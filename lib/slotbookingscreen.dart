@@ -1012,7 +1012,7 @@ class _BookingScreenState extends State<slotbookingscreen> {
 
     // Adjust the initial date if it doesn't satisfy the selectableDayPredicate
     if (_isTodayHoliday && initialDate.isBefore(DateTime.now())) {
-      initialDate = DateTime.now().add(const Duration(days: 1));
+      initialDate = getNextNonHoliday(DateTime.now()); // Use getNextNonHoliday to get the next available non-holiday day
     }
 
     final DateTime? pickedDate = await showDatePicker(
@@ -1021,27 +1021,7 @@ class _BookingScreenState extends State<slotbookingscreen> {
       initialDate: initialDate,
       firstDate: DateTime.now().subtract(Duration(days: 0)),
       lastDate: DateTime(2125),
-      // Assuming you have a variable '_isTodayHoliday' indicating whether today is a holiday or not.
-
-      selectableDayPredicate: (DateTime date) {
-        final isPastDate = date.isBefore(DateTime.now().subtract(Duration(days: 1)));
-     //   final isSunday = date.weekday == DateTime.tuesday; // Change to DateTime.sunday
-        final isHoliday = holidayList.any((holiday) =>
-        date.year == holiday.holidayDate.year &&
-            date.month == holiday.holidayDate.month &&
-            date.day == holiday.holidayDate.day);
-
-        // If today is a holiday and the selected date is a past date, allow selecting the holiday date
-        if (_isTodayHoliday && isHoliday && isPastDate) {
-          return true;
-        }
-
-        final isPreviousYear = date.year < DateTime.now().year;
-
-        // Return false if any of the conditions are met
-        return !isPastDate  && !isHoliday && !isPreviousYear && date.year >= DateTime.now().year;
-      },
-
+      selectableDayPredicate: selectableDayPredicate,
     );
 
     if (pickedDate != null) {
@@ -1049,9 +1029,41 @@ class _BookingScreenState extends State<slotbookingscreen> {
         _selectedDate = pickedDate;
         onDateSelected(pickedDate);
       });
-
     }
   }
+
+  bool isHoliday(DateTime date) {
+    return holidayList.any((holiday) =>
+    date.year == holiday.holidayDate.year &&
+        date.month == holiday.holidayDate.month &&
+        date.day == holiday.holidayDate.day);
+  }
+
+  DateTime getNextNonHoliday(DateTime currentDate) {
+    // Keep moving forward until a non-holiday day is found
+    while (isHoliday(currentDate)) {
+      currentDate = currentDate.add(const Duration(days: 1));
+    }
+    return currentDate;
+  }
+
+  bool selectableDayPredicate(DateTime date) {
+    final isPastDate = date.isBefore(DateTime.now().subtract(Duration(days: 1)));
+    final isHolidayDate = isHoliday(date);
+    final isPreviousYear = date.year < DateTime.now().year;
+
+    // If today is a holiday and the selected date is a past date, allow selecting the next non-holiday date
+    if (_isTodayHoliday && isHolidayDate && isPastDate) {
+      return true;
+    }
+
+    // Return false if any of the conditions are met
+    return !isPastDate && !isHolidayDate && !isPreviousYear && date.year >= DateTime.now().year;
+  }
+
+
+
+  //Original Code commented by Arun on Jan25th
   // Future<void> _openDatePicker(bool isTodayHoliday) async {
   //   setState(() {
   //     _isTodayHoliday = isTodayHoliday;
@@ -1070,20 +1082,27 @@ class _BookingScreenState extends State<slotbookingscreen> {
   //     initialDate: initialDate,
   //     firstDate: DateTime.now().subtract(Duration(days: 0)),
   //     lastDate: DateTime(2125),
+  //     // Assuming you have a variable '_isTodayHoliday' indicating whether today is a holiday or not.
+  //
   //     selectableDayPredicate: (DateTime date) {
   //       final isPastDate = date.isBefore(DateTime.now().subtract(Duration(days: 1)));
-  //       final isSunday = date.weekday == DateTime.tuesday;
+  //    //   final isSunday = date.weekday == DateTime.tuesday; // Change to DateTime.sunday
   //       final isHoliday = holidayList.any((holiday) =>
-  //       date.year == holiday.holidayDate.year            &&
+  //       date.year == holiday.holidayDate.year &&
   //           date.month == holiday.holidayDate.month &&
   //           date.day == holiday.holidayDate.day);
-  //       if (_isTodayHoliday && isHoliday && isPastDate && !isHoliday) {
-  //         return true; // Allow selecting holiday date when today is a holiday
+  //
+  //       // If today is a holiday and the selected date is a past date, allow selecting the holiday date
+  //       if (_isTodayHoliday && isHoliday && isPastDate) {
+  //         return true;
   //       }
+  //
   //       final isPreviousYear = date.year < DateTime.now().year;
   //
-  //       return !isPastDate && !isSunday && !isHoliday && !isPreviousYear && date.year >= DateTime.now().year;;
+  //       // Return false if any of the conditions are met
+  //       return !isPastDate  && !isHoliday && !isPreviousYear && date.year >= DateTime.now().year;
   //     },
+  //
   //   );
   //
   //   if (pickedDate != null) {
@@ -1092,32 +1111,6 @@ class _BookingScreenState extends State<slotbookingscreen> {
   //       onDateSelected(pickedDate);
   //     });
   //
-  //   }
-  // }
-  //
-  // Future<void> fetchdropdown() async {
-  //   final url = Uri.parse(baseUrl + getdropdown);
-  //   print('url==>9888: $url');
-  //
-  //   try {
-  //     final response = await http.get(url);
-  //     if (response.statusCode == 200) {
-  //       final dynamic responseData = jsonDecode(response.body);
-  //       if (responseData != null && responseData['ListResult'] is List<dynamic>) {
-  //         final List<dynamic> dropdowndata = responseData['ListResult'];
-  //         setState(() {
-  //           drop = dropdowndata.map((data) => dropdown.fromJson(data)).toList();
-  //           // Set the initial value for the dropdown
-  //       //   dropValue = drop[4].typeCdId_1.toString();
-  //         });
-  //       } else {
-  //         throw Exception('Invalid response format');
-  //       }
-  //     } else {
-  //       throw Exception('Failed to fetch dropdown options');
-  //     }
-  //   } catch (e) {
-  //     throw Exception('Error: $e');
   //   }
   // }
 

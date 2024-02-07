@@ -231,8 +231,8 @@ class _appointmentlist extends State<appointmentlist> {
             ),
             Positioned(
               top: 200,
-              left: 10,
-              right: 10,
+              left: 8,
+              right: 8,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [

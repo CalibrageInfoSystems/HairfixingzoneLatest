@@ -33,59 +33,112 @@ class _HomeScreenState extends State<HomeScreen> {
       home: Scaffold(
         appBar: AppBar(
           backgroundColor: const Color(0xFFF44614), // Orange color
+
           actions: [
             Align(
               alignment: Alignment.bottomRight,
-              child: Container(width: 115,
+              child: Container(
+                width: 115,
                 height: 35,
                 margin: EdgeInsets.only(bottom: 10.0, right: 10.0),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   border: Border.all(
-                      color: Color(0xFF8d97e2),
-                      width: 3
+                    color: Color(0xFF8d97e2),
+                    width: 3,
                   ),
                   borderRadius: BorderRadius.circular(10.0),
                 ),
-                child: ElevatedButton(
-                  onPressed: () {
+                child: InkWell(
+                  onTap: () {
                     checkLoginStatus();
-
-
                     // Handle button press
                   },
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.transparent,
-                    onPrimary: Color(0xFF8d97e2),
-                    elevation: 0,
-                    shadowColor: Colors.transparent,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Image.asset(
-                        'assets/agent_icon.png',
-                        width: 20,
-                        height: 20,
-                      ),
-                      SizedBox(width: 5),
-                      Text(
-                        'AGENT',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFF042de3),
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 10), // Adjust padding as needed
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Image.asset(
+                          'assets/agent_icon.png',
+                          width: 20,
+                          height: 20,
                         ),
-                      ),
-                    ],
+                        SizedBox(width: 5),
+                        Text(
+                          'AGENT',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF042de3),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
-            )
+            ),
           ],
+
+          // actions: [
+          //   Align(
+          //     alignment: Alignment.bottomRight,
+          //     child: Container(
+          //       //width: 115,
+          //       height: 35,
+          //       margin: EdgeInsets.only(bottom: 10.0, right: 10.0),
+          //       decoration: BoxDecoration(
+          //         color: Colors.white,
+          //         border: Border.all(
+          //             color: Color(0xFF8d97e2),
+          //             width: 3
+          //         ),
+          //         borderRadius: BorderRadius.circular(10.0),
+          //       ),
+          //       child: ElevatedButton(
+          //         onPressed: () {
+          //           checkLoginStatus();
+          //
+          //
+          //           // Handle button press
+          //         },
+          //         style: ElevatedButton.styleFrom(
+          //           primary: Colors.transparent,
+          //           onPrimary: Color(0xFF8d97e2),
+          //           elevation: 0,
+          //           shadowColor: Colors.transparent,
+          //           shape: RoundedRectangleBorder(
+          //             borderRadius: BorderRadius.circular(10.0),
+          //           ),
+          //         ),
+          //         child: Row(
+          //           mainAxisSize: MainAxisSize.min,
+          //           crossAxisAlignment: CrossAxisAlignment.start,
+          //           mainAxisAlignment: MainAxisAlignment.start,
+          //           children: [
+          //             Image.asset(
+          //               'assets/agent_icon.png',
+          //               width: 20,
+          //               height: 20,
+          //             ),
+          //             SizedBox(width: 5),
+          //             Text(
+          //               'AGENT',
+          //               style: TextStyle(
+          //                 fontSize: 16,
+          //                 fontWeight: FontWeight.bold,
+          //                 color: Color(0xFF042de3),
+          //               ),
+          //             ),
+          //           ],
+          //         ),
+          //       ),
+          //     ),
+          //   )
+          // ],
+
+
 
           title: Container(
             width: 85, // Adjust the width as needed
