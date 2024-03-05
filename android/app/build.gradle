@@ -16,12 +16,12 @@ if (localPropertiesFile.exists()) {
 
 def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
 if (flutterVersionCode == null) {
-    flutterVersionCode = '2'
+    flutterVersionCode = '3'
 }
 
 def flutterVersionName = localProperties.getProperty('flutter.versionName')
 if (flutterVersionName == null) {
-    flutterVersionName = '1.0.2'
+    flutterVersionName = '1.0.3'
 }
 
 android {
@@ -49,8 +49,8 @@ android {
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
         minSdkVersion flutter.minSdkVersion
         targetSdkVersion flutter.targetSdkVersion
-        versionCode 2 // Change to a higher number
-        versionName "2.0.0" // Change to a higher number
+        versionCode 3 // Change to a higher number
+        versionName "3.0.0" // Change to a higher number
 
     }
 
@@ -64,7 +64,7 @@ android {
     android {
         signingConfigs {
             release {
-                storeFile file('E:\\Flutter\\Hairfixingzone\\android\\hairfixing.jks')
+                storeFile file('keys/hairfixing.jks')
                 storePassword 'Abcd@123'
                 keyAlias 'key0'
                 keyPassword 'Abcd@123'
