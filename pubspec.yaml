@@ -45,6 +45,9 @@ dependencies:
   flutter_local_notifications: ^9.1.5
   permission_handler: ^11.0.0
   shared_preferences: ^2.2.2
+  skeletons: ^0.0.3
+  shimmer: ^3.0.0
+  syncfusion_flutter_gauges: ^19.3.48
 
 dev_dependencies:
   flutter_test:
@@ -52,6 +55,7 @@ dev_dependencies:
   http: ^0.13.4
   flutter_svg: ^0.22.0
   intl: ^0.17.0
+
   connectivity: ^3.0.6
 
 

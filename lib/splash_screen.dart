@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'HomeScreen.dart';
 
-class  SplashScreen extends StatefulWidget {
+class SplashScreen extends StatefulWidget {
   @override
   _SplashScreenState createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen>
-    with SingleTickerProviderStateMixin {
+class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<double> _animation;
 
@@ -42,7 +42,6 @@ class _SplashScreenState extends State<SplashScreen>
     });
 
     _animationController.forward();
-
   }
 
   @override
@@ -86,13 +85,33 @@ class _SplashScreenState extends State<SplashScreen>
     );
   }
 
+  // Future<void> requestNotificationPermission() async {
+  //   PermissionStatus status = await Permission.notification.request();
+  //
+  //   if (status.isGranted) {
+  //     // The user granted permission
+  //     // You can now send notifications
+  //     navigateToHome();
+  //   } else if (status.isDenied) {
+  //     navigateToHome();
+  //     // The user denied permission
+  //     // You may want to inform the user about why you need this permission
+  //   } else if (status.isPermanentlyDenied) {
+  //     // The user denied permission permanently
+  //     // You should guide the user to app settings to enable the permission manually
+  //     openAppSettings();
+  //   }
+  // }
   Future<void> requestNotificationPermission() async {
+    final prefs = await SharedPreferences.getInstance();
+    final isGranted = prefs.getBool('notificationPermissionStatus') ?? false;
     PermissionStatus status = await Permission.notification.request();
-
-    if (status.isGranted) {
-      // The user granted permission
-      // You can now send notifications
-      navigateToHome();
+    if (!isGranted) {
+      if (status.isGranted) {
+        print('permissionisaccepted');
+        await storeNotificationPermissionStatus(true);
+        print('permissionisstored');
+      }
     } else if (status.isDenied) {
       navigateToHome();
       // The user denied permission
@@ -102,5 +121,10 @@ class _SplashScreenState extends State<SplashScreen>
       // You should guide the user to app settings to enable the permission manually
       openAppSettings();
     }
+  }
+
+  Future<void> storeNotificationPermissionStatus(bool isGranted) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('notificationPermissionStatus', isGranted);
   }
 }

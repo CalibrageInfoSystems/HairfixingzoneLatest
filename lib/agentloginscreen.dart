@@ -9,10 +9,12 @@ import 'api_config.dart';
 // import 'package:hairfixingservice/services/local_notifications.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 class agentloginscreen extends StatefulWidget {
   @override
   _AgentScreenState createState() => _AgentScreenState();
 }
+
 class _AgentScreenState extends State<agentloginscreen> {
   bool _isLoading = false;
   TextEditingController _usernameController = TextEditingController();
@@ -22,38 +24,34 @@ class _AgentScreenState extends State<agentloginscreen> {
   String notificationMsg = "Waiting for notifications";
   String firebaseToken = "";
 
-
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
 
-   // LocalNotificationService.initialize();
+    // LocalNotificationService.initialize();
 
     // Terminated State
     FirebaseMessaging.instance.getInitialMessage().then((event) {
       if (event != null) {
         setState(() {
-          notificationMsg =
-          "${event.notification!.title} ${event.notification!.body} I am coming from terminated state";
+          notificationMsg = "${event.notification!.title} ${event.notification!.body} I am coming from terminated state";
         });
       }
     });
 
     // Foregrand State
     FirebaseMessaging.onMessage.listen((event) {
-      LocalNotificationService.showNotificationOnForeground( context,event);
+      LocalNotificationService.showNotificationOnForeground(context, event);
       setState(() {
-        notificationMsg =
-        "${event.notification!.title} ${event.notification!.body} I am coming from foreground";
+        notificationMsg = "${event.notification!.title} ${event.notification!.body} I am coming from foreground";
       });
     });
 
     // background State
     FirebaseMessaging.onMessageOpenedApp.listen((event) {
       setState(() {
-        notificationMsg =
-        "${event.notification!.title} ${event.notification!.body} I am coming from background";
+        notificationMsg = "${event.notification!.title} ${event.notification!.body} I am coming from background";
       });
     });
     // Get Firebase Token
@@ -125,14 +123,11 @@ class _AgentScreenState extends State<agentloginscreen> {
               print("Slot information added for User ID: ${userIds[i]}, Branch ID: ${branchIds[i]}");
 
               agentSlotsDetailsMap["AgentSlotsdetails"].add(agentSlotDetail);
-
             }
 
             // Send the agentSlotsDetailsMap as the body of the request
-            await addAgentSlotInformation(agentSlotsDetailsMap,user_Id);
-          }
-
-          else {
+            await addAgentSlotInformation(agentSlotsDetailsMap, user_Id);
+          } else {
             FocusScope.of(context).unfocus();
             CommonUtils.showCustomToastMessageLong('Invalid user ', context, 1, 4);
             print("ListResult is null");
@@ -149,7 +144,7 @@ class _AgentScreenState extends State<agentloginscreen> {
   }
 
   Future<void> addAgentSlotInformation(Map<String, dynamic> agentSlotsDetailsMap, int user_id) async {
-  //  final String baseUrl = "http://182.18.157.215/SaloonApp/API/";
+    //  final String baseUrl = "http://182.18.157.215/SaloonApp/API/";
     final String addSlotUrl = baseUrl + "AddAgentSlotInformation";
     print('agentSlotDetail==$agentSlotsDetailsMap');
     print('addSlotUrl==$addSlotUrl');
@@ -161,7 +156,6 @@ class _AgentScreenState extends State<agentloginscreen> {
         body: jsonEncode(agentSlotsDetailsMap),
       );
 
-
       if (addSlotResponse.statusCode == 200) {
         final Map<String, dynamic> responseJson = jsonDecode(addSlotResponse.body);
 
@@ -172,21 +166,25 @@ class _AgentScreenState extends State<agentloginscreen> {
           int userId = user_id; // Replace with the actual user ID
           print('userId==$userId');
           prefs.setInt('userId', userId); // Save the user ID
-          Navigator.push(context, MaterialPageRoute(builder: (context) => Branches_screen(userId: user_id),));
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => Branches_screen(userId: user_id),
+              ));
         } else {
           print("Error: ${responseJson["EndUserMessage"]}");
-          if(responseJson["EndUserMessage"] == "This token is already used"){
+          if (responseJson["EndUserMessage"] == "This token is already used") {
             SharedPreferences prefs = await SharedPreferences.getInstance();
             prefs.setBool('isLoggedIn', true);
-            Navigator.push(context, MaterialPageRoute(builder: (context) => Branches_screen(userId: user_id),));
-          }
-          else{
-
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => Branches_screen(userId: user_id),
+                ));
+          } else {
             CommonUtils.showCustomToastMessageLong("${responseJson["EndUserMessage"]}", context, 1, 4);
           }
-
         }
-
       } else {
         print("Error: ${addSlotResponse.statusCode}");
       }
@@ -195,60 +193,50 @@ class _AgentScreenState extends State<agentloginscreen> {
     }
   }
 
-
   Future<void> _handleLogin() async {
     String username = _usernameController.text;
     String password = _passwordController.text;
     bool isValid = true;
     bool hasValidationFailed = false;
 
-    if (password.isEmpty ) {
+    if (password.isEmpty) {
       CommonUtils.showCustomToastMessageLong('Please Enter Password', context, 1, 4);
       isValid = false;
       hasValidationFailed = true;
       // Hide the keyboard || password.isEmpty
       FocusScope.of(context).unfocus();
     }
-    if (username.isEmpty ) {
+    if (username.isEmpty) {
       CommonUtils.showCustomToastMessageLong('Please Enter Username', context, 1, 4);
       isValid = false;
       hasValidationFailed = true;
       // Hide the keyboard || password.isEmpty
       FocusScope.of(context).unfocus();
-    }
-
-
-    else {
-      bool isConnected =  await CommonUtils.checkInternetConnectivity();
+    } else {
+      bool isConnected = await CommonUtils.checkInternetConnectivity();
       if (isConnected) {
         print('Connected to the internet');
         login(username, password);
-
       } else {
         CommonUtils.showCustomToastMessageLong('No Internet Connection', context, 1, 4);
         FocusScope.of(context).unfocus();
         print('Not connected to the internet');
       }
-
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
-
-
       body: Stack(
         children: [
-         Container(
+          Container(
             decoration: BoxDecoration(
               image: DecorationImage(
                 image: AssetImage('assets/background.png'),
                 fit: BoxFit.cover,
               ),
             ),
-
             padding: EdgeInsets.symmetric(horizontal: 20.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -294,7 +282,6 @@ class _AgentScreenState extends State<agentloginscreen> {
                     child: Container(
                       width: 345.0,
                       height: 40.0,
-
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(5.0),
                         border: Border.all(
@@ -316,8 +303,7 @@ class _AgentScreenState extends State<agentloginscreen> {
                               alignment: Alignment.centerLeft,
                               child: Padding(
                                 padding: EdgeInsets.only(left: 10.0, top: 6.0),
-                                child:
-                                TextFormField(
+                                child: TextFormField(
                                   controller: _usernameController,
                                   keyboardType: TextInputType.name,
                                   style: TextStyle(
@@ -348,7 +334,6 @@ class _AgentScreenState extends State<agentloginscreen> {
 
                 SizedBox(height: 10.0),
                 // Password TextField
-
 
                 Padding(
                   padding: EdgeInsets.only(top: 10.0),
@@ -386,32 +371,21 @@ class _AgentScreenState extends State<agentloginscreen> {
                                   obscureText: _obscureText,
                                   keyboardType: TextInputType.name,
                                   // initialValue: 'Full Name',
-                                  style: TextStyle(
-                                      fontSize: 14,
-                                      fontFamily: 'Calibri',
-                                      color: Color(0xFF042DE3),
-                                      fontWeight: FontWeight.w300
-                                  ),
+                                  style: TextStyle(fontSize: 14, fontFamily: 'Calibri', color: Color(0xFF042DE3), fontWeight: FontWeight.w300),
 
                                   decoration: InputDecoration(
                                     hintText: 'Password',
-                                    hintStyle: TextStyle(
-                                        fontSize: 14,
-                                        fontFamily: 'Calibri',
-                                        color: Color(0xFF042DE3),
-                                        fontWeight: FontWeight.w300
-                                    ),
+                                    hintStyle: TextStyle(fontSize: 14, fontFamily: 'Calibri', color: Color(0xFF042DE3), fontWeight: FontWeight.w300),
+                                    alignLabelWithHint: true,
                                     suffixIcon: GestureDetector(
                                       onTap: _togglePasswordVisibility,
                                       child: Icon(
                                         _obscureText ? Icons.visibility_off : Icons.visibility,
-
                                       ),
                                     ),
                                     border: InputBorder.none,
                                     // Remove the underline border
                                   ),
-
                                 ),
                               ),
                             ),
@@ -424,7 +398,6 @@ class _AgentScreenState extends State<agentloginscreen> {
                 SizedBox(height: 20.0),
                 // Login Button
 
-
                 ElevatedButton(
                   onPressed: _isLoading ? null : _handleLogin,
                   child: Text('Login'),
@@ -432,13 +405,8 @@ class _AgentScreenState extends State<agentloginscreen> {
                 SizedBox(height: 16.0),
                 if (_isLoading) CircularProgressIndicator(),
               ],
-
-
-
             ),
           ),
-
-
           Positioned(
             top: 50.0, // Adjust the top position as needed
             left: 10.0, // Adjust the left position as needed
@@ -456,13 +424,11 @@ class _AgentScreenState extends State<agentloginscreen> {
                 ),
                 child: Icon(
                   Icons.arrow_back,
-                  color:  Color(0xFFF44614), // Change the color as needed
+                  color: Color(0xFFF44614), // Change the color as needed
                 ),
               ),
             ),
           ),
-
-
         ],
       ),
     );
@@ -470,19 +436,9 @@ class _AgentScreenState extends State<agentloginscreen> {
 
   // Set this to false
 
-
-
   void _togglePasswordVisibility() {
     setState(() {
       _obscureText = !_obscureText;
     });
   }
-
-
-
-
-
-
 }
-
-

@@ -15,8 +15,8 @@ class appointmentlist extends StatefulWidget {
   final String filepath;
   final String phonenumber;
   final String branchaddress;
-  appointmentlist({required this.userId, required this.branchid, required this.branchname,required this.filepath,required this.phonenumber, required this.branchaddress}) {}
-    @override
+  appointmentlist({required this.userId, required this.branchid, required this.branchname, required this.filepath, required this.phonenumber, required this.branchaddress}) {}
+  @override
   _appointmentlist createState() => _appointmentlist();
 }
 
@@ -27,14 +27,14 @@ class _appointmentlist extends State<appointmentlist> {
   Color backgroundColor = Colors.white;
   Color textColor = Colors.black;
   late String selecteddate;
-  int selectedButtonIndex =1;
+  int selectedButtonIndex = 1;
   TextEditingController textFieldController = TextEditingController();
   bool isLoading = true;
   bool isButtonEnabled = false; // Set this value based on your condition
   bool datediff = false; // Set this value based on your condition
   bool timediff = false;
   bool isBeforeTime = false;
-  bool isBeforeDate= true;
+  bool isBeforeDate = true;
   @override
   void initState() {
     super.initState();
@@ -44,20 +44,18 @@ class _appointmentlist extends State<appointmentlist> {
     print('User branchname: ${widget.branchname}');
     print('User filepath: ${widget.filepath}');
     _dateController.text = DateFormat('dd-MM-yyyy').format(DateTime.now());
-   selecteddate = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    selecteddate = DateFormat('yyyy-MM-dd').format(DateTime.now());
     print('selecteddate $selecteddate');
     // Calling fetchAppointments with nullable parameters as null
     CommonUtils.checkInternetConnectivity().then((isConnected) {
       if (isConnected) {
         print('Connected to the internet');
-         fetchAppointments(widget.userId, widget.branchid, status: null, date: selecteddate);
-      } else { CommonUtils.showCustomToastMessageLong('Not connected to the internet', context, 1, 4);
-      print('Not connected to the internet');  // Not connected to the internet
+        fetchAppointments(widget.userId, widget.branchid, status: null, date: selecteddate);
+      } else {
+        CommonUtils.showCustomToastMessageLong('Not connected to the internet', context, 1, 4);
+        print('Not connected to the internet'); // Not connected to the internet
       }
     });
-
-
-
   }
 
   @override
@@ -65,12 +63,12 @@ class _appointmentlist extends State<appointmentlist> {
     _dateController.dispose();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    final desiredWidth = screenWidth ;
+    final desiredWidth = screenWidth;
     return MaterialApp(
-
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
@@ -86,10 +84,7 @@ class _appointmentlist extends State<appointmentlist> {
               mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
               children: [
-
-                Padding(
-                    padding:
-                    const EdgeInsets.symmetric(horizontal: 2, vertical: 2)),
+                Padding(padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 2)),
                 Image.asset(
                   'assets/logo.png',
                   width: 100,
@@ -97,7 +92,6 @@ class _appointmentlist extends State<appointmentlist> {
                 ),
               ],
             )),
-
         body: Stack(
           children: [
             Container(
@@ -111,7 +105,6 @@ class _appointmentlist extends State<appointmentlist> {
             Positioned(
               child: Container(
                 margin: EdgeInsets.all(16.0),
-
                 height: 120,
                 width: desiredWidth,
                 decoration: BoxDecoration(
@@ -137,11 +130,9 @@ class _appointmentlist extends State<appointmentlist> {
                     bottomLeft: Radius.circular(20.0),
                   ),
                   child: Stack(
-
                     children: [
                       Image.network(
-                        imagesflierepo+
-                        widget.filepath,
+                        imagesflierepo + widget.filepath,
                         fit: BoxFit.cover,
                         width: double.infinity,
                         height: double.infinity,
@@ -204,12 +195,7 @@ class _appointmentlist extends State<appointmentlist> {
                         child: SizedBox(
                           child: TextFormField(
                             controller: _dateController,
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Color(0xFFFB4110),
-                              fontWeight: FontWeight.w300,
-                              fontFamily: 'Calibri'
-                            ),
+                            style: TextStyle(fontSize: 14, color: Color(0xFFFB4110), fontWeight: FontWeight.w300, fontFamily: 'Calibri'),
                             decoration: InputDecoration(
                               hintText: 'Select date',
                               prefixIcon: Padding(
@@ -246,9 +232,7 @@ class _appointmentlist extends State<appointmentlist> {
                     },
                     child: Text(
                       'All',
-                      style: TextStyle(color: selectedButtonIndex == 1 ? Colors.white : Color(0xFFF44614),
-                          fontWeight: FontWeight.bold,
-                          fontFamily: 'Calibri',fontSize: 14),
+                      style: TextStyle(color: selectedButtonIndex == 1 ? Colors.white : Color(0xFFF44614), fontWeight: FontWeight.bold, fontFamily: 'Calibri', fontSize: 14),
                     ),
                     style: ElevatedButton.styleFrom(
                       primary: selectedButtonIndex == 1 ? Color(0xFFF44614) : Colors.white,
@@ -269,10 +253,7 @@ class _appointmentlist extends State<appointmentlist> {
                     },
                     child: Text(
                       'Requested',
-                      style: TextStyle(color: selectedButtonIndex == 2 ? Colors.white : Color(0xFFF44614),
-                          fontWeight: FontWeight.bold,
-                          fontFamily: 'Calibri',
-                          fontSize: 14),
+                      style: TextStyle(color: selectedButtonIndex == 2 ? Colors.white : Color(0xFFF44614), fontWeight: FontWeight.bold, fontFamily: 'Calibri', fontSize: 14),
                     ),
                     style: ElevatedButton.styleFrom(
                       primary: selectedButtonIndex == 2 ? Color(0xFFF44614) : Colors.white,
@@ -293,11 +274,7 @@ class _appointmentlist extends State<appointmentlist> {
                     },
                     child: Text(
                       'Accepted',
-                      style: TextStyle(color: selectedButtonIndex == 3 ? Colors.white : Color(0xFFF44614),
-                          fontWeight: FontWeight.bold,
-                          fontFamily: 'Calibri',
-                      fontSize: 14),
-
+                      style: TextStyle(color: selectedButtonIndex == 3 ? Colors.white : Color(0xFFF44614), fontWeight: FontWeight.bold, fontFamily: 'Calibri', fontSize: 14),
                     ),
                     style: ElevatedButton.styleFrom(
                       primary: selectedButtonIndex == 3 ? Color(0xFFF44614) : Colors.white,
@@ -318,10 +295,7 @@ class _appointmentlist extends State<appointmentlist> {
                     },
                     child: Text(
                       'Rejected',
-                      style: TextStyle(color: selectedButtonIndex == 4 ? Colors.white : Color(0xFFF44614),
-                          fontWeight: FontWeight.bold,
-                          fontFamily: 'Calibri',
-                      fontSize: 14),
+                      style: TextStyle(color: selectedButtonIndex == 4 ? Colors.white : Color(0xFFF44614), fontWeight: FontWeight.bold, fontFamily: 'Calibri', fontSize: 14),
                     ),
                     style: ElevatedButton.styleFrom(
                       primary: selectedButtonIndex == 4 ? Color(0xFFF44614) : Colors.white,
@@ -332,616 +306,540 @@ class _appointmentlist extends State<appointmentlist> {
                       ),
                     ),
                   ),
-
                 ],
               ),
             ),
-
             Positioned(
               top: 250,
               bottom: 10,
               left: 10,
               right: 10,
-             child: isLoading ? Center(
-                   child: CircularProgressIndicator(),)
-                 : appointments.isNotEmpty
-              ? ListView.builder(
-               shrinkWrap: true,
-               itemCount: appointments.length,
-               itemBuilder: (context, index) {
-                 final appointment = appointments[index];
-                 final isEvenItem = index % 2 == 0;
-                 final boxDecoration = isEvenItem
-                     ? BoxDecoration(
-                   gradient: LinearGradient(
-                     colors: [
-                       Color(0xFFfee7e1),
-                       Color(0xFFd7defa),
-                     ],
-                     begin: Alignment.centerLeft,
-                     end: Alignment.centerRight,
-                   ),
-                     borderRadius: BorderRadius.only(
-                       topRight: Radius.circular(30.0),
-                       bottomLeft: Radius.circular(30.0),
-                     )
-                 )
-                     : BoxDecoration(
-                   gradient: LinearGradient(
-                     colors: [
-                       Color(0xFFd7defa),
-                       Color(0xFFfee7e1),
-                     ],
-                     begin: Alignment.centerLeft,
-                     end: Alignment.centerRight,
-                   ),
-                     borderRadius: BorderRadius.only(
-                       topRight: Radius.circular(30.0),
-                       bottomLeft: Radius.circular(30.0),
-                     )
-                 );
+              child: isLoading
+                  ? Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : appointments.isNotEmpty
+                      ? ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: appointments.length,
+                          itemBuilder: (context, index) {
+                            final appointment = appointments[index];
+                            final isEvenItem = index % 2 == 0;
+                            final boxDecoration = isEvenItem
+                                ? BoxDecoration(
+                                    gradient: LinearGradient(
+                                      colors: [
+                                        Color(0xFFfee7e1),
+                                        Color(0xFFd7defa),
+                                      ],
+                                      begin: Alignment.centerLeft,
+                                      end: Alignment.centerRight,
+                                    ),
+                                    borderRadius: BorderRadius.only(
+                                      topRight: Radius.circular(30.0),
+                                      bottomLeft: Radius.circular(30.0),
+                                    ))
+                                : BoxDecoration(
+                                    gradient: LinearGradient(
+                                      colors: [
+                                        Color(0xFFd7defa),
+                                        Color(0xFFfee7e1),
+                                      ],
+                                      begin: Alignment.centerLeft,
+                                      end: Alignment.centerRight,
+                                    ),
+                                    borderRadius: BorderRadius.only(
+                                      topRight: Radius.circular(30.0),
+                                      bottomLeft: Radius.circular(30.0),
+                                    ));
 
-                 return GestureDetector(
-                   onTap: () {
-                     print('CardView clicked!');
-                   },
-                   child: ClipRRect(
-                     borderRadius: BorderRadius.only(
-                       topRight: Radius.circular(42.5),
-                       bottomLeft: Radius.circular(42.5),
-                     ),
-                     child: Card(
-                       shape: RoundedRectangleBorder(
-                           borderRadius: BorderRadius.only(
-                             topRight: Radius.circular(30.0),
-                             bottomLeft: Radius.circular(30.0),
-                           )
-                       ),
-                       child: Container(
-                         padding: EdgeInsets.only(bottom: 10, top: 5, left: 5, right: 10),
-                         decoration: boxDecoration,
-                         child: Row(
-                           crossAxisAlignment: CrossAxisAlignment.start,
-                           children: [
-                             Expanded(
-                               child: ListTile(
-                                 subtitle: Column(
-                                   crossAxisAlignment: CrossAxisAlignment.start,
-                                   children: [
+                            return GestureDetector(
+                              onTap: () {
+                                print('CardView clicked!');
+                              },
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.only(
+                                  topRight: Radius.circular(42.5),
+                                  bottomLeft: Radius.circular(42.5),
+                                ),
+                                child: Card(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.only(
+                                    topRight: Radius.circular(30.0),
+                                    bottomLeft: Radius.circular(30.0),
+                                  )),
+                                  child: Container(
+                                    padding: EdgeInsets.only(bottom: 10, top: 5, left: 5, right: 10),
+                                    decoration: boxDecoration,
+                                    child: Row(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Expanded(
+                                          child: ListTile(
+                                            subtitle: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Padding(
+                                                  padding: EdgeInsets.only(top: 5.0, bottom: 4.0),
+                                                  child: RichText(
+                                                    text: TextSpan(
+                                                      children: [
+                                                        TextSpan(
+                                                          text: 'Name : ',
+                                                          style: TextStyle(color: Color(0xFFF44614), fontSize: 12, fontWeight: FontWeight.bold, fontFamily: 'Calibri'),
+                                                        ),
+                                                        TextSpan(
+                                                          text: appointment.customerName,
+                                                          style: TextStyle(color: Color(0xFF042DE3), fontSize: 12, fontFamily: 'Calibri'),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                                Padding(
+                                                  padding: EdgeInsets.only(bottom: 4.0),
+                                                  child: RichText(
+                                                    text: TextSpan(
+                                                      children: [
+                                                        TextSpan(
+                                                          text: 'Gender : ',
+                                                          style: TextStyle(color: Color(0xFFF44614), fontSize: 12, fontWeight: FontWeight.bold, fontFamily: 'Calibri'),
+                                                        ),
+                                                        TextSpan(
+                                                          text: appointment.gender,
+                                                          style: TextStyle(color: Color(0xFF042DE3), fontSize: 12, fontFamily: 'Calibri'),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                                Padding(
+                                                  padding: EdgeInsets.only(bottom: 4.0),
+                                                  child: RichText(
+                                                    text: TextSpan(
+                                                      children: [
+                                                        TextSpan(
+                                                          text: 'Purpose : ',
+                                                          style: TextStyle(color: Color(0xFFF44614), fontSize: 12, fontWeight: FontWeight.bold, fontFamily: 'Calibri'),
+                                                        ),
+                                                        TextSpan(
+                                                          text: appointment.purposeofvisit,
+                                                          style: TextStyle(color: Color(0xFF042DE3), fontSize: 12, fontFamily: 'Calibri'),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                                Padding(
+                                                  padding: EdgeInsets.only(bottom: 4.0),
+                                                  child: RichText(
+                                                    text: TextSpan(
+                                                      children: [
+                                                        WidgetSpan(
+                                                          child: Icon(
+                                                            Icons.email_outlined,
+                                                            size: 16,
+                                                            color: Color(0xFFF44614),
+                                                          ),
+                                                        ),
+                                                        TextSpan(
+                                                          text: ' : ',
+                                                          style: TextStyle(color: Color(0xFFF44614), fontSize: 12, fontWeight: FontWeight.bold, fontFamily: 'Calibri'),
+                                                        ),
+                                                        TextSpan(
+                                                          text: appointment.email,
+                                                          style: TextStyle(color: Color(0xFF042DE3), fontSize: 12, fontFamily: 'Calibri'),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                                Padding(
+                                                  padding: EdgeInsets.only(bottom: 4.0),
+                                                  child: RichText(
+                                                    text: TextSpan(
+                                                      children: [
+                                                        WidgetSpan(
+                                                          child: Icon(
+                                                            Icons.lock_clock,
+                                                            color: Color(0xFFF44614),
+                                                            size: 16,
+                                                          ),
+                                                        ),
+                                                        TextSpan(
+                                                          text: ' : ',
+                                                          style: TextStyle(color: Color(0xFFF44614), fontSize: 12, fontWeight: FontWeight.bold, fontFamily: 'Calibri'),
+                                                        ),
+                                                        TextSpan(
+                                                          text: appointment.SlotDuration,
+                                                          style: TextStyle(
+                                                              color: Color(
+                                                                0xFF042DE3,
+                                                              ),
+                                                              fontSize: 12,
+                                                              fontFamily: 'Calibri'),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                        Column(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Padding(
+                                              padding: EdgeInsets.only(bottom: 5.0, left: 5.0, right: 5.0, top: 5.0),
+                                              child: GestureDetector(
+                                                onTap: () {
+                                                  String phoneNumber = appointment.phoneNumber;
+                                                  launch("tel:$phoneNumber");
+                                                },
+                                                child: RichText(
+                                                  text: TextSpan(
+                                                    children: [
+                                                      WidgetSpan(
+                                                        child: Padding(
+                                                          padding: EdgeInsets.only(left: 8.0, top: 2.0), // Add desired left and top padding
+                                                          child: Icon(
+                                                            Icons.phone,
+                                                            color: Color(0xFFF44614),
+                                                            size: 16,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      TextSpan(
+                                                        text: ': ',
+                                                        style: TextStyle(
+                                                          color: Color(0xFFF44614),
+                                                          fontWeight: FontWeight.bold,
+                                                          fontFamily: 'Calibri',
+                                                        ),
+                                                      ),
+                                                      TextSpan(
+                                                        text: appointment.phoneNumber,
+                                                        style: TextStyle(
+                                                          color: Color(0xFF042DE3),
+                                                          fontFamily: 'Calibri',
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            if (appointment.statusTypeId == 5)
+                                              Visibility(
+                                                child: Column(
+                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                                  children: [
+                                                    Padding(
+                                                      padding: EdgeInsets.only(top: 10.0),
+                                                      child: Container(
+                                                        width: 75,
+                                                        height: 75,
+                                                        decoration: BoxDecoration(
+                                                          shape: BoxShape.circle,
+                                                          border: Border.all(
+                                                            color: Colors.green,
+                                                            width: 2.0,
+                                                          ),
+                                                          color: Colors.white,
+                                                        ),
+                                                        child: Stack(
+                                                          alignment: Alignment.center,
+                                                          children: [
+                                                            Positioned(
+                                                              top: 12,
+                                                              child: Icon(
+                                                                Icons.check,
+                                                                color: Colors.green,
+                                                                size: 33,
+                                                              ),
+                                                            ),
+                                                            Positioned(
+                                                              bottom: 15,
+                                                              child: Text(
+                                                                'Accepted',
+                                                                style: TextStyle(color: Colors.green, fontSize: 12, fontWeight: FontWeight.bold, fontFamily: 'Calibri'),
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            if (appointment.statusTypeId == 6)
+                                              Visibility(
+                                                child: Column(
+                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                                  children: [
+                                                    Padding(
+                                                      padding: EdgeInsets.only(top: 10.0),
+                                                      child: Container(
+                                                        width: 75,
+                                                        height: 75,
+                                                        decoration: BoxDecoration(
+                                                          shape: BoxShape.circle,
+                                                          border: Border.all(
+                                                            color: Colors.red,
+                                                            width: 2.0,
+                                                          ),
+                                                          color: Colors.white,
+                                                        ),
+                                                        child: Stack(
+                                                          alignment: Alignment.center,
+                                                          children: [
+                                                            Positioned(
+                                                              top: 12,
+                                                              child: Icon(
+                                                                Icons.close,
+                                                                color: Colors.red,
+                                                                size: 33,
+                                                              ),
+                                                            ),
+                                                            Positioned(
+                                                              bottom: 15,
+                                                              child: Text(
+                                                                'Rejected',
+                                                                style: TextStyle(color: Colors.red, fontSize: 12, fontWeight: FontWeight.bold, fontFamily: 'Calibri'),
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            if (!appointment.isAccepted) SizedBox(height: 8),
+                                            if (!appointment.isRejected)
+                                              if (!appointment.isAccepted)
+                                                if (appointment.statusTypeId == 4)
+                                                  if (!appointment.isAccepted)
+                                                    ElevatedButton(
+                                                      onPressed: isPastDate(selecteddate, appointment.SlotDuration)
+                                                          ? null
+                                                          : () {
+                                                              acceptAppointment(index);
 
-                                     Padding(
-                                       padding: EdgeInsets.only(top:5.0,
-                                           bottom: 4.0),
-                                       child: RichText(
-                                         text: TextSpan(
-                                           children: [
-                                             TextSpan(
-                                               text: 'Name : ',
-                                               style: TextStyle(
-                                                   color: Color(
-                                                       0xFFF44614),fontSize: 12,
-                                                   fontWeight: FontWeight.bold,
-                                                   fontFamily: 'Calibri'),
-                                             ),
-                                             TextSpan(
-                                               text: appointment.customerName,
-                                               style: TextStyle(
-                                                   color: Color(
-                                                       0xFF042DE3),fontSize: 12,
-                                                   fontFamily: 'Calibri'),
-                                             ),
-                                           ],
-                                         ),
-                                       ),
-                                     ),
-                                     Padding(
-                                       padding: EdgeInsets.only(
-                                           bottom: 4.0),
-                                       child: RichText(
-                                         text: TextSpan(
-                                           children: [
-                                             TextSpan(
-                                               text: 'Gender : ',
-                                               style: TextStyle(
-                                                   color: Color(
-                                                       0xFFF44614),fontSize: 12,
-                                                   fontWeight: FontWeight.bold,
-                                                   fontFamily: 'Calibri'),
-                                             ),
-                                             TextSpan(
-                                               text: appointment.gender,
-                                               style: TextStyle(
-                                                   color: Color(
-                                                       0xFF042DE3),fontSize: 12,
+                                                              Appointment data = Appointment(
+                                                                id: appointment.id,
+                                                                branchId: appointment.branchId,
+                                                                name: appointment.name,
+                                                                date: appointment.date,
+                                                                slotTime: appointment.slotTime,
+                                                                customerName: appointment.customerName,
+                                                                phoneNumber: appointment.phoneNumber,
+                                                                email: appointment.email,
+                                                                genderTypeId: appointment.genderTypeId,
+                                                                gender: appointment.gender,
+                                                                statusTypeId: appointment.statusTypeId,
+                                                                status: appointment.status,
+                                                                purposevisitid: appointment.purposevisitid,
+                                                                purposeofvisit: appointment.purposeofvisit,
+                                                                isActive: appointment.isActive,
+                                                                SlotDuration: appointment.SlotDuration,
+                                                              );
 
-                                                   fontFamily: 'Calibri'),
-                                             ),
-                                           ],
-                                         ),
-                                       ),
-                                     ),
-                                     Padding(
-                                       padding: EdgeInsets.only(
-                                           bottom: 4.0),
-                                       child: RichText(
-                                         text: TextSpan(
-                                           children: [
-                                             TextSpan(
-                                               text: 'Purpose : ',
-                                               style: TextStyle(
-                                                   color: Color(
-                                                       0xFFF44614),fontSize: 12,
-                                                   fontWeight: FontWeight.bold,
-                                                   fontFamily: 'Calibri'),
-                                             ),
-                                             TextSpan(
-                                               text: appointment.purposeofvisit,
-                                               style: TextStyle(
-                                                   color: Color(
-                                                       0xFF042DE3),fontSize: 12,
+                                                              print('Button 1 pressed for ${appointment.customerName}');
+                                                              postAppointment(data, 5);
+                                                              Get_ApprovedDeclinedSlots(data, 5);
+                                                              print('accpteedbuttonisclicked');
+                                                            },
+                                                      child: Text('Accept'),
+                                                      style: ButtonStyle(
+                                                        foregroundColor: MaterialStateProperty.resolveWith<Color>(
+                                                          (Set<MaterialState> states) {
+                                                            if (states.contains(MaterialState.disabled)) {
+                                                              return Colors.grey; // Set the text color to gray when disabled
+                                                            }
+                                                            return Colors.green; // Use the default text color for enabled state
+                                                          },
+                                                        ),
+                                                        backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                                                          (Set<MaterialState> states) {
+                                                            if (states.contains(MaterialState.disabled)) {
+                                                              return Colors.grey.withOpacity(0.5); // Set the background color to gray with opacity when disabled
+                                                            }
+                                                            return Colors.white; // Use the default background color for enabled state
+                                                          },
+                                                        ),
+                                                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                                          RoundedRectangleBorder(
+                                                            borderRadius: BorderRadius.circular(25.0),
+                                                            side: BorderSide(color: Colors.green, width: 2.0),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                            if (!appointment.isRejected) SizedBox(height: 2),
+                                            if (!appointment.isAccepted)
+                                              if (!appointment.isRejected)
+                                                if (appointment.statusTypeId == 4)
+                                                  ElevatedButton(
+                                                    onPressed: isPastDate(selecteddate, appointment.SlotDuration)
+                                                        ? null
+                                                        : () {
+                                                            // Handle reject button action
+                                                            rejectAppointment(index);
 
-                                                   fontFamily: 'Calibri'),
-                                             ),
-                                           ],
-                                         ),
-                                       ),
-                                     ),
-                                     Padding(
-                                       padding: EdgeInsets.only(
-                                           bottom: 4.0),
-                                       child: RichText(
-                                         text: TextSpan(
-                                           children: [
-                                             WidgetSpan(
-                                               child: Icon(
-                                                 Icons
-                                                     .email_outlined,
-                                                 size: 16,
-                                                 color: Color(
-                                                     0xFFF44614),
-                                               ),
-                                             ),
-                                             TextSpan(
-                                               text: ' : ',
-                                               style: TextStyle(
-                                                   color: Color(
-                                                       0xFFF44614),
-                                                   fontSize: 12,
+                                                            Appointment data = Appointment(
+                                                              id: appointment.id,
+                                                              branchId: appointment.branchId,
+                                                              name: appointment.name,
+                                                              date: appointment.date,
+                                                              slotTime: appointment.slotTime,
+                                                              customerName: appointment.customerName,
+                                                              phoneNumber: appointment.phoneNumber,
+                                                              email: appointment.email,
+                                                              genderTypeId: appointment.genderTypeId,
+                                                              gender: appointment.gender,
+                                                              statusTypeId: appointment.statusTypeId,
+                                                              status: appointment.status,
+                                                              purposevisitid: appointment.purposevisitid,
+                                                              purposeofvisit: appointment.purposeofvisit,
+                                                              isActive: appointment.isActive,
+                                                              SlotDuration: appointment.SlotDuration,
+                                                            );
 
-                                                   fontWeight: FontWeight.bold,
-                                                   fontFamily: 'Calibri'),
-                                             ),
-                                             TextSpan(
-                                               text: appointment.email,
-                                               style: TextStyle(
-                                                   color: Color(
-                                                       0xFF042DE3),fontSize: 12,
-
-                                                   fontFamily: 'Calibri'),
-                                             ),
-                                           ],
-                                         ),
-                                       ),
-                                     ),
-                                     Padding(
-                                       padding: EdgeInsets.only(
-                                           bottom: 4.0),
-                                       child: RichText(
-                                         text: TextSpan(
-                                           children: [
-                                             WidgetSpan(
-                                               child: Icon(
-                                                 Icons.lock_clock,
-                                                 color: Color(
-                                                     0xFFF44614),
-                                                 size: 16,
-                                               ),
-                                             ),
-                                             TextSpan(
-                                               text: ' : ',
-                                               style: TextStyle(
-                                                   color: Color(
-                                                       0xFFF44614),
-                                                   fontSize: 12,
-
-                                                   fontWeight: FontWeight.bold,
-                                                   fontFamily: 'Calibri'),
-                                             ),
-                                             TextSpan(
-                                               text: appointment.SlotDuration,
-                                               style: TextStyle(
-                                                   color: Color(
-                                                       0xFF042DE3,
-                                                   ),
-                                                   fontSize: 12,
-
-                                                   fontFamily: 'Calibri'),
-                                             ),
-                                           ],
-                                         ),
-                                       ),
-                                     ),
-                                   ],
-                                 ),
-                               ),
-                             ),
-                             Column(
-                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                               children: [
-                                 Padding(
-                                     padding: EdgeInsets.only(
-                                         bottom: 5.0,left: 5.0,right: 5.0,top: 5.0),
-                                   child:GestureDetector(
-                                   onTap: () {
-                                     String phoneNumber = appointment.phoneNumber;
-                                     launch("tel:$phoneNumber");
-                                   },
-                                   child: RichText(
-                                     text: TextSpan(
-                                       children: [
-                                         WidgetSpan(
-                                           child: Padding(
-                                             padding: EdgeInsets.only(left: 8.0, top: 2.0), // Add desired left and top padding
-                                             child: Icon(
-                                               Icons.phone,
-                                               color: Color(0xFFF44614),
-                                               size: 16,
-                                             ),
-                                           ),
-                                         ),
-                                         TextSpan(
-                                           text: ': ',
-                                           style: TextStyle(
-                                             color: Color(0xFFF44614),
-                                             fontWeight: FontWeight.bold,
-                                             fontFamily: 'Calibri',
-                                           ),
-                                         ),
-                                         TextSpan(
-                                           text: appointment.phoneNumber,
-                                           style: TextStyle(
-                                             color: Color(0xFF042DE3),
-                                             fontFamily: 'Calibri',
-                                           ),
-                                         ),
-                                       ],
-                                     ),
-                                   ),
-                                 ),
-                                 ),
-
-                             if (appointment.statusTypeId == 5)
-                                   Visibility(
-                                     child: Column(
-                                       mainAxisAlignment: MainAxisAlignment.center,
-                                       children: [
-                                         Padding(
-                                           padding: EdgeInsets.only(top: 10.0),
-                                           child: Container(
-                                             width: 75,
-                                             height: 75,
-                                             decoration: BoxDecoration(
-                                               shape: BoxShape.circle,
-                                               border: Border.all(
-                                                 color: Colors.green,
-                                                 width: 2.0,
-                                               ),
-                                               color: Colors.white,
-                                             ),
-                                             child: Stack(
-                                               alignment: Alignment.center,
-                                               children: [
-                                                 Positioned(
-                                                   top: 12,
-                                                   child: Icon(
-                                                     Icons.check,
-                                                     color: Colors.green ,
-                                                     size: 33,
-                                                   ),
-                                                 ),
-                                                 Positioned(
-                                                   bottom: 15,
-                                                   child: Text(
-                                                     'Accepted',
-                                                     style: TextStyle(
-                                                       color: Colors.green ,
-                                                       fontSize: 12,
-                                                         fontWeight: FontWeight.bold,
-                                                         fontFamily: 'Calibri'
-                                                     ),
-                                                   ),
-                                                 ),
-                                               ],
-                                             ),
-                                           ),
-                                         ),
-                                       ],
-                                     ),
-                                   ),
-                                 if (appointment.statusTypeId == 6)
-                                   Visibility(
-                                     child: Column(
-                                       mainAxisAlignment: MainAxisAlignment.center,
-                                       children: [
-                                         Padding(
-                                           padding: EdgeInsets.only(top: 10.0),
-                                           child: Container(
-                                             width: 75,
-                                             height: 75,
-                                             decoration: BoxDecoration(
-                                               shape: BoxShape.circle,
-                                               border: Border.all(
-                                                 color:  Colors.red,
-                                                 width: 2.0,
-                                               ),
-                                               color: Colors.white,
-                                             ),
-                                             child: Stack(
-                                               alignment: Alignment.center,
-                                               children: [
-                                                 Positioned(
-                                                   top: 12,
-                                                   child: Icon(
-                                                     Icons.close,
-                                                     color:Colors.red,
-                                                     size: 33,
-                                                   ),
-                                                 ),
-                                                 Positioned(
-                                                   bottom: 15,
-                                                   child: Text(
-                                                     'Rejected',
-                                                     style: TextStyle(
-                                                       color:  Colors.red,
-                                                       fontSize: 12,
-                                                         fontWeight: FontWeight.bold,
-                                                         fontFamily: 'Calibri'
-                                                     ),
-                                                   ),
-                                                 ),
-                                               ],
-                                             ),
-                                           ),
-                                         ),
-                                       ],
-                                     ),
-                                   ),
-
-                                 if (!appointment.isAccepted) SizedBox(height: 8),
-                                 if (!appointment.isRejected)
-                                   if(!appointment.isAccepted)
-                                     if (appointment.statusTypeId == 4)
-
-                                       if (!appointment.isAccepted)
-                                         ElevatedButton(
-                                           onPressed: isPastDate(selecteddate, appointment.SlotDuration) ? null : () {
-                                             acceptAppointment(index);
-
-                                             Appointment data = Appointment(
-                                               id: appointment.id,
-                                               branchId: appointment.branchId,
-                                               name: appointment.name,
-                                               date: appointment.date,
-                                               slotTime: appointment.slotTime,
-                                               customerName: appointment.customerName,
-                                               phoneNumber: appointment.phoneNumber,
-                                               email: appointment.email,
-                                               genderTypeId: appointment.genderTypeId,
-                                               gender: appointment.gender,
-                                               statusTypeId: appointment.statusTypeId,
-                                               status: appointment.status,
-                                               purposevisitid: appointment.purposevisitid,
-                                               purposeofvisit: appointment.purposeofvisit,
-                                               isActive: appointment.isActive,
-                                               SlotDuration: appointment.SlotDuration,
-                                             );
-
-                                             print('Button 1 pressed for ${appointment.customerName}');
-                                           postAppointment(data, 5);
-                                             Get_ApprovedDeclinedSlots(data, 5);
-                                             print('accpteedbuttonisclicked');
-                                           },
-                                           child: Text('Accept'),
-                                           style: ButtonStyle(
-                                             foregroundColor: MaterialStateProperty.resolveWith<Color>(
-                                                   (Set<MaterialState> states) {
-                                                 if (states.contains(MaterialState.disabled)) {
-                                                   return Colors.grey; // Set the text color to gray when disabled
-                                                 }
-                                                 return Colors.green; // Use the default text color for enabled state
-                                               },
-                                             ),
-                                             backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                                                   (Set<MaterialState> states) {
-                                                 if (states.contains(MaterialState.disabled)) {
-                                                   return Colors.grey.withOpacity(0.5); // Set the background color to gray with opacity when disabled
-                                                 }
-                                                 return Colors.white; // Use the default background color for enabled state
-                                               },
-                                             ),
-                                             shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                               RoundedRectangleBorder(
-                                                 borderRadius: BorderRadius.circular(25.0),
-                                                 side: BorderSide(color: Colors.green, width: 2.0),
-                                               ),
-                                             ),
-                                           ),
-                                         ),
-
-
-                                 if (!appointment.isRejected) SizedBox(height: 2),
-                                 if (!appointment.isAccepted)
-                                   if(!appointment.isRejected)
-                                     if (appointment.statusTypeId == 4)
-                                       ElevatedButton(
-                                         onPressed: isPastDate(selecteddate,appointment.SlotDuration  ) ? null : () {
-                                           // Handle reject button action
-                                           rejectAppointment(index);
-
-                                           Appointment data = Appointment(
-                                             id: appointment.id,
-                                             branchId: appointment.branchId,
-                                             name: appointment.name,
-                                             date: appointment.date,
-                                             slotTime: appointment.slotTime,
-                                             customerName: appointment.customerName,
-                                             phoneNumber: appointment.phoneNumber,
-                                             email: appointment.email,
-                                             genderTypeId: appointment.genderTypeId,
-                                             gender: appointment.gender,
-                                             statusTypeId: appointment.statusTypeId,
-                                             status: appointment.status,
-                                             purposevisitid: appointment.purposevisitid,
-                                             purposeofvisit: appointment.purposeofvisit,
-                                             isActive: appointment.isActive,
-                                             SlotDuration: appointment.SlotDuration,
-                                           );
-
-                                           print('Button 1 pressed for ${appointment.customerName}');
-                                           postAppointment(data, 6);
-                                           print('rejectedbuttonisclciked');
-                                         },
-                                         child: Text('Reject'),
-                                         style: ButtonStyle(
-                                           foregroundColor: MaterialStateProperty.resolveWith<Color>(
-                                                 (Set<MaterialState> states) {
-                                               if (states.contains(MaterialState.disabled)) {
-                                                 return Colors.grey; // Set the text color to gray when disabled
-                                               }
-                                               return Color(0xFFF44614); // Use the default text color for enabled state
-                                             },
-                                           ),
-                                           backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                                                 (Set<MaterialState> states) {
-                                               if (states.contains(MaterialState.disabled)) {
-                                                 return Colors.grey.withOpacity(0.5); // Set the background color to gray with opacity when disabled
-                                               }
-                                               return Colors.white; // Use the default background color for enabled state
-                                             },
-                                           ),
-                                           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                             RoundedRectangleBorder(
-                                               borderRadius: BorderRadius.circular(25.0),
-                                               side: BorderSide(color: Color(0xFFF44614), width: 2.0),
-                                             ),
-                                           ),
-                                         ),
-                                       ),
-
-
-                                 if (appointment.isAccepted || appointment.isRejected )
-                                   Visibility(
-                                     child: Column(
-                                       mainAxisAlignment: MainAxisAlignment.center,
-                                       children: [
-                                         Padding(
-                                           padding: EdgeInsets.only(top: 10.0),
-                                           child: Container(
-                                             width: 75,
-                                             height: 75,
-                                             decoration: BoxDecoration(
-                                               shape: BoxShape.circle,
-                                               border: Border.all(
-                                                 color: appointment.isAccepted ? Colors.green : Colors.red,
-                                                 width: 2.0,
-                                               ),
-                                               color: Colors.white,
-                                             ),
-                                             child: Stack(
-                                               alignment: Alignment.center,
-                                               children: [
-                                                 Positioned(
-                                                   top: 12,
-                                                   child: Icon(
-                                                     appointment.isAccepted ? Icons.check : Icons.close,
-                                                     color: appointment.isAccepted ? Colors.green : Colors.red,
-                                                     size: 33,
-                                                   ),
-                                                 ),
-                                                 Positioned(
-                                                   bottom: 15,
-                                                   child: Text(
-                                                     appointment.isAccepted ? 'Accepted' : 'Rejected',
-                                                     style: TextStyle(
-                                                       color: appointment.isAccepted ? Colors.green : Colors.red,
-                                                       fontSize: 12,
-                                                       fontWeight: FontWeight.bold,
-                                                       fontFamily: 'Calibri',
-                                                     ),
-                                                   ),
-                                                 ),
-                                               ],
-                                             ),
-                                           ),
-                                         ),
-                                       ],
-                                     ),
-                                   )
-
-
-                               ],
-                             ),
-                           ],
-                         ),
-                       ),
-                     ),
-                   ),
-                 );
-               },
-             )
-   : Center(
-    child: Text(
-    'No Slots Available',
-    style: TextStyle(
-      fontSize: 18,
-      color: Color(0xFFFB4110),
-      fontWeight: FontWeight.bold,
-      fontFamily: 'Calibri',
-    ),
-    ),
-    ),
-
-
+                                                            print('Button 1 pressed for ${appointment.customerName}');
+                                                            postAppointment(data, 6);
+                                                            print('rejectedbuttonisclciked');
+                                                          },
+                                                    child: Text('Reject'),
+                                                    style: ButtonStyle(
+                                                      foregroundColor: MaterialStateProperty.resolveWith<Color>(
+                                                        (Set<MaterialState> states) {
+                                                          if (states.contains(MaterialState.disabled)) {
+                                                            return Colors.grey; // Set the text color to gray when disabled
+                                                          }
+                                                          return Color(0xFFF44614); // Use the default text color for enabled state
+                                                        },
+                                                      ),
+                                                      backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                                                        (Set<MaterialState> states) {
+                                                          if (states.contains(MaterialState.disabled)) {
+                                                            return Colors.grey.withOpacity(0.5); // Set the background color to gray with opacity when disabled
+                                                          }
+                                                          return Colors.white; // Use the default background color for enabled state
+                                                        },
+                                                      ),
+                                                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                                        RoundedRectangleBorder(
+                                                          borderRadius: BorderRadius.circular(25.0),
+                                                          side: BorderSide(color: Color(0xFFF44614), width: 2.0),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                            if (appointment.isAccepted || appointment.isRejected)
+                                              Visibility(
+                                                child: Column(
+                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                                  children: [
+                                                    Padding(
+                                                      padding: EdgeInsets.only(top: 10.0),
+                                                      child: Container(
+                                                        width: 75,
+                                                        height: 75,
+                                                        decoration: BoxDecoration(
+                                                          shape: BoxShape.circle,
+                                                          border: Border.all(
+                                                            color: appointment.isAccepted ? Colors.green : Colors.red,
+                                                            width: 2.0,
+                                                          ),
+                                                          color: Colors.white,
+                                                        ),
+                                                        child: Stack(
+                                                          alignment: Alignment.center,
+                                                          children: [
+                                                            Positioned(
+                                                              top: 12,
+                                                              child: Icon(
+                                                                appointment.isAccepted ? Icons.check : Icons.close,
+                                                                color: appointment.isAccepted ? Colors.green : Colors.red,
+                                                                size: 33,
+                                                              ),
+                                                            ),
+                                                            Positioned(
+                                                              bottom: 15,
+                                                              child: Text(
+                                                                appointment.isAccepted ? 'Accepted' : 'Rejected',
+                                                                style: TextStyle(
+                                                                  color: appointment.isAccepted ? Colors.green : Colors.red,
+                                                                  fontSize: 12,
+                                                                  fontWeight: FontWeight.bold,
+                                                                  fontFamily: 'Calibri',
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              )
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        )
+                      : Center(
+                          child: Text(
+                            'No Slots Available',
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: Color(0xFFFB4110),
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'Calibri',
+                            ),
+                          ),
+                        ),
             ),
           ],
         ),
-
-
-
       ),
     );
   }
-    Future<void> _openDatePicker() async {
-      final DateTime? pickedDate = await showDatePicker(
-        context: context,
 
-
-        initialEntryMode: DatePickerEntryMode.calendarOnly,
-        initialDate: _selectedDate ?? DateTime.now(),
-        firstDate: DateTime(2022),
-        lastDate: DateTime(2100),
-        selectableDayPredicate: (DateTime date) {
-          // Enable all dates (including past dates)
-          return true;
-        },
-
-      );
-
+  Future<void> _openDatePicker() async {
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialEntryMode: DatePickerEntryMode.calendarOnly,
+      initialDate: _selectedDate ?? DateTime.now(),
+      firstDate: DateTime(2022),
+      lastDate: DateTime(2100),
+      selectableDayPredicate: (DateTime date) {
+        // Enable all dates (including past dates)
+        return true;
+      },
+    );
 
     if (pickedDate != null) {
       setState(() {
         _selectedDate = pickedDate;
         _dateController.text = DateFormat('dd-MM-yyyy').format(_selectedDate!);
-        selecteddate= DateFormat('yyyy-MM-dd').format(_selectedDate!);
+        selecteddate = DateFormat('yyyy-MM-dd').format(_selectedDate!);
         DateTime currentDate = DateTime.now();
         // Splitting into date and time components
         String formattedDate = DateFormat('yyyy-MM-dd').format(currentDate);
-     //   String formattedTime = DateFormat('HH:mm:ss').format(currentDate);
+        //   String formattedTime = DateFormat('HH:mm:ss').format(currentDate);
 
         print('currentDate: $formattedDate');
-     //   print('Time: $formattedTime');
-      //  DateTime selectedDate = _selectedDate!;// The date you want to compare with the current date
-     //   print('currentDate date $currentDate');
+        //   print('Time: $formattedTime');
+        //  DateTime selectedDate = _selectedDate!;// The date you want to compare with the current date
+        //   print('currentDate date $currentDate');
         print('Selected date $selecteddate');
         DateTime selectedDateTime = DateTime.parse(selecteddate);
         DateTime currentDateTime = DateTime.parse(formattedDate);
@@ -969,7 +867,7 @@ class _appointmentlist extends State<appointmentlist> {
         print('Hours: $hours');
         print('Minutes: $minutes');
         print('Seconds: $seconds');
-        selectedButtonIndex =1;
+        selectedButtonIndex = 1;
         fetchAppointments(widget.userId, widget.branchid, status: null, date: selecteddate);
       });
     }
@@ -995,8 +893,8 @@ class _appointmentlist extends State<appointmentlist> {
     setState(() {
       appointments[index].isAccepted = true;
     });
-
   }
+
   void rejectAppointment(int index) {
     // Perform the reject action here
     setState(() {
@@ -1005,9 +903,8 @@ class _appointmentlist extends State<appointmentlist> {
     // Add your logic to handle the reject action for the appointment at the given index
   }
 
-
   Future<void> postAppointment(Appointment data, int i) async {
-    final url =  Uri.parse(baseUrl+postApiAppointment);
+    final url = Uri.parse(baseUrl + postApiAppointment);
     print('url==>890: $url');
     // final url = Uri.parse('http://182.18.157.215/SaloonApp/API/api/Appointment');
     DateTime now = DateTime.now();
@@ -1018,12 +915,11 @@ class _appointmentlist extends State<appointmentlist> {
 
     // Create the request object
     final request = {
-
       "Id": data.id,
       "BranchId": data.branchId,
       "Date": data.date,
       "SlotTime": data.slotTime,
-      "CustomerName":data.customerName,
+      "CustomerName": data.customerName,
       "PhoneNumber": data.phoneNumber,
       "Email": data.email,
       "GenderTypeId": data.genderTypeId,
@@ -1063,9 +959,9 @@ class _appointmentlist extends State<appointmentlist> {
     }
   }
 
-  void fetchAppointments(int userId, int branchid, {required status, required date})async {
+  void fetchAppointments(int userId, int branchid, {required status, required date}) async {
     appointments.clear();
-    final url =  Uri.parse(baseUrl+GetAppointment+'$userId/$branchid/$status/$date');
+    final url = Uri.parse(baseUrl + GetAppointment + '$userId/$branchid/$status/$date');
     print('url==842===$url');
     try {
       final response = await http.get(url);
@@ -1074,16 +970,14 @@ class _appointmentlist extends State<appointmentlist> {
         if (responseData['ListResult'] != null) {
           final List<dynamic> appointmentsData = responseData['ListResult'];
           setState(() {
-            appointments = appointmentsData
-                .map((appointment) => Appointment.fromJson(appointment))
-                .toList();
-        isLoading = false;
+            appointments = appointmentsData.map((appointment) => Appointment.fromJson(appointment)).toList();
+            isLoading = false;
           });
         } else {
           setState(() {
-       isLoading = false;
+            isLoading = false;
           });
-        //  textFieldController.text = 'No Slots Available';
+          //  textFieldController.text = 'No Slots Available';
           print('No Slots Available');
         }
       } else {
@@ -1093,18 +987,18 @@ class _appointmentlist extends State<appointmentlist> {
       throw Exception('Failed to connect to the API');
     }
   }
+
   bool isPastDate(String selectedDate, String time) {
     final now = DateTime.now();
-   // DateTime currentTime = DateTime.now();
-  //  print('currentTime: $currentTime');
- //   int hours = currentTime.hour;
-  //  print('current hours: $hours');
+    // DateTime currentTime = DateTime.now();
+    //  print('currentTime: $currentTime');
+    //   int hours = currentTime.hour;
+    //  print('current hours: $hours');
     // Format the time using a specific pattern with AM/PM
     String formattedTime = DateFormat('hh:mm a').format(now);
 
     final selectedDateTime = DateTime.parse(selectedDate);
     final currentDate = DateTime(now.year, now.month, now.day);
-
 
     // Agent login chey
 
@@ -1128,29 +1022,29 @@ class _appointmentlist extends State<appointmentlist> {
         isBeforeTime = true;
       }
 
-    //  isBeforeTime = hours >= time;
+      //  isBeforeTime = hours >= time;
     }
 
     print('isBeforeTime: $isBeforeTime');
     print('isBeforeDate: $isBeforeDate');
     return isBeforeTime || isBeforeDate;
   }
+
   Future<void> Get_ApprovedDeclinedSlots(Appointment data, int i) async {
-    final url =  Uri.parse(baseUrl+GetApprovedDeclinedSlots);
+    final url = Uri.parse(baseUrl + GetApprovedDeclinedSlots);
     print('url==>55555: $url');
 
     final request = {
-        "Id": data.id,
-        "StatusTypeId": 5,
-        "BranchName":widget.branchname,
-        "Date": data.date,
-        "SlotTime": data.slotTime,
-        "CustomerName": data.customerName,
-        "PhoneNumber": widget.phonenumber,
-        "Email":data.email,
-        "Address": widget.branchaddress,
-        "SlotDuration": data.SlotDuration
-
+      "Id": data.id,
+      "StatusTypeId": 5,
+      "BranchName": widget.branchname,
+      "Date": data.date,
+      "SlotTime": data.slotTime,
+      "CustomerName": data.customerName,
+      "PhoneNumber": widget.phonenumber,
+      "Email": data.email,
+      "Address": widget.branchaddress,
+      "SlotDuration": data.SlotDuration
     };
     print('Get_ApprovedSlotsmail: $request');
     try {
@@ -1166,14 +1060,11 @@ class _appointmentlist extends State<appointmentlist> {
       // Check the response status code
       if (response.statusCode == 204) {
         print('Request sent successfully');
-
       } else {
-
         print('Failed to send the request. Status code: ${response.statusCode}');
       }
     } catch (e) {
       print('Error: $e');
     }
   }
-
 }

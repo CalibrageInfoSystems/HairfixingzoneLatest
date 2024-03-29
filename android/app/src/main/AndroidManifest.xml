@@ -23,6 +23,8 @@
         </queries>
         <application
             android:label="Namma Hairfixingzone"
+            android:allowBackup="false"
+            android:fullBackupOnly="false"
             android:name="${applicationName}"
             android:icon="@drawable/hair_fixing_2">
             <activity

@@ -13,13 +13,14 @@ import 'api_config.dart';
 class slotbookingscreen extends StatefulWidget {
   final int branchId;
   final String branchname;
-  final String  branchlocation;
-  final String  filepath;
+  final String branchlocation;
+  final String filepath;
   final String MobileNumber;
-  slotbookingscreen({required this.branchId,required this.branchname,required this.branchlocation, required this.filepath,required this.MobileNumber});
+  slotbookingscreen({required this.branchId, required this.branchname, required this.branchlocation, required this.filepath, required this.MobileNumber});
   @override
   _BookingScreenState createState() => _BookingScreenState();
 }
+
 class Slot {
   final int branchId;
   final String name;
@@ -62,7 +63,7 @@ class _BookingScreenState extends State<slotbookingscreen> {
   String AvailableSlots = '';
   String? dropValue;
   List<dropdown> drop = [];
-  int? dropdownid ;
+  int? dropdownid;
   late List<String> _subSlots;
   late String selectedOption;
   late String selecteddate;
@@ -90,14 +91,14 @@ class _BookingScreenState extends State<slotbookingscreen> {
   bool isButtonEnabled = true;
   bool isLoading = true;
   late bool isSlotsAvailable;
-  List<Slot> disabledSlots =[];
-  List<Slot> visableSlots =[];
+  List<Slot> disabledSlots = [];
+  List<Slot> visableSlots = [];
   late int BranchId;
   List<DateTime> disabledDates = [];
   List<Holiday> holidayList = [];
   bool _isTodayHoliday = false;
   late DateTime holidayDate;
-  bool isTodayHoliday  = false;
+  bool isTodayHoliday = false;
   List<dynamic> dropdownItems = [];
   int selectedTypeCdId = -1;
   late int selectedValue;
@@ -128,15 +129,12 @@ class _BookingScreenState extends State<slotbookingscreen> {
           print('Error fetching time slots: $error');
         });
         fetchRadioButtonOptions();
-      fetchData();
+        fetchData();
       } else {
         CommonUtils.showCustomToastMessageLong('Not connected to the internet', context, 1, 4);
         print('Not connected to the internet');
       }
     });
-
-
-
   }
 
   @override
@@ -156,789 +154,704 @@ class _BookingScreenState extends State<slotbookingscreen> {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    final desiredWidth = screenWidth ;
+    final desiredWidth = screenWidth;
     isSlotsAvailable = getVisibleSlots(slots, isTodayHoliday).isNotEmpty;
     disabledSlots = getDisabledSlots(slots);
-    visableSlots =getVisibleSlots(slots, isTodayHoliday);
-    return
-      Scaffold(
-
-
+    visableSlots = getVisibleSlots(slots, isTodayHoliday);
+    return Scaffold(
         appBar: AppBar(
-          centerTitle: true,
-          backgroundColor: Color(0xFFFB4110),
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back),
-            onPressed: () {
-              Navigator.of(context).pop(); // Navigate back to the previous screen
-            },
-          ),
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            children: [
+            centerTitle: true,
+            backgroundColor: Color(0xFFFB4110),
+            leading: IconButton(
+              icon: Icon(Icons.arrow_back),
+              onPressed: () {
+                Navigator.of(context).pop(); // Navigate back to the previous screen
+              },
+            ),
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 2)),
+                Image.asset(
+                  'assets/logo.png',
+                  width: 100,
+                  height: 180,
+                ),
+              ],
+            )),
+        //body: YourBodyWidget(),
+        // Replace YourBodyWidget with your actual content
 
-              Padding(
-                  padding:
-                  const EdgeInsets.symmetric(horizontal: 2, vertical: 2)),
-              Image.asset(
-                'assets/logo.png',
-                width: 100,
-                height: 180,
-              ),
-            ],
-          )),
-
-        //body: YourBodyWidget(), // Replace YourBodyWidget with your actual content
-
-      body: Container(
+        body: Container(
             decoration: BoxDecoration(
               image: DecorationImage(
                 image: AssetImage('assets/background.png'),
                 fit: BoxFit.fill,
               ),
             ),
-            child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Expanded(
-                      child: Padding(
-                        padding: EdgeInsets.only(top: 20.0,left: 10,right: 10),
-                        child: Stack(
-                            alignment: Alignment.topCenter,
+            child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+              Expanded(
+                  child: Padding(
+                padding: EdgeInsets.only(top: 20.0, left: 10, right: 10),
+                child: Stack(alignment: Alignment.topCenter, children: [
+                  SizedBox(
+                    width: desiredWidth,
+                    height: 180,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(20.0),
+                      child: Image.network(
+                        imagesflierepo + widget.filepath,
+                        fit: BoxFit.fill,
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    top: 90.0,
+                    child: Container(
+                      height: 150,
+                      width: desiredWidth * 0.9,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                          topRight: Radius.circular(28.0),
+                          bottomLeft: Radius.circular(28.0),
+                        ),
+                        border: Border.all(
+                          color: Colors.white,
+                          width: 8.0,
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Color(0xFFD7DEFA),
+                            spreadRadius: -15.0,
+                            blurRadius: 20.0,
+                          ),
+                        ],
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.only(
+                          topRight: Radius.circular(20.0),
+                          bottomLeft: Radius.circular(20.0),
+                        ),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [
+                                Color(0xFFFEE7E1), // Start color
+                                Color(0xFFD7DEFA), // End color
+                              ],
+                            ),
+                          ),
+                          child: Stack(
+                            alignment: Alignment.centerRight,
                             children: [
-                              SizedBox(
-                                width: desiredWidth,
-                                height: 180,
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(20.0),
-                                  child:Image.network(
-                                    imagesflierepo +
-                                    widget.filepath,
-                                    fit: BoxFit.fill,
+                              Positioned(
+                                right: 26.0,
+                                top: 50.0,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    // Handle the click event
+                                    // Add your desired functionality here
+                                    _makePhoneCall('tel:' + widget.MobileNumber);
+                                  },
+                                  child: AnimatedContainer(
+                                    duration: Duration(milliseconds: 5000),
+                                    width: 30,
+                                    height: 30,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Colors.white,
+                                      border: Border.all(
+                                        color: Color(0xFF042DE3),
+                                        width: 1,
+                                      ),
+                                    ),
+                                    transform: Matrix4.identity()..scale(_isPhoneIconFocused ? 1.2 : 1.0),
+                                    child: Padding(
+                                      padding: EdgeInsets.all(5.0),
+                                      child: SvgPicture.asset(
+                                        'assets/phone_1.svg',
+                                        height: 34,
+                                        width: 34,
+                                        color: Color(0xFF042DE3),
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ),
-                              Positioned(
-                                top: 90.0,
-                                child: Container(
-                                  height: 150,
-                                  width: desiredWidth * 0.9,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.only(
-                                      topRight: Radius.circular(28.0),
-                                      bottomLeft: Radius.circular(28.0),
-                                    ),
-                                    border: Border.all(
-                                      color: Colors.white,
-                                      width: 8.0,
-                                    ),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Color(0xFFD7DEFA),
-                                        spreadRadius: -15.0,
-                                        blurRadius: 20.0,
+                              Align(
+                                alignment: Alignment.topLeft,
+                                child: Padding(
+                                  padding: EdgeInsets.only(
+                                    left: 16.0,
+                                    top: 39.0,
+                                  ),
+                                  child: Image.asset(
+                                    'assets/location_icon.png',
+                                    width: 15,
+                                    height: 18,
+                                  ),
+                                ),
+                              ),
+                              Align(
+                                alignment: Alignment.topLeft,
+                                child: Padding(
+                                  padding: EdgeInsets.only(
+                                    left: 18.0,
+                                    top: 15.0,
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsets.only(bottom: 4.0),
+                                        child: Text(
+                                          widget.branchname,
+                                          style: TextStyle(
+                                            color: Color(0xFFFB4110),
+                                            fontSize: 18,
+                                            fontFamily: 'Calibri',
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: Padding(
+                                          padding: EdgeInsets.only(right: 70.0, left: 18.0),
+                                          child: Text(
+                                            widget.branchlocation,
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                              fontFamily: 'Calibri',
+                                            ),
+                                            maxLines: 6,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ),
                                       ),
                                     ],
                                   ),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.only(
-                                      topRight: Radius.circular(20.0),
-                                      bottomLeft: Radius.circular(20.0),
-                                    ),
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        gradient: LinearGradient(
-                                          colors: [
-                                            Color(0xFFFEE7E1), // Start color
-                                            Color(0xFFD7DEFA), // End color
-                                          ],
-                                        ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    //  padding: EdgeInsets.only(left:5 ,top: 10.0,right: 5),
+                    padding: EdgeInsets.fromLTRB(15.0, 250.0, 15.0, 20.0),
+                    child: SingleChildScrollView(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(left: 0, top: 1.0, right: 0),
+                            child: GestureDetector(
+                              onTap: () async {
+                                _openDatePicker(isTodayHoliday);
+                              },
+                              child: Container(
+                                width: desiredWidth * 0.9,
+                                height: 40.0,
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Color(0xFF163CF1), width: 1.5),
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                                child: AbsorbPointer(
+                                  child: SizedBox(
+                                    child: TextFormField(
+                                      controller: _dateController,
+                                      style: TextStyle(
+                                        fontFamily: 'Calibri',
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w300,
                                       ),
-                                      child: Stack(
-                                        alignment: Alignment.centerRight,
-                                        children: [
-                                          Positioned(
-                                            right: 26.0,
-                                            top: 50.0,
-                                            child: GestureDetector(
-                                              onTap: () {
-                                                // Handle the click event
-                                                // Add your desired functionality here
-                                                _makePhoneCall(
-                                                    'tel:'
-                                                    + widget.MobileNumber);
-                                              },
-                                              child: AnimatedContainer(
-                                                duration: Duration(
-                                                    milliseconds: 5000),
-                                                width: 30,
-                                                height: 30,
-                                                decoration: BoxDecoration(
-                                                  shape: BoxShape.circle,
-                                                  color: Colors.white,
-                                                  border: Border.all(
-                                                    color: Color(0xFF042DE3),
-                                                    width: 1,
-                                                  ),
-                                                ),
-                                                transform: Matrix4.identity()
-                                                  ..scale(_isPhoneIconFocused
-                                                      ? 1.2
-                                                      : 1.0),
-                                                child: Padding(
-                                                  padding: EdgeInsets.all(5.0),
-                                                  child: SvgPicture.asset(
-                                                    'assets/phone_1.svg',
-                                                    height: 34,
-                                                    width: 34,
-                                                    color: Color(0xFF042DE3),
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
+                                      decoration: InputDecoration(
+                                        hintText: 'Select date',
+                                        hintStyle: TextStyle(
+                                          fontFamily: 'Calibri',
+                                          fontSize: 14,
+                                          color: Color(0xFFFB4110),
+                                          fontWeight: FontWeight.w300,
+                                        ),
+                                        prefixIcon: Padding(
+                                          padding: EdgeInsets.all(8.0),
+                                          child: SvgPicture.asset(
+                                            'assets/datepicker_icon.svg',
+                                            width: 20.0,
                                           ),
-                                          Align(
-                                            alignment: Alignment.topLeft,
-                                            child: Padding(
-                                              padding: EdgeInsets.only(
-                                                left: 16.0,
-                                                top: 39.0,
-                                              ),
-                                              child: Image.asset(
-                                                'assets/location_icon.png',
-                                                width: 15,
-                                                height: 18,
-                                              ),
-                                            ),
-                                          ),
-                                          Align(
-                                            alignment: Alignment.topLeft,
-                                            child: Padding(
-                                              padding: EdgeInsets.only(
-                                                left: 18.0,
-                                                top: 15.0,
-                                              ),
-                                              child: Column(
-                                                crossAxisAlignment: CrossAxisAlignment
-                                                    .start,
-                                                children: [
-                                                  Padding(
-                                                    padding: EdgeInsets.only(
-                                                        bottom: 4.0),
-                                                    child: Text(
-                                                      widget.branchname,
-                                                      style: TextStyle(
-                                                        color: Color(
-                                                            0xFFFB4110),
-                                                        fontSize: 18,
-                                                        fontFamily: 'Calibri',
-
-                                                        fontWeight: FontWeight
-                                                            .bold,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  Expanded(
-                                                    child: Padding(
-                                                      padding: EdgeInsets.only(
-                                                          right: 70.0,
-                                                          left: 18.0),
-                                                      child: Text(
-                                                        widget.branchlocation,
-                                                        style: TextStyle(
-                                                          fontSize: 14,
-                                                          fontFamily: 'Calibri',
-
-                                                        ),
-                                                        maxLines: 6,
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        ],
+                                        ),
+                                        border: InputBorder.none,
                                       ),
                                     ),
                                   ),
                                 ),
                               ),
-                              Padding(
-                                //  padding: EdgeInsets.only(left:5 ,top: 10.0,right: 5),
-                                padding: EdgeInsets.fromLTRB(
-                                    15.0, 250.0, 15.0, 20.0),
-                                child: SingleChildScrollView(
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment
-                                        .center,
-                                    children: [
-                                      Padding(
-                                        padding: EdgeInsets.only(left:0 ,top: 1.0,right: 0),
-                                        child: GestureDetector(
-                                          onTap: () async {
-                                            _openDatePicker(isTodayHoliday);
-                                          },
-                                          child: Container(
-                                            width: desiredWidth * 0.9,
-                                            height: 40.0,
-                                            decoration: BoxDecoration(
-                                              border: Border.all(
-                                                  color: Color(0xFF163CF1),
-                                                  width: 1.5),
-                                              borderRadius: BorderRadius.circular(
-                                                  10.0),
-                                            ),
-                                            child: AbsorbPointer(
-                                              child: SizedBox(
-                                                child: TextFormField(
-                                                  controller: _dateController,
-                                                  style: TextStyle(
-                                                    fontFamily: 'Calibri',
-                                                    fontSize: 14,
-
-                                                    fontWeight: FontWeight.w300,
-                                                  ),
-                                                  decoration: InputDecoration(
-                                                    hintText: 'Select date',
-                                                    hintStyle: TextStyle(
-                                                      fontFamily: 'Calibri',
-                                                      fontSize: 14,
-                                                      color: Color(
-                                                          0xFFFB4110),
-                                                      fontWeight: FontWeight
-                                                          .w300,
-                                                    ),
-                                                    prefixIcon: Padding(
-                                                      padding: EdgeInsets.all(
-                                                          8.0),
-                                                      child: SvgPicture.asset(
-                                                        'assets/datepicker_icon.svg',
-                                                        width: 20.0,
-                                                      ),
-                                                    ),
-                                                    border: InputBorder.none,
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
+                            ),
+                          ),
+                          SizedBox(height: 8.0),
+                          Padding(
+                            padding: EdgeInsets.all(5.0), // Adjust the padding values as needed
+                            child: Column(
+                              children: [
+                                Visibility(
+                                  visible: !isTodayHoliday,
+                                  child: Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Text(
+                                      'Select Slot',
+                                      style: TextStyle(
+                                        fontFamily: 'Calibri',
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.bold,
+                                        color: Color(0xFFFB4110),
                                       ),
-                                      SizedBox(height: 8.0),
-                                      Padding(
-                                        padding: EdgeInsets.all(5.0), // Adjust the padding values as needed
-                                        child:
-                                        Column(
-                                          children: [
-                                            Visibility(
-                                              visible: !isTodayHoliday,
-                                              child: Align(
-                                                alignment: Alignment.centerLeft,
-                                                child: Text(
-                                                  'Select Slot',
-                                                  style: TextStyle(
-                                                    fontFamily: 'Calibri',
-                                                    fontSize: 14,
-                                                    fontWeight: FontWeight.bold,
-                                                    color: Color(0xFFFB4110),
-                                                  ),
-                                                ),
+                                    ),
+                                  ),
+                                ),
+                                //bool slotsAvailable = getVisibleSlots(slots).isNotEmpty;
+
+                                // bool isSlotsAvailable = getVisibleSlots(slots).isNotEmpty;
+
+                                Scrollbar(
+                                  child: isLoading
+                                      ? Center(
+                                          child: CircularProgressIndicator(),
+                                        )
+                                      : isSlotsAvailable
+                                          ? GridView.builder(
+                                              shrinkWrap: true,
+                                              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                                crossAxisCount: 3,
+                                                childAspectRatio: 2.5,
                                               ),
-                                            ),
-                                            //bool slotsAvailable = getVisibleSlots(slots).isNotEmpty;
+                                              itemCount: getVisibleSlots(slots, isTodayHoliday).length,
+                                              itemBuilder: (BuildContext context, int i) {
+                                                final visibleSlots = getVisibleSlots(slots, isTodayHoliday);
+                                                if (i >= visibleSlots.length) {
+                                                  return SizedBox.shrink();
+                                                }
 
+                                                final slot = visibleSlots[i];
 
-                                            // bool isSlotsAvailable = getVisibleSlots(slots).isNotEmpty;
-
-                                            Scrollbar(
-                                              child: isLoading
-                                                  ? Center(
-                                                child: CircularProgressIndicator(),
-                                              )
-                                                  : isSlotsAvailable
-                                                  ? GridView.builder(
-                                                shrinkWrap: true,
-                                                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                                                  crossAxisCount: 3,
-                                                  childAspectRatio: 2.5,
-                                                ),
-                                                itemCount: getVisibleSlots(slots,isTodayHoliday).length,
-                                                itemBuilder: (BuildContext context, int i) {
-                                                  final visibleSlots = getVisibleSlots(slots,isTodayHoliday);
-                                                  if (i >= visibleSlots.length) {
-                                                    return SizedBox.shrink();
-                                                  }
-
-                                                  final slot = visibleSlots[i];
-
-                                                  return Container(
-                                                    margin: EdgeInsets.symmetric(vertical: 2, horizontal: 2),
-                                                    child: ElevatedButton(
-                                                      onPressed: slot.availableSlots <= 0
-                                                          ? null
-                                                          : () {
-                                                        setState(() {
-                                                          _selectedTimeSlot = slot.SlotTimeSpan;
-                                                          _selectedSlot = slot.slot;
-                                                          AvailableSlots = slot.availableSlots.toString();
-                                                          timeSlotParts = _selectedSlot.split(' - ');
-                                                          slotselection = true;
-
-                                                          print('===123==$timeSlotParts[0]');
-                                                          print('===12===$timeSlotParts[1]');
-                                                          print('==234==$_selectedTimeSlot');
-                                                          print('===567==$_selectedSlot');
-                                                          print('==900==$AvailableSlots');
-                                                        });
-                                                      },
-                                                      style: ElevatedButton.styleFrom(
-                                                        padding: EdgeInsets.symmetric(vertical: 1.0, horizontal: 1.0),
-                                                        primary: _selectedTimeSlot == slot.SlotTimeSpan
-                                                            ? Colors.green
-                                                            : (slot.availableSlots <= 0 ? Colors.grey : Colors.white),
-                                                        side: BorderSide(
-                                                          color: _selectedTimeSlot == slot.SlotTimeSpan
-                                                              ? Colors.green
-                                                              : (slot.availableSlots <= 0 ? Colors.transparent : Colors.green),
-                                                          width: 2.0,
-                                                        ),
-                                                        shape: RoundedRectangleBorder(
-                                                          borderRadius: BorderRadius.circular(5.0),
-                                                        ),
-                                                        textStyle: TextStyle(
-                                                          color: _selectedTimeSlot == slot.SlotTimeSpan ? Colors.white : Colors.black,
-                                                        ),
+                                                return Container(
+                                                  margin: EdgeInsets.symmetric(vertical: 2, horizontal: 2),
+                                                  child: ElevatedButton(
+                                                    onPressed: slot.availableSlots <= 0
+                                                        ? null
+                                                        : () {
+                                                            setState(() {
+                                                              _selectedTimeSlot = slot.SlotTimeSpan;
+                                                              _selectedSlot = slot.slot;
+                                                              AvailableSlots = slot.availableSlots.toString();
+                                                              timeSlotParts = _selectedSlot.split(' - ');
+                                                              slotselection = true;
+                                                              print('===123==$timeSlotParts[0]');
+                                                              print('===12===$timeSlotParts[1]');
+                                                              print('==234==$_selectedTimeSlot');
+                                                              print('===567==$_selectedSlot');
+                                                              print('==900==$AvailableSlots');
+                                                            });
+                                                          },
+                                                    style: ElevatedButton.styleFrom(
+                                                      padding: EdgeInsets.symmetric(vertical: 1.0, horizontal: 1.0),
+                                                      primary: _selectedTimeSlot == slot.SlotTimeSpan ? Colors.green : (slot.availableSlots <= 0 ? Colors.grey : Colors.white),
+                                                      side: BorderSide(
+                                                        color: _selectedTimeSlot == slot.SlotTimeSpan ? Colors.green : (slot.availableSlots <= 0 ? Colors.transparent : Colors.green),
+                                                        width: 2.0,
                                                       ),
-                                                      child: Text(
-                                                        slot.SlotTimeSpan,
+                                                      shape: RoundedRectangleBorder(
+                                                        borderRadius: BorderRadius.circular(5.0),
+                                                      ),
+                                                      textStyle: TextStyle(
+                                                        color: _selectedTimeSlot == slot.SlotTimeSpan ? Colors.white : Colors.black,
+                                                      ),
+                                                    ),
+                                                    child: Text(
+                                                      slot.SlotTimeSpan,
+                                                      style: TextStyle(
+                                                        color: _selectedTimeSlot == slot.SlotTimeSpan ? Colors.white : (slot.availableSlots <= 0 ? Colors.white : Colors.black),
+                                                        fontFamily: 'Calibri',
+                                                        fontSize: 12,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                );
+                                              },
+                                            )
+                                          : isTodayHoliday
+                                              ? Center(
+                                                  child: Column(
+                                                    mainAxisAlignment: MainAxisAlignment.center,
+                                                    children: [
+                                                      Text(
+                                                        'Today is a holiday',
                                                         style: TextStyle(
-                                                          color: _selectedTimeSlot == slot.SlotTimeSpan
-                                                              ? Colors.white
-                                                              : (slot.availableSlots <= 0 ? Colors.white : Colors.black),
                                                           fontFamily: 'Calibri',
                                                           fontSize: 12,
+                                                          fontWeight: FontWeight.bold,
                                                         ),
                                                       ),
-                                                    ),
-
-
-
-
-                                                  );
-                                                },
-                                              )
-                                              :isTodayHoliday
-                                                  ? Center(
-                                                child: Column(
-                                                  mainAxisAlignment: MainAxisAlignment.center,
-                                                  children: [
-                                                    Text(
-                                                      'Today is a holiday',
-                                                      style: TextStyle(
-                                                        fontFamily: 'Calibri',
-                                                        fontSize: 12,
-                                                        fontWeight: FontWeight.bold,
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              )
-                                                 // Show your regular widget when today is not a holiday
+                                                    ],
+                                                  ),
+                                                )
+                                              // Show your regular widget when today is not a holiday
 
                                               : Center(
-                                                child: Column(
-                                                  mainAxisAlignment: MainAxisAlignment.center,
-                                                  children: [
-                                                    Text(
-                                                      'No Slots Available',
-                                                      style: TextStyle(
-                                                        fontFamily: 'Calibri',
-                                                        fontSize: 12,
-                                                        fontWeight: FontWeight.bold,
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            )
-                                          ],
-                                        ),
-
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsets.only(left: 0.0, top: 10.0, right: 0),
-                                        child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          children: [
-
-                                            Container(
-                                              width: 20, // Adjust the width as needed
-                                              height: 20, // Adjust the height as needed
-                                              decoration: BoxDecoration(
-                                                color: Colors.white,
-                                                border: Border.all(
-                                                  color: Colors.green, // Set the border line color
-                                                  width: 2, // Set the border line width
-                                                ),
-                                              ),
-                                            ),
-                                            SizedBox(width: 6), // Add spacing between icon and text
-                                            Text(
-                                              'Available', // Replace with your desired text
-                                              style: TextStyle(fontSize: 12), // Set the text style
-                                            ),
-                                            SizedBox(width: 13),
-                                            Container(
-                                              width: 20, // Adjust the width as needed
-                                              height: 20, // Adjust the height as needed
-                                              decoration: BoxDecoration(
-                                                color: Colors.green,
-                                                border: Border.all(
-                                                  color: Colors.green, // Set the border line color
-                                                  width: 2, // Set the border line width
-                                                ),
-                                              ),
-                                            ),
-                                            SizedBox(width: 6), // Add spacing between icon and text
-                                            Text(
-                                              'Selected', // Replace with your desired text
-                                              style: TextStyle(fontSize: 12), // Set the text style
-                                            ),
-                                            SizedBox(width: 13),
-                                            Container(
-                                              width: 20, // Adjust the width as needed
-                                              height: 20, // Adjust the height as needed
-                                              decoration: BoxDecoration(
-                                                color: Colors.grey,
-                                                border: Border.all(
-                                                  color: Colors.grey, // Set the border line color
-                                                  width: 2, // Set the border line width
-                                                ),
-                                              ),
-                                            ),
-                                            SizedBox(width: 10), // Add spacing between icon and text
-                                            Text(
-                                              'No Slots', // Replace with your desired text
-                                              style: TextStyle(fontSize: 12), // Set the text style
-                                            ),
-                                          ],
-                                        ),
-                                        // buildRow( 'Avaliable',true,false,false),
-                                        // SizedBox(width: 8),
-                                        // buildRow( 'Selected',false,true,false),
-                                        // SizedBox(width: 8),
-                                        // buildRow( 'Not Available',false, false,true),
-
-                                      ),
-                                      SizedBox(height: 15.0,),
-                                      Padding(
-                                        padding: EdgeInsets.only(left:0 ,top: 1.0,right: 0),
-                                        child: GestureDetector(
-
-                                          child: Container(
-                                            width: desiredWidth * 0.9,
-                                            height: 40.0,
-                                            decoration: BoxDecoration(
-                                              borderRadius: BorderRadius
-                                                  .circular(10.0),
-                                              border: Border.all(
-                                                color: Color(0xFF163CF1),
-                                                width: 1.5,
-                                              ),
-                                            ),
-                                            child: Row(
-                                              children: [
-                                                Padding(
-                                                  padding: EdgeInsets.all(
-                                                      8.0),
-                                                  child: SvgPicture.asset(
-                                                    'assets/User_icon.svg',
-                                                    width: 20.0,
-                                                  ),
-                                                ),
-                                                Expanded(
-                                                  child: Align(
-                                                    alignment: Alignment
-                                                        .centerLeft,
-                                                    child: Padding(
-                                                      padding: EdgeInsets.only(
-                                                          left: 10,top: 6.0),
-                                                      child: TextFormField(
-                                                        keyboardType: TextInputType
-                                                            .name,
-                                                        controller: _fullnameController1,
-                                                        style: TextStyle(
-                                                          fontFamily: 'Calibri',
-                                                          fontSize: 14,
-
-                                                          fontWeight: FontWeight
-                                                              .w300,
-                                                        ),
-                                                        decoration: InputDecoration(
-                                                          hintText: 'Full Name',
-                                                          hintStyle: TextStyle(
-                                                            fontFamily: 'Calibri',
-                                                            fontSize: 14,
-                                                            color: Color(
-                                                                0xFFFB4110),
-                                                            fontWeight: FontWeight
-                                                                .w300,
-                                                          ),
-                                                          border: InputBorder
-                                                              .none,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsets.only(left:0 ,top: 10.0,right: 0),
-                                        child: GestureDetector(
-                                          onTap: () {
-                                            // Handle the click event for the third text view
-                                            print('Third Text View Clicked');
-                                          },
-                                          child: Container(
-                                            width:desiredWidth * 0.9,
-                                            height: 40.0,
-                                            decoration: BoxDecoration(
-                                              borderRadius: BorderRadius
-                                                  .circular(10.0),
-                                              border: Border.all(
-                                                color: Color(0xFF163CF1),
-                                                width: 1.5,
-                                              ),
-                                            ),
-                                            child: Row(
-                                              children: [
-                                                Padding(
-                                                  padding: EdgeInsets.all(
-                                                      8.0),
-                                                  child: SvgPicture.asset(
-                                                    'assets/phone_1.svg',
-                                                    width: 20.0,
-                                                  ),
-                                                ),
-                                                Expanded(
-                                                  child: Align(
-                                                    alignment: Alignment
-                                                        .centerLeft,
-                                                    child: Padding(
-                                                      padding: EdgeInsets.only(
-                                                          left: 10.0),
-                                                      child: TextFormField(
-                                                        // initialValue: 'Phone Number',
-                                                        maxLength: 10,
-                                                        keyboardType: TextInputType
-                                                            .number,
-                                                        controller: _phonenumberController2,
-                                                        inputFormatters: [
-                                                          FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-                                                        ],
-                                                        style: TextStyle(
-                                                          fontFamily: 'Calibri',
-                                                          fontSize: 14,
-
-                                                          fontWeight: FontWeight
-                                                              .w300,
-                                                        ),
-                                                        decoration: InputDecoration(
-                                                          hintText: 'Phone Number',
-                                                          hintStyle: TextStyle(
-                                                            fontFamily: 'Calibri',
-                                                            fontSize: 14,
-                                                            color: Color(
-                                                                0xFFFB4110),
-                                                            fontWeight: FontWeight
-                                                                .w300,
-                                                          ),
-                                                          counterText: '',
-
-                                                          border: InputBorder
-                                                              .none,
-                                                          // Remove the underline border
-                                                        ),
-
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsets.only(left:0 ,top: 10.0,right: 0),
-                                        child: GestureDetector(
-                                          onTap: () {
-                                            // Handle the click event for the fourth text view
-                                            print('Fourth Text View Clicked');
-                                          },
-                                          child: Container(
-                                            width: desiredWidth * 0.9,
-                                            height: 40.0,
-                                            decoration: BoxDecoration(
-                                              borderRadius: BorderRadius
-                                                  .circular(10.0),
-                                              border: Border.all(
-                                                color: Color(0xFF163CF1),
-                                                width: 1.5,
-                                              ),
-                                            ),
-                                            child: Row(
-                                              children: [
-                                                Padding(
-                                                  padding: EdgeInsets.all(
-                                                      8.0),
-                                                  child: SvgPicture.asset(
-                                                    'assets/Mail_icon.svg',
-                                                    width: 20.0,
-                                                  ),
-                                                ),
-                                                Expanded(
-                                                  child: Align(
-                                                    alignment: Alignment
-                                                        .centerLeft,
-                                                    child: Padding(
-                                                      padding: EdgeInsets.only(
-                                                          left: 10.0),
-                                                      child: TextFormField(
-                                                        // initialValue: 'Email',
-                                                        controller: _emailController3,
-                                                        keyboardType: TextInputType
-                                                            .emailAddress,
-                                                        style: TextStyle(
-                                                          fontFamily: 'Calibri',
-                                                          fontSize: 14,
-
-                                                          fontWeight: FontWeight
-                                                              .w300,
-                                                        ),
-                                                        decoration: InputDecoration(
-                                                          hintText: 'Email',
-                                                          hintStyle: TextStyle(
-                                                            fontFamily: 'Calibri',
-                                                            fontSize: 14,
-                                                            color: Color(
-                                                                0xFFFB4110),
-                                                            fontWeight: FontWeight
-                                                                .w300,
-                                                          ),
-                                                          border: InputBorder
-                                                              .none,
-                                                          // Remove the underline border
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-
-                                      Padding(
-                                        padding: EdgeInsets.only(left:0,top: 10.0,right: 0),
-                                        child:
-                                        Column(
-                                          mainAxisAlignment: MainAxisAlignment.start,
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Padding(
-                                              padding: EdgeInsets.only(top: 10.0),
-                                              child: Row(
-                                                children: options.map((option) {
-                                                  return Row(
+                                                  child: Column(
+                                                    mainAxisAlignment: MainAxisAlignment.center,
                                                     children: [
-                                                      CustomRadioButton(
-                                                        selected: selectedGender == option.typeCdId,
-                                                        onTap: () {
-                                                          setState(() {
-                                                            selectedGender = option.typeCdId;
-                                                            isGenderSelected = true;
-                                                          });
-                                                          print(option.typeCdId);
-                                                          print(option.desc);
-                                                        },
-                                                      ),
-                                                      SizedBox(width: 8),
                                                       Text(
-                                                        option.desc,
+                                                        'No Slots Available',
                                                         style: TextStyle(
                                                           fontFamily: 'Calibri',
-                                                          fontSize: 14,
-                                                          color: Color(0xFFFB4110),
+                                                          fontSize: 12,
+                                                          fontWeight: FontWeight.bold,
                                                         ),
                                                       ),
-                                                      SizedBox(width: 26),
                                                     ],
-                                                  );
-                                                }).toList(),
-                                              ),
+                                                  ),
+                                                ),
+                                )
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(left: 0.0, top: 10.0, right: 0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Container(
+                                  width: 20, // Adjust the width as needed
+                                  height: 20, // Adjust the height as needed
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    border: Border.all(
+                                      color: Colors.green, // Set the border line color
+                                      width: 2, // Set the border line width
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(width: 6), // Add spacing between icon and text
+                                Text(
+                                  'Available', // Replace with your desired text
+                                  style: TextStyle(fontSize: 12), // Set the text style
+                                ),
+                                SizedBox(width: 13),
+                                Container(
+                                  width: 20, // Adjust the width as needed
+                                  height: 20, // Adjust the height as needed
+                                  decoration: BoxDecoration(
+                                    color: Colors.green,
+                                    border: Border.all(
+                                      color: Colors.green, // Set the border line color
+                                      width: 2, // Set the border line width
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(width: 6), // Add spacing between icon and text
+                                Text(
+                                  'Selected', // Replace with your desired text
+                                  style: TextStyle(fontSize: 12), // Set the text style
+                                ),
+                                SizedBox(width: 13),
+                                Container(
+                                  width: 20, // Adjust the width as needed
+                                  height: 20, // Adjust the height as needed
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey,
+                                    border: Border.all(
+                                      color: Colors.grey, // Set the border line color
+                                      width: 2, // Set the border line width
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(width: 10), // Add spacing between icon and text
+                                Text(
+                                  'No Slots', // Replace with your desired text
+                                  style: TextStyle(fontSize: 12), // Set the text style
+                                ),
+                              ],
+                            ),
+                            // buildRow( 'Avaliable',true,false,false),
+                            // SizedBox(width: 8),
+                            // buildRow( 'Selected',false,true,false),
+                            // SizedBox(width: 8),
+                            // buildRow( 'Not Available',false, false,true),
+                          ),
+                          SizedBox(
+                            height: 15.0,
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(left: 0, top: 1.0, right: 0),
+                            child: GestureDetector(
+                              child: Container(
+                                width: desiredWidth * 0.9,
+                                height: 40.0,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  border: Border.all(
+                                    color: Color(0xFF163CF1),
+                                    width: 1.5,
+                                  ),
+                                ),
+                                child: Row(
+                                  children: [
+                                    Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: SvgPicture.asset(
+                                        'assets/User_icon.svg',
+                                        width: 20.0,
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: Padding(
+                                          padding: EdgeInsets.only(left: 10, top: 6.0),
+                                          child: TextFormField(
+                                            keyboardType: TextInputType.name,
+                                            controller: _fullnameController1,
+                                            style: TextStyle(
+                                              fontFamily: 'Calibri',
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w300,
                                             ),
-                                          ],
+                                            decoration: InputDecoration(
+                                              hintText: 'Full Name',
+                                              hintStyle: TextStyle(
+                                                fontFamily: 'Calibri',
+                                                fontSize: 14,
+                                                color: Color(0xFFFB4110),
+                                                fontWeight: FontWeight.w300,
+                                              ),
+                                              border: InputBorder.none,
+                                            ),
+                                          ),
                                         ),
                                       ),
-                                      SizedBox(height: 10),
-                                      Padding(
-                                        padding: EdgeInsets.only(left:0 ,top: 10.0,right: 0),
-                                        child: Container(
-                                          width: double.infinity,
-                                          decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(10.0),
-                                            border: Border.all(
-                                              color: Color(0xFF163CF1),
-                                              width: 1.5,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(left: 0, top: 10.0, right: 0),
+                            child: GestureDetector(
+                              onTap: () {
+                                // Handle the click event for the third text view
+                                print('Third Text View Clicked');
+                              },
+                              child: Container(
+                                width: desiredWidth * 0.9,
+                                height: 40.0,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  border: Border.all(
+                                    color: Color(0xFF163CF1),
+                                    width: 1.5,
+                                  ),
+                                ),
+                                child: Row(
+                                  children: [
+                                    Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: SvgPicture.asset(
+                                        'assets/phone_1.svg',
+                                        width: 20.0,
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: Padding(
+                                          padding: EdgeInsets.only(left: 10.0),
+                                          child: TextFormField(
+                                            // initialValue: 'Phone Number',
+                                            maxLength: 10,
+                                            keyboardType: TextInputType.number,
+                                            controller: _phonenumberController2,
+                                            inputFormatters: [
+                                              FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                                            ],
+                                            style: TextStyle(
+                                              fontFamily: 'Calibri',
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w300,
+                                            ),
+                                            decoration: InputDecoration(
+                                              hintText: 'Phone Number',
+                                              hintStyle: TextStyle(
+                                                fontFamily: 'Calibri',
+                                                fontSize: 14,
+                                                color: Color(0xFFFB4110),
+                                                fontWeight: FontWeight.w300,
+                                              ),
+                                              counterText: '',
+
+                                              border: InputBorder.none,
+                                              // Remove the underline border
                                             ),
                                           ),
-                                          child: DropdownButtonHideUnderline(
-                                              child: ButtonTheme(
-                                                alignedDropdown: true,
-                                                child: DropdownButton<int>(
-                                                  value: selectedTypeCdId,
-                                                  iconSize: 30,
-
-                                                  icon: null,
-                                                  style: TextStyle(
-                                                    color: Color(0xFFFB4110),
-                                                  ),
-
-                                                    onChanged: (value) {
-                                                              setState(() {
-                                                                selectedTypeCdId = value!;
-                                                                if(selectedTypeCdId != -1) {
-                                                                  selectedValue = dropdownItems[selectedTypeCdId]['TypeCdId'];
-                                                                  selectedName = dropdownItems[selectedTypeCdId]['Desc'];
-
-                                                                  print(selectedValue);
-                                                                  print(selectedName);
-                                                                }
-                                                                else{
-                                                                  print("==========");
-                                                                  print(selectedValue);
-                                                                  print(selectedName);
-                                                                }
-                                                               // isDropdownValid = selectedTypeCdId != -1;
-                                                              });
-                                                            },
-                                            items: [
-                                              DropdownMenuItem<int>(
-                                          value: -1,
-                                            child: Text('Select Purpose of Visit'), // Static text
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(left: 0, top: 10.0, right: 0),
+                            child: GestureDetector(
+                              onTap: () {
+                                // Handle the click event for the fourth text view
+                                print('Fourth Text View Clicked');
+                              },
+                              child: Container(
+                                width: desiredWidth * 0.9,
+                                height: 40.0,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  border: Border.all(
+                                    color: Color(0xFF163CF1),
+                                    width: 1.5,
+                                  ),
+                                ),
+                                child: Row(
+                                  children: [
+                                    Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: SvgPicture.asset(
+                                        'assets/Mail_icon.svg',
+                                        width: 20.0,
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: Padding(
+                                          padding: EdgeInsets.only(left: 10.0),
+                                          child: TextFormField(
+                                            // initialValue: 'Email',
+                                            controller: _emailController3,
+                                            keyboardType: TextInputType.emailAddress,
+                                            style: TextStyle(
+                                              fontFamily: 'Calibri',
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w300,
+                                            ),
+                                            decoration: InputDecoration(
+                                              hintText: 'Email',
+                                              hintStyle: TextStyle(
+                                                fontFamily: 'Calibri',
+                                                fontSize: 14,
+                                                color: Color(0xFFFB4110),
+                                                fontWeight: FontWeight.w300,
+                                              ),
+                                              border: InputBorder.none,
+                                              // Remove the underline border
+                                            ),
                                           ),
-                                            ...dropdownItems.asMap().entries.map((entry) {
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(left: 0, top: 10.0, right: 0),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.only(top: 10.0),
+                                  child: Row(
+                                    children: options.map((option) {
+                                      return Row(
+                                        children: [
+                                          CustomRadioButton(
+                                            selected: selectedGender == option.typeCdId,
+                                            onTap: () {
+                                              setState(() {
+                                                selectedGender = option.typeCdId;
+                                                print('selectedGender:$selectedGender');
+                                                isGenderSelected = true;
+                                              });
+                                              print(option.typeCdId);
+                                              print(option.desc);
+                                            },
+                                          ),
+                                          SizedBox(width: 8),
+                                          Text(
+                                            option.desc,
+                                            style: TextStyle(
+                                              fontFamily: 'Calibri',
+                                              fontSize: 14,
+                                              color: Color(0xFFFB4110),
+                                            ),
+                                          ),
+                                          SizedBox(width: 26),
+                                        ],
+                                      );
+                                    }).toList(),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(height: 10),
+                          Padding(
+                            padding: EdgeInsets.only(left: 0, top: 10.0, right: 0),
+                            child: Container(
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10.0),
+                                border: Border.all(
+                                  color: Color(0xFF163CF1),
+                                  width: 1.5,
+                                ),
+                              ),
+                              child: DropdownButtonHideUnderline(
+                                child: ButtonTheme(
+                                  alignedDropdown: true,
+                                  child: DropdownButton<int>(
+                                      value: selectedTypeCdId,
+                                      iconSize: 30,
+                                      icon: null,
+                                      style: TextStyle(
+                                        color: Color(0xFFFB4110),
+                                      ),
+                                      onChanged: (value) {
+                                        setState(() {
+                                          selectedTypeCdId = value!;
+                                          if (selectedTypeCdId != -1) {
+                                            selectedValue = dropdownItems[selectedTypeCdId]['TypeCdId'];
+                                            selectedName = dropdownItems[selectedTypeCdId]['Desc'];
+
+                                            print("selectedValue:$selectedValue");
+                                            print("selectedName:$selectedName");
+                                          } else {
+                                            print("==========");
+                                            print(selectedValue);
+                                            print(selectedName);
+                                          }
+                                          // isDropdownValid = selectedTypeCdId != -1;
+                                        });
+                                      },
+                                      items: [
+                                        DropdownMenuItem<int>(
+                                          value: -1,
+                                          child: Text('Select Purpose of Visit'), // Static text
+                                        ),
+                                        ...dropdownItems.asMap().entries.map((entry) {
                                           final index = entry.key;
                                           final item = entry.value;
                                           return DropdownMenuItem<int>(
@@ -946,63 +859,51 @@ class _BookingScreenState extends State<slotbookingscreen> {
                                             child: Text(item['Desc']),
                                           );
                                         }).toList(),
-  ]
-                                              ),
-
-
-
-                                          ),
-
-
-
-                                          ),
+                                      ]),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(left: 0, top: 10.0, right: 0),
+                            child: Container(
+                              width: 380,
+                              height: 60,
+                              child: Center(
+                                child: GestureDetector(
+                                  onTap: isButtonEnabled ? () => validatedata() : null,
+                                  child: Container(
+                                    width: desiredWidth * 0.9,
+                                    height: 40.0,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(15.0),
+                                      color: isButtonEnabled ? Color(0xFFFB4110) : Colors.grey,
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        'Book Appointment',
+                                        style: TextStyle(
+                                          fontFamily: 'Calibri',
+                                          fontSize: 14,
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
                                         ),
                                       ),
-                                      Padding(
-                                        padding: EdgeInsets.only(left:0 ,top: 10.0,right: 0),
-                                        child: Container(
-                                          width: 380,
-                                          height: 60,
-                                          child: Center(
-
-                                            child: GestureDetector(
-                                              onTap: isButtonEnabled ? () => validatedata() : null,
-                                              child: Container(
-                                                width: desiredWidth * 0.9,
-                                                height: 40.0,
-                                                decoration: BoxDecoration(
-                                                  borderRadius: BorderRadius.circular(15.0),
-                                                  color: isButtonEnabled ? Color(0xFFFB4110) : Colors.grey,
-                                                ),
-                                                child: Center(
-                                                  child: Text(
-                                                    'Book Appointment',
-                                                    style: TextStyle(
-                                                      fontFamily: 'Calibri',
-                                                      fontSize: 14,
-                                                      color: Colors.white,
-                                                      fontWeight: FontWeight.bold,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
+                                    ),
                                   ),
                                 ),
                               ),
-                            ]
-                        ),
-                      )
-                  )
-                ]
-            )
-        )
-    );
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ]),
+              ))
+            ])));
   }
+
   Future<void> _openDatePicker(bool isTodayHoliday) async {
     setState(() {
       _isTodayHoliday = isTodayHoliday;
@@ -1033,10 +934,7 @@ class _BookingScreenState extends State<slotbookingscreen> {
   }
 
   bool isHoliday(DateTime date) {
-    return holidayList.any((holiday) =>
-    date.year == holiday.holidayDate.year &&
-        date.month == holiday.holidayDate.month &&
-        date.day == holiday.holidayDate.day);
+    return holidayList.any((holiday) => date.year == holiday.holidayDate.year && date.month == holiday.holidayDate.month && date.day == holiday.holidayDate.day);
   }
 
   DateTime getNextNonHoliday(DateTime currentDate) {
@@ -1060,8 +958,6 @@ class _BookingScreenState extends State<slotbookingscreen> {
     // Return false if any of the conditions are met
     return !isPastDate && !isHolidayDate && !isPreviousYear && date.year >= DateTime.now().year;
   }
-
-
 
   //Original Code commented by Arun on Jan25th
   // Future<void> _openDatePicker(bool isTodayHoliday) async {
@@ -1121,16 +1017,16 @@ class _BookingScreenState extends State<slotbookingscreen> {
   }
 
   Future<void> validatedata() async {
-    int disabledlength= disabledSlots.length;
+    int disabledlength = disabledSlots.length;
     print('====887$disabledlength');
-    int visablelength= visableSlots.length;
+    int visablelength = visableSlots.length;
     print('==889$visablelength');
     bool isValid = true;
     bool hasValidationFailed = false;
 
-    if(selectedTypeCdId == -1){
+    if (selectedTypeCdId == -1) {
       selectedName = "Select";
-  }
+    }
 
     if (_dateController.text.isEmpty) {
       showCustomToastMessageLong('Please Select Date', context, 1, 4);
@@ -1141,14 +1037,12 @@ class _BookingScreenState extends State<slotbookingscreen> {
       showCustomToastMessageLong('No Slots Available Today', context, 1, 4);
       isValid = false;
       hasValidationFailed = true;
-    }
-    else  if (!slotselection) {
+    } else if (!slotselection) {
       showCustomToastMessageLong('Please Select slot', context, 1, 4);
       isValid = false;
       hasValidationFailed = true;
     }
-    if(visablelength == disabledlength)
-    {
+    if (visablelength == disabledlength) {
       showCustomToastMessageLong('No Slots Available Today ', context, 1, 4);
       isValid = false;
       hasValidationFailed = true;
@@ -1165,8 +1059,7 @@ class _BookingScreenState extends State<slotbookingscreen> {
       hasValidationFailed = true;
     }
     if (isValid && _phonenumberController2.text.isEmpty) {
-      showCustomToastMessageLong(
-          'Please Enter Your Phone Number', context, 1, 4);
+      showCustomToastMessageLong('Please Enter Your Phone Number', context, 1, 4);
       isValid = false;
       hasValidationFailed = true;
     } else {
@@ -1179,7 +1072,6 @@ class _BookingScreenState extends State<slotbookingscreen> {
       }
     }
 
-
     if (isValid && _emailController3.text.isEmpty) {
       showCustomToastMessageLong('Please Enter Your Email', context, 1, 4);
       isValid = false;
@@ -1191,14 +1083,11 @@ class _BookingScreenState extends State<slotbookingscreen> {
       hasValidationFailed = true;
     }
 
-
     if (isValid && !isGenderSelected) {
       showCustomToastMessageLong('Please Select Gender', context, 1, 4);
       isValid = false;
       hasValidationFailed = true;
     }
-
-
 
     if (isValid && selectedTypeCdId == -1) {
       showCustomToastMessageLong('Please Select Purpose of Visit', context, 1, 4);
@@ -1206,14 +1095,11 @@ class _BookingScreenState extends State<slotbookingscreen> {
       hasValidationFailed = true;
     }
 
-
-
-
     if (isValid) {
       // Disable the button after validation
       disableButton();
       // Define the API URL
-      final url =  Uri.parse(baseUrl+postApiAppointment);
+      final url = Uri.parse(baseUrl + postApiAppointment);
       print('url==>890: $url');
 
       DateTime now = DateTime.now();
@@ -1229,7 +1115,7 @@ class _BookingScreenState extends State<slotbookingscreen> {
         "BranchId": widget.branchId,
         "Date": selecteddate,
         "SlotTime": timeSlotParts[0],
-        "CustomerName":_fullnameController1.text,
+        "CustomerName": _fullnameController1.text,
         "PhoneNumber": _phonenumberController2.text,
         "Email": _emailController3.text,
         "GenderTypeId": selectedGender,
@@ -1240,7 +1126,6 @@ class _BookingScreenState extends State<slotbookingscreen> {
         "CreatedDate": dateTimeString,
         "UpdatedDate": dateTimeString,
         "UpdatedByUserId": null,
-
       };
       print('DateTime as String: $request');
       try {
@@ -1256,12 +1141,10 @@ class _BookingScreenState extends State<slotbookingscreen> {
         // Check the response status code
         if (response.statusCode == 200) {
           print('Request sent successfully');
-          showCustomToastMessageLong(
-              'Slot booked successfully', context, 0, 2);
+          showCustomToastMessageLong('Slot booked successfully', context, 0, 2);
           Navigator.pop(context);
         } else {
-          showCustomToastMessageLong(
-              'Failed to send the request', context, 1, 2);
+          showCustomToastMessageLong('Failed to send the request', context, 1, 2);
           print('Failed to send the request. Status code: ${response.statusCode}');
         }
       } catch (e) {
@@ -1269,9 +1152,9 @@ class _BookingScreenState extends State<slotbookingscreen> {
       }
     }
   }
-  Future<void> fetchRadioButtonOptions() async {
 
-    final url =  Uri.parse(baseUrl+getgender);
+  Future<void> fetchRadioButtonOptions() async {
+    final url = Uri.parse(baseUrl + getgender);
     print('url==>946: $url');
 
     try {
@@ -1340,12 +1223,10 @@ class _BookingScreenState extends State<slotbookingscreen> {
     DateTime currentDate = DateTime.now();
 
     // Combine the current date and formatted time
-    String combinedDateTimeString =
-        DateFormat('yyyy-MM-dd').format(currentDate) + ' ' + formattedTime;
+    String combinedDateTimeString = DateFormat('yyyy-MM-dd').format(currentDate) + ' ' + formattedTime;
 
     // Parse the combined date and time string into a DateTime object
-    DateTime combinedDateTime =
-    DateFormat('yyyy-MM-dd hh:mm a').parse(combinedDateTimeString);
+    DateTime combinedDateTime = DateFormat('yyyy-MM-dd hh:mm a').parse(combinedDateTimeString);
 
     if (isTodayHoliday) {
       // Today is a holiday, return an empty list
@@ -1360,8 +1241,7 @@ class _BookingScreenState extends State<slotbookingscreen> {
     return slots.where((slot) {
       String timespan = slot.SlotTimeSpan;
       // Combine the current date and formatted time
-      String SlotDateTimeString =
-          DateFormat('yyyy-MM-dd').format(currentDate) + ' ' + timespan;
+      String SlotDateTimeString = DateFormat('yyyy-MM-dd').format(currentDate) + ' ' + timespan;
 
       DateFormat dateformat = DateFormat('yyyy-MM-dd');
       String currentdate = dateformat.format(DateTime.now());
@@ -1383,15 +1263,12 @@ class _BookingScreenState extends State<slotbookingscreen> {
         slotDateTime = DateFormat('yyyy-MM-dd hh:mm a').parse(SlotDateTimeString);
       } else {
         // If the slot is for a different date, use the slot's date and time
-        slotDateTime =
-            DateFormat('yyyy-MM-dd HH:mm').parse('${formattedapiDate} ${timespan}');
+        slotDateTime = DateFormat('yyyy-MM-dd HH:mm').parse('${formattedapiDate} ${timespan}');
       }
 
       return !slotDateTime.isBefore(combinedDateTime);
     }).toList();
   }
-
-
 
   List<Slot> getDisabledSlots(List<Slot> slots) {
     // Get the current time
@@ -1404,17 +1281,14 @@ class _BookingScreenState extends State<slotbookingscreen> {
     DateTime currentDate = DateTime.now();
 
     // Combine the current date and formatted time
-    String combinedDateTimeString =
-        DateFormat('yyyy-MM-dd').format(currentDate) + ' ' + formattedTime;
+    String combinedDateTimeString = DateFormat('yyyy-MM-dd').format(currentDate) + ' ' + formattedTime;
 
     // Parse the combined date and time string into a DateTime object
-    DateTime combinedDateTime =
-    DateFormat('yyyy-MM-dd hh:mm a').parse(combinedDateTimeString);
+    DateTime combinedDateTime = DateFormat('yyyy-MM-dd hh:mm a').parse(combinedDateTimeString);
 
     // Filter the slots based on visibility criteria
     List<Slot> disabledSlots = slots.where((slot) {
-      DateTime slotDateTime =
-      DateFormat('yyyy-MM-dd HH:mm').parse('${slot.date} ${slot.date}');
+      DateTime slotDateTime = DateFormat('yyyy-MM-dd HH:mm').parse('${slot.date} ${slot.date}');
       return !slotDateTime.isBefore(combinedDateTime) && slot.availableSlots <= 0;
     }).toList();
 
@@ -1451,15 +1325,13 @@ class _BookingScreenState extends State<slotbookingscreen> {
     }
   }
 
-
-  void showCustomToastMessageLong(String message,
-      BuildContext context,
-      int backgroundColorType,
-      int length,) {
-    final double screenWidth = MediaQuery
-        .of(context)
-        .size
-        .width;
+  void showCustomToastMessageLong(
+    String message,
+    BuildContext context,
+    int backgroundColorType,
+    int length,
+  ) {
+    final double screenWidth = MediaQuery.of(context).size.width;
     final double textWidth = screenWidth / 1.5; // Adjust multiplier as needed
 
     final double toastWidth = textWidth + 32.0; // Adjust padding as needed
@@ -1467,38 +1339,35 @@ class _BookingScreenState extends State<slotbookingscreen> {
 
     OverlayEntry overlayEntry;
     overlayEntry = OverlayEntry(
-      builder: (BuildContext context) =>
-          Positioned(
-            bottom: 16.0,
-            left: toastOffset,
-            child: Material(
-              color: Colors.white,
+      builder: (BuildContext context) => Positioned(
+        bottom: 16.0,
+        left: toastOffset,
+        child: Material(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(8.0),
+          child: Container(
+            width: toastWidth,
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: backgroundColorType == 0 ? Colors.green : Colors.red,
+                width: 2.0,
+              ),
               borderRadius: BorderRadius.circular(8.0),
-              child: Container(
-                width: toastWidth,
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: backgroundColorType == 0 ? Colors.green : Colors.red,
-                    width: 2.0,
-                  ),
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-                child: Padding(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: 16.0, vertical: 10.0),
-                  child: Center(
-                    child: Text(
-                      message,
-                      style: TextStyle(fontSize: 16.0, color: Colors.black),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
+            ),
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
+              child: Center(
+                child: Text(
+                  message,
+                  style: TextStyle(fontSize: 16.0, color: Colors.black),
+                  textAlign: TextAlign.center,
                 ),
               ),
             ),
           ),
+        ),
+      ),
     );
-
 
     Overlay.of(context).insert(overlayEntry);
     Future.delayed(Duration(seconds: length)).then((value) {
@@ -1519,13 +1388,13 @@ class _BookingScreenState extends State<slotbookingscreen> {
       return false;
     }
 
-    return regex.hasMatch(email)
-    ;
+    return regex.hasMatch(email);
   }
+
   Future<HolidayResponse> fetchHolidayListByBranchId(int branchId) async {
     // final url = Uri.parse(
     //     'http://182.18.157.215/SaloonApp/API/GetHolidayListByBranchId/$branchId');
-    final url =  Uri.parse(baseUrl+GetHolidayListByBranchId+'$branchId');
+    final url = Uri.parse(baseUrl + GetHolidayListByBranchId + '$branchId');
     try {
       final response = await http.get(url);
 
@@ -1547,7 +1416,6 @@ class _BookingScreenState extends State<slotbookingscreen> {
             print('Today is a holiday: $formattedDate');
             break; // If a match is found, exit the loop
           }
-
         }
         return holidayResponse;
       } else {
@@ -1561,7 +1429,7 @@ class _BookingScreenState extends State<slotbookingscreen> {
   Future<void> fetchData() async {
     final url = Uri.parse(baseUrl + getdropdown);
     final response = await http.get((url));
-   // final url =  Uri.parse(baseUrl+GetHolidayListByBranchId+'$branchId');
+    // final url =  Uri.parse(baseUrl+GetHolidayListByBranchId+'$branchId');
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
       setState(() {
@@ -1571,8 +1439,8 @@ class _BookingScreenState extends State<slotbookingscreen> {
       print('Failed to fetch data');
     }
   }
-
 }
+
 class RadioButtonOption {
   final int typeCdId;
   final String desc;
@@ -1586,6 +1454,7 @@ class RadioButtonOption {
     );
   }
 }
+
 class dropdown {
   final int typeCdId_1;
   final String desc_1;
@@ -1599,6 +1468,7 @@ class dropdown {
     );
   }
 }
+
 class HolidayResponse {
   List<Holiday> listResult;
   bool isSuccess;
@@ -1627,6 +1497,7 @@ class HolidayResponse {
     );
   }
 }
+
 class Holiday {
   int branchId;
   DateTime holidayDate;
