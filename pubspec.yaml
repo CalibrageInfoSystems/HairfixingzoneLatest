@@ -48,6 +48,8 @@ dependencies:
   skeletons: ^0.0.3
   shimmer: ^3.0.0
   syncfusion_flutter_gauges: ^19.3.48
+  flutter_rating_bar: ^4.0.1
+
 
 dev_dependencies:
   flutter_test:

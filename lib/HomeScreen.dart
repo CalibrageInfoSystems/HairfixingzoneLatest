@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:hairfixingzone/feedback.dart';
 import 'package:hairfixingzone/slotbookingscreen.dart';
 import 'dart:async';
 //
@@ -160,16 +161,21 @@ class _HomeScreenState extends State<HomeScreen> {
               ListTile(
                 leading: Icon(Icons.place),
                 title: Text(
-                  'My Leaves',
+                  'My Appointments',
                   style: TextStyle(
                     color: Colors.black,
                     fontFamily: 'hind_semibold',
                   ),
                 ),
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => MyAppointments()),
+                  );
+                },
               ),
               ListTile(
-                leading: Icon(Icons.star), // Change the icon as needed
+                leading: Icon(Icons.star),
                 title: Text(
                   'Feedback',
                   style: TextStyle(
@@ -179,6 +185,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 onTap: () {
                   // Handle the onTap action for Logout
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => feedback_Screen()),
+                  );
                 },
               ),
               ListTile(
@@ -192,6 +202,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 onTap: () {
                   // Handle the onTap action for Logout
+                  logOutDialog();
                 },
               ),
               // Add more ListTiles or other widgets as needed
@@ -200,6 +211,33 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         body: SliderScreen(),
       ),
+    );
+  }
+
+  void logOutDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Logout'),
+          content: Text('Are you sure you want to Logout?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+                // Perform logout action
+              },
+              child: Text('Logout'),
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -577,6 +615,7 @@ class _SliderScreenState extends State<SliderScreen> {
 //       print('Error: $error');
 //     }
 //   }
+
   Future<void> fetchImages() async {
     setState(() {
       isDataBinding = true; // Set the flag to true when data fetching starts
