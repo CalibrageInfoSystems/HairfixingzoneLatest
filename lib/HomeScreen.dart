@@ -77,7 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ],
-
+          centerTitle: true,
           // actions: [
           //   Align(
           //     alignment: Alignment.bottomRight,
@@ -147,6 +147,57 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
         ),
+        drawer: Drawer(
+          child: ListView(
+            children: [
+              DrawerHeader(
+                decoration: BoxDecoration(
+                    // Remove the DecorationImage with AssetImage
+                    ),
+                child: Icon(Icons.place),
+              ),
+
+              ListTile(
+                leading: Icon(Icons.place),
+                title: Text(
+                  'My Leaves',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontFamily: 'hind_semibold',
+                  ),
+                ),
+                onTap: () {},
+              ),
+              ListTile(
+                leading: Icon(Icons.star), // Change the icon as needed
+                title: Text(
+                  'Feedback',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontFamily: 'hind_semibold',
+                  ),
+                ),
+                onTap: () {
+                  // Handle the onTap action for Logout
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.logout), // Change the icon as needed
+                title: Text(
+                  'Logout',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontFamily: 'hind_semibold',
+                  ),
+                ),
+                onTap: () {
+                  // Handle the onTap action for Logout
+                },
+              ),
+              // Add more ListTiles or other widgets as needed
+            ],
+          ),
+        ),
         body: SliderScreen(),
       ),
     );
@@ -195,10 +246,10 @@ class BannerImages {
     return BannerImages(
       imageName: json['imageName'] ?? '',
       id: json['id'] ?? 0,
-
     );
   }
 }
+
 class SliderScreen extends StatefulWidget {
   @override
   _SliderScreenState createState() => _SliderScreenState();
@@ -544,8 +595,7 @@ class _SliderScreenState extends State<SliderScreen> {
 
         List<BannerImages> bannerImages = [];
         for (var item in jsonData['listResult']) {
-          bannerImages.add(BannerImages(imageName: item['imageName'] ?? '', id: item['id']?? 0));
-
+          bannerImages.add(BannerImages(imageName: item['imageName'] ?? '', id: item['id'] ?? 0));
         }
 
         setState(() {
@@ -653,7 +703,7 @@ class _SliderScreenState extends State<SliderScreen> {
                                 : CarouselSlider(
                                     items: imageList
                                         .map((item) => Image.network(
-                                             item.imageName,
+                                              item.imageName,
                                               fit: BoxFit.fitWidth,
                                               width: MediaQuery.of(context).size.width,
                                             ))
