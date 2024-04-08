@@ -5,7 +5,7 @@ const String SUCCESS_MESSAGE=" You will be contacted by us very soon.";
 var baseUrl = "http://182.18.157.215/SaloonApp/API/";      // Test
 //var baseUrl ="http://182.18.157.215/SaloonApp_Live/API/";//live
 
-var getBanners ="api/Banner/null";
+var getBanners ="GetBanner?Id=null";
 
 var getbranches="api/Branch/null";
 var GetBranchByUserId="GetBranchByUserId/";

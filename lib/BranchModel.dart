@@ -20,18 +20,19 @@ class BranchModel {
     required this.mobileNumber,
     required this.isActive,
   });
-
   factory BranchModel.fromJson(Map<String, dynamic> json) {
     return BranchModel(
-      id: json['Id'],
-      name: json['Name'],
-      filePath: json['FilePath'],
-      address: json['Address'],
-      startTime: json['StartTime'],
-      closeTime: json['CloseTime'],
-      room: json['Room'],
-      mobileNumber: json['MobileNumber'],
-      isActive: json['IsActive'],
+      id: json['Id'] ?? 0,
+      name: json['Name'] ?? '',
+      filePath: json['FilePath'] ?? '',
+      address: json['Address'] ?? '',
+      startTime: json['StartTime'] ?? 0,
+      closeTime: json['CloseTime'] ?? 0,
+      room: json['Room'] ?? 0,
+      mobileNumber: json['MobileNumber'] ?? '',
+      isActive: json['IsActive'] ?? false,
     );
   }
+
+
 }

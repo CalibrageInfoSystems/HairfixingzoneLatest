@@ -3,7 +3,6 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hairfixingzone/slotbookingscreen.dart';
 import 'dart:async';
-
 //
 // import 'package:hairfixingservice/slotbookingscreen.dart';
 import 'package:http/http.dart' as http;
@@ -177,13 +176,29 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
+// class BannerImages {
+//   final String imageName;
+//   final int id;
+//
+//   BannerImages({required this.imageName, required this.id});
+// }
 class BannerImages {
-  final String FilePath;
-  final int Id;
+  final int id;
+  final String imageName;
 
-  BannerImages({required this.FilePath, required this.Id});
+  BannerImages({
+    required this.imageName,
+    required this.id,
+  });
+
+  factory BannerImages.fromJson(Map<String, dynamic> json) {
+    return BannerImages(
+      imageName: json['imageName'] ?? '',
+      id: json['id'] ?? 0,
+
+    );
+  }
 }
-
 class SliderScreen extends StatefulWidget {
   @override
   _SliderScreenState createState() => _SliderScreenState();
@@ -436,20 +451,19 @@ class _SliderScreenState extends State<SliderScreen> {
         if (response.statusCode == 200) {
           // Parse the response body
           final data = json.decode(response.body);
-          print('Failed to fetch data:  $data');
 
           List<BranchModel> branchList = [];
-          for (var item in data['ListResult']) {
+          for (var item in data['listResult']) {
             branchList.add(BranchModel(
-              id: item['Id'],
-              name: item['Name'],
-              filePath: item['FilePath'],
-              address: item['Address'],
-              startTime: item['StartTime'],
-              closeTime: item['CloseTime'],
-              room: item['Room'],
-              mobileNumber: item['MobileNumber'],
-              isActive: item['IsActive'],
+              id: item['id'],
+              name: item['name'],
+              filePath: item['filePath'],
+              address: item['address'],
+              startTime: item['startTime'],
+              closeTime: item['closeTime'],
+              room: item['room'],
+              mobileNumber: item['mobileNumber'],
+              isActive: item['isActive'],
             ));
           }
 
@@ -529,8 +543,9 @@ class _SliderScreenState extends State<SliderScreen> {
         final jsonData = json.decode(response.body);
 
         List<BannerImages> bannerImages = [];
-        for (var item in jsonData['ListResult']) {
-          bannerImages.add(BannerImages(FilePath: item['FilePath'], Id: item['Id']));
+        for (var item in jsonData['listResult']) {
+          bannerImages.add(BannerImages(imageName: item['imageName'] ?? '', id: item['id']?? 0));
+
         }
 
         setState(() {
@@ -638,7 +653,7 @@ class _SliderScreenState extends State<SliderScreen> {
                                 : CarouselSlider(
                                     items: imageList
                                         .map((item) => Image.network(
-                                              imagesflierepo + item.FilePath,
+                                             item.imageName,
                                               fit: BoxFit.fitWidth,
                                               width: MediaQuery.of(context).size.width,
                                             ))

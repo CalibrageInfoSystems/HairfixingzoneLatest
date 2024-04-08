@@ -97,19 +97,19 @@ class _AgentScreenState extends State<agentloginscreen> {
       if (response.statusCode == 200) {
         final Map<String, dynamic> responseData = jsonDecode(response.body);
 
-        if (responseData["IsSuccess"]) {
-          List<dynamic>? listResult = responseData["ListResult"];
+        if (responseData["isSuccess"]) {
+          List<dynamic>? listResult = responseData["listResult"];
 
           if (listResult != null) {
-            user_Id = listResult[0]["Id"];
+            user_Id = listResult[0]["id"];
 
             final Map<String, dynamic> agentSlotsDetailsMap = {
               "AgentSlotsdetails": [],
             };
 
             for (var item in listResult) {
-              userIds.add(item["Id"]);
-              branchIds.add(item["BranchId"]);
+              userIds.add(item["id"]);
+              branchIds.add(item["branchId"]);
             }
 
             for (int i = 0; i < userIds.length; i++) {
@@ -159,7 +159,7 @@ class _AgentScreenState extends State<agentloginscreen> {
       if (addSlotResponse.statusCode == 200) {
         final Map<String, dynamic> responseJson = jsonDecode(addSlotResponse.body);
 
-        if (responseJson["IsSuccess"]) {
+        if (responseJson["isSuccess"]) {
           print("Agent slots information added successfully.");
           SharedPreferences prefs = await SharedPreferences.getInstance();
           prefs.setBool('isLoggedIn', true);
@@ -172,8 +172,8 @@ class _AgentScreenState extends State<agentloginscreen> {
                 builder: (context) => Branches_screen(userId: user_id),
               ));
         } else {
-          print("Error: ${responseJson["EndUserMessage"]}");
-          if (responseJson["EndUserMessage"] == "This token is already used") {
+          print("Error: ${responseJson["statusMessage"]}");
+          if (responseJson["statusMessage"] == "This token is already used") {
             SharedPreferences prefs = await SharedPreferences.getInstance();
             prefs.setBool('isLoggedIn', true);
             Navigator.push(
@@ -182,7 +182,7 @@ class _AgentScreenState extends State<agentloginscreen> {
                   builder: (context) => Branches_screen(userId: user_id),
                 ));
           } else {
-            CommonUtils.showCustomToastMessageLong("${responseJson["EndUserMessage"]}", context, 1, 4);
+            CommonUtils.showCustomToastMessageLong("${responseJson["statusMessage"]}", context, 1, 4);
           }
         }
       } else {

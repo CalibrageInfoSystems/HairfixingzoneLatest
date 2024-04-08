@@ -624,17 +624,17 @@ class _BranchesscreenState extends State<Branches_screen> {
         final data = json.decode(response.body);
 
         List<BranchModel> branchList = [];
-        for (var item in data['ListResult']) {
+        for (var item in data['listResult']) {
           branchList.add(BranchModel(
-            id: item['Id'],
-            name: item['Name'],
-            filePath: item['FilePath'],
-            address: item['Address'],
-            startTime: item['StartTime'],
-            closeTime: item['CloseTime'],
-            room: item['Room'],
-            mobileNumber: item['MobileNumber'],
-            isActive: item['IsActive'],
+            id: item['id'],
+            name: item['name'],
+            filePath: item['filePath'],
+            address: item['address'],
+            startTime: item['startTime'],
+            closeTime: item['closeTime'],
+            room: item['room'],
+            mobileNumber: item['mobileNumber'],
+            isActive: item['isActive'],
           ));
         }
 

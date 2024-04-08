@@ -931,6 +931,7 @@ class _appointmentlist extends State<appointmentlist> {
       "UpdatedDate": dateTimeString,
       "UpdatedByUserId": widget.userId
     };
+    print('Accept Or reject object: : ${json.encode(request)}');
     print('Accept Or reject object: $request');
     try {
       // Send the POST request
@@ -967,8 +968,8 @@ class _appointmentlist extends State<appointmentlist> {
       final response = await http.get(url);
       if (response.statusCode == 200) {
         final Map<String, dynamic> responseData = jsonDecode(response.body);
-        if (responseData['ListResult'] != null) {
-          final List<dynamic> appointmentsData = responseData['ListResult'];
+        if (responseData['listResult'] != null) {
+          final List<dynamic> appointmentsData = responseData['listResult'];
           setState(() {
             appointments = appointmentsData.map((appointment) => Appointment.fromJson(appointment)).toList();
             isLoading = false;

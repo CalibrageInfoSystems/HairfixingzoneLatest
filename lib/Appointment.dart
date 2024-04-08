@@ -42,22 +42,22 @@ class Appointment {
 
   factory Appointment.fromJson(Map<String, dynamic> json) {
     return Appointment(
-      id: json['Id'],
-      branchId: json['BranchId'],
-      name: json['Name'],
-      date: json['Date'],
-      slotTime: json['SlotTime'],
-      customerName: json['CustomerName'],
-      phoneNumber: json['PhoneNumber'],
-      email: json['Email'],
-      genderTypeId: json['GenderTypeId'],
-      gender: json['Gender'],
-      statusTypeId: json['StatusTypeId'],
-      status: json['Status'],
-      purposevisitid: json['PurposeOfVisitId'],
-      purposeofvisit: json['PurposeOfVisit'],
-      isActive: json['IsActive'],
-      SlotDuration: json['SlotDuration'],
+      id: json['id'],
+      branchId: json['branchId'],
+      name: json['name'],
+      date: json['date'],
+      slotTime: json['slotTime'],
+      customerName: json['customerName'],
+      phoneNumber: json['phoneNumber'],
+      email: json['email'],
+      genderTypeId: json['genderTypeId'],
+      gender: json['gender'],
+      statusTypeId: json['statusTypeId'],
+      status: json['status'],
+      purposevisitid: json['purposeOfVisitId'],
+      purposeofvisit: json['purposeOfVisit'],
+      isActive: json['isActive'],
+      SlotDuration: json['slotDuration'],
     );
   }
 }

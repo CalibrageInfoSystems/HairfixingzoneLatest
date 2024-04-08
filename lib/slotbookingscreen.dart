@@ -43,13 +43,13 @@ class Slot {
 
   factory Slot.fromJson(Map<String, dynamic> json) {
     return Slot(
-      branchId: json['BranchId'],
-      name: json['Name'],
-      date: DateTime.parse(json['Dates']),
-      room: json['Room'],
-      slot: json['Slot'],
-      availableSlots: json['AvailableSlots'],
-      SlotTimeSpan: json['SlotTimeSpan'],
+      branchId: json['branchId'],
+      name: json['name'],
+      date: DateTime.parse(json['dates']),
+      room: json['room'],
+      slot: json['slot'],
+      availableSlots: json['availableSlots'],
+      SlotTimeSpan: json['slotTimeSpan'],
     );
   }
 }
@@ -117,10 +117,16 @@ class _BookingScreenState extends State<slotbookingscreen> {
     dropValue = 'Select';
     _dateController.text = DateFormat('dd-MM-yyyy').format(DateTime.now());
     selecteddate = DateFormat('yyyy-MM-dd').format(DateTime.now());
-    CommonUtils.checkInternetConnectivity().then((isConnected) {
+    CommonUtils.checkInternetConnectivity().then((isConnected) async {
       if (isConnected) {
         print('Connected to the internet');
-        fetchHolidayListByBranchId(widget.branchId);
+//  fetchHolidayListByBranchId(widget.branchId);
+        try {
+          final holidayResponse = await fetchHolidayListByBranchId();
+          print(holidayResponse);
+        } catch (e) {
+          print('Error: $e');
+        }
         fetchTimeSlots(DateTime.parse(selecteddate), widget.branchId).then((value) {
           setState(() {
             slots = value;
@@ -833,8 +839,8 @@ class _BookingScreenState extends State<slotbookingscreen> {
                                         setState(() {
                                           selectedTypeCdId = value!;
                                           if (selectedTypeCdId != -1) {
-                                            selectedValue = dropdownItems[selectedTypeCdId]['TypeCdId'];
-                                            selectedName = dropdownItems[selectedTypeCdId]['Desc'];
+                                            selectedValue = dropdownItems[selectedTypeCdId]['typeCdId'];
+                                            selectedName = dropdownItems[selectedTypeCdId]['desc'];
 
                                             print("selectedValue:$selectedValue");
                                             print("selectedName:$selectedName");
@@ -856,7 +862,7 @@ class _BookingScreenState extends State<slotbookingscreen> {
                                           final item = entry.value;
                                           return DropdownMenuItem<int>(
                                             value: index,
-                                            child: Text(item['Desc']),
+                                            child: Text(item['desc']),
                                           );
                                         }).toList(),
                                       ]),
@@ -1127,7 +1133,7 @@ class _BookingScreenState extends State<slotbookingscreen> {
         "UpdatedDate": dateTimeString,
         "UpdatedByUserId": null,
       };
-      print('DateTime as String: $request');
+      print('Object: ${json.encode(request)}');
       try {
         // Send the POST request
         final response = await http.post(
@@ -1137,7 +1143,6 @@ class _BookingScreenState extends State<slotbookingscreen> {
             'Content-Type': 'application/json', // Set the content type header
           },
         );
-
         // Check the response status code
         if (response.statusCode == 200) {
           print('Request sent successfully');
@@ -1161,8 +1166,8 @@ class _BookingScreenState extends State<slotbookingscreen> {
       final response = await http.get(url);
       if (response.statusCode == 200) {
         final dynamic responseData = jsonDecode(response.body);
-        if (responseData != null && responseData['ListResult'] is List<dynamic>) {
-          final List<dynamic> optionsData = responseData['ListResult'];
+        if (responseData != null && responseData['listResult'] is List<dynamic>) {
+          final List<dynamic> optionsData = responseData['listResult'];
           setState(() {
             options = optionsData.map((data) => RadioButtonOption.fromJson(data)).toList();
           });
@@ -1308,7 +1313,7 @@ class _BookingScreenState extends State<slotbookingscreen> {
       final response = await http.get(url);
       if (response.statusCode == 200) {
         final jsonResult = json.decode(response.body);
-        final List<dynamic> slotData = jsonResult['ListResult'];
+        final List<dynamic> slotData = jsonResult['listResult'];
 
         slots = slotData.map((slotJson) => Slot.fromJson(slotJson)).toList();
 
@@ -1390,13 +1395,21 @@ class _BookingScreenState extends State<slotbookingscreen> {
 
     return regex.hasMatch(email);
   }
-
-  Future<HolidayResponse> fetchHolidayListByBranchId(int branchId) async {
+  Future<Holiday> fetchHolidayListByBranchId() async {
     // final url = Uri.parse(
     //     'http://182.18.157.215/SaloonApp/API/GetHolidayListByBranchId/$branchId');
-    final url = Uri.parse(baseUrl + GetHolidayListByBranchId + '$branchId');
+   // final url = Uri.parse(baseUrl + GetHolidayListByBranchId);
+ final url = Uri.parse('http://182.18.157.215/SaloonApp/API/api/HolidayList/GetHolidayListdetails');
     try {
-      final response = await http.get(url);
+      final response = await http.post(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, dynamic>{
+          'id': null,
+        }),
+      );
 
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
@@ -1417,7 +1430,7 @@ class _BookingScreenState extends State<slotbookingscreen> {
             break; // If a match is found, exit the loop
           }
         }
-        return holidayResponse;
+        return Holiday.fromJson(jsonResponse);
       } else {
         throw Exception('Request failed with status: ${response.statusCode}');
       }
@@ -1426,6 +1439,41 @@ class _BookingScreenState extends State<slotbookingscreen> {
     }
   }
 
+  // Future<HolidayResponse> fetchHolidayListByBranchId(int branchId) async {
+  //   // final url = Uri.parse(
+  //   //     'http://182.18.157.215/SaloonApp/API/GetHolidayListByBranchId/$branchId');
+  //   final url = Uri.parse(baseUrl + GetHolidayListByBranchId + '$branchId');
+  //   try {
+  //     final response = await http.get(url);
+  //
+  //     if (response.statusCode == 200) {
+  //       final jsonResponse = jsonDecode(response.body);
+  //       final holidayResponse = HolidayResponse.fromJson(jsonResponse);
+  //       holidayList = holidayResponse.listResult;
+  //
+  //       DateTime now = DateTime.now();
+  //       DateTime currentDate = DateTime(now.year, now.month, now.day);
+  //       String formattedDate = DateFormat("yyyy-MM-dd'T'HH:mm:ss").format(currentDate);
+  //
+  //       for (final holiday in holidayList) {
+  //         DateTime holidayDate = holiday.holidayDate;
+  //         String holidaydate = DateFormat("yyyy-MM-dd'T'HH:mm:ss").format(holidayDate);
+  //
+  //         if (formattedDate == holidaydate) {
+  //           isTodayHoliday = true;
+  //           print('Today is a holiday: $formattedDate');
+  //           break; // If a match is found, exit the loop
+  //         }
+  //       }
+  //       return holidayResponse;
+  //     } else {
+  //       throw Exception('Request failed with status: ${response.statusCode}');
+  //     }
+  //   } catch (e) {
+  //     throw Exception('Request failed with exception: $e');
+  //   }
+  // }
+
   Future<void> fetchData() async {
     final url = Uri.parse(baseUrl + getdropdown);
     final response = await http.get((url));
@@ -1433,7 +1481,7 @@ class _BookingScreenState extends State<slotbookingscreen> {
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
       setState(() {
-        dropdownItems = data['ListResult'];
+        dropdownItems = data['listResult'];
       });
     } else {
       print('Failed to fetch data');
@@ -1449,8 +1497,8 @@ class RadioButtonOption {
 
   factory RadioButtonOption.fromJson(Map<String, dynamic> json) {
     return RadioButtonOption(
-      typeCdId: json['TypeCdId'] ?? 0,
-      desc: json['Desc'] ?? '',
+      typeCdId: json['typeCdId'] ?? 0,
+      desc: json['desc'] ?? '',
     );
   }
 }
@@ -1469,51 +1517,77 @@ class dropdown {
   }
 }
 
-class HolidayResponse {
-  List<Holiday> listResult;
-  bool isSuccess;
-  int affectedRecords;
-  String endUserMessage;
-  List<dynamic> validationErrors;
-  dynamic exception;
-
-  HolidayResponse({
-    required this.listResult,
-    required this.isSuccess,
-    required this.affectedRecords,
-    required this.endUserMessage,
-    required this.validationErrors,
-    required this.exception,
-  });
-
-  factory HolidayResponse.fromJson(Map<String, dynamic> json) {
-    return HolidayResponse(
-      listResult: List<Holiday>.from(json['ListResult'].map((x) => Holiday.fromJson(x))),
-      isSuccess: json['IsSuccess'],
-      affectedRecords: json['AffectedRecords'],
-      endUserMessage: json['EndUserMessage'],
-      validationErrors: List<dynamic>.from(json['ValidationErrors']),
-      exception: json['Exception'],
-    );
-  }
-}
+// class HolidayResponse {
+//   List<Holiday> listResult;
+//   bool isSuccess;
+//   int affectedRecords;
+//   String endUserMessage;
+//   List<dynamic> validationErrors;
+//   dynamic exception;
+//
+//   HolidayResponse({
+//     required this.listResult,
+//     required this.isSuccess,
+//     required this.affectedRecords,
+//     required this.endUserMessage,
+//     required this.validationErrors,
+//     required this.exception,
+//   });
+//
+//   factory HolidayResponse.fromJson(Map<String, dynamic> json) {
+//     return HolidayResponse(
+//       listResult: List<Holiday>.from(json['ListResult'].map((x) => Holiday.fromJson(x))),
+//       isSuccess: json['IsSuccess'],
+//       affectedRecords: json['AffectedRecords'],
+//       endUserMessage: json['EndUserMessage'],
+//       validationErrors: List<dynamic>.from(json['ValidationErrors']),
+//       exception: json['Exception'],
+//     );
+//   }
+// }
 
 class Holiday {
-  int branchId;
-  DateTime holidayDate;
-  bool isActive;
+  final int id;
+  final int branchId;
+  final DateTime holidayDate;
+  final bool isActive;
+  final String comments;
+  final String name;
+  final String createdBy;
+  final String updatedBy;
 
   Holiday({
+    required this.id,
     required this.branchId,
     required this.holidayDate,
     required this.isActive,
+    required this.comments,
+    required this.name,
+    required this.createdBy,
+    required this.updatedBy,
   });
 
   factory Holiday.fromJson(Map<String, dynamic> json) {
     return Holiday(
-      branchId: json['BranchId'],
-      holidayDate: DateTime.parse(json['HolidayDate']),
-      isActive: json['IsActive'],
+      id: json['id'] ?? 0,
+      branchId: json['branchId'] ?? 0,
+      holidayDate: DateTime.parse(json['holidayDate'] ?? ''),
+      isActive: json['isActive'] ?? false,
+      comments: json['comments'] ?? '',
+      name: json['name'] ?? '',
+      createdBy: json['createdBy'] ?? '',
+      updatedBy: json['updatedBy'] ?? '',
     );
+  }
+}
+
+class HolidayResponse {
+  final List<Holiday> listResult;
+
+  HolidayResponse({required this.listResult});
+
+  factory HolidayResponse.fromJson(List<dynamic> json) {
+    List<Holiday> holidays = json.map((holidayJson) => Holiday.fromJson(holidayJson)).toList();
+    return HolidayResponse(listResult: holidays);
   }
 }
