@@ -20,45 +20,74 @@ class _UserSelectionScreenState extends State<UserSelectionScreen> {
 
           return false;
         },
-    child: Scaffold(
-
-      body: Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/background.png'),
-            fit: BoxFit.cover,
-          ),
-        ),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              ElevatedButton(
-                onPressed: () {
-                  // Navigate to user login screen
-                  Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => UserLoginScreen()),
-                  );
-                },
-                child: Text('User Login'),
+        child: Scaffold(
+          body: SingleChildScrollView(
+              child: Container(
+            height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('assets/background.png'),
+                fit: BoxFit.cover,
               ),
-              SizedBox(height: 20), // Add some space between buttons
-              ElevatedButton(
-                onPressed: () {
-                  // Navigate to agent login screen
-                  Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => agentloginscreen()),
-                  );
-                },
-                child: Text('Agent Login'),
+            ),
+            child: Container(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Container(width: 200, height: 150, child: Image.asset('assets/logo.png')),
+
+                  // ElevatedButton(
+                  //   onPressed: () {
+                  //     // Navigate to user login screen
+                  //     Navigator.of(context).push(
+                  //       MaterialPageRoute(builder: (context) => UserLoginScreen()),
+                  //     );
+                  //   },
+                  //   child: Text('User Login'),
+                  // ),
+                  SizedBox(height: 20), // Add some space between buttons
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                          width: 120,
+                          height: 120,
+                          child: GestureDetector(
+                              onTap: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(builder: (context) => UserLoginScreen()),
+                                );
+                              },
+                              child: Image.asset('assets/CUSTOMER_ICON.png'))),
+                      SizedBox(width: 16),
+                      Container(
+                          width: 120,
+                          height: 120,
+                          child: GestureDetector(
+                              onTap: () {
+                                //     // Navigate to agent login screen
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(builder: (context) => agentloginscreen()),
+                                );
+                              },
+                              child: Image.asset('assets/AGENT.png')))
+                    ],
+                  )
+                  // ElevatedButton(
+                  //   onPressed: () {
+                  //     // Navigate to agent login screen
+                  //     Navigator.of(context).push(
+                  //       MaterialPageRoute(builder: (context) => agentloginscreen()),
+                  //     );
+                  //   },
+                  //   child: Text('Agent Login'),
+                  // ),
+                ],
               ),
-            ],
-          ),
-        ),
-      ),
-
-
-    ));
+            ),
+          )),
+        ));
   }
 
   void checkLoginStatus() async {
@@ -75,7 +104,7 @@ class _UserSelectionScreenState extends State<UserSelectionScreen> {
           context,
           MaterialPageRoute(builder: (context) => HomeScreen()),
         );
-      //  Navigator.push(context, MaterialPageRoute(builder: (context) => Branches_screen(userId: userId)));
+        //  Navigator.push(context, MaterialPageRoute(builder: (context) => Branches_screen(userId: userId)));
       } else {
         // Handle the case where the user ID is not available
         print('User ID not found in SharedPreferences');
