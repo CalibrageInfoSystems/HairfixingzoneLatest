@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'Branches_screen.dart';
 import 'HomeScreen.dart';
+import 'UserLoginScreen.dart';
+import 'UserSelectionScreen.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -37,11 +40,16 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
 
     _animationController.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
-        navigateToHome();
+       // navigateTouserselection();
+        checkLoginStatus();
+
+        //  navigateToHome();
       }
     });
 
     _animationController.forward();
+    // Call checkLoginStatus here
+
   }
 
   @override
@@ -50,9 +58,9 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
     super.dispose();
   }
 
-  void navigateToHome() {
+  void navigateTouserselection() {
     Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (context) => HomeScreen()),
+      MaterialPageRoute(builder: (context) => UserSelectionScreen()),
     );
   }
 
@@ -85,23 +93,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
     );
   }
 
-  // Future<void> requestNotificationPermission() async {
-  //   PermissionStatus status = await Permission.notification.request();
-  //
-  //   if (status.isGranted) {
-  //     // The user granted permission
-  //     // You can now send notifications
-  //     navigateToHome();
-  //   } else if (status.isDenied) {
-  //     navigateToHome();
-  //     // The user denied permission
-  //     // You may want to inform the user about why you need this permission
-  //   } else if (status.isPermanentlyDenied) {
-  //     // The user denied permission permanently
-  //     // You should guide the user to app settings to enable the permission manually
-  //     openAppSettings();
-  //   }
-  // }
+
   Future<void> requestNotificationPermission() async {
     final prefs = await SharedPreferences.getInstance();
     final isGranted = prefs.getBool('notificationPermissionStatus') ?? false;
@@ -113,7 +105,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
         print('permissionisstored');
       }
     } else if (status.isDenied) {
-      navigateToHome();
+      navigateTouserselection();
       // The user denied permission
       // You may want to inform the user about why you need this permission
     } else if (status.isPermanentlyDenied) {
@@ -127,4 +119,44 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool('notificationPermissionStatus', isGranted);
   }
+
+  void checkLoginStatus() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
+    print('isLoggedIn: $isLoggedIn');
+    if (isLoggedIn) {
+      int? userId = prefs.getInt('userId'); // Retrieve the user ID
+      int? roleId = prefs.getInt('userRoleId'); // Retrieve the role ID
+
+     // if (userId != null && roleId != null) {
+      if (userId != null ) {
+        // Use the user ID and role ID as needed
+        print('User ID: $userId, Role ID: $roleId');
+        if (roleId == 2) {
+          // Navigate to home screen for users with role ID 1
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => HomeScreen()),
+          );
+        } else {
+          // Navigate to another screen for users with different role ID
+          // For example, you might have a different screen for users with role ID 2
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => Branches_screen(userId: userId)));
+
+        }
+      } else {
+        // Handle the case where the user ID or role ID is not available
+        print('User ID or Role ID not found in SharedPreferences');
+      }
+    } else {
+      // If not logged in, navigate to the login screen
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => UserSelectionScreen()),
+      );
+    }
+  }
+
 }

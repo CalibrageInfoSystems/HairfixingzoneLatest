@@ -18,7 +18,7 @@ var postApiAppointment="api/Appointment/AddUpdateAppointment";
 var getbranchesbyuserid="api/Branch/";
 
 var ValidateUser="ValidateUser";
-
+var ValidateUserData="ValidateUserData";
 var GetAppointment="api/Appointment/GetAppointment/";
 
 var GetHolidayListByBranchId="api/Appointment/GetHolidayListByBranchId/";

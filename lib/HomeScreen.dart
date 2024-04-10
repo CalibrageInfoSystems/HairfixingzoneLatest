@@ -1,6 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter_expanded_tile/flutter_expanded_tile.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:hairfixingzone/UserSelectionScreen.dart';
 import 'package:hairfixingzone/feedback.dart';
 import 'package:hairfixingzone/slotbookingscreen.dart';
 import 'dart:async';
@@ -14,6 +18,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/services.dart';
 import 'BranchModel.dart';
 import 'Branches_screen.dart';
+import 'MyAppointments.dart';
 import 'agentloginscreen.dart';
 import 'api_config.dart';
 import 'CommonUtils.dart';
@@ -24,60 +29,55 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  late ExpandedTileController _expandedTileController;
+  @override
+  void initState() {
+    // TODO: implement initState
+    _expandedTileController = ExpandedTileController(isExpanded: false);
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return WillPopScope(
+        onWillPop: () async {
+          // Show a confirmation dialog
+          bool confirmClose = await showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: Text('Confirm Exit'),
+                content: Text('Are you sure you want to close the app?'),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () => Navigator.of(context).pop(false), // Close the dialog and return false
+                    child: Text('No'),
+                  ),
+                  TextButton(
+                    onPressed: () => Navigator.of(context).pop(true), // Close the dialog and return true
+                    child: Text('Yes'),
+                  ),
+                ],
+              );
+            },
+          );
+
+          // Close the app if user confirms
+          if (confirmClose == true) {
+            // Close the app
+            SystemNavigator.pop();
+          }
+
+          // Return false to prevent default back button behavior
+          return false;
+        },
+    child: MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
           backgroundColor: const Color(0xFFF44614), // Orange color
 
-          actions: [
-            Align(
-              alignment: Alignment.bottomRight,
-              child: Container(
-                width: 115,
-                height: 35,
-                margin: EdgeInsets.only(bottom: 10.0, right: 10.0),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border.all(
-                    color: Color(0xFF8d97e2),
-                    width: 3,
-                  ),
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                child: InkWell(
-                  onTap: () {
-                    checkLoginStatus();
-                    // Handle button press
-                  },
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 10), // Adjust padding as needed
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Image.asset(
-                          'assets/agent_icon.png',
-                          width: 20,
-                          height: 20,
-                        ),
-                        SizedBox(width: 5),
-                        Text(
-                          'AGENT',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xFF042de3),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ],
           centerTitle: true,
           // actions: [
           //   Align(
@@ -157,7 +157,149 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                 child: Icon(Icons.place),
               ),
-
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 13),
+                margin: const EdgeInsets.symmetric(vertical: 5),
+                child: ExpandedTile(
+                  controller: _expandedTileController,
+                  theme: const ExpandedTileThemeData(
+                    headerColor: Colors.transparent,
+                    headerPadding: EdgeInsets.all(0),
+                    headerSplashColor: Colors.transparent,
+                    contentBackgroundColor: Colors.transparent,
+                    // contentPadding: EdgeInsets.all(15),
+                    // contentRadius: 12.0,
+                  ),
+                  leading: const Icon(
+                    Icons.person,
+                    color: Colors.black,
+                    size: 22,
+                  ),
+                  title: const Text(
+                    ' User Profile',
+                    // style: TextStyle(),
+                  ),
+                  content: Container(
+                    color: Colors.transparent,
+                    child: Column(
+                      children: [
+                        ListTile(
+                          contentPadding: EdgeInsets.zero,
+                          leading: Container(
+                            padding: const EdgeInsets.all(10), // Adjust padding as needed
+                            decoration: BoxDecoration(
+                              color: Colors.blue.withOpacity(0.2),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: const Icon(
+                              CupertinoIcons.profile_circled,
+                              size: 20, // Reduce the size of the icon
+                              color: Colors.blue,
+                            ),
+                          ),
+                          title: Text(
+                            'Full Name',
+                            // style: CommonUtils.txSty_14B_Fb,
+                          ),
+                          // subtitle: const Text(
+                          //   'SlpCode',
+                          //   style: CommonUtils.Mediumtext_12,
+                          // ),
+                        ),
+                        ListTile(
+                          contentPadding: EdgeInsets.zero,
+                          leading: Container(
+                            padding: const EdgeInsets.all(10), // Set padding to zero
+                            decoration: BoxDecoration(
+                              color: Colors.orange.withOpacity(0.2),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: const Icon(
+                              Icons.email_outlined,
+                              size: 20,
+                              color: Colors.orange,
+                            ),
+                          ),
+                          title: Text(
+                            'Email',
+                            //   style: CommonUtils.txSty_14B_Fb,
+                          ),
+                          // subtitle: const Text(
+                          //   'Email',
+                          //   style: CommonUtils.Mediumtext_12,
+                          // ),
+                        ),
+                        ListTile(
+                          contentPadding: EdgeInsets.zero,
+                          leading: Container(
+                              padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                color: Colors.red.withOpacity(0.2),
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: const Icon(
+                                Icons.call,
+                                size: 20,
+                                color: Colors.red,
+                              )),
+                          title: Text(
+                            '1234567890',
+                            //    style: CommonUtils.txSty_14B_Fb
+                          ),
+                          // subtitle: const Text(
+                          //   'Phone Number',
+                          //   style: CommonUtils.Mediumtext_12,
+                          // ),
+                        ),
+                        ListTile(
+                          contentPadding: EdgeInsets.zero,
+                          leading: Container(
+                              padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                color: Colors.green.withOpacity(0.2),
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: const Icon(
+                                Icons.male,
+                                size: 20,
+                                color: Colors.green,
+                              )),
+                          title: Text(
+                            'Gender',
+                            //style: CommonUtils.txSty_14B_Fb
+                          ),
+                          // subtitle: const Text(
+                          //   'Company Name',
+                          //   style: CommonUtils.Mediumtext_12,
+                          // ),
+                        ),
+                        // if (reporingManagerName != null)
+                        //   ListTile(
+                        //     contentPadding: EdgeInsets.zero,
+                        //     leading: Container(
+                        //         padding: const EdgeInsets.all(10),
+                        //         decoration: BoxDecoration(
+                        //           color: const Color(0xFFe78337).withOpacity(0.2),
+                        //           // color: const Color.fromARGB(
+                        //           //     255, 178, 236, 180),
+                        //           borderRadius: BorderRadius.circular(20),
+                        //         ),
+                        //         child: const Icon(
+                        //           Icons.manage_accounts_rounded,
+                        //           size: 20,
+                        //           color: Color(0xFFe78337),
+                        //         )),
+                        //     title: Text('$reporingManagerName', style: CommonUtils.txSty_14B_Fb),
+                        //     subtitle: const Text(
+                        //       'Reporing Manager Name',
+                        //       style: CommonUtils.Mediumtext_12,
+                        //     ),
+                        //   ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
               ListTile(
                 leading: Icon(Icons.place),
                 title: Text(
@@ -211,7 +353,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         body: SliderScreen(),
       ),
-    );
+    ));
   }
 
   void logOutDialog() {
@@ -219,21 +361,21 @@ class _HomeScreenState extends State<HomeScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Logout'),
-          content: Text('Are you sure you want to Logout?'),
+          title: const Text('Logout'),
+          content: const Text('Are you sure you want to Logout?'),
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
+                Navigator.of(context).pop();
               },
-              child: Text('Cancel'),
+              child: const Text('Cancel'),
             ),
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
-                // Perform logout action
+                Navigator.of(context).pop();
+                onConfirmLogout();
               },
-              child: Text('Logout'),
+              child: const Text('Logout'),
             ),
           ],
         );
@@ -241,28 +383,42 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  void checkLoginStatus() async {
+  Future<void> onConfirmLogout() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    bool isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
-    print('isLoggedIn: $isLoggedIn');
-    if (isLoggedIn) {
-      int? userId = prefs.getInt('userId'); // Retrieve the user ID
+    prefs.setBool('isLoggedIn', false);
+    prefs.remove('userId'); // Remove userId from SharedPreferences
+    prefs.remove('userRoleId'); // Remove roleId from SharedPreferences
+    CommonUtils.showCustomToastMessageLong("Logout Successful", context, 0, 3);
 
-      if (userId != null) {
-        // Use the user ID as needed
-        print('User ID: $userId');
-        Navigator.push(context, MaterialPageRoute(builder: (context) => Branches_screen(userId: userId)));
-      } else {
-        // Handle the case where the user ID is not available
-        print('User ID not found in SharedPreferences');
-      }
-    } else {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => agentloginscreen()),
-      );
-    }
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(builder: (context) =>  UserSelectionScreen()),
+          (route) => false,
+    );
   }
+
+
+// void checkLoginStatus() async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   bool isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
+  //   print('isLoggedIn: $isLoggedIn');
+  //   if (isLoggedIn) {
+  //     int? userId = prefs.getInt('id'); // Retrieve the user ID
+  //
+  //     if (userId != null) {
+  //       // Use the user ID as needed
+  //       print('User ID: $userId');
+  //       Navigator.push(context, MaterialPageRoute(builder: (context) => Branches_screen(userId: userId)));
+  //     } else {
+  //       // Handle the case where the user ID is not available
+  //       print('User ID not found in SharedPreferences');
+  //     }
+  //   } else {
+  //     Navigator.push(
+  //       context,
+  //       MaterialPageRoute(builder: (context) => agentloginscreen()),
+  //     );
+  //   }
+  // }
 }
 
 // class BannerImages {
@@ -319,6 +475,9 @@ class _SliderScreenState extends State<SliderScreen> {
         //  fetchData();
         //fetchimagesslider();
         fetchImages();
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          _showBottomSheet(context);
+        });
       } else {
         CommonUtils.showCustomToastMessageLong('No Internet Connection', context, 1, 4);
         print('Not connected to the internet'); // Not connected to the internet
@@ -328,6 +487,7 @@ class _SliderScreenState extends State<SliderScreen> {
 
   void fetchData() async {
     setState(() {
+
       isLoading = true;
     });
 
@@ -1378,5 +1538,168 @@ class _SliderScreenState extends State<SliderScreen> {
         color: index == currentIndex ? Colors.orange : Colors.grey,
       ),
     );
+  }
+  TextEditingController _commentstexteditcontroller = TextEditingController();
+  double rating_star = 0.0;
+
+  void _showBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      isScrollControlled: true,
+      context: context,
+      builder: (BuildContext context) {
+        return SingleChildScrollView(
+          child: Container(
+            width: MediaQuery.of(context).size.width,
+
+            /// height: MediaQuery.of(context).size.height,
+            padding: EdgeInsets.only(
+              top: 15.0,
+              left: 15.0,
+              right: 15.0,
+              bottom: MediaQuery.of(context).viewInsets.bottom,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Feedback',
+                  style: TextStyle(
+                    fontSize: 24,
+                    color: Color(0xFFf15f22),
+                    fontFamily: 'Calibri',
+                  ),
+                ),
+                SizedBox(
+                  height: 15.0,
+                ),
+                Text(
+                  'Rating',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Color(0xFFf15f22),
+                    fontFamily: 'Calibri',
+                  ),
+                ),
+                SizedBox(
+                  height: 15.0,
+                ),
+                Container(
+                    width: MediaQuery.of(context).size.width,
+                    child: RatingBar.builder(
+                      initialRating: 0,
+                      minRating: 0,
+                      direction: Axis.horizontal,
+                      allowHalfRating: true,
+                      itemCount: 5,
+                      itemPadding: EdgeInsets.symmetric(horizontal: 1.0),
+                      itemBuilder: (context, _) => Icon(
+                        Icons.star,
+                        color: Colors.amber,
+                      ),
+                      onRatingUpdate: (rating) {
+                        setState(() {
+                          rating_star = rating;
+                          print('rating_star$rating_star');
+                        });
+                      },
+                    )),
+                Padding(
+                  padding: EdgeInsets.only(left: 0, top: 10.0, right: 0),
+                  child: GestureDetector(
+                    onTap: () async {},
+                    child: Container(
+                      height: 80,
+                      width: MediaQuery.of(context).size.width,
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Color(0xFFf15f22), width: 1.5),
+                        borderRadius: BorderRadius.circular(5.0),
+                        color: Colors.white,
+                      ),
+                      child: TextFormField(
+                        controller: _commentstexteditcontroller,
+                        style: TextStyle(
+                          fontFamily: 'Calibri',
+                          fontSize: 14,
+                          fontWeight: FontWeight.w300,
+                        ),
+                        maxLines: null,
+
+                        // Set maxLines to null for multiline input
+                        decoration: InputDecoration(
+                          hintText: 'Comments',
+                          hintStyle: TextStyle(
+                            color: Colors.black54,
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'Calibri',
+                          ),
+                          contentPadding: EdgeInsets.symmetric(
+                            horizontal: 16.0,
+                            vertical: 12.0,
+                          ),
+                          border: InputBorder.none,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 20.0, left: 0.0, right: 0.0),
+                  child: Container(
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: Color(0xFFf15f22),
+                      borderRadius: BorderRadius.circular(6.0),
+                    ),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        validaterating();
+                      },
+                      child: Text(
+                        'Submit',
+                        style: TextStyle(color: Colors.white, fontSize: 16, fontFamily: 'Calibri'),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.transparent,
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(4.0),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> validaterating() async {
+    bool isValid = true;
+    bool hasValidationFailed = false;
+    if (rating_star != null && rating_star <= 0.0) {
+      CommonUtils.showCustomToastMessageLong('Please Give Rating', context, 1, 4);
+      isValid = false;
+      hasValidationFailed = true;
+      FocusScope.of(context).unfocus();
+    }
+
+    if (isValid && _commentstexteditcontroller.text.trim().isEmpty) {
+      CommonUtils.showCustomToastMessageLong('Please Enter Comments', context, 1, 4);
+      isValid = false;
+      hasValidationFailed = true;
+      FocusScope.of(context).unfocus();
+    }
+    if (isValid) {
+      SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+      String? storedEmployeeId = sharedPreferences.getString("employeeId");
+      print('employidinfeedback$storedEmployeeId');
+      String comments = _commentstexteditcontroller.text.toString();
+      int myInt = rating_star.toInt();
+      print('changedintoint$myInt');
+    }
   }
 }

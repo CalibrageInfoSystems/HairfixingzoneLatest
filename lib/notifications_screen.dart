@@ -703,8 +703,8 @@ class _notifications_screenState extends State<notifications_screen> {
       final response = await http.get(url);
       if (response.statusCode == 200) {
         final Map<String, dynamic> responseData = jsonDecode(response.body);
-        if (responseData['ListResult'] != null) {
-          final List<dynamic> appointmentsData = responseData['ListResult'];
+        if (responseData['listResult'] != null) {
+          final List<dynamic> appointmentsData = responseData['listResult'];
           setState(() {
             appointments = appointmentsData
                 .map((appointment) => Notifications.fromJson(appointment))
@@ -731,7 +731,6 @@ class _notifications_screenState extends State<notifications_screen> {
     print('url==>55555: $url');
 
     final request = {
-
 
       "Id": data.id,
       "StatusTypeId": 5,

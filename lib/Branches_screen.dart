@@ -62,7 +62,39 @@ class _BranchesscreenState extends State<Branches_screen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return WillPopScope(
+        onWillPop: () async {
+      // Show a confirmation dialog
+      bool confirmClose = await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Confirm Exit'),
+            content: Text('Are you sure you want to close the app?'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(false), // Close the dialog and return false
+                child: Text('No'),
+              ),
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(true), // Close the dialog and return true
+                child: Text('Yes'),
+              ),
+            ],
+          );
+        },
+      );
+
+      // Close the app if user confirms
+      if (confirmClose == true) {
+        // Close the app
+        SystemNavigator.pop();
+      }
+
+      // Return false to prevent default back button behavior
+      return false;
+    },
+    child:  Scaffold(
         appBar: AppBar(
           backgroundColor: const Color(0xFFF44614),
           centerTitle: true,
@@ -572,7 +604,7 @@ class _BranchesscreenState extends State<Branches_screen> {
               ],
             ),
           ),
-        ));
+        )));
   }
 
   void _handleButtonPress() {

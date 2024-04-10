@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:hairfixingzone/HomeScreen.dart';
 import 'package:hairfixingzone/services/local_notifications.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -10,12 +11,12 @@ import 'api_config.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class agentloginscreen extends StatefulWidget {
+class UserLoginScreen extends StatefulWidget {
   @override
-  _AgentScreenState createState() => _AgentScreenState();
+  _UserScreenState createState() => _UserScreenState();
 }
 
-class _AgentScreenState extends State<agentloginscreen> {
+class _UserScreenState extends State<UserLoginScreen> {
   bool _isLoading = false;
   TextEditingController _usernameController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
@@ -29,172 +30,122 @@ class _AgentScreenState extends State<agentloginscreen> {
     // TODO: implement initState
     super.initState();
 
-    // LocalNotificationService.initialize();
 
-    // Terminated State
-    FirebaseMessaging.instance.getInitialMessage().then((event) {
-      if (event != null) {
-        setState(() {
-          notificationMsg = "${event.notification!.title} ${event.notification!.body} I am coming from terminated state";
-        });
-      }
-    });
-
-    // Foregrand State
-    FirebaseMessaging.onMessage.listen((event) {
-      LocalNotificationService.showNotificationOnForeground(context, event);
-      setState(() {
-        notificationMsg = "${event.notification!.title} ${event.notification!.body} I am coming from foreground";
-      });
-    });
-
-    // background State
-    FirebaseMessaging.onMessageOpenedApp.listen((event) {
-      setState(() {
-        notificationMsg = "${event.notification!.title} ${event.notification!.body} I am coming from background";
-      });
-    });
-    // Get Firebase Token
-    FirebaseMessaging.instance.getToken().then((token) {
-      setState(() {
-        firebaseToken = token ?? "";
-        print('firebaseToken==>61===>   $firebaseToken');
-      });
-    });
   }
 
-  // FirebaseMessaging.instance.getToken().then((token) {
-  // setState(() {
-  // firebaseToken = token ?? "";
-  // print('firebaseToken: $firebaseToken');
-  // }).catchError((error) {
-  // print('Error getting FCM token: $error');
-  // });
-  // });
+  Future<void> login(String username, String password) async {
+    // Define the API endpoint
+    final String apiUrl = 'http://182.18.157.215/SaloonApp/API/ValidateUserData';
 
-  Future<void> login(String usename, String password) async {
-    final String apiUrl = baseUrl + ValidateUser;
-    final String addSlotUrl = baseUrl + AddAgentSlotInformation;
-    List<int> userIds = [];
-    List<int> branchIds = [];
-    int user_Id;
-
-    final Map<String, dynamic> requestObject = {
-      "UserName": usename,
-      "Password": password,
-      "deviceTokens": [firebaseToken],
+    // Prepare the request body
+    Map<String, String> requestBody = {
+      'userName': 'sample121',
+      'password': 'calibrage',
     };
 
-    print('requestObject==$requestObject');
+    // Make the POST request
+    final response = await http.post(
+      Uri.parse(apiUrl),
+      body: requestBody,
+    );
 
-    try {
-      final http.Response response = await http.post(
-        Uri.parse(apiUrl),
-        headers: {"Content-Type": "application/json"},
-        body: jsonEncode(requestObject),
-      );
+    // Check if the request was successful
+    if (response.statusCode == 200) {
+      // Parse the JSON response
+      Map<String, dynamic> data = json.decode(response.body);
 
-      if (response.statusCode == 200) {
-        final Map<String, dynamic> responseData = jsonDecode(response.body);
+      // Extract the necessary information
+      bool isSuccess = data['isSuccess'];
+      String statusMessage = data['statusMessage'];
 
-        if (responseData["isSuccess"]) {
-          List<dynamic>? listResult = responseData["listResult"];
+      // Print the result
+      print('Is Success: $isSuccess');
+      print('Status Message: $statusMessage');
 
-          if (listResult != null) {
-            user_Id = listResult[0]["id"];
-
-            final Map<String, dynamic> agentSlotsDetailsMap = {
-              "AgentSlotsdetails": [],
-            };
-
-            for (var item in listResult) {
-              userIds.add(item["id"]);
-              branchIds.add(item["branchId"]);
-            }
-
-            for (int i = 0; i < userIds.length; i++) {
-              final Map<String, dynamic> agentSlotDetail = {
-                "Id": null,
-                "UserId": userIds[i],
-                "BranchId": branchIds[i],
-                "Devicetoken": firebaseToken,
-              };
-              print('agentSlotDetail==$agentSlotDetail');
-              print("Slot information added for User ID: ${userIds[i]}, Branch ID: ${branchIds[i]}");
-
-              agentSlotsDetailsMap["AgentSlotsdetails"].add(agentSlotDetail);
-            }
-
-            // Send the agentSlotsDetailsMap as the body of the request
-            await addAgentSlotInformation(agentSlotsDetailsMap, user_Id);
-          } else {
-            FocusScope.of(context).unfocus();
-            CommonUtils.showCustomToastMessageLong('Invalid user ', context, 1, 4);
-            print("ListResult is null");
-          }
-        } else {
-          print("API returned an error: ${responseData["EndUserMessage"]}");
-        }
-      } else {
-        print("Error: ${response.statusCode}");
-      }
-    } catch (e) {
-      print("Exception: $e");
-    }
-  }
-
-  Future<void> addAgentSlotInformation(Map<String, dynamic> agentSlotsDetailsMap, int user_id) async {
-    //  final String baseUrl = "http://182.18.157.215/SaloonApp/API/";
-    final String addSlotUrl = baseUrl + "AddAgentSlotInformation";
-    print('agentSlotDetail==$agentSlotsDetailsMap');
-    print('addSlotUrl==$addSlotUrl');
-    print('user_id==$user_id');
-    try {
-      final http.Response addSlotResponse = await http.post(
-        Uri.parse(addSlotUrl),
-        headers: {"Content-Type": "application/json"},
-        body: jsonEncode(agentSlotsDetailsMap),
-      );
-
-      if (addSlotResponse.statusCode == 200) {
-        final Map<String, dynamic> responseJson = jsonDecode(addSlotResponse.body);
-
-        if (responseJson["isSuccess"]) {
-          print("Agent slots information added successfully.");
-          SharedPreferences prefs = await SharedPreferences.getInstance();
-          prefs.setBool('isLoggedIn', true);
-          int userId = user_id; // Replace with the actual user ID
-          print('userId==$userId');
-          prefs.setInt('userId', userId); // Save the user ID
+      // Handle the data accordingly
+      if (isSuccess) {
+        // If the user is valid, you can extract more data from 'listResult'
+        List<dynamic> listResult = data['listResult'];
+        if (listResult.isNotEmpty) {
+          Map<String, dynamic> user = listResult.first;
+          print('User ID: ${user['id']}');
+          print('Full Name: ${user['fullName']}');
+          print('Role ID: ${user['roleID']}');
+          await saveUserDataToSharedPreferences(user);
+          // Extract other user information as needed
           Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => Branches_screen(userId: user_id),
-              ));
-        } else {
-          print("Error: ${responseJson["statusMessage"]}");
-          if (responseJson["statusMessage"] == "This token is already used") {
-            SharedPreferences prefs = await SharedPreferences.getInstance();
-            prefs.setBool('isLoggedIn', true);
-            int userId = user_id; // Replace with the actual user ID
-            print('userId==$userId');
-            prefs.setInt('userId', userId);
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => Branches_screen(userId: user_id),
-                ));
-          } else {
-            CommonUtils.showCustomToastMessageLong("${responseJson["statusMessage"]}", context, 1, 4);
-          }
+            context,
+            MaterialPageRoute(builder: (context) => HomeScreen()),
+          );
         }
       } else {
-        print("Error: ${addSlotResponse.statusCode}");
+        // Handle the case where the user is not valid
+        List<dynamic> validationErrors = data['validationErrors'];
+        if (validationErrors.isNotEmpty) {
+          // Print or handle validation errors if any
+        }
       }
-    } catch (e) {
-      print("Exception: $e");
+    } else {
+      // Handle any error cases here
+      print('Failed to connect to the API. Status code: ${response.statusCode}');
     }
   }
+
+
+  // Future<bool> login(String username, String password) async {
+  //   final String apiUrl = baseUrl + ValidateUserData;
+  //
+  //   final Map<String, dynamic> requestObject = {
+  //     "userName": username,
+  //     "password": password,
+  //   };
+  //
+  //   print('requestObject == ${jsonEncode(requestObject)}');
+  //
+  //   try {
+  //     final http.Response response = await http.post(
+  //       Uri.parse(apiUrl),
+  //       headers: {"Content-Type": "application/json"},
+  //       body: jsonEncode(requestObject),
+  //     );
+  //
+  //     if (response.statusCode == 200) {
+  //       final Map<String, dynamic> responseData = jsonDecode(response.body);
+  //
+  //       if (responseData["isSuccess"]) {
+  //         final dynamic userData = responseData["listResult"];
+  //
+  //         if (userData != null) {
+  //           // print("UserId ${int.parse(userData['id'])}");
+  //           // print("Roleid ${int.parse(userData['roleID'])}");
+  //           SharedPreferences prefs = await SharedPreferences.getInstance();
+  //           prefs.setBool('isLoggedIn', true);
+  //           prefs.setInt("id", int.parse(userData['id']));
+  //           prefs.setInt("roleId", int.parse(userData['roleID']));
+  //           prefs.setString("fullName", userData['fullName']);
+  //           Navigator.push(
+  //             context,
+  //             MaterialPageRoute(builder: (context) => HomeScreen()),
+  //           );
+  //           return true; // Indicate successful login
+  //         } else {
+  //           print("ListResult is null");
+  //           return false; // Indicate failed login
+  //         }
+  //       } else {
+  //         print("API returned an error: ${responseData["EndUserMessage"]}");
+  //         return false; // Indicate failed login
+  //       }
+  //     } else {
+  //       print("Error: ${response.statusCode}");
+  //       return false; // Indicate failed login
+  //     }
+  //   } catch (e) {
+  //     print("Exception: $e");
+  //     return false; // Indicate failed login
+  //   }
+  // }
+
 
   Future<void> _handleLogin() async {
     String username = _usernameController.text;
@@ -230,7 +181,12 @@ class _AgentScreenState extends State<agentloginscreen> {
 
   @override
   Widget build(BuildContext context) {
-    return   Scaffold(
+    return WillPopScope(
+        onWillPop: () async {
+          Navigator.of(context).pop();
+          return false;
+        },
+        child:  Scaffold(
       body: Stack(
         children: [
           Container(
@@ -264,7 +220,7 @@ class _AgentScreenState extends State<agentloginscreen> {
                     ),
                     SizedBox(width: 10.0),
                     Text(
-                      'Agent Login',
+                      'Customer Login',
                       style: TextStyle(
                         fontSize: 24.0,
                         fontFamily: 'Calibri',
@@ -415,7 +371,7 @@ class _AgentScreenState extends State<agentloginscreen> {
             left: 10.0, // Adjust the left position as needed
             child: GestureDetector(
               onTap: () {
-                // Handle the back button press here
+                print('Back button tapped');
                 Navigator.pop(context);
               },
               child: Container(
@@ -434,7 +390,7 @@ class _AgentScreenState extends State<agentloginscreen> {
           ),
         ],
       ),
-    );
+    ));
   }
 
   // Set this to false
@@ -443,5 +399,16 @@ class _AgentScreenState extends State<agentloginscreen> {
     setState(() {
       _obscureText = !_obscureText;
     });
+  }
+
+  Future<void> saveUserDataToSharedPreferences(Map<String, dynamic> userData) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    prefs.setBool('isLoggedIn', true);
+    // Save user data using unique keys
+    await prefs.setInt('userId', userData['id']);
+    await prefs.setString('userFullName', userData['fullName']);
+    await prefs.setInt('userRoleId', userData['roleID']);
+    // Save other user data as needed
   }
 }
