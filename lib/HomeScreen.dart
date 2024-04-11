@@ -293,10 +293,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 onTap: () {
                   // Handle the onTap action for Logout
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => feedback_Screen()),
-                  );
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(builder: (context) => feedback_Screen()),
+                  // );
                 },
               ),
               ListTile(
@@ -1364,7 +1364,7 @@ class _SliderScreenState extends State<SliderScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Feedback',
+                  'Please rate your recent experience with us',
                   style: TextStyle(
                     fontSize: 24,
                     color: Color(0xFFf15f22),
@@ -1425,9 +1425,10 @@ class _SliderScreenState extends State<SliderScreen> {
                           fontWeight: FontWeight.w300,
                         ),
                         maxLines: null,
-
+                        maxLength: 256,
                         // Set maxLines to null for multiline input
                         decoration: InputDecoration(
+                          counterText: '',
                           hintText: 'Comments',
                           hintStyle: TextStyle(
                             color: Colors.black54,
@@ -1448,7 +1449,7 @@ class _SliderScreenState extends State<SliderScreen> {
                 Padding(
                   padding: EdgeInsets.only(top: 20.0, left: 0.0, right: 0.0),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       ElevatedButton(
                         onPressed: () {
@@ -1550,7 +1551,7 @@ class _SliderScreenState extends State<SliderScreen> {
 
   Future<void> fetchAppointments() async {
     //  final response = await http.get('http://182.18.157.215/SaloonApp/API/api/Role/GetLatestAppointmentByUserId/1');
-    final Uri url = Uri.parse('http://182.18.157.215/SaloonApp/API/api/Role/GetLatestAppointmentByUserId/1');
+    final Uri url = Uri.parse('http://182.18.157.215/SaloonApp/API/api/Role/GetLatestAppointmentByUserId/$userId');
     final response = await http.get(url);
 
     if (response.statusCode == 200) {
@@ -1614,12 +1615,12 @@ class _SliderScreenState extends State<SliderScreen> {
         "IsActive": true,
         "CreatedDate": dateTimeString,
         "UpdatedDate": dateTimeString,
-        "UpdatedByUserId": 1,
+        "UpdatedByUserId":null,
         "rating": rating_star,
         "review": _commentstexteditcontroller.text.toString(),
         "reviewSubmittedDate": dateTimeString,
         "timeofslot": null,
-        "customerId": 1
+        "customerId": userId
       };
       print('AddUpdatefeedback object: : ${json.encode(request)}');
 
