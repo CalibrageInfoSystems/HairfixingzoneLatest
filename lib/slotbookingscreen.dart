@@ -113,6 +113,7 @@ class _BookingScreenState extends State<slotbookingscreen> {
   String email = '';
   String phonenumber = '';
   int gender = 0;
+  int? userId;
 
   @override
   @override
@@ -178,15 +179,16 @@ class _BookingScreenState extends State<slotbookingscreen> {
       email = prefs.getString('email') ?? '';
       phonenumber = prefs.getString('contactNumber') ?? '';
       gender = prefs.getInt('gender') ?? 0;
-
+      userId = prefs.getInt('userId');
       _fullnameController1.text = userFullName;
       _emailController3.text = email;
       _phonenumberController2.text = phonenumber;
       // gender = selectedGender;
-      print('userFullName:$userFullName');
+      print('userId:$userId');
       print('gender:$gender');
     });
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -1201,7 +1203,7 @@ class _BookingScreenState extends State<slotbookingscreen> {
         "review": null,
         "reviewSubmittedDate": null,
         "timeofslot": null,
-        "customerId": 1
+        "customerId": userId
       };
       print('Object: ${json.encode(request)}');
       try {

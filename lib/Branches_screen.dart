@@ -248,7 +248,8 @@ class _BranchesscreenState extends State<Branches_screen> {
                                   onTap: () {
                                     Navigator.of(context).push(
                                       MaterialPageRoute(
-                                          builder: (context) => appointmentlist(userId: widget.userId, branchid: branch.id, branchname: branch.name, filepath: branch.filePath, phonenumber: branch.mobileNumber, branchaddress: branch.address)),
+                                          builder: (context) => appointmentlist(userId: widget.userId, branchid: branch.id, branchname: branch.name,
+                                              filepath: branch.imageName!, phonenumber: branch.mobileNumber, branchaddress: branch.address)),
                                     );
                                   },
                                   child: Card(
@@ -295,7 +296,7 @@ class _BranchesscreenState extends State<Branches_screen> {
                                                 child: ClipRRect(
                                                   borderRadius: BorderRadius.circular(7.0),
                                                   child: Image.network(
-                                                    imagesflierepo + branch.filePath,
+                                                    imagesflierepo + branch.imageName!,
                                                     width: 110,
                                                     height: 65,
                                                     fit: BoxFit.fill,
@@ -394,7 +395,8 @@ class _BranchesscreenState extends State<Branches_screen> {
                                                               Navigator.of(context).push(
                                                                 MaterialPageRoute(
                                                                     builder: (context) =>
-                                                                        appointmentlist(userId: widget.userId, branchid: branch.id, branchname: branch.name, filepath: branch.filePath, phonenumber: branch.mobileNumber, branchaddress: branch.address)),
+                                                                        appointmentlist(userId: widget.userId, branchid: branch.id, branchname: branch.name,
+                                                                            filepath: branch.imageName!, phonenumber: branch.mobileNumber, branchaddress: branch.address)),
                                                               );
                                                             },
                                                             child: Row(
@@ -660,7 +662,7 @@ class _BranchesscreenState extends State<Branches_screen> {
           branchList.add(BranchModel(
             id: item['id'],
             name: item['name'],
-            filePath: item['filePath'],
+            imageName: item['imageName'],
             address: item['address'],
             startTime: item['startTime'],
             closeTime: item['closeTime'],

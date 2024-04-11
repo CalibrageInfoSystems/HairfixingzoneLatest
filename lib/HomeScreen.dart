@@ -160,110 +160,109 @@ class _HomeScreenState extends State<HomeScreen> {
                     ' User Profile',
                     // style: TextStyle(),
                   ),
-                  content: Container(
-                    color: Colors.transparent,
-                    child: Column(
-                      children: [
-                        ListTile(
-                          contentPadding: EdgeInsets.zero,
-                          leading: Container(
-                            padding: const EdgeInsets.all(10), // Adjust padding as needed
-                            decoration: BoxDecoration(
-                              color: Colors.blue.withOpacity(0.2),
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: const Icon(
-                              CupertinoIcons.profile_circled,
-                              size: 20, // Reduce the size of the icon
-                              color: Colors.blue,
-                            ),
-                          ),
-                          title: Text(
-                            'Full Name',
-                            // style: CommonUtils.txSty_14B_Fb,
-                          ),
-                          // subtitle: const Text(
-                          //   'SlpCode',
-                          //   style: CommonUtils.Mediumtext_12,
-                          // ),
-                        ),
-                        ListTile(
-                          contentPadding: EdgeInsets.zero,
-                          leading: Container(
-                            padding: const EdgeInsets.all(10), // Set padding to zero
-                            decoration: BoxDecoration(
-                              color: Colors.orange.withOpacity(0.2),
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: const Icon(
-                              Icons.email_outlined,
-                              size: 20,
-                              color: Colors.orange,
-                            ),
-                          ),
-                          title: Text(
-                            'Email',
-                            //   style: CommonUtils.txSty_14B_Fb,
-                          ),
-                          // subtitle: const Text(
-                          //   'Email',
-                          //   style: CommonUtils.Mediumtext_12,
-                          // ),
-                        ),
-                        ListTile(
-                          contentPadding: EdgeInsets.zero,
-                          leading: Container(
-                              padding: const EdgeInsets.all(10),
+                    content: Container(
+                      color: Colors.transparent,
+                      child: Column(
+                        children: [
+                          ListTile(
+                            contentPadding: EdgeInsets.zero,
+                            leading: Container(
+                              padding: const EdgeInsets.all(10), // Adjust padding as needed
                               decoration: BoxDecoration(
-                                color: Colors.red.withOpacity(0.2),
+                                color: Colors.blue.withOpacity(0.2),
                                 borderRadius: BorderRadius.circular(20),
                               ),
                               child: const Icon(
-                                Icons.call,
+                                CupertinoIcons.profile_circled,
+                                size: 20, // Reduce the size of the icon
+                                color: Colors.blue,
+                              ),
+                            ),
+                            title: Text(
+                              '$userFullName',
+                              // style: CommonUtils.txSty_14B_Fb,
+                            ),
+                            // subtitle: const Text(
+                            //   'SlpCode',
+                            //   style: CommonUtils.Mediumtext_12,
+                            // ),
+                          ),
+                          ListTile(
+                            contentPadding: EdgeInsets.zero,
+                            leading: Container(
+                              padding: const EdgeInsets.all(10), // Set padding to zero
+                              decoration: BoxDecoration(
+                                color: Colors.orange.withOpacity(0.2),
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: const Icon(
+                                Icons.email_outlined,
                                 size: 20,
-                                color: Colors.red,
-                              )),
-                          title: Text(
-                            '1234567890',
-                            //    style: CommonUtils.txSty_14B_Fb
-                          ),
-                          // subtitle: const Text(
-                          //   'Phone Number',
-                          //   style: CommonUtils.Mediumtext_12,
-                          // ),
-                        ),
-                        ListTile(
-                          contentPadding: EdgeInsets.zero,
-                          leading: Container(
-                            padding: const EdgeInsets.all(10),
-                            decoration: BoxDecoration(
-                              color: Colors.green.withOpacity(0.2),
-                              borderRadius: BorderRadius.circular(20),
+                                color: Colors.orange,
+                              ),
                             ),
-                            child: Image.asset(
-                              'assets/gender.png',
-                              height: 22,
-                              width: 22,
+                            title: Text(
+                              '$email',
+                              //   style: CommonUtils.txSty_14B_Fb,
                             ),
-                            // const Icon(
-                            //   Icons.male,
-                            //   size: 20,
-                            //   color: Colors.green,
-                            // )
+                            // subtitle: const Text(
+                            //   'Email',
+                            //   style: CommonUtils.Mediumtext_12,
+                            // ),
                           ),
-                          title: Text(
-                            '$Gender',
-                            //style: CommonUtils.txSty_14B_Fb
+                          ListTile(
+                            contentPadding: EdgeInsets.zero,
+                            leading: Container(
+                                padding: const EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                  color: Colors.red.withOpacity(0.2),
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: const Icon(
+                                  Icons.call,
+                                  size: 20,
+                                  color: Colors.red,
+                                )),
+                            title: Text(
+                              '$phonenumber',
+                              //    style: CommonUtils.txSty_14B_Fb
+                            ),
+                            // subtitle: const Text(
+                            //   'Phone Number',
+                            //   style: CommonUtils.Mediumtext_12,
+                            // ),
                           ),
-                          // subtitle: const Text(
-                          //   'Company Name',
-                          //   style: CommonUtils.Mediumtext_12,
-                          // ),
-                        ),
-
-                      ],
+                          ListTile(
+                            contentPadding: EdgeInsets.zero,
+                            leading: Container(
+                              padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                color: Colors.green.withOpacity(0.2),
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: Image.asset(
+                                'assets/gender.png',
+                                height: 22,
+                                width: 22,
+                              ),
+                              // const Icon(
+                              //   Icons.male,
+                              //   size: 20,
+                              //   color: Colors.green,
+                              // )
+                            ),
+                            title: Text(
+                              '$Gender',
+                              //style: CommonUtils.txSty_14B_Fb
+                            ),
+                            // subtitle: const Text(
+                            //   'Company Name',
+                            //   style: CommonUtils.Mediumtext_12,
+                            // ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
                 ),
               ),
               ListTile(
@@ -509,7 +508,7 @@ class _SliderScreenState extends State<SliderScreen> {
             branchList.add(BranchModel(
               id: item['id'],
               name: item['name'],
-              filePath: item['filePath'],
+              imageName: item['imageName'],
               address: item['address'],
               startTime: item['startTime'],
               closeTime: item['closeTime'],
@@ -850,8 +849,18 @@ class _SliderScreenState extends State<SliderScreen> {
                                 child: GestureDetector(
                                   onTap: () {
                                     Navigator.push(
-                                      context,
-                                      MaterialPageRoute(builder: (context) => slotbookingscreen(branchId: branch.id, branchname: branch.name, branchlocation: branch.address, filepath: branch.filePath, MobileNumber: branch.mobileNumber)),
+                                      context,MaterialPageRoute(
+                                      builder: (context) => slotbookingscreen(
+                                        branchId: branch.id,
+                                        branchname: branch.name,
+                                        branchlocation: branch.address,
+                                        filepath: branch.imageName != null ? imagesflierepo + branch.imageName! : 'assets/top_image.png',
+                                        MobileNumber: branch.mobileNumber,
+                                      ),
+                                    ),
+
+                                      // MaterialPageRoute(builder: (context) => slotbookingscreen(branchId: branch.id, branchname: branch.name, branchlocation: branch.address,
+                                      //     filepath: branch.imageName!, MobileNumber: branch.mobileNumber)),
                                     );
                                   },
                                   child: Card(
@@ -890,8 +899,9 @@ class _SliderScreenState extends State<SliderScreen> {
                                                 ),
                                                 child: ClipRRect(
                                                   borderRadius: BorderRadius.circular(7.0),
-                                                  child: Image.network(
-                                                    imagesflierepo + branch.filePath,
+                                                  child: branch.imageName != null
+                                                      ? Image.network(
+                                                    imagesflierepo + branch.imageName!,
                                                     width: 110,
                                                     height: 65,
                                                     fit: BoxFit.fill,
@@ -899,9 +909,15 @@ class _SliderScreenState extends State<SliderScreen> {
                                                       if (loadingProgress == null) return child;
 
                                                       return const Center(child: CircularProgressIndicator.adaptive());
-                                                      // You can use LinearProgressIndicator or CircularProgressIndicator instead
                                                     },
+                                                  )
+                                                      : Image.asset(
+                                                    'assets/top_image.png', // Provide the path to your default image asset
+                                                    width: 110,
+                                                    height: 65,
+                                                    fit: BoxFit.fill,
                                                   ),
+
                                                 ),
                                               ),
                                             ),
@@ -1026,9 +1042,19 @@ class _SliderScreenState extends State<SliderScreen> {
                                                               print(branch.name);
                                                               // Handle button press, navigate to a new screen
                                                               Navigator.push(
-                                                                context,
-                                                                MaterialPageRoute(
-                                                                    builder: (context) => slotbookingscreen(branchId: branch.id, branchname: branch.name, branchlocation: branch.address, filepath: branch.filePath, MobileNumber: branch.mobileNumber)),
+                                                                context,MaterialPageRoute(
+                                                                builder: (context) => slotbookingscreen(
+                                                                  branchId: branch.id,
+                                                                  branchname: branch.name,
+                                                                  branchlocation: branch.address,
+                                                                  filepath: branch.imageName != null ? imagesflierepo + branch.imageName! : 'assets/top_image.png',
+                                                                  MobileNumber: branch.mobileNumber,
+                                                                ),
+                                                              ),
+
+                                                                // MaterialPageRoute(
+                                                                //     builder: (context) => slotbookingscreen(branchId: branch.id, branchname: branch.name, branchlocation: branch.address,
+                                                                //         filepath: branch.imageName!, MobileNumber: branch.mobileNumber)),
                                                               );
                                                             },
                                                             child: Row(
