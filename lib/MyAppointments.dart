@@ -29,7 +29,7 @@ class MyAppointments_screenState extends State<MyAppointments> {
   String todate = "";
   TextEditingController _commentstexteditcontroller = TextEditingController();
   double rating_star = 0.0;
-
+  int? userId;
   // List<Map<String, dynamic>> leaveData = [];
 
   bool isLoading = true;
@@ -45,7 +45,8 @@ class MyAppointments_screenState extends State<MyAppointments> {
     CommonUtils.checkInternetConnectivity().then((isConnected) {
       if (isConnected) {
         print('The Internet Is Connected');
-        fetchMyAppointments();
+        checkLoginuserdata();
+        
       } else {
         print('The Internet Is not  Connected');
       }
@@ -142,7 +143,9 @@ class MyAppointments_screenState extends State<MyAppointments> {
                   return GestureDetector(
                     onTap: () {
                       print('CardView clicked!');
-                      ShowAlertdialog();
+                      if (appointment_model.statusTypeId == 5) {
+                        ShowAlertdialog(appointment_model);
+                      }
                     },
                     child: ClipRRect(
                       borderRadius: BorderRadius.only(
@@ -194,110 +197,8 @@ class MyAppointments_screenState extends State<MyAppointments> {
                                                 )
                                               ],
                                             ),
-                                            // Row(
-                                            //   children: [
-                                            //     Expanded(
-                                            //       flex: 5,
-                                            //       child: Column(
-                                            //         crossAxisAlignment: CrossAxisAlignment.start,
-                                            //         children: [
-                                            //           const Padding(
-                                            //             padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                            //             child: Text(
-                                            //               'Name ',
-                                            //               style: TextStyle(color: Color(0xFFF44614), fontSize: 12, fontWeight: FontWeight.bold, fontFamily: 'Calibri'),
-                                            //             ),
-                                            //           ),
-                                            //         ],
-                                            //       ),
-                                            //     ),
-                                            //     Expanded(
-                                            //       flex: 0,
-                                            //       child: Column(
-                                            //         crossAxisAlignment: CrossAxisAlignment.center,
-                                            //         children: [
-                                            //           Padding(
-                                            //             padding: EdgeInsets.fromLTRB(3, 0, 0, 0),
-                                            //             child: Text(
-                                            //               ' : ',
-                                            //               style: TextStyle(color: Color(0xFFF44614), fontSize: 12, fontWeight: FontWeight.bold, fontFamily: 'Calibri'),
-                                            //             ),
-                                            //           ),
-                                            //         ],
-                                            //       ),
-                                            //     ),
-                                            //     Expanded(
-                                            //       flex: 9,
-                                            //       child: Column(
-                                            //         crossAxisAlignment: CrossAxisAlignment.start,
-                                            //         children: [
-                                            //           Padding(
-                                            //             padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                            //             child: Text(
-                                            //               '${appointment_model.customerName}',
-                                            //               style: TextStyle(color: Color(0xFF042DE3), fontSize: 12, fontFamily: 'Calibri'),
-                                            //             ),
-                                            //           ),
-                                            //         ],
-                                            //       ),
-                                            //     )
-                                            //   ],
-                                            // ),
-                                            // Row(
-                                            //   children: [
-                                            //     Expanded(
-                                            //       flex: 7,
-                                            //       child: Column(
-                                            //         crossAxisAlignment: CrossAxisAlignment.start,
-                                            //         children: [
-                                            //           const Padding(
-                                            //             padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                            //             child: Text(
-                                            //               'Email',
-                                            //               style: TextStyle(color: Color(0xFFF44614), fontSize: 12, fontWeight: FontWeight.bold, fontFamily: 'Calibri'),
-                                            //             ),
-                                            //             // Icon(
-                                            //             //   Icons.email_outlined,
-                                            //             //   size: 16,
-                                            //             //   color: Color(0xFFF44614),
-                                            //             // ),
-                                            //           ),
-                                            //         ],
-                                            //       ),
-                                            //     ),
-                                            //     Expanded(
-                                            //       flex: 0,
-                                            //       child: Column(
-                                            //         crossAxisAlignment: CrossAxisAlignment.center,
-                                            //         children: [
-                                            //           Padding(
-                                            //             padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                            //             child: Text(
-                                            //               ' : ',
-                                            //               style: TextStyle(color: Color(0xFFF44614), fontSize: 12, fontWeight: FontWeight.bold, fontFamily: 'Calibri'),
-                                            //             ),
-                                            //           ),
-                                            //         ],
-                                            //       ),
-                                            //     ),
-                                            //     Expanded(
-                                            //       flex: 12,
-                                            //       child: Column(
-                                            //         crossAxisAlignment: CrossAxisAlignment.start,
-                                            //         children: [
-                                            //           Padding(
-                                            //             padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                            //             child: Text(
-                                            //               '${appointment_model.email}',
-                                            //               maxLines: 1,
-                                            //               style: TextStyle(color: Color(0xFF042DE3), fontSize: 12, fontFamily: 'Calibri'),
-                                            //             ),
-                                            //           ),
-                                            //         ],
-                                            //       ),
-                                            //     )
-                                            //   ],
-                                            // ),
+
+
                                             Row(
                                               children: [
                                                 Expanded(
@@ -405,78 +306,7 @@ class MyAppointments_screenState extends State<MyAppointments> {
                                         ),
                                       ),
 
-                                      // Padding(
-                                      //   padding: EdgeInsets.only(top: 5.0, bottom: 4.0),
-                                      //   child: RichText(
-                                      //     text: TextSpan(
-                                      //       children: [
-                                      //         TextSpan(
-                                      //           text: 'Name : ',
-                                      //           style: TextStyle(color: Color(0xFFF44614), fontSize: 12, fontWeight: FontWeight.bold, fontFamily: 'Calibri'),
-                                      //         ),
-                                      //         TextSpan(
-                                      //           text: 'customerName',
-                                      //           style: TextStyle(color: Color(0xFF042DE3), fontSize: 12, fontFamily: 'Calibri'),
-                                      //         ),
-                                      //       ],
-                                      //     ),
-                                      //   ),
-                                      // ),
 
-                                      // Padding(
-                                      //   padding: EdgeInsets.only(bottom: 4.0),
-                                      //   child: RichText(
-                                      //     text: TextSpan(
-                                      //       children: [
-                                      //         WidgetSpan(
-                                      //           child: Icon(
-                                      //             Icons.email_outlined,
-                                      //             size: 16,
-                                      //             color: Color(0xFFF44614),
-                                      //           ),
-                                      //         ),
-                                      //         TextSpan(
-                                      //           text: ' : ',
-                                      //           style: TextStyle(color: Color(0xFFF44614), fontSize: 12, fontWeight: FontWeight.bold, fontFamily: 'Calibri'),
-                                      //         ),
-                                      //         TextSpan(
-                                      //           text: 'email',
-                                      //           style: TextStyle(color: Color(0xFF042DE3), fontSize: 12, fontFamily: 'Calibri'),
-                                      //         ),
-                                      //       ],
-                                      //     ),
-                                      //   ),
-                                      // ),
-
-                                      // Padding(
-                                      //   padding: EdgeInsets.only(bottom: 4.0),
-                                      //   child: RichText(
-                                      //     text: TextSpan(
-                                      //       children: [
-                                      //         WidgetSpan(
-                                      //           child: Icon(
-                                      //             Icons.lock_clock,
-                                      //             color: Color(0xFFF44614),
-                                      //             size: 16,
-                                      //           ),
-                                      //         ),
-                                      //         TextSpan(
-                                      //           text: ' : ',
-                                      //           style: TextStyle(color: Color(0xFFF44614), fontSize: 12, fontWeight: FontWeight.bold, fontFamily: 'Calibri'),
-                                      //         ),
-                                      //         TextSpan(
-                                      //           text: 'SlotDuration',
-                                      //           style: TextStyle(
-                                      //               color: Color(
-                                      //                 0xFF042DE3,
-                                      //               ),
-                                      //               fontSize: 12,
-                                      //               fontFamily: 'Calibri'),
-                                      //         ),
-                                      //       ],
-                                      //     ),
-                                      //   ),
-                                      // ),
                                     ],
                                   ),
                                 ),
@@ -593,261 +423,7 @@ class MyAppointments_screenState extends State<MyAppointments> {
                                       ],
                                     ),
 
-                                    // Row(
-                                    //   children: [
-                                    //     Expanded(
-                                    //       flex: 8,
-                                    //       child: Column(
-                                    //         crossAxisAlignment: CrossAxisAlignment.start,
-                                    //         children: [
-                                    //           Padding(
-                                    //             padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                    //             child: Text(
-                                    //               'Mobile No',
-                                    //               style: TextStyle(color: Color(0xFFF44614), fontSize: 12, fontWeight: FontWeight.bold, fontFamily: 'Calibri'),
-                                    //             ),
-                                    //             // Icon(
-                                    //             //   Icons.phone,
-                                    //             //   size: 14,
-                                    //             //   color: Color(0xFFF44614),
-                                    //             // ),
-                                    //           ),
-                                    //         ],
-                                    //       ),
-                                    //     ),
-                                    //     Expanded(
-                                    //       flex: 0,
-                                    //       child: Column(
-                                    //         crossAxisAlignment: CrossAxisAlignment.center,
-                                    //         children: [
-                                    //           Padding(
-                                    //             padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                    //             child: Text(
-                                    //               ': ',
-                                    //               style: TextStyle(color: Color(0xFFF44614), fontSize: 12, fontWeight: FontWeight.bold, fontFamily: 'Calibri'),
-                                    //             ),
-                                    //           ),
-                                    //         ],
-                                    //       ),
-                                    //     ),
-                                    //     Expanded(
-                                    //       flex: 9,
-                                    //       child: Column(
-                                    //         crossAxisAlignment: CrossAxisAlignment.start,
-                                    //         children: [
-                                    //           Padding(
-                                    //             padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                    //             child: Text(
-                                    //               '${appointment_model.contactNumber}',
-                                    //               style: TextStyle(color: Color(0xFF042DE3), fontSize: 12, fontFamily: 'Calibri'),
-                                    //             ),
-                                    //           ),
-                                    //         ],
-                                    //       ),
-                                    //     )
-                                    //   ],
-                                    // ),
-                                    // Row(
-                                    //   children: [
-                                    //     Expanded(
-                                    //       flex: 8,
-                                    //       child: Column(
-                                    //         crossAxisAlignment: CrossAxisAlignment.start,
-                                    //         children: [
-                                    //           const Padding(
-                                    //             padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                    //             child: Text(
-                                    //               'Gender',
-                                    //               style: TextStyle(color: Color(0xFFF44614), fontSize: 12, fontWeight: FontWeight.bold, fontFamily: 'Calibri'),
-                                    //             ),
-                                    //           ),
-                                    //         ],
-                                    //       ),
-                                    //     ),
-                                    //     Expanded(
-                                    //       flex: 0,
-                                    //       child: Column(
-                                    //         crossAxisAlignment: CrossAxisAlignment.center,
-                                    //         children: [
-                                    //           Padding(
-                                    //             padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                    //             child: Text(
-                                    //               ': ',
-                                    //               style: TextStyle(color: Color(0xFFF44614), fontSize: 12, fontWeight: FontWeight.bold, fontFamily: 'Calibri'),
-                                    //             ),
-                                    //           ),
-                                    //         ],
-                                    //       ),
-                                    //     ),
-                                    //     Expanded(
-                                    //       flex: 9,
-                                    //       child: Column(
-                                    //         crossAxisAlignment: CrossAxisAlignment.start,
-                                    //         children: [
-                                    //           Padding(
-                                    //             padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                    //             child: Text(
-                                    //               '${appointment_model.gender}',
-                                    //               style: TextStyle(color: Color(0xFF042DE3), fontSize: 12, fontFamily: 'Calibri'),
-                                    //             ),
-                                    //           ),
-                                    //         ],
-                                    //       ),
-                                    //     )
-                                    //   ],
-                                    // ),
 
-                                    // Padding(
-                                    //   padding: EdgeInsets.only(bottom: 4.0),
-                                    //   child: RichText(
-                                    //     text: TextSpan(
-                                    //       children: [
-                                    //         TextSpan(
-                                    //           text: 'Gender : ',
-                                    //           style: TextStyle(color: Color(0xFFF44614), fontSize: 12, fontWeight: FontWeight.bold, fontFamily: 'Calibri'),
-                                    //         ),
-                                    //         TextSpan(
-                                    //           text: 'gender',
-                                    //           style: TextStyle(color: Color(0xFF042DE3), fontSize: 12, fontFamily: 'Calibri'),
-                                    //         ),
-                                    //       ],
-                                    //     ),
-                                    //   ),
-                                    // ),
-                                    // Row(
-                                    //   children: [
-                                    //     Expanded(
-                                    //       flex: 10,
-                                    //       child: Column(
-                                    //         crossAxisAlignment: CrossAxisAlignment.end,
-                                    //         children: [
-                                    //           Padding(
-                                    //             padding: EdgeInsets.fromLTRB(0, 10, 10, 0),
-                                    //             child: Icon(
-                                    //               Icons.phone,
-                                    //               size: 16,
-                                    //               color: Color(0xFFF44614),
-                                    //             ),
-                                    //           ),
-                                    //         ],
-                                    //       ),
-                                    //     ),
-                                    //     Expanded(
-                                    //       flex: 0,
-                                    //       child: Column(
-                                    //         crossAxisAlignment: CrossAxisAlignment.center,
-                                    //         children: [
-                                    //           Padding(
-                                    //             padding: EdgeInsets.fromLTRB(0, 10, 5, 0),
-                                    //             child: Text(
-                                    //               ' : ',
-                                    //               style: TextStyle(color: Color(0xFFF44614), fontSize: 12, fontWeight: FontWeight.bold, fontFamily: 'Calibri'),
-                                    //             ),
-                                    //           ),
-                                    //         ],
-                                    //       ),
-                                    //     ),
-                                    //     Expanded(
-                                    //       flex: 14,
-                                    //       child: Column(
-                                    //         crossAxisAlignment: CrossAxisAlignment.start,
-                                    //         children: [
-                                    //           Padding(
-                                    //             padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                                    //             child: Text(
-                                    //               '6846847844',
-                                    //               style: TextStyle(color: Color(0xFF042DE3), fontSize: 12, fontFamily: 'Calibri'),
-                                    //             ),
-                                    //           ),
-                                    //         ],
-                                    //       ),
-                                    //     )
-                                    //   ],
-                                    // ),
-                                    // Padding(
-                                    //   padding: EdgeInsets.only(bottom: 4.0),
-                                    //   child: RichText(
-                                    //     text: TextSpan(
-                                    //       children: [
-                                    //         TextSpan(
-                                    //           text: 'Purpose : ',
-                                    //           style: TextStyle(color: Color(0xFFF44614), fontSize: 12, fontWeight: FontWeight.bold, fontFamily: 'Calibri'),
-                                    //         ),
-                                    //         TextSpan(
-                                    //           text: 'purposeofvisit',
-                                    //           style: TextStyle(color: Color(0xFF042DE3), fontSize: 12, fontFamily: 'Calibri'),
-                                    //         ),
-                                    //       ],
-                                    //     ),
-                                    //   ),
-                                    // ),
-                                    // Row(
-                                    //   children: [
-                                    //     Expanded(
-                                    //       flex: 10,
-                                    //       child: Column(
-                                    //         crossAxisAlignment: CrossAxisAlignment.end,
-                                    //         children: [
-                                    //           Padding(
-                                    //             padding: EdgeInsets.fromLTRB(0, 10, 10, 0),
-                                    //             child: Icon(
-                                    //               Icons.phone,
-                                    //               size: 16,
-                                    //               color: Color(0xFFF44614),
-                                    //             ),
-                                    //           ),
-                                    //         ],
-                                    //       ),
-                                    //     ),
-                                    //     Expanded(
-                                    //       flex: 0,
-                                    //       child: Column(
-                                    //         crossAxisAlignment: CrossAxisAlignment.center,
-                                    //         children: [
-                                    //           Padding(
-                                    //             padding: EdgeInsets.fromLTRB(0, 10, 5, 0),
-                                    //             child: Text(
-                                    //               ' : ',
-                                    //               style: TextStyle(color: Color(0xFFF44614), fontSize: 12, fontWeight: FontWeight.bold, fontFamily: 'Calibri'),
-                                    //             ),
-                                    //           ),
-                                    //         ],
-                                    //       ),
-                                    //     ),
-                                    //     Expanded(
-                                    //       flex: 14,
-                                    //       child: Column(
-                                    //         crossAxisAlignment: CrossAxisAlignment.start,
-                                    //         children: [
-                                    //           Padding(
-                                    //             padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                                    //             child: Text(
-                                    //               '6846847844',
-                                    //               style: TextStyle(color: Color(0xFF042DE3), fontSize: 12, fontFamily: 'Calibri'),
-                                    //             ),
-                                    //           ),
-                                    //         ],
-                                    //       ),
-                                    //     )
-                                    //   ],
-                                    // ),
-                                    // Padding(
-                                    //   padding: EdgeInsets.only(bottom: 4.0),
-                                    //   child: RichText(
-                                    //     text: TextSpan(
-                                    //       children: [
-                                    //         TextSpan(
-                                    //           text: 'Status :',
-                                    //           style: TextStyle(color: Color(0xFFF44614), fontSize: 12, fontWeight: FontWeight.bold, fontFamily: 'Calibri'),
-                                    //         ),
-                                    //         TextSpan(
-                                    //           text: ' Accepted',
-                                    //           style: TextStyle(color: Color(0xFF042DE3), fontSize: 12, fontFamily: 'Calibri'),
-                                    //         ),
-                                    //       ],
-                                    //     ),
-                                    //   ),
-                                    // ),
                                   ],
                                 ),
                               )
@@ -900,13 +476,19 @@ class MyAppointments_screenState extends State<MyAppointments> {
         return Colors.red;
     }
   }
-
-  void fetchMyAppointments() async {
+  void checkLoginuserdata() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    userId = prefs.getInt('userId'); // Retrieve the user ID
+    print('userId: : $userId');
+    fetchMyAppointments(userId);
+  }
+  void fetchMyAppointments(int? userId) async {
     setState(() {
       isLoading = true; // Set isLoading to true before making the API request
     });
 
-    String url = 'http://182.18.157.215/SaloonApp/API/api/Appointment/GetAppointmentByUserid/1';
+    String url = 'http://182.18.157.215/SaloonApp/API/api/Appointment/GetAppointmentByUserid/$userId';
+    print('GetAppointmentByUserid: : $url');
     try {
       final response = await http.get(Uri.parse(url));
 
@@ -958,10 +540,10 @@ class MyAppointments_screenState extends State<MyAppointments> {
     }
   }
 
-  void ShowAlertdialog() {
+  void ShowAlertdialog(MyAppointment_Model appointment_model) {
     _commentstexteditcontroller.clear();
     showDialog(
-      // barrierDismissible: false,
+
       barrierDismissible: true,
       context: context,
       builder: (BuildContext context) {

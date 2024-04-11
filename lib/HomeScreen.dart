@@ -332,29 +332,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
 
 
-// void checkLoginStatus() async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   bool isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
-  //   print('isLoggedIn: $isLoggedIn');
-  //   if (isLoggedIn) {
-  //     int? userId = prefs.getInt('id'); // Retrieve the user ID
-  //
-  //     if (userId != null) {
-  //       // Use the user ID as needed
-  //       print('User ID: $userId');
-  //       Navigator.push(context, MaterialPageRoute(builder: (context) => Branches_screen(userId: userId)));
-  //     } else {
-  //       // Handle the case where the user ID is not available
-  //       print('User ID not found in SharedPreferences');
-  //     }
-  //   } else {
-  //     Navigator.push(
-  //       context,
-  //       MaterialPageRoute(builder: (context) => agentloginscreen()),
-  //     );
-  //   }
-  // }
+
 }
+
 
 // class BannerImages {
 //   final String imageName;
@@ -395,6 +375,7 @@ class _SliderScreenState extends State<SliderScreen> {
   bool apiAllowed = true;
   late Timer _timer;
   List<LastAppointment> appointments = [];
+  int? userId;
   @override
   initState() {
     super.initState();
@@ -407,6 +388,7 @@ class _SliderScreenState extends State<SliderScreen> {
       if (isConnected) {
         print('Connected to the internet');
         fetchData();
+        checkLoginuserdata();
         // Call API immediately when screen loads
         //  fetchData();
         //fetchimagesslider();
@@ -1328,11 +1310,7 @@ class _SliderScreenState extends State<SliderScreen> {
     showModalBottomSheet(
         context: context,
         builder: (BuildContext context) {
-  // void _showBottomSheet(BuildContext context) {
-  //   showModalBottomSheet(
-  //     isScrollControlled: true,
-  //     context: context,
-  //     builder: (BuildContext context) {
+
         return SingleChildScrollView(
           child: Container(
             width: MediaQuery.of(context).size.width,
@@ -1431,30 +1409,70 @@ class _SliderScreenState extends State<SliderScreen> {
                 ),
                 Padding(
                   padding: EdgeInsets.only(top: 20.0, left: 0.0, right: 0.0),
-                  child: Container(
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      color: Color(0xFFf15f22),
-                      borderRadius: BorderRadius.circular(6.0),
-                    ),
-                    child: ElevatedButton(
-                      onPressed: () {
-                        validaterating();
-                      },
-                      child: Text(
-                        'Submit',
-                        style: TextStyle(color: Colors.white, fontSize: 16, fontFamily: 'Calibri'),
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        primary: Colors.transparent,
-                        elevation: 0,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(4.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: Text(
+                          'Cancel',
+                          style: TextStyle(color: Colors.white, fontSize: 16, fontFamily: 'Calibri'),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.grey,
+                          elevation: 0,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(4.0),
+                          ),
                         ),
                       ),
-                    ),
+                      ElevatedButton(
+                        onPressed: () {
+                          validaterating(appointments);
+                        },
+                        child: Text(
+                          'Submit',
+                          style: TextStyle(color: Colors.white, fontSize: 16, fontFamily: 'Calibri'),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          primary: Color(0xFFf15f22),
+                          elevation: 0,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(4.0),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
+                // Padding(
+                //   padding: EdgeInsets.only(top: 20.0, left: 0.0, right: 0.0),
+                //   child: Container(
+                //     width: double.infinity,
+                //     decoration: BoxDecoration(
+                //       color: Color(0xFFf15f22),
+                //       borderRadius: BorderRadius.circular(6.0),
+                //     ),
+                //     child: ElevatedButton(
+                //       onPressed: () {
+                //         validaterating(appointments);
+                //       },
+                //       child: Text(
+                //         'Submit',
+                //         style: TextStyle(color: Colors.white, fontSize: 16, fontFamily: 'Calibri'),
+                //       ),
+                //       style: ElevatedButton.styleFrom(
+                //         primary: Colors.transparent,
+                //         elevation: 0,
+                //         shape: RoundedRectangleBorder(
+                //           borderRadius: BorderRadius.circular(4.0),
+                //         ),
+                //       ),
+                //     ),
+                //   ),
+                // ),
               ],
             ),
           ),
@@ -1463,7 +1481,7 @@ class _SliderScreenState extends State<SliderScreen> {
     );
   }
 
-  Future<void> validaterating() async {
+  Future<void> validaterating(List<LastAppointment> appointments) async {
     bool isValid = true;
     bool hasValidationFailed = false;
     if (rating_star != null && rating_star <= 0.0) {
@@ -1486,10 +1504,10 @@ class _SliderScreenState extends State<SliderScreen> {
       String comments = _commentstexteditcontroller.text.toString();
       int myInt = rating_star.toInt();
       print('changedintoint$myInt');
-      AddUpdatefeedback();
+      AddUpdatefeedback(appointments);
     }
   }
-  Future<void> AddUpdatefeedback() async {}
+  // Future<void> AddUpdatefeedback(List<LastAppointment> appointments) async {}
 
 
   Future<void> fetchAppointments() async {
@@ -1534,70 +1552,69 @@ class _SliderScreenState extends State<SliderScreen> {
     }
   }
 
+  Future<void> AddUpdatefeedback(List<LastAppointment> appointments) async {
+    final url = Uri.parse(baseUrl + postApiAppointment);
+    print('url==>890: $url');
+    DateTime now = DateTime.now();
+    String dateTimeString = now.toString();
+    print('DateTime as String: $dateTimeString');
+
+    for (LastAppointment appointment in appointments) {
+      // Create the request object for each appointment
+      final request = {
+        "Id": appointment.id,
+        "BranchId": appointment.branchId,
+        "Date": appointment.date,
+        "SlotTime": appointment.slotTime,
+        "CustomerName": appointment.customerName,
+        "PhoneNumber": appointment.contactNumber, // Changed from appointments.phoneNumber
+        "Email": appointment.email,
+        "GenderTypeId": appointment.genderTypeId,
+        "StatusTypeId": 11,
+        "PurposeOfVisitId": appointment.purposeOfVisitId,
+        "PurposeOfVisit": appointment.purposeOfVisit,
+        "IsActive": true,
+        "CreatedDate": dateTimeString,
+        "UpdatedDate": dateTimeString,
+        "UpdatedByUserId": 1,
+        "rating": rating_star,
+        "review": _commentstexteditcontroller.text.toString(),
+        "reviewSubmittedDate": dateTimeString,
+        "timeofslot": null,
+        "customerId": 1
+      };
+      print('AddUpdatefeedback object: : ${json.encode(request)}');
 
 
- //  Future<void> AddUpdatefeedback() async {
- // // Future<void> AddUpdatefeedback(Appointment data, int i) async {
- //    final url = Uri.parse(baseUrl + postApiAppointment);
- //    print('url==>890: $url');
- //    // final url = Uri.parse('http://182.18.157.215/SaloonApp/API/api/Appointment');
- //    DateTime now = DateTime.now();
- //
- //    // Using toString() method
- //    String dateTimeString = now.toString();
- //    print('DateTime as String: $dateTimeString');
- //
- //    // Create the request object
- //    final request = {
- //      "Id": data.id,
- //      "BranchId": data.branchId,
- //      "Date": data.date,
- //      "SlotTime": data.slotTime,
- //      "CustomerName": data.customerName,
- //      "PhoneNumber": data.phoneNumber,
- //      "Email": data.email,
- //      "GenderTypeId": data.genderTypeId,
- //      "StatusTypeId": i,
- //      "PurposeOfVisitId": data.purposevisitid,
- //      "PurposeOfVisit": data.purposeofvisit,
- //      "IsActive": true,
- //      "CreatedDate": dateTimeString,
- //      "UpdatedDate": dateTimeString,
- //      "UpdatedByUserId": widget.userId,
- //      "rating": null,
- //      "review": null,
- //      "reviewSubmittedDate": null,
- //      "timeofslot": null,
- //      "customerId": 1
- //    };
- //    print('Accept Or reject object: : ${json.encode(request)}');
- //    print('Accept Or reject object: $request');
- //    try {
- //      // Send the POST request
- //      final response = await http.post(
- //        url,
- //        body: json.encode(request),
- //        headers: {
- //          'Content-Type': 'application/json', // Set the content type header
- //        },
- //      );
- //
- //      // Check the response status code
- //      if (response.statusCode == 200) {
- //        print('Request sent successfully');
- //
- //        // showCustomToastMessageLong(
- //        //     'Request sent successfully', context, 0, 2);
- //        //    Navigator.pop(context);
- //      } else {
- //        //showCustomToastMessageLong(
- //        // 'Failed to send the request', context, 1, 2);
- //        print('Failed to send the request. Status code: ${response.statusCode}');
- //      }
- //    } catch (e) {
- //      print('Error: $e');
- //    }
- //  }
+      try {
+        // Send the POST request for each appointment
+        final response = await http.post(
+          url,
+          body: json.encode(request),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        );
+
+        if (response.statusCode == 200) {
+          print('Request sent successfully');
+          Navigator.pop(context);
+        } else {
+          print('Failed to send the request. Status code: ${response.statusCode}');
+        }
+      } catch (e) {
+        print('Error: $e');
+      }
+    }
+  }
+
+  void checkLoginuserdata() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    userId = prefs.getInt('userId'); // Retrieve the user ID
+    print('userId: : $userId');
+
+  }
+
 
 
 }

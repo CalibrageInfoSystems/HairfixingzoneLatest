@@ -39,8 +39,8 @@ class _UserScreenState extends State<UserLoginScreen> {
 
     // Prepare the request body
     Map<String, String> requestBody = {
-      'userName': 'sample121',
-      'password': 'calibrage',
+      'userName':_usernameController.text,
+      'password': _passwordController.text,
     };
 
     // Make the POST request

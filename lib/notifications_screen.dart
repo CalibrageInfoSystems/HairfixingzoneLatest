@@ -36,7 +36,8 @@ class _notifications_screenState extends State<notifications_screen> {
       if (isConnected) {
         print('Connected to the internet');
         fetchAppointments(widget.userId,widget.formattedDate);
-      } else { CommonUtils.showCustomToastMessageLong('Not connected to the internet', context, 1, 4);
+      } else {
+        CommonUtils.showCustomToastMessageLong('Not connected to the internet', context, 1, 4);
       print('Not connected to the internet');  // Not connected to the internet
       }
     });
@@ -704,26 +705,43 @@ class _notifications_screenState extends State<notifications_screen> {
       if (response.statusCode == 200) {
         final Map<String, dynamic> responseData = jsonDecode(response.body);
         if (responseData['listResult'] != null) {
-          final List<dynamic> appointmentsData = responseData['listResult'];
-          setState(() {
-            appointments = appointmentsData
-                .map((appointment) => Notifications.fromJson(appointment))
-                .toList();
-            isLoading = false;
-          });
+          appointments = responseData['listResult'];
+          // Process appointments here
+          print('Appointments: $appointments');
         } else {
-          setState(() {
-            isLoading = false;
-          });
-          //  textFieldController.text = 'No Slots Available';
-          print('No Slots Available');
+          print('No appointments available');
         }
       } else {
         throw Exception('Failed to fetch appointments');
       }
     } catch (error) {
-      throw Exception('Failed to connect to the API');
+      print('Failed to connect to the API: $error');
     }
+    // try {
+    //   final response = await http.get(url);
+    //   if (response.statusCode == 200) {
+    //     final Map<String, dynamic> responseData = jsonDecode(response.body);
+    //     if (responseData['listResult'] != null) {
+    //       final List<dynamic> appointmentsData = responseData['listResult'];
+    //       setState(() {
+    //         appointments = appointmentsData
+    //             .map((appointment) => Notifications.fromJson(appointment))
+    //             .toList();
+    //         isLoading = false;
+    //       });
+    //     } else {
+    //       setState(() {
+    //         isLoading = false;
+    //       });
+    //       //  textFieldController.text = 'No Slots Available';
+    //       print('No Slots Available');
+    //     }
+    //   } else {
+    //     throw Exception('Failed to fetch appointments');
+    //   }
+    // } catch (error) {
+    //   throw Exception('Failed to connect to the API');
+    // }
   }
 
   Future<void> Get_ApprovedDeclinedSlots(Notifications data, int i) async {
