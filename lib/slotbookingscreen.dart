@@ -164,7 +164,14 @@ class _BookingScreenState extends State<slotbookingscreen> {
     isSlotsAvailable = getVisibleSlots(slots, isTodayHoliday).isNotEmpty;
     disabledSlots = getDisabledSlots(slots);
     visableSlots = getVisibleSlots(slots, isTodayHoliday);
-    return Scaffold(
+    return WillPopScope(
+        onWillPop: () async {
+      // Show a confirmation dialog
+      Navigator.of(context).pop(); // Navigate back to the previous screen
+      // Return false to prevent default back button behavior
+      return false;
+    },
+    child: Scaffold(
         appBar: AppBar(
             centerTitle: true,
             backgroundColor: Color(0xFFFB4110),
@@ -907,7 +914,7 @@ class _BookingScreenState extends State<slotbookingscreen> {
                   ),
                 ]),
               ))
-            ])));
+            ]))));
   }
 
   Future<void> _openDatePicker(bool isTodayHoliday) async {

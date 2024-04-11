@@ -16,8 +16,10 @@ import 'package:shimmer/shimmer.dart';
 import 'dart:convert';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/services.dart';
+import 'Appointment.dart';
 import 'BranchModel.dart';
 import 'Branches_screen.dart';
+import 'LatestAppointment.dart';
 import 'MyAppointments.dart';
 import 'agentloginscreen.dart';
 import 'api_config.dart';
@@ -30,12 +32,15 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   late ExpandedTileController _expandedTileController;
+
+
   @override
   void initState() {
     // TODO: implement initState
     _expandedTileController = ExpandedTileController(isExpanded: false);
 
     super.initState();
+
   }
 
   @override
@@ -79,62 +84,7 @@ class _HomeScreenState extends State<HomeScreen> {
           backgroundColor: const Color(0xFFF44614), // Orange color
 
           centerTitle: true,
-          // actions: [
-          //   Align(
-          //     alignment: Alignment.bottomRight,
-          //     child: Container(
-          //       //width: 115,
-          //       height: 35,
-          //       margin: EdgeInsets.only(bottom: 10.0, right: 10.0),
-          //       decoration: BoxDecoration(
-          //         color: Colors.white,
-          //         border: Border.all(
-          //             color: Color(0xFF8d97e2),
-          //             width: 3
-          //         ),
-          //         borderRadius: BorderRadius.circular(10.0),
-          //       ),
-          //       child: ElevatedButton(
-          //         onPressed: () {
-          //           checkLoginStatus();
-          //
-          //
-          //           // Handle button press
-          //         },
-          //         style: ElevatedButton.styleFrom(
-          //           primary: Colors.transparent,
-          //           onPrimary: Color(0xFF8d97e2),
-          //           elevation: 0,
-          //           shadowColor: Colors.transparent,
-          //           shape: RoundedRectangleBorder(
-          //             borderRadius: BorderRadius.circular(10.0),
-          //           ),
-          //         ),
-          //         child: Row(
-          //           mainAxisSize: MainAxisSize.min,
-          //           crossAxisAlignment: CrossAxisAlignment.start,
-          //           mainAxisAlignment: MainAxisAlignment.start,
-          //           children: [
-          //             Image.asset(
-          //               'assets/agent_icon.png',
-          //               width: 20,
-          //               height: 20,
-          //             ),
-          //             SizedBox(width: 5),
-          //             Text(
-          //               'AGENT',
-          //               style: TextStyle(
-          //                 fontSize: 16,
-          //                 fontWeight: FontWeight.bold,
-          //                 color: Color(0xFF042de3),
-          //               ),
-          //             ),
-          //           ],
-          //         ),
-          //       ),
-          //     ),
-          //   )
-          // ],
+
 
           title: Container(
             width: 85, // Adjust the width as needed
@@ -155,7 +105,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 decoration: BoxDecoration(
                     // Remove the DecorationImage with AssetImage
                     ),
-                child: Icon(Icons.place),
+                child:  Center(
+                  child: Image.asset(
+                    'assets/logo.png',
+                  ),
+                ),
               ),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 13),
@@ -273,28 +227,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           //   style: CommonUtils.Mediumtext_12,
                           // ),
                         ),
-                        // if (reporingManagerName != null)
-                        //   ListTile(
-                        //     contentPadding: EdgeInsets.zero,
-                        //     leading: Container(
-                        //         padding: const EdgeInsets.all(10),
-                        //         decoration: BoxDecoration(
-                        //           color: const Color(0xFFe78337).withOpacity(0.2),
-                        //           // color: const Color.fromARGB(
-                        //           //     255, 178, 236, 180),
-                        //           borderRadius: BorderRadius.circular(20),
-                        //         ),
-                        //         child: const Icon(
-                        //           Icons.manage_accounts_rounded,
-                        //           size: 20,
-                        //           color: Color(0xFFe78337),
-                        //         )),
-                        //     title: Text('$reporingManagerName', style: CommonUtils.txSty_14B_Fb),
-                        //     subtitle: const Text(
-                        //       'Reporing Manager Name',
-                        //       style: CommonUtils.Mediumtext_12,
-                        //     ),
-                        //   ),
+
                       ],
                     ),
                   ),
@@ -397,6 +330,8 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
 
+
+
 // void checkLoginStatus() async {
   //   SharedPreferences prefs = await SharedPreferences.getInstance();
   //   bool isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
@@ -459,6 +394,7 @@ class _SliderScreenState extends State<SliderScreen> {
   bool isDataBinding = false;
   bool apiAllowed = true;
   late Timer _timer;
+  List<LastAppointment> appointments = [];
   @override
   initState() {
     super.initState();
@@ -475,9 +411,7 @@ class _SliderScreenState extends State<SliderScreen> {
         //  fetchData();
         //fetchimagesslider();
         fetchImages();
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          _showBottomSheet(context);
-        });
+        fetchAppointments();
       } else {
         CommonUtils.showCustomToastMessageLong('No Internet Connection', context, 1, 4);
         print('Not connected to the internet'); // Not connected to the internet
@@ -527,158 +461,7 @@ class _SliderScreenState extends State<SliderScreen> {
     _timer?.cancel();
     super.dispose();
   }
-  // Future<void> _getDataWithinFiveSeconds() async {
-  //   // Start a timer to measure the elapsed time
-  //   Timer(Duration(seconds: 5), () {
-  //     if (!isLoading) {
-  //       print('API call within 5 seconds!');
-  //       // Make the API call here
-  //       _getData();
-  //       fetchImages();
-  //     } else {
-  //       print('API call after 5seconds');
-  //     }
-  //   });
-  // }
 
-//   Future<void> _getData() async {
-//     final url =  Uri.parse(baseUrl+getbranches);
-//     print('url==>135: $url');
-// //  final url = Uri.parse('http://182.18.157.215/SaloonApp/API/api/Banner/null');
-//
-//
-//     final response = await http.get(url);
-//
-//     try {
-//       // Check if the request was successful
-//       if (response.statusCode == 200) {
-//         // Parse the response body
-//         final data = json.decode(response.body);
-//         print('Failed to fetch data:  $data');
-//
-//         List<BranchModel> branchList = [];
-//         for (var item in data['ListResult']) {
-//           branchList.add(BranchModel(
-//             id: item['Id'],
-//             name: item['Name'],
-//             filePath: item['FilePath'],
-//             address: item['Address'],
-//             startTime: item['StartTime'],
-//             closeTime: item['CloseTime'],
-//             room: item['Room'],
-//             mobileNumber: item['MobileNumber'],
-//             isActive: item['IsActive'],
-//           ));
-//         }
-//
-//         // Update the state with the fetched data
-//         setState(() {
-//           brancheslist = branchList;
-//         });
-//       }
-//       else {
-//         // Handle error if the API request was not successful
-//         print('Request failed with status: ${response.statusCode}');
-//       }
-//     } catch (error) {
-//       // Handle any exception that occurred during the API call
-//       print('Error: $error');
-//     }
-//   }
-//   Future<void> _getData() async {
-//     setState(() {
-//       isLoading = true; // Set isLoading to true before making the API call
-//     });
-//
-//     final url = Uri.parse(baseUrl + getbranches);
-//     print('url==>135: $url');
-//
-//     final response = await http.get(url);
-//
-//     try {
-//       // Check if the request was successful
-//       if (response.statusCode == 200) {
-//         // Parse the response body
-//         final data = json.decode(response.body);
-//         print('Failed to fetch data:  $data');
-//
-//         List<BranchModel> branchList = [];
-//         for (var item in data['ListResult']) {
-//           branchList.add(BranchModel(
-//             id: item['Id'],
-//             name: item['Name'],
-//             filePath: item['FilePath'],
-//             address: item['Address'],
-//             startTime: item['StartTime'],
-//             closeTime: item['CloseTime'],
-//             room: item['Room'],
-//             mobileNumber: item['MobileNumber'],
-//             isActive: item['IsActive'],
-//           ));
-//         }
-//
-//         // Update the state with the fetched data
-//         setState(() {
-//           brancheslist = branchList;
-//           isLoading = false; // Set isLoading to false after data is fetched
-//         });
-//       } else {
-//         // Handle error if the API request was not successful
-//         print('Request failed with status: ${response.statusCode}');
-//         setState(() {
-//           isLoading = false; // Set isLoading to false if request fails
-//         });
-//       }
-//     } catch (error) {
-//       // Handle any exception that occurred during the API call
-//       print('Error data is not getting from the api: $error');
-//       setState(() {
-//         isLoading = false; // Set isLoading to false if error occurs
-//       });
-//     }
-//   }
-
-  // Future<void> _getData() async {
-  //   final url = Uri.parse(baseUrl + getbranches);
-  //   print('branchesapi:$url');
-  //   try {
-  //     final response = await http.get(url);
-  //
-  //     if (response.statusCode == 200) {
-  //       final data = json.decode(response.body);
-  //
-  //       List<BranchModel> branchList = [];
-  //       for (var item in data['ListResult']) {
-  //         branchList.add(BranchModel(
-  //           id: item['Id'],
-  //           name: item['Name'],
-  //           filePath: item['FilePath'],
-  //           address: item['Address'],
-  //           startTime: item['StartTime'],
-  //           closeTime: item['CloseTime'],
-  //           room: item['Room'],
-  //           mobileNumber: item['MobileNumber'],
-  //           isActive: item['IsActive'],
-  //         ));
-  //       }
-  //
-  //       setState(() {
-  //         brancheslist = branchList;
-  //         isLoading = false;
-  //       });
-  //     } else {
-  //       print('Request failed with status: ${response.statusCode}');
-  //       setState(() {
-  //         isLoading = false;
-  //       });
-  //     }
-  //   } catch (error) {
-  //     print('Error fetching data: $error');
-  //     setState(() {
-  //       isLoading = false;
-  //     });
-  //   }
-  // }
 
   Future<void> _getData() async {
     setState(() {
@@ -1541,12 +1324,15 @@ class _SliderScreenState extends State<SliderScreen> {
   }
   TextEditingController _commentstexteditcontroller = TextEditingController();
   double rating_star = 0.0;
-
-  void _showBottomSheet(BuildContext context) {
+  void _showBottomSheet(BuildContext context, List<LastAppointment> appointments) {
     showModalBottomSheet(
-      isScrollControlled: true,
-      context: context,
-      builder: (BuildContext context) {
+        context: context,
+        builder: (BuildContext context) {
+  // void _showBottomSheet(BuildContext context) {
+  //   showModalBottomSheet(
+  //     isScrollControlled: true,
+  //     context: context,
+  //     builder: (BuildContext context) {
         return SingleChildScrollView(
           child: Container(
             width: MediaQuery.of(context).size.width,
@@ -1700,6 +1486,118 @@ class _SliderScreenState extends State<SliderScreen> {
       String comments = _commentstexteditcontroller.text.toString();
       int myInt = rating_star.toInt();
       print('changedintoint$myInt');
+      AddUpdatefeedback();
     }
   }
+  Future<void> AddUpdatefeedback() async {}
+
+
+  Future<void> fetchAppointments() async {
+    //  final response = await http.get('http://182.18.157.215/SaloonApp/API/api/Role/GetLatestAppointmentByUserId/1');
+    final Uri url = Uri.parse('http://182.18.157.215/SaloonApp/API/api/Role/GetLatestAppointmentByUserId/1');
+    final response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      final List<dynamic> jsonData = jsonDecode(response.body);
+      List<LastAppointment> loadedAppointments = [];
+
+      for (var item in jsonData) {
+        loadedAppointments.add(LastAppointment.fromJson(item));
+      }
+
+      setState(() {
+        appointments = loadedAppointments;
+      });
+
+      // Print each appointment in the logs
+      appointments.forEach((appointment) {
+        print('Appointment ID: ${appointment.id}');
+        print('Branch: ${appointment.branch}');
+        print('Date: ${appointment.date}');
+        print('Customer Name: ${appointment.customerName}');
+        print('Slot Time: ${appointment.slotTime}');
+        print('Contact Number: ${appointment.contactNumber}');
+        print('Email: ${appointment.email}');
+        print('Gender: ${appointment.gender}');
+        print('Status: ${appointment.status}');
+        print('Purpose of Visit: ${appointment.purposeOfVisit}');
+        print('Slot Duration: ${appointment.slotDuration}');
+        print('Appointment Time: ${appointment.appointmentTime}');
+        print('');
+
+        WidgetsBinding.instance!.addPostFrameCallback((_) {
+          _showBottomSheet(context, appointments);
+        });
+      });
+    } else {
+      throw Exception('Failed to load appointments');
+    }
+  }
+
+
+
+ //  Future<void> AddUpdatefeedback() async {
+ // // Future<void> AddUpdatefeedback(Appointment data, int i) async {
+ //    final url = Uri.parse(baseUrl + postApiAppointment);
+ //    print('url==>890: $url');
+ //    // final url = Uri.parse('http://182.18.157.215/SaloonApp/API/api/Appointment');
+ //    DateTime now = DateTime.now();
+ //
+ //    // Using toString() method
+ //    String dateTimeString = now.toString();
+ //    print('DateTime as String: $dateTimeString');
+ //
+ //    // Create the request object
+ //    final request = {
+ //      "Id": data.id,
+ //      "BranchId": data.branchId,
+ //      "Date": data.date,
+ //      "SlotTime": data.slotTime,
+ //      "CustomerName": data.customerName,
+ //      "PhoneNumber": data.phoneNumber,
+ //      "Email": data.email,
+ //      "GenderTypeId": data.genderTypeId,
+ //      "StatusTypeId": i,
+ //      "PurposeOfVisitId": data.purposevisitid,
+ //      "PurposeOfVisit": data.purposeofvisit,
+ //      "IsActive": true,
+ //      "CreatedDate": dateTimeString,
+ //      "UpdatedDate": dateTimeString,
+ //      "UpdatedByUserId": widget.userId,
+ //      "rating": null,
+ //      "review": null,
+ //      "reviewSubmittedDate": null,
+ //      "timeofslot": null,
+ //      "customerId": 1
+ //    };
+ //    print('Accept Or reject object: : ${json.encode(request)}');
+ //    print('Accept Or reject object: $request');
+ //    try {
+ //      // Send the POST request
+ //      final response = await http.post(
+ //        url,
+ //        body: json.encode(request),
+ //        headers: {
+ //          'Content-Type': 'application/json', // Set the content type header
+ //        },
+ //      );
+ //
+ //      // Check the response status code
+ //      if (response.statusCode == 200) {
+ //        print('Request sent successfully');
+ //
+ //        // showCustomToastMessageLong(
+ //        //     'Request sent successfully', context, 0, 2);
+ //        //    Navigator.pop(context);
+ //      } else {
+ //        //showCustomToastMessageLong(
+ //        // 'Failed to send the request', context, 1, 2);
+ //        print('Failed to send the request. Status code: ${response.statusCode}');
+ //      }
+ //    } catch (e) {
+ //      print('Error: $e');
+ //    }
+ //  }
+
+
 }
