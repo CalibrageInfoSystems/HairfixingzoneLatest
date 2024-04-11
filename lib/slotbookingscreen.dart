@@ -183,12 +183,12 @@ class _BookingScreenState extends State<slotbookingscreen> {
       _fullnameController1.text = userFullName;
       _emailController3.text = email;
       _phonenumberController2.text = phonenumber;
+      isGenderSelected = true;
       // gender = selectedGender;
       print('userId:$userId');
       print('gender:$gender');
     });
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -672,6 +672,7 @@ class _BookingScreenState extends State<slotbookingscreen> {
                                                   fontSize: 14,
                                                   fontWeight: FontWeight.w300,
                                                 ),
+                                                readOnly: true,
                                                 decoration: InputDecoration(
                                                   hintText: 'Full Name',
                                                   hintStyle: TextStyle(
@@ -730,6 +731,7 @@ class _BookingScreenState extends State<slotbookingscreen> {
                                                 inputFormatters: [
                                                   FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
                                                 ],
+                                                readOnly: true,
                                                 style: TextStyle(
                                                   fontFamily: 'Calibri',
                                                   fontSize: 14,
@@ -797,6 +799,7 @@ class _BookingScreenState extends State<slotbookingscreen> {
                                                   fontSize: 14,
                                                   fontWeight: FontWeight.w300,
                                                 ),
+                                                readOnly: true,
                                                 decoration: InputDecoration(
                                                   hintText: 'Email',
                                                   hintStyle: TextStyle(
