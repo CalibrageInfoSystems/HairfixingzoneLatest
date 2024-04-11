@@ -409,6 +409,9 @@ class _UserScreenState extends State<UserLoginScreen> {
     await prefs.setInt('userId', userData['id']);
     await prefs.setString('userFullName', userData['fullName']);
     await prefs.setInt('userRoleId', userData['roleID']);
+    await prefs.setString('email', userData['email']);
+    await prefs.setString('contactNumber', userData['contactNumber']);
+    await prefs.setInt('gender', userData['gender']);
     // Save other user data as needed
   }
 }

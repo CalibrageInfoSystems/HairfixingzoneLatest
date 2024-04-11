@@ -33,16 +33,43 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   late ExpandedTileController _expandedTileController;
 
-
+  String userFullName = '';
+  String email = '';
+  String phonenumber = '';
+  int gender = 0;
+  String Gender = '';
   @override
   void initState() {
     // TODO: implement initState
     _expandedTileController = ExpandedTileController(isExpanded: false);
-
+    checkLoginuserdata();
     super.initState();
 
   }
+  void checkLoginuserdata() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
 
+    setState(() {
+      userFullName = prefs.getString('userFullName') ?? '';
+      email = prefs.getString('email') ?? '';
+      phonenumber = prefs.getString('contactNumber') ?? '';
+      gender = prefs.getInt('gender') ?? 0;
+
+      // _fullnameController1.text = userFullName;
+      // _emailController3.text = email;
+      // _phonenumberController2.text = phonenumber;
+      // gender = selectedGender;
+      print('userFullName:$userFullName');
+      print('gender:$gender');
+      if (gender == 1) {
+        Gender = 'Female';
+      } else if (gender == 2) {
+        Gender = 'Male';
+      } else if (gender == 3) {
+        Gender = 'Other';
+      }
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -208,18 +235,24 @@ class _HomeScreenState extends State<HomeScreen> {
                         ListTile(
                           contentPadding: EdgeInsets.zero,
                           leading: Container(
-                              padding: const EdgeInsets.all(10),
-                              decoration: BoxDecoration(
-                                color: Colors.green.withOpacity(0.2),
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              child: const Icon(
-                                Icons.male,
-                                size: 20,
-                                color: Colors.green,
-                              )),
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              color: Colors.green.withOpacity(0.2),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Image.asset(
+                              'assets/gender.png',
+                              height: 22,
+                              width: 22,
+                            ),
+                            // const Icon(
+                            //   Icons.male,
+                            //   size: 20,
+                            //   color: Colors.green,
+                            // )
+                          ),
                           title: Text(
-                            'Gender',
+                            '$Gender',
                             //style: CommonUtils.txSty_14B_Fb
                           ),
                           // subtitle: const Text(
@@ -376,6 +409,11 @@ class _SliderScreenState extends State<SliderScreen> {
   late Timer _timer;
   List<LastAppointment> appointments = [];
   int? userId;
+  String userFullName = '';
+  String email = '';
+  String phonenumber = '';
+  int gender = 0;
+  String Gender = '';
   @override
   initState() {
     super.initState();
@@ -1610,11 +1648,32 @@ class _SliderScreenState extends State<SliderScreen> {
 
   void checkLoginuserdata() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    userId = prefs.getInt('userId'); // Retrieve the user ID
-    print('userId: : $userId');
+
+      setState(() {
+        userFullName = prefs.getString('userFullName') ?? '';
+        email = prefs.getString('email') ?? '';
+        phonenumber = prefs.getString('contactNumber') ?? '';
+        gender = prefs.getInt('gender') ?? 0;
+        userId = prefs.getInt('userId'); // Retrieve the user ID
+        print('userId: : $userId');
+        // _fullnameController1.text = userFullName;
+        // _emailController3.text = email;
+        // _phonenumberController2.text = phonenumber;
+        // gender = selectedGender;
+        print('userFullName:$userFullName');
+        print('gender:$gender');
+        if (gender == 1) {
+          Gender = 'Female';
+        } else if (gender == 2) {
+          Gender = 'Male';
+        } else if (gender == 3) {
+          Gender = 'Other';
+        }
+      });
+    }
 
   }
 
 
 
-}
+
