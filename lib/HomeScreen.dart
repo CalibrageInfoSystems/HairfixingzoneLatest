@@ -281,23 +281,23 @@ class _HomeScreenState extends State<HomeScreen> {
                   );
                 },
               ),
-              ListTile(
-                leading: Icon(Icons.star),
-                title: Text(
-                  'Feedback',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontFamily: 'hind_semibold',
-                  ),
-                ),
-                onTap: () {
-                  // Handle the onTap action for Logout
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(builder: (context) => feedback_Screen()),
-                  // );
-                },
-              ),
+              // ListTile(
+              //   leading: Icon(Icons.star),
+              //   title: Text(
+              //     'Feedback',
+              //     style: TextStyle(
+              //       color: Colors.black,
+              //       fontFamily: 'hind_semibold',
+              //     ),
+              //   ),
+              //   onTap: () {
+              //     // Handle the onTap action for Logout
+              //     // Navigator.push(
+              //     //   context,
+              //     //   MaterialPageRoute(builder: (context) => feedback_Screen()),
+              //     // );
+              //   },
+              // ),
               ListTile(
                 leading: Icon(Icons.logout), // Change the icon as needed
                 title: Text(
@@ -1608,9 +1608,10 @@ class _SliderScreenState extends State<SliderScreen> {
         print('Appointment Time: ${appointment.appointmentTime}');
         print('');
 
-        WidgetsBinding.instance!.addPostFrameCallback((_) {
-          _showBottomSheet(context, appointments);
-        });
+
+      });
+      WidgetsBinding.instance!.addPostFrameCallback((_) {
+        _showBottomSheet(context, appointments);
       });
     } else {
       throw Exception('Failed to load appointments');

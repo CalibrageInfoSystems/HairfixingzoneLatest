@@ -202,7 +202,7 @@ class _BookingScreenState extends State<slotbookingscreen> {
           // Show a confirmation dialog
           Navigator.of(context).pop(); // Navigate back to the previous screen
           // Return false to prevent default back button behavior
-          return false;
+          return true;
         },
         child: Scaffold(
             appBar: AppBar(

@@ -11,13 +11,13 @@ class Notifications {
   final String gender;
   final int statusTypeId;
   final String status;
-final String Address;
-  final int purposevisitid;
-  final String purposeofvisit;
+  final int purposeOfVisitId;
+  final String purposeOfVisit;
   final bool isActive;
   bool isAccepted;
   bool isRejected;
-  final String SlotDuration;
+  final String address;
+  final String slotDuration;
 
   Notifications({
     required this.id,
@@ -32,34 +32,34 @@ final String Address;
     required this.gender,
     required this.statusTypeId,
     required this.status,
-    required this.Address,
-    required this.purposevisitid,
-    required this.purposeofvisit,
+    required this.purposeOfVisitId,
+    required this.purposeOfVisit,
     required this.isActive,
     this.isAccepted = false,
     this.isRejected =false,
-    required this.SlotDuration,
+    required this.address,
+    required this.slotDuration,
   });
 
   factory Notifications.fromJson(Map<String, dynamic> json) {
     return Notifications(
-      id: json['Id'],
-      branchId: json['BranchId'],
-      name: json['Name'],
-      date: json['Date'],
-      slotTime: json['SlotTime'],
-      customerName: json['CustomerName'],
-      phoneNumber: json['PhoneNumber'],
-      email: json['Email'],
-      genderTypeId: json['GenderTypeId'],
-      gender: json['Gender'],
-      statusTypeId: json['StatusTypeId'],
-      status: json['Status'],
-      Address: json['Address'],
-      purposevisitid: json['PurposeOfVisitId'],
-      purposeofvisit: json['PurposeOfVisit'],
-      isActive: json['IsActive'],
-      SlotDuration: json['SlotDuration'],
+      id: json['id'],
+      branchId: json['branchId'],
+      name: json['name'],
+      date: json['date'],
+      slotTime: json['slotTime'],
+      customerName: json['customerName'],
+      phoneNumber: json['phoneNumber'],
+      email: json['email'],
+      genderTypeId: json['genderTypeId'],
+      gender: json['gender'],
+      statusTypeId: json['statusTypeId'],
+      status: json['status'],
+      purposeOfVisitId: json['purposeOfVisitId'],
+      purposeOfVisit: json['purposeOfVisit'],
+      isActive: json['isActive'],
+      address: json['address'],
+      slotDuration: json['slotDuration'],
     );
   }
 }

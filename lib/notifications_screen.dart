@@ -10,8 +10,8 @@ import 'Notifications.dart';
 import 'api_config.dart';
 
 class notifications_screen extends StatefulWidget {
-   int userId;
-   String formattedDate;
+  int userId;
+  String formattedDate;
 
   notifications_screen({required this.userId, required this.formattedDate});
   @override
@@ -36,8 +36,7 @@ class _notifications_screenState extends State<notifications_screen> {
       if (isConnected) {
         print('Connected to the internet');
         fetchAppointments(widget.userId,widget.formattedDate);
-      } else {
-        CommonUtils.showCustomToastMessageLong('Not connected to the internet', context, 1, 4);
+      } else { CommonUtils.showCustomToastMessageLong('Not connected to the internet', context, 1, 4);
       print('Not connected to the internet');  // Not connected to the internet
       }
     });
@@ -231,7 +230,7 @@ class _notifications_screenState extends State<notifications_screen> {
                                               fontFamily: 'Calibri'),
                                         ),
                                         TextSpan(
-                                          text: appointment.purposeofvisit,
+                                          text: appointment.purposeOfVisit,
                                           style: TextStyle(
                                               color: Color(
                                                   0xFF042DE3),fontSize: 12,
@@ -317,7 +316,7 @@ class _notifications_screenState extends State<notifications_screen> {
                                               fontFamily: 'Calibri'),
                                         ),
                                         TextSpan(
-                                          text: " "+ appointment.SlotDuration,
+                                          text: " "+ appointment.slotDuration,
                                           style: TextStyle(
                                               color: Color(
                                                 0xFF042DE3,
@@ -483,8 +482,8 @@ class _notifications_screenState extends State<notifications_screen> {
 
                                   if (!appointment.isAccepted)
                                     ElevatedButton(
-                                    //  onPressed: () {
-            onPressed: isPastDate(widget.formattedDate, appointment.SlotDuration) ? null : () {
+                                      //  onPressed: () {
+                                      onPressed: isPastDate(widget.formattedDate, appointment.slotDuration) ? null : () {
 
                                         acceptAppointment(index);
 
@@ -501,10 +500,10 @@ class _notifications_screenState extends State<notifications_screen> {
                                           gender: appointment.gender,
                                           statusTypeId: appointment.statusTypeId,
                                           status: appointment.status,
-                                          purposevisitid: appointment.purposevisitid,
-                                          purposeofvisit: appointment.purposeofvisit,
+                                          purposeOfVisit: appointment.purposeOfVisit,
+                                          purposeOfVisitId : appointment.purposeOfVisitId,
                                           isActive: appointment.isActive,
-                                          SlotDuration: appointment.SlotDuration, Address: appointment.Address,
+                                          slotDuration: appointment.slotDuration, address: appointment.address,
                                         );
 
                                         print('Button 1 pressed for ${appointment.customerName}');
@@ -563,8 +562,8 @@ class _notifications_screenState extends State<notifications_screen> {
                               if(!appointment.isRejected)
                                 if (appointment.statusTypeId == 4)
                                   ElevatedButton(
-                                  //  onPressed: () {
-                                    onPressed: isPastDate(widget.formattedDate,appointment.SlotDuration  ) ? null : () {
+                                    //  onPressed: () {
+                                    onPressed: isPastDate(widget.formattedDate,appointment.slotDuration  ) ? null : () {
                                       // Handle reject button action
                                       rejectAppointment(index);
 
@@ -581,10 +580,10 @@ class _notifications_screenState extends State<notifications_screen> {
                                         gender: appointment.gender,
                                         statusTypeId: appointment.statusTypeId,
                                         status: appointment.status,
-                                        purposevisitid: appointment.purposevisitid,
-                                        purposeofvisit: appointment.purposeofvisit,
+                                        purposeOfVisit: appointment.purposeOfVisit,
+                                        purposeOfVisitId : appointment.purposeOfVisitId,
                                         isActive: appointment.isActive,
-                                        SlotDuration: appointment.SlotDuration, Address: appointment.Address,
+                                        slotDuration: appointment.slotDuration, address: appointment.address,
                                       );
 
                                       print('Button 1 pressed for ${appointment.customerName}');
@@ -705,43 +704,26 @@ class _notifications_screenState extends State<notifications_screen> {
       if (response.statusCode == 200) {
         final Map<String, dynamic> responseData = jsonDecode(response.body);
         if (responseData['listResult'] != null) {
-          appointments = responseData['listResult'];
-          // Process appointments here
-          print('Appointments: $appointments');
+          final List<dynamic> appointmentsData = responseData['listResult'];
+          setState(() {
+            appointments = appointmentsData
+                .map((appointment) => Notifications.fromJson(appointment))
+                .toList();
+            isLoading = false;
+          });
         } else {
-          print('No appointments available');
+          setState(() {
+            isLoading = false;
+          });
+          //  textFieldController.text = 'No Slots Available';
+          print('No Slots Available');
         }
       } else {
         throw Exception('Failed to fetch appointments');
       }
     } catch (error) {
-      print('Failed to connect to the API: $error');
+      throw Exception('Failed to connect to the API');
     }
-    // try {
-    //   final response = await http.get(url);
-    //   if (response.statusCode == 200) {
-    //     final Map<String, dynamic> responseData = jsonDecode(response.body);
-    //     if (responseData['listResult'] != null) {
-    //       final List<dynamic> appointmentsData = responseData['listResult'];
-    //       setState(() {
-    //         appointments = appointmentsData
-    //             .map((appointment) => Notifications.fromJson(appointment))
-    //             .toList();
-    //         isLoading = false;
-    //       });
-    //     } else {
-    //       setState(() {
-    //         isLoading = false;
-    //       });
-    //       //  textFieldController.text = 'No Slots Available';
-    //       print('No Slots Available');
-    //     }
-    //   } else {
-    //     throw Exception('Failed to fetch appointments');
-    //   }
-    // } catch (error) {
-    //   throw Exception('Failed to connect to the API');
-    // }
   }
 
   Future<void> Get_ApprovedDeclinedSlots(Notifications data, int i) async {
@@ -758,8 +740,8 @@ class _notifications_screenState extends State<notifications_screen> {
       "CustomerName": data.customerName,
       "PhoneNumber": data.phoneNumber,
       "Email":data.email,
-      "Address": data.Address,
-      "SlotDuration": data.SlotDuration
+      "Address": data.address,
+      "SlotDuration": data.slotDuration
 
     };
     print('Get_ApprovedSlotsmail: $request');
@@ -821,8 +803,8 @@ class _notifications_screenState extends State<notifications_screen> {
       "Email": data.email,
       "GenderTypeId": data.genderTypeId,
       "StatusTypeId": i,
-      "PurposeOfVisitId": data.purposevisitid,
-      "PurposeOfVisit": data.purposeofvisit,
+      "PurposeOfVisitId": data.purposeOfVisitId,
+      "PurposeOfVisit": data.purposeOfVisit,
       "IsActive": true,
       "CreatedDate": dateTimeString,
       "UpdatedDate": dateTimeString,
