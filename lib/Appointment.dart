@@ -11,7 +11,6 @@ class Appointment {
   final String gender;
   final int statusTypeId;
   final String status;
-
   final int purposevisitid;
   final String purposeofvisit;
   final bool isActive;

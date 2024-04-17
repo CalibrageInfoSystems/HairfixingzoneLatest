@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'Commonutils.dart';
+import 'HomeScreen.dart';
 
 class feedback_Screen extends StatefulWidget {
   @override
@@ -51,6 +52,10 @@ class _feedback_Screen_screenState extends State<feedback_Screen> {
         onWillPop: () async {
           // Handle back button press here
           //
+          Navigator.of(context).push(
+            MaterialPageRoute(builder: (context) => HomeScreen()),
+          );
+
           // You can add any custom logic before closing the app
           return true; // Return true to allow back button press and close the app
         },

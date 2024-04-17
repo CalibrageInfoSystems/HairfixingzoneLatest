@@ -7,9 +7,9 @@ import 'package:flutter_svg/svg.dart';
 import 'package:hairfixingzone/UserSelectionScreen.dart';
 import 'package:hairfixingzone/feedback.dart';
 import 'package:hairfixingzone/slotbookingscreen.dart';
+
 import 'dart:async';
-//
-// import 'package:hairfixingservice/slotbookingscreen.dart';
+
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
@@ -21,6 +21,7 @@ import 'BranchModel.dart';
 import 'Branches_screen.dart';
 import 'LatestAppointment.dart';
 import 'MyAppointments.dart';
+import 'MyProducts.dart';
 import 'agentloginscreen.dart';
 import 'api_config.dart';
 import 'CommonUtils.dart';
@@ -36,13 +37,45 @@ class _HomeScreenState extends State<HomeScreen> {
   String userFullName = '';
   String email = '';
   String phonenumber = '';
-  int gender = 0;
+//  String gender ='';
   String Gender = '';
+  List<BannerImages> imageList = [];
+
+  List<BranchModel> brancheslist = [];
+  final CarouselController carouselController = CarouselController();
+  int currentIndex = 0;
+  bool isLoading = true;
+  bool isDataBinding = false;
+  bool apiAllowed = true;
+  late Timer _timer;
+  List<LastAppointment> appointments = [];
+  int? userId;
+  // String userFullName = '';
+  // String email = '';
+  // String phonenumber = '';
+  // int gender = 0;
+  // String Gender = '';
   @override
   void initState() {
     // TODO: implement initState
     _expandedTileController = ExpandedTileController(isExpanded: false);
-    checkLoginuserdata();
+
+
+    CommonUtils.checkInternetConnectivity().then((isConnected) {
+      if (isConnected) {
+        print('Connected to the internet');
+        fetchData();
+        checkLoginuserdata();
+        // Call API immediately when screen loads
+        //  fetchData();
+        //fetchimagesslider();
+        fetchImages();
+   
+      } else {
+        CommonUtils.showCustomToastMessageLong('No Internet Connection', context, 1, 4);
+        print('Not connected to the internet'); // Not connected to the internet
+      }
+    });
     super.initState();
 
   }
@@ -53,21 +86,23 @@ class _HomeScreenState extends State<HomeScreen> {
       userFullName = prefs.getString('userFullName') ?? '';
       email = prefs.getString('email') ?? '';
       phonenumber = prefs.getString('contactNumber') ?? '';
-      gender = prefs.getInt('gender') ?? 0;
-
+      Gender = prefs.getString('gender') ?? '';
+      userId = prefs.getInt('userId');
       // _fullnameController1.text = userFullName;
       // _emailController3.text = email;
       // _phonenumberController2.text = phonenumber;
       // gender = selectedGender;
+      print('userId:$userId');
+      GetLatestAppointmentByUserId(userId);
       print('userFullName:$userFullName');
-      print('gender:$gender');
-      if (gender == 1) {
-        Gender = 'Female';
-      } else if (gender == 2) {
-        Gender = 'Male';
-      } else if (gender == 3) {
-        Gender = 'Other';
-      }
+      print('gender:$Gender');
+      // if (gender == 1) {
+      //   Gender = 'Female';
+      // } else if (gender == 2) {
+      //   Gender = 'Male';
+      // } else if (gender == 3) {
+      //   Gender = 'Other';
+      // }
     });
   }
   @override
@@ -102,223 +137,733 @@ class _HomeScreenState extends State<HomeScreen> {
           }
 
           // Return false to prevent default back button behavior
-          return false;
+          return Future.value(false);
         },
-    child: MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        appBar: AppBar(
-          backgroundColor: const Color(0xFFF44614), // Orange color
+    // child: MaterialApp(
+    //   debugShowCheckedModeBanner: false,
+     child: Scaffold(
+    appBar: AppBar(
+    backgroundColor: const Color(0xFFF44614), // Orange color
 
-          centerTitle: true,
+    centerTitle: true,
 
 
-          title: Container(
-            width: 85, // Adjust the width as needed
-            height: 50, // Adjust the height as needed
-            child: FractionallySizedBox(
-              widthFactor: 1, // Adjust the width factor as needed (0.8 = 80% of available width)
-              child: Image.asset(
-                'assets/logo.png',
-                fit: BoxFit.fitHeight,
-              ),
-            ),
-          ),
+    title: Container(
+    width: 85, // Adjust the width as needed
+    height: 50, // Adjust the height as needed
+    child: FractionallySizedBox(
+    widthFactor: 1, // Adjust the width factor as needed (0.8 = 80% of available width)
+    child: Image.asset(
+    'assets/logo.png',
+    fit: BoxFit.fitHeight,
+    ),
+    ),
+    ),
+    ),
+    drawer: Drawer(
+    child: ListView(
+    children: [
+    DrawerHeader(
+    decoration: BoxDecoration(
+    // Remove the DecorationImage with AssetImage
+    ),
+    child:  Center(
+    child: Image.asset(
+    'assets/logo.png',
+    ),
+    ),
+    ),
+    Container(
+    padding: const EdgeInsets.symmetric(horizontal: 13),
+    margin: const EdgeInsets.symmetric(vertical: 5),
+    child: ExpandedTile(
+    controller: _expandedTileController,
+    theme: const ExpandedTileThemeData(
+    headerColor: Colors.transparent,
+    headerPadding: EdgeInsets.all(0),
+    headerSplashColor: Colors.transparent,
+    contentBackgroundColor: Colors.transparent,
+    // contentPadding: EdgeInsets.all(15),
+    // contentRadius: 12.0,
+    ),
+    leading: const Icon(
+    Icons.person,
+    color: Colors.black,
+    size: 22,
+    ),
+    title: const Text(
+    ' User Profile',
+    // style: TextStyle(),
+    ),
+    content: Container(
+    color: Colors.transparent,
+    child: Column(
+    children: [
+    ListTile(
+    contentPadding: EdgeInsets.zero,
+    leading: Container(
+    padding: const EdgeInsets.all(10), // Adjust padding as needed
+    decoration: BoxDecoration(
+    color: Colors.blue.withOpacity(0.2),
+    borderRadius: BorderRadius.circular(20),
+    ),
+    child: const Icon(
+    CupertinoIcons.profile_circled,
+    size: 20, // Reduce the size of the icon
+    color: Colors.blue,
+    ),
+    ),
+    title: Text(
+    '$userFullName',
+    // style: CommonUtils.txSty_14B_Fb,
+    ),
+    // subtitle: const Text(
+    //   'SlpCode',
+    //   style: CommonUtils.Mediumtext_12,
+    // ),
+    ),
+    ListTile(
+    contentPadding: EdgeInsets.zero,
+    leading: Container(
+    padding: const EdgeInsets.all(10), // Set padding to zero
+    decoration: BoxDecoration(
+    color: Colors.orange.withOpacity(0.2),
+    borderRadius: BorderRadius.circular(20),
+    ),
+    child: const Icon(
+    Icons.email_outlined,
+    size: 20,
+    color: Colors.orange,
+    ),
+    ),
+    title: Text(
+    '$email',
+    //   style: CommonUtils.txSty_14B_Fb,
+    ),
+    // subtitle: const Text(
+    //   'Email',
+    //   style: CommonUtils.Mediumtext_12,
+    // ),
+    ),
+    ListTile(
+    contentPadding: EdgeInsets.zero,
+    leading: Container(
+    padding: const EdgeInsets.all(10),
+    decoration: BoxDecoration(
+    color: Colors.red.withOpacity(0.2),
+    borderRadius: BorderRadius.circular(20),
+    ),
+    child: const Icon(
+    Icons.call,
+    size: 20,
+    color: Colors.red,
+    )),
+    title: Text(
+    '$phonenumber',
+    //    style: CommonUtils.txSty_14B_Fb
+    ),
+    // subtitle: const Text(
+    //   'Phone Number',
+    //   style: CommonUtils.Mediumtext_12,
+    // ),
+    ),
+    ListTile(
+    contentPadding: EdgeInsets.zero,
+    leading: Container(
+    padding: const EdgeInsets.all(10),
+    decoration: BoxDecoration(
+    color: Colors.green.withOpacity(0.2),
+    borderRadius: BorderRadius.circular(20),
+    ),
+    child: Image.asset(
+    'assets/gender.png',
+    height: 22,
+    width: 22,
+    ),
+    // const Icon(
+    //   Icons.male,
+    //   size: 20,
+    //   color: Colors.green,
+    // )
+    ),
+    title: Text(
+    '$Gender',
+    //style: CommonUtils.txSty_14B_Fb
+    ),
+    // subtitle: const Text(
+    //   'Company Name',
+    //   style: CommonUtils.Mediumtext_12,
+    // ),
+    ),
+    ],
+    ),
+    ),
+    ),
+    ),
+    ListTile(
+    leading: Icon(Icons.place),
+    title: Text(
+    'My Appointments',
+    style: TextStyle(
+    color: Colors.black,
+    fontFamily: 'hind_semibold',
+    ),
+    ),
+    onTap: () {
+    Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => MyAppointments()),
+    );
+    },
+    ),
+    ListTile(
+      leading: Icon(Icons.star),
+      title: Text(
+        'MyProducts',
+        style: TextStyle(
+          color: Colors.black,
+          fontFamily: 'hind_semibold',
         ),
-        drawer: Drawer(
-          child: ListView(
-            children: [
-              DrawerHeader(
-                decoration: BoxDecoration(
-                    // Remove the DecorationImage with AssetImage
-                    ),
-                child:  Center(
-                  child: Image.asset(
-                    'assets/logo.png',
+      ),
+      onTap: () {
+     //   Handle the onTap action for Logout
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => MyProducts()),
+        );
+      },
+    ),
+    ListTile(
+    leading: Icon(Icons.logout), // Change the icon as needed
+    title: Text(
+    'Logout',
+    style: TextStyle(
+    color: Colors.black,
+    fontFamily: 'hind_semibold',
+    ),
+    ),
+    onTap: () {
+    // Handle the onTap action for Logout
+    logOutDialog();
+    },
+    ),
+    // Add more ListTiles or other widgets as needed
+    ],
+    ),
+    ),
+ // body: SliderScreen(),
+        body:  Column(
+          children: [
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 0.0),
+              child: Padding(
+                padding: EdgeInsets.only(top: 10.0, bottom: 10.0),
+                child: RichText(
+                  text: TextSpan(
+                    style: DefaultTextStyle.of(context).style,
+                    children: [
+                      TextSpan(
+                        text: 'Welcome to ',
+                        style: TextStyle(
+                          fontFamily: 'Calibri',
+                          fontSize: 20,
+                          color: Color(0xFFFB4110),
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      TextSpan(
+                        text: 'Hair Fixing Zone',
+                        style: TextStyle(
+                          fontFamily: 'Calibri',
+                          fontSize: 20,
+                          color: Color(0xFF163CF1),
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 13),
-                margin: const EdgeInsets.symmetric(vertical: 5),
-                child: ExpandedTile(
-                  controller: _expandedTileController,
-                  theme: const ExpandedTileThemeData(
-                    headerColor: Colors.transparent,
-                    headerPadding: EdgeInsets.all(0),
-                    headerSplashColor: Colors.transparent,
-                    contentBackgroundColor: Colors.transparent,
-                    // contentPadding: EdgeInsets.all(15),
-                    // contentRadius: 12.0,
-                  ),
-                  leading: const Icon(
-                    Icons.person,
-                    color: Colors.black,
-                    size: 22,
-                  ),
-                  title: const Text(
-                    ' User Profile',
-                    // style: TextStyle(),
-                  ),
-                    content: Container(
-                      color: Colors.transparent,
-                      child: Column(
+            ),
+            Expanded(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 10.0),
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: Stack(
                         children: [
-                          ListTile(
-                            contentPadding: EdgeInsets.zero,
-                            leading: Container(
-                              padding: const EdgeInsets.all(10), // Adjust padding as needed
-                              decoration: BoxDecoration(
-                                color: Colors.blue.withOpacity(0.2),
-                                borderRadius: BorderRadius.circular(20),
+                          Align(
+                            alignment: Alignment.topCenter,
+                            child: isDataBinding
+                                ? Center(
+                              child: CircularProgressIndicator.adaptive(),
+                            )
+                                : imageList.isEmpty
+                                ? Center(
+                              // child: CircularProgressIndicator.adaptive(),
+                              child: Icon(
+                                Icons.signal_cellular_connected_no_internet_0_bar_sharp,
+                                color: Colors.red,
                               ),
-                              child: const Icon(
-                                CupertinoIcons.profile_circled,
-                                size: 20, // Reduce the size of the icon
-                                color: Colors.blue,
+                            )
+                                : CarouselSlider(
+                              items: imageList
+                                  .map((item) => Image.network(
+                                item.imageName,
+                                fit: BoxFit.fitWidth,
+                                width: MediaQuery.of(context).size.width,
+                              ))
+                                  .toList(),
+                              carouselController: carouselController,
+                              options: CarouselOptions(
+                                scrollPhysics: const BouncingScrollPhysics(),
+                                autoPlay: true,
+                                aspectRatio: 23 / 9,
+                                viewportFraction: 1,
+                                onPageChanged: (index, reason) {
+                                  setState(() {
+                                    currentIndex = index;
+                                  });
+                                },
                               ),
                             ),
-                            title: Text(
-                              '$userFullName',
-                              // style: CommonUtils.txSty_14B_Fb,
-                            ),
-                            // subtitle: const Text(
-                            //   'SlpCode',
-                            //   style: CommonUtils.Mediumtext_12,
-                            // ),
                           ),
-                          ListTile(
-                            contentPadding: EdgeInsets.zero,
-                            leading: Container(
-                              padding: const EdgeInsets.all(10), // Set padding to zero
-                              decoration: BoxDecoration(
-                                color: Colors.orange.withOpacity(0.2),
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              child: const Icon(
-                                Icons.email_outlined,
-                                size: 20,
-                                color: Colors.orange,
-                              ),
-                            ),
-                            title: Text(
-                              '$email',
-                              //   style: CommonUtils.txSty_14B_Fb,
-                            ),
-                            // subtitle: const Text(
-                            //   'Email',
-                            //   style: CommonUtils.Mediumtext_12,
-                            // ),
-                          ),
-                          ListTile(
-                            contentPadding: EdgeInsets.zero,
-                            leading: Container(
-                                padding: const EdgeInsets.all(10),
-                                decoration: BoxDecoration(
-                                  color: Colors.red.withOpacity(0.2),
-                                  borderRadius: BorderRadius.circular(20),
+
+                          // Align(
+                          //   alignment: Alignment.topCenter,
+                          //   child: Padding(
+                          //     padding: EdgeInsets.only(top: 110.0),
+                          //     child: Row(
+                          //       mainAxisAlignment: MainAxisAlignment.center,
+                          //       children: imageList.asMap().entries.map((entry) {
+                          //         final index = entry.key;
+                          //         return buildIndicator(index);
+                          //       }).toList(),
+                          //     ),
+                          //   ),
+                          // ),working code has been hide because it is intialize static padding
+                          Container(
+                            width: MediaQuery.of(context).size.width,
+                            //  padding: EdgeInsets.all(20.0),
+
+                            height: MediaQuery.of(context).size.height,
+                            child: Align(
+                              alignment: Alignment.bottomCenter,
+                              child: Padding(
+                                padding: EdgeInsets.only(bottom: 25.0),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: imageList.asMap().entries.map((entry) {
+                                    final index = entry.key;
+                                    return buildIndicator(index);
+                                  }).toList(),
                                 ),
-                                child: const Icon(
-                                  Icons.call,
-                                  size: 20,
-                                  color: Colors.red,
-                                )),
-                            title: Text(
-                              '$phonenumber',
-                              //    style: CommonUtils.txSty_14B_Fb
-                            ),
-                            // subtitle: const Text(
-                            //   'Phone Number',
-                            //   style: CommonUtils.Mediumtext_12,
-                            // ),
-                          ),
-                          ListTile(
-                            contentPadding: EdgeInsets.zero,
-                            leading: Container(
-                              padding: const EdgeInsets.all(10),
-                              decoration: BoxDecoration(
-                                color: Colors.green.withOpacity(0.2),
-                                borderRadius: BorderRadius.circular(20),
                               ),
-                              child: Image.asset(
-                                'assets/gender.png',
-                                height: 22,
-                                width: 22,
-                              ),
-                              // const Icon(
-                              //   Icons.male,
-                              //   size: 20,
-                              //   color: Colors.green,
-                              // )
                             ),
-                            title: Text(
-                              '$Gender',
-                              //style: CommonUtils.txSty_14B_Fb
-                            ),
-                            // subtitle: const Text(
-                            //   'Company Name',
-                            //   style: CommonUtils.Mediumtext_12,
-                            // ),
-                          ),
+                          )
                         ],
                       ),
                     ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 5.0, vertical: 5.0),
+                      child: Align(
+                        alignment: Alignment.topCenter,
+                        child: Text(
+                          'Branches',
+                          textAlign: TextAlign.left,
+                          style: TextStyle(
+                            fontFamily: 'Calibri',
+                            fontSize: 20,
+                            color: Color(0xFF163CF1),
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                    if (isLoading)
+                      Text('Please Wait Loading Slow Internet Connection !')
+                    else if (brancheslist.isEmpty && imageList.isEmpty)
+                      Container(
+                        padding: EdgeInsets.all(15.0),
+                        child: Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text('Failed to fetch data. Please check your internet connection.!'),
+                              SizedBox(height: 20),
+                              ElevatedButton(
+                                onPressed: retryDataFetching,
+                                child: Text('Retry'),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    Expanded(
+                        flex: 3,
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: isLoading ? 5 : brancheslist.length, // Display a fixed number of shimmer items when loading
+                          itemBuilder: (context, index) {
+                            if (isLoading) {
+                              // Return shimmer effect if isLoading is true
+                              return Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 0.0, vertical: 5.0),
+                                child: Shimmer.fromColors(
+                                  baseColor: Colors.grey.shade300,
+                                  highlightColor: Colors.grey.shade100,
+                                  child: Container(
+                                    height: 150, // Adjust height as needed
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(15.0),
+                                    ),
+                                    // child: Shimmer.fromColors(
+                                    //   baseColor: Colors.grey.shade300,
+                                    //   highlightColor: Colors.grey.shade100,
+                                    //   child: ClipRRect(
+                                    //     borderRadius: BorderRadius.circular(7.0),
+                                    //     child: Image.network(
+                                    //       imagesflierepo,
+                                    //       width: 110,
+                                    //       height: 65,
+                                    //       fit: BoxFit.fill,
+                                    //       // loadingBuilder: (context, child, loadingProgress) {
+                                    //       //   if (loadingProgress == null) return child;
+                                    //       //
+                                    //       //   return const Center(child: CircularProgressIndicator.adaptive());
+                                    //       //   // You can use LinearProgressIndicator or CircularProgressIndicator instead
+                                    //       // },
+                                    //     ),
+                                    //   ),
+                                    // ),
+                                  ),
+                                ),
+                              );
+                            } else {
+                              // Return actual data when isLoading is false
+                              BranchModel branch = brancheslist[index];
+                              return Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 0.0, vertical: 5.0),
+                                child: IntrinsicHeight(
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.only(
+                                      topRight: Radius.circular(42.5),
+                                      bottomLeft: Radius.circular(42.5),
+                                    ),
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>  slotbookingscreen(
+                                                branchId: branch.id, branchname: branch.name,  branchlocation: branch.address,
+                                                filepath: branch.imageName != null ?  branch.imageName! : 'assets/top_image.png', MobileNumber: branch.mobileNumber) ,
+                                          ),
+                                        );
+                                        //
+                                        // Navigator.of(context).push(
+                                        //   MaterialPageRoute(builder: (context) => feedback_Screen()),
+                                        // );
+
+                                      },
+                                      child: Card(
+                                        shadowColor: Colors.transparent,
+                                        surfaceTintColor: Colors.transparent,
+                                        child: ClipRRect(
+                                          borderRadius: BorderRadius.only(
+                                            topRight: Radius.circular(29.0),
+                                            bottomLeft: Radius.circular(29.0),
+                                          ),
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              gradient: LinearGradient(
+                                                colors: [
+                                                  Color(0xFFFEE7E1), // Start color
+                                                  Color(0xFFD7DEFA),
+                                                ],
+                                                begin: Alignment.centerLeft,
+                                                end: Alignment.centerRight,
+                                              ),
+                                            ),
+                                            child: Row(
+                                              crossAxisAlignment: CrossAxisAlignment.center,
+                                              children: [
+                                                Padding(
+                                                  padding: EdgeInsets.only(left: 15.0),
+                                                  child: Container(
+                                                    width: 110,
+                                                    height: 65,
+                                                    decoration: BoxDecoration(
+                                                      borderRadius: BorderRadius.circular(10.0),
+                                                      border: Border.all(
+                                                        color: Color(0xFF9FA1EE),
+                                                        width: 3.0,
+                                                      ),
+                                                    ),
+                                                    child: ClipRRect(
+                                                      borderRadius: BorderRadius.circular(7.0),
+                                                      child: branch.imageName != null
+                                                          ? Image.network(
+                                                        branch.imageName!,
+                                                        width: 110,
+                                                        height: 65,
+                                                        fit: BoxFit.fill,
+                                                        loadingBuilder: (context, child, loadingProgress) {
+                                                          if (loadingProgress == null) return child;
+
+                                                          return const Center(child: CircularProgressIndicator.adaptive());
+                                                        },
+                                                      )
+                                                          : Image.asset(
+                                                        'assets/top_image.png', // Provide the path to your default image asset
+                                                        width: 110,
+                                                        height: 65,
+                                                        fit: BoxFit.fill,
+                                                      ),
+
+                                                    ),
+                                                  ),
+                                                ),
+                                                // Padding(
+                                                //   padding: EdgeInsets.only(left: 15.0),
+                                                //   child: Container(
+                                                //     width: 110,
+                                                //     height: 65,
+                                                //     decoration: BoxDecoration(
+                                                //       borderRadius: BorderRadius.circular(10.0),
+                                                //       border: Border.all(
+                                                //         color: Color(0xFF9FA1EE),
+                                                //         width: 3.0,
+                                                //       ),
+                                                //     ),
+                                                //     child: ClipRRect(
+                                                //       borderRadius: BorderRadius.circular(7.0),
+                                                //       child: isLoading
+                                                //           ? Shimmer.fromColors(
+                                                //               baseColor: Colors.grey.shade300,
+                                                //               highlightColor: Colors.white,
+                                                //               child: Container(
+                                                //                 width: 110,
+                                                //                 height: 65,
+                                                //                 decoration: BoxDecoration(
+                                                //                   color: Colors.white,
+                                                //                   borderRadius: BorderRadius.circular(7.0),
+                                                //                 ),
+                                                //               ),
+                                                //             )
+                                                //           : Image.network(
+                                                //               imagesflierepo + branch.filePath,
+                                                //               width: 110,
+                                                //               height: 65,
+                                                //               fit: BoxFit.fill,
+                                                //             ),
+                                                //     ),
+                                                //   ),
+                                                // ),
+
+                                                Expanded(
+                                                  child: Padding(
+                                                    padding: EdgeInsets.only(left: 15.0),
+                                                    child: Column(
+                                                      mainAxisAlignment: MainAxisAlignment.start,
+                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                      children: [
+                                                        Padding(
+                                                          padding: EdgeInsets.only(top: 15.0),
+                                                          child: Text(
+                                                            branch.name,
+                                                            style: TextStyle(
+                                                              fontSize: 18,
+                                                              color: Color(0xFFFB4110),
+                                                              fontWeight: FontWeight.bold,
+                                                              fontFamily: 'Calibri',
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        SizedBox(height: 4.0),
+                                                        Expanded(
+                                                          child: Padding(
+                                                            padding: EdgeInsets.only(right: 10.0),
+                                                            child: Column(
+                                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                                              children: [
+                                                                Row(
+                                                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                                  children: [
+                                                                    Image.asset(
+                                                                      'assets/location_icon.png',
+                                                                      width: 20,
+                                                                      height: 18,
+                                                                    ),
+                                                                    SizedBox(width: 4.0),
+                                                                    Expanded(
+                                                                      child: Text(
+                                                                        branch.address,
+                                                                        style: TextStyle(
+                                                                          fontFamily: 'Calibri',
+                                                                          fontSize: 12,
+                                                                          color: Color(0xFF000000),
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                                Spacer(flex: 3),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        Align(
+                                                          alignment: Alignment.bottomRight,
+                                                          child: Container(
+                                                            height: 26,
+                                                            margin: EdgeInsets.only(bottom: 10.0, right: 10.0),
+                                                            decoration: BoxDecoration(
+                                                              color: Colors.white,
+                                                              border: Border.all(
+                                                                color: Color(0xFF8d97e2),
+                                                              ),
+                                                              borderRadius: BorderRadius.circular(10.0),
+                                                            ),
+                                                            child: ElevatedButton(
+                                                              onPressed: () {
+                                                                // Handle button press
+                                                              },
+                                                              style: ElevatedButton.styleFrom(
+                                                                primary: Colors.transparent,
+                                                                onPrimary: Color(0xFF8d97e2),
+                                                                elevation: 0,
+                                                                shadowColor: Colors.transparent,
+                                                                shape: RoundedRectangleBorder(
+                                                                  borderRadius: BorderRadius.circular(10.0),
+                                                                ),
+                                                              ),
+                                                              child: GestureDetector(
+                                                                onTap: () {
+                                                                  print('booknowbuttonisclciked');
+                                                                  print(branch.id);
+                                                                  print(branch.name);
+                                                                  Navigator.push(
+                                                                    context,
+                                                                    MaterialPageRoute(
+                                                                      builder: (context) =>  slotbookingscreen(
+                                                                          branchId: branch.id, branchname: branch.name,  branchlocation: branch.address,
+                                                                          filepath: branch.imageName != null ?  branch.imageName! : 'assets/top_image.png', MobileNumber: branch.mobileNumber) ,
+                                                                    ),
+                                                                  );
+
+
+                                                                },
+
+
+                                                                // Handle button press, navigate to a new screen
+
+                                                                child: Row(
+                                                                  mainAxisSize: MainAxisSize.min,
+                                                                  children: [
+                                                                    SvgPicture.asset(
+                                                                      'assets/datepicker_icon.svg',
+                                                                      width: 15.0,
+                                                                      height: 15.0,
+                                                                    ),
+                                                                    SizedBox(width: 5),
+                                                                    Text(
+                                                                      'Book Now',
+                                                                      style: TextStyle(
+                                                                        fontSize: 13,
+                                                                        color: Color(0xFF8d97e2),
+                                                                      ),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              );
+                            }
+                          },
+                        )
+
+
+                    ),
+
+                    // width: 300.0,
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 10.0),
+                      child: Container(
+                        margin: EdgeInsets.symmetric(horizontal: 15.0, vertical: 5.0),
+                        decoration: BoxDecoration(
+                          color: Color(0xFFFFFFFF),
+                          border: Border.all(
+                            color: Color(0xFFFB4110),
+                          ),
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        child: TextButton(
+                          onPressed: () async {
+                            const url = 'https://www.hairfixingzone.com/';
+                            try {
+                              if (await canLaunch(url)) {
+                                await launch(url);
+                              } else {
+                                throw 'Could not launch $url';
+                              }
+                            } catch (e) {
+                              print('Error launching URL: $e');
+                            }
+                          },
+                          style: ButtonStyle(
+                            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                            ),
+                          ),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Image.asset(
+                                'assets/web_icon.png',
+                                width: 20,
+                                height: 20,
+                              ),
+                              SizedBox(width: 5),
+                              Text(
+                                'Click Here for Website',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  color: Color(0xFFFB4110),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    )
+                  ],
                 ),
               ),
-              ListTile(
-                leading: Icon(Icons.place),
-                title: Text(
-                  'My Appointments',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontFamily: 'hind_semibold',
-                  ),
-                ),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => MyAppointments()),
-                  );
-                },
-              ),
-              // ListTile(
-              //   leading: Icon(Icons.star),
-              //   title: Text(
-              //     'Feedback',
-              //     style: TextStyle(
-              //       color: Colors.black,
-              //       fontFamily: 'hind_semibold',
-              //     ),
-              //   ),
-              //   onTap: () {
-              //     // Handle the onTap action for Logout
-              //     // Navigator.push(
-              //     //   context,
-              //     //   MaterialPageRoute(builder: (context) => feedback_Screen()),
-              //     // );
-              //   },
-              // ),
-              ListTile(
-                leading: Icon(Icons.logout), // Change the icon as needed
-                title: Text(
-                  'Logout',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontFamily: 'hind_semibold',
-                  ),
-                ),
-                onTap: () {
-                  // Handle the onTap action for Logout
-                  logOutDialog();
-                },
-              ),
-              // Add more ListTiles or other widgets as needed
-            ],
-          ),
-        ),
-        body: SliderScreen(),
+            ),
+          ],
+        )
       ),
-    ));
+    );
   }
 
   void logOutDialog() {
@@ -361,83 +906,6 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-
-
-
-
-}
-
-
-// class BannerImages {
-//   final String imageName;
-//   final int id;
-//
-//   BannerImages({required this.imageName, required this.id});
-// }
-class BannerImages {
-  final int id;
-  final String imageName;
-
-  BannerImages({
-    required this.imageName,
-    required this.id,
-  });
-
-  factory BannerImages.fromJson(Map<String, dynamic> json) {
-    return BannerImages(
-      imageName: json['imageName'] ?? '',
-      id: json['id'] ?? 0,
-    );
-  }
-}
-
-class SliderScreen extends StatefulWidget {
-  @override
-  _SliderScreenState createState() => _SliderScreenState();
-}
-
-class _SliderScreenState extends State<SliderScreen> {
-  List<BannerImages> imageList = [];
-
-  List<BranchModel> brancheslist = [];
-  final CarouselController carouselController = CarouselController();
-  int currentIndex = 0;
-  bool isLoading = true;
-  bool isDataBinding = false;
-  bool apiAllowed = true;
-  late Timer _timer;
-  List<LastAppointment> appointments = [];
-  int? userId;
-  String userFullName = '';
-  String email = '';
-  String phonenumber = '';
-  int gender = 0;
-  String Gender = '';
-  @override
-  initState() {
-    super.initState();
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitDown,
-      DeviceOrientation.portraitUp,
-    ]);
-
-    CommonUtils.checkInternetConnectivity().then((isConnected) {
-      if (isConnected) {
-        print('Connected to the internet');
-        fetchData();
-        checkLoginuserdata();
-        // Call API immediately when screen loads
-        //  fetchData();
-        //fetchimagesslider();
-        fetchImages();
-        fetchAppointments();
-      } else {
-        CommonUtils.showCustomToastMessageLong('No Internet Connection', context, 1, 4);
-        print('Not connected to the internet'); // Not connected to the internet
-      }
-    });
-  }
-
   void fetchData() async {
     setState(() {
 
@@ -477,7 +945,7 @@ class _SliderScreenState extends State<SliderScreen> {
 
   @override
   void dispose() {
-    _timer?.cancel();
+    //  _timer?.cancel();
     super.dispose();
   }
 
@@ -549,35 +1017,6 @@ class _SliderScreenState extends State<SliderScreen> {
     }
   }
 
-//   Future<void> fetchImages() async {
-//     final url = Uri.parse(baseUrl + getBanners);
-//     print('url==>127: $url');
-// //  final url = Uri.parse('http://182.18.157.215/SaloonApp/API/api/Banner/null');
-//
-//     try {
-//       final response = await http.get(url);
-//
-//       if (response.statusCode == 200) {
-//         final jsonData = json.decode(response.body);
-//
-//         List<BannerImages> bannerImages = [];
-//         for (var item in jsonData['ListResult']) {
-//           bannerImages.add(BannerImages(FilePath: item['FilePath'], Id: item['Id']));
-//         }
-//
-//         setState(() {
-//           imageList = bannerImages;
-//         });
-//       } else {
-//         // Handle error if the API request was not successful
-//         print('Request failed with status: ${response.statusCode}');
-//       }
-//     } catch (error) {
-//       // Handle any exception that occurred during the API call
-//       print('Error: $error');
-//     }
-//   }
-
   Future<void> fetchImages() async {
     setState(() {
       isDataBinding = true; // Set the flag to true when data fetching starts
@@ -644,718 +1083,51 @@ class _SliderScreenState extends State<SliderScreen> {
     });
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 0.0),
-          child: Padding(
-            padding: EdgeInsets.only(top: 10.0, bottom: 10.0),
-            child: RichText(
-              text: TextSpan(
-                style: DefaultTextStyle.of(context).style,
-                children: [
-                  TextSpan(
-                    text: 'Welcome to ',
-                    style: TextStyle(
-                      fontFamily: 'Calibri',
-                      fontSize: 20,
-                      color: Color(0xFFFB4110),
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  TextSpan(
-                    text: 'Hair Fixing Zone',
-                    style: TextStyle(
-                      fontFamily: 'Calibri',
-                      fontSize: 20,
-                      color: Color(0xFF163CF1),
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-        Expanded(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 10.0),
-            child: Column(
-              children: [
-                Expanded(
-                  child: Stack(
-                    children: [
-                      Align(
-                        alignment: Alignment.topCenter,
-                        child: isDataBinding
-                            ? Center(
-                                child: CircularProgressIndicator.adaptive(),
-                              )
-                            : imageList.isEmpty
-                                ? Center(
-                                    // child: CircularProgressIndicator.adaptive(),
-                                    child: Icon(
-                                      Icons.signal_cellular_connected_no_internet_0_bar_sharp,
-                                      color: Colors.red,
-                                    ),
-                                  )
-                                : CarouselSlider(
-                                    items: imageList
-                                        .map((item) => Image.network(
-                                              item.imageName,
-                                              fit: BoxFit.fitWidth,
-                                              width: MediaQuery.of(context).size.width,
-                                            ))
-                                        .toList(),
-                                    carouselController: carouselController,
-                                    options: CarouselOptions(
-                                      scrollPhysics: const BouncingScrollPhysics(),
-                                      autoPlay: true,
-                                      aspectRatio: 23 / 9,
-                                      viewportFraction: 1,
-                                      onPageChanged: (index, reason) {
-                                        setState(() {
-                                          currentIndex = index;
-                                        });
-                                      },
-                                    ),
-                                  ),
-                      ),
+  Future<void> GetLatestAppointmentByUserId(int? userId) async {
+    //  final response = await http.get('http://182.18.157.215/SaloonApp/API/api/Role/GetLatestAppointmentByUserId/1');
+    final Uri url = Uri.parse('http://182.18.157.215/SaloonApp/API/api/Role/GetLatestAppointmentByUserId/$userId');
+    print('url==>1086: $url');
+    final response = await http.get(url);
 
-                      // Align(
-                      //   alignment: Alignment.topCenter,
-                      //   child: Padding(
-                      //     padding: EdgeInsets.only(top: 110.0),
-                      //     child: Row(
-                      //       mainAxisAlignment: MainAxisAlignment.center,
-                      //       children: imageList.asMap().entries.map((entry) {
-                      //         final index = entry.key;
-                      //         return buildIndicator(index);
-                      //       }).toList(),
-                      //     ),
-                      //   ),
-                      // ),working code has been hide because it is intialize static padding
-                      Container(
-                        width: MediaQuery.of(context).size.width,
-                        //  padding: EdgeInsets.all(20.0),
+    if (response.statusCode == 200) {
+      final List<dynamic> jsonData = jsonDecode(response.body);
+      List<LastAppointment> loadedAppointments = [];
 
-                        height: MediaQuery.of(context).size.height,
-                        child: Align(
-                          alignment: Alignment.bottomCenter,
-                          child: Padding(
-                            padding: EdgeInsets.only(bottom: 25.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: imageList.asMap().entries.map((entry) {
-                                final index = entry.key;
-                                return buildIndicator(index);
-                              }).toList(),
-                            ),
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 5.0, vertical: 5.0),
-                  child: Align(
-                    alignment: Alignment.topCenter,
-                    child: Text(
-                      'Branches',
-                      textAlign: TextAlign.left,
-                      style: TextStyle(
-                        fontFamily: 'Calibri',
-                        fontSize: 20,
-                        color: Color(0xFF163CF1),
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
-                if (isLoading)
-                  Text('Please Wait Loading Slow Internet Connection !')
-                else if (brancheslist.isEmpty && imageList.isEmpty)
-                  Container(
-                    padding: EdgeInsets.all(15.0),
-                    child: Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text('Failed to fetch data. Please check your internet connection.!'),
-                          SizedBox(height: 20),
-                          ElevatedButton(
-                            onPressed: retryDataFetching,
-                            child: Text('Retry'),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                Expanded(
-                    flex: 3,
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: isLoading ? 5 : brancheslist.length, // Display a fixed number of shimmer items when loading
-                      itemBuilder: (context, index) {
-                        if (isLoading) {
-                          // Return shimmer effect if isLoading is true
-                          return Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 0.0, vertical: 5.0),
-                            child: Shimmer.fromColors(
-                              baseColor: Colors.grey.shade300,
-                              highlightColor: Colors.grey.shade100,
-                              child: Container(
-                                height: 150, // Adjust height as needed
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(15.0),
-                                ),
-                                // child: Shimmer.fromColors(
-                                //   baseColor: Colors.grey.shade300,
-                                //   highlightColor: Colors.grey.shade100,
-                                //   child: ClipRRect(
-                                //     borderRadius: BorderRadius.circular(7.0),
-                                //     child: Image.network(
-                                //       imagesflierepo,
-                                //       width: 110,
-                                //       height: 65,
-                                //       fit: BoxFit.fill,
-                                //       // loadingBuilder: (context, child, loadingProgress) {
-                                //       //   if (loadingProgress == null) return child;
-                                //       //
-                                //       //   return const Center(child: CircularProgressIndicator.adaptive());
-                                //       //   // You can use LinearProgressIndicator or CircularProgressIndicator instead
-                                //       // },
-                                //     ),
-                                //   ),
-                                // ),
-                              ),
-                            ),
-                          );
-                        } else {
-                          // Return actual data when isLoading is false
-                          BranchModel branch = brancheslist[index];
-                          return Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 0.0, vertical: 5.0),
-                            child: IntrinsicHeight(
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.only(
-                                  topRight: Radius.circular(42.5),
-                                  bottomLeft: Radius.circular(42.5),
-                                ),
-                                child: GestureDetector(
-                                  onTap: () {
-                                    Navigator.push(
-                                      context,MaterialPageRoute(
-                                      builder: (context) => slotbookingscreen(
-                                        branchId: branch.id,
-                                        branchname: branch.name,
-                                        branchlocation: branch.address,
-                                        filepath: branch.imageName != null ? imagesflierepo + branch.imageName! : 'assets/top_image.png',
-                                        MobileNumber: branch.mobileNumber,
-                                      ),
-                                    ),
+      for (var item in jsonData) {
+        loadedAppointments.add(LastAppointment.fromJson(item));
+      }
 
-                                      // MaterialPageRoute(builder: (context) => slotbookingscreen(branchId: branch.id, branchname: branch.name, branchlocation: branch.address,
-                                      //     filepath: branch.imageName!, MobileNumber: branch.mobileNumber)),
-                                    );
-                                  },
-                                  child: Card(
-                                    shadowColor: Colors.transparent,
-                                    surfaceTintColor: Colors.transparent,
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.only(
-                                        topRight: Radius.circular(29.0),
-                                        bottomLeft: Radius.circular(29.0),
-                                      ),
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          gradient: LinearGradient(
-                                            colors: [
-                                              Color(0xFFFEE7E1), // Start color
-                                              Color(0xFFD7DEFA),
-                                            ],
-                                            begin: Alignment.centerLeft,
-                                            end: Alignment.centerRight,
-                                          ),
-                                        ),
-                                        child: Row(
-                                          crossAxisAlignment: CrossAxisAlignment.center,
-                                          children: [
-                                            Padding(
-                                              padding: EdgeInsets.only(left: 15.0),
-                                              child: Container(
-                                                width: 110,
-                                                height: 65,
-                                                decoration: BoxDecoration(
-                                                  borderRadius: BorderRadius.circular(10.0),
-                                                  border: Border.all(
-                                                    color: Color(0xFF9FA1EE),
-                                                    width: 3.0,
-                                                  ),
-                                                ),
-                                                child: ClipRRect(
-                                                  borderRadius: BorderRadius.circular(7.0),
-                                                  child: branch.imageName != null
-                                                      ? Image.network(
-                                                    imagesflierepo + branch.imageName!,
-                                                    width: 110,
-                                                    height: 65,
-                                                    fit: BoxFit.fill,
-                                                    loadingBuilder: (context, child, loadingProgress) {
-                                                      if (loadingProgress == null) return child;
+      setState(() {
+        appointments = loadedAppointments;
+        print('Appointment ID: ${appointments.length}');
+      });
 
-                                                      return const Center(child: CircularProgressIndicator.adaptive());
-                                                    },
-                                                  )
-                                                      : Image.asset(
-                                                    'assets/top_image.png', // Provide the path to your default image asset
-                                                    width: 110,
-                                                    height: 65,
-                                                    fit: BoxFit.fill,
-                                                  ),
+      // Print each appointment in the logs
+      appointments.forEach((appointment) {
+        print('Appointment ID: ${appointment.id}');
+        print('Branch: ${appointment.branch}');
+        print('Date: ${appointment.date}');
+        print('Customer Name: ${appointment.customerName}');
+        print('Slot Time: ${appointment.slotTime}');
+        print('Contact Number: ${appointment.contactNumber}');
+        print('Email: ${appointment.email}');
+        print('Gender: ${appointment.gender}');
+        print('Status: ${appointment.status}');
+        print('Purpose of Visit: ${appointment.purposeOfVisit}');
+        print('Slot Duration: ${appointment.slotDuration}');
+        print('Appointment Time: ${appointment.appointmentTime}');
+        print('');
+        WidgetsBinding.instance!.addPostFrameCallback((_) {
+          _showBottomSheet(context, appointments);
+        });
 
-                                                ),
-                                              ),
-                                            ),
-                                            // Padding(
-                                            //   padding: EdgeInsets.only(left: 15.0),
-                                            //   child: Container(
-                                            //     width: 110,
-                                            //     height: 65,
-                                            //     decoration: BoxDecoration(
-                                            //       borderRadius: BorderRadius.circular(10.0),
-                                            //       border: Border.all(
-                                            //         color: Color(0xFF9FA1EE),
-                                            //         width: 3.0,
-                                            //       ),
-                                            //     ),
-                                            //     child: ClipRRect(
-                                            //       borderRadius: BorderRadius.circular(7.0),
-                                            //       child: isLoading
-                                            //           ? Shimmer.fromColors(
-                                            //               baseColor: Colors.grey.shade300,
-                                            //               highlightColor: Colors.white,
-                                            //               child: Container(
-                                            //                 width: 110,
-                                            //                 height: 65,
-                                            //                 decoration: BoxDecoration(
-                                            //                   color: Colors.white,
-                                            //                   borderRadius: BorderRadius.circular(7.0),
-                                            //                 ),
-                                            //               ),
-                                            //             )
-                                            //           : Image.network(
-                                            //               imagesflierepo + branch.filePath,
-                                            //               width: 110,
-                                            //               height: 65,
-                                            //               fit: BoxFit.fill,
-                                            //             ),
-                                            //     ),
-                                            //   ),
-                                            // ),
+      });
 
-                                            Expanded(
-                                              child: Padding(
-                                                padding: EdgeInsets.only(left: 15.0),
-                                                child: Column(
-                                                  mainAxisAlignment: MainAxisAlignment.start,
-                                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                                  children: [
-                                                    Padding(
-                                                      padding: EdgeInsets.only(top: 15.0),
-                                                      child: Text(
-                                                        branch.name,
-                                                        style: TextStyle(
-                                                          fontSize: 18,
-                                                          color: Color(0xFFFB4110),
-                                                          fontWeight: FontWeight.bold,
-                                                          fontFamily: 'Calibri',
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    SizedBox(height: 4.0),
-                                                    Expanded(
-                                                      child: Padding(
-                                                        padding: EdgeInsets.only(right: 10.0),
-                                                        child: Column(
-                                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                                          children: [
-                                                            Row(
-                                                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                                              children: [
-                                                                Image.asset(
-                                                                  'assets/location_icon.png',
-                                                                  width: 20,
-                                                                  height: 18,
-                                                                ),
-                                                                SizedBox(width: 4.0),
-                                                                Expanded(
-                                                                  child: Text(
-                                                                    branch.address,
-                                                                    style: TextStyle(
-                                                                      fontFamily: 'Calibri',
-                                                                      fontSize: 12,
-                                                                      color: Color(0xFF000000),
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                            Spacer(flex: 3),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    Align(
-                                                      alignment: Alignment.bottomRight,
-                                                      child: Container(
-                                                        height: 26,
-                                                        margin: EdgeInsets.only(bottom: 10.0, right: 10.0),
-                                                        decoration: BoxDecoration(
-                                                          color: Colors.white,
-                                                          border: Border.all(
-                                                            color: Color(0xFF8d97e2),
-                                                          ),
-                                                          borderRadius: BorderRadius.circular(10.0),
-                                                        ),
-                                                        child: ElevatedButton(
-                                                          onPressed: () {
-                                                            // Handle button press
-                                                          },
-                                                          style: ElevatedButton.styleFrom(
-                                                            primary: Colors.transparent,
-                                                            onPrimary: Color(0xFF8d97e2),
-                                                            elevation: 0,
-                                                            shadowColor: Colors.transparent,
-                                                            shape: RoundedRectangleBorder(
-                                                              borderRadius: BorderRadius.circular(10.0),
-                                                            ),
-                                                          ),
-                                                          child: GestureDetector(
-                                                            onTap: () {
-                                                              print('booknowbuttonisclciked');
-                                                              print(branch.id);
-                                                              print(branch.name);
-                                                              // Handle button press, navigate to a new screen
-                                                              Navigator.push(
-                                                                context,MaterialPageRoute(
-                                                                builder: (context) => slotbookingscreen(
-                                                                  branchId: branch.id,
-                                                                  branchname: branch.name,
-                                                                  branchlocation: branch.address,
-                                                                  filepath: branch.imageName != null ? imagesflierepo + branch.imageName! : 'assets/top_image.png',
-                                                                  MobileNumber: branch.mobileNumber,
-                                                                ),
-                                                              ),
-
-                                                                // MaterialPageRoute(
-                                                                //     builder: (context) => slotbookingscreen(branchId: branch.id, branchname: branch.name, branchlocation: branch.address,
-                                                                //         filepath: branch.imageName!, MobileNumber: branch.mobileNumber)),
-                                                              );
-                                                            },
-                                                            child: Row(
-                                                              mainAxisSize: MainAxisSize.min,
-                                                              children: [
-                                                                SvgPicture.asset(
-                                                                  'assets/datepicker_icon.svg',
-                                                                  width: 15.0,
-                                                                  height: 15.0,
-                                                                ),
-                                                                SizedBox(width: 5),
-                                                                Text(
-                                                                  'Book Now',
-                                                                  style: TextStyle(
-                                                                    fontSize: 13,
-                                                                    color: Color(0xFF8d97e2),
-                                                                  ),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          );
-                        }
-                      },
-                    )
-
-                    // ListView.builder(
-                    //   shrinkWrap: true,
-                    //   itemCount: brancheslist.length,
-                    //   itemBuilder: (context, index) {
-                    //     BranchModel branch = brancheslist[index]; // Get the branch at the current index
-                    //
-                    //     return Padding(
-                    //         padding: EdgeInsets.symmetric(horizontal: 0.0, vertical: 5.0),
-                    //         child: IntrinsicHeight(
-                    //           child: ClipRRect(
-                    //               borderRadius: BorderRadius.only(
-                    //                 topRight: Radius.circular(42.5),
-                    //                 bottomLeft: Radius.circular(42.5),
-                    //               ),
-                    //               child: GestureDetector(
-                    //                 onTap: () {
-                    //                   Navigator.push(
-                    //                     context,
-                    //                     MaterialPageRoute(builder: (context) => slotbookingscreen(branchId: branch.id, branchname: branch.name, branchlocation: branch.address, filepath: branch.filePath, MobileNumber: branch.mobileNumber)),
-                    //                   );
-                    //                 },
-                    //                 child: Card(
-                    //                   shadowColor: Colors.transparent,
-                    //                   surfaceTintColor: Colors.transparent,
-                    //                   child: ClipRRect(
-                    //                     borderRadius: BorderRadius.only(
-                    //                       topRight: Radius.circular(29.0),
-                    //                       bottomLeft: Radius.circular(29.0),
-                    //                     ),
-                    //                     //surfaceTintColor : Colors.red,
-                    //
-                    //                     child: Container(
-                    //                       decoration: BoxDecoration(
-                    //                         gradient: LinearGradient(
-                    //                           colors: [
-                    //                             Color(0xFFFEE7E1), // Start color
-                    //                             Color(0xFFD7DEFA),
-                    //                           ],
-                    //                           begin: Alignment.centerLeft,
-                    //                           end: Alignment.centerRight,
-                    //                         ),
-                    //                         // borderRadius: BorderRadius.only(
-                    //                         //   topRight: Radius.circular(30.0),
-                    //                         //   bottomLeft: Radius.circular(30.0),
-                    //                         //
-                    //                         // ),
-                    //                       ),
-                    //                       child: Row(
-                    //                         crossAxisAlignment: CrossAxisAlignment.center,
-                    //                         children: [
-                    //                           Padding(
-                    //                             padding: EdgeInsets.only(left: 15.0),
-                    //                             child: Container(
-                    //                               width: 110,
-                    //                               height: 65,
-                    //                               decoration: BoxDecoration(
-                    //                                 borderRadius: BorderRadius.circular(10.0),
-                    //                                 border: Border.all(
-                    //                                   color: Color(0xFF9FA1EE),
-                    //                                   width: 3.0,
-                    //                                 ),
-                    //                               ),
-                    //                               child: ClipRRect(
-                    //                                 borderRadius: BorderRadius.circular(7.0),
-                    //                                 child: Image.network(
-                    //                                   imagesflierepo + branch.filePath,
-                    //                                   width: 110,
-                    //                                   height: 65,
-                    //                                   fit: BoxFit.fill,
-                    //                                 ),
-                    //                               ),
-                    //                             ),
-                    //                           ),
-                    //                           Expanded(
-                    //                             child: Padding(
-                    //                               padding: EdgeInsets.only(left: 15.0),
-                    //                               child: Column(
-                    //                                 mainAxisAlignment: MainAxisAlignment.start,
-                    //                                 crossAxisAlignment: CrossAxisAlignment.start,
-                    //                                 children: [
-                    //                                   Padding(
-                    //                                     padding: EdgeInsets.only(top: 15.0),
-                    //                                     child: Text(
-                    //                                       branch.name,
-                    //                                       style: TextStyle(
-                    //                                         fontSize: 18,
-                    //                                         color: Color(0xFFFB4110),
-                    //                                         fontWeight: FontWeight.bold,
-                    //                                         fontFamily: 'Calibri',
-                    //                                       ),
-                    //                                     ),
-                    //                                   ),
-                    //                                   SizedBox(height: 4.0),
-                    //                                   Expanded(
-                    //                                     child: Padding(
-                    //                                       padding: EdgeInsets.only(right: 10.0),
-                    //                                       child: Column(
-                    //                                         crossAxisAlignment: CrossAxisAlignment.start,
-                    //                                         children: [
-                    //                                           Row(
-                    //                                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    //                                             children: [
-                    //                                               Image.asset(
-                    //                                                 'assets/location_icon.png',
-                    //                                                 width: 20,
-                    //                                                 height: 18,
-                    //                                               ),
-                    //                                               SizedBox(width: 4.0),
-                    //                                               Expanded(
-                    //                                                 child: Text(
-                    //                                                   branch.address,
-                    //                                                   style: TextStyle(
-                    //                                                     fontFamily: 'Calibri',
-                    //                                                     fontSize: 12,
-                    //                                                     color: Color(0xFF000000),
-                    //                                                   ),
-                    //                                                 ),
-                    //                                               ),
-                    //                                             ],
-                    //                                           ),
-                    //                                           Spacer(flex: 3),
-                    //                                         ],
-                    //                                       ),
-                    //                                     ),
-                    //                                   ),
-                    //                                   Align(
-                    //                                     alignment: Alignment.bottomRight,
-                    //                                     child: Container(
-                    //                                       height: 26,
-                    //                                       margin: EdgeInsets.only(bottom: 10.0, right: 10.0),
-                    //                                       decoration: BoxDecoration(
-                    //                                         color: Colors.white,
-                    //                                         border: Border.all(
-                    //                                           color: Color(0xFF8d97e2),
-                    //                                         ),
-                    //                                         borderRadius: BorderRadius.circular(10.0),
-                    //                                       ),
-                    //                                       child: ElevatedButton(
-                    //                                         onPressed: () {
-                    //                                           // Handle button press
-                    //                                         },
-                    //                                         style: ElevatedButton.styleFrom(
-                    //                                           primary: Colors.transparent,
-                    //                                           onPrimary: Color(0xFF8d97e2),
-                    //                                           elevation: 0,
-                    //                                           shadowColor: Colors.transparent,
-                    //                                           shape: RoundedRectangleBorder(
-                    //                                             borderRadius: BorderRadius.circular(10.0),
-                    //                                           ),
-                    //                                         ),
-                    //                                         child: GestureDetector(
-                    //                                           onTap: () {
-                    //                                             print('booknowbuttonisclciked');
-                    //                                             print(branch.id);
-                    //                                             print(branch.name);
-                    //                                             // Handle button press, navigate to a new screen
-                    //                                             Navigator.push(
-                    //                                               context,
-                    //                                               MaterialPageRoute(
-                    //                                                   builder: (context) => slotbookingscreen(branchId: branch.id, branchname: branch.name, branchlocation: branch.address, filepath: branch.filePath, MobileNumber: branch.mobileNumber)),
-                    //                                             );
-                    //                                           },
-                    //                                           child: Row(
-                    //                                             mainAxisSize: MainAxisSize.min,
-                    //                                             children: [
-                    //                                               SvgPicture.asset(
-                    //                                                 'assets/datepicker_icon.svg',
-                    //                                                 width: 15.0,
-                    //                                                 height: 15.0,
-                    //                                               ),
-                    //                                               SizedBox(width: 5),
-                    //                                               Text(
-                    //                                                 'Book Now',
-                    //                                                 style: TextStyle(
-                    //                                                   fontSize: 13,
-                    //                                                   color: Color(0xFF8d97e2),
-                    //                                                 ),
-                    //                                               ),
-                    //                                             ],
-                    //                                           ),
-                    //                                         ),
-                    //                                       ),
-                    //                                     ),
-                    //                                   ),
-                    //                                 ],
-                    //                               ),
-                    //                             ),
-                    //                           ),
-                    //                         ],
-                    //                       ),
-                    //                     ),
-                    //                   ),
-                    //                 ),
-                    //               )),
-                    //         ));
-                    //   },
-                    // ),
-                    ),
-
-                // width: 300.0,
-                Padding(
-                  padding: EdgeInsets.only(bottom: 10.0),
-                  child: Container(
-                    margin: EdgeInsets.symmetric(horizontal: 15.0, vertical: 5.0),
-                    decoration: BoxDecoration(
-                      color: Color(0xFFFFFFFF),
-                      border: Border.all(
-                        color: Color(0xFFFB4110),
-                      ),
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                    child: TextButton(
-                      onPressed: () async {
-                        const url = 'https://www.hairfixingzone.com/';
-                        try {
-                          if (await canLaunch(url)) {
-                            await launch(url);
-                          } else {
-                            throw 'Could not launch $url';
-                          }
-                        } catch (e) {
-                          print('Error launching URL: $e');
-                        }
-                      },
-                      style: ButtonStyle(
-                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                        ),
-                      ),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Image.asset(
-                            'assets/web_icon.png',
-                            width: 20,
-                            height: 20,
-                          ),
-                          SizedBox(width: 5),
-                          Text(
-                            'Click Here for Website',
-                            style: TextStyle(
-                              fontSize: 18,
-                              color: Color(0xFFFB4110),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                )
-              ],
-            ),
-          ),
-        ),
-      ],
-    );
+    } else {
+      throw Exception('Failed to load appointments');
+    }
   }
+
 
   Widget buildIndicator(int index) {
     return Container(
@@ -1372,8 +1144,8 @@ class _SliderScreenState extends State<SliderScreen> {
   double rating_star = 0.0;
   void _showBottomSheet(BuildContext context, List<LastAppointment> appointments) {
     showModalBottomSheet(
-        context: context,
-        builder: (BuildContext context) {
+      context: context,
+      builder: (BuildContext context) {
 
         return SingleChildScrollView(
           child: Container(
@@ -1575,48 +1347,6 @@ class _SliderScreenState extends State<SliderScreen> {
   // Future<void> AddUpdatefeedback(List<LastAppointment> appointments) async {}
 
 
-  Future<void> fetchAppointments() async {
-    //  final response = await http.get('http://182.18.157.215/SaloonApp/API/api/Role/GetLatestAppointmentByUserId/1');
-    final Uri url = Uri.parse('http://182.18.157.215/SaloonApp/API/api/Role/GetLatestAppointmentByUserId/$userId');
-    final response = await http.get(url);
-
-    if (response.statusCode == 200) {
-      final List<dynamic> jsonData = jsonDecode(response.body);
-      List<LastAppointment> loadedAppointments = [];
-
-      for (var item in jsonData) {
-        loadedAppointments.add(LastAppointment.fromJson(item));
-      }
-
-      setState(() {
-        appointments = loadedAppointments;
-      });
-
-      // Print each appointment in the logs
-      appointments.forEach((appointment) {
-        print('Appointment ID: ${appointment.id}');
-        print('Branch: ${appointment.branch}');
-        print('Date: ${appointment.date}');
-        print('Customer Name: ${appointment.customerName}');
-        print('Slot Time: ${appointment.slotTime}');
-        print('Contact Number: ${appointment.contactNumber}');
-        print('Email: ${appointment.email}');
-        print('Gender: ${appointment.gender}');
-        print('Status: ${appointment.status}');
-        print('Purpose of Visit: ${appointment.purposeOfVisit}');
-        print('Slot Duration: ${appointment.slotDuration}');
-        print('Appointment Time: ${appointment.appointmentTime}');
-        print('');
-
-
-      });
-      WidgetsBinding.instance!.addPostFrameCallback((_) {
-        _showBottomSheet(context, appointments);
-      });
-    } else {
-      throw Exception('Failed to load appointments');
-    }
-  }
 
   Future<void> AddUpdatefeedback(List<LastAppointment> appointments) async {
     final url = Uri.parse(baseUrl + postApiAppointment);
@@ -1674,33 +1404,41 @@ class _SliderScreenState extends State<SliderScreen> {
     }
   }
 
-  void checkLoginuserdata() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
 
-      setState(() {
-        userFullName = prefs.getString('userFullName') ?? '';
-        email = prefs.getString('email') ?? '';
-        phonenumber = prefs.getString('contactNumber') ?? '';
-        gender = prefs.getInt('gender') ?? 0;
-        userId = prefs.getInt('userId'); // Retrieve the user ID
-        print('userId: : $userId');
-        // _fullnameController1.text = userFullName;
-        // _emailController3.text = email;
-        // _phonenumberController2.text = phonenumber;
-        // gender = selectedGender;
-        print('userFullName:$userFullName');
-        print('gender:$gender');
-        if (gender == 1) {
-          Gender = 'Female';
-        } else if (gender == 2) {
-          Gender = 'Male';
-        } else if (gender == 3) {
-          Gender = 'Other';
-        }
-      });
-    }
 
+
+
+
+}
+
+
+class BannerImages {
+  final int id;
+  final String imageName;
+
+  BannerImages({
+    required this.imageName,
+    required this.id,
+  });
+
+  factory BannerImages.fromJson(Map<String, dynamic> json) {
+    return BannerImages(
+      imageName: json['imageName'] ?? '',
+      id: json['id'] ?? 0,
+    );
   }
+}
+
+
+
+
+
+
+
+
+
+
+
 
 
 

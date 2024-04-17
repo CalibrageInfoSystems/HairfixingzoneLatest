@@ -85,7 +85,7 @@ class _AgentScreenState extends State<agentloginscreen> {
       "deviceTokens": [firebaseToken],
     };
 
-    print('requestObject==$requestObject');
+    print('requestObject==${jsonEncode(requestObject)}');
 
     try {
       final http.Response response = await http.post(
@@ -100,7 +100,7 @@ class _AgentScreenState extends State<agentloginscreen> {
         if (responseData["isSuccess"]) {
           List<dynamic>? listResult = responseData["listResult"];
 
-          if (listResult != null) {
+          if (listResult != null && listResult.isNotEmpty && listResult[0]['roleID'] == 3) {
             user_Id = listResult[0]["id"];
 
             final Map<String, dynamic> agentSlotsDetailsMap = {
@@ -114,11 +114,12 @@ class _AgentScreenState extends State<agentloginscreen> {
 
             for (int i = 0; i < userIds.length; i++) {
               final Map<String, dynamic> agentSlotDetail = {
-                "Id": null,
-                "UserId": userIds[i],
-                "BranchId": branchIds[i],
-                "Devicetoken": firebaseToken,
+                "id": null,
+                "userId": userIds[i],
+                "branchId": branchIds[i],
+                "devicetoken": firebaseToken,
               };
+
               print('agentSlotDetail==$agentSlotDetail');
               print("Slot information added for User ID: ${userIds[i]}, Branch ID: ${branchIds[i]}");
 
@@ -127,13 +128,16 @@ class _AgentScreenState extends State<agentloginscreen> {
 
             // Send the agentSlotsDetailsMap as the body of the request
             await addAgentSlotInformation(agentSlotsDetailsMap, user_Id);
-          } else {
+          }
+          else {
             FocusScope.of(context).unfocus();
             CommonUtils.showCustomToastMessageLong('Invalid user ', context, 1, 4);
             print("ListResult is null");
           }
         } else {
-          print("API returned an error: ${responseData["EndUserMessage"]}");
+          FocusScope.of(context).unfocus();
+          CommonUtils.showCustomToastMessageLong(responseData["statusMessage"], context, 1, 4);
+          print("API returned an error: ${responseData["statusMessage"]}");
         }
       } else {
         print("Error: ${response.statusCode}");
@@ -146,7 +150,7 @@ class _AgentScreenState extends State<agentloginscreen> {
   Future<void> addAgentSlotInformation(Map<String, dynamic> agentSlotsDetailsMap, int user_id) async {
     //  final String baseUrl = "http://182.18.157.215/SaloonApp/API/";
     final String addSlotUrl = baseUrl + "AddAgentSlotInformation";
-    print('agentSlotDetail==$agentSlotsDetailsMap');
+    print('agentSlotDetail==${jsonEncode(agentSlotsDetailsMap)}');
     print('addSlotUrl==$addSlotUrl');
     print('user_id==$user_id');
     try {

@@ -17,6 +17,7 @@ class slotbookingscreen extends StatefulWidget {
   final String branchlocation;
   final String filepath;
   final String MobileNumber;
+  //slotbookingscreen({required this.branchId, required this.branchname, required this.branchlocation, required this.filepath, required this.MobileNumber}) {}
 
   slotbookingscreen(
       {required this.branchId, required this.branchname, required this.branchlocation, required this.filepath, required this.MobileNumber});
@@ -58,7 +59,7 @@ class Slot {
   }
 }
 
-class _BookingScreenState extends State<slotbookingscreen> {
+class _BookingScreenState extends State<slotbookingscreen>  {
   List<String> timeSlots = [];
   List<String> availableSlots = [];
   List<String> timeSlotParts = [];
@@ -87,7 +88,7 @@ class _BookingScreenState extends State<slotbookingscreen> {
   TextEditingController _phonenumberController2 = TextEditingController();
   TextEditingController _emailController3 = TextEditingController();
   TextEditingController _purposeController4 = TextEditingController();
-
+  bool isBackButtonActivated = false;
 //  TextEditingController textController4 = TextEditingController(text: 'Initial value 4');
   List<Slot> slots = [];
 
@@ -114,7 +115,7 @@ class _BookingScreenState extends State<slotbookingscreen> {
   String phonenumber = '';
   int gender = 0;
   int? userId;
-
+  bool showConfirmationDialog = false;
   @override
   @override
   initState() {
@@ -158,11 +159,15 @@ class _BookingScreenState extends State<slotbookingscreen> {
     });
   }
 
+
   @override
   void dispose() {
     _dateController.dispose();
+
     super.dispose();
   }
+
+
 
   Future<void> _makePhoneCall(String phoneNumber) async {
     if (await canLaunch(phoneNumber)) {
@@ -197,14 +202,16 @@ class _BookingScreenState extends State<slotbookingscreen> {
     isSlotsAvailable = getVisibleSlots(slots, isTodayHoliday).isNotEmpty;
     disabledSlots = getDisabledSlots(slots);
     visableSlots = getVisibleSlots(slots, isTodayHoliday);
-    return WillPopScope(
-        onWillPop: () async {
-          // Show a confirmation dialog
-          Navigator.of(context).pop(); // Navigate back to the previous screen
-          // Return false to prevent default back button behavior
-          return true;
-        },
-        child: Scaffold(
+    // return WillPopScope(
+    //     onWillPop: () async {
+    //       // Show a confirmation dialog
+    //       Navigator.of(context).pop(); // Navigate back to the previous screen
+    //       // Return false to prevent default back button behavior
+    //       return true;
+    //     },
+    //     child:
+    return  WillPopScope(
+        onWillPop: () => onBackPressed(context), child: Scaffold(
             appBar: AppBar(
                 centerTitle: true,
                 backgroundColor: Color(0xFFFB4110),
@@ -229,7 +236,7 @@ class _BookingScreenState extends State<slotbookingscreen> {
             //body: YourBodyWidget(),
             // Replace YourBodyWidget with your actual content
 
-            body: Container(
+            body:Container(
                 decoration: BoxDecoration(
                   image: DecorationImage(
                     image: AssetImage('assets/background.png'),
@@ -247,7 +254,7 @@ class _BookingScreenState extends State<slotbookingscreen> {
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(20.0),
                           child: Image.network(
-                            imagesflierepo + widget.filepath,
+                          widget.filepath,
                             fit: BoxFit.fill,
                           ),
                         ),
@@ -1563,6 +1570,13 @@ class _BookingScreenState extends State<slotbookingscreen> {
     } else {
       print('Failed to fetch data');
     }
+  }
+
+  Future<bool> onBackPressed(BuildContext context) {
+    // Navigate back when the back button is pressed
+    Navigator.pop(context);
+    // Return false to indicate that we handled the back button press
+    return Future.value(false);
   }
 }
 

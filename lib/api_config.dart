@@ -7,7 +7,7 @@ var baseUrl = "http://182.18.157.215/SaloonApp/API/";      // Test
 
 var getBanners ="GetBanner?Id=null";
 
-var getbranches="api/Branch/null";
+var getbranches="GetBranchById/null";
 var GetBranchByUserId="GetBranchByUserId/";
 var GetSlotsByDateAndBranch="api/Appointment/GetSlotsByDateAndBranch/";
 
@@ -20,6 +20,7 @@ var getbranchesbyuserid="api/Branch/";
 var ValidateUser="ValidateUser";
 var ValidateUserData="ValidateUserData";
 var GetAppointment="api/Appointment/GetAppointment/";
+var GetAppointmentByUserid="api/Appointment/GetAppointmentByUserid";
 
 var GetHolidayListByBranchId="api/Appointment/GetHolidayListByBranchId/";
 

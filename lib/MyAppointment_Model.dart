@@ -1,3 +1,4 @@
+
 class MyAppointment_Model {
   final int id;
   final int branchId;
@@ -8,12 +9,15 @@ class MyAppointment_Model {
   final String contactNumber;
   final String email;
   final int genderTypeId;
-  final String gender;
+  final String genderName;
   final int statusTypeId;
   final String status;
   final int purposeOfVisitId;
   final String purposeOfVisit;
   final bool isActive;
+  final String? review;
+  final double? rating;
+  final DateTime? reviewSubmittedDate;
   final String slotDuration;
 
   MyAppointment_Model({
@@ -26,12 +30,15 @@ class MyAppointment_Model {
     required this.contactNumber,
     required this.email,
     required this.genderTypeId,
-    required this.gender,
+    required this.genderName,
     required this.statusTypeId,
     required this.status,
     required this.purposeOfVisitId,
     required this.purposeOfVisit,
     required this.isActive,
+    required this.review,
+    required this.rating,
+    required this.reviewSubmittedDate,
     required this.slotDuration,
   });
 
@@ -46,12 +53,17 @@ class MyAppointment_Model {
       contactNumber: json['contactNumber'],
       email: json['email'],
       genderTypeId: json['genderTypeId'],
-      gender: json['gender'],
+      genderName: json['genderName'],
       statusTypeId: json['statusTypeId'],
       status: json['status'],
       purposeOfVisitId: json['purposeOfVisitId'],
       purposeOfVisit: json['purposeOfVisit'],
       isActive: json['isActive'],
+      review: json['review'],
+      rating: json['rating'] != null ? json['rating'].toDouble() : null,
+      reviewSubmittedDate: json['reviewSubmittedDate'] != null
+          ? DateTime.parse(json['reviewSubmittedDate'])
+          : null,
       slotDuration: json['slotDuration'],
     );
   }

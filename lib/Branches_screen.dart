@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
 import 'dart:convert';
 import 'BranchModel.dart';
 import 'CommonUtils.dart';
+import 'UserSelectionScreen.dart';
 import 'appointmentlist.dart';
 import 'api_config.dart';
 
@@ -95,7 +97,8 @@ class _BranchesscreenState extends State<Branches_screen> {
       return false;
     },
     child:  Scaffold(
-        appBar: AppBar(
+        appBar:
+        AppBar(
           backgroundColor: const Color(0xFFF44614),
           centerTitle: true,
           title: Container(
@@ -109,7 +112,20 @@ class _BranchesscreenState extends State<Branches_screen> {
               ),
             ),
           ),
+          actions: [
+            IconButton(
+              icon: Icon(
+                Icons.logout,
+                color: Colors.white,
+              ),
+              onPressed: () {
+                logOutDialog();
+                // Add logout functionality here
+              },
+            ),
+          ],
         ),
+
         body: SingleChildScrollView(
           child: Container(
             width: MediaQuery.of(context).size.width,
@@ -248,8 +264,11 @@ class _BranchesscreenState extends State<Branches_screen> {
                                   onTap: () {
                                     Navigator.of(context).push(
                                       MaterialPageRoute(
-                                          builder: (context) => appointmentlist(userId: widget.userId, branchid: branch.id, branchname: branch.name,
-                                              filepath: branch.imageName!, phonenumber: branch.mobileNumber, branchaddress: branch.address)),
+                                          builder: (context) =>
+
+
+                                              appointmentlist(userId: widget.userId, branchid: branch.id, branchname: branch.name,
+                                              filepath: branch.imageName != null ? imagesflierepo + branch.imageName! : 'assets/top_image.png', phonenumber: branch.mobileNumber, branchaddress: branch.address)),
                                     );
                                   },
                                   child: Card(
@@ -295,7 +314,8 @@ class _BranchesscreenState extends State<Branches_screen> {
                                                 ),
                                                 child: ClipRRect(
                                                   borderRadius: BorderRadius.circular(7.0),
-                                                  child: Image.network(
+                                                  child: branch.imageName != null
+                                                      ? Image.network(
                                                     imagesflierepo + branch.imageName!,
                                                     width: 110,
                                                     height: 65,
@@ -304,9 +324,15 @@ class _BranchesscreenState extends State<Branches_screen> {
                                                       if (loadingProgress == null) return child;
 
                                                       return const Center(child: CircularProgressIndicator.adaptive());
-                                                      // You can use LinearProgressIndicator or CircularProgressIndicator instead
                                                     },
+                                                  )
+                                                      : Image.asset(
+                                                    'assets/top_image.png', // Provide the path to your default image asset
+                                                    width: 110,
+                                                    height: 65,
+                                                    fit: BoxFit.fill,
                                                   ),
+
                                                 ),
                                               ),
                                             ),
@@ -396,7 +422,7 @@ class _BranchesscreenState extends State<Branches_screen> {
                                                                 MaterialPageRoute(
                                                                     builder: (context) =>
                                                                         appointmentlist(userId: widget.userId, branchid: branch.id, branchname: branch.name,
-                                                                            filepath: branch.imageName!, phonenumber: branch.mobileNumber, branchaddress: branch.address)),
+                                                                            filepath: branch.imageName != null ? imagesflierepo + branch.imageName! : 'assets/top_image.png', phonenumber: branch.mobileNumber, branchaddress: branch.address)),
                                                               );
                                                             },
                                                             child: Row(
@@ -686,6 +712,46 @@ class _BranchesscreenState extends State<Branches_screen> {
 
     // retries++;
     // await Future.delayed(Duration(seconds: 2 * retries)); // Exponential backoff
+  }
+
+  void logOutDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Logout'),
+          content: const Text('Are you sure you want to Logout?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                onConfirmLogout();
+              },
+              child: const Text('Logout'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> onConfirmLogout() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool('isLoggedIn', false);
+    prefs.remove('userId'); // Remove userId from SharedPreferences
+    prefs.remove('userRoleId'); // Remove roleId from SharedPreferences
+    CommonUtils.showCustomToastMessageLong("Logout Successful", context, 0, 3);
+
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(builder: (context) =>  UserSelectionScreen()),
+          (route) => false,
+    );
   }
 
   // Handle the case where all retries failed

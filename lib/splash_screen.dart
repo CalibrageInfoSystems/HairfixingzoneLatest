@@ -66,7 +66,16 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return  WillPopScope(
+        onWillPop: () async {
+      // Handle back button press here
+      //
+
+
+      // You can add any custom logic before closing the app
+      return true; // Return true to allow back button press and close the app
+    },
+     child: Scaffold(
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
@@ -90,7 +99,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
           ),
         ),
       ),
-    );
+    ));
   }
 
 

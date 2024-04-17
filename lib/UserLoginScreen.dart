@@ -35,12 +35,14 @@ class _UserScreenState extends State<UserLoginScreen> {
 
   Future<void> login(String username, String password) async {
     // Define the API endpoint
-    final String apiUrl = 'http://182.18.157.215/SaloonApp/API/ValidateUserData';
+  //  final String apiUrl = 'http://182.18.157.215/SaloonApp/API/ValidateUserData';
+    final String apiUrl = baseUrl + ValidateUser;
 
     // Prepare the request body
     Map<String, String> requestBody = {
       'userName':_usernameController.text,
       'password': _passwordController.text,
+      "deviceTokens":"",
     };
 
     // Make the POST request
@@ -65,20 +67,32 @@ class _UserScreenState extends State<UserLoginScreen> {
       // Handle the data accordingly
       if (isSuccess) {
         // If the user is valid, you can extract more data from 'listResult'
-        List<dynamic> listResult = data['listResult'];
-        if (listResult.isNotEmpty) {
+
+        if ( data['listResult'] != null) {
+          List<dynamic> listResult = data['listResult'];
           Map<String, dynamic> user = listResult.first;
           print('User ID: ${user['id']}');
           print('Full Name: ${user['fullName']}');
           print('Role ID: ${user['roleID']}');
           await saveUserDataToSharedPreferences(user);
           // Extract other user information as needed
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => HomeScreen()),
-          );
+          if (user['roleID'] == 2) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => HomeScreen()),
+            );
+          } else {
+            // Show toast for invalid user
+            CommonUtils.showCustomToastMessageLong("Invalid user", context, 1, 4);
+           // showToast('Invalid user');
+          }
+        }
+        else{
+       //   FocusScope.of(context).unfocus();
+          CommonUtils.showCustomToastMessageLong('Invalid user ', context, 1, 4);
         }
       } else {
+        CommonUtils.showCustomToastMessageLong("${data["statusMessage"]}", context, 1, 4);
         // Handle the case where the user is not valid
         List<dynamic> validationErrors = data['validationErrors'];
         if (validationErrors.isNotEmpty) {
@@ -407,11 +421,11 @@ class _UserScreenState extends State<UserLoginScreen> {
     prefs.setBool('isLoggedIn', true);
     // Save user data using unique keys
     await prefs.setInt('userId', userData['id']);
-    await prefs.setString('userFullName', userData['fullName']);
+    await prefs.setString('userFullName', userData['firstName']);
     await prefs.setInt('userRoleId', userData['roleID']);
     await prefs.setString('email', userData['email']);
     await prefs.setString('contactNumber', userData['contactNumber']);
-    await prefs.setInt('gender', userData['gender']);
+    await prefs.setString('gender', userData['gender']);
     // Save other user data as needed
   }
 }

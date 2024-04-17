@@ -647,7 +647,7 @@ class _appointmentlist extends State<appointmentlist> {
                                                               );
 
                                                               print('Button 1 pressed for ${appointment.customerName}');
-                                                              postAppointment(data, 5);
+                                                              postAppointment(data, 5,index);
                                                               Get_ApprovedDeclinedSlots(data, 5);
                                                               print('accpteedbuttonisclicked');
                                                             },
@@ -685,8 +685,7 @@ class _appointmentlist extends State<appointmentlist> {
                                                     onPressed: isPastDate(selecteddate, appointment.SlotDuration)
                                                         ? null
                                                         : () {
-                                                            // Handle reject button action
-                                                            rejectAppointment(index);
+
 
                                                             Appointment data = Appointment(
                                                               id: appointment.id,
@@ -708,7 +707,9 @@ class _appointmentlist extends State<appointmentlist> {
                                                             );
 
                                                             print('Button 1 pressed for ${appointment.customerName}');
-                                                            postAppointment(data, 6);
+                                                            postAppointment(data, 6,index);
+                                                            // Handle reject button action
+                                                           // rejectAppointment(index);
                                                             print('rejectedbuttonisclciked');
                                                           },
                                                     child: Text('Reject'),
@@ -903,7 +904,7 @@ class _appointmentlist extends State<appointmentlist> {
     // Add your logic to handle the reject action for the appointment at the given index
   }
 
-  Future<void> postAppointment(Appointment data, int i) async {
+  Future<void> postAppointment(Appointment data, int i, int index) async {
     final url = Uri.parse(baseUrl + postApiAppointment);
     print('url==>890: $url');
     // final url = Uri.parse('http://182.18.157.215/SaloonApp/API/api/Appointment');
@@ -929,7 +930,12 @@ class _appointmentlist extends State<appointmentlist> {
       "IsActive": true,
       "CreatedDate": dateTimeString,
       "UpdatedDate": dateTimeString,
-      "UpdatedByUserId": widget.userId
+      "UpdatedByUserId": widget.userId,
+      // "rating": null,
+      // "review": null,
+      // "reviewSubmittedDate": null,
+      // "timeofslot": null,
+      // "customerId":  data.c
     };
     print('Accept Or reject object: : ${json.encode(request)}');
     print('Accept Or reject object: $request');
@@ -945,11 +951,25 @@ class _appointmentlist extends State<appointmentlist> {
 
       // Check the response status code
       if (response.statusCode == 200) {
-        print('Request sent successfully');
 
-        // showCustomToastMessageLong(
-        //     'Request sent successfully', context, 0, 2);
-        //    Navigator.pop(context);
+        Map<String, dynamic> data = json.decode(response.body);
+
+        // Extract the necessary information
+        bool isSuccess = data['isSuccess'];
+        if (isSuccess == true) {
+          print('Request sent successfully');
+          if(i == 6){
+          rejectAppointment(index);}
+          // Success case
+          // Handle success scenario here
+        } else {
+          // Failure case
+          // Handle failure scenario here
+          CommonUtils.showCustomToastMessageLong(
+              'The request should not be canceled within 30 minutes before slot', context, 0, 2);
+
+        }
+
       } else {
         //showCustomToastMessageLong(
         // 'Failed to send the request', context, 1, 2);
