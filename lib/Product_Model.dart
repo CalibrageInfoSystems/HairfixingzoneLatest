@@ -3,6 +3,7 @@ class Product_Model {
   final String code;
   final String name;
   final int categoryTypeId;
+  final int genderTypeid;
   final double minPrice;
   final double maxPrice;
   final double minDiscountPrice;
@@ -12,7 +13,8 @@ class Product_Model {
   final String fileName;
   final String fileExtension;
   final bool isActive;
-  final String productName;
+  final String categoryName;
+  final String gender;
   final String createdBy;
   final String updatedBy;
 
@@ -21,6 +23,7 @@ class Product_Model {
     required this.code,
     required this.name,
     required this.categoryTypeId,
+    required this.genderTypeid,
     required this.minPrice,
     required this.maxPrice,
     required this.minDiscountPrice,
@@ -30,7 +33,8 @@ class Product_Model {
     required this.fileName,
     required this.fileExtension,
     required this.isActive,
-    required this.productName,
+    required this.categoryName,
+    required this.gender,
     required this.createdBy,
     required this.updatedBy,
   });
@@ -50,9 +54,11 @@ class Product_Model {
       fileName: json['fileName'],
       fileExtension: json['fileExtension'],
       isActive: json['isActive'],
-      productName: json['productName'],
       createdBy: json['createdBy'],
       updatedBy: json['updatedBy'],
+      genderTypeid: json['genderTypeId'],
+      gender: json['gender'],
+      categoryName: json['categoryName'],
     );
   }
 }
