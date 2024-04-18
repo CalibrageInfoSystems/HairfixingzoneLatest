@@ -73,10 +73,6 @@ class MyProducts_screenState extends State<MyProducts> {
                 ),
                 onPressed: () {
                   Navigator.of(context).pop();
-                  // Navigator.of(context).pushReplacement(
-                  //   MaterialPageRoute(builder: (context) => home_screen()),
-                  // );
-                  // Implement your logic to navigate back
                 },
               )),
           body: Stack(
@@ -117,8 +113,8 @@ class MyProducts_screenState extends State<MyProducts> {
                             },
                             child: Scrollbar(
                               child: Shimmer.fromColors(
-                                baseColor: Colors.grey[300]!,
-                                highlightColor: Colors.grey[100]!,
+                                baseColor: Colors.grey.shade300,
+                                highlightColor: Colors.grey.shade100,
                                 child: Container(
                                   decoration: BoxDecoration(
                                     color: Colors.white,
@@ -167,7 +163,7 @@ class MyProducts_screenState extends State<MyProducts> {
                                           child: Shimmer.fromColors(
                                             baseColor: Colors.grey.shade300,
                                             highlightColor: Colors.grey.shade100,
-                                            child: Text('${productmodel.productName}'),
+                                            child: Text('${productmodel.categoryName}'),
                                           ),
                                         ),
                                         SizedBox(
@@ -227,7 +223,7 @@ class MyProducts_screenState extends State<MyProducts> {
                                           child: Center(
                                             child: Image.network(
                                               productmodel.imageName,
-                                          //    "https://images.moneycontrol.com/static-mcnews/2023/08/Health-benefits-of-almond-oil-770x433.jpg?impolicy=website&width=770&height=431", // Placeholder URL
+                                              //    "https://images.moneycontrol.com/static-mcnews/2023/08/Health-benefits-of-almond-oil-770x433.jpg?impolicy=website&width=770&height=431", // Placeholder URL
                                               fit: BoxFit.fill,
                                               loadingBuilder: (context, child, loadingProgress) {
                                                 if (loadingProgress == null) return child;
@@ -239,7 +235,7 @@ class MyProducts_screenState extends State<MyProducts> {
                                         ),
                                         SizedBox(height: 5),
                                         Text(
-                                          '${productmodel.productName}',
+                                          '${productmodel.categoryName}',
                                           textAlign: TextAlign.center,
                                         ),
                                         SizedBox(height: 5),
@@ -254,8 +250,6 @@ class MyProducts_screenState extends State<MyProducts> {
                               ),
                             ),
                           );
-
-
                         }
                       },
                     )
@@ -264,6 +258,18 @@ class MyProducts_screenState extends State<MyProducts> {
               ),
             ],
           ),
+          floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+          floatingActionButton: FloatingActionButton(
+            // isExtended: true,
+            child: Icon(
+              Icons.filter_alt,
+              color: Colors.white,
+            ),
+            backgroundColor: Color(0xFFFB4110),
+            onPressed: () {
+              ShowBottomsheet();
+            },
+          ),
         ));
   }
 
@@ -271,7 +277,7 @@ class MyProducts_screenState extends State<MyProducts> {
     setState(() {
       isLoading = true; // Set isLoading to true before making the API call
     });
-    final apiurl = 'http://182.18.157.215/SaloonApp/API/GetProductById/null';
+    final apiurl = 'http://182.18.157.215/SaloonApp/API/GetProductById';
     final url = Uri.parse(apiurl);
     print('url==>products: $url');
 
@@ -281,7 +287,14 @@ class MyProducts_screenState extends State<MyProducts> {
 
     while (!success && retries < maxRetries) {
       try {
-        final response = await http.get(url);
+        final request = {"id": null, "categoryTypeId": null, "genderTypeId": null};
+        final response = await http.post(
+          url,
+          body: json.encode(request),
+          headers: {
+            'Content-Type': 'application/json', // Set the content type header
+          },
+        );
 
         // Check if the request was successful
         if (response.statusCode == 200) {
@@ -304,9 +317,11 @@ class MyProducts_screenState extends State<MyProducts> {
               fileLocation: item['fileLocation'],
               fileName: item['fileName'],
               fileExtension: item['fileExtension'],
-              productName: item['productName'],
               createdBy: item['createdBy'],
               updatedBy: item['updatedBy'],
+              genderTypeid: item['genderTypeId'] ?? 0,
+              categoryName: item['categoryName'],
+              gender: item['gender'] ?? '',
             ));
           }
 
@@ -339,5 +354,30 @@ class MyProducts_screenState extends State<MyProducts> {
       // Handle the case where all retries failed
       print('All retries failed. Unable to fetch data from the API.');
     }
+  }
+
+  void ShowBottomsheet() {
+    showModalBottomSheet(
+      isScrollControlled: true,
+      context: context,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (BuildContext context) {
+        return Padding(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+          ),
+          child: Container(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [],
+            ),
+          ),
+        );
+      },
+    );
   }
 }
