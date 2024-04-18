@@ -17,11 +17,18 @@ class slotbookingscreen extends StatefulWidget {
   final String branchlocation;
   final String filepath;
   final String MobileNumber;
-  //slotbookingscreen({required this.branchId, required this.branchname, required this.branchlocation, required this.filepath, required this.MobileNumber}) {}
+  final int appointmentId; // New field
+  final String screenFrom; // New field
 
-  slotbookingscreen(
-      {required this.branchId, required this.branchname, required this.branchlocation, required this.filepath, required this.MobileNumber});
-
+  slotbookingscreen({
+    required this.branchId,
+    required this.branchname,
+    required this.branchlocation,
+    required this.filepath,
+    required this.MobileNumber,
+    required this.appointmentId, // New field
+    required this.screenFrom, // New field
+  });
   @override
   _BookingScreenState createState() => _BookingScreenState();
 }
@@ -126,6 +133,8 @@ class _BookingScreenState extends State<slotbookingscreen>  {
     print('branchaddress: ${widget.branchlocation}');
     print('filepath: ${widget.filepath}');
     print('MobileNumber: ${widget.MobileNumber}');
+    print('screenFrom: ${widget.screenFrom}');
+    print('appointmentId: ${widget.appointmentId}');
     loadUserData();
     //fetchdropdown();
     BranchId = widget.branchId;
@@ -1174,35 +1183,16 @@ class _BookingScreenState extends State<slotbookingscreen>  {
       print('url==>890: $url');
 
       DateTime now = DateTime.now();
-
       // Using toString() method
       String dateTimeString = now.toString();
       print('DateTime as String: $dateTimeString');
       print('DateTime as String: $selecteddate');
       print('_selectedTimeSlot892 $_selectedTimeSlot');
-      // Create the request object
-      //
-      //   "id": 1,
-      // "branchId": 2,
-      // "date": "2024-04-08T18:40:19.5708905+05:30",
-      // "slotTime": 4,
-      // "customerName": "sample string 5",
-      // "phoneNumber": "sample string 6",
-      // "email": "sample string 7",
-      // "genderTypeId": 8,
-      // "statusTypeId": 9,
-      // "isActive": true,
-      // "createdDate": "2024-04-08T18:40:19.5728632+05:30",
-      // "updatedDate": "2024-04-08T18:40:19.5728632+05:30",
-      // "updatedByUserId": 1,
-      // "purposeOfVisitId": 13,
-      // "rating": 1,
-      // "review": "sample string 14",
-      // "reviewSubmittedDate": "2024-04-08T18:40:19.5778608+05:30",
-      // "timeofslot": "sample string 15",
-      // "customerId": 1
+
+      print('screenFrom1213: ${widget.screenFrom}');
+      print('appointmentId1214: ${widget.appointmentId}');
       final request = {
-        "id": null,
+        "id": widget.screenFrom == "ReSchedule" ? widget.appointmentId : null,
         "branchId": widget.branchId,
         "date": selecteddate,
         "slotTime": timeSlotParts[0],
@@ -1210,9 +1200,8 @@ class _BookingScreenState extends State<slotbookingscreen>  {
         "phoneNumber": _phonenumberController2.text,
         "email": _emailController3.text,
         "genderTypeId": gender,
-        "statusTypeId": 4,
+        "statusTypeId": widget.screenFrom == "ReSchedule" ? 19 : 4,
         "purposeOfVisitId": selectedValue,
-        // "PurposeOfVisit": selectedName,
         "isActive": true,
         "createdDate": dateTimeString,
         "updatedDate": dateTimeString,
@@ -1223,6 +1212,7 @@ class _BookingScreenState extends State<slotbookingscreen>  {
         "timeofslot": null,
         "customerId": userId
       };
+
       print('Object: ${json.encode(request)}');
       try {
         // Send the POST request
@@ -1234,12 +1224,40 @@ class _BookingScreenState extends State<slotbookingscreen>  {
           },
         );
         // Check the response status code
+        // if (response.statusCode == 200) {
+        //   print('Request sent successfully');
+        //   showCustomToastMessageLong('Slot booked successfully', context, 0, 2);
+        //   Navigator.pop(context);
+        // } else {
+        //   showCustomToastMessageLong('Failed to send the request', context, 1, 2);
+        //   print('Failed to send the request. Status code: ${response.statusCode}');
+        // }
+
         if (response.statusCode == 200) {
-          print('Request sent successfully');
-          showCustomToastMessageLong('Slot booked successfully', context, 0, 2);
-          Navigator.pop(context);
+
+          Map<String, dynamic> data = json.decode(response.body);
+
+          // Extract the necessary information
+          bool isSuccess = data['isSuccess'];
+          if (isSuccess == true) {
+            print('Request sent successfully');
+            showCustomToastMessageLong('Slot booked successfully', context, 0, 2);
+            Navigator.pop(context);
+            // Success case
+            // Handle success scenario here
+          } else {
+            // Failure case
+            // Handle failure scenario here
+            CommonUtils.showCustomToastMessageLong(
+                '${ data['statusMessage']}', context, 0, 2);
+
+          }
+          setState(() {
+            isButtonEnabled = true;
+          });
         } else {
-          showCustomToastMessageLong('Failed to send the request', context, 1, 2);
+          //showCustomToastMessageLong(
+          // 'Failed to send the request', context, 1, 2);
           print('Failed to send the request. Status code: ${response.statusCode}');
         }
       } catch (e) {

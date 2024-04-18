@@ -520,7 +520,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     Expanded(
                         flex: 3,
-                        child: ListView.builder(
+                        child:
+                        ListView.builder(
                           shrinkWrap: true,
                           itemCount: isLoading ? 5 : brancheslist.length, // Display a fixed number of shimmer items when loading
                           itemBuilder: (context, index) {
@@ -559,7 +560,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                           MaterialPageRoute(
                                             builder: (context) =>  slotbookingscreen(
                                                 branchId: branch.id, branchname: branch.name,  branchlocation: branch.address,
-                                                filepath: branch.imageName != null ?  branch.imageName! : 'assets/top_image.png', MobileNumber: branch.mobileNumber) ,
+                                                filepath: branch.imageName != null ?  branch.imageName! : 'assets/top_image.png', MobileNumber: branch.mobileNumber,appointmentId: 0, // Provide the appointmentId value
+                                              screenFrom: "Schedule",) ,
                                           ),
                                         );
                                         //
@@ -750,7 +752,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                     MaterialPageRoute(
                                                                       builder: (context) =>  slotbookingscreen(
                                                                           branchId: branch.id, branchname: branch.name,  branchlocation: branch.address,
-                                                                          filepath: branch.imageName != null ?  branch.imageName! : 'assets/top_image.png', MobileNumber: branch.mobileNumber) ,
+                                                                          filepath: branch.imageName != null ?  branch.imageName! : 'assets/top_image.png', MobileNumber: branch.mobileNumber, appointmentId: 0, // Provide the appointmentId value
+                                                                        screenFrom: "Schedule",) ,
                                                                     ),
                                                                   );
 

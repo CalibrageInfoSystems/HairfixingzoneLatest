@@ -8,9 +8,10 @@ import 'dart:convert';
 import 'BranchModel.dart';
 import 'CommonUtils.dart';
 import 'UserSelectionScreen.dart';
+import 'ViewConsultations.dart';
 import 'appointmentlist.dart';
 import 'api_config.dart';
-import 'consultation_creation_screen.dart';
+// import 'consultation_creation_screen.dart';
 
 class Branches_screen extends StatefulWidget {
   final int userId;
@@ -128,9 +129,9 @@ class _BranchesscreenState extends State<Branches_screen> {
               ],
             ),
             body:
-                // SingleChildScrollView(
-                //   child:
-                Container(
+            // SingleChildScrollView(
+            //   child:
+            Container(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height,
               child: Column(
@@ -284,8 +285,6 @@ class _BranchesscreenState extends State<Branches_screen> {
                                           topRight: Radius.circular(15.0),
                                           bottomLeft: Radius.circular(15.0),
                                         ),
-                                        //surfaceTintColor : Colors.red,
-
                                         child: Container(
                                           decoration: BoxDecoration(
                                             gradient: LinearGradient(
@@ -296,175 +295,248 @@ class _BranchesscreenState extends State<Branches_screen> {
                                               begin: Alignment.centerLeft,
                                               end: Alignment.centerRight,
                                             ),
-                                            // borderRadius: BorderRadius.only(
-                                            //   topRight: Radius.circular(30.0),
-                                            //   bottomLeft: Radius.circular(30.0),
-                                            //
-                                            // ),
                                           ),
-                                          child: Row(
-                                            crossAxisAlignment: CrossAxisAlignment.center,
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
-                                              Padding(
-                                                padding: EdgeInsets.only(left: 15.0),
-                                                child: Container(
-                                                  width: 110,
-                                                  height: 65,
-                                                  decoration: BoxDecoration(
-                                                    borderRadius: BorderRadius.circular(10.0),
-                                                    border: Border.all(
-                                                      color: Color(0xFF9FA1EE),
-                                                      width: 3.0,
+                                              Row(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  Padding(
+                                                    padding: EdgeInsets.only(left: 15.0),
+                                                    child: Container(
+                                                      width: 110,
+                                                      height: 65,
+                                                      decoration: BoxDecoration(
+                                                        borderRadius: BorderRadius.circular(10.0),
+                                                        border: Border.all(
+                                                          color: Color(0xFF9FA1EE),
+                                                          width: 3.0,
+                                                        ),
+                                                      ),
+                                                      child: ClipRRect(
+                                                        borderRadius: BorderRadius.circular(7.0),
+                                                        child: branch.imageName != null
+                                                            ? Image.network(
+                                                          branch.imageName!,
+                                                          width: 110,
+                                                          height: 65,
+                                                          fit: BoxFit.fill,
+                                                          loadingBuilder: (context, child, loadingProgress) {
+                                                            if (loadingProgress == null) return child;
+
+                                                            return const Center(child: CircularProgressIndicator.adaptive());
+                                                          },
+                                                        )
+                                                            : Image.asset(
+                                                          'assets/top_image.png',
+                                                          width: 110,
+                                                          height: 65,
+                                                          fit: BoxFit.fill,
+                                                        ),
+                                                      ),
                                                     ),
                                                   ),
-                                                  child: ClipRRect(
-                                                    borderRadius: BorderRadius.circular(7.0),
-                                                    child: branch.imageName != null
-                                                        ? Image.network(
-                                                            branch.imageName!,
-                                                            width: 110,
-                                                            height: 65,
-                                                            fit: BoxFit.fill,
-                                                            loadingBuilder: (context, child, loadingProgress) {
-                                                              if (loadingProgress == null) return child;
-
-                                                              return const Center(child: CircularProgressIndicator.adaptive());
-                                                            },
-                                                          )
-                                                        : Image.asset(
-                                                            'assets/top_image.png', // Provide the path to your default image asset
-                                                            width: 110,
-                                                            height: 65,
-                                                            fit: BoxFit.fill,
-                                                          ),
-                                                  ),
-                                                ),
-                                              ),
-                                              Expanded(
-                                                child: Padding(
-                                                  padding: EdgeInsets.only(left: 15.0),
-                                                  child: Column(
-                                                    mainAxisAlignment: MainAxisAlignment.start,
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    children: [
-                                                      Padding(
-                                                        padding: EdgeInsets.only(top: 15.0),
-                                                        child: Text(
-                                                          branch.name,
-                                                          style: TextStyle(
-                                                            fontSize: 18,
-                                                            color: Color(0xFFFB4110),
-                                                            fontWeight: FontWeight.bold,
-                                                            fontFamily: 'Calibri',
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      SizedBox(height: 4.0),
-                                                      Expanded(
-                                                        child: Padding(
-                                                          padding: EdgeInsets.only(right: 10.0),
-                                                          child: Column(
-                                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                                            children: [
-                                                              Row(
-                                                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                                                children: [
-                                                                  Image.asset(
-                                                                    'assets/location_icon.png',
-                                                                    width: 20,
-                                                                    height: 18,
-                                                                  ),
-                                                                  SizedBox(width: 4.0),
-                                                                  Expanded(
-                                                                    child: Text(
-                                                                      branch.address,
-                                                                      style: TextStyle(
-                                                                        fontFamily: 'Calibri',
-                                                                        fontSize: 12,
-                                                                        color: Color(0xFF000000),
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                              Spacer(flex: 3),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      Align(
-                                                        alignment: Alignment.bottomRight,
-                                                        child: Container(
-                                                          height: 26,
-                                                          margin: EdgeInsets.only(bottom: 10.0, right: 10.0),
-                                                          decoration: BoxDecoration(
-                                                            color: Colors.white,
-                                                            border: Border.all(
-                                                              color: Color(0xFF8d97e2),
-                                                            ),
-                                                            borderRadius: BorderRadius.circular(10.0),
-                                                          ),
-                                                          child: ElevatedButton(
-                                                            onPressed: () {
-                                                              // Handle button press
-                                                            },
-                                                            style: ElevatedButton.styleFrom(
-                                                              primary: Colors.transparent,
-                                                              onPrimary: Color(0xFF8d97e2),
-                                                              elevation: 0,
-                                                              shadowColor: Colors.transparent,
-                                                              shape: RoundedRectangleBorder(
-                                                                borderRadius: BorderRadius.circular(10.0),
+                                                  Expanded(
+                                                    child: Padding(
+                                                      padding: EdgeInsets.only(left: 15.0),
+                                                      child: Column(
+                                                        mainAxisAlignment: MainAxisAlignment.start,
+                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                        children: [
+                                                          Padding(
+                                                            padding: EdgeInsets.only(top: 15.0),
+                                                            child: Text(
+                                                              branch.name,
+                                                              style: TextStyle(
+                                                                fontSize: 18,
+                                                                color: Color(0xFFFB4110),
+                                                                fontWeight: FontWeight.bold,
+                                                                fontFamily: 'Calibri',
                                                               ),
                                                             ),
-                                                            child: GestureDetector(
-                                                              onTap: () {
-                                                                print('Appointment Clicked ');
-
-                                                                // Handle button press, navigate to a new screen
-                                                                Navigator.of(context).push(
-                                                                  MaterialPageRoute(
-                                                                      builder: (context) => appointmentlist(
-                                                                          userId: widget.userId,
-                                                                          branchid: branch.id,
-                                                                          branchname: branch.name,
-                                                                          filepath:
-                                                                              branch.imageName != null ? branch.imageName! : 'assets/top_image.png',
-                                                                          phonenumber: branch.mobileNumber,
-                                                                          branchaddress: branch.address)),
-                                                                );
-                                                              },
-                                                              child: Row(
-                                                                mainAxisSize: MainAxisSize.min,
-                                                                children: [
-                                                                  SvgPicture.asset(
-                                                                    'assets/datepicker_icon.svg',
-                                                                    width: 15.0,
-                                                                    height: 15.0,
-                                                                  ),
-                                                                  SizedBox(width: 5),
-                                                                  Text(
-                                                                    'Check Appointment',
+                                                          ),
+                                                          SizedBox(height: 4.0),
+                                                          Padding(
+                                                            padding: EdgeInsets.only(right: 10.0),
+                                                            child: Row(
+                                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                              children: [
+                                                                Image.asset(
+                                                                  'assets/location_icon.png',
+                                                                  width: 20,
+                                                                  height: 18,
+                                                                ),
+                                                                SizedBox(width: 4.0),
+                                                                Expanded(
+                                                                  child: Text(
+                                                                    branch.address,
                                                                     style: TextStyle(
+                                                                      fontFamily: 'Calibri',
                                                                       fontSize: 12,
-                                                                      color: Color(0xFF8d97e2),
+                                                                      color: Color(0xFF000000),
                                                                     ),
                                                                   ),
-                                                                ],
-                                                              ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              SizedBox(height: 10.0),
+                                              Container(
+                                                height: 26,
+                                                margin: EdgeInsets.only(bottom: 10.0, right: 10.0),
+                                                // decoration: BoxDecoration(
+                                                //   color: Colors.white,
+                                                //   border: Border.all(
+                                                //     color: Color(0xFF8d97e2),
+                                                //   ),
+                                                //   borderRadius: BorderRadius.circular(10.0),
+                                                // ),
+                                                child:
+                                                Row(
+                                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                  children: [
+                                                    Container(
+                                                      height: double.infinity,
+                                                      decoration: BoxDecoration(
+                                                        color: Colors.white,
+                                                        border: Border.all(
+                                                          color: Color(0xFF8d97e2),
+                                                        ),
+                                                        borderRadius: BorderRadius.circular(10.0),
+                                                      ),// Ensure the button takes the full height of the parent container
+                                                      child: Align(
+                                                        alignment: Alignment.bottomRight,
+                                                        child: ElevatedButton(
+                                                          onPressed: () {
+                                                            // Handle button press
+                                                          },
+                                                          style: ElevatedButton.styleFrom(
+                                                            primary: Colors.transparent,
+                                                            onPrimary: Color(0xFF8d97e2),
+                                                            elevation: 0,
+                                                            shadowColor: Colors.transparent,
+                                                            shape: RoundedRectangleBorder(
+                                                              borderRadius: BorderRadius.circular(10.0),
+                                                            ),
+                                                          ),
+                                                          child: GestureDetector(
+                                                            onTap: () {
+                                                              print('Check Appointment Clicked ');
+
+                                                              // Handle button press, navigate to a new screen
+                                                              Navigator.of(context).push(
+                                                                MaterialPageRoute(
+                                                                  builder: (context) => appointmentlist(
+                                                                    userId: widget.userId,
+                                                                    branchid: branch.id,
+                                                                    branchname: branch.name,
+                                                                    filepath: branch.imageName != null ? branch.imageName! : 'assets/top_image.png',
+                                                                    phonenumber: branch.mobileNumber,
+                                                                    branchaddress: branch.address,
+                                                                  ),
+                                                                ),
+                                                              );
+                                                            },
+                                                            child: Row(
+                                                              mainAxisSize: MainAxisSize.min,
+                                                              children: [
+                                                                SvgPicture.asset(
+                                                                  'assets/datepicker_icon.svg',
+                                                                  width: 15.0,
+                                                                  height: 15.0,
+                                                                ),
+                                                                SizedBox(width: 5),
+                                                                Text(
+                                                                  'Check Appointment',
+                                                                  style: TextStyle(
+                                                                    fontSize: 12,
+                                                                    color: Color(0xFF8d97e2),
+                                                                  ),
+                                                                ),
+                                                              ],
                                                             ),
                                                           ),
                                                         ),
                                                       ),
-                                                    ],
-                                                  ),
+                                                    ),
+                                                    SizedBox(width: 10), // Add some spacing between the buttons
+                                                    Container(
+                                                      height: double.infinity,
+                                                      decoration: BoxDecoration(
+                                                        color: Colors.white,
+                                                        border: Border.all(
+                                                          color: Color(0xFF8d97e2),
+                                                        ),
+                                                        borderRadius: BorderRadius.circular(10.0),
+                                                      ),// Ensure the button takes the full height of the parent container
+                                                      child: Align(
+                                                        alignment: Alignment.bottomRight,
+                                                        child: ElevatedButton(
+                                                          onPressed: () {
+                                                            // Handle button press
+                                                          },
+                                                          style: ElevatedButton.styleFrom(
+                                                            primary: Colors.transparent,
+                                                            onPrimary: Color(0xFF8d97e2),
+                                                            elevation: 0,
+                                                            shadowColor: Colors.transparent,
+                                                            shape: RoundedRectangleBorder(
+                                                              borderRadius: BorderRadius.circular(10.0),
+                                                            ),
+                                                          ),
+                                                          child: GestureDetector(
+                                                            onTap: () {
+                                                              print('See Appointment Clicked ');
+                                                              Navigator.of(context).push(
+                                                                MaterialPageRoute(
+                                                                  builder: (context) => ViewConsultations(
+                                                                    // userId: widget.userId,
+                                                                    // branchid: branch.id,
+                                                                  ),
+                                                                ),
+                                                              );
+                                                              // Handle button press for "See Appointment"
+                                                            },
+                                                            child: Row(
+                                                              mainAxisSize: MainAxisSize.min,
+                                                              children: [
+                                                                Icon(
+                                                                  Icons.calendar_today,
+                                                                  size: 15.0,
+                                                                  color: Color(0xFF8d97e2),
+                                                                ),
+                                                                SizedBox(width: 5),
+                                                                Text(
+                                                                  'View Consultations',
+                                                                  style: TextStyle(
+                                                                    fontSize: 12,
+                                                                    color: Color(0xFF8d97e2),
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
                                                 ),
                                               ),
+
+
                                             ],
                                           ),
                                         ),
                                       ),
                                     ),
+
                                     // child: Card(
                                     //   shadowColor: Colors.grey,
                                     //   elevation: 10,
@@ -645,10 +717,10 @@ class _BranchesscreenState extends State<Branches_screen> {
                     child: Center(
                       child: GestureDetector(
                         onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => ConsulationCreationScreen()),
-                          );
+                          // Navigator.push(
+                          //   context,
+                          //   MaterialPageRoute(builder: (context) => ConsulationCreationScreen()),
+                          // );
                         },
                         child: Container(
                           width: desiredWidth * 0.9,
@@ -793,15 +865,15 @@ class _BranchesscreenState extends State<Branches_screen> {
 
     Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(builder: (context) => UserSelectionScreen()),
-      (route) => false,
+          (route) => false,
     );
   }
 
-  // Handle the case where all retries failed
-  // print('All retries failed. Unable to fetch data from the API.');
-  //  setState(() {
-  //    _isLoading = false;
-  //  });
+// Handle the case where all retries failed
+// print('All retries failed. Unable to fetch data from the API.');
+//  setState(() {
+//    _isLoading = false;
+//  });
 }
 
 // Future<void> _getBranchData(int userId) async {
