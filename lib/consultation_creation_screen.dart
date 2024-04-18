@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hairfixingzone/CommonUtils.dart';
 import 'package:hairfixingzone/CustomRadioButton.dart';
-import 'package:hairfixingzone/branches_model.dart';
+
 import 'package:hairfixingzone/slotbookingscreen.dart';
 import 'package:http/http.dart' as http;
 
@@ -30,7 +30,7 @@ class _ConsulationCreationScreenState extends State<ConsulationCreationScreen> {
   List<String> states = [];
   List<BranchModel> brancheslist = [];
   int? gender;
-  late Future<List<Branch>> apiData;
+  late Future<List<BranchModel>> apiData;
   int selectedTypeCdId = -1;
   late String branchname;
   List<dynamic> dropdownItems = [];
@@ -68,7 +68,7 @@ class _ConsulationCreationScreenState extends State<ConsulationCreationScreen> {
     }
   }
 
-  Future<List<Branch>> fetchBranches() async {
+  Future<List<BranchModel>> fetchBranches() async {
     String apiUrl = 'http://182.18.157.215/SaloonApp/API/GetBranchByUserId/null';
     final response = await http.get(Uri.parse(apiUrl));
 
@@ -76,8 +76,8 @@ class _ConsulationCreationScreenState extends State<ConsulationCreationScreen> {
       Map<String, dynamic> mapResponse = json.decode(response.body);
       if (mapResponse['isSuccess'] == true) {
         final branches = mapResponse['listResult'].cast<Map<String, dynamic>>();
-        final listOfBranches = await branches.map<Branch>((json) {
-          return Branch.fromJson(json);
+        final listOfBranches = await branches.map<BranchModel>((json) {
+          return BranchModel.fromJson(json);
         }).toList();
         return listOfBranches;
       } else {
