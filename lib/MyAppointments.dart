@@ -12,6 +12,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'BranchModel.dart';
 import 'Commonutils.dart';
 import 'LatestAppointment.dart';
 import 'MyAppointment_Model.dart';
@@ -32,7 +33,7 @@ class MyAppointments_screenState extends State<MyAppointments> {
   TextEditingController _commentstexteditcontroller = TextEditingController();
   double rating_star = 0.0;
   int? userId;
-
+  List<BranchModel> brancheslist = [];
   // List<Map<String, dynamic>> leaveData = [];
 
   bool isLoading = true;
@@ -149,8 +150,8 @@ class MyAppointments_screenState extends State<MyAppointments> {
                           end: Alignment.centerRight,
                         ),
                         borderRadius: BorderRadius.only(
-                          topRight: Radius.circular(30.0),
-                          bottomLeft: Radius.circular(30.0),
+                          topRight: Radius.circular(15.0),
+                          bottomLeft: Radius.circular(15.0),
                         ))
                         : BoxDecoration(
                         border: Border.all(color: borderColor, width: 1.5),
@@ -163,8 +164,8 @@ class MyAppointments_screenState extends State<MyAppointments> {
                           end: Alignment.centerRight,
                         ),
                         borderRadius: BorderRadius.only(
-                          topRight: Radius.circular(30.0),
-                          bottomLeft: Radius.circular(30.0),
+                          topRight: Radius.circular(15.0),
+                          bottomLeft: Radius.circular(15.0),
                         ));
 
                     return GestureDetector(
@@ -173,14 +174,16 @@ class MyAppointments_screenState extends State<MyAppointments> {
                       },
                       child: ClipRRect(
                         borderRadius: BorderRadius.only(
-                          topRight: Radius.circular(42.5),
-                          bottomLeft: Radius.circular(42.5),
+                          topRight: Radius.circular(15.0),
+                          bottomLeft: Radius.circular(15.0),
+                          // topRight: Radius.circular(42.5),
+                          // bottomLeft: Radius.circular(42.5),
                         ),
                         child: Card(
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.only(
-                                topRight: Radius.circular(30.0),
-                                bottomLeft: Radius.circular(30.0),
+                                topRight: Radius.circular(15.0),
+                                bottomLeft: Radius.circular(15.0),
                               )),
                           child:
                           Container(
@@ -501,8 +504,8 @@ class MyAppointments_screenState extends State<MyAppointments> {
                           end: Alignment.centerRight,
                         ),
                         borderRadius: BorderRadius.only(
-                          topRight: Radius.circular(30.0),
-                          bottomLeft: Radius.circular(30.0),
+                          topRight: Radius.circular(15.0),
+                          bottomLeft: Radius.circular(15.0),
                         ))
                         : BoxDecoration(
                         border: Border.all(color: borderColor, width: 1.5),
@@ -515,8 +518,8 @@ class MyAppointments_screenState extends State<MyAppointments> {
                           end: Alignment.centerRight,
                         ),
                         borderRadius: BorderRadius.only(
-                          topRight: Radius.circular(30.0),
-                          bottomLeft: Radius.circular(30.0),
+                          topRight: Radius.circular(15.0),
+                          bottomLeft: Radius.circular(15.0),
                         ));
 
                     return GestureDetector(
@@ -525,14 +528,14 @@ class MyAppointments_screenState extends State<MyAppointments> {
                       },
                       child: ClipRRect(
                         borderRadius: BorderRadius.only(
-                          topRight: Radius.circular(42.5),
-                          bottomLeft: Radius.circular(42.5),
+                          topRight: Radius.circular(15.0),
+                          bottomLeft: Radius.circular(15.0),
                         ),
                         child: Card(
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.only(
-                                topRight: Radius.circular(30.0),
-                                bottomLeft: Radius.circular(30.0),
+                                topRight: Radius.circular(15.0),
+                                bottomLeft: Radius.circular(15.0),
                               )),
                           child:
                           Container(
@@ -825,14 +828,52 @@ class MyAppointments_screenState extends State<MyAppointments> {
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
-                                      SizedBox(
-                                        height: 25,
+
+                                      ElevatedButton(
+                                        onPressed: appointment_model.statusTypeId == 5 // Provide a valid condition here
+                                          ? () {
+                                          getbranchedata();
+                                          showBranchesDialog(context); // Call the function to show branches dialog
+                              //  conformation(appointment_model, index);
+                                // Handle reject button action
+
+                                print('Reschedule');
+                                }
+                                  : null,
+                                        child: Text('Reschedule'),
+                                        style: ButtonStyle(
+                                          foregroundColor: MaterialStateProperty.resolveWith<Color>(
+                                                (Set<MaterialState> states) {
+                                              if (states.contains(MaterialState.disabled)) {
+                                                return Colors.grey; // Set the text color to gray when disabled
+                                              }
+                                              return Colors.green; // Use the default text color for enabled state
+                                            },
+                                          ),
+                                          backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                                                (Set<MaterialState> states) {
+                                              if (states.contains(MaterialState.disabled)) {
+                                                return Colors.grey.withOpacity(0.5); // Set the background color to gray with opacity when disabled
+                                              }
+                                              return Colors.white; // Use the default background color for enabled state
+                                            },
+                                          ),
+                                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                            RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.circular(25.0),
+                                              side: BorderSide(color: Colors.green, width: 2.0),
+                                            ),
+                                          ),
+                                        ),
                                       ),
                                       ElevatedButton(
                                         onPressed: appointment_model.statusTypeId == 5 // Provide a valid condition here
                                             ? () {
+
+
+                                          conformation(appointment_model, index);
                                           // Handle reject button action
-                                      CancelAppointment(appointment_model,index);
+
                                           print('rejectedbuttonisclciked');
                                         }
                                             : null, // Disable the button if the condition is not met
@@ -886,8 +927,8 @@ class MyAppointments_screenState extends State<MyAppointments> {
                           end: Alignment.centerRight,
                         ),
                         borderRadius: BorderRadius.only(
-                          topRight: Radius.circular(30.0),
-                          bottomLeft: Radius.circular(30.0),
+                          topRight: Radius.circular(15.0),
+                          bottomLeft: Radius.circular(15.0),
                         ))
                         : BoxDecoration(
                         border: Border.all(color: borderColor, width: 1.5),
@@ -900,8 +941,8 @@ class MyAppointments_screenState extends State<MyAppointments> {
                           end: Alignment.centerRight,
                         ),
                         borderRadius: BorderRadius.only(
-                          topRight: Radius.circular(30.0),
-                          bottomLeft: Radius.circular(30.0),
+                          topRight: Radius.circular(15.0),
+                          bottomLeft: Radius.circular(15.0),
                         ));
 
                     return GestureDetector(
@@ -910,14 +951,14 @@ class MyAppointments_screenState extends State<MyAppointments> {
                       },
                       child: ClipRRect(
                         borderRadius: BorderRadius.only(
-                          topRight: Radius.circular(42.5),
-                          bottomLeft: Radius.circular(42.5),
+                          topRight: Radius.circular(15.0),
+                          bottomLeft: Radius.circular(15.0),
                         ),
                         child: Card(
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.only(
-                                topRight: Radius.circular(30.0),
-                                bottomLeft: Radius.circular(30.0),
+                                topRight: Radius.circular(15.0),
+                                bottomLeft: Radius.circular(15.0),
                               )),
                           child:
                           Container(
@@ -1240,8 +1281,8 @@ class MyAppointments_screenState extends State<MyAppointments> {
                           end: Alignment.centerRight,
                         ),
                         borderRadius: BorderRadius.only(
-                          topRight: Radius.circular(30.0),
-                          bottomLeft: Radius.circular(30.0),
+                          topRight: Radius.circular(15.0),
+                          bottomLeft: Radius.circular(15.0),
                         ))
                         : BoxDecoration(
                         border: Border.all(color: borderColor, width: 1.5),
@@ -1254,8 +1295,8 @@ class MyAppointments_screenState extends State<MyAppointments> {
                           end: Alignment.centerRight,
                         ),
                         borderRadius: BorderRadius.only(
-                          topRight: Radius.circular(30.0),
-                          bottomLeft: Radius.circular(30.0),
+                          topRight: Radius.circular(15.0),
+                          bottomLeft: Radius.circular(15.0),
                         ));
 
                     return GestureDetector(
@@ -1264,101 +1305,14 @@ class MyAppointments_screenState extends State<MyAppointments> {
                       },
                       child: ClipRRect(
                         borderRadius: BorderRadius.only(
-                          topRight: Radius.circular(42.5),
-                          bottomLeft: Radius.circular(42.5),
+                          topRight: Radius.circular(15.0),
+                          bottomLeft: Radius.circular(15.0),
                         ),
-                        child:
-                        // Card(
-                        //   elevation: 5,
-                        //   child: Padding(
-                        //     padding: const EdgeInsets.all(10.0),
-                        //     child: Column(
-                        //       mainAxisSize: MainAxisSize.min,
-                        //       children: [
-                        //         const Row(
-                        //           children: [
-                        //             Text('occupies complete width'),
-                        //           ],
-                        //         ),
-                        //         const Row(
-                        //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        //           children: [
-                        //             Expanded(
-                        //               child: Row(
-                        //                 children: [
-                        //                   Expanded(child: Text('title')),
-                        //                   Expanded(
-                        //                     child: Row(
-                        //                       mainAxisAlignment: MainAxisAlignment.start,
-                        //                       children: [
-                        //                         Text(':data'),
-                        //                       ],
-                        //                     ),
-                        //                   ),
-                        //                 ],
-                        //               ),
-                        //             ),
-                        //             SizedBox(
-                        //               width: 20,
-                        //             ),
-                        //             Expanded(
-                        //               child: Row(
-                        //                 children: [
-                        //                   Expanded(
-                        //                       child: Row(
-                        //                         children: [
-                        //                           Text('title'),
-                        //                         ],
-                        //                       )),
-                        //                   Expanded(
-                        //                     child: Row(
-                        //                       mainAxisAlignment: MainAxisAlignment.start,
-                        //                       children: [
-                        //                         Text(':data'),
-                        //                       ],
-                        //                     ),
-                        //                   ),
-                        //                 ],
-                        //               ),
-                        //             ),
-                        //           ],
-                        //         ),
-                        //         Row(
-                        //           children: [
-                        //             Expanded(
-                        //               flex: 2,
-                        //               child: RichText(
-                        //                 text: const TextSpan(
-                        //                   children: <TextSpan>[
-                        //                     TextSpan(
-                        //                       text: 'Feedback : ',
-                        //                       style: TextStyle(
-                        //                         color: Colors.black,
-                        //                       ),
-                        //                     ),
-                        //                     TextSpan(
-                        //                       text:
-                        //                       'This is very very very very very very very very very very very very very very very very very very very very big text',
-                        //                       style: TextStyle(
-                        //                         color: Colors.black,
-                        //                       ),
-                        //                     ),
-                        //                   ],
-                        //                 ),
-                        //               ),
-                        //             ),
-                        //           ],
-                        //         ),
-                        //       ],
-                        //     ),
-                        //   ),
-                        // ),
-
-                        Card(
+                        child: Card(
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.only(
-                                topRight: Radius.circular(30.0),
-                                bottomLeft: Radius.circular(30.0),
+                                topRight: Radius.circular(15.0),
+                                bottomLeft: Radius.circular(15.0),
                               )),
                           child: Container(
                             padding: EdgeInsets.only(bottom: 10, top: 5, left: 0, right: 0),
@@ -1368,8 +1322,6 @@ class MyAppointments_screenState extends State<MyAppointments> {
                                 Row(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-
-
                                     Expanded(
                                       child: ListTile(
                                         subtitle: Column(
@@ -1656,54 +1608,7 @@ class MyAppointments_screenState extends State<MyAppointments> {
                                     ),
                                   ],
                                 ),
-                                //  Row(
-                                //   children: [
-                                //     Text('occupies complete width'),
-                                //   ],
-                                // ),
-                                //  Row(
-                                //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                //   children: [
-                                //     Expanded(
-                                //       child: Row(
-                                //         children: [
-                                //           Expanded(child: Text('title')),
-                                //           Expanded(
-                                //             child: Row(
-                                //               mainAxisAlignment: MainAxisAlignment.start,
-                                //               children: [
-                                //                 Text(':data'),
-                                //               ],
-                                //             ),
-                                //           ),
-                                //         ],
-                                //       ),
-                                //     ),
-                                //     SizedBox(
-                                //       width: 20,
-                                //     ),
-                                //     Expanded(
-                                //       child: Row(
-                                //         children: [
-                                //           Expanded(
-                                //               child: Row(
-                                //                 children: [
-                                //                   Text('title'),
-                                //                 ],
-                                //               )),
-                                //           Expanded(
-                                //             child: Row(
-                                //               mainAxisAlignment: MainAxisAlignment.start,
-                                //               children: [
-                                //                 Text(':data'),
-                                //               ],
-                                //             ),
-                                //           ),
-                                //         ],
-                                //       ),
-                                //     ),
-                                //   ],
-                                // ),
+
                                 Row(
                                   children: [
                                     Expanded(
@@ -1747,7 +1652,7 @@ class MyAppointments_screenState extends State<MyAppointments> {
                                       ),
                                     ),
                                     Expanded(
-                                      flex: 25,
+                                      flex: 24,
                                       child: Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
@@ -1770,6 +1675,66 @@ class MyAppointments_screenState extends State<MyAppointments> {
                                     )
                                   ],
                                 ),
+                                // Row(
+                                //   children: [
+                                //     Expanded(
+                                //       flex: 6,
+                                //       child: Padding(
+                                //         padding: EdgeInsets.only(left: 15.0), // Add left padding to the Feedback text
+                                //         child: Column(
+                                //           crossAxisAlignment: CrossAxisAlignment.start,
+                                //           children: [
+                                //             const Text(
+                                //               'Feedback',
+                                //               style: TextStyle(
+                                //                 color: Color(0xFFF44614),
+                                //                 fontSize: 12,
+                                //                 fontWeight: FontWeight.bold,
+                                //                 fontFamily: 'Calibri',
+                                //               ),
+                                //             ),
+                                //           ],
+                                //         ),
+                                //       ),
+                                //     ),
+                                //     Expanded(
+                                //       flex: 0,
+                                //       child: Column(
+                                //         crossAxisAlignment: CrossAxisAlignment.center,
+                                //         children: [
+                                //           Text(
+                                //             ': ',
+                                //             style: TextStyle(
+                                //               color: Color(0xFFF44614),
+                                //               fontSize: 12,
+                                //               fontWeight: FontWeight.bold,
+                                //               fontFamily: 'Calibri',
+                                //             ),
+                                //           ),
+                                //         ],
+                                //       ),
+                                //     ),
+                                //     Expanded(
+                                //       flex: 24,
+                                //       child: Column(
+                                //         crossAxisAlignment: CrossAxisAlignment.start,
+                                //         children: [
+                                //           Padding(
+                                //             padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                //             child: Text(
+                                //               '$review',
+                                //               style: TextStyle(
+                                //                 color: Color(0xFF042DE3),
+                                //                 fontSize: 12,
+                                //                 fontFamily: 'Calibri',
+                                //               ),
+                                //             ),
+                                //           ),
+                                //         ],
+                                //       ),
+                                //     )
+                                //   ],
+                                // ),
                                 Row(
                                   children: [
                                     Expanded(
@@ -1810,9 +1775,10 @@ class MyAppointments_screenState extends State<MyAppointments> {
                                       ),
                                     ),
                                     Expanded(
-                                      flex: 25,
+                                      flex: 24,
                                       child: Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
+                                        mainAxisSize: MainAxisSize.min, // Ensure the Column takes minimum vertical space
                                         children: [
                                           Padding(
                                             padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
@@ -1897,7 +1863,7 @@ class MyAppointments_screenState extends State<MyAppointments> {
         return Colors.lightBlueAccent;
     // Add more cases for other statuses if needed
       default:
-        return Colors.red; // Red border for other statuses
+        return Colors.orange; // Red border for other statuses
     }
   }
 
@@ -2165,8 +2131,8 @@ class MyAppointments_screenState extends State<MyAppointments> {
                               ),
                               child: ElevatedButton(
                                 onPressed: () {
-                                  //   validaterating();
-                                  Navigator.of(context).pop();
+
+                               Navigator.of(context).pop();
                                 },
                                 child: Text(
                                   'Cancel',
@@ -2310,7 +2276,33 @@ class MyAppointments_screenState extends State<MyAppointments> {
       //  }
     }
   }
+  void conformation(MyAppointment_Model appointments, int index) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Confirmation'),
+          content: const Text('Are you sure you want to Cancel?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('No'),
+            ),
+            TextButton(
+              onPressed: () {
+                CancelAppointment(appointments, index);
+                Navigator.of(context).pop();
 
+              },
+              child: const Text('Yes'),
+            ),
+          ],
+        );
+      },
+    );
+  }
   Future<void> CancelAppointment(MyAppointment_Model appointmens, int index) async {
     final url = Uri.parse(baseUrl + postApiAppointment);
     print('url==>890: $url');
@@ -2384,6 +2376,97 @@ class MyAppointments_screenState extends State<MyAppointments> {
     }
     //  }
   }
+
+  void showBranchesDialog(BuildContext context) {
+    List<BranchModel> brancheslist = [];
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Select Branch'),
+          content: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Replace the following list with your actual list of branches
+
+                // Add more list tiles for additional branches
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+
+  Future<void> getbranchedata() async {
+    setState(() {
+      isLoading = true; // Set isLoading to true before making the API call
+    });
+
+    final url = Uri.parse(baseUrl + getbranches);
+    print('url==>135: $url');
+
+    bool success = false;
+    int retries = 0;
+    const maxRetries = 1;
+
+    while (!success && retries < maxRetries) {
+      try {
+        final response = await http.get(url);
+
+        // Check if the request was successful
+        if (response.statusCode == 200) {
+          // Parse the response body
+          final data = json.decode(response.body);
+
+          List<BranchModel> branchList = [];
+          for (var item in data['listResult']) {
+            branchList.add(BranchModel(
+              id: item['id'],
+              name: item['name'],
+              imageName: item['imageName'],
+              address: item['address'],
+              startTime: item['startTime'],
+              closeTime: item['closeTime'],
+              room: item['room'],
+              mobileNumber: item['mobileNumber'],
+              isActive: item['isActive'],
+            ));
+          }
+
+          // Update the state with the fetched data
+          setState(() {
+            brancheslist = branchList;
+            isLoading = false; // Set isLoading to false after data is fetched
+          });
+
+          success = true;
+        } else {
+          // Handle error if the API request was not successful
+          print('Request failed with status: ${response.statusCode}');
+          setState(() {
+            isLoading = false; // Set isLoading to false if request fails
+          });
+        }
+      } catch (error) {
+        // Handle any exception that occurred during the API call
+        print('Error data is not getting from the api: $error');
+        setState(() {
+          isLoading = false; // Set isLoading to false if error occurs
+        });
+      }
+
+      retries++;
+    }
+
+    if (!success) {
+      // Handle the case where all retries failed
+      print('All retries failed. Unable to fetch data from the API.');
+    }
+  }
+
   }
 
 

@@ -103,7 +103,7 @@ class MyProducts_screenState extends State<MyProducts> {
 
                     GridView.builder(
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2, crossAxisSpacing: 16.0, mainAxisSpacing: 16.0, mainAxisExtent: 190, childAspectRatio: 8 / 2),
+                          crossAxisCount: 2, crossAxisSpacing: 16.0, mainAxisSpacing: 16.0, mainAxisExtent: 150, childAspectRatio: 8 / 2),
                       physics: NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
                       itemCount: products_List.length,
@@ -191,70 +191,71 @@ class MyProducts_screenState extends State<MyProducts> {
                         } else {
                           Product_Model productmodel = products_List[index];
                           return GestureDetector(
-                              onTap: () {
-                                //  fetchProjectList(employeid);
-                              },
-                              child: Scrollbar(
-                                  child: Container(
-                                      // height: 300,
-                                      //   padding: EdgeInsets.only(top: 10.0, left: 5, right: 5),
-                                      //        padding: EdgeInsets.only(top: 10),
-                                      decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        gradient: LinearGradient(
-                                          colors: [
-                                            Color(0xFFFEE7E1), // Start color
-                                            Color(0xFFD7DEFA),
-                                          ],
-                                          begin: Alignment.centerLeft,
-                                          end: Alignment.centerRight,
-                                        ),
-                                        borderRadius: BorderRadius.circular(12.0),
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: Colors.grey.withOpacity(0.3),
-                                            spreadRadius: 2,
-                                            blurRadius: 5,
-                                            offset: Offset(0, 3),
-                                          ),
-                                        ],
-                                      ),
-                                      child: SingleChildScrollView(
-                                        child: Container(
-                                            child: Column(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                mainAxisAlignment: MainAxisAlignment.start,
-                                                children: [
-                                              Container(
-                                                  height: 130,
-                                                  padding: EdgeInsets.only(left: 20, right: 20),
-                                                  child: Image.network(
-                                                    productmodel.imageName,
-                                                    width: 110,
-                                                    height: 65,
-                                                    fit: BoxFit.fill,
-                                                    loadingBuilder: (context, child, loadingProgress) {
-                                                      if (loadingProgress == null) return child;
+                            onTap: () {
+                              // fetchProjectList(employeid);
+                            },
+                            child: Scrollbar(
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  gradient: LinearGradient(
+                                    colors: [
+                                      Color(0xFFFEE7E1), // Start color
+                                      Color(0xFFD7DEFA),
+                                    ],
+                                    begin: Alignment.centerLeft,
+                                    end: Alignment.centerRight,
+                                  ),
+                                  borderRadius: BorderRadius.circular(12.0),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey.withOpacity(0.3),
+                                      spreadRadius: 2,
+                                      blurRadius: 5,
+                                      offset: Offset(0, 3),
+                                    ),
+                                  ],
+                                ),
+                                child: Center(
+                                  child: SingleChildScrollView(
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Container(
+                                          padding: EdgeInsets.symmetric(horizontal: 20),
+                                          child: Center(
+                                            child: Image.network(
+                                              productmodel.imageName,
+                                          //    "https://images.moneycontrol.com/static-mcnews/2023/08/Health-benefits-of-almond-oil-770x433.jpg?impolicy=website&width=770&height=431", // Placeholder URL
+                                              fit: BoxFit.fill,
+                                              loadingBuilder: (context, child, loadingProgress) {
+                                                if (loadingProgress == null) return child;
 
-                                                      return const Center(child: CircularProgressIndicator.adaptive());
-                                                    },
-                                                  )),
-                                              SizedBox(
-                                                height: 5,
-                                              ),
-                                              Container(
-                                                padding: EdgeInsets.only(left: 20, right: 20),
-                                                child: Text('${productmodel.productName}'),
-                                              ),
-                                              SizedBox(
-                                                height: 5,
-                                              ),
-                                              Container(
-                                                padding: EdgeInsets.only(left: 20, right: 20),
-                                                child: Text('${productmodel.name}'),
-                                              ),
-                                            ])),
-                                      ))));
+                                                return const Center(child: CircularProgressIndicator.adaptive());
+                                              },
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(height: 5),
+                                        Text(
+                                          '${productmodel.productName}',
+                                          textAlign: TextAlign.center,
+                                        ),
+                                        SizedBox(height: 5),
+                                        Text(
+                                          '${productmodel.name}',
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          );
+
+
                         }
                       },
                     )

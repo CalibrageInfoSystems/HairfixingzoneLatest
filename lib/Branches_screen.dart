@@ -257,8 +257,8 @@ class _BranchesscreenState extends State<Branches_screen> {
                           child: IntrinsicHeight(
                             child: ClipRRect(
                                 borderRadius: BorderRadius.only(
-                                  topRight: Radius.circular(42.5),
-                                  bottomLeft: Radius.circular(42.5),
+                                  topRight: Radius.circular(15.0),
+                                  bottomLeft: Radius.circular(15.0),
                                 ),
                                 child: GestureDetector(
                                   onTap: () {
@@ -276,8 +276,8 @@ class _BranchesscreenState extends State<Branches_screen> {
                                     surfaceTintColor: Colors.transparent,
                                     child: ClipRRect(
                                       borderRadius: BorderRadius.only(
-                                        topRight: Radius.circular(29.0),
-                                        bottomLeft: Radius.circular(29.0),
+                                        topRight: Radius.circular(15.0),
+                                        bottomLeft: Radius.circular(15.0),
                                       ),
                                       //surfaceTintColor : Colors.red,
 
@@ -316,7 +316,7 @@ class _BranchesscreenState extends State<Branches_screen> {
                                                   borderRadius: BorderRadius.circular(7.0),
                                                   child: branch.imageName != null
                                                       ? Image.network(
-                                                    imagesflierepo + branch.imageName!,
+                                             branch.imageName!,
                                                     width: 110,
                                                     height: 65,
                                                     fit: BoxFit.fill,
@@ -422,7 +422,7 @@ class _BranchesscreenState extends State<Branches_screen> {
                                                                 MaterialPageRoute(
                                                                     builder: (context) =>
                                                                         appointmentlist(userId: widget.userId, branchid: branch.id, branchname: branch.name,
-                                                                            filepath: branch.imageName != null ? imagesflierepo + branch.imageName! : 'assets/top_image.png', phonenumber: branch.mobileNumber, branchaddress: branch.address)),
+                                                                            filepath: branch.imageName != null ?  branch.imageName! : 'assets/top_image.png', phonenumber: branch.mobileNumber, branchaddress: branch.address)),
                                                               );
                                                             },
                                                             child: Row(

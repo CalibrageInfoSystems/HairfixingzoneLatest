@@ -22,6 +22,7 @@ import 'Branches_screen.dart';
 import 'LatestAppointment.dart';
 import 'MyAppointments.dart';
 import 'MyProducts.dart';
+import 'aboutus_screen.dart';
 import 'agentloginscreen.dart';
 import 'api_config.dart';
 import 'CommonUtils.dart';
@@ -319,7 +320,7 @@ class _HomeScreenState extends State<HomeScreen> {
     ListTile(
       leading: Icon(Icons.star),
       title: Text(
-        'MyProducts',
+        'My Products',
         style: TextStyle(
           color: Colors.black,
           fontFamily: 'hind_semibold',
@@ -333,6 +334,23 @@ class _HomeScreenState extends State<HomeScreen> {
         );
       },
     ),
+      ListTile(
+        leading: Icon(Icons.info),
+        title: Text(
+          'About Us',
+          style: TextStyle(
+            color: Colors.black,
+            fontFamily: 'hind_semibold',
+          ),
+        ),
+        onTap: () {
+          //   Handle the onTap action for Logout
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => AboutUsScreen()),
+          );
+        },
+      ),
     ListTile(
     leading: Icon(Icons.logout), // Change the icon as needed
     title: Text(
@@ -519,25 +537,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       color: Colors.white,
                                       borderRadius: BorderRadius.circular(15.0),
                                     ),
-                                    // child: Shimmer.fromColors(
-                                    //   baseColor: Colors.grey.shade300,
-                                    //   highlightColor: Colors.grey.shade100,
-                                    //   child: ClipRRect(
-                                    //     borderRadius: BorderRadius.circular(7.0),
-                                    //     child: Image.network(
-                                    //       imagesflierepo,
-                                    //       width: 110,
-                                    //       height: 65,
-                                    //       fit: BoxFit.fill,
-                                    //       // loadingBuilder: (context, child, loadingProgress) {
-                                    //       //   if (loadingProgress == null) return child;
-                                    //       //
-                                    //       //   return const Center(child: CircularProgressIndicator.adaptive());
-                                    //       //   // You can use LinearProgressIndicator or CircularProgressIndicator instead
-                                    //       // },
-                                    //     ),
-                                    //   ),
-                                    // ),
+
                                   ),
                                 ),
                               );
@@ -549,8 +549,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                 child: IntrinsicHeight(
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.only(
-                                      topRight: Radius.circular(42.5),
-                                      bottomLeft: Radius.circular(42.5),
+                                      topRight: Radius.circular(15.0),
+                                      bottomLeft: Radius.circular(15.0),
                                     ),
                                     child: GestureDetector(
                                       onTap: () {
@@ -573,8 +573,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                         surfaceTintColor: Colors.transparent,
                                         child: ClipRRect(
                                           borderRadius: BorderRadius.only(
-                                            topRight: Radius.circular(29.0),
-                                            bottomLeft: Radius.circular(29.0),
+                                            topRight: Radius.circular(15.0),
+                                            bottomLeft: Radius.circular(15.0),
                                           ),
                                           child: Container(
                                             decoration: BoxDecoration(
@@ -1142,23 +1142,202 @@ class _HomeScreenState extends State<HomeScreen> {
   }
   TextEditingController _commentstexteditcontroller = TextEditingController();
   double rating_star = 0.0;
+  // void _showBottomSheet(BuildContext context, List<LastAppointment> appointments) {
+  //   showModalBottomSheet(
+  //     isScrollControlled: true,
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return Padding(
+  //           padding: EdgeInsets.only(
+  //             bottom: MediaQuery.of(context).viewInsets.bottom,
+  //           ),
+  //       // return SingleChildScrollView(
+  //         child: Container(
+  //           width: MediaQuery.of(context).size.width,
+  //
+  //           /// height: MediaQuery.of(context).size.height,
+  //           padding: EdgeInsets.only(
+  //             top: 15.0,
+  //             left: 15.0,
+  //             right: 15.0,
+  //             bottom: MediaQuery.of(context).viewInsets.bottom,
+  //           ),
+  //           child: Column(
+  //             crossAxisAlignment: CrossAxisAlignment.start,
+  //             children: [
+  //               Text(
+  //                 'Please rate your recent experience with us',
+  //                 style: TextStyle(
+  //                   fontSize: 24,
+  //                   color: Color(0xFFf15f22),
+  //                   fontFamily: 'Calibri',
+  //                 ),
+  //               ),
+  //               SizedBox(
+  //                 height: 15.0,
+  //               ),
+  //               Text(
+  //                 'Rating',
+  //                 style: TextStyle(
+  //                   fontSize: 16,
+  //                   color: Color(0xFFf15f22),
+  //                   fontFamily: 'Calibri',
+  //                 ),
+  //               ),
+  //               SizedBox(
+  //                 height: 15.0,
+  //               ),
+  //               Container(
+  //                   width: MediaQuery.of(context).size.width,
+  //                   child: RatingBar.builder(
+  //                     initialRating: 0,
+  //                     minRating: 0,
+  //                     direction: Axis.horizontal,
+  //                     allowHalfRating: true,
+  //                     itemCount: 5,
+  //                     itemPadding: EdgeInsets.symmetric(horizontal: 1.0),
+  //                     itemBuilder: (context, _) => Icon(
+  //                       Icons.star,
+  //                       color: Colors.amber,
+  //                     ),
+  //                     onRatingUpdate: (rating) {
+  //                       setState(() {
+  //                         rating_star = rating;
+  //                         print('rating_star$rating_star');
+  //                       });
+  //                     },
+  //                   )),
+  //               Padding(
+  //                 padding: EdgeInsets.only(left: 0, top: 10.0, right: 0),
+  //                 child: GestureDetector(
+  //                   onTap: () async {},
+  //                   child: Container(
+  //                     height: 80,
+  //                     width: MediaQuery.of(context).size.width,
+  //                     decoration: BoxDecoration(
+  //                       border: Border.all(color: Color(0xFFf15f22), width: 1.5),
+  //                       borderRadius: BorderRadius.circular(5.0),
+  //                       color: Colors.white,
+  //                     ),
+  //                     child: TextFormField(
+  //                       controller: _commentstexteditcontroller,
+  //                       style: TextStyle(
+  //                         fontFamily: 'Calibri',
+  //                         fontSize: 14,
+  //                         fontWeight: FontWeight.w300,
+  //                       ),
+  //                       maxLines: null,
+  //                       maxLength: 256,
+  //                       // Set maxLines to null for multiline input
+  //                       decoration: InputDecoration(
+  //
+  //                         hintText: 'Comments',
+  //                         hintStyle: TextStyle(
+  //                           color: Colors.black54,
+  //                           fontSize: 14,
+  //                           fontWeight: FontWeight.bold,
+  //                           fontFamily: 'Calibri',
+  //                         ),
+  //                         contentPadding: EdgeInsets.symmetric(
+  //                           horizontal: 16.0,
+  //                           vertical: 12.0,
+  //                         ),
+  //                         border: InputBorder.none,
+  //                       ),
+  //                     ),
+  //                   ),
+  //                 ),
+  //               ),
+  //               Padding(
+  //                 padding: EdgeInsets.only(top: 20.0, left: 0.0, right: 0.0),
+  //                 child: Row(
+  //                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+  //                   children: [
+  //                     ElevatedButton(
+  //                       onPressed: () {
+  //                         Navigator.pop(context);
+  //                       },
+  //                       child: Text(
+  //                         'Cancel',
+  //                         style: TextStyle(color: Colors.white, fontSize: 16, fontFamily: 'Calibri'),
+  //                       ),
+  //                       style: ElevatedButton.styleFrom(
+  //                         primary: Colors.grey,
+  //                         elevation: 0,
+  //                         shape: RoundedRectangleBorder(
+  //                           borderRadius: BorderRadius.circular(4.0),
+  //                         ),
+  //                       ),
+  //                     ),
+  //                     ElevatedButton(
+  //                       onPressed: () {
+  //                         validaterating(appointments);
+  //                       },
+  //                       child: Text(
+  //                         'Submit',
+  //                         style: TextStyle(color: Colors.white, fontSize: 16, fontFamily: 'Calibri'),
+  //                       ),
+  //                       style: ElevatedButton.styleFrom(
+  //                         primary: Color(0xFFf15f22),
+  //                         elevation: 0,
+  //                         shape: RoundedRectangleBorder(
+  //                           borderRadius: BorderRadius.circular(4.0),
+  //                         ),
+  //                       ),
+  //                     ),
+  //                   ],
+  //                 ),
+  //               ),
+  //               // Padding(
+  //               //   padding: EdgeInsets.only(top: 20.0, left: 0.0, right: 0.0),
+  //               //   child: Container(
+  //               //     width: double.infinity,
+  //               //     decoration: BoxDecoration(
+  //               //       color: Color(0xFFf15f22),
+  //               //       borderRadius: BorderRadius.circular(6.0),
+  //               //     ),
+  //               //     child: ElevatedButton(
+  //               //       onPressed: () {
+  //               //         validaterating(appointments);
+  //               //       },
+  //               //       child: Text(
+  //               //         'Submit',
+  //               //         style: TextStyle(color: Colors.white, fontSize: 16, fontFamily: 'Calibri'),
+  //               //       ),
+  //               //       style: ElevatedButton.styleFrom(
+  //               //         primary: Colors.transparent,
+  //               //         elevation: 0,
+  //               //         shape: RoundedRectangleBorder(
+  //               //           borderRadius: BorderRadius.circular(4.0),
+  //               //         ),
+  //               //       ),
+  //               //     ),
+  //               //   ),
+  //               // ),
+  //             ],
+  //           ),
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
   void _showBottomSheet(BuildContext context, List<LastAppointment> appointments) {
+
     showModalBottomSheet(
+      isScrollControlled: true,
       context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
       builder: (BuildContext context) {
-
-        return SingleChildScrollView(
+        return Padding(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+          ),
           child: Container(
-            width: MediaQuery.of(context).size.width,
-
-            /// height: MediaQuery.of(context).size.height,
-            padding: EdgeInsets.only(
-              top: 15.0,
-              left: 15.0,
-              right: 15.0,
-              bottom: MediaQuery.of(context).viewInsets.bottom,
-            ),
+            padding: const EdgeInsets.all(20),
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
@@ -1226,7 +1405,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         maxLength: 256,
                         // Set maxLines to null for multiline input
                         decoration: InputDecoration(
-                          counterText: '',
+
                           hintText: 'Comments',
                           hintStyle: TextStyle(
                             color: Colors.black54,
@@ -1254,7 +1433,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           Navigator.pop(context);
                         },
                         child: Text(
-                          'Cancel',
+                          'Close',
                           style: TextStyle(color: Colors.white, fontSize: 16, fontFamily: 'Calibri'),
                         ),
                         style: ElevatedButton.styleFrom(
@@ -1284,32 +1463,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     ],
                   ),
                 ),
-                // Padding(
-                //   padding: EdgeInsets.only(top: 20.0, left: 0.0, right: 0.0),
-                //   child: Container(
-                //     width: double.infinity,
-                //     decoration: BoxDecoration(
-                //       color: Color(0xFFf15f22),
-                //       borderRadius: BorderRadius.circular(6.0),
-                //     ),
-                //     child: ElevatedButton(
-                //       onPressed: () {
-                //         validaterating(appointments);
-                //       },
-                //       child: Text(
-                //         'Submit',
-                //         style: TextStyle(color: Colors.white, fontSize: 16, fontFamily: 'Calibri'),
-                //       ),
-                //       style: ElevatedButton.styleFrom(
-                //         primary: Colors.transparent,
-                //         elevation: 0,
-                //         shape: RoundedRectangleBorder(
-                //           borderRadius: BorderRadius.circular(4.0),
-                //         ),
-                //       ),
-                //     ),
-                //   ),
-                // ),
               ],
             ),
           ),

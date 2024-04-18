@@ -114,6 +114,7 @@ class _BookingScreenState extends State<slotbookingscreen>  {
   String email = '';
   String phonenumber = '';
   int gender = 0;
+  String Gender = '';
   int? userId;
   bool showConfirmationDialog = false;
   @override
@@ -125,7 +126,7 @@ class _BookingScreenState extends State<slotbookingscreen>  {
     print('branchaddress: ${widget.branchlocation}');
     print('filepath: ${widget.filepath}');
     print('MobileNumber: ${widget.MobileNumber}');
-
+    loadUserData();
     //fetchdropdown();
     BranchId = widget.branchId;
     dropValue = 'Select';
@@ -151,7 +152,7 @@ class _BookingScreenState extends State<slotbookingscreen>  {
         });
         fetchRadioButtonOptions();
         fetchData();
-        loadUserData();
+
       } else {
         CommonUtils.showCustomToastMessageLong('Not connected to the internet', context, 1, 4);
         print('Not connected to the internet');
@@ -183,7 +184,7 @@ class _BookingScreenState extends State<slotbookingscreen>  {
       userFullName = prefs.getString('userFullName') ?? '';
       email = prefs.getString('email') ?? '';
       phonenumber = prefs.getString('contactNumber') ?? '';
-      gender = prefs.getInt('gender') ?? 0;
+      Gender = prefs.getString('gender') ?? '';
       userId = prefs.getInt('userId');
       _fullnameController1.text = userFullName;
       _emailController3.text = email;
@@ -191,7 +192,14 @@ class _BookingScreenState extends State<slotbookingscreen>  {
       isGenderSelected = true;
       // gender = selectedGender;
       print('userId:$userId');
-      print('gender:$gender');
+      print('gender:$Gender');
+      if (Gender == 'Female') {
+        gender = 1;
+      } else if (Gender == 'Male') {
+        gender = 2;
+      } else if (Gender == 'Other') {
+        gender = 3;
+      }
     });
   }
 

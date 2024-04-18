@@ -132,7 +132,7 @@ class _appointmentlist extends State<appointmentlist> {
                   child: Stack(
                     children: [
                       Image.network(
-                        imagesflierepo + widget.filepath,
+                      widget.filepath,
                         fit: BoxFit.cover,
                         width: double.infinity,
                         height: double.infinity,
@@ -530,7 +530,76 @@ class _appointmentlist extends State<appointmentlist> {
                                                 ),
                                               ),
                                             ),
-                                            if (appointment.statusTypeId == 5)
+                                            if (appointment.statusTypeId == 5 && !appointment.isClosed)
+                            Visibility(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  SizedBox(height: 10), // Add some spacing between the buttons
+                                  Padding(
+                                    padding: EdgeInsets.all(10.0), // Added padding for spacing
+                                    child:
+                                    ElevatedButton(
+                                      // onPressed: isPastDate(selecteddate, appointment.SlotDuration)
+                                      //     ? null
+                                      //     : () {
+    onPressed: () {
+                                        // CloseAppointment(index);
+
+                                        Appointment data = Appointment(
+                                          id: appointment.id,
+                                          branchId: appointment.branchId,
+                                          name: appointment.name,
+                                          date: appointment.date,
+                                          slotTime: appointment.slotTime,
+                                          customerName: appointment.customerName,
+                                          phoneNumber: appointment.phoneNumber,
+                                          email: appointment.email,
+                                          genderTypeId: appointment.genderTypeId,
+                                          gender: appointment.gender,
+                                          statusTypeId: appointment.statusTypeId,
+                                          status: appointment.status,
+                                          purposevisitid: appointment.purposevisitid,
+                                          purposeofvisit: appointment.purposeofvisit,
+                                          isActive: appointment.isActive,
+                                          SlotDuration: appointment.SlotDuration,
+                                        );
+
+                                        print('Button 1 pressed for ${appointment.customerName}');
+                                        closepopup(data, 18,index);
+                                       // postAppointment(data, 18,index);
+
+                                      },
+                                      child: Text('Close'),
+                                      style: ButtonStyle(
+                                        foregroundColor: MaterialStateProperty.resolveWith<Color>(
+                                              (Set<MaterialState> states) {
+
+                                            return Colors.green; // Use the default text color for enabled state
+                                          },
+                                        ),
+                                        backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                                              (Set<MaterialState> states) {
+
+
+                                            return Colors.white; // Use the default background color for enabled state
+                                          },
+                                        ),
+                                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                          RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(25.0),
+                                            side: BorderSide(color: Colors.green, width: 2.0),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+
+                                            if (appointment.statusTypeId == 18)
+
                                               Visibility(
                                                 child: Column(
                                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -562,7 +631,7 @@ class _appointmentlist extends State<appointmentlist> {
                                                             Positioned(
                                                               bottom: 15,
                                                               child: Text(
-                                                                'Accepted',
+                                                                'Closed',
                                                                 style: TextStyle(color: Colors.green, fontSize: 12, fontWeight: FontWeight.bold, fontFamily: 'Calibri'),
                                                               ),
                                                             ),
@@ -573,7 +642,7 @@ class _appointmentlist extends State<appointmentlist> {
                                                   ],
                                                 ),
                                               ),
-                                            if (appointment.statusTypeId == 6)
+                            if (appointment.statusTypeId == 6)
                                               Visibility(
                                                 child: Column(
                                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -647,7 +716,7 @@ class _appointmentlist extends State<appointmentlist> {
                                                               );
 
                                                               print('Button 1 pressed for ${appointment.customerName}');
-                                                              postAppointment(data, 5,index);
+                                                              postAppointment(data, 5,index,0);
                                                               Get_ApprovedDeclinedSlots(data, 5);
                                                               print('accpteedbuttonisclicked');
                                                             },
@@ -707,7 +776,7 @@ class _appointmentlist extends State<appointmentlist> {
                                                             );
 
                                                             print('Button 1 pressed for ${appointment.customerName}');
-                                                            postAppointment(data, 6,index);
+                                                            postAppointment(data, 6,index,0);
                                                             // Handle reject button action
                                                            // rejectAppointment(index);
                                                             print('rejectedbuttonisclciked');
@@ -773,6 +842,55 @@ class _appointmentlist extends State<appointmentlist> {
                                                                 appointment.isAccepted ? 'Accepted' : 'Rejected',
                                                                 style: TextStyle(
                                                                   color: appointment.isAccepted ? Colors.green : Colors.red,
+                                                                  fontSize: 12,
+                                                                  fontWeight: FontWeight.bold,
+                                                                  fontFamily: 'Calibri',
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            if (appointment.statusTypeId == 5)
+                                            if (appointment.isClosed )
+                                              Visibility(
+                                                child: Column(
+                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                                  children: [
+                                                    Padding(
+                                                      padding: EdgeInsets.only(top: 10.0),
+                                                      child: Container(
+                                                        width: 75,
+                                                        height: 75,
+                                                        decoration: BoxDecoration(
+                                                          shape: BoxShape.circle,
+                                                          border: Border.all(
+                                                            color: appointment.isClosed ? Colors.green : Colors.red,
+                                                            width: 2.0,
+                                                          ),
+                                                          color: Colors.white,
+                                                        ),
+                                                        child: Stack(
+                                                          alignment: Alignment.center,
+                                                          children: [
+                                                            Positioned(
+                                                              top: 12,
+                                                              child: Icon(
+                                                                appointment.isClosed ? Icons.check : Icons.close,
+                                                                color: appointment.isClosed ? Colors.green : Colors.red,
+                                                                size: 33,
+                                                              ),
+                                                            ),
+                                                            Positioned(
+                                                              bottom: 15,
+                                                              child: Text(
+                                                                appointment.isClosed ? 'Closed' : 'Rejected',
+                                                                style: TextStyle(
+                                                                  color: appointment.isClosed ? Colors.green : Colors.red,
                                                                   fontSize: 12,
                                                                   fontWeight: FontWeight.bold,
                                                                   fontFamily: 'Calibri',
@@ -895,7 +1013,11 @@ class _appointmentlist extends State<appointmentlist> {
       appointments[index].isAccepted = true;
     });
   }
-
+  void closeAppointment(int index) {
+    setState(() {
+      appointments[index].isClosed = true;
+    });
+  }
   void rejectAppointment(int index) {
     // Perform the reject action here
     setState(() {
@@ -904,7 +1026,7 @@ class _appointmentlist extends State<appointmentlist> {
     // Add your logic to handle the reject action for the appointment at the given index
   }
 
-  Future<void> postAppointment(Appointment data, int i, int index) async {
+  Future<void> postAppointment(Appointment data, int i, int index, int Amount) async {
     final url = Uri.parse(baseUrl + postApiAppointment);
     print('url==>890: $url');
     // final url = Uri.parse('http://182.18.157.215/SaloonApp/API/api/Appointment');
@@ -931,6 +1053,10 @@ class _appointmentlist extends State<appointmentlist> {
       "CreatedDate": dateTimeString,
       "UpdatedDate": dateTimeString,
       "UpdatedByUserId": widget.userId,
+      if(i == 18)
+      "price": Amount,
+
+
       // "rating": null,
       // "review": null,
       // "reviewSubmittedDate": null,
@@ -960,6 +1086,8 @@ class _appointmentlist extends State<appointmentlist> {
           print('Request sent successfully');
           if(i == 6){
           rejectAppointment(index);}
+         else if(i == 18){
+            closeAppointment(index);}
           // Success case
           // Handle success scenario here
         } else {
@@ -1088,4 +1216,93 @@ class _appointmentlist extends State<appointmentlist> {
       print('Error: $e');
     }
   }
-}
+
+  void closepopup( Appointment data, int i, int index) {
+    TextEditingController priceController = TextEditingController();
+    GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Enter Price'),
+          content: Form(
+            key: _formKey,
+            child: Container(
+              width: 345.0,
+              height: 40.0,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5.0),
+                border: Border.all(
+                  color: Color(0xFFF44614),
+                  width: 2,
+                ),
+              ),
+              child: Row(
+                children: [
+
+                  Expanded(
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Padding(
+                        padding: EdgeInsets.only(left: 10.0, top: 6.0),
+                        child: TextFormField(
+                          controller: priceController,
+                          keyboardType: TextInputType.number,
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontFamily: 'Calibri',
+                            color: Color(0xFF042DE3),
+                            fontWeight: FontWeight.w300,
+                          ),
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              CommonUtils.showCustomToastMessageLong('Please enter a price', context, 1, 4);
+                              FocusScope.of(context).unfocus();
+
+                            }
+                            int? price = int.tryParse(value);
+                            if (price == null) {
+                              CommonUtils.showCustomToastMessageLong('Please enter a valid integer price', context, 1, 4);
+                              FocusScope.of(context).unfocus();
+                             // return 'Please enter a valid integer price';
+                            }
+                            return null;
+                          },
+                          decoration: InputDecoration(
+                            hintText: ' Price',
+                            hintStyle: TextStyle(
+                              fontSize: 14,
+                              fontFamily: 'Calibri',
+                              color: Color(0xFF042DE3),
+                              fontWeight: FontWeight.w300,
+                            ),
+                            border: InputBorder.none,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                if (_formKey.currentState!.validate()) {
+                  int? price = int.tryParse(priceController.text);
+                  postAppointment(data, 18, index, price!);
+                  Navigator.of(context).pop();
+                }
+              },
+              child: Text('Submit'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+
+  }

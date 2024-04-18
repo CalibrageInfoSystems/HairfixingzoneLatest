@@ -16,6 +16,7 @@ class Appointment {
   final bool isActive;
   bool isAccepted;
   bool isRejected;
+  bool isClosed;
   final String SlotDuration;
 
   Appointment({
@@ -36,6 +37,7 @@ class Appointment {
     required this.isActive,
     this.isAccepted = false,
     this.isRejected =false,
+    this.isClosed =false,
     required this.SlotDuration,
   });
 
