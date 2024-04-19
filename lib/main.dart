@@ -1,15 +1,17 @@
-
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:hairfixingzone/MyProductsProvider.dart';
 import 'package:hairfixingzone/services/local_notifications.dart';
 import 'package:hairfixingzone/splash_screen.dart';
+import 'package:provider/provider.dart';
 // import 'package:hairfixingservice/services/local_notifications.dart';
 // import 'package:hairfixingservice/splash_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart';
 
 import 'notifications_screen.dart';
+
 @pragma('vm:entry-point')
 Future<void> backgroundHandler(RemoteMessage message) async {
   print("This is a message from the background");
@@ -21,16 +23,20 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   FirebaseMessaging.onBackgroundMessage(backgroundHandler);
- // LocalNotificationService.initialize();
+  // LocalNotificationService.initialize();
 
-  runApp(MyApp());
+  runApp(MultiProvider(providers: [
+    ChangeNotifierProvider(create: (context) => MyProductProvider()),
+  ], child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
   late String formattedDate;
- late final int userId;
+  late final int userId;
+
+  MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -46,10 +52,10 @@ class MyApp extends StatelessWidget {
       // Handle the notification when the app is in the foreground
       print("onMessage: $message");
       String? messageBody = message.notification!.body;
-      String? messagelog =message.data["message"];
+      String? messagelog = message.data["message"];
       print("onMessageOpenedApp: $messageBody");
       print("onMessageOpenedApp: $messagelog");
-      LocalNotificationService.showNotificationOnForeground(context,message);
+      LocalNotificationService.showNotificationOnForeground(context, message);
 
       RegExp datePattern = RegExp(r'\b(\d{1,2} \w+ \d{4})\b');
       Match? match = datePattern.firstMatch(messageBody!);
@@ -67,12 +73,11 @@ class MyApp extends StatelessWidget {
       bool isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
 
       if (isLoggedIn) {
-         userId = prefs.getInt('userId')!;
+        userId = prefs.getInt('userId')!;
 
-        if (userId != null) {
-          print('User ID: $userId');
-          LocalNotificationService.initialize(context, navigatorKey,userId,formattedDate);
-        }
+        print('User ID: $userId');
+        LocalNotificationService.initialize(
+            context, navigatorKey, userId, formattedDate);
       }
     });
 
@@ -104,17 +109,16 @@ class MyApp extends StatelessWidget {
         if (userId != null) {
           print('User ID: $userId');
           navigatorKey.currentState?.push(MaterialPageRoute(
-            builder: (context) =>
-                notifications_screen(userId: userId, formattedDate: formattedDate), // Replace with your screen widget
+            builder: (context) => notifications_screen(
+                userId: userId,
+                formattedDate:
+                formattedDate), // Replace with your screen widget
           ));
         } else {
           print('User ID not found in SharedPreferences');
         }
       }
     });
-
-
-
 
     // FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
     //   // Handle the notification when the app is in the foreground

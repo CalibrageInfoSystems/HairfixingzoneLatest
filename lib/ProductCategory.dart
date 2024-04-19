@@ -1,5 +1,5 @@
 class ProductCategory {
-  final int typecdid;
+  final int ? typecdid;
   final String desc;
 
   ProductCategory({required this.typecdid, required this.desc});
