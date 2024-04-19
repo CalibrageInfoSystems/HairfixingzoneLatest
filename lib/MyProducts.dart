@@ -138,7 +138,8 @@ class MyProducts_screenState extends State<MyProducts> {
         child: Consumer<MyProductProvider>(
           builder: (context, provider, child) => Scaffold(
             appBar: _appBar(),
-            body: FutureBuilder(
+            body:
+            FutureBuilder(
               future: apiData,
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
@@ -162,316 +163,108 @@ class MyProducts_screenState extends State<MyProducts> {
                   );
                 } else {
                   List<ProductList>? data = provider.getProProducts;
-                  print('provider: ${provider.getProProducts.isEmpty}');
-                  if (data.isNotEmpty) {
+                  print('provider: ${provider.getProProducts.length}');
+                  print('data: ${data}');
+                  if (data != null && data.isNotEmpty && data.length != 0) { // Check if data is not null and not empty
                     return Stack(
                       children: [
                         SingleChildScrollView(
                           child: Container(
                             padding: const EdgeInsets.all(15.0),
-                            // padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 40.0),
                             child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  GridView.builder(
-                                    gridDelegate:
-                                    const SliverGridDelegateWithFixedCrossAxisCount(
-                                        crossAxisCount: 2,
-                                        crossAxisSpacing: 16.0,
-                                        mainAxisSpacing: 16.0,
-                                        mainAxisExtent: 150,
-                                        childAspectRatio: 8 / 2),
-                                    physics:
-                                    const NeverScrollableScrollPhysics(),
-                                    shrinkWrap: true,
-                                    itemCount: data.length,
-                                    itemBuilder:
-                                        (BuildContext context, int index) {
-                                      ProductList productmodel = data[index];
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                GridView.builder(
+                                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 2, crossAxisSpacing: 16.0, mainAxisSpacing: 16.0, mainAxisExtent: 190, childAspectRatio: 8 / 2),
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  shrinkWrap: true,
+                                  itemCount: data.length,
+                                  itemBuilder: (BuildContext context, int index) {
+                                    ProductList productmodel = data[index];
 
-                                      return GestureDetector(
-                                        onTap: () {
-                                          // fetchProjectList(employeid);
-                                        },
-                                        child: Scrollbar(
-                                          child: Container(
-                                            decoration: BoxDecoration(
-                                              color: Colors.white,
-                                              gradient: const LinearGradient(
-                                                colors: [
-                                                  Color(
-                                                      0xFFFEE7E1), // Start color
-                                                  Color(0xFFD7DEFA),
-                                                ],
-                                                begin: Alignment.centerLeft,
-                                                end: Alignment.centerRight,
-                                              ),
-                                              borderRadius:
-                                              BorderRadius.circular(12.0),
-                                              boxShadow: [
-                                                BoxShadow(
-                                                  color: Colors.grey
-                                                      .withOpacity(0.3),
-                                                  spreadRadius: 2,
-                                                  blurRadius: 5,
-                                                  offset: const Offset(0, 3),
-                                                ),
-                                              ],
-                                            ),
-                                            child: Center(
-                                              child: SingleChildScrollView(
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                                  mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                                  children: [
-                                                    Container(
-                                                      padding: const EdgeInsets
-                                                          .symmetric(
-                                                          horizontal: 20),
-                                                      child: Center(
-                                                        child: Image.network(
-                                                          productmodel
-                                                              .imageName,
-                                                          //    "https://images.moneycontrol.com/static-mcnews/2023/08/Health-benefits-of-almond-oil-770x433.jpg?impolicy=website&width=770&height=431", // Placeholder URL
-                                                          fit: BoxFit.fill,
-                                                          loadingBuilder: (context,
-                                                              child,
-                                                              loadingProgress) {
-                                                            if (loadingProgress ==
-                                                                null) {
-                                                              return child;
-                                                            }
-
-                                                            return const Center(
-                                                                child: CircularProgressIndicator
-                                                                    .adaptive());
-                                                          },
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    const SizedBox(height: 5),
-                                                    Text(
-                                                      productmodel.categoryName,
-                                                      textAlign:
-                                                      TextAlign.center,
-                                                    ),
-                                                    const SizedBox(height: 5),
-                                                    Text(
-                                                      productmodel.name,
-                                                      textAlign:
-                                                      TextAlign.center,
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
+                                    return GestureDetector(
+                                      onTap: () {
+                                        // fetchProjectList(employeid);
+                                      },
+                                      child:
+                                      // Scrollbar(
+                                      //   child:
+                                      Container(
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          gradient: const LinearGradient(
+                                            colors: [
+                                              Color(0xFFFEE7E1), // Start color
+                                              Color(0xFFD7DEFA),
+                                            ],
+                                            begin: Alignment.centerLeft,
+                                            end: Alignment.centerRight,
                                           ),
+                                          borderRadius: BorderRadius.circular(12.0),
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color: Colors.grey.withOpacity(0.3),
+                                              spreadRadius: 2,
+                                              blurRadius: 5,
+                                              offset: const Offset(0, 3),
+                                            ),
+                                          ],
                                         ),
-                                      );
+                                        child: Center(
+                                          child:
+                                          // SingleChildScrollView(
+                                          //   child:
+                                          Column(
+                                            crossAxisAlignment: CrossAxisAlignment.center,
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            children: [
+                                              Container(
+                                                height: 120,
+                                                child: Center(
+                                                  child: Image.network(
+                                                    productmodel.imageName,
+                                                    //    "https://images.moneycontrol.com/static-mcnews/2023/08/Health-benefits-of-almond-oil-770x433.jpg?impolicy=website&width=770&height=431", // Placeholder URL
+                                                    fit: BoxFit.fill,
+                                                    loadingBuilder: (context, child, loadingProgress) {
+                                                      if (loadingProgress == null) {
+                                                        return child;
+                                                      }
 
-                                      // if (isLoading) {
-                                      //   return
-                                      //   GestureDetector(
-                                      //     onTap: () {},
-                                      //     child: Scrollbar(
-                                      //       child: Shimmer.fromColors(
-                                      //         baseColor: Colors.grey.shade300,
-                                      //         highlightColor:
-                                      //             Colors.grey.shade100,
-                                      //         child: Container(
-                                      //           decoration: BoxDecoration(
-                                      //             color: Colors.white,
-                                      //             gradient:
-                                      //                 const LinearGradient(
-                                      //               colors: [
-                                      //                 Color(0xFFFEE7E1),
-                                      //                 Color(0xFFD7DEFA),
-                                      //               ],
-                                      //               begin:
-                                      //                   Alignment.centerLeft,
-                                      //               end:
-                                      //                   Alignment.centerRight,
-                                      //             ),
-                                      //             borderRadius:
-                                      //                 BorderRadius.circular(
-                                      //                     12.0),
-                                      //             boxShadow: [
-                                      //               BoxShadow(
-                                      //                 color: Colors.grey
-                                      //                     .withOpacity(0.3),
-                                      //                 spreadRadius: 2,
-                                      //                 blurRadius: 5,
-                                      //                 offset:
-                                      //                     const Offset(0, 3),
-                                      //               ),
-                                      //             ],
-                                      //           ),
-                                      //           child: SingleChildScrollView(
-                                      //             child: Column(
-                                      //               crossAxisAlignment:
-                                      //                   CrossAxisAlignment
-                                      //                       .start,
-                                      //               mainAxisAlignment:
-                                      //                   MainAxisAlignment
-                                      //                       .start,
-                                      //               children: [
-                                      //                 const SizedBox(
-                                      //                   height: 5,
-                                      //                 ),
-                                      //                 Container(
-                                      //                   padding:
-                                      //                       const EdgeInsets
-                                      //                           .only(
-                                      //                           left: 20,
-                                      //                           right: 20),
-                                      //                   child: Shimmer
-                                      //                       .fromColors(
-                                      //                     baseColor: Colors
-                                      //                         .grey.shade300,
-                                      //                     highlightColor:
-                                      //                         Colors.grey
-                                      //                             .shade100,
-                                      //                     child: Text(
-                                      //                         productmodel
-                                      //                             .categoryName),
-                                      //                   ),
-                                      //                 ),
-                                      //                 const SizedBox(
-                                      //                   height: 5,
-                                      //                 ),
-                                      //                 Container(
-                                      //                   padding:
-                                      //                       const EdgeInsets
-                                      //                           .only(
-                                      //                           left: 20,
-                                      //                           right: 20),
-                                      //                   child: Shimmer
-                                      //                       .fromColors(
-                                      //                     baseColor: Colors
-                                      //                         .grey.shade300,
-                                      //                     highlightColor:
-                                      //                         Colors.grey
-                                      //                             .shade100,
-                                      //                     child: Text(
-                                      //                         productmodel
-                                      //                             .name),
-                                      //                   ),
-                                      //                 ),
-                                      //               ],
-                                      //             ),
-                                      //           ),
-                                      //         ),
-                                      //       ),
-                                      //     ),
-                                      //   );
-                                      // } else {
-                                      //   ProductList productmodel =
-                                      //       data[index];
-                                      //   return GestureDetector(
-                                      //     onTap: () {
-                                      //       // fetchProjectList(employeid);
-                                      //     },
-                                      //     child: Scrollbar(
-                                      //       child: Container(
-                                      //         decoration: BoxDecoration(
-                                      //           color: Colors.white,
-                                      //           gradient:
-                                      //               const LinearGradient(
-                                      //             colors: [
-                                      //               Color(
-                                      //                   0xFFFEE7E1), // Start color
-                                      //               Color(0xFFD7DEFA),
-                                      //             ],
-                                      //             begin: Alignment.centerLeft,
-                                      //             end: Alignment.centerRight,
-                                      //           ),
-                                      //           borderRadius:
-                                      //               BorderRadius.circular(
-                                      //                   12.0),
-                                      //           boxShadow: [
-                                      //             BoxShadow(
-                                      //               color: Colors.grey
-                                      //                   .withOpacity(0.3),
-                                      //               spreadRadius: 2,
-                                      //               blurRadius: 5,
-                                      //               offset:
-                                      //                   const Offset(0, 3),
-                                      //             ),
-                                      //           ],
-                                      //         ),
-                                      //         child: Center(
-                                      //           child: SingleChildScrollView(
-                                      //             child: Column(
-                                      //               crossAxisAlignment:
-                                      //                   CrossAxisAlignment
-                                      //                       .center,
-                                      //               mainAxisAlignment:
-                                      //                   MainAxisAlignment
-                                      //                       .center,
-                                      //               children: [
-                                      //                 Container(
-                                      //                   padding:
-                                      //                       const EdgeInsets
-                                      //                           .symmetric(
-                                      //                           horizontal:
-                                      //                               20),
-                                      //                   child: Center(
-                                      //                     child:
-                                      //                         Image.network(
-                                      //                       productmodel
-                                      //                           .imageName,
-                                      //                       //    "https://images.moneycontrol.com/static-mcnews/2023/08/Health-benefits-of-almond-oil-770x433.jpg?impolicy=website&width=770&height=431", // Placeholder URL
-                                      //                       fit: BoxFit.fill,
-                                      //                       loadingBuilder:
-                                      //                           (context,
-                                      //                               child,
-                                      //                               loadingProgress) {
-                                      //                         if (loadingProgress ==
-                                      //                             null) {
-                                      //                           return child;
-                                      //                         }
+                                                      return const Center(child: CircularProgressIndicator.adaptive());
+                                                    },
+                                                  ),
+                                                ),
+                                              ),
+                                              SizedBox(height: 5),
+                                              Text(
+                                                productmodel.categoryName,
+                                                textAlign: TextAlign.center,
+                                              ),
+                                              const SizedBox(height: 5),
+                                              Text(
+                                                productmodel.name,
+                                                textAlign: TextAlign.center,
+                                              ),
+                                            ],
+                                          ),
+                                          //  ),
+                                        ),
+                                      ),
+                                      //   ),
+                                    );
 
-                                      //                         return const Center(
-                                      //                             child: CircularProgressIndicator
-                                      //                                 .adaptive());
-                                      //                       },
-                                      //                     ),
-                                      //                   ),
-                                      //                 ),
-                                      //                 const SizedBox(
-                                      //                     height: 5),
-                                      //                 Text(
-                                      //                   productmodel
-                                      //                       .categoryName,
-                                      //                   textAlign:
-                                      //                       TextAlign.center,
-                                      //                 ),
-                                      //                 const SizedBox(
-                                      //                     height: 5),
-                                      //                 Text(
-                                      //                   productmodel.name,
-                                      //                   textAlign:
-                                      //                       TextAlign.center,
-                                      //                 ),
-                                      //               ],
-                                      //             ),
-                                      //           ),
-                                      //         ),
-                                      //       ),
-                                      //     ),
-                                      //   );
-                                      // }
-                                    },
-                                  )
-                                ]),
+
+                                  },
+                                )
+                              ],
+                            ),
                           ),
                         ),
                       ],
                     );
                   } else {
-                    return const Expanded(
+                    return Container(
                       child: SizedBox(
                         width: double.infinity,
                         child: Column(
@@ -495,361 +288,10 @@ class MyProducts_screenState extends State<MyProducts> {
                       ),
                     );
                   }
-                  // if (snapshot.hasData) {
-                  //   // List<ListResult> data = snapshot.data!;
-                  //   List<ProductList> data = provider.proProducts;
-                  //   if (provider.proProducts.isNotEmpty) {
-                  //     return Stack(
-                  //       children: [
-                  //         SingleChildScrollView(
-                  //           child: Container(
-                  //             padding: const EdgeInsets.all(15.0),
-                  //             // padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 40.0),
-                  //             child: Column(
-                  //                 crossAxisAlignment: CrossAxisAlignment.start,
-                  //                 children: [
-                  //                   GridView.builder(
-                  //                     gridDelegate:
-                  //                         const SliverGridDelegateWithFixedCrossAxisCount(
-                  //                             crossAxisCount: 2,
-                  //                             crossAxisSpacing: 16.0,
-                  //                             mainAxisSpacing: 16.0,
-                  //                             mainAxisExtent: 150,
-                  //                             childAspectRatio: 8 / 2),
-                  //                     physics:
-                  //                         const NeverScrollableScrollPhysics(),
-                  //                     shrinkWrap: true,
-                  //                     itemCount: data.length,
-                  //                     itemBuilder:
-                  //                         (BuildContext context, int index) {
-                  //                       ProductList productmodel = data[index];
-
-                  //                       return GestureDetector(
-                  //                         onTap: () {
-                  //                           // fetchProjectList(employeid);
-                  //                         },
-                  //                         child: Scrollbar(
-                  //                           child: Container(
-                  //                             decoration: BoxDecoration(
-                  //                               color: Colors.white,
-                  //                               gradient: const LinearGradient(
-                  //                                 colors: [
-                  //                                   Color(
-                  //                                       0xFFFEE7E1), // Start color
-                  //                                   Color(0xFFD7DEFA),
-                  //                                 ],
-                  //                                 begin: Alignment.centerLeft,
-                  //                                 end: Alignment.centerRight,
-                  //                               ),
-                  //                               borderRadius:
-                  //                                   BorderRadius.circular(12.0),
-                  //                               boxShadow: [
-                  //                                 BoxShadow(
-                  //                                   color: Colors.grey
-                  //                                       .withOpacity(0.3),
-                  //                                   spreadRadius: 2,
-                  //                                   blurRadius: 5,
-                  //                                   offset: const Offset(0, 3),
-                  //                                 ),
-                  //                               ],
-                  //                             ),
-                  //                             child: Center(
-                  //                               child: SingleChildScrollView(
-                  //                                 child: Column(
-                  //                                   crossAxisAlignment:
-                  //                                       CrossAxisAlignment
-                  //                                           .center,
-                  //                                   mainAxisAlignment:
-                  //                                       MainAxisAlignment
-                  //                                           .center,
-                  //                                   children: [
-                  //                                     Container(
-                  //                                       padding:
-                  //                                           const EdgeInsets
-                  //                                               .symmetric(
-                  //                                               horizontal: 20),
-                  //                                       child: Center(
-                  //                                         child: Image.network(
-                  //                                           productmodel
-                  //                                               .imageName,
-                  //                                           //    "https://images.moneycontrol.com/static-mcnews/2023/08/Health-benefits-of-almond-oil-770x433.jpg?impolicy=website&width=770&height=431", // Placeholder URL
-                  //                                           fit: BoxFit.fill,
-                  //                                           loadingBuilder:
-                  //                                               (context, child,
-                  //                                                   loadingProgress) {
-                  //                                             if (loadingProgress ==
-                  //                                                 null) {
-                  //                                               return child;
-                  //                                             }
-
-                  //                                             return const Center(
-                  //                                                 child: CircularProgressIndicator
-                  //                                                     .adaptive());
-                  //                                           },
-                  //                                         ),
-                  //                                       ),
-                  //                                     ),
-                  //                                     const SizedBox(height: 5),
-                  //                                     Text(
-                  //                                       productmodel
-                  //                                           .categoryName,
-                  //                                       textAlign:
-                  //                                           TextAlign.center,
-                  //                                     ),
-                  //                                     const SizedBox(height: 5),
-                  //                                     Text(
-                  //                                       productmodel.name,
-                  //                                       textAlign:
-                  //                                           TextAlign.center,
-                  //                                     ),
-                  //                                   ],
-                  //                                 ),
-                  //                               ),
-                  //                             ),
-                  //                           ),
-                  //                         ),
-                  //                       );
-
-                  //                       // if (isLoading) {
-                  //                       //   return
-                  //                       //   GestureDetector(
-                  //                       //     onTap: () {},
-                  //                       //     child: Scrollbar(
-                  //                       //       child: Shimmer.fromColors(
-                  //                       //         baseColor: Colors.grey.shade300,
-                  //                       //         highlightColor:
-                  //                       //             Colors.grey.shade100,
-                  //                       //         child: Container(
-                  //                       //           decoration: BoxDecoration(
-                  //                       //             color: Colors.white,
-                  //                       //             gradient:
-                  //                       //                 const LinearGradient(
-                  //                       //               colors: [
-                  //                       //                 Color(0xFFFEE7E1),
-                  //                       //                 Color(0xFFD7DEFA),
-                  //                       //               ],
-                  //                       //               begin:
-                  //                       //                   Alignment.centerLeft,
-                  //                       //               end:
-                  //                       //                   Alignment.centerRight,
-                  //                       //             ),
-                  //                       //             borderRadius:
-                  //                       //                 BorderRadius.circular(
-                  //                       //                     12.0),
-                  //                       //             boxShadow: [
-                  //                       //               BoxShadow(
-                  //                       //                 color: Colors.grey
-                  //                       //                     .withOpacity(0.3),
-                  //                       //                 spreadRadius: 2,
-                  //                       //                 blurRadius: 5,
-                  //                       //                 offset:
-                  //                       //                     const Offset(0, 3),
-                  //                       //               ),
-                  //                       //             ],
-                  //                       //           ),
-                  //                       //           child: SingleChildScrollView(
-                  //                       //             child: Column(
-                  //                       //               crossAxisAlignment:
-                  //                       //                   CrossAxisAlignment
-                  //                       //                       .start,
-                  //                       //               mainAxisAlignment:
-                  //                       //                   MainAxisAlignment
-                  //                       //                       .start,
-                  //                       //               children: [
-                  //                       //                 const SizedBox(
-                  //                       //                   height: 5,
-                  //                       //                 ),
-                  //                       //                 Container(
-                  //                       //                   padding:
-                  //                       //                       const EdgeInsets
-                  //                       //                           .only(
-                  //                       //                           left: 20,
-                  //                       //                           right: 20),
-                  //                       //                   child: Shimmer
-                  //                       //                       .fromColors(
-                  //                       //                     baseColor: Colors
-                  //                       //                         .grey.shade300,
-                  //                       //                     highlightColor:
-                  //                       //                         Colors.grey
-                  //                       //                             .shade100,
-                  //                       //                     child: Text(
-                  //                       //                         productmodel
-                  //                       //                             .categoryName),
-                  //                       //                   ),
-                  //                       //                 ),
-                  //                       //                 const SizedBox(
-                  //                       //                   height: 5,
-                  //                       //                 ),
-                  //                       //                 Container(
-                  //                       //                   padding:
-                  //                       //                       const EdgeInsets
-                  //                       //                           .only(
-                  //                       //                           left: 20,
-                  //                       //                           right: 20),
-                  //                       //                   child: Shimmer
-                  //                       //                       .fromColors(
-                  //                       //                     baseColor: Colors
-                  //                       //                         .grey.shade300,
-                  //                       //                     highlightColor:
-                  //                       //                         Colors.grey
-                  //                       //                             .shade100,
-                  //                       //                     child: Text(
-                  //                       //                         productmodel
-                  //                       //                             .name),
-                  //                       //                   ),
-                  //                       //                 ),
-                  //                       //               ],
-                  //                       //             ),
-                  //                       //           ),
-                  //                       //         ),
-                  //                       //       ),
-                  //                       //     ),
-                  //                       //   );
-                  //                       // } else {
-                  //                       //   ProductList productmodel =
-                  //                       //       data[index];
-                  //                       //   return GestureDetector(
-                  //                       //     onTap: () {
-                  //                       //       // fetchProjectList(employeid);
-                  //                       //     },
-                  //                       //     child: Scrollbar(
-                  //                       //       child: Container(
-                  //                       //         decoration: BoxDecoration(
-                  //                       //           color: Colors.white,
-                  //                       //           gradient:
-                  //                       //               const LinearGradient(
-                  //                       //             colors: [
-                  //                       //               Color(
-                  //                       //                   0xFFFEE7E1), // Start color
-                  //                       //               Color(0xFFD7DEFA),
-                  //                       //             ],
-                  //                       //             begin: Alignment.centerLeft,
-                  //                       //             end: Alignment.centerRight,
-                  //                       //           ),
-                  //                       //           borderRadius:
-                  //                       //               BorderRadius.circular(
-                  //                       //                   12.0),
-                  //                       //           boxShadow: [
-                  //                       //             BoxShadow(
-                  //                       //               color: Colors.grey
-                  //                       //                   .withOpacity(0.3),
-                  //                       //               spreadRadius: 2,
-                  //                       //               blurRadius: 5,
-                  //                       //               offset:
-                  //                       //                   const Offset(0, 3),
-                  //                       //             ),
-                  //                       //           ],
-                  //                       //         ),
-                  //                       //         child: Center(
-                  //                       //           child: SingleChildScrollView(
-                  //                       //             child: Column(
-                  //                       //               crossAxisAlignment:
-                  //                       //                   CrossAxisAlignment
-                  //                       //                       .center,
-                  //                       //               mainAxisAlignment:
-                  //                       //                   MainAxisAlignment
-                  //                       //                       .center,
-                  //                       //               children: [
-                  //                       //                 Container(
-                  //                       //                   padding:
-                  //                       //                       const EdgeInsets
-                  //                       //                           .symmetric(
-                  //                       //                           horizontal:
-                  //                       //                               20),
-                  //                       //                   child: Center(
-                  //                       //                     child:
-                  //                       //                         Image.network(
-                  //                       //                       productmodel
-                  //                       //                           .imageName,
-                  //                       //                       //    "https://images.moneycontrol.com/static-mcnews/2023/08/Health-benefits-of-almond-oil-770x433.jpg?impolicy=website&width=770&height=431", // Placeholder URL
-                  //                       //                       fit: BoxFit.fill,
-                  //                       //                       loadingBuilder:
-                  //                       //                           (context,
-                  //                       //                               child,
-                  //                       //                               loadingProgress) {
-                  //                       //                         if (loadingProgress ==
-                  //                       //                             null) {
-                  //                       //                           return child;
-                  //                       //                         }
-
-                  //                       //                         return const Center(
-                  //                       //                             child: CircularProgressIndicator
-                  //                       //                                 .adaptive());
-                  //                       //                       },
-                  //                       //                     ),
-                  //                       //                   ),
-                  //                       //                 ),
-                  //                       //                 const SizedBox(
-                  //                       //                     height: 5),
-                  //                       //                 Text(
-                  //                       //                   productmodel
-                  //                       //                       .categoryName,
-                  //                       //                   textAlign:
-                  //                       //                       TextAlign.center,
-                  //                       //                 ),
-                  //                       //                 const SizedBox(
-                  //                       //                     height: 5),
-                  //                       //                 Text(
-                  //                       //                   productmodel.name,
-                  //                       //                   textAlign:
-                  //                       //                       TextAlign.center,
-                  //                       //                 ),
-                  //                       //               ],
-                  //                       //             ),
-                  //                       //           ),
-                  //                       //         ),
-                  //                       //       ),
-                  //                       //     ),
-                  //                       //   );
-                  //                       // }
-                  //                     },
-                  //                   )
-                  //                 ]),
-                  //           ),
-                  //         ),
-                  //       ],
-                  //     );
-                  //   } else {
-                  //     return const Expanded(
-                  //       child: SizedBox(
-                  //         width: double.infinity,
-                  //         child: Column(
-                  //           mainAxisAlignment: MainAxisAlignment.center,
-                  //           crossAxisAlignment: CrossAxisAlignment.center,
-                  //           children: [
-                  //             Padding(
-                  //               padding: EdgeInsets.all(5.0),
-                  //               child: Text(
-                  //                 'No collection found!',
-                  //                 style: TextStyle(
-                  //                   fontSize: 12.0,
-                  //                   color: Colors.black,
-                  //                   fontWeight: FontWeight.bold,
-                  //                   fontFamily: "Roboto",
-                  //                 ),
-                  //               ),
-                  //             ),
-                  //           ],
-                  //         ),
-                  //       ),
-                  //     );
-                  //   }
-                  // } else {
-                  //   return const Center(
-                  //     child: Text(
-                  //       'No data available',
-                  //       style: TextStyle(
-                  //         fontSize: 12.0,
-                  //         color: Colors.black,
-                  //         fontWeight: FontWeight.bold,
-                  //         fontFamily: "Roboto",
-                  //       ),
-                  //     ),
-                  //   );
-                  // }
                 }
               },
             ),
+
             floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
             floatingActionButton: FloatingActionButton(
               // isExtended: true,
@@ -991,6 +433,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
     myProductProvider = Provider.of<MyProductProvider>(context);
   }
 
+
   Future<List<ProductList>> fetchproducts(
       {int? id, int? categoryTypeId, int? genderTypeId}) async {
     const apiurl = 'http://182.18.157.215/SaloonApp/API/GetProductById';
@@ -1018,8 +461,9 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
           list.map((item) => ProductList.fromJson(item)).toList();
           return result;
         } else {
+          // If listResult is null, return an empty list
           print('listResult is null');
-          throw Exception('else: listResult is null');
+          return [];
         }
         // myProductProvider.proProducts = productlist;
       } else {
