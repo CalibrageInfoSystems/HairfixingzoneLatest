@@ -13,7 +13,7 @@ class Consultation {
   final int createdByUser;
   final String createdDate;
   final int updatedByUser;
-  final String updatedDate;
+  final String? updatedDate;
 
   Consultation({
     required this.consultationId,
@@ -46,8 +46,8 @@ class Consultation {
       remarks: json['remarks'],
       createdByUser: json['createdByUser'],
       createdDate: json['createdDate'],
-      updatedByUser: json['updatedByUser'],
-      updatedDate: json['updatedDate'],
+      updatedByUser: json['updatedByUser'] ?? 0,
+      updatedDate: json['updatedDate'] ?? '',
     );
   }
 }
