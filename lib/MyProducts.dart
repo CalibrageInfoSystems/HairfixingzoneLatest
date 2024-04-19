@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:hairfixingzone/Product_Model.dart';
+import 'package:hairfixingzone/slotbookingscreen.dart';
 
 // import 'package:hrms/api%20config.dart';
 // import 'package:hrms/home_screen.dart';
@@ -15,8 +16,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:shimmer/shimmer.dart';
 import 'Commonutils.dart';
+import 'CustomRadioButton.dart';
 import 'LatestAppointment.dart';
 import 'MyAppointment_Model.dart';
+import 'ProductCategory.dart';
 import 'api_config.dart';
 
 // import 'Model Class/EmployeeLeave.dart';
@@ -30,6 +33,7 @@ class MyProducts extends StatefulWidget {
 class MyProducts_screenState extends State<MyProducts> {
   bool isLoading = true;
   List<Product_Model> products_List = [];
+
   @override
   void initState() {
     SystemChrome.setPreferredOrientations([
@@ -49,7 +53,9 @@ class MyProducts_screenState extends State<MyProducts> {
 
   @override
   Widget build(BuildContext context) {
-    final textscale = MediaQuery.of(context).textScaleFactor;
+    final textscale = MediaQuery
+        .of(context)
+        .textScaleFactor;
     return WillPopScope(
         onWillPop: () async {
           // Navigator.of(context).pushReplacement(
@@ -99,7 +105,11 @@ class MyProducts_screenState extends State<MyProducts> {
 
                     GridView.builder(
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2, crossAxisSpacing: 16.0, mainAxisSpacing: 16.0, mainAxisExtent: 150, childAspectRatio: 8 / 2),
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 16.0,
+                          mainAxisSpacing: 16.0,
+                          mainAxisExtent: 150,
+                          childAspectRatio: 8 / 2),
                       physics: NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
                       itemCount: products_List.length,
@@ -267,7 +277,17 @@ class MyProducts_screenState extends State<MyProducts> {
             ),
             backgroundColor: Color(0xFFFB4110),
             onPressed: () {
-              ShowBottomsheet();
+              showModalBottomSheet(
+                isScrollControlled: true,
+                context: context,
+                builder: (context) => Padding(
+                  padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).viewInsets.bottom,
+                  ),
+                  child: const FilterBottomSheet(),
+                ),
+              );
+
             },
           ),
         ));
@@ -356,28 +376,222 @@ class MyProducts_screenState extends State<MyProducts> {
     }
   }
 
-  void ShowBottomsheet() {
-    showModalBottomSheet(
-      isScrollControlled: true,
-      context: context,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      builder: (BuildContext context) {
-        return Padding(
-          padding: EdgeInsets.only(
-            bottom: MediaQuery.of(context).viewInsets.bottom,
-          ),
-          child: Container(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [],
+// void ShowBottomsheet() {
+//   showModalBottomSheet(
+//     isScrollControlled: true,
+//     context: context,
+//     shape: RoundedRectangleBorder(
+//       borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+//     ),
+//     builder: (BuildContext context) {
+//       return Padding(
+//         padding: EdgeInsets.only(
+//           bottom: MediaQuery.of(context).viewInsets.bottom,
+//         ),
+//         child: Container(
+//           padding: const EdgeInsets.all(20),
+//           child: Column(
+//             mainAxisSize: MainAxisSize.min,
+//             crossAxisAlignment: CrossAxisAlignment.start,
+//             children: [],
+//           ),
+//         ),
+//       );
+//     },
+//   );
+// }
+}
+class FilterBottomSheet extends StatefulWidget {
+  const FilterBottomSheet({Key? key}) : super(key: key);
+
+  @override
+  State<FilterBottomSheet> createState() => _FilterBottomSheetState();
+}
+
+class _FilterBottomSheetState extends State<FilterBottomSheet> {
+  List<RadioButtonOption> options = [];
+  int? gender;
+  int? categoryid;
+  bool isGenderSelected = false;
+  List<ProductCategory> products = [];
+  @override
+  void initState() {
+    // Initialize state
+    super.initState();
+    fetchRadioButtonOptions();
+    fetchProductsCategory();
+    fetchProductsCategory();
+  }
+
+  @override
+  void dispose() {
+    // Dispose resources
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                const Text(
+                  'Filter By',
+                ),
+                GestureDetector(
+                  onTap: () {
+                    // Clear filters
+                    // provider.clearFilter(); // You need to provide the provider instance here if you are using a state management solution
+                  },
+                  child: const Text(
+                    'Clear all filters',
+                  ),
+                ),
+              ],
             ),
-          ),
-        );
-      },
+            const SizedBox(height: 20),
+
+            Padding(
+              padding: EdgeInsets.only(left: 5, top: 10.0, right: 5),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(top: 10.0),
+                    child: Row(
+                      children: options.map((option) {
+                        return Row(
+                          children: [
+                            CustomRadioButton(
+                              selected: gender == option.typeCdId,
+                              onTap: () {
+                                setState(() {
+                                  gender = option.typeCdId;
+                                  print('selectedGenderid:$gender');
+                                  isGenderSelected = true;
+                                });
+                                print(option.typeCdId);
+                                print(option.desc);
+                              },
+                            ),
+                            SizedBox(width: 5),
+                            Text(
+                              option.desc,
+                              style: TextStyle(
+                                fontFamily: 'Calibri',
+                                fontSize: 14,
+                                color: Color(0xFFFB4110),
+                              ),
+                            ),
+                            SizedBox(width: 26),
+                          ],
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+       // Added SizedBox for spacing
+            Row(
+              children: [
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    style: ElevatedButton.styleFrom(
+                      textStyle: const TextStyle(
+                        color: Colors.red,
+                      ),
+                      side: const BorderSide(
+                        color: Colors.red,
+                      ),
+                      backgroundColor: Colors.white,
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(10),
+                        ),
+                      ),
+                    ),
+                    child: const Text(
+                      'Cancel',
+                      // style: CommonStyles.txSty_14r_fb,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 20),
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      // Apply filters
+                      // getAppliedFilterData(context);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      textStyle: const TextStyle(
+                        color: Colors.white,
+                      ),
+                      // backgroundColor: CommonStyles.orangeColor,
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(10),
+                        ),
+                      ),
+                    ),
+                    child: const Text(
+                      'Apply',
+                      // style: CommonStyles.txSty_14w_fb,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
     );
   }
+
+  Future<void> fetchRadioButtonOptions() async {
+    final url = Uri.parse(baseUrl + getgender);
+    print('url==>946: $url');
+
+    try {
+      final response = await http.get(url);
+      if (response.statusCode == 200) {
+        final dynamic responseData = jsonDecode(response.body);
+        if (responseData != null && responseData['listResult'] is List<dynamic>) {
+          final List<dynamic> optionsData = responseData['listResult'];
+          setState(() {
+            options = optionsData.map((data) => RadioButtonOption.fromJson(data)).toList();
+          });
+        } else {
+          throw Exception('Invalid response format');
+        }
+      } else {
+        throw Exception('Failed to fetch radio button options');
+      }
+    } catch (e) {
+      throw Exception('Error Radio: $e');
+    }
+  }
+
+  Future<List<ProductCategory>> fetchProductsCategory() async {
+    final response = await http.get(Uri.parse('http://182.18.157.215/SaloonApp/API/GetProduct/6'));
+    if (response.statusCode == 200) {
+      final List<dynamic> responseData = json.decode(response.body)['listResult'];
+      return responseData.map((json) => ProductCategory.fromJson(json)).toList();
+    } else {
+      throw Exception('Failed to load products');
+    }
+  }
+
 }
