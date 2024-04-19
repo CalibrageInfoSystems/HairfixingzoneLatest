@@ -501,7 +501,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     if (isLoading)
                       Text('Please Wait Loading Slow Internet Connection !')
-                    else if (brancheslist.isEmpty && imageList.isEmpty)
+                    else if (brancheslist.isEmpty && imageList.isEmpty )
                       Container(
                         padding: EdgeInsets.all(15.0),
                         child: Center(
@@ -518,6 +518,23 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                       ),
+     if (brancheslist == null || brancheslist.isEmpty)
+    Container(
+    padding: EdgeInsets.all(15.0),
+    child: Center(
+    child: Column(
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: [
+      SizedBox(height: 100),
+      Center(
+        child: Text('No  found.'),
+      ),
+
+
+    ],
+    ),
+    ),
+    ),
                     Expanded(
                         flex: 3,
                         child:

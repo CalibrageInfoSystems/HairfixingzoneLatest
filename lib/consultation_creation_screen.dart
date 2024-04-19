@@ -468,7 +468,9 @@ class _ConsulationCreationScreenState extends State<ConsulationCreationScreen> {
                 child: SizedBox(
                   child: Center(
                     child: GestureDetector(
-                      onTap: () => {validatedata()},
+                      onTap: () => {
+                        validatedata()
+                      },
                       child: Container(
                         width: screenWidth * 0.9,
                         height: 40.0,
@@ -481,7 +483,7 @@ class _ConsulationCreationScreenState extends State<ConsulationCreationScreen> {
                         ),
                         child: const Center(
                           child: Text(
-                            'Add Costumer',
+                            'Add Consultation',
                             style: TextStyle(
                               fontFamily: 'Calibri',
                               fontSize: 14,
@@ -507,7 +509,7 @@ class _ConsulationCreationScreenState extends State<ConsulationCreationScreen> {
       elevation: 0,
       backgroundColor: const Color(0xFFf15f22),
       title: const Text(
-        'Customer Deatils',
+        'Consultation ',
         style: TextStyle(color: Colors.white, fontSize: 16.0),
       ),
       centerTitle: true,
@@ -545,11 +547,11 @@ class _ConsulationCreationScreenState extends State<ConsulationCreationScreen> {
       }
     }
 
-    if (isValid && email.text.isEmpty) {
-      CommonUtils.showCustomToastMessageLong('Please Enter Customer Email', context, 1, 4);
-      isValid = false;
-      hasValidationFailed = true;
-    }
+    // if (isValid && email.text.isEmpty) {
+    //   CommonUtils.showCustomToastMessageLong('Please Enter Customer Email', context, 1, 4);
+    //   isValid = false;
+    //   hasValidationFailed = true;
+    // }
     if (isValid && !validateEmailFormat(email.text)) {
       CommonUtils.showCustomToastMessageLong('Please Enter Customer Email', context, 1, 4);
       isValid = false;
@@ -557,6 +559,11 @@ class _ConsulationCreationScreenState extends State<ConsulationCreationScreen> {
     }
     if (isValid && selectedTypeCdId == -1) {
       CommonUtils.showCustomToastMessageLong('Please Select Branch', context, 1, 4);
+      isValid = false;
+      hasValidationFailed = true;
+    }
+    if (isValid && remarks.text.isEmpty) {
+      CommonUtils.showCustomToastMessageLong('Please Enter Customer Email', context, 1, 4);
       isValid = false;
       hasValidationFailed = true;
     }

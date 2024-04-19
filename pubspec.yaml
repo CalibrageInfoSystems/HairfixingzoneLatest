@@ -103,6 +103,7 @@ flutter:
     - assets/CUSTOMER_ICON.png
     - assets/AGENT.png
     - assets/gender.png
+    - assets/user.svg
 
 
 

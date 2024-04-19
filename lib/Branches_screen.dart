@@ -11,6 +11,7 @@ import 'UserSelectionScreen.dart';
 import 'ViewConsultations.dart';
 import 'appointmentlist.dart';
 import 'api_config.dart';
+import 'consultation_creation_screen.dart';
 // import 'consultation_creation_screen.dart';
 
 class Branches_screen extends StatefulWidget {
@@ -266,16 +267,16 @@ class _BranchesscreenState extends State<Branches_screen> {
                                   ),
                                   child: GestureDetector(
                                     onTap: () {
-                                      Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                            builder: (context) => appointmentlist(
-                                                userId: widget.userId,
-                                                branchid: branch.id,
-                                                branchname: branch.name,
-                                                filepath: branch.imageName != null ? imagesflierepo + branch.imageName! : 'assets/top_image.png',
-                                                phonenumber: branch.mobileNumber,
-                                                branchaddress: branch.address)),
-                                      );
+                                      // Navigator.of(context).push(
+                                      //   MaterialPageRoute(
+                                      //       builder: (context) => appointmentlist(
+                                      //           userId: widget.userId,
+                                      //           branchid: branch.id,
+                                      //           branchname: branch.name,
+                                      //           filepath: branch.imageName != null ? imagesflierepo + branch.imageName! : 'assets/top_image.png',
+                                      //           phonenumber: branch.mobileNumber,
+                                      //           branchaddress: branch.address)),
+                                      // );
                                     },
                                     child: Card(
                                       shadowColor: Colors.transparent,
@@ -303,7 +304,7 @@ class _BranchesscreenState extends State<Branches_screen> {
                                                 crossAxisAlignment: CrossAxisAlignment.start,
                                                 children: [
                                                   Padding(
-                                                    padding: EdgeInsets.only(left: 15.0),
+                                                    padding: EdgeInsets.only(left: 15.0,top:10.0),
                                                     child: Container(
                                                       width: 110,
                                                       height: 65,
@@ -497,7 +498,7 @@ class _BranchesscreenState extends State<Branches_screen> {
                                                               Navigator.of(context).push(
                                                                 MaterialPageRoute(
                                                                   builder: (context) => ViewConsultations(
-                                                                    // userId: widget.userId,
+                                                                    branchid: widget.userId,
                                                                     // branchid: branch.id,
                                                                   ),
                                                                 ),
@@ -717,10 +718,10 @@ class _BranchesscreenState extends State<Branches_screen> {
                     child: Center(
                       child: GestureDetector(
                         onTap: () {
-                          // Navigator.push(
-                          //   context,
-                          //   MaterialPageRoute(builder: (context) => ConsulationCreationScreen()),
-                          // );
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => ConsulationCreationScreen(userid: widget.userId)),
+                          );
                         },
                         child: Container(
                           width: desiredWidth * 0.9,
