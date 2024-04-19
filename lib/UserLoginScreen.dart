@@ -83,15 +83,17 @@ class _UserScreenState extends State<UserLoginScreen> {
             );
           } else {
             // Show toast for invalid user
+            FocusScope.of(context).unfocus();
             CommonUtils.showCustomToastMessageLong("Invalid user", context, 1, 4);
            // showToast('Invalid user');
           }
         }
         else{
-       //   FocusScope.of(context).unfocus();
+       FocusScope.of(context).unfocus();
           CommonUtils.showCustomToastMessageLong('Invalid user ', context, 1, 4);
         }
       } else {
+        FocusScope.of(context).unfocus();
         CommonUtils.showCustomToastMessageLong("${data["statusMessage"]}", context, 1, 4);
         // Handle the case where the user is not valid
         List<dynamic> validationErrors = data['validationErrors'];

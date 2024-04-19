@@ -71,29 +71,35 @@ class ViewConsultations_screenState extends State<ViewConsultations> {
           body: Stack(
             children: [
               // Background Image
-              ListView.builder(
+              Consultations_List.isEmpty
+                  ? Center(
+                child: Text('No data found'),
+              )
+                  : ListView.builder(
                 shrinkWrap: true,
                 itemCount: Consultations_List.length,
                 itemBuilder: (context, index) {
                   Consultation branch = Consultations_List[index];
-
                   return GestureDetector(
                     onTap: () {
                       print('CardView clicked!');
                     },
                     child: ClipRRect(
                       borderRadius: BorderRadius.only(
-                        topRight: Radius.circular(42.5),
-                        bottomLeft: Radius.circular(42.5),
+                        topRight: Radius.circular(15.0),
+                        bottomLeft: Radius.circular(15.0),
+                        // topRight: Radius.circular(42.5),
+                        // bottomLeft: Radius.circular(42.5),
                       ),
                       child: Card(
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.only(
-                          topRight: Radius.circular(30.0),
-                          bottomLeft: Radius.circular(30.0),
-                        )),
-                        child: Container(
-                          padding: EdgeInsets.only(bottom: 10, top: 5, left: 5, right: 10),
+                              topRight: Radius.circular(15.0),
+                              bottomLeft: Radius.circular(15.0),
+                            )),
+                        child:
+                        Container(
+                          padding: EdgeInsets.only(bottom: 10, top: 5, left: 0, right: 0),
                           decoration: BoxDecoration(
                               gradient: LinearGradient(
                                 colors: [
@@ -104,26 +110,25 @@ class ViewConsultations_screenState extends State<ViewConsultations> {
                                 end: Alignment.centerRight,
                               ),
                               borderRadius: BorderRadius.only(
-                                topRight: Radius.circular(30.0),
-                                bottomLeft: Radius.circular(30.0),
+                                topRight: Radius.circular(15.0),
+                                bottomLeft: Radius.circular(15.0),
                               )),
                           child: Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Expanded(
                                 child: ListTile(
-                                  subtitle: Row(
-                                    //crossAxisAlignment: CrossAxisAlignment.start,
+                                  subtitle: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       // Text(
                                       //   'Branch Name',
                                       //   style: TextStyle(color: Color(0xFFF44614), fontSize: 16, fontWeight: FontWeight.bold, fontFamily: 'Calibri'),
                                       // ),
                                       Container(
-                                        width: MediaQuery.of(context).size.width / 2.5,
+                                        width: MediaQuery.of(context).size.width / 2,
                                         //   height: MediaQuery.of(context).size.height,
                                         child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
                                             Row(
                                               children: [
@@ -148,44 +153,61 @@ class ViewConsultations_screenState extends State<ViewConsultations> {
                                                 )
                                               ],
                                             ),
-                                            Padding(
-                                              padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                                              child: Text(
-                                                '${branch.consultationName}',
-                                                style: TextStyle(color: Color(0xFF042DE3), fontSize: 12, fontFamily: 'Calibri'),
-                                              ),
-                                            ),
-                                            Padding(
-                                              padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
-                                              child: Text(
-                                                '${branch.phoneNumber}',
-                                                style: TextStyle(color: Color(0xFF042DE3), fontSize: 12, fontFamily: 'Calibri'),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      Container(
-                                        width: MediaQuery.of(context).size.width / 2.5,
-                                        //   height: MediaQuery.of(context).size.height,
-                                        child: Column(
-                                          children: [
                                             Row(
                                               children: [
                                                 Expanded(
-                                                  flex: 5,
+                                                  flex: 7,
+                                                  child: Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children: [
+                                                      const Padding(
+                                                        padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                                        child: Text(
+                                                          'Name',
+                                                          style: TextStyle(
+                                                              color: Color(0xFFF44614),
+                                                              fontSize: 12,
+                                                              fontWeight: FontWeight.bold,
+                                                              fontFamily: 'Calibri'),
+                                                        ),
+                                                        // Icon(
+                                                        //   Icons.lock_clock,
+                                                        //   size: 16,
+                                                        //   color: Color(0xFFF44614),
+                                                        // ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                                Expanded(
+                                                  flex: 0,
+                                                  child: Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                                    children: [
+                                                      Padding(
+                                                        padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                                        child: Text(
+                                                          ' : ',
+                                                          style: TextStyle(
+                                                              color: Color(0xFFF44614),
+                                                              fontSize: 12,
+                                                              fontWeight: FontWeight.bold,
+                                                              fontFamily: 'Calibri'),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                                Expanded(
+                                                  flex: 12,
                                                   child: Column(
                                                     crossAxisAlignment: CrossAxisAlignment.start,
                                                     children: [
                                                       Padding(
                                                         padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
                                                         child: Text(
-                                                          '',
-                                                          style: TextStyle(
-                                                              color: Color(0xFFF44614),
-                                                              fontSize: 16,
-                                                              fontWeight: FontWeight.bold,
-                                                              fontFamily: 'Calibri'),
+                                                          '${branch.consultationName}',
+                                                          style: TextStyle(color: Color(0xFF042DE3), fontSize: 12, fontFamily: 'Calibri'),
                                                         ),
                                                       ),
                                                     ],
@@ -195,24 +217,51 @@ class ViewConsultations_screenState extends State<ViewConsultations> {
                                             ),
                                             Row(
                                               children: [
-                                                Padding(
-                                                  padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                                                  child: Text(
-                                                    '${branch.consultationName}',
-                                                    style: TextStyle(color: Color(0xFF042DE3), fontSize: 12, fontFamily: 'Calibri'),
+                                                Expanded(
+                                                  flex: 6,
+                                                  child: Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children: [
+                                                      const Padding(
+                                                        padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                                        child: Text(
+                                                          'Phone',
+                                                          style: TextStyle(
+                                                              color: Color(0xFFF44614),
+                                                              fontSize: 12,
+                                                              fontWeight: FontWeight.bold,
+                                                              fontFamily: 'Calibri'),
+                                                        ),
+                                                      ),
+                                                    ],
                                                   ),
                                                 ),
-                                              ],
-                                            ),
-                                            Row(
-                                              children: [
                                                 Expanded(
-                                                  flex: 1,
+                                                  flex: 0,
+                                                  child: Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                                    children: [
+                                                      Padding(
+                                                        padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                                        child: Text(
+                                                          ': ',
+                                                          style: TextStyle(
+                                                              color: Color(0xFFF44614),
+                                                              fontSize: 12,
+                                                              fontWeight: FontWeight.bold,
+                                                              fontFamily: 'Calibri'),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                                Expanded(
+                                                  flex: 10,
                                                   child: Column(
                                                     crossAxisAlignment: CrossAxisAlignment.start,
                                                     children: [
                                                       Padding(
-                                                        padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
+                                                        padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
                                                         child: Text(
                                                           '${branch.phoneNumber}',
                                                           style: TextStyle(color: Color(0xFF042DE3), fontSize: 12, fontFamily: 'Calibri'),
@@ -223,13 +272,200 @@ class ViewConsultations_screenState extends State<ViewConsultations> {
                                                 )
                                               ],
                                             ),
+
                                           ],
                                         ),
                                       ),
-
                                       //Spacer(),
                                     ],
                                   ),
+                                ),
+                              ),
+                              Container(
+                                width: MediaQuery.of(context).size.width / 2.25,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    SizedBox(
+                                      height: 25,
+                                    ),
+
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          flex: 6,
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              const Padding(
+                                                padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                                child: Text(
+                                                  'Gender',
+                                                  style: TextStyle(
+                                                      color: Color(0xFFF44614),
+                                                      fontSize: 12,
+                                                      fontWeight: FontWeight.bold,
+                                                      fontFamily: 'Calibri'),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        Expanded(
+                                          flex: 0,
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.center,
+                                            children: [
+                                              Padding(
+                                                padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                                child: Text(
+                                                  ': ',
+                                                  style: TextStyle(
+                                                      color: Color(0xFFF44614),
+                                                      fontSize: 12,
+                                                      fontWeight: FontWeight.bold,
+                                                      fontFamily: 'Calibri'),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        Expanded(
+                                          flex: 10,
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Padding(
+                                                padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                                child: Text(
+                                                  '${branch.gender}',
+                                                  style: TextStyle(color: Color(0xFF042DE3), fontSize: 12, fontFamily: 'Calibri'),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          flex: 6,
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              const Padding(
+                                                padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                                child: Text(
+                                                  'Email',
+                                                  style: TextStyle(
+                                                      color: Color(0xFFF44614),
+                                                      fontSize: 12,
+                                                      fontWeight: FontWeight.bold,
+                                                      fontFamily: 'Calibri'),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        Expanded(
+                                          flex: 0,
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.center,
+                                            children: [
+                                              Padding(
+                                                padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                                child: Text(
+                                                  ': ',
+                                                  style: TextStyle(
+                                                      color: Color(0xFFF44614),
+                                                      fontSize: 12,
+                                                      fontWeight: FontWeight.bold,
+                                                      fontFamily: 'Calibri'),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        Expanded(
+                                          flex: 10,
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Padding(
+                                                padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                                child: Text(
+                                                  '${branch.email}',
+                                                  style: TextStyle(color: Color(0xFF042DE3), fontSize: 12, fontFamily: 'Calibri'),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          flex: 6,
+                                          child: Padding(
+                                            padding: EdgeInsets.only(left: 15.0), // Add left padding to the Feedback text
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                const Text(
+                                                  'Remarks',
+                                                  style: TextStyle(
+                                                    color: Color(0xFFF44614),
+                                                    fontSize: 12,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontFamily: 'Calibri',
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          flex: 0,
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.center,
+                                            children: [
+                                              Text(
+                                                ': ',
+                                                style: TextStyle(
+                                                  color: Color(0xFFF44614),
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontFamily: 'Calibri',
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        Expanded(
+                                          flex: 24,
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            mainAxisSize: MainAxisSize.min, // Ensure the Column takes minimum vertical space
+                                            children: [
+                                              Padding(
+                                                padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                                child: Text(
+                                                  '${branch.remarks}',
+                                                  style: TextStyle(
+                                                    color: Color(0xFF042DE3),
+                                                    fontSize: 12,
+                                                    fontFamily: 'Calibri',
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ],
                                 ),
                               ),
                             ],
@@ -238,6 +474,7 @@ class ViewConsultations_screenState extends State<ViewConsultations> {
                       ),
                     ),
                   );
+
                 },
               )
 
@@ -249,7 +486,6 @@ class ViewConsultations_screenState extends State<ViewConsultations> {
 
   Future<void> fetchConsultations(int userid) async {
     final String ee = 'http://182.18.157.215/SaloonApp/API/api/Consultation/GetConsultationsByBranchId/$userid';
-    //final url1 = Uri.parse(ee);
     final url = Uri.parse(ee);
     print('url==842===$url');
     try {
@@ -260,17 +496,23 @@ class ViewConsultations_screenState extends State<ViewConsultations> {
           final List<dynamic> appointmentsData = responseData['listResult'];
           setState(() {
             Consultations_List = appointmentsData.map((appointment) => Consultation.fromJson(appointment)).toList();
-            // isLoading = false;
           });
         } else {
-          //  textFieldController.text = 'No Slots Available';
-          print('No Slots Available');
+          setState(() {
+            Consultations_List = []; // Empty the list when no data is found
+          });
+          print('No data found');
+          // Display 'No data found' in your UI or handle it accordingly
         }
       } else {
-        throw Exception('Failed to fetch appointments');
+        print('No data found');
+        throw Exception('Failed to fetch appointments. Status code: ${response.statusCode}');
+
       }
     } catch (error) {
       throw Exception('Failed to connect to the API $error');
     }
   }
+
+
 }

@@ -444,10 +444,10 @@ class _ConsulationCreationScreenState extends State<ConsulationCreationScreen> {
                           decoration: InputDecoration(
                             hintText: 'Remarks',
                             hintStyle: TextStyle(
-                              color: Colors.black54,
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
                               fontFamily: 'Calibri',
+                              fontSize: 14,
+                              color: Color(0xFFFB4110),
+                              fontWeight: FontWeight.w300,
                             ),
                             contentPadding: EdgeInsets.symmetric(
                               horizontal: 16.0,
@@ -552,8 +552,13 @@ class _ConsulationCreationScreenState extends State<ConsulationCreationScreen> {
     //   isValid = false;
     //   hasValidationFailed = true;
     // }
-    if (isValid && !validateEmailFormat(email.text)) {
-      CommonUtils.showCustomToastMessageLong('Please Enter Customer Email', context, 1, 4);
+    // if (isValid && !validateEmailFormat(email.text)) {
+    //   CommonUtils.showCustomToastMessageLong('Please Enter Customer Email', context, 1, 4);
+    //   isValid = false;
+    //   hasValidationFailed = true;
+    // }
+    if (isValid && !isGenderSelected) {
+      CommonUtils.showCustomToastMessageLong('Please Select Gender', context, 1, 4);
       isValid = false;
       hasValidationFailed = true;
     }
@@ -562,8 +567,9 @@ class _ConsulationCreationScreenState extends State<ConsulationCreationScreen> {
       isValid = false;
       hasValidationFailed = true;
     }
+
     if (isValid && remarks.text.isEmpty) {
-      CommonUtils.showCustomToastMessageLong('Please Enter Customer Email', context, 1, 4);
+      CommonUtils.showCustomToastMessageLong('Please Enter Remarks', context, 1, 4);
       isValid = false;
       hasValidationFailed = true;
     }

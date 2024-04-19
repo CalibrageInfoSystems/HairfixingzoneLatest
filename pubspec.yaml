@@ -104,6 +104,11 @@ flutter:
     - assets/AGENT.png
     - assets/gender.png
     - assets/user.svg
+    - assets/skin-care.svg
+    - assets/calendar-_2_.svg
+    - assets/rescheduling.svg
+    - assets/rate.svg
+    - assets/close.svg
 
 
 

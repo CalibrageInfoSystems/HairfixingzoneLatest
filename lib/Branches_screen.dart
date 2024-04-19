@@ -411,13 +411,30 @@ class _BranchesscreenState extends State<Branches_screen> {
                                                           color: Color(0xFF8d97e2),
                                                         ),
                                                         borderRadius: BorderRadius.circular(10.0),
-                                                      ),// Ensure the button takes the full height of the parent container
-                                                      child: Align(
-                                                        alignment: Alignment.bottomRight,
-                                                        child: ElevatedButton(
-                                                          onPressed: () {
-                                                            // Handle button press
-                                                          },
+
+                                                      ),
+                                                  child: GestureDetector(
+                                                    onTap: () {
+                                                      print('Container clicked');
+                                                      Navigator.of(context).push(
+                                                        MaterialPageRoute(
+                                                          builder: (context) => appointmentlist(
+                                                            userId: widget.userId,
+                                                            branchid: branch.id,
+                                                            branchname: branch.name,
+                                                            filepath: branch.imageName != null ? branch.imageName! : 'assets/top_image.png',
+                                                            phonenumber: branch.mobileNumber,
+                                                            branchaddress: branch.address,
+                                                          ),
+                                                        ),
+                                                      );
+                                                    },
+                                                    child: Align(
+                                                      alignment: Alignment.bottomRight,
+                                                      child: ElevatedButton(
+                                                        onPressed: () {
+                                                          // Handle button press
+                                                        },
                                                           style: ElevatedButton.styleFrom(
                                                             primary: Colors.transparent,
                                                             onPrimary: Color(0xFF8d97e2),
@@ -466,7 +483,7 @@ class _BranchesscreenState extends State<Branches_screen> {
                                                           ),
                                                         ),
                                                       ),
-                                                    ),
+                                                    )),
                                                     SizedBox(width: 10), // Add some spacing between the buttons
                                                     Container(
                                                       height: double.infinity,
@@ -476,35 +493,40 @@ class _BranchesscreenState extends State<Branches_screen> {
                                                           color: Color(0xFF8d97e2),
                                                         ),
                                                         borderRadius: BorderRadius.circular(10.0),
-                                                      ),// Ensure the button takes the full height of the parent container
-                                                      child: Align(
-                                                        alignment: Alignment.bottomRight,
-                                                        child: ElevatedButton(
-                                                          onPressed: () {
-                                                            // Handle button press
-                                                          },
-                                                          style: ElevatedButton.styleFrom(
-                                                            primary: Colors.transparent,
-                                                            onPrimary: Color(0xFF8d97e2),
-                                                            elevation: 0,
-                                                            shadowColor: Colors.transparent,
-                                                            shape: RoundedRectangleBorder(
-                                                              borderRadius: BorderRadius.circular(10.0),
+                                                      ),
+                                                      child: GestureDetector(
+                                                        onTap: () {
+                                                          print('Container clicked');
+                                                          Navigator.of(context).push(
+                                                            MaterialPageRoute(
+                                                              builder: (context) => ViewConsultations(
+                                                                branchid: branch.id,
+                                                              ),
                                                             ),
-                                                          ),
-                                                          child: GestureDetector(
-                                                            onTap: () {
-                                                              print('See Appointment Clicked ');
+                                                          );
+                                                        },
+                                                        child: Align(
+                                                          alignment: Alignment.bottomRight,
+                                                          child: ElevatedButton(
+                                                            onPressed: () {
                                                               Navigator.of(context).push(
                                                                 MaterialPageRoute(
                                                                   builder: (context) => ViewConsultations(
-                                                                    branchid: widget.userId,
-                                                                    // branchid: branch.id,
+                                                                    branchid: branch.id,
                                                                   ),
                                                                 ),
                                                               );
-                                                              // Handle button press for "See Appointment"
+                                                              // Handle button press
                                                             },
+                                                            style: ElevatedButton.styleFrom(
+                                                              primary: Colors.transparent,
+                                                              onPrimary: Color(0xFF8d97e2),
+                                                              elevation: 0,
+                                                              shadowColor: Colors.transparent,
+                                                              shape: RoundedRectangleBorder(
+                                                                borderRadius: BorderRadius.circular(10.0),
+                                                              ),
+                                                            ),
                                                             child: Row(
                                                               mainAxisSize: MainAxisSize.min,
                                                               children: [
@@ -527,7 +549,8 @@ class _BranchesscreenState extends State<Branches_screen> {
                                                         ),
                                                       ),
                                                     ),
-                                                  ],
+
+                                                    ],
                                                 ),
                                               ),
 

@@ -1602,6 +1602,55 @@ class MyAppointments_screenState extends State<MyAppointments> {
                                     ),
                                   ),
                                 ),
+                                // Container(
+                                //   width: MediaQuery.of(context).size.width / 2.25,
+                                //   child: Column(
+                                //     mainAxisAlignment: MainAxisAlignment.center,
+                                //     children: [
+                                //       SizedBox(
+                                //         height: 20,
+                                //       ),
+                                //       ElevatedButton(
+                                //         onPressed: appointment_model.statusTypeId == 18 // Provide a valid condition here
+                                //             ? () {
+                                //
+                                //           ShowAlertdialog(appointment_model,index); // Call the function to show branches dialog
+                                //           //  conformation(appointment_model, index);
+                                //           // Handle reject button action
+                                //
+                                //           print('Rate Us');
+                                //         }
+                                //             : null,
+                                //         child: Text('Rate Us'),
+                                //         style: ButtonStyle(
+                                //           foregroundColor: MaterialStateProperty.resolveWith<Color>(
+                                //                 (Set<MaterialState> states) {
+                                //               if (states.contains(MaterialState.disabled)) {
+                                //                 return Colors.grey; // Set the text color to gray when disabled
+                                //               }
+                                //               return Colors.green; // Use the default text color for enabled state
+                                //             },
+                                //           ),
+                                //           backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                                //                 (Set<MaterialState> states) {
+                                //               if (states.contains(MaterialState.disabled)) {
+                                //                 return Colors.grey.withOpacity(0.5); // Set the background color to gray with opacity when disabled
+                                //               }
+                                //               return Colors.white; // Use the default background color for enabled state
+                                //             },
+                                //           ),
+                                //           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                //             RoundedRectangleBorder(
+                                //               borderRadius: BorderRadius.circular(25.0),
+                                //               side: BorderSide(color: Colors.green, width: 2.0),
+                                //             ),
+                                //           ),
+                                //         ),
+                                //       ),
+                                //
+                                //     ],
+                                //   ),
+                                // ),
                                 Container(
                                   width: MediaQuery.of(context).size.width / 2.25,
                                   child: Column(
@@ -1613,23 +1662,18 @@ class MyAppointments_screenState extends State<MyAppointments> {
                                       ElevatedButton(
                                         onPressed: appointment_model.statusTypeId == 18 // Provide a valid condition here
                                             ? () {
-
-                                          ShowAlertdialog(appointment_model,index); // Call the function to show branches dialog
+                                          ShowAlertdialog(appointment_model, index); // Call the function to show branches dialog
                                           //  conformation(appointment_model, index);
                                           // Handle reject button action
-
                                           print('Rate Us');
                                         }
                                             : null,
-                                        child: Text('Rate Us'),
                                         style: ButtonStyle(
-                                          foregroundColor: MaterialStateProperty.resolveWith<Color>(
-                                                (Set<MaterialState> states) {
-                                              if (states.contains(MaterialState.disabled)) {
-                                                return Colors.grey; // Set the text color to gray when disabled
-                                              }
-                                              return Colors.green; // Use the default text color for enabled state
-                                            },
+                                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                            RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.circular(25.0),
+                                              side: BorderSide(color: Colors.green, width: 2.0),
+                                            ),
                                           ),
                                           backgroundColor: MaterialStateProperty.resolveWith<Color>(
                                                 (Set<MaterialState> states) {
@@ -1639,15 +1683,29 @@ class MyAppointments_screenState extends State<MyAppointments> {
                                               return Colors.white; // Use the default background color for enabled state
                                             },
                                           ),
-                                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                            RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.circular(25.0),
-                                              side: BorderSide(color: Colors.green, width: 2.0),
-                                            ),
+                                          foregroundColor: MaterialStateProperty.resolveWith<Color>(
+                                                (Set<MaterialState> states) {
+                                              if (states.contains(MaterialState.disabled)) {
+                                                return Colors.grey; // Set the text color to gray when disabled
+                                              }
+                                              return Colors.green; // Use the default text color for enabled state
+                                            },
                                           ),
                                         ),
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            SvgPicture.asset(
+                                              'assets/rate.svg', // Replace 'your_image.svg' with the path to your SVG image asset
+                                              width: 24, // Adjust width as needed
+                                              height: 24, // Adjust height as needed
+                                            ),
+                                            SizedBox(width: 5), // Add some space between the image and text
+                                            Text('Rate Us'),
+                                          ],
+                                        ),
                                       ),
-
                                     ],
                                   ),
                                 ),
