@@ -832,84 +832,113 @@ class MyAppointments_screenState extends State<MyAppointments> {
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
+                                      SizedBox(
+                                        width: 130, // Ensure buttons take up the full width of the container
+                                        child:
 
-                                      ElevatedButton(
-                                        onPressed: appointment_model.statusTypeId == 5 // Provide a valid condition here
-                                          ? () {
-                                          getbranchedata();
-                                          showBranchesDialog(context,appointment_model); // Call the function to show branches dialog
-                              //  conformation(appointment_model, index);
-                                // Handle reject button action
-
-                                print('Reschedule');
-                                }
-                                  : null,
-                                        child: Text('Reschedule'),
-                                        style: ButtonStyle(
-                                          foregroundColor: MaterialStateProperty.resolveWith<Color>(
-                                                (Set<MaterialState> states) {
-                                              if (states.contains(MaterialState.disabled)) {
-                                                return Colors.grey; // Set the text color to gray when disabled
-                                              }
-                                              return Colors.green; // Use the default text color for enabled state
-                                            },
+                                        ElevatedButton(
+                                          onPressed: isPastDate(appointment_model.date, appointment_model.slotDuration)
+                                              ? null // Disable the button if slotDuration is before the current time
+                                              : () {
+                                            getbranchedata();
+                                            showBranchesDialog(context, appointment_model); // Call the function to show branches dialog
+                                            print('Reschedule');
+                                          },
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              SvgPicture.asset(
+                                                'assets/rescheduling.svg',
+                                                width: 24,
+                                                height: 24,
+                                              ),
+                                              SizedBox(width: 5),
+                                              Text('Reschedule'),
+                                            ],
                                           ),
-                                          backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                                                (Set<MaterialState> states) {
-                                              if (states.contains(MaterialState.disabled)) {
-                                                return Colors.grey.withOpacity(0.5); // Set the background color to gray with opacity when disabled
-                                              }
-                                              return Colors.white; // Use the default background color for enabled state
-                                            },
-                                          ),
-                                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                            RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.circular(25.0),
-                                              side: BorderSide(color: Colors.green, width: 2.0),
+                                          style: ButtonStyle(
+                                            foregroundColor: MaterialStateProperty.resolveWith<Color>(
+                                                  (Set<MaterialState> states) {
+                                                if (states.contains(MaterialState.disabled)) {
+                                                  return Colors.grey; // Set the text color to gray when disabled
+                                                }
+                                                return Colors.green; // Use the default text color for enabled state
+                                              },
+                                            ),
+                                            backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                                                  (Set<MaterialState> states) {
+                                                if (states.contains(MaterialState.disabled)) {
+                                                  return Colors.grey.withOpacity(0.5); // Set the background color to gray with opacity when disabled
+                                                }
+                                                return Colors.white; // Use the default background color for enabled state
+                                              },
+                                            ),
+                                            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                              RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(25.0),
+                                                side: BorderSide(color: Colors.green, width: 2.0),
+                                              ),
                                             ),
                                           ),
                                         ),
+
+
                                       ),
-                                      ElevatedButton(
-                                        onPressed: appointment_model.statusTypeId == 5 // Provide a valid condition here
-                                            ? () {
-
-
-                                          conformation(appointment_model, index);
-                                          // Handle reject button action
-
-                                          print('rejectedbuttonisclciked');
-                                        }
-                                            : null, // Disable the button if the condition is not met
-                                        child: Text('Cancel'),
-                                        style: ButtonStyle(
-                                          foregroundColor: MaterialStateProperty.resolveWith<Color>(
-                                                (Set<MaterialState> states) {
-                                              if (states.contains(MaterialState.disabled)) {
-                                                return Colors.grey; // Set the text color to gray when disabled
-                                              }
-                                              return Color(0xFFF44614); // Use the default text color for enabled state
+                                      SizedBox(
+                                        width:130, // Ensure buttons take up the full width of the container
+                                        child: ElevatedButton(
+                                            onPressed: isPastDate(appointment_model.date, appointment_model.slotDuration)
+                                                ? null // Disable the button if slotDuration is before the current time
+                                                : () {
+                                              conformation(appointment_model, index);
+                                              print('rejectedbuttonisclciked');
+                                              print('Reschedule');
                                             },
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              SvgPicture.asset(
+                                                'assets/close.svg',
+                                                width: 24,
+                                                height: 24,
+                                              ),
+                                              SizedBox(width: 5),
+                                              Text('Cancel'),
+                                            ],
                                           ),
-                                          backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                                                (Set<MaterialState> states) {
-                                              if (states.contains(MaterialState.disabled)) {
-                                                return Colors.grey.withOpacity(0.5); // Set the background color to gray with opacity when disabled
-                                              }
-                                              return Colors.white; // Use the default background color for enabled state
-                                            },
-                                          ),
-                                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                            RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.circular(25.0),
-                                              side: BorderSide(color: Color(0xFFF44614), width: 2.0),
+                                          style: ButtonStyle(
+                                            foregroundColor: MaterialStateProperty.resolveWith<Color>(
+                                                  (Set<MaterialState> states) {
+                                                if (states.contains(MaterialState.disabled)) {
+                                                  return Colors.grey; // Set the text color to gray when disabled
+                                                }
+                                                return Color(0xFFF44614); // Use the default text color for enabled state
+                                              },
+                                            ),
+                                            backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                                                  (Set<MaterialState> states) {
+                                                if (states.contains(MaterialState.disabled)) {
+                                                  return Colors.grey.withOpacity(0.5); // Set the background color to gray with opacity when disabled
+                                                }
+                                                return Colors.white; // Use the default background color for enabled state
+                                              },
+                                            ),
+                                            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                              RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(25.0),
+                                                side: BorderSide(color: Color(0xFFF44614), width: 2.0),
+                                              ),
                                             ),
                                           ),
                                         ),
+
                                       ),
                                     ],
                                   ),
                                 ),
+
 
                               ],
                             ),
@@ -1659,51 +1688,56 @@ class MyAppointments_screenState extends State<MyAppointments> {
                                       SizedBox(
                                         height: 20,
                                       ),
-                                      ElevatedButton(
-                                        onPressed: appointment_model.statusTypeId == 18 // Provide a valid condition here
-                                            ? () {
-                                          ShowAlertdialog(appointment_model, index); // Call the function to show branches dialog
-                                          //  conformation(appointment_model, index);
-                                          // Handle reject button action
-                                          print('Rate Us');
-                                        }
-                                            : null,
-                                        style: ButtonStyle(
-                                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                            RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.circular(25.0),
-                                              side: BorderSide(color: Colors.green, width: 2.0),
+
+                                           SizedBox(
+                                        width:130, // Ensure buttons take up the full width of the container
+                                        child:
+                                        ElevatedButton(
+                                     onPressed:  appointment_model.statusTypeId == 18 // Provide a valid condition here
+                                              ? () {
+                                            ShowAlertdialog(appointment_model, index); // Call the function to show branches dialog
+                                            //  conformation(appointment_model, index);
+                                            // Handle reject button action
+                                            print('Rate Us');
+                                          }
+                                              : null,
+                                          style: ButtonStyle(
+                                            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                              RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(25.0),
+                                                side: BorderSide(color: Colors.green, width: 2.0),
+                                              ),
+                                            ),
+                                            backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                                                  (Set<MaterialState> states) {
+                                                if (states.contains(MaterialState.disabled)) {
+                                                  return Colors.grey.withOpacity(0.5); // Set the background color to gray with opacity when disabled
+                                                }
+                                                return Colors.white; // Use the default background color for enabled state
+                                              },
+                                            ),
+                                            foregroundColor: MaterialStateProperty.resolveWith<Color>(
+                                                  (Set<MaterialState> states) {
+                                                if (states.contains(MaterialState.disabled)) {
+                                                  return Colors.grey; // Set the text color to gray when disabled
+                                                }
+                                                return Colors.green; // Use the default text color for enabled state
+                                              },
                                             ),
                                           ),
-                                          backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                                                (Set<MaterialState> states) {
-                                              if (states.contains(MaterialState.disabled)) {
-                                                return Colors.grey.withOpacity(0.5); // Set the background color to gray with opacity when disabled
-                                              }
-                                              return Colors.white; // Use the default background color for enabled state
-                                            },
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              SvgPicture.asset(
+                                                'assets/rate.svg', // Replace 'your_image.svg' with the path to your SVG image asset
+                                                width: 24, // Adjust width as needed
+                                                height: 24, // Adjust height as needed
+                                              ),
+                                              SizedBox(width: 5), // Add some space between the image and text
+                                              Text('Rate Us'),
+                                            ],
                                           ),
-                                          foregroundColor: MaterialStateProperty.resolveWith<Color>(
-                                                (Set<MaterialState> states) {
-                                              if (states.contains(MaterialState.disabled)) {
-                                                return Colors.grey; // Set the text color to gray when disabled
-                                              }
-                                              return Colors.green; // Use the default text color for enabled state
-                                            },
-                                          ),
-                                        ),
-                                        child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            SvgPicture.asset(
-                                              'assets/rate.svg', // Replace 'your_image.svg' with the path to your SVG image asset
-                                              width: 24, // Adjust width as needed
-                                              height: 24, // Adjust height as needed
-                                            ),
-                                            SizedBox(width: 5), // Add some space between the image and text
-                                            Text('Rate Us'),
-                                          ],
                                         ),
                                       ),
                                     ],
@@ -3179,6 +3213,49 @@ class MyAppointments_screenState extends State<MyAppointments> {
       print('All retries failed. Unable to fetch data from the API.');
     }
   }
+
+  bool isPastDate(String selectedDate, String time) {
+    final now = DateTime.now();
+    // DateTime currentTime = DateTime.now();
+    //  print('currentTime: $currentTime');
+    //   int hours = currentTime.hour;
+    //  print('current hours: $hours');
+    // Format the time using a specific pattern with AM/PM
+    String formattedTime = DateFormat('hh:mm a').format(now);
+
+    final selectedDateTime = DateTime.parse(selectedDate);
+    final currentDate = DateTime(now.year, now.month, now.day);
+
+    // Agent login chey
+
+    bool isBeforeTime = false; // Assume initial value as true
+    bool isBeforeDate = selectedDateTime.isBefore(currentDate);
+    // Parse the desired time for comparison
+    DateTime desiredTime = DateFormat('hh:mm a').parse(time);
+    // Parse the current time for comparison
+    DateTime currentTime = DateFormat('hh:mm a').parse(formattedTime);
+
+    if (selectedDateTime == currentDate) {
+      int comparison = currentTime.compareTo(desiredTime);
+      print('comparison$comparison');
+      // Print the comparison result
+      if (comparison < 0) {
+        isBeforeTime = false;
+        print('The current time is earlier than 10:15 AM.');
+      } else if (comparison > 0) {
+        isBeforeTime = true;
+      } else {
+        isBeforeTime = true;
+      }
+
+      //  isBeforeTime = hours >= time;
+    }
+
+    print('isBeforeTime: $isBeforeTime');
+    print('isBeforeDate: $isBeforeDate');
+    return isBeforeTime || isBeforeDate;
+  }
+
 
   }
 

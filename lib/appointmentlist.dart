@@ -723,7 +723,7 @@ class _appointmentlist extends State<appointmentlist> {
                                                       child: Text('Accept'),
                                                       style: ButtonStyle(
                                                         foregroundColor: MaterialStateProperty.resolveWith<Color>(
-                                                          (Set<MaterialState> states) {
+                                                              (Set<MaterialState> states) {
                                                             if (states.contains(MaterialState.disabled)) {
                                                               return Colors.grey; // Set the text color to gray when disabled
                                                             }
@@ -731,7 +731,7 @@ class _appointmentlist extends State<appointmentlist> {
                                                           },
                                                         ),
                                                         backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                                                          (Set<MaterialState> states) {
+                                                              (Set<MaterialState> states) {
                                                             if (states.contains(MaterialState.disabled)) {
                                                               return Colors.grey.withOpacity(0.5); // Set the background color to gray with opacity when disabled
                                                             }
