@@ -179,6 +179,7 @@ class _ConsulationCreationScreenState extends State<ConsulationCreationScreen> {
                               padding: const EdgeInsets.only(left: 10, top: 6.0),
                               child: TextFormField(
                                 keyboardType: TextInputType.name,
+                                maxLength: 30,
                                 controller: username,
                                 style: const TextStyle(
                                   fontFamily: 'Calibri',
@@ -194,7 +195,9 @@ class _ConsulationCreationScreenState extends State<ConsulationCreationScreen> {
                                     fontWeight: FontWeight.w300,
                                   ),
                                   border: InputBorder.none,
-                                ),
+                               counterText: ""
+                                )
+                                ,
                               ),
                             ),
                           ),
@@ -300,6 +303,7 @@ class _ConsulationCreationScreenState extends State<ConsulationCreationScreen> {
                                   fontSize: 14,
                                   fontWeight: FontWeight.w300,
                                 ),
+                                maxLength: 30,
                                 decoration: const InputDecoration(
                                   hintText: 'Email',
                                   hintStyle: TextStyle(
@@ -307,7 +311,9 @@ class _ConsulationCreationScreenState extends State<ConsulationCreationScreen> {
                                     fontSize: 14,
                                     color: Color(0xFFFB4110),
                                     fontWeight: FontWeight.w300,
+
                                   ),
+                                  counterText: "",
                                   border: InputBorder.none,
                                   // Remove the underline border
                                 ),
@@ -441,6 +447,7 @@ class _ConsulationCreationScreenState extends State<ConsulationCreationScreen> {
                             fontWeight: FontWeight.w300,
                           ),
                           maxLines: null,
+                          maxLength: 200,
                           decoration: InputDecoration(
                             hintText: 'Remarks',
                             hintStyle: TextStyle(

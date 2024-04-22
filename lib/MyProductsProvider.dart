@@ -3,11 +3,32 @@ import 'package:hairfixingzone/Product_Model.dart';
 
 class MyProductProvider extends ChangeNotifier {
   List<ProductList> proProducts = [];
-  int selectedStatusIndex = 0;
+  int selectedCategoryIndex = 0;
+  int selectedGenderIndex = 0;
+  int? _selectedGender;
+  int? _selectedCategory;
 
-  int get dropDownStatus => selectedStatusIndex;
-  set dropDownStatus(int newStatus) {
-    selectedStatusIndex = newStatus;
+  int? get getGender => _selectedGender;
+  set getGender(int? newGender) {
+    _selectedGender = newGender;
+    notifyListeners();
+  }
+
+  int? get getCategory => _selectedCategory;
+  set getCategory(int? newCategory) {
+    _selectedCategory = newCategory;
+    notifyListeners();
+  }
+
+  int get selectedCategory => selectedCategoryIndex;
+  set selectedCategory(int newStatus) {
+    selectedCategoryIndex = newStatus;
+    notifyListeners();
+  }
+
+  int get selectedGender => selectedGenderIndex;
+  set selectedGender(int newStatus) {
+    selectedGenderIndex = newStatus;
     notifyListeners();
   }
 
@@ -21,6 +42,17 @@ class MyProductProvider extends ChangeNotifier {
   void storeIntoProvider(List<ProductList> items) {
     proProducts.clear();
     proProducts.addAll(items);
+    notifyListeners();
+  }
+
+
+  void clearFilter() {
+    selectedGender = 0;
+    selectedCategory = 0;
+    getGender = null;
+    getCategory = null;
+
+    proProducts = [];
     notifyListeners();
   }
 }

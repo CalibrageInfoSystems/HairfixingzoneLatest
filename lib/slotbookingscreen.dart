@@ -983,6 +983,34 @@ class _BookingScreenState extends State<slotbookingscreen>  {
                 ]))));
   }
 
+  // Future<void> _openDatePicker(bool isTodayHoliday) async {
+  //   setState(() {
+  //     _isTodayHoliday = isTodayHoliday;
+  //   });
+  //
+  //   DateTime initialDate = _selectedDate;
+  //
+  //   // Adjust the initial date if it doesn't satisfy the selectableDayPredicate
+  //   if (_isTodayHoliday && initialDate.isBefore(DateTime.now())) {
+  //     initialDate = getNextNonHoliday(DateTime.now()); // Use getNextNonHoliday to get the next available non-holiday day
+  //   }
+  //
+  //   final DateTime? pickedDate = await showDatePicker(
+  //     context: context,
+  //     initialEntryMode: DatePickerEntryMode.calendarOnly,
+  //     initialDate: initialDate,
+  //     firstDate: DateTime.now().subtract(Duration(days: 0)),
+  //     lastDate: DateTime(2125),
+  //     selectableDayPredicate: selectableDayPredicate,
+  //   );
+  //
+  //   if (pickedDate != null) {
+  //     setState(() {
+  //       _selectedDate = pickedDate;
+  //       onDateSelected(pickedDate);
+  //     });
+  //   }
+  // }
   Future<void> _openDatePicker(bool isTodayHoliday) async {
     setState(() {
       _isTodayHoliday = isTodayHoliday;
@@ -995,10 +1023,15 @@ class _BookingScreenState extends State<slotbookingscreen>  {
       initialDate = getNextNonHoliday(DateTime.now()); // Use getNextNonHoliday to get the next available non-holiday day
     }
 
+    // Ensure that the initialDate satisfies the selectableDayPredicate
+    while (initialDate != null && !selectableDayPredicate(initialDate)) {
+      initialDate = initialDate.add(Duration(days: 1));
+    }
+
     final DateTime? pickedDate = await showDatePicker(
       context: context,
       initialEntryMode: DatePickerEntryMode.calendarOnly,
-      initialDate: initialDate,
+      initialDate: initialDate ?? DateTime.now(),
       firstDate: DateTime.now().subtract(Duration(days: 0)),
       lastDate: DateTime(2125),
       selectableDayPredicate: selectableDayPredicate,
@@ -1326,6 +1359,7 @@ class _BookingScreenState extends State<slotbookingscreen>  {
   }
 
   List<Slot> getVisibleSlots(List<Slot> slots, bool isTodayHoliday) {
+    print('isTodayHoliday====$isTodayHoliday');
     // Get the current time
     DateTime now = DateTime.now();
 
@@ -1412,8 +1446,37 @@ class _BookingScreenState extends State<slotbookingscreen>  {
 
   //List<Slot> slots = [];
 
+  // Future<List<Slot>> fetchTimeSlots(DateTime selectedDate, int branchId) async {
+  //   isLoading = false;
+  //   final formattedDate = DateFormat('yyyy-MM-dd').format(selectedDate);
+  //   final url = Uri.parse(baseUrl + GetSlotsByDateAndBranch + "$formattedDate/$branchId");
+  //   print('url==>969: $url');
+  //
+  //   try {
+  //     final response = await http.get(url);
+  //     if (response.statusCode == 200) {
+  //       final jsonResult = json.decode(response.body);
+  //       final List<dynamic> slotData = jsonResult['listResult'];
+  //
+  //       slots = slotData.map((slotJson) => Slot.fromJson(slotJson)).toList();
+  //
+  //       setState(() {
+  //         // Update any necessary state variables
+  //       });
+  //
+  //       return slots;
+  //     } else {
+  //       throw Exception('Failed to fetch slots');
+  //     }
+  //   } catch (e) {
+  //     throw Exception('Errortimeslots: $e');
+  //   }
+  // }
   Future<List<Slot>> fetchTimeSlots(DateTime selectedDate, int branchId) async {
-    isLoading = false;
+    setState(() {
+      isLoading = true; // Set isLoading to true before making the API request
+    });
+
     final formattedDate = DateFormat('yyyy-MM-dd').format(selectedDate);
     final url = Uri.parse(baseUrl + GetSlotsByDateAndBranch + "$formattedDate/$branchId");
     print('url==>969: $url');
@@ -1424,9 +1487,10 @@ class _BookingScreenState extends State<slotbookingscreen>  {
         final jsonResult = json.decode(response.body);
         final List<dynamic> slotData = jsonResult['listResult'];
 
-        slots = slotData.map((slotJson) => Slot.fromJson(slotJson)).toList();
+        List<Slot> slots = slotData.map((slotJson) => Slot.fromJson(slotJson)).toList();
 
         setState(() {
+          isLoading = false; // Set isLoading to false after data is fetched
           // Update any necessary state variables
         });
 
@@ -1435,7 +1499,10 @@ class _BookingScreenState extends State<slotbookingscreen>  {
         throw Exception('Failed to fetch slots');
       }
     } catch (e) {
-      throw Exception('Errortimeslots: $e');
+      setState(() {
+        isLoading = false; // Set isLoading to false if error occurs
+      });
+      throw Exception('Error fetching time slots: $e');
     }
   }
 
@@ -1517,7 +1584,9 @@ class _BookingScreenState extends State<slotbookingscreen>  {
           'Content-Type': 'application/json; charset=UTF-8',
         },
         body: jsonEncode(<String, dynamic>{
-          'id': null,
+
+          'id': widget.branchId,
+          'isActive': true, // Add isActive filter
         }),
       );
 
@@ -1528,12 +1597,12 @@ class _BookingScreenState extends State<slotbookingscreen>  {
 
         DateTime now = DateTime.now();
         DateTime currentDate = DateTime(now.year, now.month, now.day);
-        String formattedDate = DateFormat("yyyy-MM-dd'T'HH:mm:ss").format(currentDate);
-
+        String formattedDate = DateFormat("yyyy-MM-dd").format(currentDate);
+        print('formattedDate:1567 $formattedDate');
         for (final holiday in holidayList) {
           DateTime holidayDate = holiday.holidayDate;
-          String holidaydate = DateFormat("yyyy-MM-dd'T'HH:mm:ss").format(holidayDate);
-
+          String holidaydate = DateFormat("yyyy-MM-dd").format(holidayDate);
+          print('holidaydate:1571 $holidaydate');
           if (formattedDate == holidaydate) {
             isTodayHoliday = true;
             print('Today is a holiday: $formattedDate');
@@ -1548,6 +1617,7 @@ class _BookingScreenState extends State<slotbookingscreen>  {
       throw Exception('Request failed with exception: $e');
     }
   }
+
 
   // Future<HolidayResponse> fetchHolidayListByBranchId(int branchId) async {
   //   // final url = Uri.parse(

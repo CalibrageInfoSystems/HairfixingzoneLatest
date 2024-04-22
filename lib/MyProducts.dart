@@ -131,56 +131,67 @@ class MyProducts_screenState extends State<MyProducts> {
   @override
   Widget build(BuildContext context) {
     final textscale = MediaQuery.of(context).textScaleFactor;
-    return WillPopScope(
+    return Consumer<MyProductProvider>(
+      builder: (context, provider, child) =>
+        // PopScope(
+        // canPop: true,
+        // onPopInvoked: (didPop) {
+        //   myProductProvider.clearFilter();
+        // },
+        WillPopScope(
         onWillPop: () async {
+          myProductProvider.clearFilter();
           return true;
         },
-        child: Consumer<MyProductProvider>(
-          builder: (context, provider, child) => Scaffold(
-            appBar: _appBar(),
-            body:
-            FutureBuilder(
-              future: apiData,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(
-                    child: CircularProgressIndicator.adaptive(
-                      backgroundColor: Colors.transparent,
-                      valueColor: AlwaysStoppedAnimation<Color>(orangeColor),
+        child: Scaffold(
+          appBar: _appBar(),
+          body: FutureBuilder(
+            future: apiData,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Center(
+                  child: CircularProgressIndicator.adaptive(
+                    backgroundColor: Colors.transparent,
+                    valueColor: AlwaysStoppedAnimation<Color>(orangeColor),
+                  ),
+                );
+              } else if (snapshot.hasError) {
+                return Center(
+                  child: Text(
+                    'Error: ${snapshot.error}',
+                    style: const TextStyle(
+                      fontSize: 12.0,
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: "Roboto",
                     ),
-                  );
-                } else if (snapshot.hasError) {
-                  return Center(
-                    child: Text(
-                      'Error: ${snapshot.error}',
-                      style: const TextStyle(
-                        fontSize: 12.0,
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: "Roboto",
-                      ),
-                    ),
-                  );
-                } else {
-                  List<ProductList>? data = provider.getProProducts;
-                  print('provider: ${provider.getProProducts.length}');
-                  print('data: ${data}');
-                  if (data != null && data.isNotEmpty && data.length != 0) { // Check if data is not null and not empty
-                    return Stack(
-                      children: [
-                        SingleChildScrollView(
-                          child: Container(
-                            padding: const EdgeInsets.all(15.0),
-                            child: Column(
+                  ),
+                );
+              } else {
+                List<ProductList>? data = provider.getProProducts;
+
+                if (provider.getProProducts.isNotEmpty) {
+                  return Stack(
+                    children: [
+                      SingleChildScrollView(
+                        child: Container(
+                          padding: const EdgeInsets.all(15.0),
+                          child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 GridView.builder(
-                                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 2, crossAxisSpacing: 16.0, mainAxisSpacing: 16.0, mainAxisExtent: 190, childAspectRatio: 8 / 2),
+                                  gridDelegate:
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 2,
+                                      crossAxisSpacing: 16.0,
+                                      mainAxisSpacing: 16.0,
+                                      mainAxisExtent: 190,
+                                      childAspectRatio: 8 / 2),
                                   physics: const NeverScrollableScrollPhysics(),
                                   shrinkWrap: true,
                                   itemCount: data.length,
-                                  itemBuilder: (BuildContext context, int index) {
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
                                     ProductList productmodel = data[index];
 
                                     return GestureDetector(
@@ -201,10 +212,12 @@ class MyProducts_screenState extends State<MyProducts> {
                                             begin: Alignment.centerLeft,
                                             end: Alignment.centerRight,
                                           ),
-                                          borderRadius: BorderRadius.circular(12.0),
+                                          borderRadius:
+                                          BorderRadius.circular(12.0),
                                           boxShadow: [
                                             BoxShadow(
-                                              color: Colors.grey.withOpacity(0.3),
+                                              color:
+                                              Colors.grey.withOpacity(0.3),
                                               spreadRadius: 2,
                                               blurRadius: 5,
                                               offset: const Offset(0, 3),
@@ -216,27 +229,35 @@ class MyProducts_screenState extends State<MyProducts> {
                                           // SingleChildScrollView(
                                           //   child:
                                           Column(
-                                            crossAxisAlignment: CrossAxisAlignment.center,
-                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                            mainAxisAlignment:
+                                            MainAxisAlignment.center,
                                             children: [
-                                              Container(
+                                              SizedBox(
                                                 height: 120,
                                                 child: Center(
                                                   child: Image.network(
                                                     productmodel.imageName,
                                                     //    "https://images.moneycontrol.com/static-mcnews/2023/08/Health-benefits-of-almond-oil-770x433.jpg?impolicy=website&width=770&height=431", // Placeholder URL
                                                     fit: BoxFit.fill,
-                                                    loadingBuilder: (context, child, loadingProgress) {
-                                                      if (loadingProgress == null) {
+                                                    loadingBuilder: (context,
+                                                        child,
+                                                        loadingProgress) {
+                                                      if (loadingProgress ==
+                                                          null) {
                                                         return child;
                                                       }
 
-                                                      return const Center(child: CircularProgressIndicator.adaptive());
+                                                      return const Center(
+                                                          child:
+                                                          CircularProgressIndicator
+                                                              .adaptive());
                                                     },
                                                   ),
                                                 ),
                                               ),
-                                              SizedBox(height: 5),
+                                              const SizedBox(height: 5),
                                               Text(
                                                 productmodel.categoryName,
                                                 textAlign: TextAlign.center,
@@ -253,69 +274,52 @@ class MyProducts_screenState extends State<MyProducts> {
                                       ),
                                       //   ),
                                     );
-
-
                                   },
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    );
-                  } else {
-                    return Container(
-                      child: SizedBox(
-                        width: double.infinity,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.all(5.0),
-                              child: Text(
-                                'No products found!',
-                                style: TextStyle(
-                                  fontSize: 12.0,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: "Roboto",
                                 ),
-                              ),
-                            ),
-                          ],
+                              ]),
                         ),
                       ),
-                    );
-                  }
-                }
-              },
-            ),
-
-            floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-            floatingActionButton: FloatingActionButton(
-              // isExtended: true,
-              backgroundColor: const Color(0xFFFB4110),
-              onPressed: () {
-                showModalBottomSheet(
-                  isScrollControlled: true,
-                  context: context,
-                  builder: (context) => Padding(
-                    padding: EdgeInsets.only(
-                      bottom: MediaQuery.of(context).viewInsets.bottom,
+                    ],
+                  );
+                } else {
+                  return const Center(
+                    child: Text(
+                      'No Products found!',
+                      style: TextStyle(
+                        fontSize: 12.0,
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: "Roboto",
+                      ),
                     ),
-                    child: const FilterBottomSheet(),
+                  );
+                }
+              }
+            },
+          ),
+          floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+          floatingActionButton: FloatingActionButton(
+            backgroundColor: const Color(0xFFFB4110),
+            onPressed: () {
+              showModalBottomSheet(
+                isScrollControlled: true,
+                context: context,
+                builder: (context) => Padding(
+                  padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).viewInsets.bottom,
                   ),
-                );
-              },
-              // isExtended: true,
-              child: const Icon(
-                Icons.filter_alt,
-                color: Colors.white,
-              ),
+                  child: const FilterBottomSheet(),
+                ),
+              );
+            },
+            child: const Icon(
+              Icons.filter_alt,
+              color: Colors.white,
             ),
           ),
-        ));
+        ),
+      ),
+    );
   }
 
   Future<List<ProductList>> fetchproducts(
@@ -374,6 +378,7 @@ class MyProducts_screenState extends State<MyProducts> {
           color: Colors.white,
         ),
         onPressed: () {
+          myProductProvider.clearFilter();
           Navigator.of(context).pop();
         },
       ),
@@ -390,8 +395,7 @@ class FilterBottomSheet extends StatefulWidget {
 
 class _FilterBottomSheetState extends State<FilterBottomSheet> {
   List<RadioButtonOption> options = [];
-  int? gender;
-  int? categoryid;
+
   bool isGenderSelected = false;
   List<ProductCategory> products = [];
   late Future<List<ProductCategory>> proCatogary;
@@ -408,9 +412,10 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
     proCatogary = fetchProductsCategory();
   }
 
-  void filterProducts() {
+  Future<void> filterProducts() async {
     apiData = fetchproducts(
-        genderTypeId: gender, categoryTypeId: selectedCategory?.typecdid);
+        genderTypeId: myProductProvider.getGender,
+        categoryTypeId: myProductProvider.getCategory);
     apiData.then((data) {
       myProductProvider.getProProducts = data;
       // Navigator.of(context).pop();
@@ -419,10 +424,15 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
     });
   }
 
-  @override
-  void dispose() {
-    // Dispose resources
-    super.dispose();
+  Future<void> clearFilter() async {
+    apiData = fetchproducts();
+    apiData.then((data) {
+      myProductProvider.getProProducts = data;
+     // myProductProvider.clearFilter();
+      // Navigator.of(context).pop();
+    }).catchError((error) {
+      print('catchError: Error occurred.');
+    });
   }
 
   late MyProductProvider myProductProvider;
@@ -432,7 +442,6 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
 
     myProductProvider = Provider.of<MyProductProvider>(context);
   }
-
 
   Future<List<ProductList>> fetchproducts(
       {int? id, int? categoryTypeId, int? genderTypeId}) async {
@@ -451,7 +460,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
           'Content-Type': 'application/json',
         },
       );
-      print('api: ${json.encode(request)}');
+      print('fetchproducts: ${json.encode(request)}');
 
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
@@ -461,7 +470,6 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
           list.map((item) => ProductList.fromJson(item)).toList();
           return result;
         } else {
-          // If listResult is null, return an empty list
           print('listResult is null');
           return [];
         }
@@ -495,7 +503,10 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                   GestureDetector(
                     onTap: () {
                       // Clear filters
-                      // provider.clearFilter(); // You need to provide the provider instance here if you are using a state management solution
+                      myProductProvider.clearFilter();
+                      clearFilter().whenComplete(() {
+                        Navigator.of(context).pop();
+                      });
                     },
                     child: const Text(
                       'Clear all filters',
@@ -526,15 +537,18 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                           return Row(
                             children: [
                               CustomRadioButton(
-                                selected: gender == option.typeCdId,
+                                selected:
+                                provider.selectedGender == option.typeCdId,
                                 onTap: () {
                                   setState(() {
-                                    gender = option.typeCdId;
-                                    print('filter: $gender');
+                                    provider.getGender = option.typeCdId;
+                                    provider.selectedGender = option.typeCdId;
+
                                     isGenderSelected = true;
                                   });
                                   print(option.typeCdId);
                                   print(option.desc);
+                                  print('filter: ${provider.getGender}');
                                 },
                               ),
                               const SizedBox(width: 5),
@@ -583,7 +597,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                                   itemBuilder:
                                       (BuildContext context, int index) {
                                     bool isSelected =
-                                        index == provider.dropDownStatus;
+                                        index == provider.selectedCategory;
                                     ProductCategory productCategory;
 
                                     if (index == 0) {
@@ -597,16 +611,13 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                                     return GestureDetector(
                                       onTap: () {
                                         setState(() {
-                                          provider.dropDownStatus = index;
+                                          provider.selectedCategory = index;
 
-                                          selectedCategory = productCategory;
+                                          provider.getCategory =
+                                              productCategory.typecdid;
                                           print(
-                                              'filter: ${selectedCategory?.typecdid}');
+                                              'filter: ${provider.getCategory}');
                                         });
-                                        // payid = currentPaymode.typeCdId;
-                                        // provider.getApiStatusId =
-                                        //     currentPaymode.typeCdId;
-                                        // Selected_PaymentMode = currentPaymode.desc;
                                       },
                                       child: Container(
                                         margin: const EdgeInsets.symmetric(
@@ -691,8 +702,13 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                         ),
                       ),
                       child: const Text(
-                        'Cancel',
-                        // style: CommonStyles.txSty_14r_fb,
+                        'Close',
+                        style: TextStyle(
+                          fontFamily: 'Calibri',
+                          fontSize: 14,
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ),
@@ -702,8 +718,9 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                       child: Center(
                         child: GestureDetector(
                           onTap: () {
-                            filterProducts();
-                            Navigator.of(context).pop();
+                            filterProducts().whenComplete(() {
+                              Navigator.of(context).pop();
+                            });
                             // fetchproducts(
                             //     genderTypeId: gender,
                             //     categoryTypeId: selectedCategory?.typecdid);

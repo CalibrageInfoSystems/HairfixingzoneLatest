@@ -54,6 +54,7 @@ class MyAppointments_screenState extends State<MyAppointments> {
       if (isConnected) {
         print('The Internet Is Connected');
         checkLoginuserdata();
+        // fetchMyAppointments(userId);
         getbranchedata();
       } else {
         print('The Internet Is not  Connected');
@@ -105,12 +106,6 @@ class MyAppointments_screenState extends State<MyAppointments> {
                 right: 10,
               ),
               child:
-              // isLoading
-              //     ? Center(
-              //   child: CircularProgressIndicator(),
-              // )
-              //     : appointments.isNotEmpty
-              //     ?
               ListView.builder(
                 shrinkWrap: true,
                 itemCount: MyAppointmentList.length,
@@ -1791,13 +1786,15 @@ class MyAppointments_screenState extends State<MyAppointments> {
                           topRight: Radius.circular(15.0),
                           bottomLeft: Radius.circular(15.0),
                         ),
-                        child: Card(
+                        child:
+                        Card(
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.only(
                                 topRight: Radius.circular(15.0),
                                 bottomLeft: Radius.circular(15.0),
                               )),
-                          child: Container(
+                          child:
+                          Container(
                             padding: EdgeInsets.only(bottom: 10, top: 5, left: 0, right: 0),
                             decoration: boxDecoration,
                             child: Column(
@@ -2158,66 +2155,7 @@ class MyAppointments_screenState extends State<MyAppointments> {
                                     )
                                   ],
                                 ),
-                                // Row(
-                                //   children: [
-                                //     Expanded(
-                                //       flex: 6,
-                                //       child: Padding(
-                                //         padding: EdgeInsets.only(left: 15.0), // Add left padding to the Feedback text
-                                //         child: Column(
-                                //           crossAxisAlignment: CrossAxisAlignment.start,
-                                //           children: [
-                                //             const Text(
-                                //               'Feedback',
-                                //               style: TextStyle(
-                                //                 color: Color(0xFFF44614),
-                                //                 fontSize: 12,
-                                //                 fontWeight: FontWeight.bold,
-                                //                 fontFamily: 'Calibri',
-                                //               ),
-                                //             ),
-                                //           ],
-                                //         ),
-                                //       ),
-                                //     ),
-                                //     Expanded(
-                                //       flex: 0,
-                                //       child: Column(
-                                //         crossAxisAlignment: CrossAxisAlignment.center,
-                                //         children: [
-                                //           Text(
-                                //             ': ',
-                                //             style: TextStyle(
-                                //               color: Color(0xFFF44614),
-                                //               fontSize: 12,
-                                //               fontWeight: FontWeight.bold,
-                                //               fontFamily: 'Calibri',
-                                //             ),
-                                //           ),
-                                //         ],
-                                //       ),
-                                //     ),
-                                //     Expanded(
-                                //       flex: 24,
-                                //       child: Column(
-                                //         crossAxisAlignment: CrossAxisAlignment.start,
-                                //         children: [
-                                //           Padding(
-                                //             padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                //             child: Text(
-                                //               '$review',
-                                //               style: TextStyle(
-                                //                 color: Color(0xFF042DE3),
-                                //                 fontSize: 12,
-                                //                 fontFamily: 'Calibri',
-                                //               ),
-                                //             ),
-                                //           ),
-                                //         ],
-                                //       ),
-                                //     )
-                                //   ],
-                                // ),
+
                                 Row(
                                   children: [
                                     Expanded(
@@ -2368,8 +2306,6 @@ class MyAppointments_screenState extends State<MyAppointments> {
     print('userId: : $userId');
     fetchMyAppointments(userId);
   }
-
-
   void fetchMyAppointments(int? userId) async {
     setState(() {
       isLoading = true; // Set isLoading to true before making the API request
@@ -2377,9 +2313,6 @@ class MyAppointments_screenState extends State<MyAppointments> {
 
     final url = Uri.parse('http://182.18.157.215/SaloonApp/API/api/Appointment/GetAppointmentByUserid');
     print('url==>890: $url');
-    DateTime now = DateTime.now();
-    String dateTimeString = now.toString();
-    print('DateTime as String: $dateTimeString');
 
     try {
       // Check if userId is not null before proceeding
@@ -2405,7 +2338,9 @@ class MyAppointments_screenState extends State<MyAppointments> {
         if (response.statusCode == 200) {
           // Parse the response body
           final data = json.decode(response.body);
-          print('GetAppointmentByUserid data: : ${data}');
+          print('GetAppointmentByUserid data: : $data');
+
+          // Process the data and convert it into a list of MyAppointment_Model objects
           List<MyAppointment_Model> myAppointmentsList = [];
           for (var item in data['listResult']) {
             myAppointmentsList.add(MyAppointment_Model(
@@ -2430,7 +2365,6 @@ class MyAppointments_screenState extends State<MyAppointments> {
                 ? DateTime.parse(item['reviewsubmittedDate'])
                 : null,
             ));
-            print('ratingfromapi${item['rating']}');
           }
 
           // Update the state with the fetched data
@@ -2441,19 +2375,108 @@ class MyAppointments_screenState extends State<MyAppointments> {
         } else {
           // Handle error if the API request was not successful
           print('Request failed with status: ${response.statusCode}');
+          // You might want to show an error message to the user in the UI
         }
       } else {
         print('Error: userId is null');
+        // You might want to show an error message to the user in the UI
       }
     } catch (error) {
       // Handle any exception that occurred during the API call
       print('Error data is not getting from the api: $error');
+      // You might want to show an error message to the user in the UI
     } finally {
       setState(() {
         isLoading = false; // Set isLoading to false if error occurs or request completes
       });
     }
   }
+
+
+  // void fetchMyAppointments(int? userId) async {
+  //   setState(() {
+  //     isLoading = true; // Set isLoading to true before making the API request
+  //   });
+  //
+  //   final url = Uri.parse('http://182.18.157.215/SaloonApp/API/api/Appointment/GetAppointmentByUserid');
+  //   print('url==>890: $url');
+  //   DateTime now = DateTime.now();
+  //   String dateTimeString = now.toString();
+  //   print('DateTime as String: $dateTimeString');
+  //
+  //   try {
+  //     // Check if userId is not null before proceeding
+  //     if (userId != null) {
+  //       final request = {
+  //         "userid": userId,
+  //         "branchId": null,
+  //         "fromdate": null,
+  //         "toDate": null
+  //       };
+  //       print('GetAppointmentByUserid object: : ${json.encode(request)}');
+  //
+  //       // Send the POST request
+  //       final response = await http.post(
+  //         url,
+  //         body: json.encode(request),
+  //         headers: {
+  //           'Content-Type': 'application/json',
+  //         },
+  //       );
+  //
+  //       // Check if the request was successful
+  //       if (response.statusCode == 200) {
+  //         // Parse the response body
+  //         final data = json.decode(response.body);
+  //         print('GetAppointmentByUserid data: : ${data}');
+  //         List<MyAppointment_Model> myAppointmentsList = [];
+  //         for (var item in data['listResult']) {
+  //           myAppointmentsList.add(MyAppointment_Model(
+  //             id: item['id'],
+  //             branchId: item['branchId'],
+  //             branch: item['branch'],
+  //             date: item['date'],
+  //             slotTime: item['slotTime'],
+  //             customerName: item['customerName'],
+  //             contactNumber: item['contactNumber'],
+  //             email: item['email'],
+  //             genderTypeId: item['genderTypeId'],
+  //             genderName: item['genderName'],
+  //             statusTypeId: item['statusTypeId'],
+  //             status: item['status'],
+  //             purposeOfVisitId: item['purposeOfVisitId'],
+  //             purposeOfVisit: item['purposeOfVisit'],
+  //             isActive: item['isActive'],
+  //             slotDuration: item['slotDuration'],
+  //             review: item['review'],
+  //             rating: item['rating'], reviewSubmittedDate: item['reviewsubmittedDate'] != null
+  //               ? DateTime.parse(item['reviewsubmittedDate'])
+  //               : null,
+  //           ));
+  //           print('ratingfromapi${item['rating']}');
+  //         }
+  //
+  //         // Update the state with the fetched data
+  //         setState(() {
+  //           MyAppointmentList = myAppointmentsList;
+  //           isLoading = false; // Set isLoading to false after data is fetched
+  //         });
+  //       } else {
+  //         // Handle error if the API request was not successful
+  //         print('Request failed with status: ${response.statusCode}');
+  //       }
+  //     } else {
+  //       print('Error: userId is null');
+  //     }
+  //   } catch (error) {
+  //     // Handle any exception that occurred during the API call
+  //     print('Error data is not getting from the api: $error');
+  //   } finally {
+  //     setState(() {
+  //       isLoading = false; // Set isLoading to false if error occurs or request completes
+  //     });
+  //   }
+  // }
 
   void ShowAlertdialog(MyAppointment_Model appointments, int index) {
     print('indexof listview$index');
@@ -2717,17 +2740,19 @@ class MyAppointments_screenState extends State<MyAppointments> {
     int myInt = rating_star.toInt();
     print('changedintoint$myInt');
     if (rating_star != null && rating_star <= 0.0) {
+      FocusScope.of(context).unfocus();
       CommonUtils.showCustomToastMessageLong('Please Give Rating', context, 1, 4);
       isValid = false;
       hasValidationFailed = true;
-      FocusScope.of(context).unfocus();
+
     }
 
     if (isValid && _commentstexteditcontroller.text.trim().isEmpty) {
+      FocusScope.of(context).unfocus();
       CommonUtils.showCustomToastMessageLong('Please Enter Comments', context, 1, 4);
       isValid = false;
       hasValidationFailed = true;
-      FocusScope.of(context).unfocus();
+
     }
     if (isValid) {
       final url = Uri.parse(baseUrl + postApiAppointment);
@@ -2781,6 +2806,7 @@ class MyAppointments_screenState extends State<MyAppointments> {
             userfeedbacklist[index].comments = _commentstexteditcontroller.text.toString();
 
             print('rating_starapi${userfeedbacklist[index].ratingstar}  comments${userfeedbacklist[index].comments}');
+            fetchMyAppointments(userId);
             Navigator.pop(context);
           } else {
             print('Invalid index: $index');

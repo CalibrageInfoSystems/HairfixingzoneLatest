@@ -36,6 +36,9 @@ class _UserScreenState extends State<UserLoginScreen> {
   Future<void> login(String username, String password) async {
     // Define the API endpoint
   //  final String apiUrl = 'http://182.18.157.215/SaloonApp/API/ValidateUserData';
+    setState(() {
+      _isLoading = true; //Enable loading before getQuestions
+    });
     final String apiUrl = baseUrl + ValidateUser;
 
     // Prepare the request body
@@ -69,6 +72,10 @@ class _UserScreenState extends State<UserLoginScreen> {
         // If the user is valid, you can extract more data from 'listResult'
 
         if ( data['listResult'] != null) {
+          setState(() {
+            _isLoading = false;
+
+          });
           List<dynamic> listResult = data['listResult'];
           Map<String, dynamic> user = listResult.first;
           print('User ID: ${user['id']}');
@@ -92,6 +99,7 @@ class _UserScreenState extends State<UserLoginScreen> {
        FocusScope.of(context).unfocus();
           CommonUtils.showCustomToastMessageLong('Invalid user ', context, 1, 4);
         }
+
       } else {
         FocusScope.of(context).unfocus();
         CommonUtils.showCustomToastMessageLong("${data["statusMessage"]}", context, 1, 4);
@@ -102,6 +110,10 @@ class _UserScreenState extends State<UserLoginScreen> {
         }
       }
     } else {
+      setState(() {
+        _isLoading = false;
+
+      });
       // Handle any error cases here
       print('Failed to connect to the API. Status code: ${response.statusCode}');
     }
@@ -169,15 +181,16 @@ class _UserScreenState extends State<UserLoginScreen> {
     bool isValid = true;
     bool hasValidationFailed = false;
 
-    if (password.isEmpty) {
-      CommonUtils.showCustomToastMessageLong('Please Enter Password', context, 1, 4);
+
+    if (username.isEmpty) {
+      CommonUtils.showCustomToastMessageLong('Please Enter Username', context, 1, 4);
       isValid = false;
       hasValidationFailed = true;
       // Hide the keyboard || password.isEmpty
       FocusScope.of(context).unfocus();
     }
-    if (username.isEmpty) {
-      CommonUtils.showCustomToastMessageLong('Please Enter Username', context, 1, 4);
+   else if (password.isEmpty) {
+      CommonUtils.showCustomToastMessageLong('Please Enter Password', context, 1, 4);
       isValid = false;
       hasValidationFailed = true;
       // Hide the keyboard || password.isEmpty
@@ -378,7 +391,7 @@ class _UserScreenState extends State<UserLoginScreen> {
                   child: Text('Login'),
                 ),
                 SizedBox(height: 16.0),
-                if (_isLoading) CircularProgressIndicator(),
+                if (_isLoading) Center(child: CircularProgressIndicator()),
               ],
             ),
           ),

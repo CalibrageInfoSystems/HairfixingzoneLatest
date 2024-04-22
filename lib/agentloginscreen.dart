@@ -75,6 +75,9 @@ class _AgentScreenState extends State<agentloginscreen> {
   Future<void> login(String usename, String password) async {
     final String apiUrl = baseUrl + ValidateUser;
     final String addSlotUrl = baseUrl + AddAgentSlotInformation;
+    setState(() {
+      _isLoading = true; //Enable loading before getQuestions
+    });
     List<int> userIds = [];
     List<int> branchIds = [];
     int user_Id;
@@ -130,11 +133,19 @@ class _AgentScreenState extends State<agentloginscreen> {
             await addAgentSlotInformation(agentSlotsDetailsMap, user_Id);
           }
           else {
+            setState(() {
+              _isLoading = false;
+
+            });
             FocusScope.of(context).unfocus();
             CommonUtils.showCustomToastMessageLong('Invalid user ', context, 1, 4);
             print("ListResult is null");
           }
         } else {
+          setState(() {
+            _isLoading = false;
+
+          });
           FocusScope.of(context).unfocus();
           CommonUtils.showCustomToastMessageLong(responseData["statusMessage"], context, 1, 4);
           print("API returned an error: ${responseData["statusMessage"]}");
@@ -153,6 +164,10 @@ class _AgentScreenState extends State<agentloginscreen> {
     print('agentSlotDetail==${jsonEncode(agentSlotsDetailsMap)}');
     print('addSlotUrl==$addSlotUrl');
     print('user_id==$user_id');
+    setState(() {
+      _isLoading = true;
+
+    });
     try {
       final http.Response addSlotResponse = await http.post(
         Uri.parse(addSlotUrl),
@@ -164,6 +179,10 @@ class _AgentScreenState extends State<agentloginscreen> {
         final Map<String, dynamic> responseJson = jsonDecode(addSlotResponse.body);
 
         if (responseJson["isSuccess"]) {
+          setState(() {
+            _isLoading = false;
+
+          });
           print("Agent slots information added successfully.");
           SharedPreferences prefs = await SharedPreferences.getInstance();
           prefs.setBool('isLoggedIn', true);
@@ -177,6 +196,10 @@ class _AgentScreenState extends State<agentloginscreen> {
               ));
         } else {
           print("Error: ${responseJson["statusMessage"]}");
+          setState(() {
+            _isLoading = false;
+
+          });
           if (responseJson["statusMessage"] == "This token is already used") {
             SharedPreferences prefs = await SharedPreferences.getInstance();
             prefs.setBool('isLoggedIn', true);
@@ -189,6 +212,10 @@ class _AgentScreenState extends State<agentloginscreen> {
                   builder: (context) => Branches_screen(userId: user_id),
                 ));
           } else {
+            setState(() {
+              _isLoading = false;
+
+            });
             CommonUtils.showCustomToastMessageLong("${responseJson["statusMessage"]}", context, 1, 4);
           }
         }
@@ -205,21 +232,21 @@ class _AgentScreenState extends State<agentloginscreen> {
     String password = _passwordController.text;
     bool isValid = true;
     bool hasValidationFailed = false;
-
-    if (password.isEmpty) {
-      CommonUtils.showCustomToastMessageLong('Please Enter Password', context, 1, 4);
-      isValid = false;
-      hasValidationFailed = true;
-      // Hide the keyboard || password.isEmpty
-      FocusScope.of(context).unfocus();
-    }
     if (username.isEmpty) {
       CommonUtils.showCustomToastMessageLong('Please Enter Username', context, 1, 4);
       isValid = false;
       hasValidationFailed = true;
       // Hide the keyboard || password.isEmpty
       FocusScope.of(context).unfocus();
-    } else {
+    }
+   else if (password.isEmpty) {
+      CommonUtils.showCustomToastMessageLong('Please Enter Password', context, 1, 4);
+      isValid = false;
+      hasValidationFailed = true;
+      // Hide the keyboard || password.isEmpty
+      FocusScope.of(context).unfocus();
+    }
+   else {
       bool isConnected = await CommonUtils.checkInternetConnectivity();
       if (isConnected) {
         print('Connected to the internet');
@@ -410,7 +437,7 @@ class _AgentScreenState extends State<agentloginscreen> {
                   child: Text('Login'),
                 ),
                 SizedBox(height: 16.0),
-                if (_isLoading) CircularProgressIndicator(),
+                if (_isLoading) Center(child: CircularProgressIndicator()),
               ],
             ),
           ),
