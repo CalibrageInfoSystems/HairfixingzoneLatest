@@ -2,9 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:hairfixingzone/CommonUtils.dart';
 
 
+import 'package:flutter/material.dart';
+
+
 class CustomeFormField extends StatelessWidget {
   final String label;
-  const CustomeFormField({super.key, required this.label});
+  final String? Function(String?)? validator;
+  const CustomeFormField({super.key, required this.label, this.validator});
 
   @override
   Widget build(BuildContext context) {
@@ -12,29 +16,34 @@ class CustomeFormField extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // label text
-        Text(
-          '$label *',
-          style: CommonUtils.txSty_12p_fb,
+        Row(
+          children: [
+            Text(
+              '$label ',
+              style: CommonUtils.txSty_12p_fb,
+            ),
+            const Text(
+              '*',
+              style: TextStyle(color: Colors.red),
+            ),
+          ],
         ),
 
         // textfield
         TextFormField(
           decoration: InputDecoration(
             contentPadding:
-                const EdgeInsets.only(top: 15, bottom: 10, left: 15, right: 15),
+            const EdgeInsets.only(top: 15, bottom: 10, left: 15, right: 15),
             border: const OutlineInputBorder(
               borderRadius: BorderRadius.all(
                 Radius.circular(10),
               ),
-              borderSide: BorderSide(color: CommonUtils.primaryColor),
+              borderSide: BorderSide(color: CommonUtils.primaryTextColor),
             ),
-            // labelText: label,
             hintText: 'Enter $label',
             hintStyle: CommonUtils.txSty_12bs_fb,
           ),
-          validator: (value) {
-            return null;
-          },
+          validator: validator,
         ),
       ],
     );

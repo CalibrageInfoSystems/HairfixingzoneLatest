@@ -57,18 +57,25 @@ class CommonUtils{
       overlayEntry.remove();
     });
   }
-  static const primaryColor = Color(0xFFefdbfe);
-  static const primaryTextColor = Color.fromRGBO(113, 10, 192, 1);
 
   static const blackColor = Colors.black;
   static const blackColorShade = Color(0xFF5f5f5f);
+  static const primaryColor = Color(0xFFf7ebff);
+  static const primaryTextColor = Color(0xFF662e91);
+  static const formFieldErrorBorderColor = Color(0xFFff0000);
+  static const blueColor = Color(0xFF0f75bc);
   static const TextStyle header_Styles = TextStyle(
     fontSize: 24,
     fontFamily: "Calibri",
     fontWeight: FontWeight.w700,
     color: Color(0xFF662d91),
   );
-
+  static const TextStyle Sub_header_Styles = TextStyle(
+    fontSize: 24,
+    fontFamily: "Calibri",
+    fontWeight: FontWeight.w500,
+    color: Color(0xFF5f5f5f)
+  );
   static const TextStyle Mediumtext_o_14 = TextStyle(
     fontSize: 20,
     fontFamily: "Calibri",
@@ -84,7 +91,7 @@ class CommonUtils{
 
   static const txSty_14w_fb = TextStyle(
     fontSize: 14,
-    fontFamily: 'Roboto',
+    fontFamily: 'Calibri',
     fontWeight: FontWeight.bold,
     color: Color(0xFFFFFFFF),
   );
@@ -92,29 +99,29 @@ class CommonUtils{
     fontSize: 12.0,
     color: blackColor,
     fontWeight: FontWeight.bold,
-    fontFamily: "Roboto",
+    fontFamily: "Calibri",
   );
   static const txSty_12bs_fb = TextStyle(
     fontSize: 12.0,
     color: blackColorShade,
     fontWeight: FontWeight.bold,
-    fontFamily: "Roboto",
+    fontFamily: "Calibri",
   );
   static const txSty_12p_fb = TextStyle(
     fontSize: 12.0,
     color: primaryTextColor,
     fontWeight: FontWeight.w500,
-    fontFamily: "Roboto",
+    fontFamily: "Calibri",
   );
   static const txSty_18b_fb = TextStyle(
     fontSize: 18,
-    fontFamily: 'Roboto',
+    fontFamily: 'Calibri',
     fontWeight: FontWeight.bold,
     color: blackColor,
   );
   static const txSty_18p_f7 = TextStyle(
     fontSize: 18,
-    fontFamily: 'Roboto',
+    fontFamily: 'Calibri',
     fontWeight: FontWeight.w500,
     color: primaryTextColor,
   );
