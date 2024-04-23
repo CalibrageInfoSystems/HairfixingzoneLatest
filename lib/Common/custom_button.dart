@@ -10,11 +10,13 @@ class CustomButton extends StatelessWidget {
   final String buttonText;
   final Color color;
   final VoidCallback onPressed;
+  final double textSize; // Add this parameter
   const CustomButton(
       {super.key,
         required this.buttonText,
         required this.color,
-        required this.onPressed});
+        required this.onPressed,
+  this.textSize = 16.0, });
 
   @override
   Widget build(BuildContext context) {

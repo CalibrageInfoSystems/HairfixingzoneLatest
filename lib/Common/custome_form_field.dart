@@ -5,10 +5,13 @@ import 'package:hairfixingzone/CommonUtils.dart';
 import 'package:flutter/material.dart';
 
 
+import 'package:flutter/material.dart';
+
 class CustomeFormField extends StatelessWidget {
   final String label;
   final String? Function(String?)? validator;
-  const CustomeFormField({super.key, required this.label, this.validator});
+  final TextEditingController? controller; // Added controller parameter
+  const CustomeFormField({Key? key, required this.label, this.validator, this.controller}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +23,7 @@ class CustomeFormField extends StatelessWidget {
           children: [
             Text(
               '$label ',
-              style: CommonUtils.txSty_12p_fb,
+              style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
             ),
             const Text(
               '*',
@@ -31,9 +34,9 @@ class CustomeFormField extends StatelessWidget {
 
         // textfield
         TextFormField(
+          controller: controller, // Assigning the controller
           decoration: InputDecoration(
-            contentPadding:
-            const EdgeInsets.only(top: 15, bottom: 10, left: 15, right: 15),
+            contentPadding: const EdgeInsets.only(top: 15, bottom: 10, left: 15, right: 15),
             focusedBorder: OutlineInputBorder(
               borderSide: BorderSide(
                 color: Color(0xFF0f75bc),
@@ -42,7 +45,7 @@ class CustomeFormField extends StatelessWidget {
             ),
             enabledBorder: OutlineInputBorder(
               borderSide: BorderSide(
-                color: CommonUtils.primaryTextColor,
+                color: Colors.grey, // Changed to a default color
               ),
               borderRadius: BorderRadius.circular(6.0),
             ),
@@ -50,14 +53,11 @@ class CustomeFormField extends StatelessWidget {
               borderRadius: BorderRadius.all(
                 Radius.circular(10),
               ),
-
             ),
             hintText: 'Enter $label',
-           // hintStyle: CommonUtils.txSty_12bs_fb,
           ),
           validator: validator,
         ),
-
       ],
     );
   }
