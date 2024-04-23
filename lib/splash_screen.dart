@@ -40,7 +40,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
 
     _animationController.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
-       // navigateTouserselection();
+        // navigateTouserselection();
         checkLoginStatus();
 
         //  navigateToHome();
@@ -66,16 +66,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
 
   @override
   Widget build(BuildContext context) {
-    return  WillPopScope(
-        onWillPop: () async {
-      // Handle back button press here
-      //
-
-
-      // You can add any custom logic before closing the app
-      return true; // Return true to allow back button press and close the app
-    },
-     child: Scaffold(
+    return Scaffold(
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
@@ -99,7 +90,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
           ),
         ),
       ),
-    ));
+    );
   }
 
 
@@ -137,7 +128,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
       int? userId = prefs.getInt('userId'); // Retrieve the user ID
       int? roleId = prefs.getInt('userRoleId'); // Retrieve the role ID
 
-     // if (userId != null && roleId != null) {
+      // if (userId != null && roleId != null) {
       if (userId != null ) {
         // Use the user ID and role ID as needed
         print('User ID: $userId, Role ID: $roleId');
@@ -151,8 +142,8 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
           // Navigate to another screen for users with different role ID
           // For example, you might have a different screen for users with role ID 2
           Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => Branches_screen(userId: userId)));
+              context,
+              MaterialPageRoute(builder: (context) => Branches_screen(userId: userId)));
 
         }
       } else {

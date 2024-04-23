@@ -18,6 +18,8 @@ class Appointment {
   bool isRejected;
   bool isClosed;
   final String SlotDuration;
+  final String? review;
+  final double? rating;
 
   Appointment({
     required this.id,
@@ -39,6 +41,9 @@ class Appointment {
     this.isRejected =false,
     this.isClosed =false,
     required this.SlotDuration,
+    required this.review,
+    required this.rating,
+
   });
 
   factory Appointment.fromJson(Map<String, dynamic> json) {
@@ -59,6 +64,9 @@ class Appointment {
       purposeofvisit: json['purposeOfVisit'],
       isActive: json['isActive'],
       SlotDuration: json['slotDuration'],
+      review: json['review'],
+      rating: json['rating'] != null ? json['rating'].toDouble() : null,
+
     );
   }
 }

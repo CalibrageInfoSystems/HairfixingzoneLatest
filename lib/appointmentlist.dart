@@ -483,6 +483,201 @@ class _appointmentlist extends State<appointmentlist> {
                                                     ),
                                                   ),
                                                 ),
+                                                // if (appointment.statusTypeId == 11)
+                                                //
+                                                //   Visibility(
+                                                //     child:
+                                                //     Row(
+                                                //       crossAxisAlignment: CrossAxisAlignment.start,
+                                                //       children: [
+                                                //         Expanded(
+                                                //           child: ListTile(
+                                                //             subtitle: Column(
+                                                //               crossAxisAlignment: CrossAxisAlignment.start,
+                                                //               children: [
+                                                //                 Padding(
+                                                //                   padding: EdgeInsets.only(top: 5.0, bottom: 4.0),
+                                                //                   child: RichText(
+                                                //                     text: TextSpan(
+                                                //                       children: [
+                                                //                         TextSpan(
+                                                //                           text: 'Name : ',
+                                                //                           style: TextStyle(color: Color(0xFFF44614), fontSize: 12, fontWeight: FontWeight.bold, fontFamily: 'Calibri'),
+                                                //                         ),
+                                                //                         TextSpan(
+                                                //                           text: appointment.customerName,
+                                                //                           style: TextStyle(color: Color(0xFF042DE3), fontSize: 12, fontFamily: 'Calibri'),
+                                                //                         ),
+                                                //                       ],
+                                                //                     ),
+                                                //                   ),
+                                                //                 ),
+                                                //                 Padding(
+                                                //                   padding: EdgeInsets.only(bottom: 4.0),
+                                                //                   child: RichText(
+                                                //                     text: TextSpan(
+                                                //                       children: [
+                                                //                         TextSpan(
+                                                //                           text: 'Gender : ',
+                                                //                           style: TextStyle(color: Color(0xFFF44614), fontSize: 12, fontWeight: FontWeight.bold, fontFamily: 'Calibri'),
+                                                //                         ),
+                                                //                         TextSpan(
+                                                //                           text: appointment.gender,
+                                                //                           style: TextStyle(color: Color(0xFF042DE3), fontSize: 12, fontFamily: 'Calibri'),
+                                                //                         ),
+                                                //                       ],
+                                                //                     ),
+                                                //                   ),
+                                                //                 ),
+                                                //                 Padding(
+                                                //                   padding: EdgeInsets.only(bottom: 4.0),
+                                                //                   child: RichText(
+                                                //                     text: TextSpan(
+                                                //                       children: [
+                                                //                         TextSpan(
+                                                //                           text: 'Purpose : ',
+                                                //                           style: TextStyle(color: Color(0xFFF44614), fontSize: 12, fontWeight: FontWeight.bold, fontFamily: 'Calibri'),
+                                                //                         ),
+                                                //                         TextSpan(
+                                                //                           text: appointment.purposeofvisit,
+                                                //                           style: TextStyle(color: Color(0xFF042DE3), fontSize: 12, fontFamily: 'Calibri'),
+                                                //                         ),
+                                                //                       ],
+                                                //                     ),
+                                                //                   ),
+                                                //                 ),
+                                                //                 Padding(
+                                                //                   padding: EdgeInsets.only(bottom: 4.0),
+                                                //                   child: RichText(
+                                                //                     text: TextSpan(
+                                                //                       children: [
+                                                //                         WidgetSpan(
+                                                //                           child: Icon(
+                                                //                             Icons.email_outlined,
+                                                //                             size: 16,
+                                                //                             color: Color(0xFFF44614),
+                                                //                           ),
+                                                //                         ),
+                                                //                         TextSpan(
+                                                //                           text: ' : ',
+                                                //                           style: TextStyle(color: Color(0xFFF44614), fontSize: 12, fontWeight: FontWeight.bold, fontFamily: 'Calibri'),
+                                                //                         ),
+                                                //                         TextSpan(
+                                                //                           text: appointment.email,
+                                                //                           style: TextStyle(color: Color(0xFF042DE3), fontSize: 12, fontFamily: 'Calibri'),
+                                                //                         ),
+                                                //                       ],
+                                                //                     ),
+                                                //                   ),
+                                                //                 ),
+                                                //                 Padding(
+                                                //                   padding: EdgeInsets.only(bottom: 4.0),
+                                                //                   child: RichText(
+                                                //                     text: TextSpan(
+                                                //                       children: [
+                                                //                         WidgetSpan(
+                                                //                           child: Icon(
+                                                //                             Icons.lock_clock,
+                                                //                             color: Color(0xFFF44614),
+                                                //                             size: 16,
+                                                //                           ),
+                                                //                         ),
+                                                //                         TextSpan(
+                                                //                           text: ' : ',
+                                                //                           style: TextStyle(color: Color(0xFFF44614), fontSize: 12, fontWeight: FontWeight.bold, fontFamily: 'Calibri'),
+                                                //                         ),
+                                                //                         TextSpan(
+                                                //                           text: appointment.SlotDuration,
+                                                //                           style: TextStyle(
+                                                //                               color: Color(
+                                                //                                 0xFF042DE3,
+                                                //                               ),
+                                                //                               fontSize: 12,
+                                                //                               fontFamily: 'Calibri'),
+                                                //                         ),
+                                                //                       ],
+                                                //                     ),
+                                                //                   ),
+                                                //                 ),
+                                                //                 if (appointment.statusTypeId == 11)
+                                                //
+                                                //                   Visibility(
+                                                //                     child: Column(
+                                                //                       mainAxisAlignment: MainAxisAlignment.center,
+                                                //                       children: [
+                                                //                         Padding(
+                                                //                           padding: EdgeInsets.only(bottom: 4.0),
+                                                //                           child: RichText(
+                                                //                             text: TextSpan(
+                                                //                               children: [
+                                                //                                 TextSpan(
+                                                //                                   text: 'FeedBack : ',
+                                                //                                   style: TextStyle(color: Color(0xFFF44614), fontSize: 12, fontWeight: FontWeight.bold, fontFamily: 'Calibri'),
+                                                //                                 ),
+                                                //                                 TextSpan(
+                                                //                                   text: "huuuuuuuuuuuuuuuuuuuuuuuuuuudkjdfkdsfgdsgfdgfgdfgdfgdgdfgdfgdfgdfgfdgfdg",
+                                                //                                   style: TextStyle(color: Color(0xFF042DE3), fontSize: 12, fontFamily: 'Calibri'),
+                                                //                                 ),
+                                                //                               ],
+                                                //                             ),
+                                                //                           ),
+                                                //                         ),
+                                                //                       ],
+                                                //                     ),
+                                                //                   ),
+                                                //               ],
+                                                //             ),
+                                                //           ),
+                                                //         ),
+                                                //         Column(
+                                                //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                //           children: [
+                                                //             Padding(
+                                                //               padding: EdgeInsets.only(bottom: 5.0, left: 5.0, right: 5.0, top: 5.0),
+                                                //               child: GestureDetector(
+                                                //                 onTap: () {
+                                                //                   String phoneNumber = appointment.phoneNumber;
+                                                //                   launch("tel:$phoneNumber");
+                                                //                 },
+                                                //                 child: RichText(
+                                                //                   text: TextSpan(
+                                                //                     children: [
+                                                //                       WidgetSpan(
+                                                //                         child: Padding(
+                                                //                           padding: EdgeInsets.only(left: 8.0, top: 2.0), // Add desired left and top padding
+                                                //                           child: Icon(
+                                                //                             Icons.phone,
+                                                //                             color: Color(0xFFF44614),
+                                                //                             size: 16,
+                                                //                           ),
+                                                //                         ),
+                                                //                       ),
+                                                //                       TextSpan(
+                                                //                         text: ': ',
+                                                //                         style: TextStyle(
+                                                //                           color: Color(0xFFF44614),
+                                                //                           fontWeight: FontWeight.bold,
+                                                //                           fontFamily: 'Calibri',
+                                                //                         ),
+                                                //                       ),
+                                                //                       TextSpan(
+                                                //                         text: appointment.phoneNumber,
+                                                //                         style: TextStyle(
+                                                //                           color: Color(0xFF042DE3),
+                                                //                           fontFamily: 'Calibri',
+                                                //                         ),
+                                                //                       ),
+                                                //                     ],
+                                                //                   ),
+                                                //                 ),
+                                                //               ),
+                                                //             ),
+                                                //             //
+                                                //           ],
+                                                //         ),
+                                                //       ],
+                                                //     ),
+                                                //   ),
                                               ],
                                             ),
                                           ),
@@ -530,6 +725,7 @@ class _appointmentlist extends State<appointmentlist> {
                                                 ),
                                               ),
                                             ),
+
                                             if (appointment.statusTypeId == 5 && !appointment.isClosed)
                             Visibility(
                               child: Column(
@@ -562,7 +758,7 @@ class _appointmentlist extends State<appointmentlist> {
                                           purposevisitid: appointment.purposevisitid,
                                           purposeofvisit: appointment.purposeofvisit,
                                           isActive: appointment.isActive,
-                                          SlotDuration: appointment.SlotDuration,
+                                          SlotDuration: appointment.SlotDuration, review: '', rating: null,
                                         );
 
                                         print('Button 1 pressed for ${appointment.customerName}');
@@ -712,7 +908,7 @@ class _appointmentlist extends State<appointmentlist> {
                                                                 purposevisitid: appointment.purposevisitid,
                                                                 purposeofvisit: appointment.purposeofvisit,
                                                                 isActive: appointment.isActive,
-                                                                SlotDuration: appointment.SlotDuration,
+                                                                SlotDuration: appointment.SlotDuration,review: '', rating: null,
                                                               );
 
                                                               print('Button 1 pressed for ${appointment.customerName}');
@@ -772,7 +968,7 @@ class _appointmentlist extends State<appointmentlist> {
                                                               purposevisitid: appointment.purposevisitid,
                                                               purposeofvisit: appointment.purposeofvisit,
                                                               isActive: appointment.isActive,
-                                                              SlotDuration: appointment.SlotDuration,
+                                                              SlotDuration: appointment.SlotDuration,review: '', rating: null,
                                                             );
 
                                                             print('Button 1 pressed for ${appointment.customerName}');
@@ -903,7 +1099,8 @@ class _appointmentlist extends State<appointmentlist> {
                                                     ),
                                                   ],
                                                 ),
-                                              )
+                                              ),
+
                                           ],
                                         ),
                                       ],
@@ -1225,7 +1422,7 @@ class _appointmentlist extends State<appointmentlist> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Enter Price'),
+          title: Text('Enter Price '),
           content: Form(
             key: _formKey,
             child: Container(
@@ -1263,14 +1460,14 @@ class _appointmentlist extends State<appointmentlist> {
                             }
                             int? price = int.tryParse(value);
                             if (price == null) {
-                              CommonUtils.showCustomToastMessageLong('Please enter a valid integer price', context, 1, 4);
+                              CommonUtils.showCustomToastMessageLong('Please enter a valid  price', context, 1, 4);
                               FocusScope.of(context).unfocus();
                              // return 'Please enter a valid integer price';
                             }
                             return null;
                           },
                           decoration: InputDecoration(
-                            hintText: ' Price',
+                            hintText: ' Price in Rs',
                             hintStyle: TextStyle(
                               fontSize: 14,
                               fontFamily: 'Calibri',

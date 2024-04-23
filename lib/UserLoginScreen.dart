@@ -91,13 +91,13 @@ class _UserScreenState extends State<UserLoginScreen> {
           } else {
             // Show toast for invalid user
             FocusScope.of(context).unfocus();
-            CommonUtils.showCustomToastMessageLong("Invalid user", context, 1, 4);
+            CommonUtils.showCustomToastMessageLong("Invalid User", context, 1, 4);
            // showToast('Invalid user');
           }
         }
         else{
        FocusScope.of(context).unfocus();
-          CommonUtils.showCustomToastMessageLong('Invalid user ', context, 1, 4);
+          CommonUtils.showCustomToastMessageLong('Invalid User ', context, 1, 4);
         }
 
       } else {
@@ -109,7 +109,8 @@ class _UserScreenState extends State<UserLoginScreen> {
           // Print or handle validation errors if any
         }
       }
-    } else {
+    }
+     else {
       setState(() {
         _isLoading = false;
 
@@ -120,59 +121,7 @@ class _UserScreenState extends State<UserLoginScreen> {
   }
 
 
-  // Future<bool> login(String username, String password) async {
-  //   final String apiUrl = baseUrl + ValidateUserData;
-  //
-  //   final Map<String, dynamic> requestObject = {
-  //     "userName": username,
-  //     "password": password,
-  //   };
-  //
-  //   print('requestObject == ${jsonEncode(requestObject)}');
-  //
-  //   try {
-  //     final http.Response response = await http.post(
-  //       Uri.parse(apiUrl),
-  //       headers: {"Content-Type": "application/json"},
-  //       body: jsonEncode(requestObject),
-  //     );
-  //
-  //     if (response.statusCode == 200) {
-  //       final Map<String, dynamic> responseData = jsonDecode(response.body);
-  //
-  //       if (responseData["isSuccess"]) {
-  //         final dynamic userData = responseData["listResult"];
-  //
-  //         if (userData != null) {
-  //           // print("UserId ${int.parse(userData['id'])}");
-  //           // print("Roleid ${int.parse(userData['roleID'])}");
-  //           SharedPreferences prefs = await SharedPreferences.getInstance();
-  //           prefs.setBool('isLoggedIn', true);
-  //           prefs.setInt("id", int.parse(userData['id']));
-  //           prefs.setInt("roleId", int.parse(userData['roleID']));
-  //           prefs.setString("fullName", userData['fullName']);
-  //           Navigator.push(
-  //             context,
-  //             MaterialPageRoute(builder: (context) => HomeScreen()),
-  //           );
-  //           return true; // Indicate successful login
-  //         } else {
-  //           print("ListResult is null");
-  //           return false; // Indicate failed login
-  //         }
-  //       } else {
-  //         print("API returned an error: ${responseData["EndUserMessage"]}");
-  //         return false; // Indicate failed login
-  //       }
-  //     } else {
-  //       print("Error: ${response.statusCode}");
-  //       return false; // Indicate failed login
-  //     }
-  //   } catch (e) {
-  //     print("Exception: $e");
-  //     return false; // Indicate failed login
-  //   }
-  // }
+
 
 
   Future<void> _handleLogin() async {
@@ -183,7 +132,7 @@ class _UserScreenState extends State<UserLoginScreen> {
 
 
     if (username.isEmpty) {
-      CommonUtils.showCustomToastMessageLong('Please Enter Username', context, 1, 4);
+      CommonUtils.showCustomToastMessageLong('Please Enter User Name', context, 1, 4);
       isValid = false;
       hasValidationFailed = true;
       // Hide the keyboard || password.isEmpty
