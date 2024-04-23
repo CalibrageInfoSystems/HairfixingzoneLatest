@@ -34,17 +34,30 @@ class CustomeFormField extends StatelessWidget {
           decoration: InputDecoration(
             contentPadding:
             const EdgeInsets.only(top: 15, bottom: 10, left: 15, right: 15),
-            border: const OutlineInputBorder(
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: Color(0xFF0f75bc),
+              ),
+              borderRadius: BorderRadius.circular(6.0),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: CommonUtils.primaryTextColor,
+              ),
+              borderRadius: BorderRadius.circular(6.0),
+            ),
+            border: OutlineInputBorder(
               borderRadius: BorderRadius.all(
                 Radius.circular(10),
               ),
-              borderSide: BorderSide(color: CommonUtils.primaryTextColor),
+
             ),
             hintText: 'Enter $label',
-            hintStyle: CommonUtils.txSty_12bs_fb,
+           // hintStyle: CommonUtils.txSty_12bs_fb,
           ),
           validator: validator,
         ),
+
       ],
     );
   }

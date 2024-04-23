@@ -54,6 +54,9 @@ class _LoginPageState extends State<CustomerLoginScreen> {
                     child: Image.asset(
                         'assets/hfz_logo.png'),
                   ),
+                  const SizedBox(
+                    height: 5.0,
+                  ),
                   const Text(
                     'Customer Login',
                     style:  TextStyle(
@@ -105,7 +108,7 @@ class _LoginPageState extends State<CustomerLoginScreen> {
                     SizedBox(
                       height: 10,
                     ),
-                    CustomeFormField(label: 'User Name', validator: validateEmail,),
+                    CustomeFormField(label: 'Email/User Name', validator: validateEmail,),
                     SizedBox(
                       height: 10,
                     ),
@@ -190,7 +193,7 @@ class _LoginPageState extends State<CustomerLoginScreen> {
 
   String? validatePassword(String? value) {
     if (value == null || value.isEmpty) {
-      return 'Please enter an password';
+      return 'Please Enter Password';
     }
     if (value.length < 4) {
       return 'Password must be 4 characters or more';
@@ -203,12 +206,13 @@ class _LoginPageState extends State<CustomerLoginScreen> {
 
   String? validateEmail(String? value) {
     if (value == null || value.isEmpty) {
-      return 'Please enter an email';
-    } else if (!RegExp(
-        r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-        .hasMatch(value)) {
-      return 'Please enter a valid email address';
+      return 'Please Enter Email/User Name';
     }
+    // else if (!RegExp(
+    //     r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+    //     .hasMatch(value)) {
+    //   return 'Please enter a valid email address';
+    // }
     return null;
   }
 

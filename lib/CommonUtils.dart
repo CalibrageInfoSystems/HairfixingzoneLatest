@@ -103,7 +103,7 @@ class CommonUtils{
   );
   static const txSty_12bs_fb = TextStyle(
     fontSize: 12.0,
-    color: blackColorShade,
+
     fontWeight: FontWeight.bold,
     fontFamily: "Calibri",
   );
