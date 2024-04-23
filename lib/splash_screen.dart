@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:hairfixingzone/startingscreen.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'Branches_screen.dart';
@@ -40,7 +41,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
 
     _animationController.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
-        // navigateTouserselection();
+      navigateTouserselection();
         checkLoginStatus();
 
         //  navigateToHome();
@@ -60,7 +61,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
 
   void navigateTouserselection() {
     Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (context) => UserSelectionScreen()),
+      MaterialPageRoute(builder: (context) => startingscreen()),
     );
   }
 
@@ -75,13 +76,14 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
           ),
         ),
         child: Center(
-          child: AnimatedBuilder(
+          child:
+          AnimatedBuilder(
             animation: _animationController,
             builder: (BuildContext context, Widget? child) {
               return Transform.scale(
                 scale: _animation.value,
                 child: Image.asset(
-                  'assets/logo.png',
+                  'assets/hairfixing_logo.png',
                   width: 200,
                   height: 200,
                 ),
@@ -154,7 +156,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
       // If not logged in, navigate to the login screen
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => UserSelectionScreen()),
+        MaterialPageRoute(builder: (context) => startingscreen()),
       );
     }
   }
