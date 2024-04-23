@@ -51,6 +51,7 @@ dependencies:
   flutter_rating_bar: ^4.0.1
   flutter_expanded_tile: ^0.3.7
   provider: ^6.0.3
+  bottom_navy_bar: ^6.0.0
 
 
 dev_dependencies:
@@ -110,6 +111,8 @@ flutter:
     - assets/rescheduling.svg
     - assets/rate.svg
     - assets/close.svg
+    - assets/hfz_logo.svg
+    - assets/left-arrow.svg
 
 
 
