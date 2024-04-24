@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hairfixingzone/CommonUtils.dart';
 
 class CustomRadioButton extends StatefulWidget {
   final bool selected;
@@ -33,7 +34,7 @@ class _CustomRadioButtonState extends State<CustomRadioButton> {
             height: 18,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: Color(0xFFFB4110),
+              color: CommonUtils.primaryTextColor,
             ),
           ),
         )

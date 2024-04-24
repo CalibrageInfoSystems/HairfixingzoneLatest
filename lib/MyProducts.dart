@@ -128,195 +128,67 @@ class MyProducts_screenState extends State<MyProducts> {
     }
   }
 
+
   @override
   Widget build(BuildContext context) {
-    final textscale = MediaQuery.of(context).textScaleFactor;
-    return Consumer<MyProductProvider>(
-      builder: (context, provider, child) =>
-        // PopScope(
-        // canPop: true,
-        // onPopInvoked: (didPop) {
-        //   myProductProvider.clearFilter();
-        // },
-        WillPopScope(
-        onWillPop: () async {
-          myProductProvider.clearFilter();
-          return true;
-        },
-        child: Scaffold(
-   //       appBar: _appBar(),
-          body: FutureBuilder(
-            future: apiData,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(
-                  child: CircularProgressIndicator.adaptive(
-                    backgroundColor: Colors.transparent,
-                    valueColor: AlwaysStoppedAnimation<Color>(orangeColor),
-                  ),
-                );
-              } else if (snapshot.hasError) {
-                return Center(
-                  child: Text(
-                    'Error: ${snapshot.error}',
-                    style: const TextStyle(
-                      fontSize: 12.0,
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: "Roboto",
-                    ),
-                  ),
-                );
-              } else {
-                List<ProductList>? data = provider.getProProducts;
+    return Scaffold(
+      body: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          children: [
+            // search and filter
+            _searchBarAndFilter(),
 
-                if (provider.getProProducts.isNotEmpty) {
-                  return Stack(
-                    children: [
-                      SingleChildScrollView(
-                        child: Container(
-                          padding: const EdgeInsets.all(15.0),
-                          child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                GridView.builder(
-                                  gridDelegate:
-                                  const SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 2,
-                                      crossAxisSpacing: 16.0,
-                                      mainAxisSpacing: 16.0,
-                                      mainAxisExtent: 190,
-                                      childAspectRatio: 8 / 2),
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  shrinkWrap: true,
-                                  itemCount: data.length,
-                                  itemBuilder:
-                                      (BuildContext context, int index) {
-                                    ProductList productmodel = data[index];
-
-                                    return GestureDetector(
-                                      onTap: () {
-                                        // fetchProjectList(employeid);
-                                      },
-                                      child:
-                                      // Scrollbar(
-                                      //   child:
-                                      Container(
-                                        decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          gradient: const LinearGradient(
-                                            colors: [
-                                              Color(0xFFFEE7E1), // Start color
-                                              Color(0xFFD7DEFA),
-                                            ],
-                                            begin: Alignment.centerLeft,
-                                            end: Alignment.centerRight,
-                                          ),
-                                          borderRadius:
-                                          BorderRadius.circular(12.0),
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color:
-                                              Colors.grey.withOpacity(0.3),
-                                              spreadRadius: 2,
-                                              blurRadius: 5,
-                                              offset: const Offset(0, 3),
-                                            ),
-                                          ],
-                                        ),
-                                        child: Center(
-                                          child:
-                                          // SingleChildScrollView(
-                                          //   child:
-                                          Column(
-                                            crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                            mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                            children: [
-                                              SizedBox(
-                                                height: 120,
-                                                child: Center(
-                                                  child: Image.network(
-                                                    productmodel.imageName,
-                                                    //    "https://images.moneycontrol.com/static-mcnews/2023/08/Health-benefits-of-almond-oil-770x433.jpg?impolicy=website&width=770&height=431", // Placeholder URL
-                                                    fit: BoxFit.fill,
-                                                    loadingBuilder: (context,
-                                                        child,
-                                                        loadingProgress) {
-                                                      if (loadingProgress ==
-                                                          null) {
-                                                        return child;
-                                                      }
-
-                                                      return const Center(
-                                                          child:
-                                                          CircularProgressIndicator
-                                                              .adaptive());
-                                                    },
-                                                  ),
-                                                ),
-                                              ),
-                                              const SizedBox(height: 5),
-                                              Text(
-                                                productmodel.categoryName,
-                                                textAlign: TextAlign.center,
-                                              ),
-                                              const SizedBox(height: 5),
-                                              Text(
-                                                productmodel.name,
-                                                textAlign: TextAlign.center,
-                                              ),
-                                            ],
-                                          ),
-                                          //  ),
-                                        ),
-                                      ),
-                                      //   ),
-                                    );
-                                  },
-                                ),
-                              ]),
+            // products
+            Expanded(
+              child: Consumer<MyProductProvider>(
+                builder: (context, provider, _) => FutureBuilder(
+                  future: apiData,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(
+                        child: CircularProgressIndicator.adaptive(),
+                      );
+                    } else if (snapshot.hasError) {
+                      return Center(
+                        child: Text(
+                          'Error: ${snapshot.error.toString()}',
+                          style: const TextStyle(
+                            fontSize: 12.0,
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: "Roboto",
+                          ),
                         ),
-                      ),
-                    ],
-                  );
-                } else {
-                  return const Center(
-                    child: Text(
-                      'No Products found!',
-                      style: TextStyle(
-                        fontSize: 12.0,
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: "Roboto",
-                      ),
-                    ),
-                  );
-                }
-              }
-            },
-          ),
-          floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-          floatingActionButton: FloatingActionButton(
-            backgroundColor: const Color(0xFFFB4110),
-            onPressed: () {
-              showModalBottomSheet(
-                isScrollControlled: true,
-                context: context,
-                builder: (context) => Padding(
-                  padding: EdgeInsets.only(
-                    bottom: MediaQuery.of(context).viewInsets.bottom,
-                  ),
-                  child: const FilterBottomSheet(),
+                      );
+                    } else {
+                      List<ProductList>? data = provider.getProProducts;
+                      if (provider.getProProducts.isNotEmpty) {
+                        return ListView.builder(
+                          itemCount: data.length,
+                          itemBuilder: (context, index) {
+                            return ProductCard(product: data[index]);
+                          },
+                        );
+                      } else {
+                        return const Center(
+                          child: Text(
+                            'No products found!',
+                            style: TextStyle(
+                              fontSize: 12.0,
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: "Roboto",
+                            ),
+                          ),
+                        );
+                      }
+                    }
+                  },
                 ),
-              );
-            },
-            child: const Icon(
-              Icons.filter_alt,
-              color: Colors.white,
-            ),
-          ),
+              ),
+            )
+          ],
         ),
       ),
     );
@@ -384,6 +256,83 @@ class MyProducts_screenState extends State<MyProducts> {
       ),
     );
   }
+
+  Widget _searchBarAndFilter() {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Expanded(
+            child: SizedBox(
+              height: 45,
+              child: TextField(
+                onChanged: (input) => filterProducts(input),
+                decoration: InputDecoration(
+                  contentPadding: const EdgeInsets.only(top: 5, left: 12),
+                  hintText: 'Search Products',
+                  // hintStyle: CommonStyles.txSty_14bs_fb,
+                  suffixIcon: const Icon(Icons.search),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: const BorderSide(
+                        color: Color.fromARGB(96, 141, 140, 140)),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: const BorderSide(
+                        color: Color.fromARGB(96, 141, 140, 140)),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(
+            width: 10,
+          ),
+          GestureDetector(
+            onTap: () {
+              showModalBottomSheet(
+                isScrollControlled: true,
+                context: context,
+                builder: (context) => Padding(
+                  padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).viewInsets.bottom,
+                  ),
+                  child: const FilterBottomSheet(),
+                ),
+              );
+            },
+            child: Container(
+              height: 45,
+              width: 45,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(
+                  color: CommonUtils.primaryTextColor,
+                ),
+              ),
+              child: const Center(
+                child: Icon(Icons.filter_alt_outlined),
+              ),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  void filterProducts(String input) {
+    apiData.then((data) {
+      setState(() {
+        myProductProvider.storeIntoProvider(data
+            .where(
+                (item) => item.name.toLowerCase().contains(input.toLowerCase()))
+            .toList());
+      });
+    });
+  }
 }
 
 class FilterBottomSheet extends StatefulWidget {
@@ -401,7 +350,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
   late Future<List<ProductCategory>> proCatogary;
   ProductCategory? selectedCategory;
 
-  final orangeColor = const Color(0xFFe78337);
+  final orangeColor =CommonUtils.primaryTextColor;
   late Future<List<ProductList>> apiData;
 
   @override
@@ -428,7 +377,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
     apiData = fetchproducts();
     apiData.then((data) {
       myProductProvider.getProProducts = data;
-     // myProductProvider.clearFilter();
+      // myProductProvider.clearFilter();
       // Navigator.of(context).pop();
     }).catchError((error) {
       print('catchError: Error occurred.');
@@ -498,7 +447,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   const Text(
-                    'Filter By',
+                    'Filter By',  style: CommonUtils.Mediumtext_o_14,
                   ),
                   GestureDetector(
                     onTap: () {
@@ -509,7 +458,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                       });
                     },
                     child: const Text(
-                      'Clear all filters',
+                      'Clear all filters',  style: CommonUtils.Mediumtext_o_14,
                     ),
                   ),
                 ],
@@ -557,7 +506,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                                 style: const TextStyle(
                                   fontFamily: 'Calibri',
                                   fontSize: 14,
-                                  color: Color(0xFFFB4110),
+                                  color: CommonUtils.primaryTextColor,
                                 ),
                               ),
                               const SizedBox(width: 26),
@@ -689,10 +638,10 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                       },
                       style: ElevatedButton.styleFrom(
                         textStyle: const TextStyle(
-                          color: Colors.red,
+                          color: CommonUtils.primaryTextColor,
                         ),
                         side: const BorderSide(
-                          color: Colors.red,
+                          color:  CommonUtils.primaryTextColor,
                         ),
                         backgroundColor: Colors.white,
                         shape: const RoundedRectangleBorder(
@@ -706,7 +655,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                         style: TextStyle(
                           fontFamily: 'Calibri',
                           fontSize: 14,
-                          color: Colors.black,
+                          color: CommonUtils.primaryTextColor,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -730,7 +679,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                             height: 40.0,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(15.0),
-                              color: const Color(0xFFFB4110),
+                              color:CommonUtils.primaryTextColor,
                             ),
                             child: const Center(
                               child: Text(
@@ -797,5 +746,62 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
     } else {
       throw Exception('Failed to load products');
     }
+  }
+}
+
+class ProductCard extends StatelessWidget {
+  final ProductList product;
+  const ProductCard({super.key, required this.product});
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 2,
+      child: Container(
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+            color: Colors.white, borderRadius: BorderRadius.circular(10)),
+        child: Row(
+          children: [
+            // product image
+            Container(
+              width: 200,
+              height: 120,
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: CommonUtils.primaryColor,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Image.network(product.imageName),
+            ),
+            const SizedBox(
+              width: 10,
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Text(
+                  product.name,
+                  style: CommonUtils.txSty_18b_fb,
+                ),
+                Text(
+                  product.categoryName,
+                  style: CommonUtils.txSty_12bs_fb,
+                ),
+                Text(
+                  product.gender ?? 'NULL',
+                  style: CommonUtils.txSty_12bs_fb,
+                ),
+                Text(
+                  '₹${product.maxPrice.toString()}',
+                  style: CommonUtils.txSty_18p_f7,
+                ),
+              ],
+            )
+          ],
+        ),
+      ),
+    );
   }
 }
