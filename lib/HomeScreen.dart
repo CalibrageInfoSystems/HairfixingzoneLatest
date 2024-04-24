@@ -21,6 +21,7 @@ import 'Appointment.dart';
 import 'BranchModel.dart';
 import 'Branches_screen.dart';
 import 'CustomerLoginScreen.dart';
+import 'Dashboard_Screen.dart';
 import 'LatestAppointment.dart';
 import 'MyAppointments.dart';
 import 'MyProducts.dart';
@@ -147,759 +148,568 @@ class _HomeScreenState extends State<HomeScreen> {
       // child: MaterialApp(
       //   debugShowCheckedModeBanner: false,
       child: Scaffold(
-          appBar: AppBar(
-          backgroundColor: const Color(0xFFF44614),
-      centerTitle: true,
-      title: Container(
-        width: 85,
-        height: 50,
-        child: FractionallySizedBox(
-          widthFactor: 1,
-          child: Image.asset(
-            'assets/logo.png',
-            fit: BoxFit.fitHeight,
+        appBar: AppBar(
+          backgroundColor: const Color(0xFFf3e3ff),
+          automaticallyImplyLeading: false, // This line removes the back arrow
+          title: Container(
+            width: 85,
+            height: 40,
+            child: FractionallySizedBox(
+              widthFactor: 1,
+              child: Image.asset(
+                'assets/hfz_logo.png',
+                fit: BoxFit.fitWidth,
+              ),
+            ),
           ),
-        ),
-      ),
-      actions: [
-        IconButton(
-          icon: Icon(
-            Icons.logout,
-            color: Colors.white,
-          ),
-          onPressed: () {
-            logOutDialog();
-            // Add logout functionality here
-          },
-        ),
-      ],
-    ),
-          // drawer: Drawer(
-          //   child: ListView(
-          //     children: [
-          //       DrawerHeader(
-          //         decoration: BoxDecoration(
-          //             // Remove the DecorationImage with AssetImage
-          //             ),
-          //         child: Center(
-          //           child: Image.asset(
-          //             'assets/logo.png',
-          //           ),
-          //         ),
-          //       ),
-          //       Container(
-          //         padding: const EdgeInsets.symmetric(horizontal: 13),
-          //         margin: const EdgeInsets.symmetric(vertical: 5),
-          //         child: ExpandedTile(
-          //           controller: _expandedTileController,
-          //           theme: const ExpandedTileThemeData(
-          //             headerColor: Colors.transparent,
-          //             headerPadding: EdgeInsets.all(0),
-          //             headerSplashColor: Colors.transparent,
-          //             contentBackgroundColor: Colors.transparent,
-          //             // contentPadding: EdgeInsets.all(15),
-          //             // contentRadius: 12.0,
-          //           ),
-          //           leading: Icon(
-          //             Icons.person,
-          //             color: Colors.black,
-          //             size: 22,
-          //           ),
-          //           title: const Text(
-          //             ' User Profile',
-          //             // style: TextStyle(),
-          //           ),
-          //           content: Container(
-          //             color: Colors.transparent,
-          //             child: Column(
-          //               children: [
-          //                 ListTile(
-          //                   contentPadding: EdgeInsets.zero,
-          //                   leading: Container(
-          //                     padding: const EdgeInsets.all(10), // Adjust padding as needed
-          //                     decoration: BoxDecoration(
-          //                       color: Colors.blue.withOpacity(0.2),
-          //                       borderRadius: BorderRadius.circular(20),
-          //                     ),
-          //                     child: Icon(
-          //                       CupertinoIcons.profile_circled,
-          //                       size: 20, // Reduce the size of the icon
-          //                       color: Colors.blue,
-          //                     ),
-          //                   ),
-          //                   title: Text(
-          //                     '$userFullName',
-          //                     // style: CommonUtils.txSty_14B_Fb,
-          //                   ),
-          //                 ),
-          //                 ListTile(
-          //                   contentPadding: EdgeInsets.zero,
-          //                   leading: Container(
-          //                     padding: const EdgeInsets.all(10), // Set padding to zero
-          //                     decoration: BoxDecoration(
-          //                       color: Colors.orange.withOpacity(0.2),
-          //                       borderRadius: BorderRadius.circular(20),
-          //                     ),
-          //                     child: const Icon(
-          //                       Icons.email_outlined,
-          //                       size: 20,
-          //                       color: Colors.orange,
-          //                     ),
-          //                   ),
-          //                   title: Text(
-          //                     '$email',
-          //                     //   style: CommonUtils.txSty_14B_Fb,
-          //                   ),
-          //                   // subtitle: const Text(
-          //                   //   'Email',
-          //                   //   style: CommonUtils.Mediumtext_12,
-          //                   // ),
-          //                 ),
-          //                 ListTile(
-          //                   contentPadding: EdgeInsets.zero,
-          //                   leading: Container(
-          //                       padding: const EdgeInsets.all(10),
-          //                       decoration: BoxDecoration(
-          //                         color: Colors.red.withOpacity(0.2),
-          //                         borderRadius: BorderRadius.circular(20),
-          //                       ),
-          //                       child: const Icon(
-          //                         Icons.call,
-          //                         size: 20,
-          //                         color: Colors.red,
-          //                       )),
-          //                   title: Text(
-          //                     '$phonenumber',
-          //                     //    style: CommonUtils.txSty_14B_Fb
-          //                   ),
-          //                   // subtitle: const Text(
-          //                   //   'Phone Number',
-          //                   //   style: CommonUtils.Mediumtext_12,
-          //                   // ),
-          //                 ),
-          //                 ListTile(
-          //                   contentPadding: EdgeInsets.zero,
-          //                   leading: Container(
-          //                     padding: const EdgeInsets.all(10),
-          //                     decoration: BoxDecoration(
-          //                       color: Colors.green.withOpacity(0.2),
-          //                       borderRadius: BorderRadius.circular(20),
-          //                     ),
-          //                     child: Image.asset(
-          //                       'assets/gender.png',
-          //                       height: 22,
-          //                       width: 22,
-          //                     ),
-          //                     // const Icon(
-          //                     //   Icons.male,
-          //                     //   size: 20,
-          //                     //   color: Colors.green,
-          //                     // )
-          //                   ),
-          //                   title: Text(
-          //                     '$Gender',
-          //                     //style: CommonUtils.txSty_14B_Fb
-          //                   ),
-          //                   // subtitle: const Text(
-          //                   //   'Company Name',
-          //                   //   style: CommonUtils.Mediumtext_12,
-          //                   // ),
-          //                 ),
-          //               ],
-          //             ),
-          //           ),
-          //         ),
-          //       ),
-          //       ListTile(
-          //         leading: SvgPicture.asset(
-          //           'assets/user.svg',
-          //           width: 20.0,
-          //           color: Colors.black,
-          //         ),
-          //         title: Text(
-          //           'My Appointments',
-          //           style: TextStyle(
-          //             color: Colors.black,
-          //             fontFamily: 'hind_semibold',
-          //           ),
-          //         ),
-          //         onTap: () {
-          //           Navigator.push(
-          //             context,
-          //             MaterialPageRoute(builder: (context) => MyAppointments()),
-          //           );
-          //         },
-          //       ),
-          //       ListTile(
-          //         leading: SvgPicture.asset(
-          //           'assets/skin-care.svg',
-          //           width: 20.0,
-          //           color: Colors.black,
-          //         ),
-          //         title: Text(
-          //           'My Products',
-          //           style: TextStyle(
-          //             color: Colors.black,
-          //             fontFamily: 'hind_semibold',
-          //           ),
-          //         ),
-          //         onTap: () {
-          //           //   Handle the onTap action for Logout
-          //           Navigator.push(
-          //             context,
-          //             MaterialPageRoute(builder: (context) => MyProducts()),
-          //           );
-          //         },
-          //       ),
-          //       ListTile(
-          //         leading: Icon(Icons.info),
-          //         title: Text(
-          //           'About Us',
-          //           style: TextStyle(
-          //             color: Colors.black,
-          //             fontFamily: 'hind_semibold',
-          //           ),
-          //         ),
-          //         onTap: () {
-          //           //   Handle the onTap action for Logout
-          //           Navigator.push(
-          //             context,
-          //             MaterialPageRoute(builder: (context) => AboutUsScreen()),
-          //           );
-          //         },
-          //       ),
-          //       ListTile(
-          //         leading: Icon(Icons.logout), // Change the icon as needed
-          //         title: Text(
-          //           'Logout',
-          //           style: TextStyle(
-          //             color: Colors.black,
-          //             fontFamily: 'hind_semibold',
-          //           ),
-          //         ),
-          //         onTap: () {
-          //           // Handle the onTap action for Logout
-          //           logOutDialog();
-          //         },
-          //       ),
-          //       // Add more ListTiles or other widgets as needed
-          //     ],
-          //   ),
-          // ),
-          // body: SliderScreen(),
-          body: Column(
-            children: [
+          actions: [
 
-              // Expanded(
-              //   child: Padding(
-              //     padding: EdgeInsets.symmetric(horizontal: 10.0),
-              //     child: Column(
-              //       children: [
-              //         Expanded(
-              //           child: Stack(
-              //             children: [
-              //               Align(
-              //                 alignment: Alignment.topCenter,
-              //                 child: isDataBinding
-              //                     ? Center(
-              //                         child: CircularProgressIndicator.adaptive(),
-              //                       )
-              //                     : imageList.isEmpty
-              //                         ? Center(
-              //                             // child: CircularProgressIndicator.adaptive(),
-              //                             child: Icon(
-              //                               Icons.signal_cellular_connected_no_internet_0_bar_sharp,
-              //                               color: Colors.red,
-              //                             ),
-              //                           )
-              //                         : CarouselSlider(
-              //                             items: imageList
-              //                                 .map((item) => Image.network(
-              //                                       item.imageName,
-              //                                       fit: BoxFit.fitWidth,
-              //                                       width: MediaQuery.of(context).size.width,
-              //                                     ))
-              //                                 .toList(),
-              //                             carouselController: carouselController,
-              //                             options: CarouselOptions(
-              //                               scrollPhysics: const BouncingScrollPhysics(),
-              //                               autoPlay: true,
-              //                               aspectRatio: 23 / 9,
-              //                               viewportFraction: 1,
-              //                               onPageChanged: (index, reason) {
-              //                                 setState(() {
-              //                                   currentIndex = index;
-              //                                 });
-              //                               },
-              //                             ),
-              //                           ),
-              //               ),
-              //
-              //               // Align(
-              //               //   alignment: Alignment.topCenter,
-              //               //   child: Padding(
-              //               //     padding: EdgeInsets.only(top: 110.0),
-              //               //     child: Row(
-              //               //       mainAxisAlignment: MainAxisAlignment.center,
-              //               //       children: imageList.asMap().entries.map((entry) {
-              //               //         final index = entry.key;
-              //               //         return buildIndicator(index);
-              //               //       }).toList(),
-              //               //     ),
-              //               //   ),
-              //               // ),working code has been hide because it is intialize static padding
-              //               Container(
-              //                 width: MediaQuery.of(context).size.width,
-              //                 //  padding: EdgeInsets.all(20.0),
-              //
-              //                 height: MediaQuery.of(context).size.height,
-              //                 child: Align(
-              //                   alignment: Alignment.bottomCenter,
-              //                   child: Padding(
-              //                     padding: EdgeInsets.only(bottom: 25.0),
-              //                     child: Row(
-              //                       mainAxisAlignment: MainAxisAlignment.center,
-              //                       children: imageList.asMap().entries.map((entry) {
-              //                         final index = entry.key;
-              //                         return buildIndicator(index);
-              //                       }).toList(),
-              //                     ),
-              //                   ),
-              //                 ),
-              //               )
-              //             ],
-              //           ),
-              //         ),
-              //         Padding(
-              //           padding: EdgeInsets.symmetric(horizontal: 5.0, vertical: 5.0),
-              //           child: Align(
-              //             alignment: Alignment.topCenter,
-              //             child: Text(
-              //               'Branches',
-              //               textAlign: TextAlign.left,
-              //               style: TextStyle(
-              //                 fontFamily: 'Calibri',
-              //                 fontSize: 20,
-              //                 color: Color(0xFF163CF1),
-              //                 fontWeight: FontWeight.bold,
-              //               ),
-              //             ),
-              //           ),
-              //         ),
-              //         if (isLoading)
-              //           Text('Please Wait Loading Slow Internet Connection !')
-              //         else if (brancheslist.isEmpty && imageList.isEmpty)
-              //           Container(
-              //             padding: EdgeInsets.all(15.0),
-              //             child: Center(
-              //               child: Column(
-              //                 mainAxisAlignment: MainAxisAlignment.center,
-              //                 children: [
-              //                   Text('Failed to fetch data. Please check your internet connection.!'),
-              //                   SizedBox(height: 20),
-              //                   ElevatedButton(
-              //                     onPressed: retryDataFetching,
-              //                     child: Text('Retry'),
-              //                   ),
-              //                 ],
-              //               ),
-              //             ),
-              //           ),
-              //         // if (brancheslist == null || brancheslist.isEmpty)
-              //         //   Container(
-              //         //     padding: EdgeInsets.all(15.0),
-              //         //     child: Center(
-              //         //       child: Column(
-              //         //         mainAxisAlignment: MainAxisAlignment.center,
-              //         //         children: [
-              //         //           SizedBox(height: 100),
-              //         //           Center(
-              //         //             child: Text('No found.'),
-              //         //           ),
-              //         //         ],
-              //         //       ),
-              //         //     ),
-              //         //   ),
-              //         Expanded(
-              //             flex: 3,
-              //             child: ListView.builder(
-              //               shrinkWrap: true,
-              //               itemCount: isLoading ? 5 : brancheslist.length, // Display a fixed number of shimmer items when loading
-              //               itemBuilder: (context, index) {
-              //                 if (isLoading) {
-              //                   // Return shimmer effect if isLoading is true
-              //                   return Padding(
-              //                     padding: EdgeInsets.symmetric(horizontal: 0.0, vertical: 5.0),
-              //                     child: Shimmer.fromColors(
-              //                       baseColor: Colors.grey.shade300,
-              //                       highlightColor: Colors.grey.shade100,
-              //                       child: Container(
-              //                         height: 150, // Adjust height as needed
-              //                         decoration: BoxDecoration(
-              //                           color: Colors.white,
-              //                           borderRadius: BorderRadius.circular(15.0),
-              //                         ),
-              //                       ),
-              //                     ),
-              //                   );
-              //                 } else {
-              //                   // Return actual data when isLoading is false
-              //                   BranchModel branch = brancheslist[index];
-              //                   return Padding(
-              //                     padding: EdgeInsets.symmetric(horizontal: 0.0, vertical: 5.0),
-              //                     child: IntrinsicHeight(
-              //                       child: ClipRRect(
-              //                         borderRadius: BorderRadius.only(
-              //                           topRight: Radius.circular(15.0),
-              //                           bottomLeft: Radius.circular(15.0),
-              //                         ),
-              //                         child: GestureDetector(
-              //                           onTap: () {
-              //                             Navigator.push(
-              //                               context,
-              //                               MaterialPageRoute(
-              //                                 builder: (context) => slotbookingscreen(
-              //                                   branchId: branch.id,
-              //                                   branchname: branch.name,
-              //                                   branchlocation: branch.address,
-              //                                   filepath: branch.imageName != null ? branch.imageName! : 'assets/top_image.png',
-              //                                   MobileNumber: branch.mobileNumber,
-              //                                   appointmentId: 0,
-              //                                   // Provide the appointmentId value
-              //                                   screenFrom: "Schedule",
-              //                                 ),
-              //                               ),
-              //                             );
-              //                             //
-              //                             // Navigator.of(context).push(
-              //                             //   MaterialPageRoute(builder: (context) => feedback_Screen()),
-              //                             // );
-              //                           },
-              //                           child: Card(
-              //                             shadowColor: Colors.transparent,
-              //                             surfaceTintColor: Colors.transparent,
-              //                             child: ClipRRect(
-              //                               borderRadius: BorderRadius.only(
-              //                                 topRight: Radius.circular(15.0),
-              //                                 bottomLeft: Radius.circular(15.0),
-              //                               ),
-              //                               child: Container(
-              //                                 decoration: BoxDecoration(
-              //                                   gradient: LinearGradient(
-              //                                     colors: [
-              //                                       Color(0xFFFEE7E1), // Start color
-              //                                       Color(0xFFD7DEFA),
-              //                                     ],
-              //                                     begin: Alignment.centerLeft,
-              //                                     end: Alignment.centerRight,
-              //                                   ),
-              //                                 ),
-              //                                 child: Row(
-              //                                   crossAxisAlignment: CrossAxisAlignment.center,
-              //                                   children: [
-              //                                     Padding(
-              //                                       padding: EdgeInsets.only(left: 15.0),
-              //                                       child: Container(
-              //                                         width: 110,
-              //                                         height: 65,
-              //                                         decoration: BoxDecoration(
-              //                                           borderRadius: BorderRadius.circular(10.0),
-              //                                           border: Border.all(
-              //                                             color: Color(0xFF9FA1EE),
-              //                                             width: 3.0,
-              //                                           ),
-              //                                         ),
-              //                                         child: ClipRRect(
-              //                                           borderRadius: BorderRadius.circular(7.0),
-              //                                           child: branch.imageName != null
-              //                                               ? Image.network(
-              //                                                   branch.imageName!,
-              //                                                   width: 110,
-              //                                                   height: 65,
-              //                                                   fit: BoxFit.fill,
-              //                                                   loadingBuilder: (context, child, loadingProgress) {
-              //                                                     if (loadingProgress == null) return child;
-              //
-              //                                                     return const Center(child: CircularProgressIndicator.adaptive());
-              //                                                   },
-              //                                                 )
-              //                                               : Image.asset(
-              //                                                   'assets/top_image.png', // Provide the path to your default image asset
-              //                                                   width: 110,
-              //                                                   height: 65,
-              //                                                   fit: BoxFit.fill,
-              //                                                 ),
-              //                                         ),
-              //                                       ),
-              //                                     ),
-              //                                     // Padding(
-              //                                     //   padding: EdgeInsets.only(left: 15.0),
-              //                                     //   child: Container(
-              //                                     //     width: 110,
-              //                                     //     height: 65,
-              //                                     //     decoration: BoxDecoration(
-              //                                     //       borderRadius: BorderRadius.circular(10.0),
-              //                                     //       border: Border.all(
-              //                                     //         color: Color(0xFF9FA1EE),
-              //                                     //         width: 3.0,
-              //                                     //       ),
-              //                                     //     ),
-              //                                     //     child: ClipRRect(
-              //                                     //       borderRadius: BorderRadius.circular(7.0),
-              //                                     //       child: isLoading
-              //                                     //           ? Shimmer.fromColors(
-              //                                     //               baseColor: Colors.grey.shade300,
-              //                                     //               highlightColor: Colors.white,
-              //                                     //               child: Container(
-              //                                     //                 width: 110,
-              //                                     //                 height: 65,
-              //                                     //                 decoration: BoxDecoration(
-              //                                     //                   color: Colors.white,
-              //                                     //                   borderRadius: BorderRadius.circular(7.0),
-              //                                     //                 ),
-              //                                     //               ),
-              //                                     //             )
-              //                                     //           : Image.network(
-              //                                     //               imagesflierepo + branch.filePath,
-              //                                     //               width: 110,
-              //                                     //               height: 65,
-              //                                     //               fit: BoxFit.fill,
-              //                                     //             ),
-              //                                     //     ),
-              //                                     //   ),
-              //                                     // ),
-              //
-              //                                     Expanded(
-              //                                       child: Padding(
-              //                                         padding: EdgeInsets.only(left: 15.0),
-              //                                         child: Column(
-              //                                           mainAxisAlignment: MainAxisAlignment.start,
-              //                                           crossAxisAlignment: CrossAxisAlignment.start,
-              //                                           children: [
-              //                                             Padding(
-              //                                               padding: EdgeInsets.only(top: 15.0),
-              //                                               child: Text(
-              //                                                 branch.name,
-              //                                                 style: TextStyle(
-              //                                                   fontSize: 18,
-              //                                                   color: Color(0xFFFB4110),
-              //                                                   fontWeight: FontWeight.bold,
-              //                                                   fontFamily: 'Calibri',
-              //                                                 ),
-              //                                               ),
-              //                                             ),
-              //                                             SizedBox(height: 4.0),
-              //                                             Expanded(
-              //                                               child: Padding(
-              //                                                 padding: EdgeInsets.only(right: 10.0),
-              //                                                 child: Column(
-              //                                                   crossAxisAlignment: CrossAxisAlignment.start,
-              //                                                   children: [
-              //                                                     Row(
-              //                                                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              //                                                       children: [
-              //                                                         Image.asset(
-              //                                                           'assets/location_icon.png',
-              //                                                           width: 20,
-              //                                                           height: 18,
-              //                                                         ),
-              //                                                         SizedBox(width: 4.0),
-              //                                                         Expanded(
-              //                                                           child: Text(
-              //                                                             branch.address,
-              //                                                             style: TextStyle(
-              //                                                               fontFamily: 'Calibri',
-              //                                                               fontSize: 12,
-              //                                                               color: Color(0xFF000000),
-              //                                                             ),
-              //                                                           ),
-              //                                                         ),
-              //                                                       ],
-              //                                                     ),
-              //                                                     Spacer(flex: 3),
-              //                                                   ],
-              //                                                 ),
-              //                                               ),
-              //                                             ),
-              //                                             Align(
-              //                                               alignment: Alignment.bottomRight,
-              //                                               child: Container(
-              //                                                 height: 26,
-              //                                                 margin: EdgeInsets.only(bottom: 10.0, right: 10.0),
-              //                                                 decoration: BoxDecoration(
-              //                                                   color: Colors.white,
-              //                                                   border: Border.all(
-              //                                                     color: Color(0xFF8d97e2),
-              //                                                   ),
-              //                                                   borderRadius: BorderRadius.circular(10.0),
-              //                                                 ),
-              //                                                 child: ElevatedButton(
-              //                                                   onPressed: () {
-              //                                                     // Handle button press
-              //                                                   },
-              //                                                   style: ElevatedButton.styleFrom(
-              //                                                     primary: Colors.transparent,
-              //                                                     onPrimary: Color(0xFF8d97e2),
-              //                                                     elevation: 0,
-              //                                                     shadowColor: Colors.transparent,
-              //                                                     shape: RoundedRectangleBorder(
-              //                                                       borderRadius: BorderRadius.circular(10.0),
-              //                                                     ),
-              //                                                   ),
-              //                                                   child: GestureDetector(
-              //                                                     onTap: () {
-              //                                                       print('booknowbuttonisclciked');
-              //                                                       print(branch.id);
-              //                                                       print(branch.name);
-              //                                                       Navigator.push(
-              //                                                         context,
-              //                                                         MaterialPageRoute(
-              //                                                           builder: (context) => slotbookingscreen(
-              //                                                             branchId: branch.id,
-              //                                                             branchname: branch.name,
-              //                                                             branchlocation: branch.address,
-              //                                                             filepath:
-              //                                                                 branch.imageName != null ? branch.imageName! : 'assets/top_image.png',
-              //                                                             MobileNumber: branch.mobileNumber,
-              //                                                             appointmentId: 0,
-              //                                                             // Provide the appointmentId value
-              //                                                             screenFrom: "Schedule",
-              //                                                           ),
-              //                                                         ),
-              //                                                       );
-              //                                                     },
-              //
-              //                                                     // Handle button press, navigate to a new screen
-              //
-              //                                                     child: Row(
-              //                                                       mainAxisSize: MainAxisSize.min,
-              //                                                       children: [
-              //                                                         SvgPicture.asset(
-              //                                                           'assets/datepicker_icon.svg',
-              //                                                           width: 15.0,
-              //                                                           height: 15.0,
-              //                                                         ),
-              //                                                         SizedBox(width: 5),
-              //                                                         Text(
-              //                                                           'Book Now',
-              //                                                           style: TextStyle(
-              //                                                             fontSize: 13,
-              //                                                             color: Color(0xFF8d97e2),
-              //                                                           ),
-              //                                                         ),
-              //                                                       ],
-              //                                                     ),
-              //                                                   ),
-              //                                                 ),
-              //                                               ),
-              //                                             ),
-              //                                           ],
-              //                                         ),
-              //                                       ),
-              //                                     ),
-              //                                   ],
-              //                                 ),
-              //                               ),
-              //                             ),
-              //                           ),
-              //                         ),
-              //                       ),
-              //                     ),
-              //                   );
-              //                 }
-              //               },
-              //             )),
-              //
-              //         // width: 300.0,
-              //         Padding(
-              //           padding: EdgeInsets.only(bottom: 10.0),
-              //           child: Container(
-              //             margin: EdgeInsets.symmetric(horizontal: 15.0, vertical: 5.0),
-              //             decoration: BoxDecoration(
-              //               color: Color(0xFFFFFFFF),
-              //               border: Border.all(
-              //                 color: Color(0xFFFB4110),
-              //               ),
-              //               borderRadius: BorderRadius.circular(10.0),
-              //             ),
-              //             child: TextButton(
-              //               onPressed: () async {
-              //                 const url = 'https://www.hairfixingzone.com/';
-              //                 try {
-              //                   if (await canLaunch(url)) {
-              //                     await launch(url);
-              //                   } else {
-              //                     throw 'Could not launch $url';
-              //                   }
-              //                 } catch (e) {
-              //                   print('Error launching URL: $e');
-              //                 }
-              //               },
-              //               style: ButtonStyle(
-              //                 shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-              //                   RoundedRectangleBorder(
-              //                     borderRadius: BorderRadius.circular(10.0),
-              //                   ),
-              //                 ),
-              //               ),
-              //               child: Row(
-              //                 crossAxisAlignment: CrossAxisAlignment.center,
-              //                 mainAxisAlignment: MainAxisAlignment.center,
-              //                 children: [
-              //                   Image.asset(
-              //                     'assets/web_icon.png',
-              //                     width: 20,
-              //                     height: 20,
-              //                   ),
-              //                   SizedBox(width: 5),
-              //                   Text(
-              //                     'Click Here for Website',
-              //                     style: TextStyle(
-              //                       fontSize: 18,
-              //                       color: Color(0xFFFB4110),
-              //                     ),
-              //                   ),
-              //                 ],
-              //               ),
-              //             ),
-              //           ),
-              //         )
-              //       ],
-              //     ),
-              //   ),
-              // ),
-            ],
-          ),
+            IconButton(
+              icon: SvgPicture.asset(
+                'assets/sign-out-alt.svg', // Path to your SVG asset
+                color:Color(0xFF662e91),
+                width: 24, // Adjust width as needed
+                height: 24, // Adjust height as needed
+              ),
+              onPressed: () {
+                logOutDialog();
+                // Add logout functionality here
+              },
+            ),
+          ],
+        ),
+
+
+
+          body:_buildScreens(_currentIndex),
+          
+          // Column(
+          //   children: [
+          //
+          //     Expanded(
+          //       child: Padding(
+          //         padding: EdgeInsets.symmetric(horizontal: 10.0),
+          //         child: Column(
+          //           children: [
+          //             Expanded(
+          //               child: Stack(
+          //                 children: [
+          //                   Align(
+          //                     alignment: Alignment.topCenter,
+          //                     child: isDataBinding
+          //                         ? Center(
+          //                             child: CircularProgressIndicator.adaptive(),
+          //                           )
+          //                         : imageList.isEmpty
+          //                             ? Center(
+          //                                 // child: CircularProgressIndicator.adaptive(),
+          //                                 child: Icon(
+          //                                   Icons.signal_cellular_connected_no_internet_0_bar_sharp,
+          //                                   color: Colors.red,
+          //                                 ),
+          //                               )
+          //                             : CarouselSlider(
+          //                                 items: imageList
+          //                                     .map((item) => Image.network(
+          //                                           item.imageName,
+          //                                           fit: BoxFit.fitWidth,
+          //                                           width: MediaQuery.of(context).size.width,
+          //                                         ))
+          //                                     .toList(),
+          //                                 carouselController: carouselController,
+          //                                 options: CarouselOptions(
+          //                                   scrollPhysics: const BouncingScrollPhysics(),
+          //                                   autoPlay: true,
+          //                                   aspectRatio: 23 / 9,
+          //                                   viewportFraction: 1,
+          //                                   onPageChanged: (index, reason) {
+          //                                     setState(() {
+          //                                       currentIndex = index;
+          //                                     });
+          //                                   },
+          //                                 ),
+          //                               ),
+          //                   ),
+          //
+          //                   Container(
+          //                     width: MediaQuery.of(context).size.width,
+          //                     //  padding: EdgeInsets.all(20.0),
+          //
+          //                     height: MediaQuery.of(context).size.height,
+          //                     child: Align(
+          //                       alignment: Alignment.bottomCenter,
+          //                       child: Padding(
+          //                         padding: EdgeInsets.only(bottom: 25.0),
+          //                         child: Row(
+          //                           mainAxisAlignment: MainAxisAlignment.center,
+          //                           children: imageList.asMap().entries.map((entry) {
+          //                             final index = entry.key;
+          //                             return buildIndicator(index);
+          //                           }).toList(),
+          //                         ),
+          //                       ),
+          //                     ),
+          //                   )
+          //                 ],
+          //               ),
+          //             ),
+          //             // Padding(
+          //             //   padding: EdgeInsets.symmetric(horizontal: 5.0, vertical: 5.0),
+          //             //   child: Align(
+          //             //     alignment: Alignment.topCenter,
+          //             //     child: Text(
+          //             //       'Branches',
+          //             //       textAlign: TextAlign.left,
+          //             //       style: TextStyle(
+          //             //         fontFamily: 'Calibri',
+          //             //         fontSize: 20,
+          //             //         color: Color(0xFF163CF1),
+          //             //         fontWeight: FontWeight.bold,
+          //             //       ),
+          //             //     ),
+          //             //   ),
+          //             // ),
+          //             // if (isLoading)
+          //             //   Text('Please Wait Loading Slow Internet Connection !')
+          //             // else if (brancheslist.isEmpty && imageList.isEmpty)
+          //             //   Container(
+          //             //     padding: EdgeInsets.all(15.0),
+          //             //     child: Center(
+          //             //       child: Column(
+          //             //         mainAxisAlignment: MainAxisAlignment.center,
+          //             //         children: [
+          //             //           Text('Failed to fetch data. Please check your internet connection.!'),
+          //             //           SizedBox(height: 20),
+          //             //           ElevatedButton(
+          //             //             onPressed: retryDataFetching,
+          //             //             child: Text('Retry'),
+          //             //           ),
+          //             //         ],
+          //             //       ),
+          //             //     ),
+          //             //   ),
+          //             // // if (brancheslist == null || brancheslist.isEmpty)
+          //             // //   Container(
+          //             // //     padding: EdgeInsets.all(15.0),
+          //             // //     child: Center(
+          //             // //       child: Column(
+          //             // //         mainAxisAlignment: MainAxisAlignment.center,
+          //             // //         children: [
+          //             // //           SizedBox(height: 100),
+          //             // //           Center(
+          //             // //             child: Text('No found.'),
+          //             // //           ),
+          //             // //         ],
+          //             // //       ),
+          //             // //     ),
+          //             // //   ),
+          //             // Expanded(
+          //             //     flex: 3,
+          //             //     child: ListView.builder(
+          //             //       shrinkWrap: true,
+          //             //       itemCount: isLoading ? 5 : brancheslist.length, // Display a fixed number of shimmer items when loading
+          //             //       itemBuilder: (context, index) {
+          //             //         if (isLoading) {
+          //             //           // Return shimmer effect if isLoading is true
+          //             //           return Padding(
+          //             //             padding: EdgeInsets.symmetric(horizontal: 0.0, vertical: 5.0),
+          //             //             child: Shimmer.fromColors(
+          //             //               baseColor: Colors.grey.shade300,
+          //             //               highlightColor: Colors.grey.shade100,
+          //             //               child: Container(
+          //             //                 height: 150, // Adjust height as needed
+          //             //                 decoration: BoxDecoration(
+          //             //                   color: Colors.white,
+          //             //                   borderRadius: BorderRadius.circular(15.0),
+          //             //                 ),
+          //             //               ),
+          //             //             ),
+          //             //           );
+          //             //         } else {
+          //             //           // Return actual data when isLoading is false
+          //             //           BranchModel branch = brancheslist[index];
+          //             //           return Padding(
+          //             //             padding: EdgeInsets.symmetric(horizontal: 0.0, vertical: 5.0),
+          //             //             child: IntrinsicHeight(
+          //             //               child: ClipRRect(
+          //             //                 borderRadius: BorderRadius.only(
+          //             //                   topRight: Radius.circular(15.0),
+          //             //                   bottomLeft: Radius.circular(15.0),
+          //             //                 ),
+          //             //                 child: GestureDetector(
+          //             //                   onTap: () {
+          //             //                     Navigator.push(
+          //             //                       context,
+          //             //                       MaterialPageRoute(
+          //             //                         builder: (context) => slotbookingscreen(
+          //             //                           branchId: branch.id,
+          //             //                           branchname: branch.name,
+          //             //                           branchlocation: branch.address,
+          //             //                           filepath: branch.imageName != null ? branch.imageName! : 'assets/top_image.png',
+          //             //                           MobileNumber: branch.mobileNumber,
+          //             //                           appointmentId: 0,
+          //             //                           // Provide the appointmentId value
+          //             //                           screenFrom: "Schedule",
+          //             //                         ),
+          //             //                       ),
+          //             //                     );
+          //             //                     //
+          //             //                     // Navigator.of(context).push(
+          //             //                     //   MaterialPageRoute(builder: (context) => feedback_Screen()),
+          //             //                     // );
+          //             //                   },
+          //             //                   child: Card(
+          //             //                     shadowColor: Colors.transparent,
+          //             //                     surfaceTintColor: Colors.transparent,
+          //             //                     child: ClipRRect(
+          //             //                       borderRadius: BorderRadius.only(
+          //             //                         topRight: Radius.circular(15.0),
+          //             //                         bottomLeft: Radius.circular(15.0),
+          //             //                       ),
+          //             //                       child: Container(
+          //             //                         decoration: BoxDecoration(
+          //             //                           gradient: LinearGradient(
+          //             //                             colors: [
+          //             //                               Color(0xFFFEE7E1), // Start color
+          //             //                               Color(0xFFD7DEFA),
+          //             //                             ],
+          //             //                             begin: Alignment.centerLeft,
+          //             //                             end: Alignment.centerRight,
+          //             //                           ),
+          //             //                         ),
+          //             //                         child: Row(
+          //             //                           crossAxisAlignment: CrossAxisAlignment.center,
+          //             //                           children: [
+          //             //                             Padding(
+          //             //                               padding: EdgeInsets.only(left: 15.0),
+          //             //                               child: Container(
+          //             //                                 width: 110,
+          //             //                                 height: 65,
+          //             //                                 decoration: BoxDecoration(
+          //             //                                   borderRadius: BorderRadius.circular(10.0),
+          //             //                                   border: Border.all(
+          //             //                                     color: Color(0xFF9FA1EE),
+          //             //                                     width: 3.0,
+          //             //                                   ),
+          //             //                                 ),
+          //             //                                 child: ClipRRect(
+          //             //                                   borderRadius: BorderRadius.circular(7.0),
+          //             //                                   child: branch.imageName != null
+          //             //                                       ? Image.network(
+          //             //                                           branch.imageName!,
+          //             //                                           width: 110,
+          //             //                                           height: 65,
+          //             //                                           fit: BoxFit.fill,
+          //             //                                           loadingBuilder: (context, child, loadingProgress) {
+          //             //                                             if (loadingProgress == null) return child;
+          //             //
+          //             //                                             return const Center(child: CircularProgressIndicator.adaptive());
+          //             //                                           },
+          //             //                                         )
+          //             //                                       : Image.asset(
+          //             //                                           'assets/top_image.png', // Provide the path to your default image asset
+          //             //                                           width: 110,
+          //             //                                           height: 65,
+          //             //                                           fit: BoxFit.fill,
+          //             //                                         ),
+          //             //                                 ),
+          //             //                               ),
+          //             //                             ),
+          //             //                             // Padding(
+          //             //                             //   padding: EdgeInsets.only(left: 15.0),
+          //             //                             //   child: Container(
+          //             //                             //     width: 110,
+          //             //                             //     height: 65,
+          //             //                             //     decoration: BoxDecoration(
+          //             //                             //       borderRadius: BorderRadius.circular(10.0),
+          //             //                             //       border: Border.all(
+          //             //                             //         color: Color(0xFF9FA1EE),
+          //             //                             //         width: 3.0,
+          //             //                             //       ),
+          //             //                             //     ),
+          //             //                             //     child: ClipRRect(
+          //             //                             //       borderRadius: BorderRadius.circular(7.0),
+          //             //                             //       child: isLoading
+          //             //                             //           ? Shimmer.fromColors(
+          //             //                             //               baseColor: Colors.grey.shade300,
+          //             //                             //               highlightColor: Colors.white,
+          //             //                             //               child: Container(
+          //             //                             //                 width: 110,
+          //             //                             //                 height: 65,
+          //             //                             //                 decoration: BoxDecoration(
+          //             //                             //                   color: Colors.white,
+          //             //                             //                   borderRadius: BorderRadius.circular(7.0),
+          //             //                             //                 ),
+          //             //                             //               ),
+          //             //                             //             )
+          //             //                             //           : Image.network(
+          //             //                             //               imagesflierepo + branch.filePath,
+          //             //                             //               width: 110,
+          //             //                             //               height: 65,
+          //             //                             //               fit: BoxFit.fill,
+          //             //                             //             ),
+          //             //                             //     ),
+          //             //                             //   ),
+          //             //                             // ),
+          //             //
+          //             //                             Expanded(
+          //             //                               child: Padding(
+          //             //                                 padding: EdgeInsets.only(left: 15.0),
+          //             //                                 child: Column(
+          //             //                                   mainAxisAlignment: MainAxisAlignment.start,
+          //             //                                   crossAxisAlignment: CrossAxisAlignment.start,
+          //             //                                   children: [
+          //             //                                     Padding(
+          //             //                                       padding: EdgeInsets.only(top: 15.0),
+          //             //                                       child: Text(
+          //             //                                         branch.name,
+          //             //                                         style: TextStyle(
+          //             //                                           fontSize: 18,
+          //             //                                           color: Color(0xFFFB4110),
+          //             //                                           fontWeight: FontWeight.bold,
+          //             //                                           fontFamily: 'Calibri',
+          //             //                                         ),
+          //             //                                       ),
+          //             //                                     ),
+          //             //                                     SizedBox(height: 4.0),
+          //             //                                     Expanded(
+          //             //                                       child: Padding(
+          //             //                                         padding: EdgeInsets.only(right: 10.0),
+          //             //                                         child: Column(
+          //             //                                           crossAxisAlignment: CrossAxisAlignment.start,
+          //             //                                           children: [
+          //             //                                             Row(
+          //             //                                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          //             //                                               children: [
+          //             //                                                 Image.asset(
+          //             //                                                   'assets/location_icon.png',
+          //             //                                                   width: 20,
+          //             //                                                   height: 18,
+          //             //                                                 ),
+          //             //                                                 SizedBox(width: 4.0),
+          //             //                                                 Expanded(
+          //             //                                                   child: Text(
+          //             //                                                     branch.address,
+          //             //                                                     style: TextStyle(
+          //             //                                                       fontFamily: 'Calibri',
+          //             //                                                       fontSize: 12,
+          //             //                                                       color: Color(0xFF000000),
+          //             //                                                     ),
+          //             //                                                   ),
+          //             //                                                 ),
+          //             //                                               ],
+          //             //                                             ),
+          //             //                                             Spacer(flex: 3),
+          //             //                                           ],
+          //             //                                         ),
+          //             //                                       ),
+          //             //                                     ),
+          //             //                                     Align(
+          //             //                                       alignment: Alignment.bottomRight,
+          //             //                                       child: Container(
+          //             //                                         height: 26,
+          //             //                                         margin: EdgeInsets.only(bottom: 10.0, right: 10.0),
+          //             //                                         decoration: BoxDecoration(
+          //             //                                           color: Colors.white,
+          //             //                                           border: Border.all(
+          //             //                                             color: Color(0xFF8d97e2),
+          //             //                                           ),
+          //             //                                           borderRadius: BorderRadius.circular(10.0),
+          //             //                                         ),
+          //             //                                         child: ElevatedButton(
+          //             //                                           onPressed: () {
+          //             //                                             // Handle button press
+          //             //                                           },
+          //             //                                           style: ElevatedButton.styleFrom(
+          //             //                                             primary: Colors.transparent,
+          //             //                                             onPrimary: Color(0xFF8d97e2),
+          //             //                                             elevation: 0,
+          //             //                                             shadowColor: Colors.transparent,
+          //             //                                             shape: RoundedRectangleBorder(
+          //             //                                               borderRadius: BorderRadius.circular(10.0),
+          //             //                                             ),
+          //             //                                           ),
+          //             //                                           child: GestureDetector(
+          //             //                                             onTap: () {
+          //             //                                               print('booknowbuttonisclciked');
+          //             //                                               print(branch.id);
+          //             //                                               print(branch.name);
+          //             //                                               Navigator.push(
+          //             //                                                 context,
+          //             //                                                 MaterialPageRoute(
+          //             //                                                   builder: (context) => slotbookingscreen(
+          //             //                                                     branchId: branch.id,
+          //             //                                                     branchname: branch.name,
+          //             //                                                     branchlocation: branch.address,
+          //             //                                                     filepath:
+          //             //                                                         branch.imageName != null ? branch.imageName! : 'assets/top_image.png',
+          //             //                                                     MobileNumber: branch.mobileNumber,
+          //             //                                                     appointmentId: 0,
+          //             //                                                     // Provide the appointmentId value
+          //             //                                                     screenFrom: "Schedule",
+          //             //                                                   ),
+          //             //                                                 ),
+          //             //                                               );
+          //             //                                             },
+          //             //
+          //             //                                             // Handle button press, navigate to a new screen
+          //             //
+          //             //                                             child: Row(
+          //             //                                               mainAxisSize: MainAxisSize.min,
+          //             //                                               children: [
+          //             //                                                 SvgPicture.asset(
+          //             //                                                   'assets/datepicker_icon.svg',
+          //             //                                                   width: 15.0,
+          //             //                                                   height: 15.0,
+          //             //                                                 ),
+          //             //                                                 SizedBox(width: 5),
+          //             //                                                 Text(
+          //             //                                                   'Book Now',
+          //             //                                                   style: TextStyle(
+          //             //                                                     fontSize: 13,
+          //             //                                                     color: Color(0xFF8d97e2),
+          //             //                                                   ),
+          //             //                                                 ),
+          //             //                                               ],
+          //             //                                             ),
+          //             //                                           ),
+          //             //                                         ),
+          //             //                                       ),
+          //             //                                     ),
+          //             //                                   ],
+          //             //                                 ),
+          //             //                               ),
+          //             //                             ),
+          //             //                           ],
+          //             //                         ),
+          //             //                       ),
+          //             //                     ),
+          //             //                   ),
+          //             //                 ),
+          //             //               ),
+          //             //             ),
+          //             //           );
+          //             //         }
+          //             //       },
+          //             //     )),
+          //             //
+          //             // // width: 300.0,
+          //             // Padding(
+          //             //   padding: EdgeInsets.only(bottom: 10.0),
+          //             //   child: Container(
+          //             //     margin: EdgeInsets.symmetric(horizontal: 15.0, vertical: 5.0),
+          //             //     decoration: BoxDecoration(
+          //             //       color: Color(0xFFFFFFFF),
+          //             //       border: Border.all(
+          //             //         color: Color(0xFFFB4110),
+          //             //       ),
+          //             //       borderRadius: BorderRadius.circular(10.0),
+          //             //     ),
+          //             //     child: TextButton(
+          //             //       onPressed: () async {
+          //             //         const url = 'https://www.hairfixingzone.com/';
+          //             //         try {
+          //             //           if (await canLaunch(url)) {
+          //             //             await launch(url);
+          //             //           } else {
+          //             //             throw 'Could not launch $url';
+          //             //           }
+          //             //         } catch (e) {
+          //             //           print('Error launching URL: $e');
+          //             //         }
+          //             //       },
+          //             //       style: ButtonStyle(
+          //             //         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+          //             //           RoundedRectangleBorder(
+          //             //             borderRadius: BorderRadius.circular(10.0),
+          //             //           ),
+          //             //         ),
+          //             //       ),
+          //             //       child: Row(
+          //             //         crossAxisAlignment: CrossAxisAlignment.center,
+          //             //         mainAxisAlignment: MainAxisAlignment.center,
+          //             //         children: [
+          //             //           Image.asset(
+          //             //             'assets/web_icon.png',
+          //             //             width: 20,
+          //             //             height: 20,
+          //             //           ),
+          //             //           SizedBox(width: 5),
+          //             //           Text(
+          //             //             'Click Here for Website',
+          //             //             style: TextStyle(
+          //             //               fontSize: 18,
+          //             //               color: Color(0xFFFB4110),
+          //             //             ),
+          //             //           ),
+          //             //         ],
+          //             //       ),
+          //             //     ),
+          //             //   ),
+          //             // )
+          //           ],
+          //         ),
+          //       ),
+          //     ),
+          //   ],
+          // ),
         bottomNavigationBar: BottomNavyBar(
         selectedIndex: _currentIndex,
+        backgroundColor:Color(0xFFf3e3ff), // Background color for BottomNavyBar
         showElevation: true,
         itemCornerRadius: 24,
         curve: Curves.easeIn,
         onItemSelected: (index) => setState(() => _currentIndex = index),
         items: <BottomNavyBarItem>[
           BottomNavyBarItem(
-            icon: Icon(Icons.apps),
-            title: Text('Home'),
-            activeColor: Colors.red,
-            textAlign: TextAlign.center,
-          ),
-          BottomNavyBarItem(
-            icon: Icon(Icons.people),
-            title: Text('Users'),
-            activeColor: Colors.purpleAccent,
-            textAlign: TextAlign.center,
-          ),
-          BottomNavyBarItem(
-            icon: Icon(Icons.message),
-            title: Text(
-              'Messages test for mes teset test test ',
+            icon: SvgPicture.asset(
+              'assets/objects-column.svg',
+              width: 24,
+              height: 24,
             ),
-            activeColor: Colors.pink,
+            title: Text('Home',),
+            activeColor: Colors.blue,
             textAlign: TextAlign.center,
           ),
           BottomNavyBarItem(
-            icon: Icon(Icons.settings),
-            title: Text('Settings'),
+            icon: SvgPicture.asset(
+              'assets/calendar-clock.svg',
+              width: 24,
+              height: 24,
+            ),
+            title: Text('Book Appointment'),
+            activeColor: Colors.blue,
+            textAlign: TextAlign.center,
+          ),
+          BottomNavyBarItem(
+            icon: SvgPicture.asset(
+              'assets/invite-alt.svg',
+              width: 24,
+              height: 24,
+            ),
+            title: Text(
+              'Bookings',
+            ),
+            activeColor: Colors.blue,
+            textAlign: TextAlign.center,
+          ),
+          BottomNavyBarItem(
+            icon: SvgPicture.asset(
+              'assets/invite-alt.svg',
+              width: 24,
+              height: 24,
+            ),
+            title: Text('MY Profile'),
+            activeColor: Colors.blue,
+            textAlign: TextAlign.center,
+          ),
+          BottomNavyBarItem(
+            icon: SvgPicture.asset(
+              'assets/bin-bottles.svg',
+              width: 24,
+              height: 24,
+            ),
+            title: Text('Products'),
             activeColor: Colors.blue,
             textAlign: TextAlign.center,
           ),
@@ -1412,6 +1222,56 @@ class _HomeScreenState extends State<HomeScreen> {
       } catch (e) {
         print('Error: $e');
       }
+    }
+  }
+  Widget _buildScreens(int index) {
+    switch (index) {
+      case 0:
+        return Dashboard_Screen();
+      // Return the home screen widget
+        return Container(
+          color: Colors.white,
+          child: Center(
+            child: Text('Home Screen'),
+          ),
+        );
+      case 1:
+      // Return the users screen widget
+        return Container(
+          color: Colors.white,
+          child: Center(
+            child: Text('Book Appointment'),
+          ),
+        );
+      case 2:
+      // Return the messages screen widget
+        return MyAppointments();
+
+      //   return Container(
+      //     color: Colors.white,
+      //     child: Center(
+      //       child: Text('My Bookings'),
+      //     ),
+      //   );
+      case 3:
+      // Return the settings screen widget
+        return Container(
+          color: Colors.white,
+          child: Center(
+            child: Text('My Profile'),
+          ),
+        );
+      case 4:
+      // Return the settings screen widget
+      return  MyProducts();
+      //   return Container(
+      //     color: Colors.white,
+      //     child: Center(
+      //       child: Text('Products Screen'),
+      //     ),
+      //   );
+      default:
+        return Container();
     }
   }
 }

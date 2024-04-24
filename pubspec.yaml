@@ -116,6 +116,14 @@ flutter:
     - assets/left-arrow.svg
     - assets/befor_login_illustration.png
     - assets/hfz_logo.png
+    - assets/password_success.png
+    - assets/sign-out-alt.svg
+    - assets/bin-bottles.svg
+    - assets/calendar-clock.svg
+    - assets/filter.svg
+    - assets/invite-alt.svg
+    - assets/objects-column.svg
+
 
 
 

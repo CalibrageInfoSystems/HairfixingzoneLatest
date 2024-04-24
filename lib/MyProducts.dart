@@ -144,7 +144,7 @@ class MyProducts_screenState extends State<MyProducts> {
           return true;
         },
         child: Scaffold(
-          appBar: _appBar(),
+   //       appBar: _appBar(),
           body: FutureBuilder(
             future: apiData,
             builder: (context, snapshot) {

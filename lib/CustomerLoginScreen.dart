@@ -297,18 +297,18 @@ class _LoginPageState extends State<CustomerLoginScreen> {
             } else {
               // Show toast for invalid user
               FocusScope.of(context).unfocus();
-              CommonUtils.showCustomToastMessageLong("Invalid User", context, 1, 4);
+              CommonUtils.showCustomToastMessageLong("Invalid User", context, 1, 3, toastPosition: MediaQuery.of(context).size.height / 2);
               // showToast('Invalid user');
             }
           }
           else{
             FocusScope.of(context).unfocus();
-            CommonUtils.showCustomToastMessageLong('Invalid User ', context, 1, 4);
+            CommonUtils.showCustomToastMessageLong('Invalid User ',context, 1, 3, toastPosition: MediaQuery.of(context).size.height / 2);
           }
 
         } else {
           FocusScope.of(context).unfocus();
-          CommonUtils.showCustomToastMessageLong("${data["statusMessage"]}", context, 1, 4);
+          CommonUtils.showCustomToastMessageLong("${data["statusMessage"]}", context, 1, 3, toastPosition: MediaQuery.of(context).size.height / 2);
           // Handle the case where the user is not valid
           List<dynamic> validationErrors = data['validationErrors'];
           if (validationErrors.isNotEmpty) {

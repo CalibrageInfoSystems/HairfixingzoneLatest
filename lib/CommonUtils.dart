@@ -4,10 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:connectivity/connectivity.dart';
 class CommonUtils{
 
-  static  void showCustomToastMessageLong(String message,
+
+  static void showCustomToastMessageLong(String message,
       BuildContext context,
       int backgroundColorType,
-      int length,) {
+      int length,
+      {double toastPosition = 16.0}) {
     final double screenWidth = MediaQuery
         .of(context)
         .size
@@ -17,32 +19,54 @@ class CommonUtils{
     final double toastWidth = textWidth + 32.0; // Adjust padding as needed
     final double toastOffset = (screenWidth - toastWidth) / 2;
 
+    IconData iconData;
+    Color iconColor;
+
+    if (backgroundColorType == 0) {
+      // Success
+      iconData = Icons.check_circle;
+      iconColor = Colors.green;
+    } else {
+      // Error
+      iconData = Icons.error;
+      iconColor = Colors.red;
+    }
+
     OverlayEntry overlayEntry;
     overlayEntry = OverlayEntry(
       builder: (BuildContext context) =>
           Positioned(
-            bottom: 16.0,
+            bottom: toastPosition, // Change to toastPosition
             left: toastOffset,
             child: Material(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(8.0),
-              child: Container(
-                width: toastWidth,
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: backgroundColorType == 0 ? Colors.green : Colors.red,
-                    width: 2.0,
+              color: Colors.transparent, // Changed to transparent to cover entire screen
+              child: Center(
+                child: Container(
+                  width: toastWidth,
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: backgroundColorType == 0 ? Colors.green : Colors.red,
+                      width: 2.0,
+                    ),
+                    borderRadius: BorderRadius.circular(8.0),
+                      color: Colors.white
+                   // color: backgroundColorType == 0 ? Color(0x6F4CAF50) : Color(0xBBD97E72),
                   ),
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-                child: Padding(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: 16.0, vertical: 10.0),
-                  child: Center(
-                    child: Text(
-                      message,
-                      style: TextStyle(fontSize: 16.0, color: Colors.black,fontFamily: 'Calibri'),
-                      textAlign: TextAlign.center,
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(iconData, color: iconColor), // Icon
+                        SizedBox(width: 8.0),
+                        Expanded(
+                          child: Text(
+                            message,
+                            style: TextStyle(fontSize: 16.0, color: Colors.black, fontFamily: 'Calibri'),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -51,12 +75,13 @@ class CommonUtils{
           ),
     );
 
-
     Overlay.of(context).insert(overlayEntry);
     Future.delayed(Duration(seconds: length)).then((value) {
       overlayEntry.remove();
     });
   }
+
+
 
   static const blackColor = Colors.black;
   static const blackColorShade = Color(0xFF5f5f5f);
