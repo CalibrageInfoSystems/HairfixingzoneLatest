@@ -47,7 +47,7 @@ class _LoginPageState extends State<CustomerLoginScreen> {
 
 
           Container(
-            height: MediaQuery.of(context).size.height / 2,
+            height: MediaQuery.of(context).size.height / 2.2,
             decoration: const BoxDecoration(
 
             ),
@@ -91,8 +91,12 @@ class _LoginPageState extends State<CustomerLoginScreen> {
             ),
           ),
 
-
-         Form(key: _formKey,child: Container(
+    SizedBox(
+    height: MediaQuery.of(context).size.height - MediaQuery.of(context).size.height / 2, // Adjust the height here
+    child: SingleChildScrollView(
+    physics: AlwaysScrollableScrollPhysics(),
+    child: Form(
+         key: _formKey,child: Container(
          // height: MediaQuery.of(context).size.height,
             padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 40),
             decoration: const BoxDecoration(
@@ -198,7 +202,7 @@ class _LoginPageState extends State<CustomerLoginScreen> {
               ],
             ),
           ),
-         ) ],
+         ) ))],
       )),
 
     );
@@ -208,12 +212,12 @@ class _LoginPageState extends State<CustomerLoginScreen> {
     if (value == null || value.isEmpty) {
       return 'Please Enter Password';
     }
-    if (value.length < 4) {
-      return 'Password must be 4 characters or more';
-    }
-    if (value.length > 8) {
-      return 'Password must be 8 characters or less';
-    }
+    // if (value.length < 4) {
+    //   return 'Password must be 4 characters or more';
+    // }
+    // if (value.length > 8) {
+    //   return 'Password must be 8 characters or less';
+    // }
     return null;
   }
 

@@ -20,6 +20,7 @@ import 'package:flutter/services.dart';
 import 'Appointment.dart';
 import 'BranchModel.dart';
 import 'Branches_screen.dart';
+import 'CustomerLoginScreen.dart';
 import 'LatestAppointment.dart';
 import 'MyAppointments.dart';
 import 'MyProducts.dart';
@@ -147,22 +148,32 @@ class _HomeScreenState extends State<HomeScreen> {
       //   debugShowCheckedModeBanner: false,
       child: Scaffold(
           appBar: AppBar(
-            backgroundColor: const Color(0xFFF44614), // Orange color
-
-            centerTitle: true,
-
-            title: Container(
-              width: 85, // Adjust the width as needed
-              height: 50, // Adjust the height as needed
-              child: FractionallySizedBox(
-                widthFactor: 1, // Adjust the width factor as needed (0.8 = 80% of available width)
-                child: Image.asset(
-                  'assets/logo.png',
-                  fit: BoxFit.fitHeight,
-                ),
-              ),
-            ),
+          backgroundColor: const Color(0xFFF44614),
+      centerTitle: true,
+      title: Container(
+        width: 85,
+        height: 50,
+        child: FractionallySizedBox(
+          widthFactor: 1,
+          child: Image.asset(
+            'assets/logo.png',
+            fit: BoxFit.fitHeight,
           ),
+        ),
+      ),
+      actions: [
+        IconButton(
+          icon: Icon(
+            Icons.logout,
+            color: Colors.white,
+          ),
+          onPressed: () {
+            logOutDialog();
+            // Add logout functionality here
+          },
+        ),
+      ],
+    ),
           // drawer: Drawer(
           //   child: ListView(
           //     children: [
@@ -933,7 +944,7 @@ class _HomeScreenState extends State<HomeScreen> {
     CommonUtils.showCustomToastMessageLong("Logout Successful", context, 0, 3);
 
     Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(builder: (context) => UserSelectionScreen()),
+      MaterialPageRoute(builder: (context) => CustomerLoginScreen()),
       (route) => false,
     );
   }

@@ -1,0 +1,250 @@
+import 'package:flutter/material.dart';
+import 'package:hairfixingzone/Common/custom_button.dart';
+import 'package:hairfixingzone/Common/custome_form_field.dart';
+import 'package:hairfixingzone/CommonUtils.dart';
+import 'package:hairfixingzone/HomeScreen.dart';
+
+class ForgotChangePassword extends StatefulWidget {
+  const ForgotChangePassword({super.key});
+
+  @override
+  State<ForgotChangePassword> createState() => _ForgotChangePasswordState();
+}
+
+class _ForgotChangePasswordState extends State<ForgotChangePassword> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: CommonUtils.primaryColor,
+      appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios,color: CommonUtils.primaryTextColor ,),
+          onPressed: () {
+            // Add your functionality here when the arrow button is pressed
+          },
+        ),
+        backgroundColor: Colors.transparent, // Transparent app bar
+        elevation: 0, // No shadow
+      ),
+
+
+      body:
+      SingleChildScrollView(child:
+      Column(
+        mainAxisSize: MainAxisSize.max,
+        children: [
+
+
+          Container(
+            height: MediaQuery.of(context).size.height / 2.2,
+            decoration: const BoxDecoration(
+
+            ),
+            child:
+            Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    width: MediaQuery.of(context).size.height / 4.5,
+
+                    child: Image.asset(
+                        'assets/hfz_logo.png'),
+                  ),
+                  const SizedBox(
+                    height: 5.0,
+                  ),
+                  const Text(
+                      'Customer Login',
+                      style:  TextStyle(
+                        fontSize: 24,
+                        fontFamily: "Calibri",
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: 2,
+                        color: Color(0xFF662d91),
+                      )
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  const Text(
+                      'Login your account',
+                      style: CommonUtils.Sub_header_Styles
+                  ),
+                  const Text(
+                      'to access all the services',
+                      style: CommonUtils.Sub_header_Styles
+                  ),
+                ],
+              ),
+            ),
+          ),
+
+      SizedBox(
+          height: MediaQuery.of(context).size.height - MediaQuery.of(context).size.height / 2, // Adjust the height here
+          child: SingleChildScrollView(
+              physics: AlwaysScrollableScrollPhysics(),
+              child: Form(
+            key: _formKey,
+            child: Container(
+              // height: MediaQuery.of(context).size.height,
+              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 40),
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(30.0),
+                  topRight: Radius.circular(30.0),
+                ),
+              ),
+              height: MediaQuery.of(context).size.height / 2,
+              width: MediaQuery.of(context).size.width,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Column(
+                    children: [
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      CustomeFormField(
+                        label: 'Password',
+                        validator: validateEmail,
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      CustomeFormField(
+                        label: 'Confirm Password',
+                        validator: validatePassword,
+                      ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      // const Row(
+                      //   mainAxisAlignment: MainAxisAlignment.end,
+                      //   children: [
+                      //     Text(
+                      //       'Forgot Password?',
+                      //       style: CommonUtils.txSty_12b_fb,
+                      //     ),
+                      //   ],
+                      // ),
+                      const SizedBox(
+                        height: 30,
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: CustomButton(
+                              buttonText: 'Change Password',
+                              color: CommonUtils.primaryTextColor,
+                              onPressed: openDialog,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 30,
+                      ),
+                      const Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Back to login?',
+                            style: TextStyle(
+                              fontSize: 15,
+                              color: Colors.black,
+                            ),
+                          ),
+                          Text(
+                            ' Click Here',
+                            style: TextStyle(
+                              fontSize: 15,
+                              color: CommonUtils.primaryTextColor,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          )
+          ))]
+
+      )),
+
+    );
+  }
+
+  String? validatePassword(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter an password';
+    }
+    if (value.length < 4) {
+      return 'Password must be 4 characters or more';
+    }
+    if (value.length > 8) {
+      return 'Password must be 8 characters or less';
+    }
+    return null;
+  }
+
+  String? validateEmail(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter an email';
+    } else if (!RegExp(
+        r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+        .hasMatch(value)) {
+      return 'Please enter a valid email address';
+    }
+    return null;
+  }
+
+  void loginUser() {
+    if (_formKey.currentState!.validate()) {
+      print('login: Login success!');
+    }
+  }
+
+  void openDialog() async {
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const SizedBox(
+                height: 10,
+              ),
+              SizedBox(
+                width: 150,
+                child: Image.asset('assets/password_success.png'),
+              ),
+              const SizedBox(
+                height: 50,
+              ),
+              const Text(
+                'Your password has been successfully changed',
+                style: CommonUtils.txSty_18b_fb,
+              ),
+              const SizedBox(
+                height: 30,
+              ),
+              CustomButton(
+                  buttonText: 'Done',
+                  color: CommonUtils.primaryTextColor,
+                  onPressed: () {})
+            ],
+          ),
+        );
+      },
+    );
+  }
+}

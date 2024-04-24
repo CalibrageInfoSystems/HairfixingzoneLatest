@@ -1,20 +1,23 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hairfixingzone/Common/custom_button.dart';
 import 'package:hairfixingzone/CommonUtils.dart';
+import 'package:hairfixingzone/ForgotChangePassword.dart';
+import 'package:otp_text_field/otp_field.dart';
+import 'package:otp_text_field/otp_field_style.dart';
+import 'package:otp_text_field/style.dart';
+// import 'package:otp_text_field/otp_field.dart';
+// import 'package:otp_text_field/otp_field_style.dart';
+// import 'package:otp_text_field/style.dart';
 
-
-import 'Common/custom_button.dart';
-import 'Common/custome_form_field.dart';
-import 'ForgotPasswordOtpScreen.dart';
-
-class ForgotPasswordscreen extends StatefulWidget {
-  const ForgotPasswordscreen({super.key});
+class ForgotPasswordOtpScreen extends StatefulWidget {
+  const ForgotPasswordOtpScreen({super.key});
 
   @override
-  State<ForgotPasswordscreen> createState() => _ForgotPasswordscreen();
+  State<ForgotPasswordOtpScreen> createState() =>
+      _ForgotPasswordOtpScreenState();
 }
 
-class _ForgotPasswordscreen extends State<ForgotPasswordscreen> {
+class _ForgotPasswordOtpScreenState extends State<ForgotPasswordOtpScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,9 +70,9 @@ class _ForgotPasswordscreen extends State<ForgotPasswordscreen> {
                       const SizedBox(
                         height: 20,
                       ),
-                      const Text('Enter your email address and ',
+                      const Text('Please check your email to',
                           style: CommonUtils.Sub_header_Styles),
-                      const Text('we will send you a code',
+                      const Text('take 6 digit code for continue',
                           style: CommonUtils.Sub_header_Styles),
                     ],
                   ),
@@ -87,7 +90,7 @@ class _ForgotPasswordscreen extends State<ForgotPasswordscreen> {
             child:Form(
                 child: Container(
                   padding:
-                  const EdgeInsets.symmetric(vertical: 20, horizontal: 40),
+                  const EdgeInsets.symmetric(vertical: 10, horizontal: 40),
                   decoration: const BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.only(
@@ -104,16 +107,51 @@ class _ForgotPasswordscreen extends State<ForgotPasswordscreen> {
                       const SizedBox(),
                       Column(
                         children: [
-                          const CustomeFormField(
-                            label: 'User Name',
+                          OTPTextField(
+                            length: 6,
+                            spaceBetween: 10,
+                            width: MediaQuery.of(context).size.width,
+                            fieldWidth: 40,
+                            style: const TextStyle(fontSize: 20),
+                            textFieldAlignment: MainAxisAlignment.center,
+                            fieldStyle: FieldStyle.box,
+                            otpFieldStyle: OtpFieldStyle(
+                              borderColor: CommonUtils.primaryTextColor,
+                              enabledBorderColor: CommonUtils.primaryTextColor,
+                            ),
+                            onCompleted: (pin) {
+                              print("Completed: ");
+                            },
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          const Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                'Didn\'t receive code?',
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  color: Colors.black,
+                                ),
+                              ),
+                              Text(
+                                ' Resend code',
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  color: CommonUtils.primaryTextColor,
+                                ),
+                              ),
+                            ],
                           ),
                           const SizedBox(
                             height: 50,
                           ),
                           CustomButton(
-                            buttonText: 'Send OTP',
+                            buttonText: 'Validate OTP',
                             color: CommonUtils.primaryTextColor,
-                            onPressed: forgotUser,
+                            onPressed: validateOtp,
                           ),
                         ],
                       ),
@@ -140,15 +178,15 @@ class _ForgotPasswordscreen extends State<ForgotPasswordscreen> {
                   ),
                 ),
               )
-          )), ],
+          ))],
           )),
     );
   }
 
-  void forgotUser() {
+  void validateOtp() {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => const ForgotPasswordOtpScreen(),
+        builder: (context) => const ForgotChangePassword(),
       ),
     );
   }

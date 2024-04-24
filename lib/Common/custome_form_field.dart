@@ -31,7 +31,7 @@ class CustomeFormField extends StatelessWidget {
             ),
           ],
         ),
-
+SizedBox(height: 5.0,),
         // textfield
         TextFormField(
           controller: controller, // Assigning the controller
@@ -45,7 +45,7 @@ class CustomeFormField extends StatelessWidget {
             ),
             enabledBorder: OutlineInputBorder(
               borderSide: BorderSide(
-                color: Colors.grey, // Changed to a default color
+                color: CommonUtils.primaryTextColor,
               ),
               borderRadius: BorderRadius.circular(6.0),
             ),
