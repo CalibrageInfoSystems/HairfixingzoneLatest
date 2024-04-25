@@ -260,7 +260,7 @@ class MyProducts_screenState extends State<MyProducts> {
 
   Widget _searchBarAndFilter() {
     return Container(
-      margin: const EdgeInsets.only(bottom: 10),
+      margin: const EdgeInsets.only(bottom: 10,left: 5.0,right: 5.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -271,7 +271,8 @@ class MyProducts_screenState extends State<MyProducts> {
               child: TextField(
                 onChanged: (input) => filterProducts(input),
                 decoration: InputDecoration(
-                  contentPadding: const EdgeInsets.only(top: 5, left: 12),
+                  contentPadding: const EdgeInsets.all(10),
+
                   hintText: 'Search Products',
                   // hintStyle: CommonStyles.txSty_14bs_fb,
                  // suffixIcon: const Icon(Icons.search),
@@ -285,7 +286,7 @@ class MyProducts_screenState extends State<MyProducts> {
                     borderSide: BorderSide(
                       color: Color(0xFF0f75bc),
                     ),
-                    borderRadius: BorderRadius.circular(6.0),
+                    borderRadius: BorderRadius.circular(10.0),
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderSide: BorderSide(
@@ -450,7 +451,8 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
   @override
   Widget build(BuildContext context) {
     return Consumer<MyProductProvider>(
-      builder: (context, provider, child) => SingleChildScrollView(
+      builder: (context, provider, child) =>
+          SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(20),
           child: Column(
@@ -477,14 +479,13 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                   ),
                 ],
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 5),
-                child: Container(
+
+                Container(
                   width: double.infinity,
-                  height: 0.2,
-                  color: Colors.grey,
+                  height: 0.3,
+                  color: CommonUtils.primaryTextColor,
                 ),
-              ),
+
               const SizedBox(height: 10),
               Padding(
                 padding: const EdgeInsets.only(left: 5, right: 5),
@@ -495,7 +496,8 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                     // radio buttons
                     Padding(
                       padding: const EdgeInsets.only(top: 10.0),
-                      child: Row(
+                      child:
+                      Row(
                         children: options.map((option) {
                           return Row(
                             children: [
@@ -505,7 +507,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                                 onTap: () {
                                   setState(() {
                                     provider.getGender = option.typeCdId;
-                                    provider.selectedGender = option.typeCdId;
+                                    provider.selectedGender = option.typeCdId!;
 
                                     isGenderSelected = true;
                                   });
@@ -643,7 +645,9 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                   ],
                 ),
               ),
-              Row(
+          Padding(
+            padding: const EdgeInsets.only(left: 5, right: 5),
+            child:Row(
                 children: [
                   Expanded(
                     child: ElevatedButton(
@@ -713,7 +717,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                   ),
                 ],
               ),
-            ],
+            )],
           ),
         ),
       ),
@@ -769,8 +773,10 @@ class ProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 2,
+    return
+      Card(
+      elevation: 5,
+        shadowColor:CommonUtils.primaryColor, // Set the shadow color here
       child: Container(
         padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
@@ -779,7 +785,7 @@ class ProductCard extends StatelessWidget {
           children: [
             // product image
             Container(
-              width: 180,
+              width: MediaQuery.of(context).size.width/3,
               height: 100,
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
@@ -796,35 +802,41 @@ class ProductCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Text(
-                  product.name,
-                  style: CommonUtils.txSty_18b_fb,
+                  product.name + " (" +  product.code + ") "  ,
+                  style: CommonUtils.txSty_18p_f7,
                 ),
-                const SizedBox(
-                  width: 3,
-                ),
+                SizedBox(height: 8), // Add space here
                 Text(
                   product.categoryName,
                   style: CommonUtils.txSty_12bs_fb,
                 ),
-                const SizedBox(
-                  width: 3,
-                ),
+                SizedBox(height: 8), // Add space here
                 Text(
                   product.gender ?? ' ',
                   style: CommonUtils.txSty_12bs_fb,
                 ),
-                const SizedBox(
-                  width: 3,
-                ),
+                SizedBox(height: 8), // Add space here
                 Text(
-                  '₹ ${product.maxPrice.toString()}',
-                  style: CommonUtils.txSty_18p_f7,
+                  '₹ ${formatNumber(product.maxPrice)} /-',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontFamily: "Calibri",
+                    fontWeight: FontWeight.w500,
+                    letterSpacing: 1,
+                    color: Color(0xFF662d91),
+                  ),
                 ),
               ],
             )
+
           ],
         ),
       ),
     );
+  }
+
+  String formatNumber(double number) {
+    NumberFormat formatter = NumberFormat("#,##,##,##,##,##,##0.00", "en_US");
+    return formatter.format(number);
   }
 }

@@ -164,7 +164,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 )
               : _currentIndex == 1 || _currentIndex == 2 || _currentIndex == 3
-                  ? Text(_getAppBarTitle(_currentIndex))
+                  ? Text(_getAppBarTitle(_currentIndex),style: CommonUtils.header_Styles,)
                   : null,
           actions: [
             IconButton(

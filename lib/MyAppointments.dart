@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:math';
 
+import 'package:custom_date_range_picker/custom_date_range_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -15,6 +16,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'BranchModel.dart';
+import 'Common/common_styles.dart';
 import 'Commonutils.dart';
 import 'MyAppointment_Model.dart';
 import 'api_config.dart';
@@ -39,7 +41,7 @@ class MyAppointments_screenState extends State<MyAppointments> {
   bool isLoading = true;
   List<MyAppointment_Model> MyAppointmentList = [];
   List<UserFeedback> userfeedbacklist = [];
-  late Future<List<MyAppointment_Model>> apiData;
+   Future<List<MyAppointment_Model>>? apiData;
 
   @override
   void initState() {
@@ -61,7 +63,7 @@ class MyAppointments_screenState extends State<MyAppointments> {
     });
   }
 
-  late MyAppointmentsProvider myAppointmentsProvider;
+  MyAppointmentsProvider? myAppointmentsProvider;
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -186,8 +188,8 @@ class MyAppointments_screenState extends State<MyAppointments> {
 
   void initializeData(int? userId) {
     apiData = fetchMyAppointments(userId);
-    apiData.then((value) {
-      myAppointmentsProvider.storeIntoProvider = value;
+    apiData!.then((value) {
+      myAppointmentsProvider!.storeIntoProvider = value;
     }).catchError((error) {
       print('catchError: Error occurred.');
     });
@@ -3602,7 +3604,7 @@ class MyAppointments_screenState extends State<MyAppointments> {
                 onChanged: (input) => filterAppointment(input),
                 decoration: InputDecoration(
                   contentPadding: const EdgeInsets.only(top: 5, left: 12),
-                  hintText: 'Search Products',
+                  hintText: 'Search Appointment',
                   // hintStyle: CommonStyles.txSty_14bs_fb,
                   // suffixIcon: const Icon(Icons.search),
                   border: OutlineInputBorder(
@@ -3677,9 +3679,9 @@ class MyAppointments_screenState extends State<MyAppointments> {
 
 
   void filterAppointment(String input) {
-    apiData.then((data) {
+    apiData!.then((data) {
       setState(() {
-        myAppointmentsProvider.filterProviderData(data
+        myAppointmentsProvider!.filterProviderData(data
             .where((item) =>
             item.branch.toLowerCase().contains(input.toLowerCase()))
             .toList());
@@ -3705,13 +3707,19 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
 
   final orangeColor =CommonUtils.primaryTextColor;
   late Future<List<BranchModel>> apiData;
-
+  TextEditingController From_todates = new TextEditingController();
+  DateTime? startDate;
+  DateTime? endDate;
+  FocusNode DateofBirthdFocus = FocusNode();
+  List<Statusmodel> statusoptions = [];
+  late Future<List<Statusmodel>> prostatus;
+  Statusmodel? selectedstatus;
   @override
   void initState() {
     // Initialize state
     super.initState();
-    fetchRadioButtonOptions();
-    branchname = fetchbranches();
+    apiData = fetchbranches();
+    prostatus = fetchstatus();
   }
 
 
@@ -3734,46 +3742,7 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
     myAppointmentsProvider = Provider.of<MyAppointmentsProvider>(context);
   }
 
-  // Future<List<ProductList>> fetchproducts(
-  //     {int? id, int? categoryTypeId, int? genderTypeId}) async {
-  //   const apiurl = 'http://182.18.157.215/SaloonApp/API/GetProductById';
-  //
-  //   try {
-  //     final request = {
-  //       "id": id,
-  //       "categoryTypeId": categoryTypeId,
-  //       "genderTypeId": genderTypeId
-  //     };
-  //     final response = await http.post(
-  //       Uri.parse(apiurl),
-  //       body: json.encode(request),
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //     );
-  //     print('fetchproducts: ${json.encode(request)}');
-  //
-  //     if (response.statusCode == 200) {
-  //       final data = json.decode(response.body);
-  //       if (data['listResult'] != null) {
-  //         List<dynamic> list = data['listResult'];
-  //         List<ProductList> result =
-  //         list.map((item) => ProductList.fromJson(item)).toList();
-  //         return result;
-  //       } else {
-  //         print('listResult is null');
-  //         return [];
-  //       }
-  //       // myProductProvider.proProducts = productlist;
-  //     } else {
-  //       print('api failed');
-  //       throw Exception('else: api failed');
-  //     }
-  //   } catch (error) {
-  //     print('Error data is not getting from the api: $error');
-  //     throw Exception('catch: $error');
-  //   }
-  // }
+
 
   @override
   Widget build(BuildContext context) {
@@ -3809,8 +3778,8 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                 padding: const EdgeInsets.symmetric(vertical: 5),
                 child: Container(
                   width: double.infinity,
-                  height: 0.2,
-                  color: Colors.grey,
+                  height: 0.3,
+                  color:CommonUtils.primaryTextColor,
                 ),
               ),
               const SizedBox(height: 10),
@@ -3827,11 +3796,81 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                       height: 10,
                     ),
 
+                    // Row(
+                    //   children: [
+                    //     Text(
+                    //       'Date of Birth',
+                    //       style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                    //     ),
+                    //     Text(
+                    //       '*',
+                    //       style: TextStyle(color: Colors.red),
+                    //     ),
+                    //   ],
+                    // ),
+                    TextFormField(
+                      controller: From_todates, // Assigning the controller
+                      keyboardType: TextInputType.visiblePassword,
+                      onTap: () {
+                        showCustomDateRangePicker(
+                          context,
+                          dismissible: true,
+                          endDate: endDate,
+                          startDate: startDate,
+                          maximumDate: DateTime.now().add(const Duration(days: 50)),
+                          minimumDate: DateTime.now().subtract(const Duration(days: 50)),
+                          onApplyClick: (s, e) {
+                            setState(() {
+                              endDate = e;
+                              startDate = s;
+                              From_todates.text = '${startDate != null ? DateFormat("dd, MMM").format(startDate!) : '-'} / ${endDate != null ? DateFormat("dd, MMM").format(endDate!) : '-'}';
+                            });
+                          },
+                          onCancelClick: () {
+                            setState(() {
+                              endDate = null;
+                              startDate = null;
+                            });
+                          },
+                        );
+                      },
+                      focusNode: DateofBirthdFocus,
+                      readOnly: true,
+                      decoration: InputDecoration(
+                        contentPadding: const EdgeInsets.only(top: 15, bottom: 10, left: 15, right: 15),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Color(0xFF0f75bc),
+                          ),
+                          borderRadius: BorderRadius.circular(6.0),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: CommonUtils.primaryTextColor,
+                          ),
+                          borderRadius: BorderRadius.circular(6.0),
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(10),
+                          ),
+                        ),
+                        hintText: 'Select Between Dates',
+                        counterText: "",
+                        hintStyle: TextStyle(color: Colors.grey, fontWeight: FontWeight.w400),
+                        prefixIcon: Icon(Icons.calendar_today),
+
+                      ),
+                      //  validator: validatePassword,
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
                     // category
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10),
                       child: FutureBuilder(
-                          future: branchname,
+                          future: apiData,
                           builder: (context, snapshot) {
                             if (snapshot.connectionState ==
                                 ConnectionState.waiting) {
@@ -3853,11 +3892,11 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                                   itemBuilder:
                                       (BuildContext context, int index) {
                                     bool isSelected =
-                                        index == provider.selectedCategory;
-                                    BranchModel branch;
+                                        index == provider.selectedBranch;
+                                    BranchModel branchmodel;
 
                                     if (index == 0) {
-                                      branch = BranchModel(  id: 0,
+                                      branchmodel = BranchModel(  id: 0,
                                         name: "All",
                                         imageName:null ,
                                         address: " ",
@@ -3869,15 +3908,16 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
 
                                       );
                                     } else {
-                                      branch = data[index - 1];
+                                      branchmodel = data[index - 1];
                                     }
                                     return GestureDetector(
                                       onTap: () {
                                         setState(() {
-                                          provider.selectedCategory = index;
+                                          provider.selectedBranch = index;
 
-                                          provider.getCategory = branch.id;
-                                          print('filter: ${provider.getCategory}');
+                                          provider.getbranch = branchmodel.id;
+                                          print(
+                                              'filter: ${provider.getbranch}');
                                         });
                                       },
                                       child: Container(
@@ -3908,7 +3948,7 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                                                 child: Row(
                                                   children: [
                                                     Text(
-                                                      branch.name
+                                                      branchmodel.name
                                                           .toString(),
                                                       style: TextStyle(
                                                         fontSize: 12.0,
@@ -3934,7 +3974,109 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                             }
                           }),
                     ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      child: FutureBuilder(
+                          future: prostatus,
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return CircularProgressIndicator.adaptive(
+                                backgroundColor: Colors.transparent,
+                                valueColor:
+                                AlwaysStoppedAnimation<Color>(orangeColor),
+                              );
+                            } else if (snapshot.hasError) {
+                              return Text('Error: ${snapshot.error}');
+                            } else {
+                              List<Statusmodel> data = snapshot.data!;
+                              return SizedBox(
+                                height: 40,
+                                child: ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  shrinkWrap: true,
+                                  itemCount: data.length + 1,
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    bool isSelected =
+                                        index == provider.selectedstatus;
+                                    Statusmodel status;
 
+                                    if (index == 0) {
+                                      status = Statusmodel(
+                                        typeCdId: null,
+                                        desc:  'All',
+
+                                      );
+                                    } else {
+                                      status = data[index - 1];
+                                    }
+                                    return GestureDetector(
+                                      onTap: () {
+                                        setState(() {
+                                          provider.selectedStatus = index;
+
+                                          provider.getStatus = status.typeCdId;
+                                          print(
+                                              'filter: ${provider.getStatus}');
+                                        });
+                                      },
+                                      child: Container(
+                                        margin: const EdgeInsets.symmetric(
+                                            horizontal: 4.0),
+                                        decoration: BoxDecoration(
+                                          color: isSelected
+                                              ? orangeColor
+                                              : orangeColor.withOpacity(0.1),
+                                          border: Border.all(
+                                            color: isSelected
+                                                ? orangeColor
+                                                : orangeColor,
+                                            width: 1.0,
+                                          ),
+                                          borderRadius:
+                                          BorderRadius.circular(8.0),
+                                        ),
+                                        child: IntrinsicWidth(
+                                          child: Column(
+                                            mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                            children: [
+                                              Container(
+                                                padding:
+                                                const EdgeInsets.symmetric(
+                                                    horizontal: 10.0),
+                                                child: Row(
+                                                  children: [
+                                                    Text(
+                                                      status.desc.toString(),
+                                                      style: TextStyle(
+                                                        fontSize: 12.0,
+                                                        fontWeight:
+                                                        FontWeight.bold,
+                                                        fontFamily: "Roboto",
+                                                        color: isSelected
+                                                            ? Colors.white
+                                                            : Colors.black,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              );
+                            }
+                          }),
+                    ),
                     const SizedBox(
                       height: 10,
                     ),
@@ -4016,31 +4158,23 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
     );
   }
 
-  Future<void> fetchRadioButtonOptions() async {
-    final url = Uri.parse(baseUrl + getstatus);
-    print('url==>946: $url');
 
-    try {
-      final response = await http.get(url);
-      if (response.statusCode == 200) {
-        final dynamic responseData = jsonDecode(response.body);
-        if (responseData != null &&
-            responseData['listResult'] is List<dynamic>) {
-          final List<dynamic> optionsData = responseData['listResult'];
-          setState(() {
+  Future<List<Statusmodel>> fetchstatus() async {
 
-          });
-        } else {
-          throw Exception('Invalid response format');
-        }
-      } else {
-        throw Exception('Failed to fetch radio button options');
-      }
-    } catch (e) {
-      throw Exception('Error Radio: $e');
+    final response = await http.get(Uri.parse(baseUrl + getstatus));
+    if (response.statusCode == 200) {
+      final List<dynamic> responseData =
+      json.decode(response.body)['listResult'];
+      List<Statusmodel> result =
+      responseData.map((json) => Statusmodel.fromJson(json)).toList();
+      print('fetch branchname: ${result[0].desc}');
+      return result;
+    } else {
+      throw Exception('Failed to load products');
     }
-  }
 
+
+  }
 
 
   Future<List<BranchModel>> fetchbranches() async {
@@ -4070,6 +4204,8 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
     });
   }
 
+
+
 }
 
 
@@ -4088,7 +4224,7 @@ class _AppointmentCardState extends State<AppointmentCard> {
     DateTime dateTime = DateTime.parse(dateString);
     print(
         'dateFormate: ${dateTime.day} - ${DateFormat.MMM().format(dateTime)} - ${dateTime.year}');
-    // int ,       String ,                           int
+    //         int ,       String ,                           int
     return [dateTime.day, DateFormat.MMM().format(dateTime), dateTime.year];
   }
 
@@ -4104,6 +4240,7 @@ class _AppointmentCardState extends State<AppointmentCard> {
     // appointments
     return Card(
       elevation: 4,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
       child: Container(
         padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
@@ -4115,14 +4252,20 @@ class _AppointmentCardState extends State<AppointmentCard> {
           children: [
             // part 1
             SizedBox(
-              height: 70,
+              height: 80,
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    '${dateValues[1]}',
-
+                    '${dateValues[1]}', //'10:00 AM to 11;00 AM',
+                    // style: const TextStyle(
+                    //   fontSize: 18,
+                    //   fontFamily: 'Calibri',
+                    //   fontWeight: FontWeight.bold,
+                    //   color: Color(0xFF0f75bc),
+                    // ),
                     style: const TextStyle(
                       fontSize: 14,
                       fontFamily: 'Calibri',
@@ -4138,10 +4281,10 @@ class _AppointmentCardState extends State<AppointmentCard> {
                       fontWeight: FontWeight.bold,
                       color: Color(0xFF0f75bc),
                     ),
+                    //  style: CommonUtils.txSty_12blu_fb,
                   ),
                   Text(
                     '${dateValues[2]}',
-                    //style: CommonUtils.txSty_14blu_fb,
                     style: const TextStyle(
                       fontSize: 14,
                       fontFamily: 'Calibri',
@@ -4151,6 +4294,40 @@ class _AppointmentCardState extends State<AppointmentCard> {
                   ),
                 ],
               ),
+              //  Column(
+              //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //   crossAxisAlignment: CrossAxisAlignment.center,
+              //   children: [
+              //     Text(
+              //       '${dateValues[1]}',
+              //       style: const TextStyle(
+              //         fontSize: 14,
+              //         fontFamily: 'Calibri',
+              //         fontWeight: FontWeight.bold,
+              //         color: Color(0xFF0f75bc),
+              //       ),
+              //     ),
+              //     Text(
+              //       '${dateValues[0]}',
+              //       style: const TextStyle(
+              //         fontSize: 20,
+              //         fontFamily: 'Calibri',
+              //         fontWeight: FontWeight.bold,
+              //         color: Color(0xFF0f75bc),
+              //       ),
+              //     ),
+              //     Text(
+              //       '${dateValues[2]}',
+              //       //style: CommonUtils.txSty_14blu_fb,
+              //       style: const TextStyle(
+              //         fontSize: 14,
+              //         fontFamily: 'Calibri',
+              //         fontWeight: FontWeight.bold,
+              //         color: Color(0xFF0f75bc),
+              //       ),
+              //     ),
+              //   ],
+              // ),
             ),
 
             // divider
@@ -4159,9 +4336,9 @@ class _AppointmentCardState extends State<AppointmentCard> {
               children: [
                 Container(
                   margin: const EdgeInsets.symmetric(horizontal: 10),
-                  width: 0.2,
-                  height: 70,
-                  color: const Color.fromARGB(255, 85, 80, 80),
+                  width: 0.5,
+                  height: 80,
+                  color: const Color.fromARGB(255, 70, 67, 67),
                 ),
               ],
             ),
@@ -4169,20 +4346,26 @@ class _AppointmentCardState extends State<AppointmentCard> {
             // part 2
             Expanded(
               child: SizedBox(
-                height: 70,
+                height: 80,
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       widget.data.slotDuration, //'10:00 AM to 11;00 AM',
+                      // style: const TextStyle(
+                      //   fontSize: 18,
+                      //   fontFamily: 'Calibri',
+                      //   fontWeight: FontWeight.bold,
+                      //   color: Color(0xFF0f75bc),
+                      // ),
                       style: const TextStyle(
-                        fontSize: 18,
+                        fontSize: 14,
                         fontFamily: 'Calibri',
                         fontWeight: FontWeight.bold,
                         color: Color(0xFF0f75bc),
                       ),
-                      //  style: CommonUtils.txSty_12blu_fb,
                     ),
                     Text(
                       widget.data.purposeOfVisit, //'Head Wash',
@@ -4193,6 +4376,11 @@ class _AppointmentCardState extends State<AppointmentCard> {
                       widget.data.branch, //'Kondapur',
                       style: CommonUtils.txSty_12b_fb,
                     ),
+                    if (widget.data.statusTypeId == 18)
+                      const Text(
+                        'This is feed back content', //'Kondapur',
+                        style: CommonUtils.txSty_12b_fb,
+                      ),
                   ],
                 ),
               ),
@@ -4201,36 +4389,22 @@ class _AppointmentCardState extends State<AppointmentCard> {
             // part 3
             SizedBox(
               // color: Colors.grey,
-              height: 70,
+              height: 80,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
+                  statusBasedBgById(
+                      widget.data.statusTypeId, widget.data.status),
                   Row(
                     children: [
-                      Container(
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: Colors.blue.shade200),
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 2, horizontal: 5),
-                        child: Row(
-                          children: [
-                            Text(
-                              widget.data.status,
-                              style: const TextStyle(
-                                  fontSize: 11, color: Colors.blue),
-                            ),
-                          ],
-                        ),
-                      ),
                       widget.data.statusTypeId == 18
                           ? const Padding(
                         padding: EdgeInsets.only(left: 8),
                         child: Row(
                           children: [
                             Icon(
-                              Icons.star,
+                              Icons.star_border_outlined,
                               size: 13,
                               color: Color.fromARGB(255, 44, 172, 55),
                             ),
@@ -4247,7 +4421,6 @@ class _AppointmentCardState extends State<AppointmentCard> {
                           : const SizedBox(),
                     ],
                   ),
-                  // here
                   verifyStatus(widget.data.statusTypeId),
                 ],
               ),
@@ -4270,13 +4443,20 @@ class _AppointmentCardState extends State<AppointmentCard> {
             Container(
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(3),
-                  border: Border.all(
-                      color: const Color.fromARGB(255, 116, 9, 179))),
-              padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 5),
-              child: const Text(
-                'Reschedule',
-                style: TextStyle(
-                    fontSize: 11, color: Color.fromARGB(255, 116, 9, 179)),
+                  border: Border.all(color: CommonUtils.primaryTextColor)),
+              padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
+              child: Row(
+                children: [
+                  SvgPicture.asset(
+                    'assets/calendar_3.svg',
+                    width: 13,
+                  ),
+                  const Text(
+                    ' Reschedule',
+                    style: TextStyle(
+                        fontSize: 11, color: CommonUtils.primaryTextColor),
+                  ),
+                ],
               ),
             ),
             const SizedBox(
@@ -4285,13 +4465,20 @@ class _AppointmentCardState extends State<AppointmentCard> {
             Container(
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(3),
-                  border: Border.all(
-                      color: const Color.fromARGB(255, 197, 14, 14))),
-              padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 5),
-              child: const Text(
-                'Cancel',
-                style: TextStyle(
-                    fontSize: 11, color: Color.fromARGB(255, 197, 14, 14)),
+                  border: Border.all(color: CommonStyles.statusRedText)),
+              padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
+              child: Row(
+                children: [
+                  SvgPicture.asset(
+                    'assets/calendar-xmark.svg',
+                    width: 13,
+                  ),
+                  const Text(
+                    ' Cancel',
+                    style: TextStyle(
+                        fontSize: 11, color: CommonStyles.statusRedText),
+                  ),
+                ],
               ),
             ),
           ],
@@ -4302,14 +4489,11 @@ class _AppointmentCardState extends State<AppointmentCard> {
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(3),
               border: Border.all(color: CommonUtils.primaryTextColor)),
-          padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 5),
+          padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
           child: const Row(
             children: [
-              Icon(
-                Icons.star,
-                size: 13,
-                color: CommonUtils.primaryTextColor,
-              ),
+              Icon(Icons.star_border_outlined,
+                  size: 13, color: CommonUtils.primaryTextColor),
               Text(
                 ' Rate Us',
                 style: TextStyle(
@@ -4319,416 +4503,79 @@ class _AppointmentCardState extends State<AppointmentCard> {
           ),
         );
       default:
-        return const SizedBox();
+        return Container(
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(3),
+              border: Border.all(color: CommonUtils.blackColor)),
+          padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
+          child: const Row(
+            children: [
+              Icon(
+                Icons.star_border_outlined,
+                size: 13,
+              ),
+              Text(
+                ' default',
+                style: TextStyle(fontSize: 11, color: CommonUtils.blackColor),
+              ),
+            ],
+          ),
+        );
     }
   }
+
+  Widget statusBasedBgById(int statusTypeId, String status) {
+    final Color statusColor;
+    final Color statusBgColor;
+    switch (statusTypeId) {
+      case 4: // Submited
+        statusColor = CommonStyles.statusBlueText;
+        statusBgColor = CommonStyles.statusBlueBg;
+        break;
+      case 5: // Accepted
+        statusColor = CommonStyles.statusGreenText;
+        statusBgColor = CommonStyles.statusGreenBg;
+        break;
+      case 11: // FeedBack
+        statusColor = CommonStyles.statusRedText;
+        statusBgColor = CommonStyles.statusRedBg;
+        break;
+      case 18: // Closed
+        statusColor = CommonStyles.statusYellowText;
+        statusBgColor = CommonStyles.statusYellowBg;
+        break;
+      case 100: // Rejected
+        statusColor = CommonStyles.statusYellowText;
+        statusBgColor = CommonStyles.statusYellowBg;
+        break;
+      default:
+        statusColor = Colors.black26;
+        statusBgColor = Colors.black26.withOpacity(0.2);
+        break;
+    }
+    return Container(
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10), color: statusBgColor),
+      padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
+      child: Row(
+        children: [
+          // statusBasedBgById(widget.data.statusTypeId),
+          Text(
+            status,
+            style: TextStyle(
+              fontSize: 11,
+              fontFamily: "Calibri",
+              fontWeight: FontWeight.w500,
+              color: statusColor,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
 }
 
-// class FilterBottomSheet extends StatefulWidget {
-//   const FilterBottomSheet({Key? key}) : super(key: key);
-
-//   @override
-//   State<FilterBottomSheet> createState() => _FilterBottomSheetState();
-// }
-
-// class _FilterBottomSheetState extends State<FilterBottomSheet> {
-//   List<RadioButtonOption> options = [];
-
-//   bool isGenderSelected = false;
-//   List<ProductCategory> products = [];
-//   late Future<List<ProductCategory>> proCatogary;
-//   ProductCategory? selectedCategory;
-
-//   final orangeColor = const Color(0xFFe78337);
-//   late Future<List<ProductList>> apiData;
-
-//   @override
-//   void initState() {
-//     // Initialize state
-//     super.initState();
-//     fetchRadioButtonOptions();
-//     proCatogary = fetchProductsCategory();
-//   }
-
-//   Future<void> filterProducts() async {
-//     apiData = fetchproducts(
-//         genderTypeId: myProductProvider.getGender,
-//         categoryTypeId: myProductProvider.getCategory);
-//     apiData.then((data) {
-//       myProductProvider.getProProducts = data;
-//       // Navigator.of(context).pop();
-//     }).catchError((error) {
-//       print('catchError: Error occurred.');
-//     });
-//   }
-
-//   Future<void> clearFilter() async {
-//     apiData = fetchproducts();
-//     apiData.then((data) {
-//       myProductProvider.getProProducts = data;
-//       // myProductProvider.clearFilter();
-//       // Navigator.of(context).pop();
-//     }).catchError((error) {
-//       print('catchError: Error occurred.');
-//     });
-//   }
-
-//   late MyProductProvider myProductProvider;
-//   @override
-//   void didChangeDependencies() {
-//     super.didChangeDependencies();
-
-//     myProductProvider = Provider.of<MyProductProvider>(context);
-//   }
-
-//   Future<List<ProductList>> fetchproducts(
-//       {int? id, int? categoryTypeId, int? genderTypeId}) async {
-//     const apiurl = 'http://182.18.157.215/SaloonApp/API/GetProductById';
-
-//     try {
-//       final request = {
-//         "id": id,
-//         "categoryTypeId": categoryTypeId,
-//         "genderTypeId": genderTypeId
-//       };
-//       final response = await http.post(
-//         Uri.parse(apiurl),
-//         body: json.encode(request),
-//         headers: {
-//           'Content-Type': 'application/json',
-//         },
-//       );
-//       print('fetchproducts: ${json.encode(request)}');
-//       if (response.statusCode == 200) {
-//         final data = json.decode(response.body);
-//         if (data['listResult'] != null) {
-//           List<dynamic> list = data['listResult'];
-//           List<ProductList> result =
-//               list.map((item) => ProductList.fromJson(item)).toList();
-//           return result;
-//         } else {
-//           print('listResult is null');
-//           return [];
-//         }
-//         // myProductProvider.proProducts = productlist;
-//       } else {
-//         print('api failed');
-//         throw Exception('else: api failed');
-//       }
-//     } catch (error) {
-//       print('Error data is not getting from the api: $error');
-//       throw Exception('catch: $error');
-//     }
-//   }
-//   @override
-//   Widget build(BuildContext context) {
-//     return Consumer<MyProductProvider>(
-//       builder: (context, provider, child) => SingleChildScrollView(
-//         child: Padding(
-//           padding: const EdgeInsets.all(20),
-//           child: Column(
-//             crossAxisAlignment: CrossAxisAlignment.start,
-//             mainAxisSize: MainAxisSize.min,
-//             children: <Widget>[
-//               Row(
-//                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                 children: <Widget>[
-//                   const Text(
-//                     'Filter By',
-//                   ),
-//                   GestureDetector(
-//                     onTap: () {
-//                       // Clear filters
-//                       myProductProvider.clearFilter();
-//                       clearFilter().whenComplete(() {
-//                         Navigator.of(context).pop();
-//                       });
-//                     },
-//                     child: const Text(
-//                       'Clear all filters',
-//                     ),
-//                   ),
-//                 ],
-//               ),
-//               Padding(
-//                 padding: const EdgeInsets.symmetric(vertical: 5),
-//                 child: Container(
-//                   width: double.infinity,
-//                   height: 0.2,
-//                   color: Colors.grey,
-//                 ),
-//               ),
-//               const SizedBox(height: 10),
-//               Padding(
-//                 padding: const EdgeInsets.only(left: 5, right: 5),
-//                 child: Column(
-//                   mainAxisAlignment: MainAxisAlignment.start,
-//                   crossAxisAlignment: CrossAxisAlignment.start,
-//                   children: [
-//                     // radio buttons
-//                     Padding(
-//                       padding: const EdgeInsets.only(top: 10.0),
-//                       child: Row(
-//                         children: options.map((option) {
-//                           return Row(
-//                             children: [
-//                               CustomRadioButton(
-//                                 selected:
-//                                     provider.selectedGender == option.typeCdId,
-//                                 onTap: () {
-//                                   setState(() {
-//                                     provider.getGender = option.typeCdId;
-//                                     provider.selectedGender = option.typeCdId;
-//                                     isGenderSelected = true;
-//                                   });
-//                                   print(option.typeCdId);
-//                                   print(option.desc);
-//                                   print('filter: ${provider.getGender}');
-//                                 },
-//                               ),
-//                               const SizedBox(width: 5),
-//                               Text(
-//                                 option.desc,
-//                                 style: const TextStyle(
-//                                   fontFamily: 'Calibri',
-//                                   fontSize: 14,
-//                                   color: Color(0xFFFB4110),
-//                                 ),
-//                               ),
-//                               const SizedBox(width: 26),
-//                             ],
-//                           );
-//                         }).toList(),
-//                       ),
-//                     ),
-//                     const SizedBox(
-//                       height: 10,
-//                     ),
-//                     // category
-//                     Padding(
-//                       padding: const EdgeInsets.symmetric(vertical: 10),
-//                       child: FutureBuilder(
-//                           future: proCatogary,
-//                           builder: (context, snapshot) {
-//                             if (snapshot.connectionState ==
-//                                 ConnectionState.waiting) {
-//                               return CircularProgressIndicator.adaptive(
-//                                 backgroundColor: Colors.transparent,
-//                                 valueColor:
-//                                     AlwaysStoppedAnimation<Color>(orangeColor),
-//                               );
-//                             } else if (snapshot.hasError) {
-//                               return Text('Error: ${snapshot.error}');
-//                             } else {
-//                               List<ProductCategory> data = snapshot.data!;
-//                               return SizedBox(
-//                                 height: 40,
-//                                 child: ListView.builder(
-//                                   scrollDirection: Axis.horizontal,
-//                                   shrinkWrap: true,
-//                                   itemCount: data.length + 1,
-//                                   itemBuilder:
-//                                       (BuildContext context, int index) {
-//                                     bool isSelected =
-//                                         index == provider.selectedCategory;
-//                                     ProductCategory productCategory;
-//                                     if (index == 0) {
-//                                       productCategory = ProductCategory(
-//                                         typecdid: null,
-//                                         desc: 'All',
-//                                       );
-//                                     } else {
-//                                       productCategory = data[index - 1];
-//                                     }
-//                                     return GestureDetector(
-//                                       onTap: () {
-//                                         setState(() {
-//                                           provider.selectedCategory = index;
-
-//                                           provider.getCategory =
-//                                               productCategory.typecdid;
-//                                           print(
-//                                               'filter: ${provider.getCategory}');
-//                                         });
-//                                       },
-//                                       child: Container(
-//                                         margin: const EdgeInsets.symmetric(
-//                                             horizontal: 4.0),
-//                                         decoration: BoxDecoration(
-//                                           color: isSelected
-//                                               ? orangeColor
-//                                               : orangeColor.withOpacity(0.1),
-//                                           border: Border.all(
-//                                             color: isSelected
-//                                                 ? orangeColor
-//                                                 : orangeColor,
-//                                             width: 1.0,
-//                                           ),
-//                                           borderRadius:
-//                                               BorderRadius.circular(8.0),
-//                                         ),
-//                                         child: IntrinsicWidth(
-//                                           child: Column(
-//                                             mainAxisAlignment:
-//                                                 MainAxisAlignment.center,
-//                                             children: [
-//                                               Container(
-//                                                 padding:
-//                                                     const EdgeInsets.symmetric(
-//                                                         horizontal: 10.0),
-//                                                 child: Row(
-//                                                   children: [
-//                                                     Text(
-//                                                       productCategory.desc
-//                                                           .toString(),
-//                                                       style: TextStyle(
-//                                                         fontSize: 12.0,
-//                                                         fontWeight:
-//                                                             FontWeight.bold,
-//                                                         fontFamily: "Roboto",
-//                                                         color: isSelected
-//                                                             ? Colors.white
-//                                                             : Colors.black,
-//                                                       ),
-//                                                     ),
-//                                                   ],
-//                                                 ),
-//                                               ),
-//                                             ],
-//                                           ),
-//                                         ),
-//                                       ),
-//                                     );
-//                                   },
-//                                 ),
-//                               );
-//                             }
-//                           }),
-//                     ),
-//                     const SizedBox(
-//                       height: 10,
-//                     ),
-//                   ],
-//                 ),
-//               ),
-//               Row(
-//                 children: [
-//                   Expanded(
-//                     child: ElevatedButton(
-//                       onPressed: () {
-//                         Navigator.of(context).pop();
-//                       },
-//                       style: ElevatedButton.styleFrom(
-//                         textStyle: const TextStyle(
-//                           color: Colors.red,
-//                         ),
-//                         side: const BorderSide(
-//                           color: Colors.red,
-//                         ),
-//                         backgroundColor: Colors.white,
-//                         shape: const RoundedRectangleBorder(
-//                           borderRadius: BorderRadius.all(
-//                             Radius.circular(10),
-//                           ),
-//                         ),
-//                       ),
-//                       child: const Text(
-//                         'Close',
-//                         style: TextStyle(
-//                           fontFamily: 'Calibri',
-//                           fontSize: 14,
-//                           color: Colors.black,
-//                           fontWeight: FontWeight.bold,
-//                         ),
-//                       ),
-//                     ),
-//                   ),
-//                   const SizedBox(width: 20),
-//                   Expanded(
-//                     child: SizedBox(
-//                       child: Center(
-//                         child: GestureDetector(
-//                           onTap: () {
-//                             filterProducts().whenComplete(() {
-//                               Navigator.of(context).pop();
-//                             });
-//                             // fetchproducts(
-//                             //     genderTypeId: gender,
-//                             //     categoryTypeId: selectedCategory?.typecdid);
-//                           },
-//                           child: Container(
-//                             // width: desiredWidth * 0.9,
-//                             height: 40.0,
-//                             decoration: BoxDecoration(
-//                               borderRadius: BorderRadius.circular(15.0),
-//                               color: const Color(0xFFFB4110),
-//                             ),
-//                             child: const Center(
-//                               child: Text(
-//                                 'Apply',
-//                                 style: TextStyle(
-//                                   fontFamily: 'Calibri',
-//                                   fontSize: 14,
-//                                   color: Colors.white,
-//                                   fontWeight: FontWeight.bold,
-//                                 ),
-//                               ),
-//                             ),
-//                           ),
-//                         ),
-//                       ),
-//                     ),
-//                   ),
-//                 ],
-//               ),
-//             ],
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-//   Future<void> fetchRadioButtonOptions() async {
-//     final url = Uri.parse(baseUrl + getgender);
-//     print('url==>946: $url');
-
-//     try {
-//       final response = await http.get(url);
-//       if (response.statusCode == 200) {
-//         final dynamic responseData = jsonDecode(response.body);
-//         if (responseData != null &&
-//             responseData['listResult'] is List<dynamic>) {
-//           final List<dynamic> optionsData = responseData['listResult'];
-//           setState(() {
-//             options = optionsData
-//                 .map((data) => RadioButtonOption.fromJson(data))
-//                 .toList();
-//           });
-//         } else {
-//           throw Exception('Invalid response format');
-//         }
-//       } else {
-//         throw Exception('Failed to fetch radio button options');
-//       }
-//     } catch (e) {
-//       throw Exception('Error Radio: $e');
-//     }
-//   }
-
-//   Future<List<ProductCategory>> fetchProductsCategory() async {
-//     final response = await http
-//         .get(Uri.parse('http://182.18.157.215/SaloonApp/API/GetProduct/6'));
-//     if (response.statusCode == 200) {
-//       final List<dynamic> responseData =
-//           json.decode(response.body)['listResult'];
-//       List<ProductCategory> result =
-//           responseData.map((json) => ProductCategory.fromJson(json)).toList();
-//       print('fetchProductsCategory: ${result[0].desc}');
-//       return result;
-//     } else {
-//       throw Exception('Failed to load products');
-//     }
-//   }
-// }
 
 class UserFeedback {
   double? ratingstar;

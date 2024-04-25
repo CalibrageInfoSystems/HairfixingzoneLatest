@@ -14,6 +14,7 @@ class Dashboard_Screen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
+        debugShowCheckedModeBanner : false,
       home: TwoCardPageView(),
     );
   }
@@ -35,6 +36,7 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
   @override
   void initState() {
     super.initState();
+
     _pageController = PageController(initialPage: _currentPage);
     _fetchItems();
     _startAutoScroll();

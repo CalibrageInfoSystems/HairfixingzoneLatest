@@ -860,7 +860,7 @@ class _BookingScreenState extends State<slotbookingscreen>  {
                                                 selected: gender == option.typeCdId,
                                                 onTap: () {
                                                   setState(() {
-                                                    gender = option.typeCdId;
+                                                    gender = option.typeCdId!;
                                                     //  print('selectedGender:$selectedGender');
                                                     isGenderSelected = true;
                                                   });
@@ -1677,7 +1677,7 @@ class _BookingScreenState extends State<slotbookingscreen>  {
 }
 
 class RadioButtonOption {
-  final int typeCdId;
+  final int? typeCdId;
   final String desc;
 
   RadioButtonOption({required this.typeCdId, required this.desc});

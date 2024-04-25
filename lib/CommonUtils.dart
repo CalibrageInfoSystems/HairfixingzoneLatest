@@ -135,7 +135,7 @@ class CommonUtils{
   );
   static const txSty_12bs_fb = TextStyle(
     fontSize: 12.0,
-
+    letterSpacing: 1,
     fontWeight: FontWeight.bold,
     fontFamily: "Calibri",
   );
@@ -143,6 +143,7 @@ class CommonUtils{
     fontSize: 12.0,
     color: primaryTextColor,
     fontWeight: FontWeight.w500,
+    letterSpacing: 1,
     fontFamily: "Calibri",
   );
   static const txSty_18b_fb = TextStyle(
@@ -155,6 +156,7 @@ class CommonUtils{
     fontSize: 18,
     fontFamily: 'Calibri',
     fontWeight: FontWeight.w700,
+    letterSpacing: 1,
     color:Color(0xFF0f75bc),
   );
   static Future<bool> checkInternetConnectivity() async {
