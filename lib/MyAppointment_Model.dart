@@ -1,4 +1,3 @@
-
 class MyAppointment_Model {
   final int id;
   final int branchId;
@@ -10,6 +9,7 @@ class MyAppointment_Model {
   final String email;
   final int genderTypeId;
   final String genderName;
+  final String imagename;
   final int statusTypeId;
   final String status;
   final int purposeOfVisitId;
@@ -17,6 +17,7 @@ class MyAppointment_Model {
   final bool isActive;
   final String? review;
   final double? rating;
+  final String? address;
   final DateTime? reviewSubmittedDate;
   final String slotDuration;
 
@@ -37,6 +38,8 @@ class MyAppointment_Model {
     required this.purposeOfVisit,
     required this.isActive,
     required this.review,
+    required this.address,
+    required this.imagename,
     required this.rating,
     required this.reviewSubmittedDate,
     required this.slotDuration,
@@ -60,11 +63,11 @@ class MyAppointment_Model {
       purposeOfVisit: json['purposeOfVisit'],
       isActive: json['isActive'],
       review: json['review'],
+      address: json['address'],
       rating: json['rating'] != null ? json['rating'].toDouble() : null,
-      reviewSubmittedDate: json['reviewSubmittedDate'] != null
-          ? DateTime.parse(json['reviewSubmittedDate'])
-          : null,
+      reviewSubmittedDate: json['reviewSubmittedDate'] != null ? DateTime.parse(json['reviewSubmittedDate']) : null,
       slotDuration: json['slotDuration'],
+      imagename: json['imageName'],
     );
   }
 }

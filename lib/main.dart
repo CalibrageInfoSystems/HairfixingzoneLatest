@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:hairfixingzone/MyProductsProvider.dart';
+import 'package:hairfixingzone/Rescheduleslotscreen.dart';
 import 'package:hairfixingzone/aboutus_screen.dart';
 import 'package:hairfixingzone/services/local_notifications.dart';
 import 'package:hairfixingzone/splash_screen.dart';
@@ -12,6 +13,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart';
 
 import 'HomeScreen.dart';
+import 'MyAppointment_Model.dart';
 import 'MyAppointmentsProvider.dart';
 import 'notifications_screen.dart';
 
@@ -202,6 +204,11 @@ class MyApp extends StatelessWidget {
       routes: {
         // Home screen route
         '/about': (context) => AboutUsScreen(), // About Us screen route
+        '/ReSchedulescreen': (context) {
+          MyAppointment_Model? data = null;
+          return data != null ? Rescheduleslotscreen(data: data) : Rescheduleslotscreen(data: data!);
+        }
+
         // Add routes for other screens here
       },
       home: SplashScreen(),
