@@ -166,10 +166,7 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
                                         color_1: Color(0xFF43a05a),
                                         textcolor: Color(0xFF118730),
                                         onTap: () {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(builder: (context) => AboutUsScreen()),
-                                          );
+                                          Navigator.of(context, rootNavigator: true).pushNamed("/about");
                                         },
                                       ),
                                     ),

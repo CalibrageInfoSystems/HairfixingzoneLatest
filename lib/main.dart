@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:hairfixingzone/MyProductsProvider.dart';
+import 'package:hairfixingzone/aboutus_screen.dart';
 import 'package:hairfixingzone/services/local_notifications.dart';
 import 'package:hairfixingzone/splash_screen.dart';
 import 'package:provider/provider.dart';
@@ -10,6 +11,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart';
 
+import 'HomeScreen.dart';
 import 'MyAppointmentsProvider.dart';
 import 'notifications_screen.dart';
 
@@ -78,8 +80,7 @@ class MyApp extends StatelessWidget {
         userId = prefs.getInt('userId')!;
 
         print('User ID: $userId');
-        LocalNotificationService.initialize(
-            context, navigatorKey, userId, formattedDate);
+        LocalNotificationService.initialize(context, navigatorKey, userId, formattedDate);
       }
     });
 
@@ -111,10 +112,7 @@ class MyApp extends StatelessWidget {
         if (userId != null) {
           print('User ID: $userId');
           navigatorKey.currentState?.push(MaterialPageRoute(
-            builder: (context) => notifications_screen(
-                userId: userId,
-                formattedDate:
-                formattedDate), // Replace with your screen widget
+            builder: (context) => notifications_screen(userId: userId, formattedDate: formattedDate), // Replace with your screen widget
           ));
         } else {
           print('User ID not found in SharedPreferences');
@@ -201,6 +199,11 @@ class MyApp extends StatelessWidget {
       navigatorKey: navigatorKey,
       debugShowCheckedModeBanner: false,
       title: 'My App',
+      routes: {
+        // Home screen route
+        '/about': (context) => AboutUsScreen(), // About Us screen route
+        // Add routes for other screens here
+      },
       home: SplashScreen(),
     );
   }
