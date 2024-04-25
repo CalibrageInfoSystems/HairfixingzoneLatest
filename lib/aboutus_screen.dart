@@ -132,9 +132,9 @@ class AboutUsScreen extends StatelessWidget {
         ],
         // centerTitle: true,
         leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back,
-            color: Color(0xFF662e91),
+          icon: Icon(
+            Icons.arrow_back_ios,
+            color: CommonUtils.primaryTextColor,
           ),
           onPressed: () {
             Navigator.of(context).pop();
