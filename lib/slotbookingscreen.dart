@@ -1619,40 +1619,7 @@ class _BookingScreenState extends State<slotbookingscreen>  {
   }
 
 
-  // Future<HolidayResponse> fetchHolidayListByBranchId(int branchId) async {
-  //   // final url = Uri.parse(
-  //   //     'http://182.18.157.215/SaloonApp/API/GetHolidayListByBranchId/$branchId');
-  //   final url = Uri.parse(baseUrl + GetHolidayListByBranchId + '$branchId');
-  //   try {
-  //     final response = await http.get(url);
-  //
-  //     if (response.statusCode == 200) {
-  //       final jsonResponse = jsonDecode(response.body);
-  //       final holidayResponse = HolidayResponse.fromJson(jsonResponse);
-  //       holidayList = holidayResponse.listResult;
-  //
-  //       DateTime now = DateTime.now();
-  //       DateTime currentDate = DateTime(now.year, now.month, now.day);
-  //       String formattedDate = DateFormat("yyyy-MM-dd'T'HH:mm:ss").format(currentDate);
-  //
-  //       for (final holiday in holidayList) {
-  //         DateTime holidayDate = holiday.holidayDate;
-  //         String holidaydate = DateFormat("yyyy-MM-dd'T'HH:mm:ss").format(holidayDate);
-  //
-  //         if (formattedDate == holidaydate) {
-  //           isTodayHoliday = true;
-  //           print('Today is a holiday: $formattedDate');
-  //           break; // If a match is found, exit the loop
-  //         }
-  //       }
-  //       return holidayResponse;
-  //     } else {
-  //       throw Exception('Request failed with status: ${response.statusCode}');
-  //     }
-  //   } catch (e) {
-  //     throw Exception('Request failed with exception: $e');
-  //   }
-  // }
+
 
   Future<void> fetchData() async {
     final url = Uri.parse(baseUrl + getdropdown);
@@ -1704,34 +1671,6 @@ class dropdown {
   }
 }
 
-// class HolidayResponse {
-//   List<Holiday> listResult;
-//   bool isSuccess;
-//   int affectedRecords;
-//   String endUserMessage;
-//   List<dynamic> validationErrors;
-//   dynamic exception;
-//
-//   HolidayResponse({
-//     required this.listResult,
-//     required this.isSuccess,
-//     required this.affectedRecords,
-//     required this.endUserMessage,
-//     required this.validationErrors,
-//     required this.exception,
-//   });
-//
-//   factory HolidayResponse.fromJson(Map<String, dynamic> json) {
-//     return HolidayResponse(
-//       listResult: List<Holiday>.from(json['ListResult'].map((x) => Holiday.fromJson(x))),
-//       isSuccess: json['IsSuccess'],
-//       affectedRecords: json['AffectedRecords'],
-//       endUserMessage: json['EndUserMessage'],
-//       validationErrors: List<dynamic>.from(json['ValidationErrors']),
-//       exception: json['Exception'],
-//     );
-//   }
-// }
 
 class Holiday {
   final int id;

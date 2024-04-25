@@ -1030,10 +1030,10 @@ class _HomeScreenState extends State<HomeScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Please rate your recent experience with us',
+                  'Please Rate Your Recent Experience With Us',
                   style: TextStyle(
                     fontSize: 24,
-                    color: Color(0xFFf15f22),
+                    color:CommonUtils.primaryTextColor,
                     fontFamily: 'Calibri',
                   ),
                 ),
@@ -1044,7 +1044,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   'Rating',
                   style: TextStyle(
                     fontSize: 16,
-                    color: Color(0xFFf15f22),
+                    color: CommonUtils.primaryTextColor,
                     fontFamily: 'Calibri',
                   ),
                 ),
@@ -1111,46 +1111,74 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                 ),
-                Padding(
-                  padding: EdgeInsets.only(top: 20.0, left: 0.0, right: 0.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      ElevatedButton(
+
+                Row(
+                  children: [
+                    Expanded(
+                      child: ElevatedButton(
                         onPressed: () {
-                          Navigator.pop(context);
+                          Navigator.of(context).pop();
                         },
-                        child: Text(
+                        style: ElevatedButton.styleFrom(
+                          textStyle: const TextStyle(
+                            color: CommonUtils.primaryTextColor,
+                          ),
+                          side: const BorderSide(
+                            color: CommonUtils.primaryTextColor,
+                          ),
+                          backgroundColor: Colors.white,
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(10),
+                            ),
+                          ),
+                        ),
+                        child: const Text(
                           'Close',
-                          style: TextStyle(color: Colors.white, fontSize: 16, fontFamily: 'Calibri'),
-                        ),
-                        style: ElevatedButton.styleFrom(
-                          primary: Colors.grey,
-                          elevation: 0,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(4.0),
+                          style: TextStyle(
+                            fontFamily: 'Calibri',
+                            fontSize: 14,
+                            color: CommonUtils.primaryTextColor,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),
-                      ElevatedButton(
-                        onPressed: () {
-                          validaterating(appointments);
-                        },
-                        child: Text(
-                          'Submit',
-                          style: TextStyle(color: Colors.white, fontSize: 16, fontFamily: 'Calibri'),
-                        ),
-                        style: ElevatedButton.styleFrom(
-                          primary: Color(0xFFf15f22),
-                          elevation: 0,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(4.0),
+                    ),
+                    const SizedBox(width: 20),
+                    Expanded(
+                      child: SizedBox(
+                        child: Center(
+                          child: GestureDetector(
+                            onTap: () {
+
+                              validaterating(appointments);
+                            },
+                            child: Container(
+                              // width: desiredWidth * 0.9,
+                              height: 40.0,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15.0),
+                                color: CommonUtils.primaryTextColor,
+                              ),
+                              child: const Center(
+                                child: Text(
+                                  'Apply',
+                                  style: TextStyle(
+                                    fontFamily: 'Calibri',
+                                    fontSize: 14,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ),
                           ),
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
+
               ],
             ),
           ),

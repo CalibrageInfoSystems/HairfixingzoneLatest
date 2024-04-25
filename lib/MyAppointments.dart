@@ -19,6 +19,7 @@ import 'BranchModel.dart';
 import 'Common/common_styles.dart';
 import 'Commonutils.dart';
 import 'MyAppointment_Model.dart';
+import 'Rescheduleslotscreen.dart';
 import 'api_config.dart';
 
 class MyAppointments extends StatefulWidget {
@@ -4006,6 +4007,14 @@ class _AppointmentCardState extends State<AppointmentCard> {
           children: [
             GestureDetector(
               onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder:
+                        (context) =>
+                            Rescheduleslotscreen( data: data,),
+                  ),
+                );
                 // Add your logic here for when the 'Reschedule' container is tapped
               },
               child: Container(

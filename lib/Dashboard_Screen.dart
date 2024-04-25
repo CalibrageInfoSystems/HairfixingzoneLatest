@@ -14,7 +14,7 @@ class Dashboard_Screen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-        debugShowCheckedModeBanner : false,
+      debugShowCheckedModeBanner: false,
       home: TwoCardPageView(),
     );
   }
@@ -33,6 +33,7 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
   late Timer _timer;
   int _currentPage = 0;
 
+  String marqueeText = '';
   @override
   void initState() {
     super.initState();
@@ -40,6 +41,8 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
     _pageController = PageController(initialPage: _currentPage);
     _fetchItems();
     _startAutoScroll();
+
+    getMarqueeText();
   }
 
   @override
@@ -50,11 +53,14 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
   }
 
   void _fetchItems() async {
-    final response = await http.get(Uri.parse('http://182.18.157.215/SaloonApp/API/GetBranchById/null/true'));
+    final response = await http.get(Uri.parse(
+        'http://182.18.157.215/SaloonApp/API/GetBranchById/null/true'));
 
     if (response.statusCode == 200) {
       setState(() {
-        _items = (json.decode(response.body)['listResult'] as List).map((item) => Item.fromJson(item)).toList();
+        _items = (json.decode(response.body)['listResult'] as List)
+            .map((item) => Item.fromJson(item))
+            .toList();
       });
     } else {
       throw Exception('Failed to load items');
@@ -62,7 +68,7 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
   }
 
   void _startAutoScroll() {
-    _timer = Timer.periodic(Duration(seconds: 5), (_) {
+    _timer = Timer.periodic(const Duration(seconds: 5), (_) {
       if (_currentPage < _items.length - 1) {
         _currentPage++;
       } else {
@@ -70,10 +76,39 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
       }
       _pageController.animateToPage(
         _currentPage,
-        duration: Duration(milliseconds: 500),
+        duration: const Duration(milliseconds: 500),
         curve: Curves.ease,
       );
     });
+  }
+
+  Future<void> getMarqueeText() async {
+    final apiUrl = Uri.parse('http://182.18.157.215/SaloonApp/API/GetContent');
+
+    try {
+      final jsonResponse = await http.get(apiUrl);
+
+      if (jsonResponse.statusCode == 200) {
+        final response = json.decode(jsonResponse.body);
+
+        if (response['isSuccess']) {
+          int records = response['affectedRecords'];
+          for (var i = 0; i < records; i++) {
+            marqueeText =
+            '${marqueeText + response['listResult'][i]['text']}  ';
+            // marqueeText += response['listResult'][i]['text'];
+          }
+        } else {
+          print('api failed');
+          throw Exception('api failed');
+        }
+      } else {
+        throw Exception(
+            'Request failed with status: ${jsonResponse.statusCode}');
+      }
+    } catch (error) {
+      rethrow;
+    }
   }
 
   @override
@@ -117,32 +152,47 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(color: Colors.grey, width: 1.5),
-                    color: _currentPage == i ? Colors.grey.withOpacity(0.9) : Colors.transparent,
+                    color: _currentPage == i
+                        ? Colors.grey.withOpacity(0.9)
+                        : Colors.transparent,
                   ),
                 )
             ],
           ),
-          Container(
+          SizedBox(
             height: 30,
-            child: Marquee(
-              text: 'The quick brown fox jumps over the lazy dog',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
-              scrollAxis: Axis.horizontal, //scroll direction
-              crossAxisAlignment: CrossAxisAlignment.start,
-              blankSpace: 20.0,
-              velocity: 50.0, //speed
-              pauseAfterRound: Duration(seconds: 1),
-              startPadding: 10.0,
-              accelerationDuration: Duration(seconds: 1),
-              accelerationCurve: Curves.linear,
-              decelerationDuration: Duration(milliseconds: 500),
-              decelerationCurve: Curves.easeOut,
+            child: FutureBuilder(
+              future: getMarqueeText(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const SizedBox();
+                } else if (snapshot.hasError) {
+                  return const SizedBox();
+                } else {
+                  return Marquee(
+                    text: marqueeText,
+                    //'The quick brown fox jumps over the lazy dog', //MARK: Marquee
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold, fontSize: 14),
+                    scrollAxis: Axis.horizontal, //scroll direction
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    blankSpace: 20.0,
+                    velocity: 50.0, //speed
+                    pauseAfterRound: const Duration(seconds: 1),
+                    startPadding: 10.0,
+                    accelerationDuration: const Duration(seconds: 1),
+                    accelerationCurve: Curves.linear,
+                    decelerationDuration: const Duration(milliseconds: 500),
+                    decelerationCurve: Curves.easeOut,
+                  );
+                }
+              },
             ),
           ),
           Expanded(
               flex: 4,
               child: SingleChildScrollView(
-                child: Container(
+                child: SizedBox(
                   width: MediaQuery.of(context).size.width,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -153,10 +203,12 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
                         children: [
                           // First Container with single card view
                           Expanded(
-                            child: Container(
-                              height: MediaQuery.of(context).size.height / 3, // Match height with the first container
+                            child: SizedBox(
+                              height: MediaQuery.of(context).size.height /
+                                  3, // Match height with the first container
                               child: Column(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                MainAxisAlignment.spaceBetween,
                                 children: [
                                   Expanded(
                                     child: Container(
@@ -164,25 +216,27 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
                                         //imageUrl: "creditcard.svg",
                                         item: "Create About us",
                                         item1: "Create About us",
-                                        color: Color(0xFFb7dbc1),
-                                        color_1: Color(0xFF43a05a),
-                                        textcolor: Color(0xFF118730),
+                                        color: const Color(0xFFb7dbc1),
+                                        color_1: const Color(0xFF43a05a),
+                                        textcolor: const Color(0xFF118730),
                                         onTap: () {
-                                          Navigator.of(context, rootNavigator: true).pushNamed("/about");
+                                          Navigator.of(context,
+                                              rootNavigator: true)
+                                              .pushNamed("/about");
                                         },
                                       ),
                                     ),
                                   ),
-                                  SizedBox(height: 5),
+                                  const SizedBox(height: 5),
                                   Expanded(
                                     child: Container(
                                       child: _customcontainerCard(
                                         //     imageUrl: "arrows_repeat.svg",
                                         item: "Create Return order",
                                         item1: "Create a Reorder",
-                                        color: Color(0xFFF8dac2),
-                                        color_1: Color(0xFFec9d62),
-                                        textcolor: Color(0xFFe78337),
+                                        color: const Color(0xFFF8dac2),
+                                        color_1: const Color(0xFFec9d62),
+                                        textcolor: const Color(0xFFe78337),
                                         onTap: () {},
                                       ),
                                     ),
@@ -194,10 +248,12 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
                           // Second Container divided into two equal-sized containers
 
                           Expanded(
-                            child: Container(
-                              height: MediaQuery.of(context).size.height / 3, // Match height with the first container
+                            child: SizedBox(
+                              height: MediaQuery.of(context).size.height /
+                                  3, // Match height with the first container
                               child: Column(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                MainAxisAlignment.spaceBetween,
                                 children: [
                                   Expanded(
                                     child: Container(
@@ -205,23 +261,23 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
                                         //     imageUrl: "album_collection.svg",
                                         item: "View Collections",
                                         item1: "View All Collections",
-                                        color: Color(0xFFF8dac2),
-                                        color_1: Color(0xFFec9d62),
-                                        textcolor: Color(0xFFe78337),
+                                        color: const Color(0xFFF8dac2),
+                                        color_1: const Color(0xFFec9d62),
+                                        textcolor: const Color(0xFFe78337),
                                         onTap: () {},
                                       ),
                                     ),
                                   ),
-                                  SizedBox(height: 5),
+                                  const SizedBox(height: 5),
                                   Expanded(
                                     child: Container(
                                       child: _customcontainerCard(
                                         //     imageUrl: "bags-orders.svg",
                                         item: "View Return order",
                                         item1: "View All Reorders",
-                                        color: Color(0xFFb7dbc1),
-                                        color_1: Color(0xFF43a05a),
-                                        textcolor: Color(0xFF118730),
+                                        color: const Color(0xFFb7dbc1),
+                                        color_1: const Color(0xFF43a05a),
+                                        textcolor: const Color(0xFF118730),
                                         onTap: () {},
                                       ),
                                     ),
@@ -259,28 +315,30 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
         width: MediaQuery.of(context).size.width / 2,
         child: Card(
           color: color,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+          shape:
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
           elevation: 8,
           child: Padding(
-            padding: EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 10),
+            padding:
+            const EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Container(
-                  margin: EdgeInsets.only(bottom: 0),
-                  padding: EdgeInsets.all(8),
+                  margin: const EdgeInsets.only(bottom: 0),
+                  padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
                     color: color_1,
                     borderRadius: BorderRadius.circular(15),
                   ),
                   child: SvgPicture.asset(
-                    "assets/" + imageUrl,
+                    "assets/$imageUrl",
                     width: 30.0,
                     height: 30.0,
-                    color: Color(0xFF414141),
+                    color: const Color(0xFF414141),
                   ),
                 ),
-                SizedBox(height: 15),
+                const SizedBox(height: 15),
                 Container(
                   child: Align(
                     alignment: Alignment.topLeft,
@@ -300,8 +358,12 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
                     alignment: Alignment.centerLeft,
                     child: RichText(
                       text: TextSpan(
-                        style: TextStyle(fontSize: 14, color: textcolor, fontFamily: "Roboto", fontWeight: FontWeight.w600),
-                        children: [
+                        style: TextStyle(
+                            fontSize: 14,
+                            color: textcolor,
+                            fontFamily: "Roboto",
+                            fontWeight: FontWeight.w600),
+                        children: const [
                           // TextSpan(
                           //   text: 'All Incoming and\n',
                           // ),
@@ -317,7 +379,10 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
                           // TextSpan(
                           //   text: 'Record',
                           // ),
-                          TextSpan(text: 'All Incoming and Outgoing Transactions record', style: TextStyle(height: 2))
+                          TextSpan(
+                              text:
+                              'All Incoming and Outgoing Transactions record',
+                              style: TextStyle(height: 2))
                         ],
                       ),
                     ),
@@ -350,10 +415,12 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
         height: MediaQuery.of(context).size.height / 6,
         child: Card(
           color: color,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+          shape:
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
           elevation: 8,
           child: Padding(
-            padding: const EdgeInsets.only(left: 10, right: 15, top: 7, bottom: 3),
+            padding:
+            const EdgeInsets.only(left: 10, right: 15, top: 7, bottom: 3),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
@@ -380,7 +447,11 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
                     child: Text(
                       item,
                       maxLines: 1,
-                      style: TextStyle(fontSize: 16, fontFamily: "Roboto", fontWeight: FontWeight.w700, color: textcolor),
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontFamily: "Roboto",
+                          fontWeight: FontWeight.w700,
+                          color: textcolor),
                     ),
                   ),
                 ),
@@ -389,7 +460,11 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
                 // ),
                 Text(
                   item1,
-                  style: const TextStyle(fontSize: 12, fontFamily: "Roboto", fontWeight: FontWeight.w500, color: Color(0xFF414141)),
+                  style: const TextStyle(
+                      fontSize: 12,
+                      fontFamily: "Roboto",
+                      fontWeight: FontWeight.w500,
+                      color: Color(0xFF414141)),
                 ),
                 // Expanded(
                 //   child: Align(
@@ -429,10 +504,12 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
         width: MediaQuery.of(context).size.width / 2,
         child: Card(
           color: color,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+          shape:
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
           elevation: 8,
           child: Padding(
-            padding: const EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 10),
+            padding:
+            const EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
@@ -459,7 +536,11 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
                     child: Text(
                       item,
                       maxLines: 1,
-                      style: TextStyle(fontSize: 16, fontFamily: "Roboto", fontWeight: FontWeight.w700, color: textcolor),
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontFamily: "Roboto",
+                          fontWeight: FontWeight.w700,
+                          color: textcolor),
                     ),
                   ),
                 ),
@@ -468,7 +549,11 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
                 ),
                 Text(
                   item1,
-                  style: const TextStyle(fontSize: 12, fontFamily: "Roboto", fontWeight: FontWeight.w500, color: Color(0xFF414141)),
+                  style: const TextStyle(
+                      fontSize: 12,
+                      fontFamily: "Roboto",
+                      fontWeight: FontWeight.w500,
+                      color: Color(0xFF414141)),
                 ),
                 // Expanded(
                 //   child: Align(
@@ -507,10 +592,12 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
         width: MediaQuery.of(context).size.width,
         child: Card(
           color: color,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+          shape:
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
           elevation: 8,
           child: Padding(
-            padding: const EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 10),
+            padding:
+            const EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 10),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.start,
@@ -532,20 +619,30 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
                 const SizedBox(width: 8),
                 Expanded(
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start, // Adjusted to center
-                    mainAxisAlignment: MainAxisAlignment.center, // Added to center
+                    crossAxisAlignment:
+                    CrossAxisAlignment.start, // Adjusted to center
+                    mainAxisAlignment:
+                    MainAxisAlignment.center, // Added to center
                     children: [
                       Text(
                         item,
                         maxLines: 1,
-                        style: TextStyle(fontSize: 16, fontFamily: "Roboto", fontWeight: FontWeight.w700, color: textcolor),
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontFamily: "Roboto",
+                            fontWeight: FontWeight.w700,
+                            color: textcolor),
                       ),
                       const SizedBox(
                         height: 5.0,
                       ),
                       Text(
                         item1,
-                        style: const TextStyle(fontSize: 12, fontFamily: "Roboto", fontWeight: FontWeight.w500, color: Color(0xFF414141)),
+                        style: const TextStyle(
+                            fontSize: 12,
+                            fontFamily: "Roboto",
+                            fontWeight: FontWeight.w500,
+                            color: Color(0xFF414141)),
                       ),
                     ],
                   ),
@@ -604,7 +701,8 @@ class Item {
     return Item(
       json['name'] as String,
       Colors.blue, // Default color
-      json['imageName'] as String? ?? '', // Add null check and provide a default value
+      json['imageName'] as String? ??
+          '', // Add null check and provide a default value
     );
   }
 }

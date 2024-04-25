@@ -134,11 +134,15 @@ class MyProducts_screenState extends State<MyProducts> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(5),
         child: Column(
           children: [
             // search and filter
-            _searchBarAndFilter(),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 0)
+                  .copyWith(top: 10),
+              child: _searchBarAndFilter(),
+            ),
 
             // products
             Expanded(
