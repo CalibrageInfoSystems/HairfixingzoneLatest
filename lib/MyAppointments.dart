@@ -32,17 +32,16 @@ class MyAppointments_screenState extends State<MyAppointments> {
   String accessToken = '';
   String empolyeid = '';
   String todate = "";
-  final TextEditingController _commentstexteditcontroller =
-  TextEditingController();
+  final TextEditingController _commentstexteditcontroller = TextEditingController();
   double rating_star = 0.0;
-  int? userId;
+
   List<BranchModel> brancheslist = [];
 
   bool isLoading = true;
   List<MyAppointment_Model> MyAppointmentList = [];
   List<UserFeedback> userfeedbacklist = [];
    Future<List<MyAppointment_Model>>? apiData;
-
+  int? userId;
   @override
   void initState() {
     super.initState();
@@ -165,17 +164,7 @@ class MyAppointments_screenState extends State<MyAppointments> {
     }
   }
 
-  Color _getStatusColor(String status) {
-    switch (status) {
-      case 'Accepted':
-        return Colors.green.shade600;
-      case 'Rejected':
-        return Colors.red;
 
-      default:
-        return Colors.red;
-    }
-  }
 
   void checkLoginuserdata() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -204,7 +193,8 @@ class MyAppointments_screenState extends State<MyAppointments> {
         "userid": userId,
         "branchId": null,
         "fromdate": null,
-        "toDate": null
+        "toDate": null,
+        "statustypeId": null
       };
       print('GetAppointmentByUserid: ${json.encode(request)}');
 
@@ -239,469 +229,8 @@ class MyAppointments_screenState extends State<MyAppointments> {
     }
   }
 
-  void ShowAlertdialog(MyAppointment_Model appointments, int index) {
-    print('indexof listview$index');
-    _commentstexteditcontroller.clear();
-    showDialog(
-      barrierDismissible: true,
-      context: context,
-      builder: (BuildContext context) {
-        return StatefulBuilder(
-          builder: (context, setState) {
-            return AlertDialog(
-              backgroundColor: Colors.transparent,
-              surfaceTintColor: Colors.transparent,
-              title: SingleChildScrollView(
-                child: Container(
-                  width: MediaQuery.of(context).size.width,
 
-                  //     height: MediaQuery.of(context).size.height,
-                  //   color: Colors.white,
-                  padding: const EdgeInsets.only(
-                      top: 15.0, left: 15.0, right: 15.0, bottom: 20.0),
 
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10.0),
-                    gradient: const LinearGradient(
-                      colors: [
-                        Color(0xFFd7defa),
-                        Color(0xFFfee7e1),
-                      ],
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                    ),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        'Feedback',
-                        style: TextStyle(
-                          fontSize: 24,
-                          color: Color(0xFFf15f22),
-                          fontFamily: 'Calibri',
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 15.0,
-                      ),
-                      const Text(
-                        'Rating',
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Color(0xFFf15f22),
-                          fontFamily: 'Calibri',
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 15.0,
-                      ),
-                      SizedBox(
-                          width: MediaQuery.of(context).size.width,
-                          child: RatingBar.builder(
-                            initialRating: 0,
-                            minRating: 0,
-                            direction: Axis.horizontal,
-                            allowHalfRating: true,
-                            itemCount: 5,
-                            itemPadding:
-                            const EdgeInsets.symmetric(horizontal: 1.0),
-                            itemBuilder: (context, _) => const Icon(
-                              Icons.star,
-                              color: Colors.amber,
-                            ),
-                            onRatingUpdate: (rating) {
-                              setState(() {
-                                rating_star = rating;
-                                print('rating_star$rating_star');
-                              });
-                            },
-                          )),
-                      Padding(
-                        padding:
-                        const EdgeInsets.only(left: 0, top: 10.0, right: 0),
-                        child: GestureDetector(
-                          onTap: () async {},
-                          child: Container(
-                            height: 80,
-                            width: MediaQuery.of(context).size.width,
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                  color: const Color(0xFFf15f22), width: 1.5),
-                              borderRadius: BorderRadius.circular(5.0),
-                              color: Colors.white,
-                            ),
-                            child: TextFormField(
-                              controller: _commentstexteditcontroller,
-                              style: const TextStyle(
-                                fontFamily: 'Calibri',
-                                fontSize: 14,
-                                fontWeight: FontWeight.w300,
-                              ),
-                              maxLines: null,
-                              maxLength: 256,
-                              // Set maxLines to null for multiline input
-                              decoration: const InputDecoration(
-                                hintText: 'Comments',
-                                hintStyle: TextStyle(
-                                  color: Colors.black54,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: 'Calibri',
-                                ),
-                                contentPadding: EdgeInsets.symmetric(
-                                  horizontal: 16.0,
-                                  vertical: 12.0,
-                                ),
-                                border: InputBorder.none,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                            top: 20.0, left: 0.0, right: 0.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            ElevatedButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              style: ElevatedButton.styleFrom(
-                                foregroundColor: Colors.grey,
-                                elevation: 0,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(4.0),
-                                ),
-                              ),
-                              child: const Text(
-                                'Close',
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 16,
-                                    fontFamily: 'Calibri'),
-                              ),
-                            ),
-                            ElevatedButton(
-                              onPressed: () {
-                                validaterating(appointments, index);
-                              },
-                              style: ElevatedButton.styleFrom(
-                                foregroundColor: const Color(0xFFf15f22),
-                                elevation: 0,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(4.0),
-                                ),
-                              ),
-                              child: const Text(
-                                'Submit',
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 16,
-                                    fontFamily: 'Calibri'),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      // Row(
-                      //   mainAxisAlignment: MainAxisAlignment.center,
-                      //   crossAxisAlignment: CrossAxisAlignment.center,
-                      //   children: [
-                      //     Padding(
-                      //       padding: EdgeInsets.only(top: 20.0, left: 0.0, right: 0.0),
-                      //       child: Container(
-                      //         width: MediaQuery.of(context).size.width / 3.80,
-                      //         decoration: BoxDecoration(
-                      //           color: Color(0xFFf15f22),
-                      //           borderRadius: BorderRadius.circular(6.0),
-                      //         ),
-                      //         child: ElevatedButton(
-                      //           onPressed: () {
-                      //             validaterating(appointments, index);
-                      //           },
-                      //           child: Text(
-                      //             'Submit',
-                      //             style: TextStyle(color: Colors.white, fontSize: 16, fontFamily: 'Calibri'),
-                      //           ),
-                      //           style: ElevatedButton.styleFrom(
-                      //             foregroundColor: Colors.transparent,
-                      //             elevation: 0,
-                      //             shape: RoundedRectangleBorder(
-                      //               borderRadius: BorderRadius.circular(4.0),
-                      //             ),
-                      //           ),
-                      //         ),
-                      //       ),
-                      //     ),
-                      //     SizedBox(
-                      //       width: 10,
-                      //     ),
-                      //     Padding(
-                      //       padding: EdgeInsets.only(top: 20.0, left: 0.0, right: 0.0),
-                      //       child: Container(
-                      //         width: MediaQuery.of(context).size.width / 3.80,
-                      //         decoration: BoxDecoration(
-                      //           color: Color(0xFFf15f22),
-                      //           borderRadius: BorderRadius.circular(6.0),
-                      //         ),
-                      //         child: ElevatedButton(
-                      //           onPressed: () {
-                      //
-                      //          Navigator.of(context).pop();
-                      //           },
-                      //           child: Text(
-                      //             'Cancel',
-                      //             style: TextStyle(color: Colors.white, fontSize: 16, fontFamily: 'Calibri'),
-                      //           ),
-                      //           style: ElevatedButton.styleFrom(
-                      //             foregroundColor: Colors.transparent,
-                      //             elevation: 0,
-                      //             shape: RoundedRectangleBorder(
-                      //               borderRadius: BorderRadius.circular(4.0),
-                      //             ),
-                      //           ),
-                      //         ),
-                      //       ),
-                      //     ),
-                      //   ],
-                      // )
-                    ],
-                  ),
-                ),
-              ),
-              // actions: [
-              //   ElevatedButton(
-              //     onPressed: () {
-              //       Navigator.of(context).pop();
-              //     },
-              //     child: Text(
-              //       'Ok',
-              //       style: TextStyle(color: Colors.white, fontFamily: 'Calibri'), // Set text color to white
-              //     ),
-              //     style: ElevatedButton.styleFrom(
-              //       foregroundColor: Color(0xFFf15f22), // Change to your desired background color
-              //       shape: RoundedRectangleBorder(
-              //         borderRadius: BorderRadius.circular(5), // Set border radius
-              //       ),
-              //     ),
-              //   ),
-              // ],
-            );
-          },
-        );
-      },
-    );
-  }
-
-  Future<void> validaterating(
-      MyAppointment_Model appointmens, int index) async {
-    print('indexinvalidating$index');
-    bool isValid = true;
-    bool hasValidationFailed = false;
-    int myInt = rating_star.toInt();
-    print('changedintoint$myInt');
-    if (rating_star <= 0.0) {
-      FocusScope.of(context).unfocus();
-      CommonUtils.showCustomToastMessageLong(
-          'Please Give Rating', context, 1, 4);
-      isValid = false;
-      hasValidationFailed = true;
-    }
-
-    if (isValid && _commentstexteditcontroller.text.trim().isEmpty) {
-      FocusScope.of(context).unfocus();
-      CommonUtils.showCustomToastMessageLong(
-          'Please Enter Comments', context, 1, 4);
-      isValid = false;
-      hasValidationFailed = true;
-    }
-    if (isValid) {
-      final url = Uri.parse(baseUrl + postApiAppointment);
-      print('url==>890: $url');
-      DateTime now = DateTime.now();
-      String dateTimeString = now.toString();
-      print('DateTime as String: $dateTimeString');
-
-      //  for (MyAppointment_Model appointment in appointmens) {
-      // Create the request object for each appointment
-      final request = {
-        "Id": appointmens.id,
-        "BranchId": appointmens.branchId,
-        "Date": appointmens.date,
-        "SlotTime": appointmens.slotTime,
-        "CustomerName": appointmens.customerName,
-        "PhoneNumber":
-        appointmens.contactNumber, // Changed from appointments.phoneNumber
-        "Email": appointmens.email,
-        "GenderTypeId": appointmens.genderTypeId,
-        "StatusTypeId": 11,
-        "PurposeOfVisitId": appointmens.purposeOfVisitId,
-        "PurposeOfVisit": appointmens.purposeOfVisit,
-        "IsActive": true,
-        "CreatedDate": dateTimeString,
-        "UpdatedDate": dateTimeString,
-        "UpdatedByUserId": null,
-        "rating": rating_star,
-        "review": _commentstexteditcontroller.text.toString(),
-        "reviewSubmittedDate": dateTimeString,
-        "timeofslot": null,
-        "customerId": userId
-      };
-      print('AddUpdatefeedback object: : ${json.encode(request)}');
-
-      try {
-        // Send the POST request for each appointment
-        final response = await http.post(
-          url,
-          body: json.encode(request),
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        );
-
-        if (response.statusCode == 200) {
-          print('Request sent successfully');
-          fetchMyAppointments(userId);
-          CommonUtils.showCustomToastMessageLong(
-              'Feedback Successfully Submited', context, 0, 4);
-
-          if (index >= 0.0 && index < userfeedbacklist.length) {
-            // Ensure index is within the valid range
-            userfeedbacklist[index].ratingstar = rating_star;
-            userfeedbacklist[index].comments =
-                _commentstexteditcontroller.text.toString();
-
-            print(
-                'rating_starapi${userfeedbacklist[index].ratingstar}  comments${userfeedbacklist[index].comments}');
-
-            Navigator.pop(context);
-          } else {
-            print('Invalid index: $index');
-          }
-          // _printAppointments();
-          // userfeedbacklist[index].ratingstar = rating_star;
-          // userfeedbacklist[index].comments = _commentstexteditcontroller.text.toString();
-
-          Navigator.pop(context);
-        } else {
-          print(
-              'Failed to send the request. Status code: ${response.statusCode}');
-        }
-      } catch (e) {
-        print('Error while sending : $e');
-      }
-      //  }
-    }
-  }
-
-  void conformation(MyAppointment_Model appointments, int index) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Confirmation'),
-          content: const Text('Are you sure you want to Cancel?'),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text('No'),
-            ),
-            TextButton(
-              onPressed: () {
-                CancelAppointment(appointments, index);
-                Navigator.of(context).pop();
-              },
-              child: const Text('Yes'),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  Future<void> CancelAppointment(
-      MyAppointment_Model appointmens, int index) async {
-    final url = Uri.parse(baseUrl + postApiAppointment);
-    print('url==>890: $url');
-    DateTime now = DateTime.now();
-    String dateTimeString = now.toString();
-    print('DateTime as String: $dateTimeString');
-
-    //  for (MyAppointment_Model appointment in appointmens) {
-    // Create the request object for each appointment
-    final request = {
-      "Id": appointmens.id,
-      "BranchId": appointmens.branchId,
-      "Date": appointmens.date,
-      "SlotTime": appointmens.slotTime,
-      "CustomerName": appointmens.customerName,
-      "PhoneNumber":
-      appointmens.contactNumber, // Changed from appointments.phoneNumber
-      "Email": appointmens.email,
-      "GenderTypeId": appointmens.genderTypeId,
-      "StatusTypeId": 6,
-      "PurposeOfVisitId": appointmens.purposeOfVisitId,
-      "PurposeOfVisit": appointmens.purposeOfVisit,
-      "IsActive": true,
-      "CreatedDate": dateTimeString,
-      "UpdatedDate": dateTimeString,
-      "UpdatedByUserId": null,
-      "rating": rating_star,
-      "review": _commentstexteditcontroller.text.toString(),
-      "reviewSubmittedDate": dateTimeString,
-      "timeofslot": null,
-      "customerId": userId
-    };
-    print('AddUpdatefeedback object: : ${json.encode(request)}');
-
-    try {
-      // Send the POST request for each appointment
-      final response = await http.post(
-        url,
-        body: json.encode(request),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      );
-
-      if (response.statusCode == 200) {
-        Map<String, dynamic> data = json.decode(response.body);
-
-        // Extract the necessary information
-        bool isSuccess = data['isSuccess'];
-        if (isSuccess == true) {
-          print('Request sent successfully');
-          fetchMyAppointments(userId);
-          CommonUtils.showCustomToastMessageLong(
-              'Cancelled  Successfully ', context, 0, 4);
-          //   Navigator.pop(context);
-          // Success case
-          // Handle success scenario here
-        } else {
-          // Failure case
-          // Handle failure scenario here
-          CommonUtils.showCustomToastMessageLong(
-              'The request should not be canceled within 30 minutes before slot',
-              context,
-              0,
-              2);
-        }
-      } else {
-        //showCustomToastMessageLong(
-        // 'Failed to send the request', context, 1, 2);
-        print(
-            'Failed to send the request. Status code: ${response.statusCode}');
-      }
-    } catch (e) {
-      print('Error while sending : $e');
-    }
-    //  }
-  }
 
   void showBranchesDialog(
       BuildContext context, MyAppointment_Model appointmentModel) {
@@ -1594,7 +1123,8 @@ class MyAppointments_screenState extends State<MyAppointments> {
                 ),
               ),
             );
-          } else if (appointmentModel.statusTypeId == 5) {
+          }
+          else if (appointmentModel.statusTypeId == 5) {
             // Customize UI for statusTypeId 2
             boxDecoration = isEvenItem
                 ? BoxDecoration(
@@ -2069,7 +1599,7 @@ class MyAppointments_screenState extends State<MyAppointments> {
                                       appointmentModel.slotDuration)
                                       ? null // Disable the button if slotDuration is before the current time
                                       : () {
-                                    conformation(appointmentModel, index);
+                                    //conformation(appointmentModel, index);
                                     print('rejectedbuttonisclciked');
                                     print('Reschedule');
                                   },
@@ -2133,7 +1663,8 @@ class MyAppointments_screenState extends State<MyAppointments> {
                 ),
               ),
             );
-          } else if (appointmentModel.statusTypeId == 6) {
+          }
+          else if (appointmentModel.statusTypeId == 6) {
             boxDecoration = isEvenItem
                 ? BoxDecoration(
                 border: Border.all(color: borderColor, width: 1.5),
@@ -2536,7 +2067,8 @@ class MyAppointments_screenState extends State<MyAppointments> {
                 ),
               ),
             );
-          } else if (appointmentModel.statusTypeId == 18) {
+          }
+          else if (appointmentModel.statusTypeId == 18) {
             // Customize UI for statusTypeId 2
             boxDecoration = isEvenItem
                 ? BoxDecoration(
@@ -2950,8 +2482,8 @@ class MyAppointments_screenState extends State<MyAppointments> {
                                   onPressed: appointmentModel.statusTypeId ==
                                       18 // Provide a valid condition here
                                       ? () {
-                                    ShowAlertdialog(appointmentModel,
-                                        index); // Call the function to show branches dialog
+                                    // ShowAlertdialog(appointmentModel,
+                                    // ); // Call the function to show branches dialog
                                     //  conformation(appointment_model, index);
                                     // Handle reject button action
                                     print('Rate Us');
@@ -3655,7 +3187,7 @@ class MyAppointments_screenState extends State<MyAppointments> {
                     padding: EdgeInsets.only(
                       bottom: MediaQuery.of(context).viewInsets.bottom,
                     ),
-                    child: const FilterAppointmentBottomSheet(),
+                    child:  FilterAppointmentBottomSheet(userId: userId,),
                   ),
                 );
                 // Add logout functionality here
@@ -3691,37 +3223,40 @@ class MyAppointments_screenState extends State<MyAppointments> {
 
 }
 
-
 class FilterAppointmentBottomSheet extends StatefulWidget {
-  const FilterAppointmentBottomSheet({Key? key}) : super(key: key);
+  final int? userId;
+  const FilterAppointmentBottomSheet({Key? key, required this.userId})
+      : super(key: key);
 
   @override
-  State<FilterAppointmentBottomSheet> createState() => _FilterBottomSheetState();
+  State<FilterAppointmentBottomSheet> createState() =>
+      _FilterBottomSheetState();
 }
 
 class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
-
   List<BranchModel> products = [];
   late Future<List<BranchModel>> branchname;
   BranchModel? selectedCategory;
 
-  final orangeColor =CommonUtils.primaryTextColor;
+  final orangeColor = CommonUtils.primaryTextColor;
   late Future<List<BranchModel>> apiData;
-  TextEditingController From_todates = new TextEditingController();
+  TextEditingController From_todates = TextEditingController();
   DateTime? startDate;
   DateTime? endDate;
   FocusNode DateofBirthdFocus = FocusNode();
   List<Statusmodel> statusoptions = [];
   late Future<List<Statusmodel>> prostatus;
   Statusmodel? selectedstatus;
+  String? apiFromDate;
+  String? apiToDate;
+
+  late MyAppointmentsProvider myAppointmentsProvider;
   @override
   void initState() {
-    // Initialize state
     super.initState();
     apiData = fetchbranches();
     prostatus = fetchstatus();
   }
-
 
   Future<void> clearFilter() async {
     // apiData = fetchproducts();
@@ -3734,42 +3269,87 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
     // });
   }
 
-  late MyAppointmentsProvider myAppointmentsProvider;
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
 
     myAppointmentsProvider = Provider.of<MyAppointmentsProvider>(context);
+    From_todates.text = myAppointmentsProvider.getDisplayDate;
   }
 
+  Future<void> filterAppointments(Map<String, dynamic> requestBody) async {
+    final url = Uri.parse(
+        'http://182.18.157.215/SaloonApp/API/api/Appointment/GetAppointmentByUserid');
 
+    try {
+      Map<String, dynamic> request = requestBody;
+      print('filterAppointments: ${json.encode(request)}');
+
+      final jsonResponse = await http.post(
+        url,
+        body: json.encode(request),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      );
+
+      if (jsonResponse.statusCode == 200) {
+        final response = json.decode(jsonResponse.body);
+
+        if (response['listResult'] != null) {
+          List<dynamic> listResult = response['listResult'];
+          myAppointmentsProvider.storeIntoProvider = listResult
+              .map((item) => MyAppointment_Model.fromJson(item))
+              .toList();
+        } else {
+          myAppointmentsProvider.storeIntoProvider = [];
+          throw Exception('No appointments found!');
+        }
+      } else {
+        myAppointmentsProvider.storeIntoProvider = [];
+        print('Request failed with status: ${jsonResponse.statusCode}');
+        throw Exception(
+            'Request failed with status: ${jsonResponse.statusCode}');
+      }
+    } catch (error) {
+      print('catch: $error');
+    }
+    Navigator.of(context).pop();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Consumer<MyAppointmentsProvider>(
-      builder: (context, provider, child) => SingleChildScrollView(
+      builder: (context, provider, _) => SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.all(10),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
+              const SizedBox(
+                height: 10,
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   const Text(
-                    'Filter By',  style: CommonUtils.Mediumtext_o_14,
+                    'Filter By',
+                    style: CommonStyles.txSty_16blu_f5,
                   ),
                   GestureDetector(
                     onTap: () {
-                      // Clear filters
-                      myAppointmentsProvider.clearFilter();
-                      clearFilter().whenComplete(() {
-                        Navigator.of(context).pop();
-                      });
+                      filterAppointments({
+                        "userid": widget.userId,
+                        "branchId": null,
+                        "fromdate": null,
+                        "toDate": null,
+                        "statustypeId": null,
+                      }).whenComplete(() => provider.clearFilter());
                     },
                     child: const Text(
-                      'Clear all filters',  style: CommonUtils.Mediumtext_o_14,
+                      'Clear all filters', //MARK: Clear all filters
+                      style: CommonStyles.txSty_16blu_f5,
                     ),
                   ),
                 ],
@@ -3779,7 +3359,7 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                 child: Container(
                   width: double.infinity,
                   height: 0.3,
-                  color:CommonUtils.primaryTextColor,
+                  color: CommonUtils.primaryTextColor,
                 ),
               ),
               const SizedBox(height: 10),
@@ -3789,27 +3369,11 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // radio buttons
-
-
                     const SizedBox(
                       height: 10,
                     ),
-
-                    // Row(
-                    //   children: [
-                    //     Text(
-                    //       'Date of Birth',
-                    //       style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-                    //     ),
-                    //     Text(
-                    //       '*',
-                    //       style: TextStyle(color: Colors.red),
-                    //     ),
-                    //   ],
-                    // ),
                     TextFormField(
-                      controller: From_todates, // Assigning the controller
+                      controller: From_todates,
                       keyboardType: TextInputType.visiblePassword,
                       onTap: () {
                         showCustomDateRangePicker(
@@ -3817,13 +3381,25 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                           dismissible: true,
                           endDate: endDate,
                           startDate: startDate,
-                          maximumDate: DateTime.now().add(const Duration(days: 50)),
-                          minimumDate: DateTime.now().subtract(const Duration(days: 50)),
+                          maximumDate:
+                          DateTime.now().add(const Duration(days: 50)),
+                          minimumDate:
+                          DateTime.now().subtract(const Duration(days: 50)),
                           onApplyClick: (s, e) {
                             setState(() {
+                              //MARK: Date
                               endDate = e;
                               startDate = s;
-                              From_todates.text = '${startDate != null ? DateFormat("dd, MMM").format(startDate!) : '-'} / ${endDate != null ? DateFormat("dd, MMM").format(endDate!) : '-'}';
+                              provider.getDisplayDate =
+                              '${startDate != null ? DateFormat("dd, MMM").format(startDate!) : '-'} / ${endDate != null ? DateFormat("dd, MMM").format(endDate!) : '-'}';
+                              From_todates.text = provider.getDisplayDate;
+                              provider.getApiFromDate =
+                                  DateFormat('yyyy-MM-dd').format(startDate!);
+                              provider.getApiToDate =
+                                  DateFormat('yyyy-MM-dd').format(endDate!);
+
+                              print('Filter apiFromDate: $apiFromDate');
+                              print('Filter apiToDate: $apiToDate');
                             });
                           },
                           onCancelClick: () {
@@ -3837,29 +3413,30 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                       focusNode: DateofBirthdFocus,
                       readOnly: true,
                       decoration: InputDecoration(
-                        contentPadding: const EdgeInsets.only(top: 15, bottom: 10, left: 15, right: 15),
+                        contentPadding: const EdgeInsets.only(
+                            top: 15, bottom: 10, left: 15, right: 15),
                         focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
+                          borderSide: const BorderSide(
                             color: Color(0xFF0f75bc),
                           ),
                           borderRadius: BorderRadius.circular(6.0),
                         ),
                         enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
+                          borderSide: const BorderSide(
                             color: CommonUtils.primaryTextColor,
                           ),
                           borderRadius: BorderRadius.circular(6.0),
                         ),
-                        border: OutlineInputBorder(
+                        border: const OutlineInputBorder(
                           borderRadius: BorderRadius.all(
                             Radius.circular(10),
                           ),
                         ),
                         hintText: 'Select Between Dates',
                         counterText: "",
-                        hintStyle: TextStyle(color: Colors.grey, fontWeight: FontWeight.w400),
-                        prefixIcon: Icon(Icons.calendar_today),
-
+                        hintStyle: const TextStyle(
+                            color: Colors.grey, fontWeight: FontWeight.w400),
+                        prefixIcon: const Icon(Icons.calendar_today),
                       ),
                       //  validator: validatePassword,
                     ),
@@ -3896,28 +3473,34 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                                     BranchModel branchmodel;
 
                                     if (index == 0) {
-                                      branchmodel = BranchModel(  id: 0,
+                                      branchmodel = BranchModel(
+                                        id: 0,
                                         name: "All",
-                                        imageName:null ,
+                                        imageName: null,
                                         address: " ",
-                                        startTime:0,
+                                        startTime: 0,
                                         closeTime: 0,
-                                        room:0,
+                                        room: 0,
                                         mobileNumber: "",
                                         isActive: true,
-
                                       );
                                     } else {
                                       branchmodel = data[index - 1];
                                     }
                                     return GestureDetector(
+                                      //MARK: Brach id
                                       onTap: () {
                                         setState(() {
                                           provider.selectedBranch = index;
 
-                                          provider.getbranch = branchmodel.id;
+                                          // provider.getbranch = branchmodel.id;
+                                          provider.getApiBranchId =
+                                              branchmodel.id;
                                           print(
                                               'filter: ${provider.getbranch}');
+
+                                          print(
+                                              'Filter branchmodel: ${branchmodel.id}');
                                         });
                                       },
                                       child: Container(
@@ -4008,20 +3591,24 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                                     if (index == 0) {
                                       status = Statusmodel(
                                         typeCdId: null,
-                                        desc:  'All',
-
+                                        desc: 'All',
                                       );
                                     } else {
                                       status = data[index - 1];
                                     }
                                     return GestureDetector(
+                                      //MARK: Status id
                                       onTap: () {
                                         setState(() {
                                           provider.selectedStatus = index;
 
-                                          provider.getStatus = status.typeCdId;
+                                          // provider.getStatus = status.typeCdId;
+                                          provider.getApiStatusTypeId =
+                                              status.typeCdId;
                                           print(
                                               'filter: ${provider.getStatus}');
+                                          print(
+                                              'Filter status.typeCdId: ${status.typeCdId}');
                                         });
                                       },
                                       child: Container(
@@ -4095,7 +3682,7 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                           color: CommonUtils.primaryTextColor,
                         ),
                         side: const BorderSide(
-                          color:  CommonUtils.primaryTextColor,
+                          color: CommonUtils.primaryTextColor,
                         ),
                         backgroundColor: Colors.white,
                         shape: const RoundedRectangleBorder(
@@ -4121,17 +3708,23 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                       child: Center(
                         child: GestureDetector(
                           onTap: () {
-                            // filterAppointment().whenComplete(() {
-                            //   Navigator.of(context).pop();
-                            // });
-
+                            //MARK: Filter Apply
+                            // filterAppointments(widget.userId);
+                            filterAppointments({
+                              "userid": widget.userId,
+                              "branchId": myAppointmentsProvider.getApiBranchId,
+                              "fromdate": myAppointmentsProvider.getApiFromDate,
+                              "toDate": myAppointmentsProvider.getApiToDate,
+                              "statustypeId":
+                              myAppointmentsProvider.getApiStatusTypeId,
+                            });
                           },
                           child: Container(
                             // width: desiredWidth * 0.9,
                             height: 40.0,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(15.0),
-                              color:CommonUtils.primaryTextColor,
+                              color: CommonUtils.primaryTextColor,
                             ),
                             child: const Center(
                               child: Text(
@@ -4158,9 +3751,7 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
     );
   }
 
-
   Future<List<Statusmodel>> fetchstatus() async {
-
     final response = await http.get(Uri.parse(baseUrl + getstatus));
     if (response.statusCode == 200) {
       final List<dynamic> responseData =
@@ -4172,14 +3763,10 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
     } else {
       throw Exception('Failed to load products');
     }
-
-
   }
 
-
   Future<List<BranchModel>> fetchbranches() async {
-    final response = await http
-        .get(Uri.parse(baseUrl + getbranches));
+    final response = await http.get(Uri.parse(baseUrl + getbranches));
     if (response.statusCode == 200) {
       final List<dynamic> responseData =
       json.decode(response.body)['listResult'];
@@ -4192,7 +3779,6 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
     }
   }
 
-
   void filterAppointment(String input) {
     apiData.then((data) {
       // setState(() {
@@ -4203,9 +3789,6 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
       // });
     });
   }
-
-
-
 }
 
 
@@ -4229,6 +3812,10 @@ class _AppointmentCardState extends State<AppointmentCard> {
   }
 
   late List<dynamic> dateValues;
+  final TextEditingController _commentstexteditcontroller = TextEditingController();
+  double rating_star = 0.0;
+  int? userId;
+  List<UserFeedback> userfeedbacklist = [];
   @override
   void initState() {
     super.initState();
@@ -4247,191 +3834,168 @@ class _AppointmentCardState extends State<AppointmentCard> {
           borderRadius: BorderRadius.circular(5),
           color: Colors.white,
         ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // part 1
-            SizedBox(
-              height: 80,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    '${dateValues[1]}', //'10:00 AM to 11;00 AM',
-                    // style: const TextStyle(
-                    //   fontSize: 18,
-                    //   fontFamily: 'Calibri',
-                    //   fontWeight: FontWeight.bold,
-                    //   color: Color(0xFF0f75bc),
-                    // ),
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontFamily: 'Calibri',
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF0f75bc),
-                    ),
-                  ),
-                  Text(
-                    '${dateValues[0]}',
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontFamily: 'Calibri',
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF0f75bc),
-                    ),
-                    //  style: CommonUtils.txSty_12blu_fb,
-                  ),
-                  Text(
-                    '${dateValues[2]}',
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontFamily: 'Calibri',
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF0f75bc),
-                    ),
-                  ),
-                ],
-              ),
-              //  Column(
-              //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //   crossAxisAlignment: CrossAxisAlignment.center,
-              //   children: [
-              //     Text(
-              //       '${dateValues[1]}',
-              //       style: const TextStyle(
-              //         fontSize: 14,
-              //         fontFamily: 'Calibri',
-              //         fontWeight: FontWeight.bold,
-              //         color: Color(0xFF0f75bc),
-              //       ),
-              //     ),
-              //     Text(
-              //       '${dateValues[0]}',
-              //       style: const TextStyle(
-              //         fontSize: 20,
-              //         fontFamily: 'Calibri',
-              //         fontWeight: FontWeight.bold,
-              //         color: Color(0xFF0f75bc),
-              //       ),
-              //     ),
-              //     Text(
-              //       '${dateValues[2]}',
-              //       //style: CommonUtils.txSty_14blu_fb,
-              //       style: const TextStyle(
-              //         fontSize: 14,
-              //         fontFamily: 'Calibri',
-              //         fontWeight: FontWeight.bold,
-              //         color: Color(0xFF0f75bc),
-              //       ),
-              //     ),
-              //   ],
-              // ),
-            ),
+        child:
+    Container(
+    width: double.infinity,
+    child: Row(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+    // part 1
+    SizedBox(
+    height: MediaQuery.of(context).size.height / 8,
+    child: Column(
+    mainAxisAlignment: MainAxisAlignment.start,
+    mainAxisSize: MainAxisSize.max, // Set mainAxisSize to max
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+    Text(
+    '${dateValues[1]}', //'10:00 AM to 11;00 AM',
+    style: const TextStyle(
+    fontSize: 18,
+    fontFamily: 'Calibri',
+    fontWeight: FontWeight.bold,
+    color: Color(0xFF0f75bc),
+    ),
+    ),
+    SizedBox(height: 10.0,),
+    Text(
+    '${dateValues[0]}',
+    style: const TextStyle(
+    fontSize: 30,
+    fontFamily: 'Calibri',
+    fontWeight: FontWeight.bold,
+    color: Color(0xFF0f75bc),
+    ),
+    ),
+    SizedBox(height: 10.0,),
+    Text(
+    '${dateValues[2]}',
+    style: const TextStyle(
+    fontSize: 18,
+    fontFamily: 'Calibri',
+    fontWeight: FontWeight.bold,
+    color: Color(0xFF0f75bc),
+    ),
+    ),
+    ],
+    ),
+    ),
 
-            // divider
-            Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 10),
-                  width: 0.5,
-                  height: 80,
-                  color: const Color.fromARGB(255, 70, 67, 67),
-                ),
-              ],
-            ),
+    // divider
+    Column(
+    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    children: [
+    Container(
+    margin: const EdgeInsets.symmetric(horizontal: 10),
+    width: 0.5,
+    height: MediaQuery.of(context).size.height/8,
+    color: const Color.fromARGB(255, 70, 67, 67),
+    ),
+    ],
+    ),
 
-            // part 2
-            Expanded(
-              child: SizedBox(
-                height: 80,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      widget.data.slotDuration, //'10:00 AM to 11;00 AM',
-                      // style: const TextStyle(
-                      //   fontSize: 18,
-                      //   fontFamily: 'Calibri',
-                      //   fontWeight: FontWeight.bold,
-                      //   color: Color(0xFF0f75bc),
-                      // ),
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontFamily: 'Calibri',
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFF0f75bc),
-                      ),
-                    ),
-                    Text(
-                      widget.data.purposeOfVisit, //'Head Wash',
-                      style: CommonUtils.txSty_12b_fb,
-                      //  style: CommonUtils.txSty_12blu_fb,
-                    ),
-                    Text(
-                      widget.data.branch, //'Kondapur',
-                      style: CommonUtils.txSty_12b_fb,
-                    ),
-                    if (widget.data.statusTypeId == 18)
-                      const Text(
-                        'This is feed back content', //'Kondapur',
-                        style: CommonUtils.txSty_12b_fb,
-                      ),
-                  ],
-                ),
-              ),
-            ),
+    Expanded(
+    child: SizedBox(
+    height: MediaQuery.of(context).size.height/8,
+    child: Column(
+    mainAxisAlignment: MainAxisAlignment.start,
+    mainAxisSize: MainAxisSize.min,
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+    Text(
+    widget.data.slotDuration, //'10:00 AM to 11;00 AM',
+    style: const TextStyle(
+    fontSize: 20,
+    fontFamily: 'Calibri',
+    fontWeight: FontWeight.bold,
+    color: Color(0xFF0f75bc),
+    ),
+    ),
+    SizedBox(height: 5.0,),
+    Text(
+    widget.data.purposeOfVisit, //'Head Wash',
+    style:TextStyle(
+    fontSize: 14.0,
+    color: Color(0xFF5f5f5f),
+    fontWeight: FontWeight.bold,
+    fontFamily: "Calibri",
+    ),
+    ),
+    SizedBox(height: 5.0,),
+    Text(
+    widget.data.branch, //'Kondapur',
+    style:TextStyle(
+    fontSize: 14.0,
+    color: Color(0xFF5f5f5f),
+    fontWeight: FontWeight.bold,
+    fontFamily: "Calibri",
+    ),
+    ),
+    SizedBox(height: 5.0,),
+    if (widget.data.statusTypeId == 11)
+    Text(
+        widget.data.review?.toString() ?? '',
+    style:TextStyle(
+    fontSize: 14.0,
+    color: Color(0xFF5f5f5f),
+    fontWeight: FontWeight.bold,
+    fontFamily: "Calibri",
+    ),
+    ),
+    ],
+    ),
+    ),
+    ),
+    // part
 
-            // part 3
-            SizedBox(
-              // color: Colors.grey,
-              height: 80,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  statusBasedBgById(
-                      widget.data.statusTypeId, widget.data.status),
-                  Row(
-                    children: [
-                      widget.data.statusTypeId == 18
-                          ? const Padding(
-                        padding: EdgeInsets.only(left: 8),
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.star_border_outlined,
-                              size: 13,
-                              color: Color.fromARGB(255, 44, 172, 55),
-                            ),
-                            Text(
-                              ' 4.5',
-                              style: TextStyle(
-                                fontSize: 11,
-                                color: Color.fromARGB(255, 44, 172, 55),
-                              ),
-                            ),
-                          ],
-                        ),
-                      )
-                          : const SizedBox(),
-                    ],
-                  ),
-                  verifyStatus(widget.data.statusTypeId),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
+    // part 3
+    SizedBox(
+    // color: Colors.grey,
+    height: 80,
+    child: Column(
+    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    crossAxisAlignment: CrossAxisAlignment.end,
+    children: [
+    statusBasedBgById(
+    widget.data.statusTypeId, widget.data.status),
+    Row(
+    children: [
+    widget.data.statusTypeId == 11
+    ?  Padding(
+    padding: EdgeInsets.only(left: 8),
+    child: Row(
+    children: [
+    Icon(
+    Icons.star_border_outlined,
+    size: 13,
+    color: Color.fromARGB(255, 44, 172, 55),
+    ),
+    Text(
+    widget.data.rating?.toString() ?? '', // Using null-aware operator and providing a default value
+    style: TextStyle(
+    fontSize: 16,
+    color: Color.fromARGB(255, 44, 172, 55),
+    ),
+    ),
+
+
+    ],
+    ),
+    )
+        : const SizedBox(),
+    ],
+    ),
+    verifyStatus(widget.data.statusTypeId,widget.data),
+    ],
+    ),
+    ),
+
+      ],
+    ),
+    )));
   }
 
-  Widget verifyStatus(int statusTypeId) {
+  Widget verifyStatus(int statusTypeId, MyAppointment_Model data) {
     switch (statusTypeId) {
       case 4: // Submited
         return const SizedBox();
@@ -4440,68 +4004,113 @@ class _AppointmentCardState extends State<AppointmentCard> {
       case 5: // Accepted
         return Row(
           children: [
-            Container(
-              decoration: BoxDecoration(
+            GestureDetector(
+              onTap: () {
+                // Add your logic here for when the 'Reschedule' container is tapped
+              },
+              child: Container(
+                decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(3),
-                  border: Border.all(color: CommonUtils.primaryTextColor)),
-              padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
-              child: Row(
-                children: [
-                  SvgPicture.asset(
-                    'assets/calendar_3.svg',
-                    width: 13,
-                  ),
-                  const Text(
-                    ' Reschedule',
-                    style: TextStyle(
-                        fontSize: 11, color: CommonUtils.primaryTextColor),
-                  ),
-                ],
+                  border: Border.all(color: CommonUtils.primaryTextColor),
+                ),
+                padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
+                child: Row(
+                  children: [
+                    SvgPicture.asset(
+                      'assets/calendar-_3_.svg',
+                      width: 13,
+                      color: CommonUtils.primaryTextColor,
+                    ),
+                    const Text(
+                      ' Reschedule',
+                      style:  TextStyle(
+                        fontSize: 18,
+                        fontFamily: "Calibri",
+                        fontWeight: FontWeight.w500,
+                        color: CommonUtils.primaryTextColor,
+                      ),
+
+                    ),
+                  ],
+                ),
               ),
             ),
             const SizedBox(
               width: 10,
             ),
-            Container(
-              decoration: BoxDecoration(
+            GestureDetector(
+              onTap: () {
+                conformation(data);
+                // Add your logic here for when the 'Cancel' container is tapped
+              },
+              child: Container(
+                decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(3),
-                  border: Border.all(color: CommonStyles.statusRedText)),
-              padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
-              child: Row(
-                children: [
-                  SvgPicture.asset(
-                    'assets/calendar-xmark.svg',
-                    width: 13,
-                  ),
-                  const Text(
-                    ' Cancel',
-                    style: TextStyle(
-                        fontSize: 11, color: CommonStyles.statusRedText),
-                  ),
-                ],
+                  border: Border.all(color: CommonStyles.statusRedText),
+                ),
+                padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
+                child: Row(
+                  children: [
+                    SvgPicture.asset(
+                      'assets/calendar-xmark.svg',
+                      width: 13,
+                      color: CommonStyles.statusRedText,
+                    ),
+                    const Text(
+                      ' Cancel',
+                      style:
+                      TextStyle(
+                        fontSize: 18,
+                        fontFamily: "Calibri",
+                        fontWeight: FontWeight.w500,
+                        color: CommonStyles.statusRedText,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
+
           ],
         );
 
       case 18: // Closed
-        return Container(
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(3),
-              border: Border.all(color: CommonUtils.primaryTextColor)),
-          padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
-          child: const Row(
-            children: [
-              Icon(Icons.star_border_outlined,
-                  size: 13, color: CommonUtils.primaryTextColor),
-              Text(
-                ' Rate Us',
-                style: TextStyle(
-                    fontSize: 11, color: CommonUtils.primaryTextColor),
-              ),
-            ],
-          ),
-        );
+        return GestureDetector(
+    onTap: () {
+
+    // Handle the click event here
+    // For example, you can navigate to a rating screen or show a dialog box for rating
+    // Replace the below print statement with your desired action
+      ShowAlertdialog(data);
+    print('Rate Us clicked');
+    },
+    child: Container(
+    decoration: BoxDecoration(
+    borderRadius: BorderRadius.circular(3),
+    border: Border.all(color: CommonUtils.primaryTextColor),
+    ),
+    padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
+    child: Row(
+    children: [
+    Icon(
+    Icons.star_border_outlined,
+    size: 16,
+    color: CommonUtils.primaryTextColor,
+    ),
+    Text(
+    ' Rate Us',
+    style:   TextStyle(
+      fontSize: 18,
+      fontFamily: "Calibri",
+      fontWeight: FontWeight.w500,
+      color: CommonStyles.primaryTextColor,
+    ),
+    ),
+    ],
+    ),
+    ),
+
+    );
       default:
         return Container(
           decoration: BoxDecoration(
@@ -4527,6 +4136,10 @@ class _AppointmentCardState extends State<AppointmentCard> {
   Widget statusBasedBgById(int statusTypeId, String status) {
     final Color statusColor;
     final Color statusBgColor;
+    if (statusTypeId== 11) {
+      status = "Closed";
+    }
+
     switch (statusTypeId) {
       case 4: // Submited
         statusColor = CommonStyles.statusBlueText;
@@ -4537,8 +4150,8 @@ class _AppointmentCardState extends State<AppointmentCard> {
         statusBgColor = CommonStyles.statusGreenBg;
         break;
       case 11: // FeedBack
-        statusColor = CommonStyles.statusRedText;
-        statusBgColor = CommonStyles.statusRedBg;
+        statusColor = CommonStyles.statusYellowText;
+        statusBgColor = CommonStyles.statusYellowBg;
         break;
       case 18: // Closed
         statusColor = CommonStyles.statusYellowText;
@@ -4555,15 +4168,15 @@ class _AppointmentCardState extends State<AppointmentCard> {
     }
     return Container(
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10), color: statusBgColor),
-      padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
+          borderRadius: BorderRadius.circular(15), color: statusBgColor),
+      padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 15),
       child: Row(
         children: [
           // statusBasedBgById(widget.data.statusTypeId),
           Text(
             status,
             style: TextStyle(
-              fontSize: 11,
+              fontSize: 18,
               fontFamily: "Calibri",
               fontWeight: FontWeight.w500,
               color: statusColor,
@@ -4573,6 +4186,469 @@ class _AppointmentCardState extends State<AppointmentCard> {
       ),
     );
   }
+
+  void ShowAlertdialog(MyAppointment_Model appointments) {
+//    print('indexof listview$index');
+    _commentstexteditcontroller.clear();
+    showDialog(
+      barrierDismissible: true,
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              backgroundColor: Colors.transparent,
+              surfaceTintColor: Colors.transparent,
+              title: SingleChildScrollView(
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+
+                  //     height: MediaQuery.of(context).size.height,
+                  //   color: Colors.white,
+                  padding: const EdgeInsets.only(
+                      top: 15.0, left: 15.0, right: 15.0, bottom: 20.0),
+
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10.0),
+                    gradient: const LinearGradient(
+                      colors: [
+                        Color(0xFFd7defa),
+                        Color(0xFFfee7e1),
+                      ],
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                    ),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Feedback',
+                        style: TextStyle(
+                          fontSize: 24,
+                          color: Color(0xFFf15f22),
+                          fontFamily: 'Calibri',
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 15.0,
+                      ),
+                      const Text(
+                        'Rating',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Color(0xFFf15f22),
+                          fontFamily: 'Calibri',
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 15.0,
+                      ),
+                      SizedBox(
+                          width: MediaQuery.of(context).size.width,
+                          child: RatingBar.builder(
+                            initialRating: 0,
+                            minRating: 0,
+                            direction: Axis.horizontal,
+                            allowHalfRating: true,
+                            itemCount: 5,
+                            itemPadding:
+                            const EdgeInsets.symmetric(horizontal: 1.0),
+                            itemBuilder: (context, _) => const Icon(
+                              Icons.star,
+                              color: Colors.amber,
+                            ),
+                            onRatingUpdate: (rating) {
+                              setState(() {
+                                rating_star = rating;
+                                print('rating_star$rating_star');
+                              });
+                            },
+                          )),
+                      Padding(
+                        padding:
+                        const EdgeInsets.only(left: 0, top: 10.0, right: 0),
+                        child: GestureDetector(
+                          onTap: () async {},
+                          child: Container(
+                            height: 80,
+                            width: MediaQuery.of(context).size.width,
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                  color: const Color(0xFFf15f22), width: 1.5),
+                              borderRadius: BorderRadius.circular(5.0),
+                              color: Colors.white,
+                            ),
+                            child: TextFormField(
+                              controller: _commentstexteditcontroller,
+                              style: const TextStyle(
+                                fontFamily: 'Calibri',
+                                fontSize: 14,
+                                fontWeight: FontWeight.w300,
+                              ),
+                              maxLines: null,
+                              maxLength: 256,
+                              // Set maxLines to null for multiline input
+                              decoration: const InputDecoration(
+                                hintText: 'Comments',
+                                hintStyle: TextStyle(
+                                  color: Colors.black54,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: 'Calibri',
+                                ),
+                                contentPadding: EdgeInsets.symmetric(
+                                  horizontal: 16.0,
+                                  vertical: 12.0,
+                                ),
+                                border: InputBorder.none,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            top: 20.0, left: 0.0, right: 0.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            ElevatedButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              style: ElevatedButton.styleFrom(
+                                foregroundColor: Colors.grey,
+                                elevation: 0,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(4.0),
+                                ),
+                              ),
+                              child: const Text(
+                                'Close',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                    fontFamily: 'Calibri'),
+                              ),
+                            ),
+                            ElevatedButton(
+                              onPressed: () {
+                                validaterating(appointments);
+                              },
+                              style: ElevatedButton.styleFrom(
+                                foregroundColor: const Color(0xFFf15f22),
+                                elevation: 0,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(4.0),
+                                ),
+                              ),
+                              child: const Text(
+                                'Submit',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                    fontFamily: 'Calibri'),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      // Row(
+                      //   mainAxisAlignment: MainAxisAlignment.center,
+                      //   crossAxisAlignment: CrossAxisAlignment.center,
+                      //   children: [
+                      //     Padding(
+                      //       padding: EdgeInsets.only(top: 20.0, left: 0.0, right: 0.0),
+                      //       child: Container(
+                      //         width: MediaQuery.of(context).size.width / 3.80,
+                      //         decoration: BoxDecoration(
+                      //           color: Color(0xFFf15f22),
+                      //           borderRadius: BorderRadius.circular(6.0),
+                      //         ),
+                      //         child: ElevatedButton(
+                      //           onPressed: () {
+                      //             validaterating(appointments, index);
+                      //           },
+                      //           child: Text(
+                      //             'Submit',
+                      //             style: TextStyle(color: Colors.white, fontSize: 16, fontFamily: 'Calibri'),
+                      //           ),
+                      //           style: ElevatedButton.styleFrom(
+                      //             foregroundColor: Colors.transparent,
+                      //             elevation: 0,
+                      //             shape: RoundedRectangleBorder(
+                      //               borderRadius: BorderRadius.circular(4.0),
+                      //             ),
+                      //           ),
+                      //         ),
+                      //       ),
+                      //     ),
+                      //     SizedBox(
+                      //       width: 10,
+                      //     ),
+                      //     Padding(
+                      //       padding: EdgeInsets.only(top: 20.0, left: 0.0, right: 0.0),
+                      //       child: Container(
+                      //         width: MediaQuery.of(context).size.width / 3.80,
+                      //         decoration: BoxDecoration(
+                      //           color: Color(0xFFf15f22),
+                      //           borderRadius: BorderRadius.circular(6.0),
+                      //         ),
+                      //         child: ElevatedButton(
+                      //           onPressed: () {
+                      //
+                      //          Navigator.of(context).pop();
+                      //           },
+                      //           child: Text(
+                      //             'Cancel',
+                      //             style: TextStyle(color: Colors.white, fontSize: 16, fontFamily: 'Calibri'),
+                      //           ),
+                      //           style: ElevatedButton.styleFrom(
+                      //             foregroundColor: Colors.transparent,
+                      //             elevation: 0,
+                      //             shape: RoundedRectangleBorder(
+                      //               borderRadius: BorderRadius.circular(4.0),
+                      //             ),
+                      //           ),
+                      //         ),
+                      //       ),
+                      //     ),
+                      //   ],
+                      // )
+                    ],
+                  ),
+                ),
+              ),
+              // actions: [
+              //   ElevatedButton(
+              //     onPressed: () {
+              //       Navigator.of(context).pop();
+              //     },
+              //     child: Text(
+              //       'Ok',
+              //       style: TextStyle(color: Colors.white, fontFamily: 'Calibri'), // Set text color to white
+              //     ),
+              //     style: ElevatedButton.styleFrom(
+              //       foregroundColor: Color(0xFFf15f22), // Change to your desired background color
+              //       shape: RoundedRectangleBorder(
+              //         borderRadius: BorderRadius.circular(5), // Set border radius
+              //       ),
+              //     ),
+              //   ),
+              // ],
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Future<void> validaterating(
+      MyAppointment_Model appointmens) async {
+  //  print('indexinvalidating$index');
+    bool isValid = true;
+    bool hasValidationFailed = false;
+    int myInt = rating_star.toInt();
+    print('changedintoint$myInt');
+    if (rating_star <= 0.0) {
+      FocusScope.of(context).unfocus();
+      CommonUtils.showCustomToastMessageLong(
+          'Please Give Rating', context, 1, 4);
+      isValid = false;
+      hasValidationFailed = true;
+    }
+
+    if (isValid && _commentstexteditcontroller.text.trim().isEmpty) {
+      FocusScope.of(context).unfocus();
+      CommonUtils.showCustomToastMessageLong(
+          'Please Enter Comments', context, 1, 4);
+      isValid = false;
+      hasValidationFailed = true;
+    }
+    if (isValid) {
+      final url = Uri.parse(baseUrl + postApiAppointment);
+      print('url==>890: $url');
+      DateTime now = DateTime.now();
+      String dateTimeString = now.toString();
+      print('DateTime as String: $dateTimeString');
+
+      //  for (MyAppointment_Model appointment in appointmens) {
+      // Create the request object for each appointment
+      final request = {
+        "Id": appointmens.id,
+        "BranchId": appointmens.branchId,
+        "Date": appointmens.date,
+        "SlotTime": appointmens.slotTime,
+        "CustomerName": appointmens.customerName,
+        "PhoneNumber":
+        appointmens.contactNumber, // Changed from appointments.phoneNumber
+        "Email": appointmens.email,
+        "GenderTypeId": appointmens.genderTypeId,
+        "StatusTypeId": 11,
+        "PurposeOfVisitId": appointmens.purposeOfVisitId,
+        "PurposeOfVisit": appointmens.purposeOfVisit,
+        "IsActive": true,
+        "CreatedDate": dateTimeString,
+        "UpdatedDate": dateTimeString,
+        "UpdatedByUserId": null,
+        "rating": rating_star,
+        "review": _commentstexteditcontroller.text.toString(),
+        "reviewSubmittedDate": dateTimeString,
+        "timeofslot": null,
+        "customerId": userId
+      };
+      print('AddUpdatefeedback object: : ${json.encode(request)}');
+
+      try {
+        // Send the POST request for each appointment
+        final response = await http.post(
+          url,
+          body: json.encode(request),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        );
+
+        if (response.statusCode == 200) {
+          print('Request sent successfully');
+        //  fetchMyAppointments(userId);
+          CommonUtils.showCustomToastMessageLong(
+              'Feedback Successfully Submited', context, 0, 4);
+
+          // if (index >= 0.0 && index < userfeedbacklist.length) {
+          //   // Ensure index is within the valid range
+          //   userfeedbacklist.ratingstar = rating_star;
+          //   userfeedbacklist.comments = _commentstexteditcontroller.text.toString();
+          //
+          //   print('rating_starapi${userfeedbacklist[].ratingstar}  comments${userfeedbacklist[].comments}');
+          //
+          //   Navigator.pop(context);
+          // } else {
+          //   print('Invalid index: $index');
+          // }
+          // _printAppointments();
+          // userfeedbacklist[index].ratingstar = rating_star;
+          // userfeedbacklist[index].comments = _commentstexteditcontroller.text.toString();
+
+          Navigator.pop(context);
+        } else {
+          print(
+              'Failed to send the request. Status code: ${response.statusCode}');
+        }
+      } catch (e) {
+        print('Error while sending : $e');
+      }
+      //  }
+    }
+  }
+
+  void conformation(MyAppointment_Model appointments) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Confirmation'),
+          content: const Text('Are you sure you want to Cancel?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('No'),
+            ),
+            TextButton(
+              onPressed: () {
+                CancelAppointment(appointments);
+                Navigator.of(context).pop();
+              },
+              child: const Text('Yes'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> CancelAppointment(
+      MyAppointment_Model appointmens) async {
+    final url = Uri.parse(baseUrl + postApiAppointment);
+    print('url==>890: $url');
+    DateTime now = DateTime.now();
+    String dateTimeString = now.toString();
+    print('DateTime as String: $dateTimeString');
+
+    //  for (MyAppointment_Model appointment in appointmens) {
+    // Create the request object for each appointment
+    final request = {
+      "Id": appointmens.id,
+      "BranchId": appointmens.branchId,
+      "Date": appointmens.date,
+      "SlotTime": appointmens.slotTime,
+      "CustomerName": appointmens.customerName,
+      "PhoneNumber":
+      appointmens.contactNumber, // Changed from appointments.phoneNumber
+      "Email": appointmens.email,
+      "GenderTypeId": appointmens.genderTypeId,
+      "StatusTypeId": 6,
+      "PurposeOfVisitId": appointmens.purposeOfVisitId,
+      "PurposeOfVisit": appointmens.purposeOfVisit,
+      "IsActive": true,
+      "CreatedDate": dateTimeString,
+      "UpdatedDate": dateTimeString,
+      "UpdatedByUserId": null,
+      "rating": rating_star,
+      "review": _commentstexteditcontroller.text.toString(),
+      "reviewSubmittedDate": dateTimeString,
+      "timeofslot": null,
+      "customerId": userId
+    };
+    print('AddUpdatefeedback object: : ${json.encode(request)}');
+
+    try {
+      // Send the POST request for each appointment
+      final response = await http.post(
+        url,
+        body: json.encode(request),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        Map<String, dynamic> data = json.decode(response.body);
+
+        // Extract the necessary information
+        bool isSuccess = data['isSuccess'];
+        if (isSuccess == true) {
+          print('Request sent successfully');
+        //  fetchMyAppointments(userId);
+          CommonUtils.showCustomToastMessageLong(
+              'Cancelled  Successfully ', context, 0, 4);
+          //   Navigator.pop(context);
+          // Success case
+          // Handle success scenario here
+        } else {
+          // Failure case
+          // Handle failure scenario here
+          CommonUtils.showCustomToastMessageLong(
+              'The request should not be canceled within 30 minutes before slot',
+              context,
+              0,
+              2);
+        }
+      } else {
+        //showCustomToastMessageLong(
+        // 'Failed to send the request', context, 1, 2);
+        print(
+            'Failed to send the request. Status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error while sending : $e');
+    }
+    //  }
+  }
+
 
 }
 

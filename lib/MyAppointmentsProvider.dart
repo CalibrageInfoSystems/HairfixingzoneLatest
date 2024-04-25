@@ -2,11 +2,48 @@ import 'package:flutter/material.dart';
 import 'package:hairfixingzone/MyAppointment_Model.dart';
 import 'package:hairfixingzone/slotbookingscreen.dart';
 
+
+
+import 'package:flutter/material.dart';
+import 'package:hairfixingzone/MyAppointment_Model.dart';
+import 'package:hairfixingzone/slotbookingscreen.dart';
+
 class MyAppointmentsProvider extends ChangeNotifier {
   List<MyAppointment_Model> proAppointments = [];
   int selectedCategoryIndex = 0;
- List<MyAppointment_Model> get storeIntoProvider => proAppointments;
+  List<MyAppointment_Model> get storeIntoProvider => proAppointments;
   int? _selectedCategory;
+// varibles
+  String displayDate = 'Select between dates';
+  String? apiFromDate;
+  String? apiToDate;
+  int? apiBranchId;
+  int? apiStatusTypeId;
+
+  String get getDisplayDate => displayDate;
+  set getDisplayDate(String newCode) {
+    displayDate = newCode;
+  }
+
+  String? get getApiFromDate => apiFromDate;
+  set getApiFromDate(String? newCode) {
+    apiFromDate = newCode;
+  }
+
+  String? get getApiToDate => apiToDate;
+  set getApiToDate(String? newCode) {
+    apiToDate = newCode;
+  }
+
+  int? get getApiBranchId => apiBranchId;
+  set getApiBranchId(int? newCode) {
+    apiBranchId = newCode;
+  }
+
+  int? get getApiStatusTypeId => apiStatusTypeId;
+  set getApiStatusTypeId(int? newCode) {
+    apiStatusTypeId = newCode;
+  }
 
   List<Statusmodel> prostatus = [];
   int selectedstatusIndex = 0;
@@ -30,12 +67,14 @@ class MyAppointmentsProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+
   void clearFilter() {
     proAppointments = [];
+    displayDate = 'Select between dates';
+    selectedStatus = 0;
+    selectedBranch = 0;
     notifyListeners();
   }
-
-
 
   // int get selectedCategory => selectedCategoryIndex;
   // set selectedCategory(int newStatus) {
@@ -53,7 +92,7 @@ class MyAppointmentsProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  int get selectedBranch=> selectedbranchesIndex;
+  int get selectedBranch => selectedbranchesIndex;
   set selectedBranch(int newStatus) {
     selectedbranchesIndex = newStatus;
     notifyListeners();
@@ -64,6 +103,7 @@ class MyAppointmentsProvider extends ChangeNotifier {
     selectedstatusIndex = newStatus;
     notifyListeners();
   }
+
   int? get getStatus => _selectedStatus;
   set getStatus(int? newCategory) {
     _selectedStatus = newCategory;

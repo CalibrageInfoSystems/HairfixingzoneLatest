@@ -126,6 +126,9 @@ flutter:
     - assets/filter.svg
     - assets/invite-alt.svg
     - assets/objects-column.svg
+    - assets/calendar-_3_.svg
+    - assets/calendar-xmark.svg
+    - assets/star.svg
 
 
 

@@ -28,4 +28,16 @@ class CommonStyles {
     fontWeight: FontWeight.w500,
     color: blackColor,
   );
+  static const TextStyle txSty_14blu_f5 = TextStyle(
+    fontSize: 14,
+    fontFamily: "Calibri",
+    fontWeight: FontWeight.w500,
+    color: Color(0xFF0f75bc),
+  );
+  static const TextStyle txSty_16blu_f5 = TextStyle(
+    fontSize: 16,
+    fontFamily: "Calibri",
+    fontWeight: FontWeight.w500,
+    color: Color(0xFF0f75bc),
+  );
 }
