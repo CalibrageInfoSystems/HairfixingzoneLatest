@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:hairfixingzone/MyProductsProvider.dart';
 import 'package:hairfixingzone/Product_Model.dart';
 import 'package:hairfixingzone/slotbookingscreen.dart';
@@ -273,38 +274,32 @@ class MyProducts_screenState extends State<MyProducts> {
                   contentPadding: const EdgeInsets.only(top: 5, left: 12),
                   hintText: 'Search Products',
                   // hintStyle: CommonStyles.txSty_14bs_fb,
-                  suffixIcon: const Icon(Icons.search),
+                 // suffixIcon: const Icon(Icons.search),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
                     borderSide: const BorderSide(
-                        color: Color.fromARGB(96, 141, 140, 140)),
+                        color:CommonUtils.primaryTextColor),
                   ),
+
                   focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: const BorderSide(
-                        color: Color.fromARGB(96, 141, 140, 140)),
+                    borderSide: BorderSide(
+                      color: Color(0xFF0f75bc),
+                    ),
+                    borderRadius: BorderRadius.circular(6.0),
                   ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: CommonUtils.primaryTextColor,
+                    ),
                 ),
               ),
             ),
           ),
+          ),
           const SizedBox(
             width: 10,
           ),
-          GestureDetector(
-            onTap: () {
-              showModalBottomSheet(
-                isScrollControlled: true,
-                context: context,
-                builder: (context) => Padding(
-                  padding: EdgeInsets.only(
-                    bottom: MediaQuery.of(context).viewInsets.bottom,
-                  ),
-                  child: const FilterBottomSheet(),
-                ),
-              );
-            },
-            child: Container(
+      Container(
               height: 45,
               width: 45,
               decoration: BoxDecoration(
@@ -313,11 +308,30 @@ class MyProducts_screenState extends State<MyProducts> {
                   color: CommonUtils.primaryTextColor,
                 ),
               ),
-              child: const Center(
-                child: Icon(Icons.filter_alt_outlined),
+              child: IconButton(
+              icon: SvgPicture.asset(
+    'assets/filter.svg', // Path to your SVG asset
+    color:Color(0xFF662e91),
+    width: 24, // Adjust width as needed
+    height: 24, // Adjust height as needed
+    ),
+    onPressed: () {
+      showModalBottomSheet(
+        isScrollControlled: true,
+        context: context,
+        builder: (context) => Padding(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+          ),
+          child: const FilterBottomSheet(),
+        ),
+      );
+    // Add logout functionality here
+    },
+    ),
               ),
-            ),
-          )
+
+
         ],
       ),
     );
@@ -765,8 +779,8 @@ class ProductCard extends StatelessWidget {
           children: [
             // product image
             Container(
-              width: 200,
-              height: 120,
+              width: 180,
+              height: 100,
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
                 color: CommonUtils.primaryColor,
@@ -785,16 +799,25 @@ class ProductCard extends StatelessWidget {
                   product.name,
                   style: CommonUtils.txSty_18b_fb,
                 ),
+                const SizedBox(
+                  width: 3,
+                ),
                 Text(
                   product.categoryName,
                   style: CommonUtils.txSty_12bs_fb,
                 ),
-                Text(
-                  product.gender ?? 'NULL',
-                  style: CommonUtils.txSty_12bs_fb,
+                const SizedBox(
+                  width: 3,
                 ),
                 Text(
-                  '₹${product.maxPrice.toString()}',
+                  product.gender ?? ' ',
+                  style: CommonUtils.txSty_12bs_fb,
+                ),
+                const SizedBox(
+                  width: 3,
+                ),
+                Text(
+                  '₹ ${product.maxPrice.toString()}',
                   style: CommonUtils.txSty_18p_f7,
                 ),
               ],

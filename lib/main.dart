@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart';
 
+import 'MyAppointmentsProvider.dart';
 import 'notifications_screen.dart';
 
 @pragma('vm:entry-point')
@@ -27,6 +28,7 @@ void main() async {
 
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (context) => MyProductProvider()),
+    ChangeNotifierProvider(create: (context) => MyAppointmentsProvider()),
   ], child: MyApp()));
 }
 

@@ -34,3 +34,4 @@ var AddAgentSlotInformation = "AddAgentSlotInformation";
 var GetApprovedDeclinedSlots = "api/Appointment/GetApprovedDeclinedSlots";
 var Getnotificatons = "api/Appointment/GetNotificationsByUserId/";
 var customeregisration = 'Register';
+var getstatus = "api/TypeCdDmt/2";

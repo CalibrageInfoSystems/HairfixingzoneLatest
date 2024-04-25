@@ -241,7 +241,7 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
                                     ),
                                     enabledBorder: OutlineInputBorder(
                                       borderSide: BorderSide(
-                                        color: Colors.grey, // Changed to a default color
+                                        color: CommonUtils.primaryTextColor,
                                       ),
                                       borderRadius: BorderRadius.circular(6.0),
                                     ),
@@ -274,13 +274,14 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
                                   ],
                                 ),
                                 Padding(
-                                  padding: EdgeInsets.only(left: 0, top: 0.0, right: 0),
+                                  padding: EdgeInsets.only(left: 0, top: 5.0, right: 0),
                                   child: Container(
                                     width: MediaQuery.of(context).size.width,
                                     decoration: BoxDecoration(
                                       border: Border.all(
-                                        color: Colors.grey,
+                                        color: CommonUtils.primaryTextColor,
                                       ),
+
                                       borderRadius: BorderRadius.circular(5.0),
                                       color: Colors.white,
                                     ),
@@ -346,13 +347,80 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
                                 SizedBox(
                                   height: 10,
                                 ),
-                                CustomeFormField(
-                                  label: 'Alternate Mobile Number',
-                                  validator: validateAlterMobilenum,
-                                  controller: AlernateMobilenum,
-                                  maxLength: 10,
-                                  //   focusNode: AlernateMobilenumFocus,
-                                  keyboardType: TextInputType.number,
+                                // CustomeFormField(
+                                //   label: 'Alternate Mobile Number',
+                                //   validator: validateAlterMobilenum,
+                                //   controller: AlernateMobilenum,
+                                //   maxLength: 10,
+                                //   //   focusNode: AlernateMobilenumFocus,
+                                //   keyboardType: TextInputType.number,
+                                // ),
+                                ListView(
+                                  padding: EdgeInsets.zero,
+                                  shrinkWrap: true,
+                                  physics: NeverScrollableScrollPhysics(),
+                                  children: [
+                                    // SizedBox(height: 5),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          'Alternate Mobile Number',
+                                          style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                                        ),
+                                        // Text(
+                                        //   '',
+                                        //   style: TextStyle(color: Colors.red),
+                                        // ),
+                                      ],
+                                    ),
+                                    SizedBox(height: 5.0,),
+                                    TextFormField(
+                                      controller: AlernateMobilenum, // Assigning the controller
+                                      keyboardType: TextInputType.emailAddress,
+                                      onTap: () {
+                                        setState(() {
+                                          AlernateMobilenumFocus.addListener(() {
+                                            if (AlernateMobilenumFocus.hasFocus) {
+                                              Future.delayed(Duration(milliseconds: 300), () {
+                                                Scrollable.ensureVisible(
+                                                  AlernateMobilenumFocus.context!,
+                                                  duration: Duration(milliseconds: 300),
+                                                  curve: Curves.easeInOut,
+                                                );
+                                              });
+                                            }
+                                          });
+                                        });
+                                      },
+                                      focusNode: AlernateMobilenumFocus,
+                                      decoration: InputDecoration(
+                                        contentPadding: const EdgeInsets.only(top: 15, bottom: 10, left: 15, right: 15),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: Color(0xFF0f75bc),
+                                          ),
+                                          borderRadius: BorderRadius.circular(6.0),
+                                        ),
+                                        enabledBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: CommonUtils.primaryTextColor,
+                                          ),
+                                          borderRadius: BorderRadius.circular(6.0),
+                                        ),
+                                        border: OutlineInputBorder(
+                                          borderRadius: BorderRadius.all(
+                                            Radius.circular(10),
+                                          ),
+                                        ),
+                                        hintText: 'Alternate Mobile Number',
+                                        counterText: "",
+
+                                        hintStyle: TextStyle(color: Colors.grey, fontWeight: FontWeight.w400),
+                                      ),
+                                      maxLength: 10,
+                                      validator: validateAlterMobilenum,
+                                    ),
+                                  ],
                                 ),
                                 SizedBox(
                                   height: 10,
@@ -382,6 +450,7 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
                                         ),
                                       ],
                                     ),
+                                    SizedBox(height: 5.0,),
                                     TextFormField(
                                       controller: Email, // Assigning the controller
                                       keyboardType: TextInputType.emailAddress,
@@ -411,7 +480,7 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
                                         ),
                                         enabledBorder: OutlineInputBorder(
                                           borderSide: BorderSide(
-                                            color: Colors.grey, // Changed to a default color
+                                            color: CommonUtils.primaryTextColor,
                                           ),
                                           borderRadius: BorderRadius.circular(6.0),
                                         ),
@@ -456,6 +525,7 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
                                         ),
                                       ],
                                     ),
+                                    SizedBox(height: 5.0,),
                                     TextFormField(
                                       controller: username, // Assigning the controller
                                       keyboardType: TextInputType.visiblePassword,
@@ -485,7 +555,7 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
                                         ),
                                         enabledBorder: OutlineInputBorder(
                                           borderSide: BorderSide(
-                                            color: Colors.grey, // Changed to a default color
+                                            color: CommonUtils.primaryTextColor,
                                           ),
                                           borderRadius: BorderRadius.circular(6.0),
                                         ),
@@ -530,6 +600,7 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
                                         ),
                                       ],
                                     ),
+                                    SizedBox(height: 5.0,),
                                     TextFormField(
                                       controller: Password, // Assigning the controller
                                       keyboardType: TextInputType.visiblePassword,
@@ -559,7 +630,7 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
                                         ),
                                         enabledBorder: OutlineInputBorder(
                                           borderSide: BorderSide(
-                                            color: Colors.grey, // Changed to a default color
+                                            color: CommonUtils.primaryTextColor,
                                           ),
                                           borderRadius: BorderRadius.circular(6.0),
                                         ),
@@ -597,6 +668,7 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
                                         ),
                                       ],
                                     ),
+                                    SizedBox(height: 5.0,),
                                     TextFormField(
                                       controller: ConfrimPassword, // Assigning the controller
                                       keyboardType: TextInputType.visiblePassword,
@@ -626,7 +698,7 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
                                         ),
                                         enabledBorder: OutlineInputBorder(
                                           borderSide: BorderSide(
-                                            color: Colors.grey, // Changed to a default color
+                                            color: CommonUtils.primaryTextColor,
                                           ),
                                           borderRadius: BorderRadius.circular(6.0),
                                         ),

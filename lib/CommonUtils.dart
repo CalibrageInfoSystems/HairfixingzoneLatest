@@ -107,6 +107,13 @@ class CommonUtils{
     fontWeight: FontWeight.w500,
     color: Color(0xFF0f75bc),
   );
+
+  static const TextStyle Mediumtext14 = TextStyle(
+    fontSize: 14,
+    fontFamily: "Calibri",
+    fontWeight: FontWeight.w500,
+    color: Color(0xFF0f75bc),
+  );
   static const TextStyle Mediumtext_14 = TextStyle(
     fontSize: 20,
     fontFamily: "Calibri",
@@ -142,13 +149,13 @@ class CommonUtils{
     fontSize: 18,
     fontFamily: 'Calibri',
     fontWeight: FontWeight.bold,
-    color: blackColor,
+    color: Color(0xFF662d91),
   );
   static const txSty_18p_f7 = TextStyle(
     fontSize: 18,
     fontFamily: 'Calibri',
-    fontWeight: FontWeight.w500,
-    color: primaryTextColor,
+    fontWeight: FontWeight.w700,
+    color:Color(0xFF0f75bc),
   );
   static Future<bool> checkInternetConnectivity() async {
     var connectivityResult = await (Connectivity().checkConnectivity());

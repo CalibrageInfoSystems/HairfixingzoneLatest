@@ -666,26 +666,20 @@ class _HomeScreenState extends State<HomeScreen> {
               'assets/objects-column.svg',
               width: 24,
               height: 24,
+              color: Colors.grey,
             ),
             title: Text('Home',),
             activeColor: Colors.blue,
             textAlign: TextAlign.center,
+
           ),
-          BottomNavyBarItem(
-            icon: SvgPicture.asset(
-              'assets/calendar-clock.svg',
-              width: 24,
-              height: 24,
-            ),
-            title: Text('Book Appointment'),
-            activeColor: Colors.blue,
-            textAlign: TextAlign.center,
-          ),
+
           BottomNavyBarItem(
             icon: SvgPicture.asset(
               'assets/invite-alt.svg',
               width: 24,
               height: 24,
+              color: Colors.grey,
             ),
             title: Text(
               'Bookings',
@@ -698,6 +692,7 @@ class _HomeScreenState extends State<HomeScreen> {
               'assets/invite-alt.svg',
               width: 24,
               height: 24,
+              color: Colors.grey,
             ),
             title: Text('MY Profile'),
             activeColor: Colors.blue,
@@ -708,6 +703,7 @@ class _HomeScreenState extends State<HomeScreen> {
               'assets/bin-bottles.svg',
               width: 24,
               height: 24,
+              color: Colors.grey,
             ),
             title: Text('Products'),
             activeColor: Colors.blue,
@@ -1235,15 +1231,8 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Text('Home Screen'),
           ),
         );
+
       case 1:
-      // Return the users screen widget
-        return Container(
-          color: Colors.white,
-          child: Center(
-            child: Text('Book Appointment'),
-          ),
-        );
-      case 2:
       // Return the messages screen widget
         return MyAppointments();
 
@@ -1253,7 +1242,7 @@ class _HomeScreenState extends State<HomeScreen> {
       //       child: Text('My Bookings'),
       //     ),
       //   );
-      case 3:
+      case 2:
       // Return the settings screen widget
         return Container(
           color: Colors.white,
@@ -1261,7 +1250,7 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Text('My Profile'),
           ),
         );
-      case 4:
+      case 3:
       // Return the settings screen widget
       return  MyProducts();
       //   return Container(
@@ -1271,7 +1260,7 @@ class _HomeScreenState extends State<HomeScreen> {
       //     ),
       //   );
       default:
-        return Container();
+        return Dashboard_Screen();
     }
   }
 }

@@ -4,11 +4,14 @@ import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:hairfixingzone/MyAppointmentsProvider.dart';
 import 'package:hairfixingzone/slotbookingscreen.dart';
 
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'BranchModel.dart';
@@ -40,6 +43,7 @@ class MyAppointments_screenState extends State<MyAppointments> {
 
   @override
   void initState() {
+    super.initState();
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitDown,
       DeviceOrientation.portraitUp,
@@ -57,52 +61,88 @@ class MyAppointments_screenState extends State<MyAppointments> {
     });
   }
 
+  late MyAppointmentsProvider myAppointmentsProvider;
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    myAppointmentsProvider = Provider.of<MyAppointmentsProvider>(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
       onRefresh: () async {
         refreshTheScreen();
       },
-      child: Scaffold(
-        appBar: _appBar(),
-        body: FutureBuilder(
-          future: apiData,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(
-                child: CircularProgressIndicator.adaptive(),
-              );
-            } else if (snapshot.hasError) {
-              return Center(
-                child: Text(
-                  'No appointments found!',
-                  style: const TextStyle(
-                    fontSize: 12.0,
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: "Roboto",
-                  ),
+      child: Consumer<MyAppointmentsProvider>(
+        builder: (context, provider, _) => Scaffold(
+          body: Column(
+            children: [
+              // search and filter
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10)
+                    .copyWith(top: 10),
+                child: _searchBarAndFilter(),
+              ),
+
+              // appointment
+              Expanded(
+                child: FutureBuilder(
+                  future: apiData,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(
+                        child: CircularProgressIndicator.adaptive(),
+                      );
+                    } else if (snapshot.hasError) {
+                      return const Center(
+                        child: Text(
+                          'No appointments found!',
+                          style: TextStyle(
+                            fontSize: 12.0,
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: "Roboto",
+                          ),
+                        ),
+                      );
+                    } else {
+                      List<MyAppointment_Model> data = provider.proAppointments;
+                      if (data.isNotEmpty) {
+                        // List<MyAppointment_Model> data = snapshot.data!;
+                        // return _appointments(data);
+
+                        return Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: ListView.builder(
+                            itemCount: data.length,
+                            itemBuilder: (context, index) {
+                              return AppointmentCard(
+                                  data: data[index],
+                                  day: parseDayFromDate(data[index].date));
+                            },
+                          ),
+                        );
+                      } else {
+                        return const Center(
+                          child: Text(
+                            'No appointmens available',
+                            style: TextStyle(
+                              fontSize: 12.0,
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: "Roboto",
+                            ),
+                          ),
+                        );
+                      }
+                    }
+                  },
                 ),
-              );
-            } else {
-              if (snapshot.hasData) {
-                List<MyAppointment_Model> data = snapshot.data!;
-                return _appointments(data);
-              } else {
-                return const Center(
-                  child: Text(
-                    'No appointmens available',
-                    style: TextStyle(
-                      fontSize: 12.0,
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: "Roboto",
-                    ),
-                  ),
-                );
-              }
-            }
-          },
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -139,7 +179,18 @@ class MyAppointments_screenState extends State<MyAppointments> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     userId = prefs.getInt('userId');
     print('userId: : $userId');
+    // apiData = fetchMyAppointments(userId);
+    // apiData.then((value) => myAppointmentsProvider.storeIntoProvider = value);
+    initializeData(userId);
+  }
+
+  void initializeData(int? userId) {
     apiData = fetchMyAppointments(userId);
+    apiData.then((value) {
+      myAppointmentsProvider.storeIntoProvider = value;
+    }).catchError((error) {
+      print('catchError: Error occurred.');
+    });
   }
 
   Future<List<MyAppointment_Model>> fetchMyAppointments(int? userId) async {
@@ -626,8 +677,7 @@ class MyAppointments_screenState extends State<MyAppointments> {
           fetchMyAppointments(userId);
           CommonUtils.showCustomToastMessageLong(
               'Cancelled  Successfully ', context, 0, 4);
-;
-       //   Navigator.pop(context);
+          //   Navigator.pop(context);
           // Success case
           // Handle success scenario here
         } else {
@@ -651,17 +701,20 @@ class MyAppointments_screenState extends State<MyAppointments> {
     //  }
   }
 
-  void showBranchesDialog(BuildContext context, MyAppointment_Model appointment_model) {
+  void showBranchesDialog(
+      BuildContext context, MyAppointment_Model appointmentModel) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Select Branch'),
+          title: const Text('Select Branch'),
           content: SizedBox(
               width: double.maxFinite,
               height: 400, // Adjust the height as needed
               child: brancheslist.isEmpty // Check if brancheslist is empty
-                  ? Center(child: CircularProgressIndicator()) // Show a loading indicator if brancheslist is empty
+                  ? const Center(
+                  child:
+                  CircularProgressIndicator()) // Show a loading indicator if brancheslist is empty
                   : ListView.builder(
                 shrinkWrap: true,
                 itemCount: brancheslist.length,
@@ -669,10 +722,11 @@ class MyAppointments_screenState extends State<MyAppointments> {
                   BranchModel branch = brancheslist[index];
 
                   return Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 0.0, vertical: 5.0),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 0.0, vertical: 5.0),
                     child: IntrinsicHeight(
                       child: ClipRRect(
-                        borderRadius: BorderRadius.only(
+                        borderRadius: const BorderRadius.only(
                           topRight: Radius.circular(15.0),
                           bottomLeft: Radius.circular(15.0),
                         ),
@@ -681,12 +735,18 @@ class MyAppointments_screenState extends State<MyAppointments> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) =>  slotbookingscreen(
-                                  branchId: branch.id, branchname: branch.name,  branchlocation: branch.address,
-                                  filepath: branch.imageName != null ?  branch.imageName! : 'assets/top_image.png', MobileNumber: branch.mobileNumber,
-                                  appointmentId: appointment_model.id, // Provide the appointmentId value
+                                builder: (context) => slotbookingscreen(
+                                  branchId: branch.id,
+                                  branchname: branch.name,
+                                  branchlocation: branch.address,
+                                  filepath: branch.imageName != null
+                                      ? branch.imageName!
+                                      : 'assets/top_image.png',
+                                  MobileNumber: branch.mobileNumber,
+                                  appointmentId: appointmentModel
+                                      .id, // Provide the appointmentId value
                                   screenFrom: "ReSchedule",
-                                ) ,
+                                ),
                               ),
                             );
                             Navigator.of(context).pop();
@@ -694,18 +754,17 @@ class MyAppointments_screenState extends State<MyAppointments> {
                             // Navigator.of(context).push(
                             //   MaterialPageRoute(builder: (context) => feedback_Screen()),
                             // );
-
                           },
                           child: Card(
                             shadowColor: Colors.transparent,
                             surfaceTintColor: Colors.transparent,
                             child: ClipRRect(
-                              borderRadius: BorderRadius.only(
+                              borderRadius: const BorderRadius.only(
                                 topRight: Radius.circular(15.0),
                                 bottomLeft: Radius.circular(15.0),
                               ),
                               child: Container(
-                                decoration: BoxDecoration(
+                                decoration: const BoxDecoration(
                                   gradient: LinearGradient(
                                     colors: [
                                       Color(0xFFFEE7E1), // Start color
@@ -716,32 +775,44 @@ class MyAppointments_screenState extends State<MyAppointments> {
                                   ),
                                 ),
                                 child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  crossAxisAlignment:
+                                  CrossAxisAlignment.center,
                                   children: [
                                     Padding(
-                                      padding: EdgeInsets.only(left: 15.0),
+                                      padding: const EdgeInsets.only(
+                                          left: 15.0),
                                       child: Container(
                                         width: 80,
                                         height: 50,
                                         decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(10.0),
+                                          borderRadius:
+                                          BorderRadius.circular(10.0),
                                           border: Border.all(
-                                            color: Color(0xFF9FA1EE),
+                                            color:
+                                            const Color(0xFF9FA1EE),
                                             width: 3.0,
                                           ),
                                         ),
                                         child: ClipRRect(
-                                          borderRadius: BorderRadius.circular(7.0),
+                                          borderRadius:
+                                          BorderRadius.circular(7.0),
                                           child: branch.imageName != null
                                               ? Image.network(
                                             branch.imageName!,
                                             width: 80,
                                             height: 50,
                                             fit: BoxFit.fill,
-                                            loadingBuilder: (context, child, loadingProgress) {
-                                              if (loadingProgress == null) return child;
+                                            loadingBuilder: (context,
+                                                child,
+                                                loadingProgress) {
+                                              if (loadingProgress ==
+                                                  null) {
+                                                return child;
+                                              }
 
-                                              return const Center(child: CircularProgressIndicator.adaptive());
+                                              return const Center(
+                                                  child: CircularProgressIndicator
+                                                      .adaptive());
                                             },
                                           )
                                               : Image.asset(
@@ -750,124 +821,186 @@ class MyAppointments_screenState extends State<MyAppointments> {
                                             height: 65,
                                             fit: BoxFit.fill,
                                           ),
-
                                         ),
                                       ),
                                     ),
-
-
                                     Expanded(
                                       child: Padding(
-                                        padding: EdgeInsets.only(left: 15.0),
+                                        padding: const EdgeInsets.only(
+                                            left: 15.0),
                                         child: Column(
-                                          mainAxisAlignment: MainAxisAlignment.start,
-                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                           children: [
                                             Padding(
-                                              padding: EdgeInsets.only(top: 15.0),
+                                              padding:
+                                              const EdgeInsets.only(
+                                                  top: 15.0),
                                               child: Text(
                                                 branch.name,
-                                                style: TextStyle(
+                                                style: const TextStyle(
                                                   fontSize: 18,
-                                                  color: Color(0xFFFB4110),
-                                                  fontWeight: FontWeight.bold,
+                                                  color:
+                                                  Color(0xFFFB4110),
+                                                  fontWeight:
+                                                  FontWeight.bold,
                                                   fontFamily: 'Calibri',
                                                 ),
                                               ),
                                             ),
-                                            SizedBox(height: 4.0),
+                                            const SizedBox(height: 4.0),
                                             Expanded(
                                               child: Padding(
-                                                padding: EdgeInsets.only(right: 10.0),
+                                                padding:
+                                                const EdgeInsets.only(
+                                                    right: 10.0),
                                                 child: Column(
-                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  crossAxisAlignment:
+                                                  CrossAxisAlignment
+                                                      .start,
                                                   children: [
                                                     Row(
-                                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                      mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceEvenly,
                                                       children: [
                                                         Image.asset(
                                                           'assets/location_icon.png',
                                                           width: 20,
                                                           height: 18,
                                                         ),
-                                                        SizedBox(width: 4.0),
+                                                        const SizedBox(
+                                                            width: 4.0),
                                                         Expanded(
                                                           child: Text(
-                                                            branch.address,
-                                                            style: TextStyle(
-                                                              fontFamily: 'Calibri',
-                                                              fontSize: 12,
-                                                              color: Color(0xFF000000),
+                                                            branch
+                                                                .address,
+                                                            style:
+                                                            const TextStyle(
+                                                              fontFamily:
+                                                              'Calibri',
+                                                              fontSize:
+                                                              12,
+                                                              color: Color(
+                                                                  0xFF000000),
                                                             ),
                                                           ),
                                                         ),
                                                       ],
                                                     ),
-                                                    Spacer(flex: 3),
+                                                    const Spacer(flex: 3),
                                                   ],
                                                 ),
                                               ),
                                             ),
                                             Align(
-                                              alignment: Alignment.bottomRight,
+                                              alignment:
+                                              Alignment.bottomRight,
                                               child: Container(
                                                 height: 26,
-                                                margin: EdgeInsets.only(bottom: 10.0, right: 10.0),
+                                                margin:
+                                                const EdgeInsets.only(
+                                                    bottom: 10.0,
+                                                    right: 10.0),
                                                 decoration: BoxDecoration(
                                                   color: Colors.white,
                                                   border: Border.all(
-                                                    color: Color(0xFF8d97e2),
+                                                    color: const Color(
+                                                        0xFF8d97e2),
                                                   ),
-                                                  borderRadius: BorderRadius.circular(10.0),
+                                                  borderRadius:
+                                                  BorderRadius
+                                                      .circular(10.0),
                                                 ),
                                                 child: ElevatedButton(
                                                   onPressed: () {
                                                     // Handle button press
                                                   },
-                                                  style: ElevatedButton.styleFrom(
-                                                    primary: Colors.transparent,
-                                                    onPrimary: Color(0xFF8d97e2),
+                                                  style: ElevatedButton
+                                                      .styleFrom(
+                                                    foregroundColor:
+                                                    Colors
+                                                        .transparent,
+                                                    backgroundColor:
+                                                    const Color(
+                                                        0xFF8d97e2),
                                                     elevation: 0,
-                                                    shadowColor: Colors.transparent,
-                                                    shape: RoundedRectangleBorder(
-                                                      borderRadius: BorderRadius.circular(10.0),
+                                                    shadowColor: Colors
+                                                        .transparent,
+                                                    shape:
+                                                    RoundedRectangleBorder(
+                                                      borderRadius:
+                                                      BorderRadius
+                                                          .circular(
+                                                          10.0),
                                                     ),
                                                   ),
                                                   child: GestureDetector(
                                                     onTap: () {
-                                                      print('booknowbuttonisclciked');
+                                                      print(
+                                                          'booknowbuttonisclciked');
                                                       print(branch.id);
                                                       print(branch.name);
                                                       Navigator.push(
                                                         context,
                                                         MaterialPageRoute(
-                                                          builder: (context) =>  slotbookingscreen(
-                                                            branchId: branch.id, branchname: branch.name,  branchlocation: branch.address,
-                                                            filepath: branch.imageName != null ?  branch.imageName! : 'assets/top_image.png', MobileNumber: branch.mobileNumber, appointmentId: appointment_model.id, // Provide the appointmentId value
-                                                            screenFrom: "ReSchedule",) ,
+                                                          builder:
+                                                              (context) =>
+                                                              slotbookingscreen(
+                                                                branchId:
+                                                                branch.id,
+                                                                branchname:
+                                                                branch
+                                                                    .name,
+                                                                branchlocation:
+                                                                branch
+                                                                    .address,
+                                                                filepath: branch
+                                                                    .imageName !=
+                                                                    null
+                                                                    ? branch
+                                                                    .imageName!
+                                                                    : 'assets/top_image.png',
+                                                                MobileNumber:
+                                                                branch
+                                                                    .mobileNumber,
+                                                                appointmentId:
+                                                                appointmentModel
+                                                                    .id, // Provide the appointmentId value
+                                                                screenFrom:
+                                                                "ReSchedule",
+                                                              ),
                                                         ),
                                                       );
 
-                                                      Navigator.of(context).pop();
+                                                      Navigator.of(
+                                                          context)
+                                                          .pop();
                                                     },
-
 
                                                     // Handle button press, navigate to a new screen
 
                                                     child: Row(
-                                                      mainAxisSize: MainAxisSize.min,
+                                                      mainAxisSize:
+                                                      MainAxisSize
+                                                          .min,
                                                       children: [
                                                         SvgPicture.asset(
                                                           'assets/datepicker_icon.svg',
                                                           width: 15.0,
                                                           height: 15.0,
                                                         ),
-                                                        SizedBox(width: 5),
-                                                        Text(
+                                                        const SizedBox(
+                                                            width: 5),
+                                                        const Text(
                                                           'Book Now',
-                                                          style: TextStyle(
+                                                          style:
+                                                          TextStyle(
                                                             fontSize: 13,
-                                                            color: Color(0xFF8d97e2),
+                                                            color: Color(
+                                                                0xFF8d97e2),
                                                           ),
                                                         ),
                                                       ],
@@ -889,14 +1022,13 @@ class MyAppointments_screenState extends State<MyAppointments> {
                       ),
                     ),
                   );
-
                 },
-              )
-          ),
+              )),
         );
       },
     );
   }
+
   Future<void> getbranchedata() async {
     setState(() {
       isLoading = true; // Set isLoading to true before making the API call
@@ -2801,7 +2933,6 @@ class MyAppointments_screenState extends State<MyAppointments> {
                             ),
                           ),
                         ),
-
                         SizedBox(
                           width: MediaQuery.of(context).size.width / 2.25,
                           child: Column(
@@ -3456,7 +3587,1148 @@ class MyAppointments_screenState extends State<MyAppointments> {
       },
     );
   }
+
+  Widget _searchBarAndFilter() {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Expanded(
+            child: SizedBox(
+              height: 45,
+              child: TextField(
+                onChanged: (input) => filterAppointment(input),
+                decoration: InputDecoration(
+                  contentPadding: const EdgeInsets.only(top: 5, left: 12),
+                  hintText: 'Search Products',
+                  // hintStyle: CommonStyles.txSty_14bs_fb,
+                  // suffixIcon: const Icon(Icons.search),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: const BorderSide(
+                        color:CommonUtils.primaryTextColor),
+                  ),
+
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Color(0xFF0f75bc),
+                    ),
+                    borderRadius: BorderRadius.circular(6.0),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: CommonUtils.primaryTextColor,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(
+            width: 10,
+          ),
+          Container(
+            height: 45,
+            width: 45,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(
+                color: CommonUtils.primaryTextColor,
+              ),
+            ),
+            child: IconButton(
+              icon: SvgPicture.asset(
+                'assets/filter.svg', // Path to your SVG asset
+                color:Color(0xFF662e91),
+                width: 24, // Adjust width as needed
+                height: 24, // Adjust height as needed
+              ),
+              onPressed: () {
+                showModalBottomSheet(
+                  isScrollControlled: true,
+                  context: context,
+                  builder: (context) => Padding(
+                    padding: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).viewInsets.bottom,
+                    ),
+                    child: const FilterAppointmentBottomSheet(),
+                  ),
+                );
+                // Add logout functionality here
+              },
+            ),
+          ),
+
+
+        ],
+      ),
+    );
+  }
+  int parseDayFromDate(String dateString) {
+    DateTime dateTime = DateTime.parse(dateString);
+    print(
+        'dateFormate: ${dateTime.day} - ${DateFormat.MMM().format(dateTime)} - ${dateTime.year}');
+    // int ,       String ,                           int
+    return dateTime
+        .day; //[dateTime.day, DateFormat.MMM().format(dateTime), dateTime.year];
+  }
+
+
+  void filterAppointment(String input) {
+    apiData.then((data) {
+      setState(() {
+        myAppointmentsProvider.filterProviderData(data
+            .where((item) =>
+            item.branch.toLowerCase().contains(input.toLowerCase()))
+            .toList());
+      });
+    });
+  }
+
 }
+
+
+class FilterAppointmentBottomSheet extends StatefulWidget {
+  const FilterAppointmentBottomSheet({Key? key}) : super(key: key);
+
+  @override
+  State<FilterAppointmentBottomSheet> createState() => _FilterBottomSheetState();
+}
+
+class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
+
+  List<BranchModel> products = [];
+  late Future<List<BranchModel>> branchname;
+  BranchModel? selectedCategory;
+
+  final orangeColor =CommonUtils.primaryTextColor;
+  late Future<List<BranchModel>> apiData;
+
+  @override
+  void initState() {
+    // Initialize state
+    super.initState();
+    fetchRadioButtonOptions();
+    branchname = fetchbranches();
+  }
+
+
+  Future<void> clearFilter() async {
+    // apiData = fetchproducts();
+    // apiData.then((data) {
+    //   myProductProvider.getProProducts = data;
+    //   // myProductProvider.clearFilter();
+    //   // Navigator.of(context).pop();
+    // }).catchError((error) {
+    //   print('catchError: Error occurred.');
+    // });
+  }
+
+  late MyAppointmentsProvider myAppointmentsProvider;
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    myAppointmentsProvider = Provider.of<MyAppointmentsProvider>(context);
+  }
+
+  // Future<List<ProductList>> fetchproducts(
+  //     {int? id, int? categoryTypeId, int? genderTypeId}) async {
+  //   const apiurl = 'http://182.18.157.215/SaloonApp/API/GetProductById';
+  //
+  //   try {
+  //     final request = {
+  //       "id": id,
+  //       "categoryTypeId": categoryTypeId,
+  //       "genderTypeId": genderTypeId
+  //     };
+  //     final response = await http.post(
+  //       Uri.parse(apiurl),
+  //       body: json.encode(request),
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //     );
+  //     print('fetchproducts: ${json.encode(request)}');
+  //
+  //     if (response.statusCode == 200) {
+  //       final data = json.decode(response.body);
+  //       if (data['listResult'] != null) {
+  //         List<dynamic> list = data['listResult'];
+  //         List<ProductList> result =
+  //         list.map((item) => ProductList.fromJson(item)).toList();
+  //         return result;
+  //       } else {
+  //         print('listResult is null');
+  //         return [];
+  //       }
+  //       // myProductProvider.proProducts = productlist;
+  //     } else {
+  //       print('api failed');
+  //       throw Exception('else: api failed');
+  //     }
+  //   } catch (error) {
+  //     print('Error data is not getting from the api: $error');
+  //     throw Exception('catch: $error');
+  //   }
+  // }
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<MyAppointmentsProvider>(
+      builder: (context, provider, child) => SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  const Text(
+                    'Filter By',  style: CommonUtils.Mediumtext_o_14,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      // Clear filters
+                      myAppointmentsProvider.clearFilter();
+                      clearFilter().whenComplete(() {
+                        Navigator.of(context).pop();
+                      });
+                    },
+                    child: const Text(
+                      'Clear all filters',  style: CommonUtils.Mediumtext_o_14,
+                    ),
+                  ),
+                ],
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 5),
+                child: Container(
+                  width: double.infinity,
+                  height: 0.2,
+                  color: Colors.grey,
+                ),
+              ),
+              const SizedBox(height: 10),
+              Padding(
+                padding: const EdgeInsets.only(left: 5, right: 5),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // radio buttons
+
+
+                    const SizedBox(
+                      height: 10,
+                    ),
+
+                    // category
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      child: FutureBuilder(
+                          future: branchname,
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return CircularProgressIndicator.adaptive(
+                                backgroundColor: Colors.transparent,
+                                valueColor:
+                                AlwaysStoppedAnimation<Color>(orangeColor),
+                              );
+                            } else if (snapshot.hasError) {
+                              return Text('Error: ${snapshot.error}');
+                            } else {
+                              List<BranchModel> data = snapshot.data!;
+                              return SizedBox(
+                                height: 40,
+                                child: ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  shrinkWrap: true,
+                                  itemCount: data.length + 1,
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    bool isSelected =
+                                        index == provider.selectedCategory;
+                                    BranchModel branch;
+
+                                    if (index == 0) {
+                                      branch = BranchModel(  id: 0,
+                                        name: "All",
+                                        imageName:null ,
+                                        address: " ",
+                                        startTime:0,
+                                        closeTime: 0,
+                                        room:0,
+                                        mobileNumber: "",
+                                        isActive: true,
+
+                                      );
+                                    } else {
+                                      branch = data[index - 1];
+                                    }
+                                    return GestureDetector(
+                                      onTap: () {
+                                        setState(() {
+                                          provider.selectedCategory = index;
+
+                                          provider.getCategory = branch.id;
+                                          print('filter: ${provider.getCategory}');
+                                        });
+                                      },
+                                      child: Container(
+                                        margin: const EdgeInsets.symmetric(
+                                            horizontal: 4.0),
+                                        decoration: BoxDecoration(
+                                          color: isSelected
+                                              ? orangeColor
+                                              : orangeColor.withOpacity(0.1),
+                                          border: Border.all(
+                                            color: isSelected
+                                                ? orangeColor
+                                                : orangeColor,
+                                            width: 1.0,
+                                          ),
+                                          borderRadius:
+                                          BorderRadius.circular(8.0),
+                                        ),
+                                        child: IntrinsicWidth(
+                                          child: Column(
+                                            mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                            children: [
+                                              Container(
+                                                padding:
+                                                const EdgeInsets.symmetric(
+                                                    horizontal: 10.0),
+                                                child: Row(
+                                                  children: [
+                                                    Text(
+                                                      branch.name
+                                                          .toString(),
+                                                      style: TextStyle(
+                                                        fontSize: 12.0,
+                                                        fontWeight:
+                                                        FontWeight.bold,
+                                                        fontFamily: "Roboto",
+                                                        color: isSelected
+                                                            ? Colors.white
+                                                            : Colors.black,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              );
+                            }
+                          }),
+                    ),
+
+                    const SizedBox(
+                      height: 10,
+                    ),
+                  ],
+                ),
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      style: ElevatedButton.styleFrom(
+                        textStyle: const TextStyle(
+                          color: CommonUtils.primaryTextColor,
+                        ),
+                        side: const BorderSide(
+                          color:  CommonUtils.primaryTextColor,
+                        ),
+                        backgroundColor: Colors.white,
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(10),
+                          ),
+                        ),
+                      ),
+                      child: const Text(
+                        'Close',
+                        style: TextStyle(
+                          fontFamily: 'Calibri',
+                          fontSize: 14,
+                          color: CommonUtils.primaryTextColor,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 20),
+                  Expanded(
+                    child: SizedBox(
+                      child: Center(
+                        child: GestureDetector(
+                          onTap: () {
+                            // filterAppointment().whenComplete(() {
+                            //   Navigator.of(context).pop();
+                            // });
+
+                          },
+                          child: Container(
+                            // width: desiredWidth * 0.9,
+                            height: 40.0,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(15.0),
+                              color:CommonUtils.primaryTextColor,
+                            ),
+                            child: const Center(
+                              child: Text(
+                                'Apply',
+                                style: TextStyle(
+                                  fontFamily: 'Calibri',
+                                  fontSize: 14,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Future<void> fetchRadioButtonOptions() async {
+    final url = Uri.parse(baseUrl + getstatus);
+    print('url==>946: $url');
+
+    try {
+      final response = await http.get(url);
+      if (response.statusCode == 200) {
+        final dynamic responseData = jsonDecode(response.body);
+        if (responseData != null &&
+            responseData['listResult'] is List<dynamic>) {
+          final List<dynamic> optionsData = responseData['listResult'];
+          setState(() {
+
+          });
+        } else {
+          throw Exception('Invalid response format');
+        }
+      } else {
+        throw Exception('Failed to fetch radio button options');
+      }
+    } catch (e) {
+      throw Exception('Error Radio: $e');
+    }
+  }
+
+
+
+  Future<List<BranchModel>> fetchbranches() async {
+    final response = await http
+        .get(Uri.parse(baseUrl + getbranches));
+    if (response.statusCode == 200) {
+      final List<dynamic> responseData =
+      json.decode(response.body)['listResult'];
+      List<BranchModel> result =
+      responseData.map((json) => BranchModel.fromJson(json)).toList();
+      print('fetch branchname: ${result[0].name}');
+      return result;
+    } else {
+      throw Exception('Failed to load products');
+    }
+  }
+
+
+  void filterAppointment(String input) {
+    apiData.then((data) {
+      // setState(() {
+      //   myAppointmentsProvider.filterProviderData(data
+      //       .where((item) =>
+      //       item.branch.toLowerCase().contains(input.toLowerCase()))
+      //       .toList());
+      // });
+    });
+  }
+
+}
+
+
+
+class AppointmentCard extends StatefulWidget {
+  final MyAppointment_Model data;
+  final int day;
+  const AppointmentCard({super.key, required this.data, required this.day});
+
+  @override
+  State<AppointmentCard> createState() => _AppointmentCardState();
+}
+
+class _AppointmentCardState extends State<AppointmentCard> {
+  List<dynamic> parseDateString(String dateString) {
+    DateTime dateTime = DateTime.parse(dateString);
+    print(
+        'dateFormate: ${dateTime.day} - ${DateFormat.MMM().format(dateTime)} - ${dateTime.year}');
+    // int ,       String ,                           int
+    return [dateTime.day, DateFormat.MMM().format(dateTime), dateTime.year];
+  }
+
+  late List<dynamic> dateValues;
+  @override
+  void initState() {
+    super.initState();
+    dateValues = parseDateString(widget.data.date);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // appointments
+    return Card(
+      elevation: 4,
+      child: Container(
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(5),
+          color: Colors.white,
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // part 1
+            SizedBox(
+              height: 70,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    '${dateValues[1]}',
+
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontFamily: 'Calibri',
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF0f75bc),
+                    ),
+                  ),
+                  Text(
+                    '${dateValues[0]}',
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontFamily: 'Calibri',
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF0f75bc),
+                    ),
+                  ),
+                  Text(
+                    '${dateValues[2]}',
+                    //style: CommonUtils.txSty_14blu_fb,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontFamily: 'Calibri',
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF0f75bc),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            // divider
+            Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 10),
+                  width: 0.2,
+                  height: 70,
+                  color: const Color.fromARGB(255, 85, 80, 80),
+                ),
+              ],
+            ),
+
+            // part 2
+            Expanded(
+              child: SizedBox(
+                height: 70,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      widget.data.slotDuration, //'10:00 AM to 11;00 AM',
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontFamily: 'Calibri',
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF0f75bc),
+                      ),
+                      //  style: CommonUtils.txSty_12blu_fb,
+                    ),
+                    Text(
+                      widget.data.purposeOfVisit, //'Head Wash',
+                      style: CommonUtils.txSty_12b_fb,
+                      //  style: CommonUtils.txSty_12blu_fb,
+                    ),
+                    Text(
+                      widget.data.branch, //'Kondapur',
+                      style: CommonUtils.txSty_12b_fb,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
+            // part 3
+            SizedBox(
+              // color: Colors.grey,
+              height: 70,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Row(
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.blue.shade200),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 2, horizontal: 5),
+                        child: Row(
+                          children: [
+                            Text(
+                              widget.data.status,
+                              style: const TextStyle(
+                                  fontSize: 11, color: Colors.blue),
+                            ),
+                          ],
+                        ),
+                      ),
+                      widget.data.statusTypeId == 18
+                          ? const Padding(
+                        padding: EdgeInsets.only(left: 8),
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.star,
+                              size: 13,
+                              color: Color.fromARGB(255, 44, 172, 55),
+                            ),
+                            Text(
+                              ' 4.5',
+                              style: TextStyle(
+                                fontSize: 11,
+                                color: Color.fromARGB(255, 44, 172, 55),
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                          : const SizedBox(),
+                    ],
+                  ),
+                  // here
+                  verifyStatus(widget.data.statusTypeId),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget verifyStatus(int statusTypeId) {
+    switch (statusTypeId) {
+      case 4: // Submited
+        return const SizedBox();
+      case 11: // FeedBack
+        return const SizedBox();
+      case 5: // Accepted
+        return Row(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(3),
+                  border: Border.all(
+                      color: const Color.fromARGB(255, 116, 9, 179))),
+              padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 5),
+              child: const Text(
+                'Reschedule',
+                style: TextStyle(
+                    fontSize: 11, color: Color.fromARGB(255, 116, 9, 179)),
+              ),
+            ),
+            const SizedBox(
+              width: 10,
+            ),
+            Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(3),
+                  border: Border.all(
+                      color: const Color.fromARGB(255, 197, 14, 14))),
+              padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 5),
+              child: const Text(
+                'Cancel',
+                style: TextStyle(
+                    fontSize: 11, color: Color.fromARGB(255, 197, 14, 14)),
+              ),
+            ),
+          ],
+        );
+
+      case 18: // Closed
+        return Container(
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(3),
+              border: Border.all(color: CommonUtils.primaryTextColor)),
+          padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 5),
+          child: const Row(
+            children: [
+              Icon(
+                Icons.star,
+                size: 13,
+                color: CommonUtils.primaryTextColor,
+              ),
+              Text(
+                ' Rate Us',
+                style: TextStyle(
+                    fontSize: 11, color: CommonUtils.primaryTextColor),
+              ),
+            ],
+          ),
+        );
+      default:
+        return const SizedBox();
+    }
+  }
+}
+
+// class FilterBottomSheet extends StatefulWidget {
+//   const FilterBottomSheet({Key? key}) : super(key: key);
+
+//   @override
+//   State<FilterBottomSheet> createState() => _FilterBottomSheetState();
+// }
+
+// class _FilterBottomSheetState extends State<FilterBottomSheet> {
+//   List<RadioButtonOption> options = [];
+
+//   bool isGenderSelected = false;
+//   List<ProductCategory> products = [];
+//   late Future<List<ProductCategory>> proCatogary;
+//   ProductCategory? selectedCategory;
+
+//   final orangeColor = const Color(0xFFe78337);
+//   late Future<List<ProductList>> apiData;
+
+//   @override
+//   void initState() {
+//     // Initialize state
+//     super.initState();
+//     fetchRadioButtonOptions();
+//     proCatogary = fetchProductsCategory();
+//   }
+
+//   Future<void> filterProducts() async {
+//     apiData = fetchproducts(
+//         genderTypeId: myProductProvider.getGender,
+//         categoryTypeId: myProductProvider.getCategory);
+//     apiData.then((data) {
+//       myProductProvider.getProProducts = data;
+//       // Navigator.of(context).pop();
+//     }).catchError((error) {
+//       print('catchError: Error occurred.');
+//     });
+//   }
+
+//   Future<void> clearFilter() async {
+//     apiData = fetchproducts();
+//     apiData.then((data) {
+//       myProductProvider.getProProducts = data;
+//       // myProductProvider.clearFilter();
+//       // Navigator.of(context).pop();
+//     }).catchError((error) {
+//       print('catchError: Error occurred.');
+//     });
+//   }
+
+//   late MyProductProvider myProductProvider;
+//   @override
+//   void didChangeDependencies() {
+//     super.didChangeDependencies();
+
+//     myProductProvider = Provider.of<MyProductProvider>(context);
+//   }
+
+//   Future<List<ProductList>> fetchproducts(
+//       {int? id, int? categoryTypeId, int? genderTypeId}) async {
+//     const apiurl = 'http://182.18.157.215/SaloonApp/API/GetProductById';
+
+//     try {
+//       final request = {
+//         "id": id,
+//         "categoryTypeId": categoryTypeId,
+//         "genderTypeId": genderTypeId
+//       };
+//       final response = await http.post(
+//         Uri.parse(apiurl),
+//         body: json.encode(request),
+//         headers: {
+//           'Content-Type': 'application/json',
+//         },
+//       );
+//       print('fetchproducts: ${json.encode(request)}');
+//       if (response.statusCode == 200) {
+//         final data = json.decode(response.body);
+//         if (data['listResult'] != null) {
+//           List<dynamic> list = data['listResult'];
+//           List<ProductList> result =
+//               list.map((item) => ProductList.fromJson(item)).toList();
+//           return result;
+//         } else {
+//           print('listResult is null');
+//           return [];
+//         }
+//         // myProductProvider.proProducts = productlist;
+//       } else {
+//         print('api failed');
+//         throw Exception('else: api failed');
+//       }
+//     } catch (error) {
+//       print('Error data is not getting from the api: $error');
+//       throw Exception('catch: $error');
+//     }
+//   }
+//   @override
+//   Widget build(BuildContext context) {
+//     return Consumer<MyProductProvider>(
+//       builder: (context, provider, child) => SingleChildScrollView(
+//         child: Padding(
+//           padding: const EdgeInsets.all(20),
+//           child: Column(
+//             crossAxisAlignment: CrossAxisAlignment.start,
+//             mainAxisSize: MainAxisSize.min,
+//             children: <Widget>[
+//               Row(
+//                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                 children: <Widget>[
+//                   const Text(
+//                     'Filter By',
+//                   ),
+//                   GestureDetector(
+//                     onTap: () {
+//                       // Clear filters
+//                       myProductProvider.clearFilter();
+//                       clearFilter().whenComplete(() {
+//                         Navigator.of(context).pop();
+//                       });
+//                     },
+//                     child: const Text(
+//                       'Clear all filters',
+//                     ),
+//                   ),
+//                 ],
+//               ),
+//               Padding(
+//                 padding: const EdgeInsets.symmetric(vertical: 5),
+//                 child: Container(
+//                   width: double.infinity,
+//                   height: 0.2,
+//                   color: Colors.grey,
+//                 ),
+//               ),
+//               const SizedBox(height: 10),
+//               Padding(
+//                 padding: const EdgeInsets.only(left: 5, right: 5),
+//                 child: Column(
+//                   mainAxisAlignment: MainAxisAlignment.start,
+//                   crossAxisAlignment: CrossAxisAlignment.start,
+//                   children: [
+//                     // radio buttons
+//                     Padding(
+//                       padding: const EdgeInsets.only(top: 10.0),
+//                       child: Row(
+//                         children: options.map((option) {
+//                           return Row(
+//                             children: [
+//                               CustomRadioButton(
+//                                 selected:
+//                                     provider.selectedGender == option.typeCdId,
+//                                 onTap: () {
+//                                   setState(() {
+//                                     provider.getGender = option.typeCdId;
+//                                     provider.selectedGender = option.typeCdId;
+//                                     isGenderSelected = true;
+//                                   });
+//                                   print(option.typeCdId);
+//                                   print(option.desc);
+//                                   print('filter: ${provider.getGender}');
+//                                 },
+//                               ),
+//                               const SizedBox(width: 5),
+//                               Text(
+//                                 option.desc,
+//                                 style: const TextStyle(
+//                                   fontFamily: 'Calibri',
+//                                   fontSize: 14,
+//                                   color: Color(0xFFFB4110),
+//                                 ),
+//                               ),
+//                               const SizedBox(width: 26),
+//                             ],
+//                           );
+//                         }).toList(),
+//                       ),
+//                     ),
+//                     const SizedBox(
+//                       height: 10,
+//                     ),
+//                     // category
+//                     Padding(
+//                       padding: const EdgeInsets.symmetric(vertical: 10),
+//                       child: FutureBuilder(
+//                           future: proCatogary,
+//                           builder: (context, snapshot) {
+//                             if (snapshot.connectionState ==
+//                                 ConnectionState.waiting) {
+//                               return CircularProgressIndicator.adaptive(
+//                                 backgroundColor: Colors.transparent,
+//                                 valueColor:
+//                                     AlwaysStoppedAnimation<Color>(orangeColor),
+//                               );
+//                             } else if (snapshot.hasError) {
+//                               return Text('Error: ${snapshot.error}');
+//                             } else {
+//                               List<ProductCategory> data = snapshot.data!;
+//                               return SizedBox(
+//                                 height: 40,
+//                                 child: ListView.builder(
+//                                   scrollDirection: Axis.horizontal,
+//                                   shrinkWrap: true,
+//                                   itemCount: data.length + 1,
+//                                   itemBuilder:
+//                                       (BuildContext context, int index) {
+//                                     bool isSelected =
+//                                         index == provider.selectedCategory;
+//                                     ProductCategory productCategory;
+//                                     if (index == 0) {
+//                                       productCategory = ProductCategory(
+//                                         typecdid: null,
+//                                         desc: 'All',
+//                                       );
+//                                     } else {
+//                                       productCategory = data[index - 1];
+//                                     }
+//                                     return GestureDetector(
+//                                       onTap: () {
+//                                         setState(() {
+//                                           provider.selectedCategory = index;
+
+//                                           provider.getCategory =
+//                                               productCategory.typecdid;
+//                                           print(
+//                                               'filter: ${provider.getCategory}');
+//                                         });
+//                                       },
+//                                       child: Container(
+//                                         margin: const EdgeInsets.symmetric(
+//                                             horizontal: 4.0),
+//                                         decoration: BoxDecoration(
+//                                           color: isSelected
+//                                               ? orangeColor
+//                                               : orangeColor.withOpacity(0.1),
+//                                           border: Border.all(
+//                                             color: isSelected
+//                                                 ? orangeColor
+//                                                 : orangeColor,
+//                                             width: 1.0,
+//                                           ),
+//                                           borderRadius:
+//                                               BorderRadius.circular(8.0),
+//                                         ),
+//                                         child: IntrinsicWidth(
+//                                           child: Column(
+//                                             mainAxisAlignment:
+//                                                 MainAxisAlignment.center,
+//                                             children: [
+//                                               Container(
+//                                                 padding:
+//                                                     const EdgeInsets.symmetric(
+//                                                         horizontal: 10.0),
+//                                                 child: Row(
+//                                                   children: [
+//                                                     Text(
+//                                                       productCategory.desc
+//                                                           .toString(),
+//                                                       style: TextStyle(
+//                                                         fontSize: 12.0,
+//                                                         fontWeight:
+//                                                             FontWeight.bold,
+//                                                         fontFamily: "Roboto",
+//                                                         color: isSelected
+//                                                             ? Colors.white
+//                                                             : Colors.black,
+//                                                       ),
+//                                                     ),
+//                                                   ],
+//                                                 ),
+//                                               ),
+//                                             ],
+//                                           ),
+//                                         ),
+//                                       ),
+//                                     );
+//                                   },
+//                                 ),
+//                               );
+//                             }
+//                           }),
+//                     ),
+//                     const SizedBox(
+//                       height: 10,
+//                     ),
+//                   ],
+//                 ),
+//               ),
+//               Row(
+//                 children: [
+//                   Expanded(
+//                     child: ElevatedButton(
+//                       onPressed: () {
+//                         Navigator.of(context).pop();
+//                       },
+//                       style: ElevatedButton.styleFrom(
+//                         textStyle: const TextStyle(
+//                           color: Colors.red,
+//                         ),
+//                         side: const BorderSide(
+//                           color: Colors.red,
+//                         ),
+//                         backgroundColor: Colors.white,
+//                         shape: const RoundedRectangleBorder(
+//                           borderRadius: BorderRadius.all(
+//                             Radius.circular(10),
+//                           ),
+//                         ),
+//                       ),
+//                       child: const Text(
+//                         'Close',
+//                         style: TextStyle(
+//                           fontFamily: 'Calibri',
+//                           fontSize: 14,
+//                           color: Colors.black,
+//                           fontWeight: FontWeight.bold,
+//                         ),
+//                       ),
+//                     ),
+//                   ),
+//                   const SizedBox(width: 20),
+//                   Expanded(
+//                     child: SizedBox(
+//                       child: Center(
+//                         child: GestureDetector(
+//                           onTap: () {
+//                             filterProducts().whenComplete(() {
+//                               Navigator.of(context).pop();
+//                             });
+//                             // fetchproducts(
+//                             //     genderTypeId: gender,
+//                             //     categoryTypeId: selectedCategory?.typecdid);
+//                           },
+//                           child: Container(
+//                             // width: desiredWidth * 0.9,
+//                             height: 40.0,
+//                             decoration: BoxDecoration(
+//                               borderRadius: BorderRadius.circular(15.0),
+//                               color: const Color(0xFFFB4110),
+//                             ),
+//                             child: const Center(
+//                               child: Text(
+//                                 'Apply',
+//                                 style: TextStyle(
+//                                   fontFamily: 'Calibri',
+//                                   fontSize: 14,
+//                                   color: Colors.white,
+//                                   fontWeight: FontWeight.bold,
+//                                 ),
+//                               ),
+//                             ),
+//                           ),
+//                         ),
+//                       ),
+//                     ),
+//                   ),
+//                 ],
+//               ),
+//             ],
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+//   Future<void> fetchRadioButtonOptions() async {
+//     final url = Uri.parse(baseUrl + getgender);
+//     print('url==>946: $url');
+
+//     try {
+//       final response = await http.get(url);
+//       if (response.statusCode == 200) {
+//         final dynamic responseData = jsonDecode(response.body);
+//         if (responseData != null &&
+//             responseData['listResult'] is List<dynamic>) {
+//           final List<dynamic> optionsData = responseData['listResult'];
+//           setState(() {
+//             options = optionsData
+//                 .map((data) => RadioButtonOption.fromJson(data))
+//                 .toList();
+//           });
+//         } else {
+//           throw Exception('Invalid response format');
+//         }
+//       } else {
+//         throw Exception('Failed to fetch radio button options');
+//       }
+//     } catch (e) {
+//       throw Exception('Error Radio: $e');
+//     }
+//   }
+
+//   Future<List<ProductCategory>> fetchProductsCategory() async {
+//     final response = await http
+//         .get(Uri.parse('http://182.18.157.215/SaloonApp/API/GetProduct/6'));
+//     if (response.statusCode == 200) {
+//       final List<dynamic> responseData =
+//           json.decode(response.body)['listResult'];
+//       List<ProductCategory> result =
+//           responseData.map((json) => ProductCategory.fromJson(json)).toList();
+//       print('fetchProductsCategory: ${result[0].desc}');
+//       return result;
+//     } else {
+//       throw Exception('Failed to load products');
+//     }
+//   }
+// }
 
 class UserFeedback {
   double? ratingstar;

@@ -41,41 +41,33 @@ class CustomeFormField extends StatelessWidget {
             ),
           ],
         ),
-
-        // textfield.
-        GestureDetector(
-          onTap: onTap,
-          child: TextFormField(
-            controller: controller, // Assigning the controller
-            keyboardType: keyboardType,
-            maxLength: maxLength,
-
-            decoration: InputDecoration(
-              contentPadding: const EdgeInsets.only(top: 15, bottom: 10, left: 15, right: 15),
-              focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                  color: Color(0xFF0f75bc),
-                ),
-                borderRadius: BorderRadius.circular(6.0),
+SizedBox(height: 5.0,),
+        // textfield
+        TextFormField(
+          controller: controller, // Assigning the controller
+          decoration: InputDecoration(
+            contentPadding: const EdgeInsets.only(top: 15, bottom: 10, left: 15, right: 15),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: Color(0xFF0f75bc),
               ),
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                  color: Colors.grey, // Changed to a default color
-                ),
-                borderRadius: BorderRadius.circular(6.0),
-              ),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.all(
-                  Radius.circular(10),
-                ),
-              ),
-              hintText: 'Enter $label',
-              counterText: "",
-              hintStyle: TextStyle(color: Colors.grey, fontWeight: FontWeight.w400),
+              borderRadius: BorderRadius.circular(6.0),
             ),
-            validator: validator,
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: CommonUtils.primaryTextColor,
+              ),
+              borderRadius: BorderRadius.circular(6.0),
+            ),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.all(
+                Radius.circular(10),
+              ),
+            ),
+            hintText: 'Enter $label',
           ),
-        )
+          validator: validator,
+        ),
       ],
     );
   }
