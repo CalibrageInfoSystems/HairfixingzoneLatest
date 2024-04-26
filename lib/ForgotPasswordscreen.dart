@@ -32,7 +32,7 @@ class _ForgotPasswordscreen extends State<ForgotPasswordscreen> {
             color: CommonUtils.primaryTextColor,
           ),
           onPressed: () {
-            // Add your functionality here when the arrow button is pressed
+            Navigator.of(context).pop();
           },
         ),
         backgroundColor: Colors.transparent, // Transparent app bar
@@ -78,7 +78,7 @@ class _ForgotPasswordscreen extends State<ForgotPasswordscreen> {
                       SizedBox(
                         height: 20,
                       ),
-                      Text('Enter your email address and ', style: CommonUtils.Sub_header_Styles),
+                      Text('Enter your email address and we will send you a code', style: CommonUtils.Sub_header_Styles),
                       Text('we will send you a code', style: CommonUtils.Sub_header_Styles),
                     ],
                   ),
@@ -229,7 +229,7 @@ class _ForgotPasswordscreen extends State<ForgotPasswordscreen> {
               context,
               MaterialPageRoute(
                   builder: (context) => ForgotPasswordOtpScreen(
-                        id: user['id'],
+                        id: user['id'], userName: user['userName']
                       )),
             );
             CommonUtils.showCustomToastMessageLong('Otp has Sent to Your Mail', context, 0, 3, toastPosition: MediaQuery.of(context).size.height / 2);

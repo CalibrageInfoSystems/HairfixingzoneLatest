@@ -12,8 +12,11 @@ import 'api_config.dart';
 
 class ForgotPasswordOtpScreen extends StatefulWidget {
   final int id;
+  final String userName;
 
-  ForgotPasswordOtpScreen({required this.id});
+  ForgotPasswordOtpScreen({required this.id ,
+    required this.userName
+  });
 
   @override
   State<ForgotPasswordOtpScreen> createState() => _ForgotPasswordOtpScreenState();
@@ -24,6 +27,7 @@ class _ForgotPasswordOtpScreenState extends State<ForgotPasswordOtpScreen> {
   late Timer _timer;
   int _secondsRemaining = 600;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  bool _isloading = false;
   @override
   void initState() {
     // TODO: implement initState
@@ -62,7 +66,7 @@ class _ForgotPasswordOtpScreenState extends State<ForgotPasswordOtpScreen> {
             color: CommonUtils.primaryTextColor,
           ),
           onPressed: () {
-            // Add your functionality here when the arrow button is pressed
+            Navigator.of(context).pop();
           },
         ),
         backgroundColor: CommonUtils.primaryColor,
@@ -105,8 +109,8 @@ class _ForgotPasswordOtpScreenState extends State<ForgotPasswordOtpScreen> {
                       const SizedBox(
                         height: 20,
                       ),
-                      const Text('Please check your email to', style: CommonUtils.Sub_header_Styles),
-                      const Text('take 6 digit code for continue', style: CommonUtils.Sub_header_Styles),
+                      const Text('Please Check Your Email To ', style: CommonUtils.Sub_header_Styles),
+                      const Text('Take 6 Digit Code For Continue', style: CommonUtils.Sub_header_Styles),
                     ],
                   ),
                 ),
@@ -198,34 +202,66 @@ class _ForgotPasswordOtpScreenState extends State<ForgotPasswordOtpScreen> {
                                   ),
                                   Text(
                                     'OTP Validate For ${(_secondsRemaining ~/ 60).toString().padLeft(2, '0')}:${(_secondsRemaining % 60).toString().padLeft(2, '0')} Minutes',
-                                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontFamily: "Calibri",
+                                      fontWeight: FontWeight.w700,
+                                      color: Colors.black,
+                                    ),
                                   ),
-                                  const Row(
+                                  const SizedBox(
+                                    height: 20,
+                                  ),
+                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Text(
                                         'Didn\'t receive code?',
                                         style: TextStyle(
-                                          fontSize: 15,
+                                          fontSize: 14,
+                                          fontFamily: "Calibri",
+                                          fontWeight: FontWeight.w500,
                                           color: Colors.black,
-                                        ),
+                                        )
                                       ),
-                                      Text(
-                                        ' Resend code',
-                                        style: TextStyle(
-                                          fontSize: 15,
-                                          color: CommonUtils.primaryTextColor,
+
+                                      GestureDetector(
+                                        onTap: () {
+                                          // Handle the click event for the "Click here!" text
+                                          print('Click here! clicked');
+                                          // Add your custom logic or navigation code here
+                                       Resendotpmethod();
+
+                                        },
+                                        child: Text('Resend code', style:TextStyle(
+                                          fontSize: 14,
+                                          fontFamily: "Calibri",
+                                          fontWeight: FontWeight.w700,
+                                          color: Color(0xFF0f75bc),
+                                        )
                                         ),
-                                      ),
+                                      )
+                                      // Text(
+                                      //   ' Resend code',
+                                      //   style: TextStyle(
+                                      //     fontSize: 14,
+                                      //     fontFamily: "Calibri",
+                                      //     fontWeight: FontWeight.w700,
+                                      //     color:CommonUtils.primaryTextColor,
+                                      //   )
+                                      // ),
                                     ],
                                   ),
                                   const SizedBox(
-                                    height: 50,
+                                    height: 20,
                                   ),
                                   CustomButton(
                                     buttonText: 'Validate OTP',
                                     color: CommonUtils.primaryTextColor,
                                     onPressed: validateOtp,
+                                  ),
+                                  const SizedBox(
+                                    height: 20,
                                   ),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
@@ -233,16 +269,20 @@ class _ForgotPasswordOtpScreenState extends State<ForgotPasswordOtpScreen> {
                                       Text(
                                         'Back to login?',
                                         style: TextStyle(
-                                          fontSize: 15,
+                                          fontSize: 14,
+                                          fontFamily: "Calibri",
+                                          fontWeight: FontWeight.w700,
                                           color: Colors.black,
-                                        ),
+                                        )
                                       ),
                                       Text(
                                         ' Click here',
                                         style: TextStyle(
-                                          fontSize: 15,
-                                          color: CommonUtils.primaryTextColor,
-                                        ),
+                                          fontSize: 14,
+                                          fontFamily: "Calibri",
+                                          fontWeight: FontWeight.w700,
+                                          color:CommonUtils.primaryTextColor,
+                                        )
                                       ),
                                     ],
                                   ),
@@ -349,4 +389,77 @@ class _ForgotPasswordOtpScreenState extends State<ForgotPasswordOtpScreen> {
     //   ),
     // );
   }
+  Future<void> Resendotpmethod() async {
+
+      // Print the username and password
+      //  print('Username: $email');
+      print('userName: ${widget.userName}');
+      setState(() {
+        _isloading = true; //Enable loading before getQuestions
+      });
+      final String apiUrl = baseUrl + validateusername;
+
+      // Prepare the request body
+      Map<String, String> requestBody = {
+        'userName': '${widget.userName}',
+      };
+
+      // Make the POST request
+      final response = await http.post(
+        Uri.parse(apiUrl),
+        body: requestBody,
+      );
+
+      // Check if the request was successful
+      if (response.statusCode == 200) {
+        // Parse the JSON response
+        Map<String, dynamic> data = json.decode(response.body);
+
+        // Extract the necessary information
+        bool isSuccess = data['isSuccess'];
+        String statusMessage = data['statusMessage'];
+
+        // Print the result
+        print('Is Success: $isSuccess');
+        print('Status Message: $statusMessage');
+        setState(() {
+          _isloading = false; //Enable loading before getQuestions
+        });
+        // Handle the data accordingly
+        if (isSuccess) {
+          // If the user is valid, you can extract more data from 'listResult'
+
+          if (data['listResult'] != null) {
+            List<dynamic> listResult = data['listResult'];
+            Map<String, dynamic> user = listResult.first;
+            print('userid: ${user['id']}');
+
+            CommonUtils.showCustomToastMessageLong('Otp has Sent to Your Mail', context, 0, 3, toastPosition: MediaQuery.of(context).size.height / 2);
+            startTimer();
+          } else {
+            FocusScope.of(context).unfocus();
+            CommonUtils.showCustomToastMessageLong('Invalid User ', context, 1, 3, toastPosition: MediaQuery.of(context).size.height / 2);
+          }
+        } else {
+          FocusScope.of(context).unfocus();
+          CommonUtils.showCustomToastMessageLong("${data["statusMessage"]}", context, 1, 3, toastPosition: MediaQuery.of(context).size.height / 2);
+          // Handle the case where the user is not valid
+          setState(() {
+            _isloading = false; //Enable loading before getQuestions
+          });
+          List<dynamic> validationErrors = data['validationErrors'];
+          if (validationErrors.isNotEmpty) {
+            // Print or handle validation errors if any
+          }
+        }
+      } else {
+        setState(() {
+          _isloading = false; //Enable loading before getQuestions
+        });
+        // Handle any error cases here
+        print('Failed to connect to the API. Status code: ${response.statusCode}');
+      }
+    }
+
+
 }

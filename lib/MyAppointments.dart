@@ -79,10 +79,10 @@ class MyAppointments_screenState extends State<MyAppointments> {
       },
       child: Consumer<MyAppointmentsProvider>(
         builder: (context, provider, _) => Scaffold(
-          body: PopScope(
-            canPop: true,
-            onPopInvoked: (didPop) {
+          body: WillPopScope(
+              onWillPop: () async{
               provider.clearFilter();
+              return true;
             },
             child: Column(
               children: [

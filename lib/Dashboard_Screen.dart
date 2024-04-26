@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:hairfixingzone/BranchesModel.dart';
+
 import 'package:hairfixingzone/Common/common_styles.dart';
 import 'package:hairfixingzone/aboutus_screen.dart';
 
@@ -9,6 +9,8 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:marquee/marquee.dart';
+
+import 'BranchesModel.dart';
 
 class Dashboard_Screen extends StatelessWidget {
   const Dashboard_Screen({Key? key}) : super(key: key);

@@ -126,7 +126,7 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
             color: CommonUtils.primaryTextColor,
           ),
           onPressed: () {
-            // Add your functionality here when the arrow button is pressed
+            Navigator.of(context).pop();
           },
         ),
         backgroundColor: Colors.transparent, // Transparent app bar

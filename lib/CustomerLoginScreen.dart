@@ -53,7 +53,8 @@ class _LoginPageState extends State<CustomerLoginScreen> {
             ),
             child:
             Center(
-              child: Column(
+              child:
+              Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   SizedBox(
@@ -190,7 +191,13 @@ class _LoginPageState extends State<CustomerLoginScreen> {
                               ),
                             );
                           },
-                          child: Text('Register Here!', style: CommonUtils.Mediumtext_o_14),
+                          child: Text('Register Here!', style:TextStyle(
+                            fontSize: 14,
+                            fontFamily: "Calibri",
+                            fontWeight: FontWeight.w700,
+                            color: Color(0xFF0f75bc),
+                          )
+                          ),
                         )
                       ],
                     ),

@@ -113,7 +113,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
+    return
+      WillPopScope(
       onWillPop: () async {
         // Show a confirmation dialog
         bool confirmClose = await showDialog(

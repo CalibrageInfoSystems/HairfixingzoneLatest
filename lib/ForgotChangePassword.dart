@@ -31,7 +31,7 @@ class _ForgotChangePasswordState extends State<ForgotChangePassword> {
             color: CommonUtils.primaryTextColor,
           ),
           onPressed: () {
-            // Add your functionality here when the arrow button is pressed
+            Navigator.of(context).pop();
           },
         ),
         backgroundColor: Colors.transparent, // Transparent app bar
@@ -45,33 +45,69 @@ class _ForgotChangePasswordState extends State<ForgotChangePassword> {
               height: MediaQuery.of(context).size.height / 2.2,
               decoration: const BoxDecoration(),
               child: Center(
-                child: Column(
+                child:
+                Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     SizedBox(
                       width: MediaQuery.of(context).size.height / 4.5,
-                      child: Image.asset('assets/hfz_logo.png'),
+
+                      child: Image.asset(
+                          'assets/hfz_logo.png'),
                     ),
                     const SizedBox(
                       height: 5.0,
                     ),
-                    const Text('Customer Login',
-                        style: TextStyle(
+                    const Text(
+                        'Forgot Password',
+                        style:  TextStyle(
                           fontSize: 24,
                           fontFamily: "Calibri",
                           fontWeight: FontWeight.w700,
                           letterSpacing: 2,
                           color: Color(0xFF662d91),
-                        )),
+                        )
+                    ),
                     const SizedBox(
                       height: 20,
                     ),
-                    const Text('Login your account',
-                        style: CommonUtils.Sub_header_Styles),
-                    const Text('to access all the services',
-                        style: CommonUtils.Sub_header_Styles),
+                    const Text(
+                        'Reset Your Password For Recovery ',
+                        style: CommonUtils.Sub_header_Styles
+                    ),
+                    const Text(
+                        'And Log In to Your Account ',
+                        style: CommonUtils.Sub_header_Styles
+                    ),
                   ],
                 ),
+                // Column(
+                //   mainAxisAlignment: MainAxisAlignment.center,
+                //   children: [
+                //     SizedBox(
+                //       width: MediaQuery.of(context).size.height / 4.5,
+                //       child: Image.asset('assets/hfz_logo.png'),
+                //     ),
+                //     const SizedBox(
+                //       height: 5.0,
+                //     ),
+                //     const Text('Forgot Password',
+                //         style: TextStyle(
+                //           fontSize: 24,
+                //           fontFamily: "Calibri",
+                //           fontWeight: FontWeight.w700,
+                //           letterSpacing: 2,
+                //           color: Color(0xFF662d91),
+                //         )),
+                //     const SizedBox(
+                //       height: 20,
+                //     ),
+                //     const Text('Login your account',
+                //         style: CommonUtils.Sub_header_Styles),
+                //     const Text('to access all the services',
+                //         style: CommonUtils.Sub_header_Styles),
+                //   ],
+                // ),
               ),
             ),
             SizedBox(
@@ -173,12 +209,12 @@ class _ForgotChangePasswordState extends State<ForgotChangePassword> {
     if (value == null || value.isEmpty) {
       return 'Please enter an password';
     }
-    if (value.length < 4) {
-      return 'Password must be 4 characters or more';
-    }
-    if (value.length > 8) {
-      return 'Password must be 8 characters or less';
-    }
+    // if (value.length < 4) {
+    //   return 'Password must be 4 characters or more';
+    // }
+    // if (value.length > 8) {
+    //   return 'Password must be 8 characters or less';
+    // }
     return null;
   }
 
