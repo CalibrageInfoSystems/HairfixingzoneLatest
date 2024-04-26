@@ -203,7 +203,7 @@ class _ForgotPasswordOtpScreenState extends State<ForgotPasswordOtpScreen> {
                                   Text(
                                     'OTP Validate For ${(_secondsRemaining ~/ 60).toString().padLeft(2, '0')}:${(_secondsRemaining % 60).toString().padLeft(2, '0')} Minutes',
                                     style: TextStyle(
-                                      fontSize: 16,
+                                      fontSize: 20,
                                       fontFamily: "Calibri",
                                       fontWeight: FontWeight.w700,
                                       color: Colors.black,
@@ -216,9 +216,9 @@ class _ForgotPasswordOtpScreenState extends State<ForgotPasswordOtpScreen> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Text(
-                                        'Didn\'t receive code?',
+                                        'Didn\'t receive code? ',
                                         style: TextStyle(
-                                          fontSize: 14,
+                                          fontSize: 20,
                                           fontFamily: "Calibri",
                                           fontWeight: FontWeight.w500,
                                           color: Colors.black,
@@ -234,7 +234,7 @@ class _ForgotPasswordOtpScreenState extends State<ForgotPasswordOtpScreen> {
 
                                         },
                                         child: Text('Resend code', style:TextStyle(
-                                          fontSize: 14,
+                                          fontSize: 20,
                                           fontFamily: "Calibri",
                                           fontWeight: FontWeight.w700,
                                           color: Color(0xFF0f75bc),
@@ -269,7 +269,7 @@ class _ForgotPasswordOtpScreenState extends State<ForgotPasswordOtpScreen> {
                                       Text(
                                         'Back to login?',
                                         style: TextStyle(
-                                          fontSize: 14,
+                                          fontSize: 20,
                                           fontFamily: "Calibri",
                                           fontWeight: FontWeight.w700,
                                           color: Colors.black,
@@ -278,7 +278,7 @@ class _ForgotPasswordOtpScreenState extends State<ForgotPasswordOtpScreen> {
                                       Text(
                                         ' Click here',
                                         style: TextStyle(
-                                          fontSize: 14,
+                                          fontSize: 20,
                                           fontFamily: "Calibri",
                                           fontWeight: FontWeight.w700,
                                           color:CommonUtils.primaryTextColor,

@@ -1003,18 +1003,29 @@ class _OpCardState extends State<OpCard> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text('${dateValues[1]}'),
+                  Text('${dateValues[1]}',  style: CommonUtils.txSty_18p_f7,),
                   Text(
                     '${dateValues[0]}',
-                    style: const TextStyle(fontSize: 20),
+                    style: TextStyle(
+                      fontSize: 26,
+                      fontFamily: "Calibri",
+                      letterSpacing: 1.5,
+                      fontWeight: FontWeight.w700,
+                      color: Color(0xFF0f75bc),
+                    ),
                   ),
                   Text(
-                    '${dateValues[2]}',
+                    '${dateValues[2]}', style: TextStyle(
+                    fontSize: 14,
+                    fontFamily: "Calibri",
+                    fontWeight: FontWeight.w700,
+                    color: Color(0xFF0f75bc),
+                  ),
                   ),
                 ],
               ),
             ),
-            const VerticalDivider(),
+            const VerticalDivider(color: CommonUtils.primaryTextColor,),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -1030,27 +1041,20 @@ class _OpCardState extends State<OpCard> {
                               children: [
                                 Text(
                                   widget.data.slotDuration,
-                                  style: const TextStyle(
+                                  style: TextStyle(
+                                    fontSize: 16,
                                     fontFamily: "Calibri",
-                                    fontWeight: FontWeight.w500,
-                                    color: CommonStyles.primaryTextColor,
+                                    fontWeight: FontWeight.w700,
+                                    color: Color(0xFF0f75bc),
                                   ),
                                 ),
                                 Text(
                                   widget.data.purposeOfVisit,
-                                  style: const TextStyle(
-                                    fontFamily: "Calibri",
-                                    fontWeight: FontWeight.w500,
-                                    color: CommonStyles.blackColor,
-                                  ),
+                                 style: CommonStyles.txSty_16black_f5
                                 ),
                                 Text(
                                   widget.data.branch,
-                                  style: const TextStyle(
-                                    fontFamily: "Calibri",
-                                    fontWeight: FontWeight.w500,
-                                    color: CommonStyles.blackColor,
-                                  ),
+                                    style: CommonStyles.txSty_16black_f5
                                 ),
                               ],
                             ),
@@ -1063,7 +1067,8 @@ class _OpCardState extends State<OpCard> {
                               statusBasedBgById(
                                   widget.data.statusTypeId, widget.data.status),
                               // Text('status'),
-                              if (widget.data.statusTypeId == 18)
+                              SizedBox(height: 10.0,),
+                              if (widget.data.statusTypeId == 11)
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
@@ -1074,11 +1079,16 @@ class _OpCardState extends State<OpCard> {
                                           size: 13,
                                           color: CommonStyles.greenColor,
                                         ),
-                                        Text(
-                                          widget.data.rating?.toString() ??
-                                              'No rating',
-                                          style: CommonStyles.txSty_14g_f5,
+
+                                        Padding(
+                                          padding: const EdgeInsets.only(right: 8.0), // Adjust the value as needed
+                                          child: Text(
+                                            '${widget.data.rating ?? 'No rating'}',
+                                            style: CommonStyles.txSty_14g_f5,
+                                          ),
                                         ),
+
+
                                       ],
                                     ),
                                   ],
@@ -1150,14 +1160,14 @@ class _OpCardState extends State<OpCard> {
     return Container(
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15), color: statusBgColor),
-      padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 13),
+      padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 15),
       child: Row(
         children: [
           // statusBasedBgById(widget.data.statusTypeId),
           Text(
             status,
             style: TextStyle(
-              fontSize: 14,
+              fontSize: 16,
               fontFamily: "Calibri",
               fontWeight: FontWeight.w500,
               color: statusColor,
@@ -1203,7 +1213,7 @@ class _OpCardState extends State<OpCard> {
                   child: Row(
                     children: [
                       SvgPicture.asset(
-                        'assets/calendar_3.svg',
+                        'assets/calendar-_3_.svg',
                         width: 13,
                         color: isPastDate(data.date, data.slotDuration)
                             ? Colors.grey
@@ -1212,7 +1222,7 @@ class _OpCardState extends State<OpCard> {
                       Text(
                         '  Reschedule',
                         style: TextStyle(
-                          fontSize: 11,
+                          fontSize: 15,
                           color: isPastDate(data.date, data.slotDuration)
                               ? Colors.grey
                               : CommonUtils.primaryTextColor,
@@ -1258,7 +1268,7 @@ class _OpCardState extends State<OpCard> {
                       Text(
                         '  Cancel',
                         style: TextStyle(
-                          fontSize: 11,
+                          fontSize: 16,
                           fontFamily: "Calibri",
                           fontWeight: FontWeight.w500,
                           color: isPastDate(data.date, data.slotDuration)
@@ -1278,16 +1288,13 @@ class _OpCardState extends State<OpCard> {
       case 11: // FeedBack
         return Flexible(
           child: Text(
-            data.review ?? '',
+            '" ${data.review} "' ?? '',
             overflow: TextOverflow.ellipsis,
             maxLines: 2,
-            style: const TextStyle(
-              fontFamily: "Calibri",
-              fontWeight: FontWeight.w500,
-              color: CommonStyles.primaryTextColor,
-            ),
+          style: CommonStyles.txSty_16blu_f5
           ),
         );
+
       case 18: // Closed
         return GestureDetector(
           onTap: () {
@@ -1311,7 +1318,7 @@ class _OpCardState extends State<OpCard> {
                 Text(
                   ' Rate Us',
                   style: TextStyle(
-                    fontSize: 11,
+                    fontSize: 16,
                     color: CommonStyles.primaryTextColor,
                   ),
                 ),
@@ -1671,7 +1678,7 @@ class _OpCardState extends State<OpCard> {
           // userfeedbacklist[index].ratingstar = rating_star;
           // userfeedbacklist[index].comments = _commentstexteditcontroller.text.toString();
 
-          //  Navigator.pop(context);
+         Navigator.pop(context);
         } else {
           print(
               'Failed to send the request. Status code: ${response.statusCode}');

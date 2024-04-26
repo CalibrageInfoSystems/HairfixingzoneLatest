@@ -56,6 +56,7 @@ dependencies:
   marquee: ^2.2.3
   custom_date_range_picker: ^1.0.6
   loading_animation_widget: ^1.2.0+4
+  readmore: ^2.2.0
 
 
 dev_dependencies:
@@ -129,6 +130,12 @@ flutter:
     - assets/calendar-_3_.svg
     - assets/calendar-xmark.svg
     - assets/star.svg
+    - assets/products_icon.svg
+    - assets/about_us_icon.svg
+    - assets/my_profile_icon.svg
+    - assets/my_bookings_icon.svg
+    - assets/book_op_illusion.svg
+    - assets/noun-appointment-date-2417776.svg
 
 
 

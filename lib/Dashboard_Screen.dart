@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
-
+import 'package:hairfixingzone/BranchesModel.dart';
 import 'package:hairfixingzone/Common/common_styles.dart';
 import 'package:hairfixingzone/aboutus_screen.dart';
 
@@ -9,8 +10,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:marquee/marquee.dart';
-
-import 'BranchesModel.dart';
 
 class Dashboard_Screen extends StatelessWidget {
   const Dashboard_Screen({Key? key}) : super(key: key);
@@ -58,11 +57,14 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
   }
 
   void _fetchItems() async {
-    final response = await http.get(Uri.parse('http://182.18.157.215/SaloonApp/API/GetBranchById/null/true'));
+    final response = await http.get(Uri.parse(
+        'http://182.18.157.215/SaloonApp/API/GetBranchById/null/true'));
 
     if (response.statusCode == 200) {
       setState(() {
-        _items = (json.decode(response.body)['listResult'] as List).map((item) => Item.fromJson(item)).toList();
+        _items = (json.decode(response.body)['listResult'] as List)
+            .map((item) => Item.fromJson(item))
+            .toList();
       });
     } else {
       throw Exception('Failed to load items');
@@ -96,7 +98,8 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
         if (response['isSuccess']) {
           int records = response['affectedRecords'];
           for (var i = 0; i < records; i++) {
-            marqueeText = '${marqueeText + response['listResult'][i]['text']}  ';
+            marqueeText =
+            '${marqueeText + response['listResult'][i]['text']}  ';
             // marqueeText += response['listResult'][i]['text'];
           }
         } else {
@@ -104,7 +107,8 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
           throw Exception('api failed');
         }
       } else {
-        throw Exception('Request failed with status: ${jsonResponse.statusCode}');
+        throw Exception(
+            'Request failed with status: ${jsonResponse.statusCode}');
       }
     } catch (error) {
       rethrow;
@@ -114,233 +118,344 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: CommonStyles.primaryTextColor,
       body: Column(
         children: [
-          SizedBox(
-            width: MediaQuery.of(context).size.width,
-            height: 200,
-            child: PageView.builder(
-              controller: _pageController,
-              itemCount: _items.length,
-              itemBuilder: (context, index) {
-                final itemIndex = index % _items.length;
-                return SizedBox(
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: ItemBuilder(items: _items, index: itemIndex),
-                      ),
-                    ],
-                  ),
-                );
-              },
-              onPageChanged: (int page) {
-                setState(() {
-                  _currentPage = page;
-                });
-              },
-            ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              for (int i = 0; i < _items.length; i++)
-                Container(
-                  margin: const EdgeInsets.all(2),
-                  width: 10,
-                  height: 10,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: Colors.grey, width: 1.5),
-                    color: _currentPage == i ? Colors.grey.withOpacity(0.9) : Colors.transparent,
-                  ),
-                )
-            ],
-          ),
-          SizedBox(height: 5),
-          SizedBox(
-            height: 30,
-            child: FutureBuilder(
-              future: getMarqueeText(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const SizedBox();
-                } else if (snapshot.hasError) {
-                  return const SizedBox();
-                } else {
-                  return Marquee(
-                    text: marqueeText, //MARK: Marquee
-                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
-                  );
-                }
-              },
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            child: Column(
+          //MARK: Welcome Text
+          Container(
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+            height: 80,
+            child: const Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                //MARK: Book Appointment
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: CommonStyles.primaryTextColor),
-                    borderRadius: BorderRadius.circular(10),
+                Text(
+                  'Hello!',
+                  style: CommonStyles.txSty_16w_fb,
+                ),
+                Text(
+                  'Customer Name',
+                  style: CommonStyles.txSty_18w_fb,
+                ),
+              ],
+            ),
+          ),
+          //MARK: Main Card
+          Expanded(
+            child: SingleChildScrollView(
+              child: Container(
+                decoration: const BoxDecoration(
+                  color: CommonStyles.whiteColor,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20),
                   ),
-                  child: GestureDetector(
-                      onTap: () {
-                        //Navigator.of(context).pushNamed('/BookAppointment');
-                        Navigator.of(context, rootNavigator: true).pushNamed("/BookAppointment");
-                      },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Icon(Icons.home),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                ),
+                child: Column(
+                  children: [
+                    //MARK: Marquee
+                    SizedBox(
+                      height: 30,
+                      child: FutureBuilder(
+                        future: getMarqueeText(),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const SizedBox();
+                          } else if (snapshot.hasError) {
+                            return const SizedBox();
+                          } else {
+                            return Marquee(
+                              text: marqueeText,
+                              style: const TextStyle(
+                                  color: CommonStyles.statusRedText),
+                            );
+                          }
+                        },
+                      ),
+                    ),
+                    //MARK: Carosel
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width,
+                      height: 200,
+                      child: PageView.builder(
+                        controller: _pageController,
+                        itemCount: _items.length,
+                        itemBuilder: (context, index) {
+                          final itemIndex = index % _items.length;
+                          return SizedBox(
+                            child: Row(
                               children: [
-                                Text(
-                                  'Click Here',
-                                  style: CommonStyles.txSty_14b_f5,
-                                ),
-                                Text(
-                                  'To Book an Appointment',
-                                  style: CommonStyles.txSty_14b_f5,
+                                Expanded(
+                                  child: ItemBuilder(
+                                      items: _items, index: itemIndex),
                                 ),
                               ],
                             ),
-                          ),
-                          SizedBox(
+                          );
+                        },
+                        onPageChanged: (int page) {
+                          setState(() {
+                            _currentPage = page;
+                          });
+                        },
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        for (int i = 0; i < _items.length; i++)
+                          Container(
+                            margin: const EdgeInsets.all(2),
                             width: 10,
-                          ),
-                          Icon(Icons.home),
-                        ],
-                      )),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                //MARK: Screens
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      children: [
-                        Container(
-                          width: 60,
-                          height: 60,
-                          decoration: const BoxDecoration(
-                            color: Color.fromARGB(255, 240, 124, 230),
-                            shape: BoxShape.circle,
-                          ),
-                          child: const Icon(Icons.home),
-                        ),
-                        const SizedBox(height: 5),
-                        const Text(
-                          'My Bookings',
-                          style: CommonStyles.txSty_14b_f5,
-                        ),
+                            height: 10,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              border:
+                              Border.all(color: Colors.grey, width: 1.5),
+                              color: _currentPage == i
+                                  ? Colors.grey.withOpacity(0.9)
+                                  : Colors.transparent,
+                            ),
+                          )
                       ],
                     ),
-                    Column(
-                      children: [
-                        Container(
-                          width: 60,
-                          height: 60,
-                          decoration: const BoxDecoration(
-                            color: Color.fromARGB(255, 228, 67, 67),
-                            shape: BoxShape.circle,
-                          ),
-                          child: const Icon(Icons.home),
-                        ),
-                        const SizedBox(height: 5),
-                        const Text(
-                          'Products',
-                          style: CommonStyles.txSty_14b_f5,
-                        ),
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        Container(
-                          width: 60,
-                          height: 60,
-                          decoration: const BoxDecoration(
-                            color: Color.fromARGB(255, 115, 26, 199),
-                            shape: BoxShape.circle,
-                          ),
-                          child: const Icon(Icons.home),
-                        ),
-                        const SizedBox(height: 5),
-                        const Text('About Us'),
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        Container(
-                          width: 60,
-                          height: 60,
-                          decoration: const BoxDecoration(
-                            color: Color.fromARGB(255, 3, 104, 65),
-                            shape: BoxShape.circle,
-                          ),
-                          child: const Icon(Icons.home),
-                        ),
-                        const SizedBox(height: 5),
-                        const Text(
-                          'My Profile',
-                          style: CommonStyles.txSty_14b_f5,
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 15),
-                //MARK: Branches
-                const Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Branches',
-                      style: CommonStyles.txSty_16p_fb,
-                    ),
-                  ],
-                ),
+                    const SizedBox(height: 5),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                      child: Column(
+                        children: [
+                          //MARK: Book Appointment
+                          Container(
+                            width: double.infinity,
+                            padding: const EdgeInsets.all(5),
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                  color: CommonStyles.primaryTextColor),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
 
-                SizedBox(
-                  height: 200,
-                  child: FutureBuilder(
-                    future: apiData,
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const Center(child: CircularProgressIndicator.adaptive());
-                      } else if (snapshot.hasError) {
-                        return Center(
-                          child: Text(snapshot.error.toString()),
-                        );
-                      } else {
-                        List<BranchList>? data = snapshot.data!;
-                        return Expanded(
-                          child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: data.length,
-                            itemBuilder: (context, index) {
-                              return BranchCard(
-                                branch: data[index],
-                              );
-                            },
+                            child: GestureDetector(
+                                onTap: (){
+                                  Navigator.of(context, rootNavigator: true).pushNamed("/BookAppointment");
+
+
+
+
+                                },
+                                child:
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.all(15),
+                                  decoration: const BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: CommonStyles.primaryTextColor),
+                                  child: Center(
+                                    child: SvgPicture.asset(
+                                      'assets/noun-appointment-date-2417776.svg',
+                                      width: 30.0,
+                                      height: 30.0,
+                                      color: CommonStyles.whiteColor,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                const Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                    CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Click Here',
+                                        style: CommonStyles.txSty_16p_f5,
+                                      ),
+                                      Text(
+                                        'To Book an Appointment',
+                                        style: CommonStyles.txSty_20p_fb,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                SvgPicture.asset(
+                                  'assets/book_op_illusion.svg',
+                                  width: 60.0,
+                                  height: 80.0,
+                                ),
+                              ],
+                            )),
                           ),
-                        );
-                      }
-                    },
-                  ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          //MARK: Screens
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              GestureDetector(
+                                onTap: (){
+
+                                },
+                                child:
+                              Column(
+                                children: [
+
+                                  Container(
+                                    width: 60,
+                                    height: 60,
+                                    padding: const EdgeInsets.all(15),
+                                    decoration: const BoxDecoration(
+                                      color: Color.fromARGB(255, 240, 124, 230),
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: SvgPicture.asset(
+                                      'assets/my_bookings_icon.svg',
+                                      color: CommonStyles.whiteColor,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 5),
+                                  const Text(
+                                    'My Bookings',
+                                    style: CommonStyles.txSty_14p_f5,
+                                  ),
+                                ],
+                              ),),
+                              Column(
+                                children: [
+                                  Container(
+                                    width: 60,
+                                    height: 60,
+                                    padding: const EdgeInsets.all(15),
+                                    decoration: const BoxDecoration(
+                                      color: Color.fromARGB(255, 228, 67, 67),
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: SvgPicture.asset(
+                                      'assets/products_icon.svg',
+                                      color: CommonStyles.whiteColor,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 5),
+                                  const Text(
+                                    'Products',
+                                    style: CommonStyles.txSty_14p_f5,
+                                  ),
+                                ],
+                              ),
+                              GestureDetector(
+                                onTap: (){
+                                  Navigator.of(context, rootNavigator: true).pushNamed("/about");
+                                },
+                                child:  Column(
+                                  children: [
+
+                                    Container(
+                                      width: 60,
+                                      height: 60,
+                                      padding: const EdgeInsets.all(15),
+                                      decoration: const BoxDecoration(
+                                        color: Color.fromARGB(255, 115, 26, 199),
+                                        shape: BoxShape.circle,
+                                      ),
+                                      child: SvgPicture.asset(
+                                        'assets/about_us_icon.svg',
+                                        color: CommonStyles.whiteColor,
+                                        width: 11.0,
+                                        height: 11.0,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 5),
+                                    const Text(
+                                      'About Us',
+                                      style: CommonStyles.txSty_14p_f5,
+                                    ),
+                                  ],
+                                ),
+                              ),
+GestureDetector(
+  onTap: (){
+    Navigator.of(context, rootNavigator: true).pushNamed("/MyProfile");
+  },
+  child:
+                              Column(
+                                children: [
+                                  Container(
+                                    padding: const EdgeInsets.all(15),
+                                    width: 60,
+                                    height: 60,
+                                    decoration: const BoxDecoration(
+                                      color: Color.fromARGB(255, 3, 104, 65),
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: SvgPicture.asset(
+                                      'assets/my_profile_icon.svg',
+                                      color: CommonStyles.whiteColor,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 5),
+                                  const Text(
+                                    'My Profile',
+                                    style: CommonStyles.txSty_14p_f5,
+                                  ),
+                                ],
+                              ),)
+                            ],
+                          ),
+                          const SizedBox(height: 20),
+                          //MARK: Branches
+                          const Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Branches',
+                                style: CommonStyles.txSty_16p_fb,
+                              ),
+                            ],
+                          ),
+
+                          SizedBox(
+                            height: 200,
+                            child: FutureBuilder(
+                              future: apiData,
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return const Center(
+                                      child:
+                                      CircularProgressIndicator.adaptive());
+                                } else if (snapshot.hasError) {
+                                  return Center(
+                                    child: Text(snapshot.error.toString()),
+                                  );
+                                } else {
+                                  List<BranchList>? data = snapshot.data!;
+                                  return Expanded(
+                                    child: ListView.builder(
+                                      scrollDirection: Axis.horizontal,
+                                      itemCount: data.length,
+                                      itemBuilder: (context, index) {
+                                        return BranchCard(
+                                          branch: data[index],
+                                        );
+                                      },
+                                    ),
+                                  );
+                                }
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
           )
         ],
@@ -348,325 +463,11 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
     );
   }
 
-  _customheightCard({
-    required String imageUrl,
-    required String item,
-    required String item_1,
-    required Color color,
-    required Color color_1,
-    required Color textcolor,
-    required VoidCallback? onTap,
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: SizedBox(
-        //  height: MediaQuery.of(context).size.height * (4 / 9) - 250 / 2,
-        height: MediaQuery.of(context).size.height / 3.3,
-        // height: height,
-        width: MediaQuery.of(context).size.width / 2,
-        child: Card(
-          color: color,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
-          elevation: 8,
-          child: Padding(
-            padding: const EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Container(
-                  margin: const EdgeInsets.only(bottom: 0),
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: color_1,
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  child: SvgPicture.asset(
-                    "assets/$imageUrl",
-                    width: 30.0,
-                    height: 30.0,
-                    color: const Color(0xFF414141),
-                  ),
-                ),
-                const SizedBox(height: 15),
-                Container(
-                  child: Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      item,
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontFamily: "Roboto",
-                        fontWeight: FontWeight.w700,
-                        color: textcolor,
-                      ),
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: RichText(
-                      text: TextSpan(
-                        style: TextStyle(fontSize: 14, color: textcolor, fontFamily: "Roboto", fontWeight: FontWeight.w600),
-                        children: const [
-                          // TextSpan(
-                          //   text: 'All Incoming and\n',
-                          // ),
-                          // WidgetSpan(
-                          //   child: SizedBox(height: 25),
-                          // ),
-                          // TextSpan(
-                          //   text: 'Outgoing Transactions\n',
-                          // ),
-                          // WidgetSpan(
-                          //   child: SizedBox(height: 25),
-                          // ),
-                          // TextSpan(
-                          //   text: 'Record',
-                          // ),
-                          TextSpan(text: 'All Incoming and Outgoing Transactions record', style: TextStyle(height: 2))
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                // SizedBox(height: 16),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
 
-  _customwidthCard({
-    required String imageUrl,
-    required String item,
-    required Color color,
-    required String item1,
-    required VoidCallback? onTap,
-    required Color color_1,
-    required Color textcolor,
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: SizedBox(
-        //  height: MediaQuery.of(context).size.width * (3.8 / 9) - 110 / 2,
-        width: MediaQuery.of(context).size.width / 2.25,
-        //  height: 275 / 2,
-        height: MediaQuery.of(context).size.height / 6,
-        child: Card(
-          color: color,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
-          elevation: 8,
-          child: Padding(
-            padding: const EdgeInsets.only(left: 10, right: 15, top: 7, bottom: 3),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                const SizedBox(height: 8),
-                Container(
-                  margin: const EdgeInsets.only(bottom: 6),
-                  padding: const EdgeInsets.all(6),
-                  decoration: BoxDecoration(
-                    color: color_1,
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  child: SvgPicture.asset(
-                    "assets/$imageUrl",
-                    width: 20.0,
-                    height: 22.0,
-                    color: const Color(0xFF414141),
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Expanded(
-                  child: Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      item,
-                      maxLines: 1,
-                      style: TextStyle(fontSize: 16, fontFamily: "Roboto", fontWeight: FontWeight.w700, color: textcolor),
-                    ),
-                  ),
-                ),
-                // SizedBox(
-                //   height: 8.0,
-                // ),
-                Text(
-                  item1,
-                  style: const TextStyle(fontSize: 12, fontFamily: "Roboto", fontWeight: FontWeight.w500, color: Color(0xFF414141)),
-                ),
-                // Expanded(
-                //   child: Align(
-                //     alignment: Alignment.topLeft,
-                //     child: Text(
-                //       item1,
-                //       style: TextStyle(
-                //           fontSize: 12,
-                //           fontFamily: "Roboto",
-                //           fontWeight: FontWeight.w500,
-                //           color: Color(0xFF414141)),
-                //     ),
-                //   ),
-                // ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  _customcontainerCard({
-    //  required String imageUrl,
-    required String item,
-    required String item1,
-    required Color color,
-    required VoidCallback? onTap,
-    required Color color_1,
-    required Color textcolor,
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: SizedBox(
-        //height: 260 / 2,
-        height: MediaQuery.of(context).size.height / 6,
-        width: MediaQuery.of(context).size.width / 2,
-        child: Card(
-          color: color,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
-          elevation: 8,
-          child: Padding(
-            padding: const EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                // SizedBox(height: 8),
-                // Container(
-                //   margin: const EdgeInsets.only(bottom: 6),
-                //   padding: const EdgeInsets.all(6),
-                //   decoration: BoxDecoration(
-                //     color: color_1,
-                //     borderRadius: BorderRadius.circular(10),
-                //   ),
-                //   child: SvgPicture.asset(
-                //     "assets/$imageUrl",
-                //     width: 20.0,
-                //     height: 22.0,
-                //     color: const Color(0xFF414141),
-                //   ),
-                // ),
-                const SizedBox(height: 8),
-                Container(
-                  child: Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      item,
-                      maxLines: 1,
-                      style: TextStyle(fontSize: 16, fontFamily: "Roboto", fontWeight: FontWeight.w700, color: textcolor),
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  height: 5.0,
-                ),
-                Text(
-                  item1,
-                  style: const TextStyle(fontSize: 12, fontFamily: "Roboto", fontWeight: FontWeight.w500, color: Color(0xFF414141)),
-                ),
-                // Expanded(
-                //   child: Align(
-                //     alignment: Alignment.topLeft,
-                //     child: Text(
-                //       item1,
-                //       style: TextStyle(
-                //           fontSize: 12,
-                //           fontFamily: "Roboto",
-                //           fontWeight: FontWeight.w500,
-                //           color: Color(0xFF414141)),
-                //     ),
-                //   ),
-                // ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  _customcontainernewCard({
-    required String imageUrl,
-    required String item,
-    required String item1,
-    required Color color,
-    required VoidCallback? onTap,
-    required Color color_1,
-    required Color textcolor,
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: SizedBox(
-        height: MediaQuery.of(context).size.height / 10,
-        width: MediaQuery.of(context).size.width,
-        child: Card(
-          color: color,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
-          elevation: 8,
-          child: Padding(
-            padding: const EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 10),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Container(
-                  margin: const EdgeInsets.only(bottom: 6),
-                  padding: const EdgeInsets.all(6),
-                  decoration: BoxDecoration(
-                    color: color_1,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: SvgPicture.asset(
-                    "assets/$imageUrl",
-                    width: 20.0,
-                    height: 22.0,
-                    color: const Color(0xFF414141),
-                  ),
-                ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start, // Adjusted to center
-                    mainAxisAlignment: MainAxisAlignment.center, // Added to center
-                    children: [
-                      Text(
-                        item,
-                        maxLines: 1,
-                        style: TextStyle(fontSize: 16, fontFamily: "Roboto", fontWeight: FontWeight.w700, color: textcolor),
-                      ),
-                      const SizedBox(
-                        height: 5.0,
-                      ),
-                      Text(
-                        item1,
-                        style: const TextStyle(fontSize: 12, fontFamily: "Roboto", fontWeight: FontWeight.w500, color: Color(0xFF414141)),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
 
   Future<List<BranchList>> getBranchsData() async {
-    const apiUrl = 'http://182.18.157.215/SaloonApp/API/GetBranchById/null/true';
+    const apiUrl =
+        'http://182.18.157.215/SaloonApp/API/GetBranchById/null/true';
 
     try {
       final jsonResponse = await http.get(
@@ -676,7 +477,8 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
       if (jsonResponse.statusCode == 200) {
         Map<String, dynamic> response = jsonDecode(jsonResponse.body);
         List<dynamic> branchesData = response['listResult'];
-        List<BranchList> result = branchesData.map((e) => BranchList.fromJson(e)).toList();
+        List<BranchList> result =
+        branchesData.map((e) => BranchList.fromJson(e)).toList();
         print('result: ${result[0].name}');
         print('result: ${result[0].address}');
         print('result: ${result[0].imageName}');
@@ -813,7 +615,8 @@ class Item {
     return Item(
       json['name'] as String,
       Colors.blue, // Default color
-      json['imageName'] as String? ?? '', // Add null check and provide a default value
+      json['imageName'] as String? ??
+          '', // Add null check and provide a default value
     );
   }
 }

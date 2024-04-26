@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hairfixingzone/CommonUtils.dart';
+import 'package:hairfixingzone/CustomerLoginScreen.dart';
 import 'package:http/http.dart' as http;
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'Common/custom_button.dart';
@@ -78,7 +79,7 @@ class _ForgotPasswordscreen extends State<ForgotPasswordscreen> {
                       SizedBox(
                         height: 20,
                       ),
-                      Text('Enter your email address and we will send you a code', style: CommonUtils.Sub_header_Styles),
+                      Text('Enter your email address and ', style: CommonUtils.Sub_header_Styles),
                       Text('we will send you a code', style: CommonUtils.Sub_header_Styles),
                     ],
                   ),
@@ -128,7 +129,7 @@ class _ForgotPasswordscreen extends State<ForgotPasswordscreen> {
                                         controller: username,
                                       ),
                                       SizedBox(
-                                        height: 50,
+                                        height: 30,
                                       ),
                                       CustomButton(
                                         buttonText: 'Send OTP',
@@ -141,22 +142,31 @@ class _ForgotPasswordscreen extends State<ForgotPasswordscreen> {
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Text(
-                                        'Back to login?',
-                                        style: TextStyle(
-                                          fontSize: 15,
-                                          color: Colors.black,
+
+                                      Text(  'Back to login?', style: CommonUtils.Mediumtext_14),
+
+                                      GestureDetector(
+                                        onTap: () {
+                                          // Handle the click event for the "Click here!" text
+                                          print('Click here! clicked');
+                                          // Add your custom logic or navigation code here
+                                          Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                              builder: (context) => CustomerLoginScreen(),
+                                            ),
+                                          );
+                                        },
+                                        child: Text(' Click here!', style:TextStyle(
+                                          fontSize: 20,
+                                          fontFamily: "Calibri",
+                                          fontWeight: FontWeight.w700,
+                                          color: Color(0xFF0f75bc),
+                                        )
                                         ),
-                                      ),
-                                      Text(
-                                        ' Click here',
-                                        style: TextStyle(
-                                          fontSize: 15,
-                                          color: CommonUtils.primaryTextColor,
-                                        ),
-                                      ),
+                                      )
                                     ],
                                   ),
+
                                 ],
                               ),
                             )),

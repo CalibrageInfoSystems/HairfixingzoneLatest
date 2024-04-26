@@ -6,6 +6,8 @@ import 'package:hairfixingzone/Common/custome_form_field.dart';
 import 'package:hairfixingzone/CommonUtils.dart';
 import 'package:http/http.dart' as http;
 
+import 'CustomerLoginScreen.dart';
+
 class ForgotChangePassword extends StatefulWidget {
   const ForgotChangePassword({super.key});
 
@@ -172,25 +174,52 @@ class _ForgotChangePasswordState extends State<ForgotChangePassword> {
                             const SizedBox(
                               height: 30,
                             ),
-                            const Row(
+                            Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Text(
-                                  'Back to login?',
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    color: Colors.black,
+
+                                Text( 'Back to login?', style: CommonUtils.Mediumtext_14),
+
+                                GestureDetector(
+                                  onTap: () {
+                                    // Handle the click event for the "Click here!" text
+                                    print('Click here! clicked');
+                                    // Add your custom logic or navigation code here
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (context) => CustomerLoginScreen(),
+                                      ),
+                                    );
+                                  },
+                                  child: Text(' Click here!', style:TextStyle(
+                                    fontSize: 20,
+                                    fontFamily: "Calibri",
+                                    fontWeight: FontWeight.w700,
+                                    color: Color(0xFF0f75bc),
+                                  )
                                   ),
-                                ),
-                                Text(
-                                  ' Click Here',
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    color: CommonUtils.primaryTextColor,
-                                  ),
-                                ),
+                                )
                               ],
                             ),
+                            // const Row(
+                            //   mainAxisAlignment: MainAxisAlignment.center,
+                            //   children: [
+                            //     Text(
+                            //       'Back to login?',
+                            //       style: TextStyle(
+                            //         fontSize: 15,
+                            //         color: Colors.black,
+                            //       ),
+                            //     ),
+                            //     Text(
+                            //       ' Click Here',
+                            //       style: TextStyle(
+                            //         fontSize: 15,
+                            //         color: CommonUtils.primaryTextColor,
+                            //       ),
+                            //     ),
+                            //   ],
+                            // ),
                           ],
                         ),
                       ],
@@ -267,7 +296,6 @@ class _ForgotChangePasswordState extends State<ForgotChangePassword> {
       rethrow;
     }
   }
-
   void openDialog() async {
     await showDialog(
       context: context,
@@ -287,23 +315,70 @@ class _ForgotChangePasswordState extends State<ForgotChangePassword> {
               const SizedBox(
                 height: 50,
               ),
-              const Text(
-                'Your password has been successfully changed',
-                style: CommonUtils.txSty_18b_fb,
+              Center( // Center the text
+                child: const Text(
+                  'Your Password Has Been Successfully Changed',
+                  style: CommonUtils.txSty_18b_fb,
+                  textAlign: TextAlign.center, // Optionally, align the text center
+                ),
               ),
               const SizedBox(
                 height: 30,
               ),
               CustomButton(
-                  buttonText: 'Done',
-                  color: CommonUtils.primaryTextColor,
-                  onPressed: () {
-                    Navigator.pop(context);
-                  })
+                buttonText: 'Done',
+                color: CommonUtils.primaryTextColor,
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => CustomerLoginScreen(),
+                    ),
+                  );
+                },
+              ),
             ],
           ),
         );
       },
     );
   }
+
+  // void openDialog() async {
+  //   await showDialog(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return AlertDialog(
+  //         content: Column(
+  //           mainAxisSize: MainAxisSize.min,
+  //           mainAxisAlignment: MainAxisAlignment.center,
+  //           children: [
+  //             const SizedBox(
+  //               height: 10,
+  //             ),
+  //             SizedBox(
+  //               width: 150,
+  //               child: Image.asset('assets/password_success.png'),
+  //             ),
+  //             const SizedBox(
+  //               height: 50,
+  //             ),
+  //             const Text(
+  //               'Your Password Has Been Successfully Changed',
+  //               style: CommonUtils.txSty_18b_fb,
+  //             ),
+  //             const SizedBox(
+  //               height: 30,
+  //             ),
+  //             CustomButton(
+  //                 buttonText: 'Done',
+  //                 color: CommonUtils.primaryTextColor,
+  //                 onPressed: () {
+  //                   Navigator.pop(context);
+  //                 })
+  //           ],
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
 }

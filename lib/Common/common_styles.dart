@@ -22,7 +22,7 @@ class CommonStyles {
   static const blueColor = Color(0xFF0f75bc);
   static const branchBg = Color(0xFFcfeaff);
   static const greenColor = Colors.greenAccent;
-
+  static const whiteColor = Colors.white;
   // styles
   static const TextStyle txSty_12b_f5 = TextStyle(
     fontSize: 12,
@@ -44,9 +44,9 @@ class CommonStyles {
     color: primaryTextColor,
   );
   static const TextStyle txSty_14g_f5 = TextStyle(
-    fontSize: 14,
+    fontSize: 16,
     fontFamily: "Calibri",
-    fontWeight: FontWeight.w500,
+    fontWeight: FontWeight.w600,
     color: greenColor,
   );
   static const TextStyle txSty_14blu_f5 = TextStyle(
@@ -61,10 +61,47 @@ class CommonStyles {
     fontWeight: FontWeight.w500,
     color: Color(0xFF0f75bc),
   );
+  static const TextStyle txSty_16black_f5 = TextStyle(
+    fontSize: 16,
+    fontFamily: "Calibri",
+    fontWeight: FontWeight.w500,
+    color: Color(0xFF5f5f5f),
+  );
   static const TextStyle txSty_16p_fb = TextStyle(
     fontSize: 16,
     fontFamily: "Calibri",
     fontWeight: FontWeight.bold,
     color: primaryTextColor,
+  );
+  static const TextStyle header_Styles = TextStyle(
+    fontSize: 26,
+    fontFamily: "Calibri",
+    fontWeight: FontWeight.w700,
+    color: Color(0xFF0f75bc),
+  );
+  static const TextStyle txSty_16w_fb = TextStyle(
+    fontSize: 16,
+    fontFamily: "Calibri",
+    fontWeight: FontWeight.bold,
+    color: whiteColor,
+  );
+  static const TextStyle txSty_18w_fb = TextStyle(
+    fontSize: 22,
+    fontFamily: "Calibri",
+    fontWeight: FontWeight.bold,
+    color: whiteColor,
+  );
+  static const TextStyle txSty_16p_f5 = TextStyle(
+    fontSize: 16,
+    fontFamily: "Calibri",
+    fontWeight: FontWeight.w500,
+    color: primaryTextColor,
+  );
+  static const TextStyle txSty_20p_fb = TextStyle(
+    fontSize: 20,
+    fontFamily: "Calibri",
+    fontWeight: FontWeight.bold,
+    color: primaryTextColor,
+    letterSpacing: 2,
   );
 }

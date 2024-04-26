@@ -18,19 +18,7 @@ import 'Room.dart';
 import 'api_config.dart';
 
 class SelectCity_Branch_screen extends StatefulWidget {
-  // final int branchId;
-  // final String branchname;
-  // final String branchlocation;
-  // final String filepath;
-  // final MyAppointment_Model data;
-  // final int appointmentId; // New field
-  // final String screenFrom; // New field
 
-  // Rescheduleslotscreen(MyAppointment_Model data, {
-  //   required this.data,
-  //  // New field
-  // });
-  // Rescheduleslotscreen({required this.data});
   @override
   _BookingScreenState createState() => _BookingScreenState();
 }

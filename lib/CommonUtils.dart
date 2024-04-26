@@ -120,7 +120,12 @@ class CommonUtils{
     fontWeight: FontWeight.w500,
     color: Color(0xFF5f5f5f),
   );
-
+  static  TextStyle Mediumtext16 = TextStyle(
+    fontSize: 16,
+    fontFamily: "Calibri",
+    fontWeight: FontWeight.w500,
+    color: Color(0xFF5f5f5f),
+  );
   static const txSty_14w_fb = TextStyle(
     fontSize: 14,
     fontFamily: 'Calibri',

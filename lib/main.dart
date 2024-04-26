@@ -16,6 +16,7 @@ import 'package:intl/intl.dart';
 import 'HomeScreen.dart';
 import 'MyAppointment_Model.dart';
 import 'MyAppointmentsProvider.dart';
+import 'myprofile.dart';
 import 'notifications_screen.dart';
 
 @pragma('vm:entry-point')
@@ -209,7 +210,10 @@ class MyApp extends StatelessWidget {
           MyAppointment_Model? data = null;
           return data != null ? Rescheduleslotscreen(data: data) : Rescheduleslotscreen(data: data!);
         },
-        '/BookAppointment': (context) => SelectCity_Branch_screen()
+        '/BookAppointment': (context) => SelectCity_Branch_screen(),
+        '/MyProfile':(context) => myprofile(),
+        '/MyProfile':(context) => myprofile(),
+        '/MyProfile':(context) => myprofile(),
 
         // Add routes for other screens here
       },
