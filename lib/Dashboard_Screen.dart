@@ -10,6 +10,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:marquee/marquee.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Dashboard_Screen extends StatelessWidget {
   const Dashboard_Screen({Key? key}) : super(key: key);
@@ -35,13 +36,19 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
   late PageController _pageController;
   late Timer _timer;
   int _currentPage = 0;
-
+  int? userId;
   String marqueeText = '';
   Future<List<BranchList>>? apiData;
+  String userFullName = '';
+  String email = '';
+  String phonenumber = '';
+
+//  String gender ='';
+  String Gender = '';
   @override
   void initState() {
     super.initState();
-
+    checkLoginuserdata();
     _pageController = PageController(initialPage: _currentPage);
     _fetchItems();
     _startAutoScroll();
@@ -58,7 +65,7 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
 
   void _fetchItems() async {
     final response = await http.get(Uri.parse(
-        'http://182.18.157.215/SaloonApp/API/GetBranchById/null/true'));
+        'http://182.18.157.215/SaloonApp/API/GetBanner?Id=null'));
 
     if (response.statusCode == 200) {
       setState(() {
@@ -125,7 +132,7 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
           Container(
             padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
             height: 80,
-            child: const Column(
+            child:  Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -134,7 +141,7 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
                   style: CommonStyles.txSty_16w_fb,
                 ),
                 Text(
-                  'Customer Name',
+                  '$userFullName ...',
                   style: CommonStyles.txSty_18w_fb,
                 ),
               ],
@@ -168,7 +175,10 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
                             return Marquee(
                               text: marqueeText,
                               style: const TextStyle(
-                                  color: CommonStyles.statusRedText),
+                                  fontSize: 16,
+                                  fontFamily: "Calibri",
+                                  fontWeight: FontWeight.w600,
+                                  color: Color(0xFFff0176)),
                             );
                           }
                         },
@@ -212,7 +222,7 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
                               border:
-                              Border.all(color: Colors.grey, width: 1.5),
+                              Border.all(color:CommonStyles.primaryTextColor, width: 1.5),
                               color: _currentPage == i
                                   ? Colors.grey.withOpacity(0.9)
                                   : Colors.transparent,
@@ -238,9 +248,6 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
                             child: GestureDetector(
                                 onTap: (){
                                   Navigator.of(context, rootNavigator: true).pushNamed("/BookAppointment");
-
-
-
 
                                 },
                                 child:
@@ -300,7 +307,7 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
                             children: [
                               GestureDetector(
                                 onTap: (){
-
+                                  Navigator.of(context, rootNavigator: true).pushNamed("/Mybookings");
                                 },
                                 child:
                               Column(
@@ -311,7 +318,7 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
                                     height: 60,
                                     padding: const EdgeInsets.all(15),
                                     decoration: const BoxDecoration(
-                                      color: Color.fromARGB(255, 240, 124, 230),
+                                   color: Color(0xFFe656ae),
                                       shape: BoxShape.circle,
                                     ),
                                     child: SvgPicture.asset(
@@ -326,6 +333,11 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
                                   ),
                                 ],
                               ),),
+                              GestureDetector(
+                                onTap: (){
+                                  Navigator.of(context, rootNavigator: true).pushNamed("/Products");
+                                },
+                                child:
                               Column(
                                 children: [
                                   Container(
@@ -333,7 +345,7 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
                                     height: 60,
                                     padding: const EdgeInsets.all(15),
                                     decoration: const BoxDecoration(
-                                      color: Color.fromARGB(255, 228, 67, 67),
+                                      color:Color(0xFFe44561),
                                       shape: BoxShape.circle,
                                     ),
                                     child: SvgPicture.asset(
@@ -347,7 +359,7 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
                                     style: CommonStyles.txSty_14p_f5,
                                   ),
                                 ],
-                              ),
+                              ),),
                               GestureDetector(
                                 onTap: (){
                                   Navigator.of(context, rootNavigator: true).pushNamed("/about");
@@ -360,7 +372,7 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
                                       height: 60,
                                       padding: const EdgeInsets.all(15),
                                       decoration: const BoxDecoration(
-                                        color: Color.fromARGB(255, 115, 26, 199),
+                                        color:Color(0xFF662d91),
                                         shape: BoxShape.circle,
                                       ),
                                       child: SvgPicture.asset(
@@ -390,7 +402,7 @@ GestureDetector(
                                     width: 60,
                                     height: 60,
                                     decoration: const BoxDecoration(
-                                      color: Color.fromARGB(255, 3, 104, 65),
+                                     color:Color(0xFF295f5a),
                                       shape: BoxShape.circle,
                                     ),
                                     child: SvgPicture.asset(
@@ -490,6 +502,34 @@ GestureDetector(
       rethrow;
     }
   }
+
+
+  void checkLoginuserdata() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    setState(() {
+      userFullName = prefs.getString('userFullName') ?? '';
+      email = prefs.getString('email') ?? '';
+      phonenumber = prefs.getString('contactNumber') ?? '';
+      Gender = prefs.getString('gender') ?? '';
+      userId = prefs.getInt('userId');
+      // _fullnameController1.text = userFullName;
+      // _emailController3.text = email;
+      // _phonenumberController2.text = phonenumber;
+      // gender = selectedGender;
+      print('userId:$userId');
+      print('userFullName:$userFullName');
+      print('gender:$Gender');
+      // if (gender == 1) {
+      //   Gender = 'Female';
+      // } else if (gender == 2) {
+      //   Gender = 'Male';
+      // } else if (gender == 3) {
+      //   Gender = 'Other';
+      // }
+    });
+  }
+
 }
 
 class BranchCard extends StatelessWidget {

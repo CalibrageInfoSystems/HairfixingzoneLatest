@@ -953,7 +953,7 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
           bool isSuccess = data['isSuccess'];
           if (isSuccess == true) {
             print('Request sent successfully');
-
+            CommonUtils.showCustomToastMessageLong('${data['statusMessage']}', context, 1, 2);
             Navigator.pop(context);
           } else {
             CommonUtils.showCustomToastMessageLong('${data['statusMessage']}', context, 0, 2);

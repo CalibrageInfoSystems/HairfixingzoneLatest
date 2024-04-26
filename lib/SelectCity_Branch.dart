@@ -76,7 +76,9 @@ class _BookingScreenState extends State<SelectCity_Branch_screen> {
   @override
   initState() {
     super.initState();
+
     getcitylist();
+    getbrancheslist(null);
   }
 
   @override

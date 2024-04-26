@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hairfixingzone/CustomerLoginScreen.dart';
 import 'package:hairfixingzone/Dashboard_Screen.dart';
+import 'package:hairfixingzone/HomeScreen.dart';
 import 'package:hairfixingzone/MyAppointment_Model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -138,7 +139,7 @@ class _BookingScreenState extends State<Bookingscreen> {
   @override
   initState() {
     super.initState();
-
+    getUserDataFromSharedPreferences();
     //fetchdropdown();
     BranchId = widget.branchId;
     dropValue = 'Select';
@@ -177,7 +178,7 @@ class _BookingScreenState extends State<Bookingscreen> {
 
     Id = prefs.getInt('userId') ?? 0;
     userFullName = prefs.getString('userFullName') ?? '';
-
+    phonenumber = prefs.getString('contactNumber') ?? '';
     email = prefs.getString('email') ?? '';
     contactNumber = prefs.getString('contactNumber') ?? '';
     genderbyid = prefs.getString('gender');
@@ -797,7 +798,7 @@ class _BookingScreenState extends State<Bookingscreen> {
             print('Request sent successfully');
             showCustomToastMessageLong('Slot booked successfully', context, 0, 2);
             Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (context) => Dashboard_Screen()),
+              MaterialPageRoute(builder: (context) => HomeScreen()),
             );
             // Success case
             // Handle success scenario here
