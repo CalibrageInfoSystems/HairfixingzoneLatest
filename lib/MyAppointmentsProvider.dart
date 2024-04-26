@@ -1,12 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:hairfixingzone/MyAppointment_Model.dart';
-import 'package:hairfixingzone/slotbookingscreen.dart';
-
-
-
-import 'package:flutter/material.dart';
-import 'package:hairfixingzone/MyAppointment_Model.dart';
-import 'package:hairfixingzone/slotbookingscreen.dart';
 
 class MyAppointmentsProvider extends ChangeNotifier {
   List<MyAppointment_Model> proAppointments = [];
@@ -19,30 +12,42 @@ class MyAppointmentsProvider extends ChangeNotifier {
   String? apiToDate;
   int? apiBranchId;
   int? apiStatusTypeId;
+  bool isFilterApplied = false;
+
+  bool get filterStatus => isFilterApplied;
+  set filterStatus(bool newStatus) {
+    isFilterApplied = newStatus;
+    notifyListeners();
+  }
 
   String get getDisplayDate => displayDate;
   set getDisplayDate(String newCode) {
     displayDate = newCode;
+    notifyListeners();
   }
 
   String? get getApiFromDate => apiFromDate;
   set getApiFromDate(String? newCode) {
     apiFromDate = newCode;
+    notifyListeners();
   }
 
   String? get getApiToDate => apiToDate;
   set getApiToDate(String? newCode) {
     apiToDate = newCode;
+    notifyListeners();
   }
 
   int? get getApiBranchId => apiBranchId;
   set getApiBranchId(int? newCode) {
     apiBranchId = newCode;
+    notifyListeners();
   }
 
   int? get getApiStatusTypeId => apiStatusTypeId;
   set getApiStatusTypeId(int? newCode) {
     apiStatusTypeId = newCode;
+    notifyListeners();
   }
 
   List<Statusmodel> prostatus = [];
@@ -67,25 +72,14 @@ class MyAppointmentsProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-
   void clearFilter() {
-    proAppointments = [];
     displayDate = 'Select between dates';
     selectedStatus = 0;
     selectedBranch = 0;
+    filterStatus = false;
     notifyListeners();
   }
 
-  // int get selectedCategory => selectedCategoryIndex;
-  // set selectedCategory(int newStatus) {
-  //   selectedCategoryIndex = newStatus;
-  //   notifyListeners();
-  // }
-  // int? get getCategory => _selectedCategory;
-  // set getCategory(int? newCategory) {
-  //   _selectedCategory = newCategory;
-  //   notifyListeners();
-  // }
   int? get getbranch => _selectedbranch;
   set getbranch(int? newCategory) {
     _selectedbranch = newCategory;
