@@ -58,14 +58,11 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
   }
 
   void _fetchItems() async {
-    final response = await http.get(Uri.parse(
-        'http://182.18.157.215/SaloonApp/API/GetBranchById/null/true'));
+    final response = await http.get(Uri.parse('http://182.18.157.215/SaloonApp/API/GetBranchById/null/true'));
 
     if (response.statusCode == 200) {
       setState(() {
-        _items = (json.decode(response.body)['listResult'] as List)
-            .map((item) => Item.fromJson(item))
-            .toList();
+        _items = (json.decode(response.body)['listResult'] as List).map((item) => Item.fromJson(item)).toList();
       });
     } else {
       throw Exception('Failed to load items');
@@ -99,8 +96,7 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
         if (response['isSuccess']) {
           int records = response['affectedRecords'];
           for (var i = 0; i < records; i++) {
-            marqueeText =
-                '${marqueeText + response['listResult'][i]['text']}  ';
+            marqueeText = '${marqueeText + response['listResult'][i]['text']}  ';
             // marqueeText += response['listResult'][i]['text'];
           }
         } else {
@@ -108,8 +104,7 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
           throw Exception('api failed');
         }
       } else {
-        throw Exception(
-            'Request failed with status: ${jsonResponse.statusCode}');
+        throw Exception('Request failed with status: ${jsonResponse.statusCode}');
       }
     } catch (error) {
       rethrow;
@@ -157,14 +152,12 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(color: Colors.grey, width: 1.5),
-                    color: _currentPage == i
-                        ? Colors.grey.withOpacity(0.9)
-                        : Colors.transparent,
+                    color: _currentPage == i ? Colors.grey.withOpacity(0.9) : Colors.transparent,
                   ),
                 )
             ],
           ),
-          const SizedBox(height: 5),
+          SizedBox(height: 5),
           SizedBox(
             height: 30,
             child: FutureBuilder(
@@ -177,8 +170,7 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
                 } else {
                   return Marquee(
                     text: marqueeText, //MARK: Marquee
-                    style: const TextStyle(
-                        fontWeight: FontWeight.bold, fontSize: 14),
+                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
                   );
                 }
               },
@@ -196,34 +188,39 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
                     border: Border.all(color: CommonStyles.primaryTextColor),
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Icon(Icons.home),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Click Here',
-                              style: CommonStyles.txSty_14b_f5,
+                  child: GestureDetector(
+                      onTap: () {
+                        //Navigator.of(context).pushNamed('/BookAppointment');
+                        Navigator.of(context, rootNavigator: true).pushNamed("/BookAppointment");
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Icon(Icons.home),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Click Here',
+                                  style: CommonStyles.txSty_14b_f5,
+                                ),
+                                Text(
+                                  'To Book an Appointment',
+                                  style: CommonStyles.txSty_14b_f5,
+                                ),
+                              ],
                             ),
-                            Text(
-                              'To Book an Appointment',
-                              style: CommonStyles.txSty_14b_f5,
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Icon(Icons.home),
-                    ],
-                  ),
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Icon(Icons.home),
+                        ],
+                      )),
                 ),
                 const SizedBox(
                   height: 10,
@@ -321,8 +318,7 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
                     future: apiData,
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const Center(
-                            child: CircularProgressIndicator.adaptive());
+                        return const Center(child: CircularProgressIndicator.adaptive());
                       } else if (snapshot.hasError) {
                         return Center(
                           child: Text(snapshot.error.toString()),
@@ -370,12 +366,10 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
         width: MediaQuery.of(context).size.width / 2,
         child: Card(
           color: color,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
           elevation: 8,
           child: Padding(
-            padding:
-                const EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 10),
+            padding: const EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
@@ -413,11 +407,7 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
                     alignment: Alignment.centerLeft,
                     child: RichText(
                       text: TextSpan(
-                        style: TextStyle(
-                            fontSize: 14,
-                            color: textcolor,
-                            fontFamily: "Roboto",
-                            fontWeight: FontWeight.w600),
+                        style: TextStyle(fontSize: 14, color: textcolor, fontFamily: "Roboto", fontWeight: FontWeight.w600),
                         children: const [
                           // TextSpan(
                           //   text: 'All Incoming and\n',
@@ -434,10 +424,7 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
                           // TextSpan(
                           //   text: 'Record',
                           // ),
-                          TextSpan(
-                              text:
-                                  'All Incoming and Outgoing Transactions record',
-                              style: TextStyle(height: 2))
+                          TextSpan(text: 'All Incoming and Outgoing Transactions record', style: TextStyle(height: 2))
                         ],
                       ),
                     ),
@@ -470,12 +457,10 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
         height: MediaQuery.of(context).size.height / 6,
         child: Card(
           color: color,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
           elevation: 8,
           child: Padding(
-            padding:
-                const EdgeInsets.only(left: 10, right: 15, top: 7, bottom: 3),
+            padding: const EdgeInsets.only(left: 10, right: 15, top: 7, bottom: 3),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
@@ -502,11 +487,7 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
                     child: Text(
                       item,
                       maxLines: 1,
-                      style: TextStyle(
-                          fontSize: 16,
-                          fontFamily: "Roboto",
-                          fontWeight: FontWeight.w700,
-                          color: textcolor),
+                      style: TextStyle(fontSize: 16, fontFamily: "Roboto", fontWeight: FontWeight.w700, color: textcolor),
                     ),
                   ),
                 ),
@@ -515,11 +496,7 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
                 // ),
                 Text(
                   item1,
-                  style: const TextStyle(
-                      fontSize: 12,
-                      fontFamily: "Roboto",
-                      fontWeight: FontWeight.w500,
-                      color: Color(0xFF414141)),
+                  style: const TextStyle(fontSize: 12, fontFamily: "Roboto", fontWeight: FontWeight.w500, color: Color(0xFF414141)),
                 ),
                 // Expanded(
                 //   child: Align(
@@ -559,12 +536,10 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
         width: MediaQuery.of(context).size.width / 2,
         child: Card(
           color: color,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
           elevation: 8,
           child: Padding(
-            padding:
-                const EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 10),
+            padding: const EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
@@ -591,11 +566,7 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
                     child: Text(
                       item,
                       maxLines: 1,
-                      style: TextStyle(
-                          fontSize: 16,
-                          fontFamily: "Roboto",
-                          fontWeight: FontWeight.w700,
-                          color: textcolor),
+                      style: TextStyle(fontSize: 16, fontFamily: "Roboto", fontWeight: FontWeight.w700, color: textcolor),
                     ),
                   ),
                 ),
@@ -604,11 +575,7 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
                 ),
                 Text(
                   item1,
-                  style: const TextStyle(
-                      fontSize: 12,
-                      fontFamily: "Roboto",
-                      fontWeight: FontWeight.w500,
-                      color: Color(0xFF414141)),
+                  style: const TextStyle(fontSize: 12, fontFamily: "Roboto", fontWeight: FontWeight.w500, color: Color(0xFF414141)),
                 ),
                 // Expanded(
                 //   child: Align(
@@ -647,12 +614,10 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
         width: MediaQuery.of(context).size.width,
         child: Card(
           color: color,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
           elevation: 8,
           child: Padding(
-            padding:
-                const EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 10),
+            padding: const EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 10),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.start,
@@ -674,30 +639,20 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
                 const SizedBox(width: 8),
                 Expanded(
                   child: Column(
-                    crossAxisAlignment:
-                        CrossAxisAlignment.start, // Adjusted to center
-                    mainAxisAlignment:
-                        MainAxisAlignment.center, // Added to center
+                    crossAxisAlignment: CrossAxisAlignment.start, // Adjusted to center
+                    mainAxisAlignment: MainAxisAlignment.center, // Added to center
                     children: [
                       Text(
                         item,
                         maxLines: 1,
-                        style: TextStyle(
-                            fontSize: 16,
-                            fontFamily: "Roboto",
-                            fontWeight: FontWeight.w700,
-                            color: textcolor),
+                        style: TextStyle(fontSize: 16, fontFamily: "Roboto", fontWeight: FontWeight.w700, color: textcolor),
                       ),
                       const SizedBox(
                         height: 5.0,
                       ),
                       Text(
                         item1,
-                        style: const TextStyle(
-                            fontSize: 12,
-                            fontFamily: "Roboto",
-                            fontWeight: FontWeight.w500,
-                            color: Color(0xFF414141)),
+                        style: const TextStyle(fontSize: 12, fontFamily: "Roboto", fontWeight: FontWeight.w500, color: Color(0xFF414141)),
                       ),
                     ],
                   ),
@@ -711,8 +666,7 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
   }
 
   Future<List<BranchList>> getBranchsData() async {
-    const apiUrl =
-        'http://182.18.157.215/SaloonApp/API/GetBranchById/null/true';
+    const apiUrl = 'http://182.18.157.215/SaloonApp/API/GetBranchById/null/true';
 
     try {
       final jsonResponse = await http.get(
@@ -722,8 +676,7 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
       if (jsonResponse.statusCode == 200) {
         Map<String, dynamic> response = jsonDecode(jsonResponse.body);
         List<dynamic> branchesData = response['listResult'];
-        List<BranchList> result =
-            branchesData.map((e) => BranchList.fromJson(e)).toList();
+        List<BranchList> result = branchesData.map((e) => BranchList.fromJson(e)).toList();
         print('result: ${result[0].name}');
         print('result: ${result[0].address}');
         print('result: ${result[0].imageName}');
@@ -860,8 +813,7 @@ class Item {
     return Item(
       json['name'] as String,
       Colors.blue, // Default color
-      json['imageName'] as String? ??
-          '', // Add null check and provide a default value
+      json['imageName'] as String? ?? '', // Add null check and provide a default value
     );
   }
 }

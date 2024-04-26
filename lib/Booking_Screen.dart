@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hairfixingzone/CustomerLoginScreen.dart';
+import 'package:hairfixingzone/Dashboard_Screen.dart';
 import 'package:hairfixingzone/MyAppointment_Model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -14,12 +15,12 @@ import 'CustomRadioButton.dart';
 import 'Room.dart';
 import 'api_config.dart';
 
-class Rescheduleslotscreen extends StatefulWidget {
-  // final int branchId;
+class Bookingscreen extends StatefulWidget {
+  final int branchId;
   // final String branchname;
-  // final String branchlocation;
-  // final String filepath;
-  final MyAppointment_Model data;
+  final String branchname;
+  final String branchaddress;
+  //final MyAppointment_Model data;
   // final int appointmentId; // New field
   // final String screenFrom; // New field
 
@@ -27,7 +28,7 @@ class Rescheduleslotscreen extends StatefulWidget {
   //   required this.data,
   //  // New field
   // });
-  Rescheduleslotscreen({required this.data});
+  Bookingscreen({required this.branchId, required this.branchname, required this.branchaddress});
   @override
   _BookingScreenState createState() => _BookingScreenState();
 }
@@ -65,7 +66,7 @@ class Slot {
   }
 }
 
-class _BookingScreenState extends State<Rescheduleslotscreen> {
+class _BookingScreenState extends State<Bookingscreen> {
   List<String> timeSlots = [];
   List<String> availableSlots = [];
   List<String> timeSlotParts = [];
@@ -122,8 +123,11 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
   int gender = 0;
   String Gender = '';
   int? userId;
+  String? contactNumber;
   bool showConfirmationDialog = false;
-  @override
+  int? Id;
+  String? genderbyid;
+
   @override
   void dispose() {
     _dateController.dispose();
@@ -136,7 +140,7 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
     super.initState();
 
     //fetchdropdown();
-    BranchId = widget.data.branchId;
+    BranchId = widget.branchId;
     dropValue = 'Select';
     _dateController.text = DateFormat('dd-MM-yyyy').format(DateTime.now());
     selecteddate = DateFormat('yyyy-MM-dd').format(DateTime.now());
@@ -148,10 +152,11 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
         try {
           final holidayResponse = await fetchHolidayListByBranchId();
           print(holidayResponse);
+          getUserDataFromSharedPreferences();
         } catch (e) {
           print('Error: $e');
         }
-        fetchTimeSlots(DateTime.parse(selecteddate), widget.data.branchId).then((value) {
+        fetchTimeSlots(DateTime.parse(selecteddate), widget.branchId).then((value) {
           setState(() {
             slots = value;
           });
@@ -167,6 +172,29 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
     });
   }
 
+  Future<void> getUserDataFromSharedPreferences() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    Id = prefs.getInt('userId') ?? 0;
+    userFullName = prefs.getString('userFullName') ?? '';
+
+    email = prefs.getString('email') ?? '';
+    contactNumber = prefs.getString('contactNumber') ?? '';
+    genderbyid = prefs.getString('gender');
+
+    // Create a Map to hold the retrieved user data
+    // Map<String, dynamic> userData = {
+    //   'isLoggedIn': isLoggedIn,
+    //   'userId': userId,
+    //   'userFullName': userFullName,
+    //   'userRoleId': userRoleId,
+    //   'email': email,
+    //   'contactNumber': contactNumber,
+    //   'gender': gender,
+    //   // Add other user data keys as needed
+    // };
+  }
+
   Future<Holiday> fetchHolidayListByBranchId() async {
     // final url = Uri.parse(
     //     'http://182.18.157.215/SaloonApp/API/GetHolidayListByBranchId/$branchId');
@@ -179,7 +207,7 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
           'Content-Type': 'application/json; charset=UTF-8',
         },
         body: jsonEncode(<String, dynamic>{
-          'id': widget.data.branchId,
+          'id': widget.branchId,
           'isActive': true, // Add isActive filter
         }),
       );
@@ -306,7 +334,7 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
     if (isConnected) {
       print('Connected to the internet');
       DateTime selectedDateTime = DateTime.parse(selecteddate);
-      fetchTimeSlots(selectedDateTime, widget.data.branchId).then((value) {
+      fetchTimeSlots(selectedDateTime, widget.branchId).then((value) {
         setState(() {
           slots = value;
           _selectedTimeSlot = '';
@@ -342,7 +370,7 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
                 elevation: 0,
                 backgroundColor: const Color(0xFFf3e3ff),
                 title: const Text(
-                  'Reschedule Appointment',
+                  'Book Appointment',
                   style: TextStyle(color: Color(0xFF0f75bc), fontSize: 16.0, fontWeight: FontWeight.w600),
                 ),
                 // actions: [
@@ -404,7 +432,7 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    '${widget.data.branch}',
+                                    '${widget.branchname}',
                                     style: TextStyle(
                                       color: Color(0xFF0f75bc),
                                       fontSize: 16.0,
@@ -415,7 +443,7 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
                                     height: 15,
                                   ),
                                   Text(
-                                    '${widget.data.address}',
+                                    '${widget.branchaddress}',
                                     style: TextStyle(color: Color(0xFF0f75bc), fontSize: 12.0, fontWeight: FontWeight.w600),
                                   ),
                                 ],
@@ -720,15 +748,15 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
       // print('appointmentId1214: ${widget.appointmentId}');
 
       final request = {
-        "id": widget.data.id,
-        "branchId": widget.data.branchId,
+        "id": null,
+        "branchId": widget.branchId,
         "date": selecteddate,
         "slotTime": timeSlotParts[0],
-        "customerName": widget.data.customerName,
-        "phoneNumber": widget.data.contactNumber,
-        "email": widget.data.email,
-        "genderTypeId": widget.data.genderTypeId,
-        "statusTypeId": 19,
+        "customerName": userFullName,
+        "phoneNumber": phonenumber,
+        "email": email,
+        "genderTypeId": genderbyid, //Sharedprefs
+        "statusTypeId": 4,
         "purposeOfVisitId": selectedValue,
         "isActive": true,
         "createdDate": dateTimeString,
@@ -738,7 +766,7 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
         "review": null,
         "reviewSubmittedDate": null,
         "timeofslot": null,
-        "customerId": widget.data.id
+        "customerId": Id
       };
 
       print('Object: ${json.encode(request)}');
@@ -768,7 +796,9 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
           if (isSuccess == true) {
             print('Request sent successfully');
             showCustomToastMessageLong('Slot booked successfully', context, 0, 2);
-            Navigator.pop(context);
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (context) => Dashboard_Screen()),
+            );
             // Success case
             // Handle success scenario here
           } else {

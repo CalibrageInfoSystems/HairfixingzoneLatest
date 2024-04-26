@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:hairfixingzone/SelectCity_Branch.dart';
 import 'package:hairfixingzone/MyProductsProvider.dart';
 import 'package:hairfixingzone/Rescheduleslotscreen.dart';
 import 'package:hairfixingzone/aboutus_screen.dart';
@@ -207,7 +208,8 @@ class MyApp extends StatelessWidget {
         '/ReSchedulescreen': (context) {
           MyAppointment_Model? data = null;
           return data != null ? Rescheduleslotscreen(data: data) : Rescheduleslotscreen(data: data!);
-        }
+        },
+        '/BookAppointment': (context) => SelectCity_Branch_screen()
 
         // Add routes for other screens here
       },

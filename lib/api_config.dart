@@ -24,7 +24,6 @@ var GetAppointmentByUserid = "api/Appointment/GetAppointmentByUserid";
 
 var GetHolidayListByBranchId = "api/Appointment/GetHolidayListByBranchId/";
 
-
 var SendFirebaseNotifications = "SendFirebaseNotifications";
 
 var imagesflierepo = 'http://182.18.157.215/SaloonApp/Saloon_Repo/'; //test
@@ -36,5 +35,9 @@ var GetApprovedDeclinedSlots = "api/Appointment/GetApprovedDeclinedSlots";
 var Getnotificatons = "api/Appointment/GetNotificationsByUserId/";
 var customeregisration = 'Register';
 var getstatus = "api/TypeCdDmt/2";
-var validateusernameotp = "ValidateOTP";
-var validateusername ="ValidateUserName";
+var validateusername = 'ValidateUserName';
+var validateusernameotp = 'ValidateOTP';
+var getbrancheselectedcity = 'GetBranchesByCityId/';
+var getcity = "GetCityById/4";
+//var validateusernameotp = "ValidateOTP";
+// var validateusername = "ValidateUserName";

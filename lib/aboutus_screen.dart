@@ -49,6 +49,7 @@ class AboutUsScreen extends StatelessWidget {
                     Text(
                       'Welcome to Hair Fixing Zone, your premier destination for cutting-edge Hair Replacement solutions in Bangalore. Established in 2016, Hair Fixing Zone has emerged as a beacon of hope for individuals grappling with hair loss, Baldness, Hair thinning, or seeking to enhance their natural beauty. With four branches strategically located across Bangalore, we strive to provide convenient access to our specialized services, ensuring that every client receives the personalized care and attention they deserve.',
                       style: TextStyle(wordSpacing: 3.0, letterSpacing: 1.5, color: Color(0xFF0f75bc), fontSize: 14),
+                      textAlign: TextAlign.justify,
                     ),
                     SizedBox(height: 15),
                     Text('Our Journey',
@@ -58,8 +59,15 @@ class AboutUsScreen extends StatelessWidget {
                         )),
                     SizedBox(height: 5),
                     Text(
-                        '     At Hair Fixing Zone, our journey began with a simple yet profound mission: to empower individuals to embrace their unique beauty with confidence. Recognizing the transformation power of hair, we embarked on a quest to offer innovation solutions that go beyond conventional norms. Over the years, we have honed our expertise, staying at the forefront of industry advancements to deliver unparalleled results to our estmeed clientele',
-                        style: TextStyle(wordSpacing: 3.0, letterSpacing: 1.5, color: Color(0xFF0f75bc), fontSize: 14)),
+                      'At Hair Fixing Zone, our journey began with a simple yet profound mission: to empower individuals to embrace their unique beauty with confidence. Recognizing the transformation power of hair, we embarked on a quest to offer innovation solutions that go beyond conventional norms. Over the years, we have honed our expertise, staying at the forefront of industry advancements to deliver unparalleled results to our estmeed clientele',
+                      style: TextStyle(
+                        wordSpacing: 3.0,
+                        letterSpacing: 1.5,
+                        color: Color(0xFF0f75bc),
+                        fontSize: 14,
+                      ),
+                      textAlign: TextAlign.justify,
+                    ),
                   ]),
                 )
               ],
