@@ -1,8 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:hairfixingzone/BranchModel.dart';
-
+import 'package:hairfixingzone/BranchesModel.dart';
 import 'package:hairfixingzone/Common/common_styles.dart';
 import 'package:hairfixingzone/aboutus_screen.dart';
 
@@ -37,7 +36,7 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
   int _currentPage = 0;
 
   String marqueeText = '';
-  Future<List<BranchModel>>? apiData;
+  Future<List<BranchList>>? apiData;
   @override
   void initState() {
     super.initState();
@@ -99,7 +98,7 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
           int records = response['affectedRecords'];
           for (var i = 0; i < records; i++) {
             marqueeText =
-            '${marqueeText + response['listResult'][i]['text']}  ';
+                '${marqueeText + response['listResult'][i]['text']}  ';
             // marqueeText += response['listResult'][i]['text'];
           }
         } else {
@@ -175,21 +174,9 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
                   return const SizedBox();
                 } else {
                   return Marquee(
-                    text: marqueeText,
-                    //'The quick brown fox jumps over the lazy dog', //MARK: Marquee
+                    text: marqueeText, //MARK: Marquee
                     style: const TextStyle(
                         fontWeight: FontWeight.bold, fontSize: 14),
-                    scrollAxis: Axis.horizontal, //scroll direction
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    blankSpace: 20.0,
-                    velocity: 50.0, //speed
-                    pauseAfterRound: const Duration(seconds: 1),
-                    startPadding: 10.0,
-                    numberOfRounds: null,
-                    accelerationDuration: const Duration(seconds: 1),
-                    accelerationCurve: Curves.linear,
-                    decelerationDuration: const Duration(milliseconds: 500),
-                    decelerationCurve: Curves.easeOut,
                   );
                 }
               },
@@ -218,8 +205,14 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('Click Here'),
-                            Text('To Book an Appointment'),
+                            Text(
+                              'Click Here',
+                              style: CommonStyles.txSty_14b_f5,
+                            ),
+                            Text(
+                              'To Book an Appointment',
+                              style: CommonStyles.txSty_14b_f5,
+                            ),
                           ],
                         ),
                       ),
@@ -240,8 +233,8 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
                     Column(
                       children: [
                         Container(
-                          width: 85,
-                          height: 85,
+                          width: 60,
+                          height: 60,
                           decoration: const BoxDecoration(
                             color: Color.fromARGB(255, 240, 124, 230),
                             shape: BoxShape.circle,
@@ -249,14 +242,17 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
                           child: const Icon(Icons.home),
                         ),
                         const SizedBox(height: 5),
-                        const Text('My Bookings'),
+                        const Text(
+                          'My Bookings',
+                          style: CommonStyles.txSty_14b_f5,
+                        ),
                       ],
                     ),
                     Column(
                       children: [
                         Container(
-                          width: 85,
-                          height: 85,
+                          width: 60,
+                          height: 60,
                           decoration: const BoxDecoration(
                             color: Color.fromARGB(255, 228, 67, 67),
                             shape: BoxShape.circle,
@@ -264,14 +260,17 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
                           child: const Icon(Icons.home),
                         ),
                         const SizedBox(height: 5),
-                        const Text('Products'),
+                        const Text(
+                          'Products',
+                          style: CommonStyles.txSty_14b_f5,
+                        ),
                       ],
                     ),
                     Column(
                       children: [
                         Container(
-                          width: 85,
-                          height: 85,
+                          width: 60,
+                          height: 60,
                           decoration: const BoxDecoration(
                             color: Color.fromARGB(255, 115, 26, 199),
                             shape: BoxShape.circle,
@@ -285,8 +284,8 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
                     Column(
                       children: [
                         Container(
-                          width: 85,
-                          height: 85,
+                          width: 60,
+                          height: 60,
                           decoration: const BoxDecoration(
                             color: Color.fromARGB(255, 3, 104, 65),
                             shape: BoxShape.circle,
@@ -294,25 +293,28 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
                           child: const Icon(Icons.home),
                         ),
                         const SizedBox(height: 5),
-                        const Text('My Profile'),
+                        const Text(
+                          'My Profile',
+                          style: CommonStyles.txSty_14b_f5,
+                        ),
                       ],
                     ),
                   ],
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 15),
                 //MARK: Branches
                 const Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Text('Branches'),
+                    Text(
+                      'Branches',
+                      style: CommonStyles.txSty_16p_fb,
+                    ),
                   ],
                 ),
 
-                const SizedBox(height: 5),
-
                 SizedBox(
-                  width: double.infinity,
-                  height: 180,
+                  height: 200,
                   child: FutureBuilder(
                     future: apiData,
                     builder: (context, snapshot) {
@@ -324,51 +326,14 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
                           child: Text(snapshot.error.toString()),
                         );
                       } else {
-                        List<BranchModel>? data = snapshot.data!;
+                        List<BranchList>? data = snapshot.data!;
                         return Expanded(
                           child: ListView.builder(
                             scrollDirection: Axis.horizontal,
                             itemCount: data.length,
                             itemBuilder: (context, index) {
-                              return Container(
-                                width: 140,
-                                height: 170,
-                                margin: const EdgeInsets.only(right: 10),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: Colors.grey),
-                                child: Column(
-                                  children: [
-                                    Expanded(
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(2.0),
-                                        child: Image.network(data[index].imageName!),
-                                      ),
-                                    ),
-                                    Expanded(
-                                      child: Container(
-                                        width: 140,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                          BorderRadius.circular(10),
-                                        ),
-                                        padding: const EdgeInsets.all(10),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                          children: [
-                                            Text(data[index].name),
-                                            Text(
-                                              data[index].address,
-                                              overflow: TextOverflow.ellipsis,
-                                              maxLines: 2,
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                              return BranchCard(
+                                branch: data[index],
                               );
                             },
                           ),
@@ -376,7 +341,7 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
                       }
                     },
                   ),
-                )
+                ),
               ],
             ),
           )
@@ -404,11 +369,11 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
         child: Card(
           color: color,
           shape:
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
           elevation: 8,
           child: Padding(
             padding:
-            const EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 10),
+                const EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
@@ -469,7 +434,7 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
                           // ),
                           TextSpan(
                               text:
-                              'All Incoming and Outgoing Transactions record',
+                                  'All Incoming and Outgoing Transactions record',
                               style: TextStyle(height: 2))
                         ],
                       ),
@@ -504,11 +469,11 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
         child: Card(
           color: color,
           shape:
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
           elevation: 8,
           child: Padding(
             padding:
-            const EdgeInsets.only(left: 10, right: 15, top: 7, bottom: 3),
+                const EdgeInsets.only(left: 10, right: 15, top: 7, bottom: 3),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
@@ -593,11 +558,11 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
         child: Card(
           color: color,
           shape:
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
           elevation: 8,
           child: Padding(
             padding:
-            const EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 10),
+                const EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
@@ -681,11 +646,11 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
         child: Card(
           color: color,
           shape:
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
           elevation: 8,
           child: Padding(
             padding:
-            const EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 10),
+                const EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 10),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.start,
@@ -708,9 +673,9 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
                 Expanded(
                   child: Column(
                     crossAxisAlignment:
-                    CrossAxisAlignment.start, // Adjusted to center
+                        CrossAxisAlignment.start, // Adjusted to center
                     mainAxisAlignment:
-                    MainAxisAlignment.center, // Added to center
+                        MainAxisAlignment.center, // Added to center
                     children: [
                       Text(
                         item,
@@ -743,7 +708,7 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
     );
   }
 
-  Future<List<BranchModel>> getBranchsData() async {
+  Future<List<BranchList>> getBranchsData() async {
     const apiUrl =
         'http://182.18.157.215/SaloonApp/API/GetBranchById/null/true';
 
@@ -755,8 +720,8 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
       if (jsonResponse.statusCode == 200) {
         Map<String, dynamic> response = jsonDecode(jsonResponse.body);
         List<dynamic> branchesData = response['listResult'];
-        List<BranchModel> result =
-        branchesData.map((e) => BranchModel.fromJson(e)).toList();
+        List<BranchList> result =
+            branchesData.map((e) => BranchList.fromJson(e)).toList();
         print('result: ${result[0].name}');
         print('result: ${result[0].address}');
         print('result: ${result[0].imageName}');
@@ -767,6 +732,84 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
     } catch (e) {
       rethrow;
     }
+  }
+}
+
+class BranchCard extends StatelessWidget {
+  final BranchList branch;
+  const BranchCard({super.key, required this.branch});
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 5,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Container(
+        width: 170,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: Colors.grey,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Expanded(
+              child: ClipRRect(
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(10),
+                  topRight: Radius.circular(10),
+                ),
+                child: Image.network(
+                  branch.imageName,
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+            // Expanded(
+            //   child: Container(
+            //     padding: const EdgeInsets.all(5),
+            //     decoration: const BoxDecoration(
+            //       borderRadius: BorderRadius.only(
+            //         topLeft: Radius.circular(10),
+            //         topRight: Radius.circular(10),
+            //       ),
+            //       color: Colors.greenAccent,
+            //     ),
+            //     child: Image.network(
+            //       // 'https://via.placeholder.com/600/92c952',
+            //       'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTH7vDN07mCqaSv-VvdFX3VYd2Ic9uFyha4kA&s',
+            //       fit: BoxFit.fill,
+            //     ),
+            //   ),
+            // ),
+            Expanded(
+              child: Container(
+                padding: const EdgeInsets.all(10),
+                decoration: const BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(10),
+                    bottomRight: Radius.circular(10),
+                  ),
+                  color: CommonStyles.branchBg,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Text(
+                      branch.name,
+                      style: CommonStyles.txSty_16p_fb,
+                    ),
+                    Text(branch.address, style: CommonStyles.txSty_12b_f5),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
 

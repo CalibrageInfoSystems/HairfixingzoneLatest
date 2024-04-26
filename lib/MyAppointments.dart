@@ -79,64 +79,33 @@ class MyAppointments_screenState extends State<MyAppointments> {
       },
       child: Consumer<MyAppointmentsProvider>(
         builder: (context, provider, _) => Scaffold(
-          body: Column(
-            children: [
-              // search and filter
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10)
-                    .copyWith(top: 10),
-                child: _searchBarAndFilter(),
-              ),
+          body: PopScope(
+            canPop: true,
+            onPopInvoked: (didPop) {
+              provider.clearFilter();
+            },
+            child: Column(
+              children: [
+                // search and filter
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10)
+                      .copyWith(top: 10),
+                  child: _searchBarAndFilter(),
+                ),
 
-              //MARK: Appointment
-              Expanded(
-                child: FutureBuilder(
-                  future: apiData,
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(
-                        child: CircularProgressIndicator.adaptive(),
-                      );
-                    } else if (snapshot.hasError) {
-                      return const Center(
-                        child: Text(
-                          'No appointments found!',
-                          style: TextStyle(
-                            fontSize: 12.0,
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: "Roboto",
-                          ),
-                        ),
-                      );
-                    } else {
-                      List<MyAppointment_Model> data = provider.proAppointments;
-                      if (data.isNotEmpty) {
-                        return Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: ListView.builder(
-                            itemCount: data.length,
-                            itemBuilder: (context, index) {
-                              return Column(
-                                children: [
-                                  OpCard(
-                                    data: data[index],
-                                  ),
-                                  const SizedBox(
-                                    height: 5,
-                                  ),
-                                ],
-                              );
-                              // return AppointmentCard(
-                              //     data: data[index],
-                              //     day: parseDayFromDate(data[index].date),);
-                            },
-                          ),
+                //MARK: Appointment
+                Expanded(
+                  child: FutureBuilder(
+                    future: apiData,
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(
+                          child: CircularProgressIndicator.adaptive(),
                         );
-                      } else {
+                      } else if (snapshot.hasError) {
                         return const Center(
                           child: Text(
-                            'No appointmens available',
+                            'No appointments found!',
                             style: TextStyle(
                               fontSize: 12.0,
                               color: Colors.black,
@@ -145,12 +114,50 @@ class MyAppointments_screenState extends State<MyAppointments> {
                             ),
                           ),
                         );
+                      } else {
+                        List<MyAppointment_Model> data =
+                            provider.proAppointments;
+                        if (data.isNotEmpty) {
+                          return Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: ListView.builder(
+                              itemCount: data.length,
+                              itemBuilder: (context, index) {
+                                return Column(
+                                  children: [
+                                    OpCard(
+                                      data: data[index],
+                                    ),
+                                    const SizedBox(
+                                      height: 5,
+                                    ),
+                                  ],
+                                );
+                                // return AppointmentCard(
+                                //     data: data[index],
+                                //     day: parseDayFromDate(data[index].date),);
+                              },
+                            ),
+                          );
+                        } else {
+                          return const Center(
+                            child: Text(
+                              'No appointmens available',
+                              style: TextStyle(
+                                fontSize: 12.0,
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: "Roboto",
+                              ),
+                            ),
+                          );
+                        }
                       }
-                    }
-                  },
+                    },
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -245,7 +252,6 @@ class MyAppointments_screenState extends State<MyAppointments> {
 
   Widget _searchBarAndFilter() {
     return Container(
-      margin: const EdgeInsets.only(bottom: 10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -258,17 +264,15 @@ class MyAppointments_screenState extends State<MyAppointments> {
                 decoration: InputDecoration(
                   contentPadding: const EdgeInsets.only(top: 5, left: 12),
                   hintText: 'Search Appointment',
-                  // hintStyle: CommonStyles.txSty_14bs_fb,
-                  // suffixIcon: const Icon(Icons.search),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
                     borderSide:
                         const BorderSide(color: CommonUtils.primaryTextColor),
                   ),
-
                   focusedBorder: OutlineInputBorder(
                     borderSide: const BorderSide(
-                      color: Color(0xFF0f75bc),
+                      width: 1.5,
+                      color: Color.fromARGB(255, 70, 3, 121),
                     ),
                     borderRadius: BorderRadius.circular(6.0),
                   ),
@@ -295,10 +299,12 @@ class MyAppointments_screenState extends State<MyAppointments> {
             ),
             child: IconButton(
               icon: SvgPicture.asset(
-                'assets/filter.svg', // Path to your SVG asset
-                color: const Color(0xFF662e91),
-                width: 24, // Adjust width as needed
-                height: 24, // Adjust height as needed
+                'assets/filter.svg',
+                color: myAppointmentsProvider!.filterStatus == true
+                    ? Colors.black
+                    : const Color(0xFF662e91),
+                width: 24,
+                height: 24,
               ),
               onPressed: () {
                 showModalBottomSheet(
@@ -313,7 +319,6 @@ class MyAppointments_screenState extends State<MyAppointments> {
                     ),
                   ),
                 );
-                // Add logout functionality here
               },
             ),
           ),
@@ -376,17 +381,6 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
     super.initState();
     apiData = fetchbranches();
     prostatus = fetchstatus();
-  }
-
-  Future<void> clearFilter() async {
-    // apiData = fetchproducts();
-    // apiData.then((data) {
-    //   myProductProvider.getProProducts = data;
-    //   // myProductProvider.clearFilter();
-    //   // Navigator.of(context).pop();
-    // }).catchError((error) {
-    //   print('catchError: Error occurred.');
-    // });
   }
 
   @override
@@ -459,16 +453,17 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      filterAppointments({
+                      clearFilterAppointments({
                         "userid": widget.userId,
                         "branchId": null,
                         "fromdate": null,
                         "toDate": null,
                         "statustypeId": null,
-                      }).whenComplete(() => provider.clearFilter());
+                      });
                     },
                     child: const Text(
-                      'Clear all filters', //MARK: Clear all filters
+                      //MARK: Clear all filters
+                      'Clear all filters',
                       style: CommonStyles.txSty_16blu_f5,
                     ),
                   ),
@@ -563,7 +558,7 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                     const SizedBox(
                       height: 10,
                     ),
-                    // category
+                    //MARK: Filter Category
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10),
                       child: FutureBuilder(
@@ -680,6 +675,7 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                     const SizedBox(
                       height: 10,
                     ),
+                    //MARK: Filter Status
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10),
                       child: FutureBuilder(
@@ -717,7 +713,6 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                                       status = data[index - 1];
                                     }
                                     return GestureDetector(
-                                      //MARK: Status id
                                       onTap: () {
                                         setState(() {
                                           provider.selectedStatus = index;
@@ -787,82 +782,87 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                     const SizedBox(
                       height: 10,
                     ),
-                  ],
-                ),
-              ),
-              Row(
-                children: [
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      style: ElevatedButton.styleFrom(
-                        textStyle: const TextStyle(
-                          color: CommonUtils.primaryTextColor,
-                        ),
-                        side: const BorderSide(
-                          color: CommonUtils.primaryTextColor,
-                        ),
-                        backgroundColor: Colors.white,
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(10),
+
+                    Row(
+                      children: [
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            style: ElevatedButton.styleFrom(
+                              textStyle: const TextStyle(
+                                color: CommonUtils.primaryTextColor,
+                              ),
+                              side: const BorderSide(
+                                color: CommonUtils.primaryTextColor,
+                              ),
+                              backgroundColor: Colors.white,
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(5),
+                                ),
+                              ),
+                            ),
+                            child: const Text(
+                              'Close',
+                              style: TextStyle(
+                                fontFamily: 'Calibri',
+                                fontSize: 14,
+                                color: CommonUtils.primaryTextColor,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                           ),
                         ),
-                      ),
-                      child: const Text(
-                        'Close',
-                        style: TextStyle(
-                          fontFamily: 'Calibri',
-                          fontSize: 14,
-                          color: CommonUtils.primaryTextColor,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 20),
-                  Expanded(
-                    child: SizedBox(
-                      child: Center(
-                        child: GestureDetector(
-                          onTap: () {
-                            //MARK: Filter Apply
-                            // filterAppointments(widget.userId);
-                            filterAppointments({
-                              "userid": widget.userId,
-                              "branchId": myAppointmentsProvider.getApiBranchId,
-                              "fromdate": myAppointmentsProvider.getApiFromDate,
-                              "toDate": myAppointmentsProvider.getApiToDate,
-                              "statustypeId":
-                                  myAppointmentsProvider.getApiStatusTypeId,
-                            });
-                          },
-                          child: Container(
-                            // width: desiredWidth * 0.9,
-                            height: 40.0,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(15.0),
-                              color: CommonUtils.primaryTextColor,
-                            ),
-                            child: const Center(
-                              child: Text(
-                                'Apply',
-                                style: TextStyle(
-                                  fontFamily: 'Calibri',
-                                  fontSize: 14,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
+                        const SizedBox(width: 20),
+                        Expanded(
+                          child: SizedBox(
+                            child: Center(
+                              child: GestureDetector(
+                                onTap: () {
+                                  //MARK: Filter Apply
+                                  // filterAppointments(widget.userId);
+                                  filterAppointments({
+                                    "userid": widget.userId,
+                                    "branchId":
+                                        myAppointmentsProvider.getApiBranchId,
+                                    "fromdate":
+                                        myAppointmentsProvider.getApiFromDate,
+                                    "toDate":
+                                        myAppointmentsProvider.getApiToDate,
+                                    "statustypeId": myAppointmentsProvider
+                                        .getApiStatusTypeId,
+                                  }).whenComplete(
+                                      () => provider.filterStatus = true);
+                                },
+                                child: Container(
+                                  // width: desiredWidth * 0.9,
+                                  height: 40.0,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(5.0),
+                                    color: CommonUtils.primaryTextColor,
+                                  ),
+                                  child: const Center(
+                                    child: Text(
+                                      'Apply',
+                                      style: TextStyle(
+                                        fontFamily: 'Calibri',
+                                        fontSize: 14,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),
                           ),
                         ),
-                      ),
+                      ],
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ],
           ),
@@ -899,923 +899,47 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
     }
   }
 
-  void filterAppointment(String input) {
-    apiData.then((data) {});
+  Future<void> clearFilterAppointments(Map<String, dynamic> requestBody) async {
+    final url = Uri.parse(
+        'http://182.18.157.215/SaloonApp/API/api/Appointment/GetAppointmentByUserid');
+
+    try {
+      Map<String, dynamic> request = requestBody;
+      print('filterAppointments: ${json.encode(request)}');
+
+      final jsonResponse = await http.post(
+        url,
+        body: json.encode(request),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      );
+
+      if (jsonResponse.statusCode == 200) {
+        final response = json.decode(jsonResponse.body);
+
+        if (response['listResult'] != null) {
+          List<dynamic> listResult = response['listResult'];
+          myAppointmentsProvider.storeIntoProvider = listResult
+              .map((item) => MyAppointment_Model.fromJson(item))
+              .toList();
+        } else {
+          myAppointmentsProvider.storeIntoProvider = [];
+          throw Exception('No appointments found!');
+        }
+      } else {
+        myAppointmentsProvider.storeIntoProvider = [];
+        print('Request failed with status: ${jsonResponse.statusCode}');
+        throw Exception(
+            'Request failed with status: ${jsonResponse.statusCode}');
+      }
+    } catch (error) {
+      print('catch: $error');
+    }
+    Navigator.of(context).pop();
+    myAppointmentsProvider.clearFilter();
   }
 }
-
-// class AppointmentCard extends StatefulWidget {
-//   final MyAppointment_Model data;
-//   final int day;
-//   const AppointmentCard({super.key, required this.data, required this.day});
-
-//   @override
-//   State<AppointmentCard> createState() => _AppointmentCardState();
-// }
-
-// class _AppointmentCardState extends State<AppointmentCard> {
-//   late List<dynamic> dateValues;
-//   final TextEditingController _commentstexteditcontroller =
-//       TextEditingController();
-//   double rating_star = 0.0;
-//   int? userId;
-//   String? selecteddate;
-//   List<UserFeedback> userfeedbacklist = [];
-//   @override
-//   void initState() {
-//     super.initState();
-//     dateValues = parseDateString(widget.data.date);
-//     selecteddate = DateFormat('yyyy-MM-dd').format(DateTime.now());
-//   }
-
-//   List<dynamic> parseDateString(String dateString) {
-//     DateTime dateTime = DateTime.parse(dateString);
-//     print(
-//         'dateFormate: ${dateTime.day} - ${DateFormat.MMM().format(dateTime)} - ${dateTime.year}');
-//     //         int ,       String ,                           int
-//     return [dateTime.day, DateFormat.MMM().format(dateTime), dateTime.year];
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     // appointments
-//     return Card(
-//         elevation: 4,
-//         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-//         child: Container(
-//             padding: const EdgeInsets.all(10),
-//             decoration: BoxDecoration(
-//               borderRadius: BorderRadius.circular(5),
-//               color: Colors.white,
-//             ),
-//             child: SizedBox(
-//               width: double.infinity,
-//               child: Row(
-//                 crossAxisAlignment: CrossAxisAlignment.start,
-//                 children: [
-//                   // part 1
-//                   SizedBox(
-//                     height: MediaQuery.of(context).size.height / 8,
-//                     child: Column(
-//                       mainAxisAlignment: MainAxisAlignment.start,
-//                       mainAxisSize: MainAxisSize.max, // Set mainAxisSize to max
-//                       crossAxisAlignment: CrossAxisAlignment.start,
-//                       children: [
-//                         Text(
-//                           '${dateValues[1]}',
-//                           style: const TextStyle(
-//                             fontSize: 18,
-//                             fontFamily: 'Calibri',
-//                             fontWeight: FontWeight.bold,
-//                             color: Color(0xFF0f75bc),
-//                           ),
-//                         ),
-//                         const SizedBox(
-//                           height: 10.0,
-//                         ),
-//                         Text(
-//                           '${dateValues[0]}',
-//                           style: const TextStyle(
-//                             fontSize: 30,
-//                             fontFamily: 'Calibri',
-//                             fontWeight: FontWeight.bold,
-//                             color: Color(0xFF0f75bc),
-//                           ),
-//                         ),
-//                         const SizedBox(
-//                           height: 10.0,
-//                         ),
-//                         Text(
-//                           '${dateValues[2]}',
-//                           style: const TextStyle(
-//                             fontSize: 18,
-//                             fontFamily: 'Calibri',
-//                             fontWeight: FontWeight.bold,
-//                             color: Color(0xFF0f75bc),
-//                           ),
-//                         ),
-//                       ],
-//                     ),
-//                   ),
-
-//                   // divider
-//                   Column(
-//                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                     children: [
-//                       Container(
-//                         margin: const EdgeInsets.symmetric(horizontal: 10),
-//                         width: 0.5,
-//                         height: MediaQuery.of(context).size.height / 8,
-//                         color: const Color.fromARGB(255, 70, 67, 67),
-//                       ),
-//                     ],
-//                   ),
-
-//                   Expanded(
-//                     child: SizedBox(
-//                       height: MediaQuery.of(context).size.height / 8,
-//                       child: Column(
-//                         mainAxisAlignment: MainAxisAlignment.start,
-//                         mainAxisSize: MainAxisSize.min,
-//                         crossAxisAlignment: CrossAxisAlignment.start,
-//                         children: [
-//                           Text(
-//                             widget.data.slotDuration, //'10:00 AM to 11;00 AM',
-//                             style: const TextStyle(
-//                               fontSize: 20,
-//                               fontFamily: 'Calibri',
-//                               fontWeight: FontWeight.bold,
-//                               color: Color(0xFF0f75bc),
-//                             ),
-//                           ),
-//                           const SizedBox(
-//                             height: 5.0,
-//                           ),
-//                           Text(
-//                             widget.data.purposeOfVisit, //'Head Wash',
-//                             style: const TextStyle(
-//                               fontSize: 14.0,
-//                               color: Color(0xFF5f5f5f),
-//                               fontWeight: FontWeight.bold,
-//                               fontFamily: "Calibri",
-//                             ),
-//                           ),
-//                           const SizedBox(
-//                             height: 5.0,
-//                           ),
-//                           Text(
-//                             widget.data.branch, //'Kondapur',
-//                             style: const TextStyle(
-//                               fontSize: 14.0,
-//                               color: Color(0xFF5f5f5f),
-//                               fontWeight: FontWeight.bold,
-//                               fontFamily: "Calibri",
-//                             ),
-//                           ),
-//                           const SizedBox(
-//                             height: 5.0,
-//                           ),
-//                           if (widget.data.statusTypeId == 11)
-//                             Text(
-//                               widget.data.review?.toString() ?? '',
-//                               style: const TextStyle(
-//                                 fontSize: 14.0,
-//                                 color: Color(0xFF5f5f5f),
-//                                 fontWeight: FontWeight.bold,
-//                                 fontFamily: "Calibri",
-//                               ),
-//                             ),
-//                         ],
-//                       ),
-//                     ),
-//                   ),
-//                   // part
-
-//                   // part 3
-//                   SizedBox(
-//                     // color: Colors.grey,
-//                     height: 80,
-//                     child: Column(
-//                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                       crossAxisAlignment: CrossAxisAlignment.end,
-//                       children: [
-//                         statusBasedBgById(
-//                             widget.data.statusTypeId, widget.data.status),
-//                         Row(
-//                           children: [
-//                             widget.data.statusTypeId == 11
-//                                 ? Padding(
-//                                     padding: const EdgeInsets.only(left: 8),
-//                                     child: Row(
-//                                       children: [
-//                                         const Icon(
-//                                           Icons.star_border_outlined,
-//                                           size: 13,
-//                                           color:
-//                                               Color.fromARGB(255, 44, 172, 55),
-//                                         ),
-//                                         Text(
-//                                           widget.data.rating?.toString() ??
-//                                               '', // Using null-aware operator and providing a default value
-//                                           style: const TextStyle(
-//                                             fontSize: 16,
-//                                             color: Color.fromARGB(
-//                                                 255, 44, 172, 55),
-//                                           ),
-//                                         ),
-//                                       ],
-//                                     ),
-//                                   )
-//                                 : const SizedBox(),
-//                           ],
-//                         ),
-//                         verifyStatus(widget.data.statusTypeId, widget.data),
-//                       ],
-//                     ),
-//                   ),
-//                 ],
-//               ),
-//             )));
-//   }
-
-//   Widget verifyStatus(int statusTypeId, MyAppointment_Model data) {
-//     switch (statusTypeId) {
-//       case 4: // Submited
-//         return const SizedBox();
-//       case 11: // FeedBack
-//         return const SizedBox();
-//       case 5: // Accepted
-//         return Row(
-//           children: [
-//             GestureDetector(
-//               onTap: () {
-//                 if (!isPastDate(data.date, data.slotDuration)) {
-//                   Navigator.push(
-//                     context,
-//                     MaterialPageRoute(
-//                       builder: (context) => Rescheduleslotscreen(
-//                         data: data,
-//                       ),
-//                     ),
-//                   );
-//                 }
-//                 // Add your logic here for when the 'Reschedule' container is tapped
-//               },
-//               child: IgnorePointer(
-//                 ignoring: isPastDate(data.date, data.slotDuration),
-//                 child: Container(
-//                   decoration: BoxDecoration(
-//                     borderRadius: BorderRadius.circular(3),
-//                     border: Border.all(
-//                       color: isPastDate(data.date, data.slotDuration)
-//                           ? Colors.grey
-//                           : CommonUtils.primaryTextColor,
-//                     ),
-//                   ),
-//                   padding:
-//                       const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
-//                   child: Row(
-//                     children: [
-//                       SvgPicture.asset(
-//                         'assets/calendar-_3_.svg',
-//                         width: 13,
-//                         color: isPastDate(data.date, data.slotDuration)
-//                             ? Colors.grey
-//                             : CommonUtils.primaryTextColor,
-//                       ),
-//                       Text(
-//                         ' Reschedule',
-//                         style: TextStyle(
-//                           fontSize: 18,
-//                           fontFamily: "Calibri",
-//                           fontWeight: FontWeight.w500,
-//                           color: isPastDate(data.date, data.slotDuration)
-//                               ? Colors.grey
-//                               : CommonUtils.primaryTextColor,
-//                         ),
-//                       ),
-//                     ],
-//                   ),
-//                 ),
-//               ),
-//             ),
-//             const SizedBox(
-//               width: 10,
-//             ),
-//             GestureDetector(
-//               onTap: () {
-//                 if (!isPastDate(data.date, data.slotDuration)) {
-//                   conformation(data);
-//                   // Add your logic here for when the 'Cancel' container is tapped
-//                 }
-//               },
-//               child: IgnorePointer(
-//                 ignoring: isPastDate(data.date, data.slotDuration),
-//                 child: Container(
-//                   decoration: BoxDecoration(
-//                     borderRadius: BorderRadius.circular(3),
-//                     border: Border.all(
-//                       color: isPastDate(data.date, data.slotDuration)
-//                           ? Colors.grey
-//                           : CommonStyles.statusRedText,
-//                     ),
-//                   ),
-//                   padding:
-//                       const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
-//                   child: Row(
-//                     children: [
-//                       SvgPicture.asset(
-//                         'assets/calendar-xmark.svg',
-//                         width: 13,
-//                         color: isPastDate(data.date, data.slotDuration)
-//                             ? Colors.grey
-//                             : CommonStyles.statusRedText,
-//                       ),
-//                       Text(
-//                         ' Cancel',
-//                         style: TextStyle(
-//                           fontSize: 18,
-//                           fontFamily: "Calibri",
-//                           fontWeight: FontWeight.w500,
-//                           color: isPastDate(data.date, data.slotDuration)
-//                               ? Colors.grey
-//                               : CommonStyles.statusRedText,
-//                         ),
-//                       ),
-//                     ],
-//                   ),
-//                 ),
-//               ),
-//             ),
-//           ],
-//         );
-
-//       case 18: // Closed
-//         return GestureDetector(
-//           onTap: () {
-//             // Handle the click event here
-//             // For example, you can navigate to a rating screen or show a dialog box for rating
-//             // Replace the below print statement with your desired action
-//             ShowAlertdialog(data);
-//             print('Rate Us clicked');
-//           },
-//           child: Container(
-//             decoration: BoxDecoration(
-//               borderRadius: BorderRadius.circular(3),
-//               border: Border.all(color: CommonUtils.primaryTextColor),
-//             ),
-//             padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
-//             child: const Row(
-//               children: [
-//                 Icon(
-//                   Icons.star_border_outlined,
-//                   size: 16,
-//                   color: CommonUtils.primaryTextColor,
-//                 ),
-//                 Text(
-//                   ' Rate Us',
-//                   style: TextStyle(
-//                     fontSize: 18,
-//                     fontFamily: "Calibri",
-//                     fontWeight: FontWeight.w500,
-//                     color: CommonStyles.primaryTextColor,
-//                   ),
-//                 ),
-//               ],
-//             ),
-//           ),
-//         );
-//       default:
-//         return Container(
-//           decoration: BoxDecoration(
-//               borderRadius: BorderRadius.circular(3),
-//               border: Border.all(color: CommonUtils.blackColor)),
-//           padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
-//           child: const Row(
-//             children: [
-//               Icon(
-//                 Icons.star_border_outlined,
-//                 size: 13,
-//               ),
-//               Text(
-//                 ' default',
-//                 style: TextStyle(fontSize: 11, color: CommonUtils.blackColor),
-//               ),
-//             ],
-//           ),
-//         );
-//     }
-//   }
-
-//   Widget statusBasedBgById(int statusTypeId, String status) {
-//     final Color statusColor;
-//     final Color statusBgColor;
-//     if (statusTypeId == 11) {
-//       status = "Closed";
-//     }
-
-//     switch (statusTypeId) {
-//       case 4: // Submited
-//         statusColor = CommonStyles.statusBlueText;
-//         statusBgColor = CommonStyles.statusBlueBg;
-//         break;
-//       case 5: // Accepted
-//         statusColor = CommonStyles.statusGreenText;
-//         statusBgColor = CommonStyles.statusGreenBg;
-//         break;
-//       case 11: // FeedBack
-//         statusColor = CommonStyles.statusYellowText;
-//         statusBgColor = CommonStyles.statusYellowBg;
-//         break;
-//       case 18: // Closed
-//         statusColor = CommonStyles.statusYellowText;
-//         statusBgColor = CommonStyles.statusYellowBg;
-//         break;
-//       case 100: // Rejected
-//         statusColor = CommonStyles.statusYellowText;
-//         statusBgColor = CommonStyles.statusYellowBg;
-//         break;
-//       default:
-//         statusColor = Colors.black26;
-//         statusBgColor = Colors.black26.withOpacity(0.2);
-//         break;
-//     }
-//     return Container(
-//       decoration: BoxDecoration(
-//           borderRadius: BorderRadius.circular(15), color: statusBgColor),
-//       padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 15),
-//       child: Row(
-//         children: [
-//           // statusBasedBgById(widget.data.statusTypeId),
-//           Text(
-//             status,
-//             style: TextStyle(
-//               fontSize: 18,
-//               fontFamily: "Calibri",
-//               fontWeight: FontWeight.w500,
-//               color: statusColor,
-//             ),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-
-//   void ShowAlertdialog(MyAppointment_Model appointments) {
-// //    print('indexof listview$index');
-//     _commentstexteditcontroller.clear();
-//     showDialog(
-//       barrierDismissible: true,
-//       context: context,
-//       builder: (BuildContext context) {
-//         return StatefulBuilder(
-//           builder: (context, setState) {
-//             return AlertDialog(
-//               backgroundColor: Colors.transparent,
-//               surfaceTintColor: Colors.transparent,
-//               title: SingleChildScrollView(
-//                 child: Container(
-//                   width: MediaQuery.of(context).size.width,
-
-//                   //     height: MediaQuery.of(context).size.height,
-//                   //   color: Colors.white,
-//                   padding: const EdgeInsets.only(
-//                       top: 15.0, left: 15.0, right: 15.0, bottom: 20.0),
-
-//                   decoration: BoxDecoration(
-//                     borderRadius: BorderRadius.circular(10.0),
-//                     gradient: const LinearGradient(
-//                       colors: [
-//                         Color(0xffffffff),
-//                         Color(0xffffffff),
-//                       ],
-//                       begin: Alignment.topCenter,
-//                       end: Alignment.bottomCenter,
-//                     ),
-//                   ),
-//                   child: Column(
-//                     crossAxisAlignment: CrossAxisAlignment.start,
-//                     children: [
-//                       const Text(
-//                         'Feedback',
-//                         style: TextStyle(
-//                           fontSize: 24,
-//                           color: CommonUtils.primaryTextColor,
-//                           fontFamily: 'Calibri',
-//                         ),
-//                       ),
-//                       const SizedBox(
-//                         height: 15.0,
-//                       ),
-//                       Text(
-//                         'Please Rate Your Experience For The ${appointments.slotDuration} Slot At The ${appointments.branch} Hair Fixing Zone',
-//                         style: const TextStyle(
-//                           fontSize: 16,
-//                           color: CommonUtils.primaryTextColor,
-//                           fontFamily: 'Calibri',
-//                         ),
-//                       ),
-//                       const SizedBox(
-//                         height: 15.0,
-//                       ),
-//                       SizedBox(
-//                           width: MediaQuery.of(context).size.width,
-//                           child: RatingBar.builder(
-//                             initialRating: 0,
-//                             minRating: 0,
-//                             direction: Axis.horizontal,
-//                             allowHalfRating: true,
-//                             itemCount: 5,
-//                             itemPadding:
-//                                 const EdgeInsets.symmetric(horizontal: 1.0),
-//                             itemBuilder: (context, _) => const Icon(
-//                               Icons.star,
-//                               color: CommonUtils.primaryTextColor,
-//                             ),
-//                             onRatingUpdate: (rating) {
-//                               setState(() {
-//                                 rating_star = rating;
-//                                 print('rating_star$rating_star');
-//                               });
-//                             },
-//                           )),
-//                       Padding(
-//                         padding:
-//                             const EdgeInsets.only(left: 0, top: 10.0, right: 0),
-//                         child: GestureDetector(
-//                           onTap: () async {},
-//                           child: Container(
-//                             height: 80,
-//                             width: MediaQuery.of(context).size.width,
-//                             decoration: BoxDecoration(
-//                               border: Border.all(
-//                                   color: CommonUtils.primaryTextColor,
-//                                   width: 1.5),
-//                               borderRadius: BorderRadius.circular(5.0),
-//                               color: Colors.white,
-//                             ),
-//                             child: TextFormField(
-//                               controller: _commentstexteditcontroller,
-//                               style: const TextStyle(
-//                                 fontFamily: 'Calibri',
-//                                 fontSize: 14,
-//                                 fontWeight: FontWeight.w300,
-//                               ),
-//                               maxLines: null,
-//                               maxLength: 256,
-//                               // Set maxLines to null for multiline input
-//                               decoration: const InputDecoration(
-//                                 hintText: 'Comments',
-//                                 hintStyle: TextStyle(
-//                                   color: Colors.black54,
-//                                   fontSize: 14,
-//                                   fontWeight: FontWeight.bold,
-//                                   fontFamily: 'Calibri',
-//                                 ),
-//                                 contentPadding: EdgeInsets.symmetric(
-//                                   horizontal: 16.0,
-//                                   vertical: 12.0,
-//                                 ),
-//                                 border: InputBorder.none,
-//                               ),
-//                             ),
-//                           ),
-//                         ),
-//                       ),
-//                       Row(
-//                         children: [
-//                           Expanded(
-//                             child: ElevatedButton(
-//                               onPressed: () {
-//                                 Navigator.of(context).pop();
-//                               },
-//                               style: ElevatedButton.styleFrom(
-//                                 textStyle: const TextStyle(
-//                                   color: CommonUtils.primaryTextColor,
-//                                 ),
-//                                 side: const BorderSide(
-//                                   color: CommonUtils.primaryTextColor,
-//                                 ),
-//                                 backgroundColor: Colors.white,
-//                                 shape: const RoundedRectangleBorder(
-//                                   borderRadius: BorderRadius.all(
-//                                     Radius.circular(10),
-//                                   ),
-//                                 ),
-//                               ),
-//                               child: const Text(
-//                                 'Close',
-//                                 style: TextStyle(
-//                                   fontFamily: 'Calibri',
-//                                   fontSize: 14,
-//                                   color: CommonUtils.primaryTextColor,
-//                                   fontWeight: FontWeight.bold,
-//                                 ),
-//                               ),
-//                             ),
-//                           ),
-//                           const SizedBox(width: 20),
-//                           Expanded(
-//                             child: SizedBox(
-//                               child: Center(
-//                                 child: GestureDetector(
-//                                   onTap: () {
-//                                     validaterating(appointments);
-//                                   },
-//                                   child: Container(
-//                                     // width: desiredWidth * 0.9,
-//                                     height: 40.0,
-//                                     decoration: BoxDecoration(
-//                                       borderRadius: BorderRadius.circular(15.0),
-//                                       color: CommonUtils.primaryTextColor,
-//                                     ),
-//                                     child: const Center(
-//                                       child: Text(
-//                                         'Submit',
-//                                         style: TextStyle(
-//                                           fontFamily: 'Calibri',
-//                                           fontSize: 14,
-//                                           color: Colors.white,
-//                                           fontWeight: FontWeight.bold,
-//                                         ),
-//                                       ),
-//                                     ),
-//                                   ),
-//                                 ),
-//                               ),
-//                             ),
-//                           ),
-//                         ],
-//                       ),
-//                     ],
-//                   ),
-//                 ),
-//               ),
-//             );
-//           },
-//         );
-//       },
-//     );
-//   }
-
-//   Future<void> validaterating(MyAppointment_Model appointmens) async {
-//     //  print('indexinvalidating$index');
-//     SharedPreferences prefs = await SharedPreferences.getInstance();
-//     userId = prefs.getInt('userId');
-//     print('userId validaterating : $userId');
-//     bool isValid = true;
-//     bool hasValidationFailed = false;
-//     int myInt = rating_star.toInt();
-//     print('changedintoint$myInt');
-//     if (rating_star <= 0.0) {
-//       FocusScope.of(context).unfocus();
-//       CommonUtils.showCustomToastMessageLong(
-//           'Please Give Rating', context, 1, 4);
-//       isValid = false;
-//       hasValidationFailed = true;
-//     }
-
-//     if (isValid && _commentstexteditcontroller.text.trim().isEmpty) {
-//       FocusScope.of(context).unfocus();
-//       CommonUtils.showCustomToastMessageLong(
-//           'Please Enter Comments', context, 1, 4);
-//       isValid = false;
-//       hasValidationFailed = true;
-//     }
-//     if (isValid) {
-//       final url = Uri.parse(baseUrl + postApiAppointment);
-//       print('url==>890: $url');
-//       DateTime now = DateTime.now();
-//       String dateTimeString = now.toString();
-//       print('DateTime as String: $dateTimeString');
-
-//       //  for (MyAppointment_Model appointment in appointmens) {
-//       // Create the request object for each appointment
-//       final request = {
-//         "Id": appointmens.id,
-//         "BranchId": appointmens.branchId,
-//         "Date": appointmens.date,
-//         "SlotTime": appointmens.slotTime,
-//         "CustomerName": appointmens.customerName,
-//         "PhoneNumber":
-//             appointmens.contactNumber, // Changed from appointments.phoneNumber
-//         "Email": appointmens.email,
-//         "GenderTypeId": appointmens.genderTypeId,
-//         "StatusTypeId": 11,
-//         "PurposeOfVisitId": appointmens.purposeOfVisitId,
-//         "PurposeOfVisit": appointmens.purposeOfVisit,
-//         "IsActive": true,
-//         "CreatedDate": dateTimeString,
-//         "UpdatedDate": dateTimeString,
-//         "UpdatedByUserId": appointmens.genderTypeId,
-//         "rating": rating_star,
-//         "review": _commentstexteditcontroller.text.toString(),
-//         "reviewSubmittedDate": dateTimeString,
-//         "timeofslot": null,
-//         "customerId": userId
-//       };
-//       print('AddUpdatefeedback object: : ${json.encode(request)}');
-
-//       try {
-//         // Send the POST request for each appointment
-//         final response = await http.post(
-//           url,
-//           body: json.encode(request),
-//           headers: {
-//             'Content-Type': 'application/json',
-//           },
-//         );
-
-//         if (response.statusCode == 200) {
-//           print('Request sent successfully');
-//           //  fetchMyAppointments(userId);
-//           CommonUtils.showCustomToastMessageLong(
-//               'Feedback Successfully Submited', context, 0, 4);
-//           // refreshTheScreen();
-//           // if (index >= 0.0 && index < userfeedbacklist.length) {
-//           //   // Ensure index is within the valid range
-//           //   userfeedbacklist.ratingstar = rating_star;
-//           //   userfeedbacklist.comments = _commentstexteditcontroller.text.toString();
-//           //
-//           //   print('rating_starapi${userfeedbacklist[].ratingstar}  comments${userfeedbacklist[].comments}');
-//           //
-//           //   Navigator.pop(context);
-//           // } else {
-//           //   print('Invalid index: $index');
-//           // }
-//           // _printAppointments();
-//           // userfeedbacklist[index].ratingstar = rating_star;
-//           // userfeedbacklist[index].comments = _commentstexteditcontroller.text.toString();
-
-//           //  Navigator.pop(context);
-//         } else {
-//           print(
-//               'Failed to send the request. Status code: ${response.statusCode}');
-//         }
-//       } catch (e) {
-//         print('Error while sending : $e');
-//       }
-//       //  }
-//     }
-//   }
-
-//   void conformation(MyAppointment_Model appointments) {
-//     showDialog(
-//       context: context,
-//       builder: (BuildContext context) {
-//         return AlertDialog(
-//           title: const Text(
-//             'Confirmation',
-//             style: TextStyle(
-//               fontSize: 16,
-//               color: CommonUtils.blueColor,
-//               fontFamily: 'Calibri',
-//             ),
-//           ),
-//           content: Text(
-//             'Are You Sure You Want To Cancel Your  ${appointments.slotDuration} Slot At The${appointments.branch} Hair Fixing Zone',
-//             style: const TextStyle(
-//               fontSize: 16,
-//               color: CommonUtils.primaryTextColor,
-//               fontFamily: 'Calibri',
-//             ),
-//           ),
-//           actions: [
-//             TextButton(
-//               onPressed: () {
-//                 Navigator.of(context).pop();
-//               },
-//               child: const Text(
-//                 'No',
-//                 style: TextStyle(
-//                   fontSize: 16,
-//                   color: CommonUtils.blueColor,
-//                   fontFamily: 'Calibri',
-//                 ),
-//               ),
-//             ),
-//             TextButton(
-//               onPressed: () {
-//                 CancelAppointment(appointments);
-//                 Navigator.of(context).pop();
-//               },
-//               child: const Text(
-//                 'Yes',
-//                 style: TextStyle(
-//                   fontSize: 16,
-//                   color: CommonUtils.blueColor,
-//                   fontFamily: 'Calibri',
-//                 ),
-//               ),
-//             ),
-//           ],
-//         );
-//       },
-//     );
-//   }
-
-//   Future<void> CancelAppointment(MyAppointment_Model appointmens) async {
-//     final url = Uri.parse(baseUrl + postApiAppointment);
-//     print('url==>890: $url');
-//     DateTime now = DateTime.now();
-//     String dateTimeString = now.toString();
-//     print('DateTime as String: $dateTimeString');
-//     SharedPreferences prefs = await SharedPreferences.getInstance();
-//     userId = prefs.getInt('userId');
-//     print('userId CancelAppointment: $userId');
-//     //  for (MyAppointment_Model appointment in appointmens) {
-//     // Create the request object for each appointment
-//     final request = {
-//       "Id": appointmens.id,
-//       "BranchId": appointmens.branchId,
-//       "Date": appointmens.date,
-//       "SlotTime": appointmens.slotTime,
-//       "CustomerName": appointmens.customerName,
-//       "PhoneNumber":
-//           appointmens.contactNumber, // Changed from appointments.phoneNumber
-//       "Email": appointmens.email,
-//       "GenderTypeId": appointmens.genderTypeId,
-//       "StatusTypeId": 6,
-//       "PurposeOfVisitId": appointmens.purposeOfVisitId,
-//       "PurposeOfVisit": appointmens.purposeOfVisit,
-//       "IsActive": true,
-//       "CreatedDate": dateTimeString,
-//       "UpdatedDate": dateTimeString,
-//       "UpdatedByUserId": null,
-//       "rating": rating_star,
-//       "review": _commentstexteditcontroller.text.toString(),
-//       "reviewSubmittedDate": dateTimeString,
-//       "timeofslot": null,
-//       "customerId": userId
-//     };
-//     print('AddUpdatefeedback object: : ${json.encode(request)}');
-
-//     try {
-//       // Send the POST request for each appointment
-//       final response = await http.post(
-//         url,
-//         body: json.encode(request),
-//         headers: {
-//           'Content-Type': 'application/json',
-//         },
-//       );
-
-//       if (response.statusCode == 200) {
-//         Map<String, dynamic> data = json.decode(response.body);
-
-//         // Extract the necessary information
-//         bool isSuccess = data['isSuccess'];
-//         if (isSuccess == true) {
-//           print('Request sent successfully');
-//           //  fetchMyAppointments(userId);
-//           CommonUtils.showCustomToastMessageLong(
-//               'Cancelled  Successfully ', context, 0, 4);
-//           //   Navigator.pop(context);
-//           // Success case
-//           // Handle success scenario here
-//         } else {
-//           // Failure case
-//           // Handle failure scenario here
-//           CommonUtils.showCustomToastMessageLong(
-//               'The request should not be canceled within 30 minutes before slot',
-//               context,
-//               0,
-//               2);
-//         }
-//       } else {
-//         //showCustomToastMessageLong(
-//         // 'Failed to send the request', context, 1, 2);
-//         print(
-//             'Failed to send the request. Status code: ${response.statusCode}');
-//       }
-//     } catch (e) {
-//       print('Error while sending : $e');
-//     }
-//     //  }
-//   }
-
-//   bool isPastDate(String? selectedDate, String time) {
-//     final now = DateTime.now();
-//     // DateTime currentTime = DateTime.now();
-//     //  print('currentTime: $currentTime');
-//     //   int hours = currentTime.hour;
-//     //  print('current hours: $hours');
-//     // Format the time using a specific pattern with AM/PM
-//     String formattedTime = DateFormat('hh:mm a').format(now);
-
-//     final selectedDateTime = DateTime.parse(selectedDate!);
-//     final currentDate = DateTime(now.year, now.month, now.day);
-
-//     // Agent login chey
-
-//     bool isBeforeTime = false; // Assume initial value as true
-//     bool isBeforeDate = selectedDateTime.isBefore(currentDate);
-//     // Parse the desired time for comparison
-//     DateTime desiredTime = DateFormat('hh:mm a').parse(time);
-//     // Parse the current time for comparison
-//     DateTime currentTime = DateFormat('hh:mm a').parse(formattedTime);
-
-//     if (selectedDateTime == currentDate) {
-//       int comparison = currentTime.compareTo(desiredTime);
-//       print('comparison$comparison');
-//       // Print the comparison result
-//       if (comparison < 0) {
-//         isBeforeTime = false;
-//         print('The current time is earlier than 10:15 AM.');
-//       } else if (comparison > 0) {
-//         isBeforeTime = true;
-//       } else {
-//         isBeforeTime = true;
-//       }
-
-//       //  isBeforeTime = hours >= time;
-//     }
-
-//     print('isBeforeTime: $isBeforeTime');
-//     print('isBeforeDate: $isBeforeDate');
-//     return isBeforeTime || isBeforeDate;
-//   }
-// }
 
 class UserFeedback {
   double? ratingstar;

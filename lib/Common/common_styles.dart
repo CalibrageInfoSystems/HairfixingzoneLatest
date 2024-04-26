@@ -20,6 +20,8 @@ class CommonStyles {
   static const primaryTextColor = Color(0xFF662e91);
   static const formFieldErrorBorderColor = Color(0xFFff0000);
   static const blueColor = Color(0xFF0f75bc);
+  static const branchBg = Color(0xFFcfeaff);
+  static const greenColor = Colors.greenAccent;
 
   // styles
   static const TextStyle txSty_12b_f5 = TextStyle(
@@ -27,6 +29,25 @@ class CommonStyles {
     fontFamily: "Calibri",
     fontWeight: FontWeight.w500,
     color: blackColor,
+  );
+
+  static const TextStyle txSty_14b_f5 = TextStyle(
+    fontSize: 14,
+    fontFamily: "Calibri",
+    fontWeight: FontWeight.w500,
+    color: blackColor,
+  );
+  static const TextStyle txSty_14p_f5 = TextStyle(
+    fontSize: 14,
+    fontFamily: "Calibri",
+    fontWeight: FontWeight.w500,
+    color: primaryTextColor,
+  );
+  static const TextStyle txSty_14g_f5 = TextStyle(
+    fontSize: 14,
+    fontFamily: "Calibri",
+    fontWeight: FontWeight.w500,
+    color: greenColor,
   );
   static const TextStyle txSty_14blu_f5 = TextStyle(
     fontSize: 14,
@@ -39,5 +60,11 @@ class CommonStyles {
     fontFamily: "Calibri",
     fontWeight: FontWeight.w500,
     color: Color(0xFF0f75bc),
+  );
+  static const TextStyle txSty_16p_fb = TextStyle(
+    fontSize: 16,
+    fontFamily: "Calibri",
+    fontWeight: FontWeight.bold,
+    color: primaryTextColor,
   );
 }
