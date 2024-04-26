@@ -1,6 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:hairfixingzone/BranchModel.dart';
+
+import 'package:hairfixingzone/Common/common_styles.dart';
 import 'package:hairfixingzone/aboutus_screen.dart';
 
 import 'dart:async';
@@ -34,6 +37,7 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
   int _currentPage = 0;
 
   String marqueeText = '';
+  Future<List<BranchModel>>? apiData;
   @override
   void initState() {
     super.initState();
@@ -41,7 +45,7 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
     _pageController = PageController(initialPage: _currentPage);
     _fetchItems();
     _startAutoScroll();
-
+    apiData = getBranchsData();
     getMarqueeText();
   }
 
@@ -159,6 +163,7 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
                 )
             ],
           ),
+          const SizedBox(height: 5),
           SizedBox(
             height: 30,
             child: FutureBuilder(
@@ -180,6 +185,7 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
                     velocity: 50.0, //speed
                     pauseAfterRound: const Duration(seconds: 1),
                     startPadding: 10.0,
+                    numberOfRounds: null,
                     accelerationDuration: const Duration(seconds: 1),
                     accelerationCurve: Curves.linear,
                     decelerationDuration: const Duration(milliseconds: 500),
@@ -189,109 +195,191 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
               },
             ),
           ),
-          Expanded(
-              flex: 4,
-              child: SingleChildScrollView(
-                child: SizedBox(
-                  width: MediaQuery.of(context).size.width,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            child: Column(
+              children: [
+                //MARK: Book Appointment
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: CommonStyles.primaryTextColor),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: const Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      // Add some spacing between the rows
-                      // Second Row
-                      Row(
-                        children: [
-                          // First Container with single card view
-                          Expanded(
-                            child: SizedBox(
-                              height: MediaQuery.of(context).size.height /
-                                  3, // Match height with the first container
-                              child: Column(
-                                mainAxisAlignment:
-                                MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Expanded(
-                                    child: Container(
-                                      child: _customcontainerCard(
-                                        //imageUrl: "creditcard.svg",
-                                        item: "Create About us",
-                                        item1: "Create About us",
-                                        color: const Color(0xFFb7dbc1),
-                                        color_1: const Color(0xFF43a05a),
-                                        textcolor: const Color(0xFF118730),
-                                        onTap: () {
-                                          Navigator.of(context,
-                                              rootNavigator: true)
-                                              .pushNamed("/about");
-                                        },
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(height: 5),
-                                  Expanded(
-                                    child: Container(
-                                      child: _customcontainerCard(
-                                        //     imageUrl: "arrows_repeat.svg",
-                                        item: "Create Return order",
-                                        item1: "Create a Reorder",
-                                        color: const Color(0xFFF8dac2),
-                                        color_1: const Color(0xFFec9d62),
-                                        textcolor: const Color(0xFFe78337),
-                                        onTap: () {},
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          // Second Container divided into two equal-sized containers
-
-                          Expanded(
-                            child: SizedBox(
-                              height: MediaQuery.of(context).size.height /
-                                  3, // Match height with the first container
-                              child: Column(
-                                mainAxisAlignment:
-                                MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Expanded(
-                                    child: Container(
-                                      child: _customcontainerCard(
-                                        //     imageUrl: "album_collection.svg",
-                                        item: "View Collections",
-                                        item1: "View All Collections",
-                                        color: const Color(0xFFF8dac2),
-                                        color_1: const Color(0xFFec9d62),
-                                        textcolor: const Color(0xFFe78337),
-                                        onTap: () {},
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(height: 5),
-                                  Expanded(
-                                    child: Container(
-                                      child: _customcontainerCard(
-                                        //     imageUrl: "bags-orders.svg",
-                                        item: "View Return order",
-                                        item1: "View All Reorders",
-                                        color: const Color(0xFFb7dbc1),
-                                        color_1: const Color(0xFF43a05a),
-                                        textcolor: const Color(0xFF118730),
-                                        onTap: () {},
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
+                      Icon(Icons.home),
+                      SizedBox(
+                        width: 10,
                       ),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('Click Here'),
+                            Text('To Book an Appointment'),
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Icon(Icons.home),
                     ],
                   ),
                 ),
-              ))
+                const SizedBox(
+                  height: 10,
+                ),
+                //MARK: Screens
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      children: [
+                        Container(
+                          width: 85,
+                          height: 85,
+                          decoration: const BoxDecoration(
+                            color: Color.fromARGB(255, 240, 124, 230),
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Icon(Icons.home),
+                        ),
+                        const SizedBox(height: 5),
+                        const Text('My Bookings'),
+                      ],
+                    ),
+                    Column(
+                      children: [
+                        Container(
+                          width: 85,
+                          height: 85,
+                          decoration: const BoxDecoration(
+                            color: Color.fromARGB(255, 228, 67, 67),
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Icon(Icons.home),
+                        ),
+                        const SizedBox(height: 5),
+                        const Text('Products'),
+                      ],
+                    ),
+                    Column(
+                      children: [
+                        Container(
+                          width: 85,
+                          height: 85,
+                          decoration: const BoxDecoration(
+                            color: Color.fromARGB(255, 115, 26, 199),
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Icon(Icons.home),
+                        ),
+                        const SizedBox(height: 5),
+                        const Text('About Us'),
+                      ],
+                    ),
+                    Column(
+                      children: [
+                        Container(
+                          width: 85,
+                          height: 85,
+                          decoration: const BoxDecoration(
+                            color: Color.fromARGB(255, 3, 104, 65),
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Icon(Icons.home),
+                        ),
+                        const SizedBox(height: 5),
+                        const Text('My Profile'),
+                      ],
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                //MARK: Branches
+                const Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text('Branches'),
+                  ],
+                ),
+
+                const SizedBox(height: 5),
+
+                SizedBox(
+                  width: double.infinity,
+                  height: 180,
+                  child: FutureBuilder(
+                    future: apiData,
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(
+                            child: CircularProgressIndicator.adaptive());
+                      } else if (snapshot.hasError) {
+                        return Center(
+                          child: Text(snapshot.error.toString()),
+                        );
+                      } else {
+                        List<BranchModel>? data = snapshot.data!;
+                        return Expanded(
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: data.length,
+                            itemBuilder: (context, index) {
+                              return Container(
+                                width: 140,
+                                height: 170,
+                                margin: const EdgeInsets.only(right: 10),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: Colors.grey),
+                                child: Column(
+                                  children: [
+                                    Expanded(
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(2.0),
+                                        child: Image.network(data[index].imageName!),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: Container(
+                                        width: 140,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                          BorderRadius.circular(10),
+                                        ),
+                                        padding: const EdgeInsets.all(10),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                          children: [
+                                            Text(data[index].name),
+                                            Text(
+                                              data[index].address,
+                                              overflow: TextOverflow.ellipsis,
+                                              maxLines: 2,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          ),
+                        );
+                      }
+                    },
+                  ),
+                )
+              ],
+            ),
+          )
         ],
       ),
     );
@@ -653,6 +741,32 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
         ),
       ),
     );
+  }
+
+  Future<List<BranchModel>> getBranchsData() async {
+    const apiUrl =
+        'http://182.18.157.215/SaloonApp/API/GetBranchById/null/true';
+
+    try {
+      final jsonResponse = await http.get(
+        Uri.parse(apiUrl),
+      );
+
+      if (jsonResponse.statusCode == 200) {
+        Map<String, dynamic> response = jsonDecode(jsonResponse.body);
+        List<dynamic> branchesData = response['listResult'];
+        List<BranchModel> result =
+        branchesData.map((e) => BranchModel.fromJson(e)).toList();
+        print('result: ${result[0].name}');
+        print('result: ${result[0].address}');
+        print('result: ${result[0].imageName}');
+        return result;
+      } else {
+        throw Exception('api failed');
+      }
+    } catch (e) {
+      rethrow;
+    }
   }
 }
 

@@ -1062,7 +1062,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       itemPadding: EdgeInsets.symmetric(horizontal: 1.0),
                       itemBuilder: (context, _) => Icon(
                         Icons.star,
-                        color: Colors.amber,
+                      color: CommonUtils.primaryTextColor,
                       ),
                       onRatingUpdate: (rating) {
                         setState(() {
@@ -1079,7 +1079,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       height: 80,
                       width: MediaQuery.of(context).size.width,
                       decoration: BoxDecoration(
-                        border: Border.all(color: Color(0xFFf15f22), width: 1.5),
+                        border: Border.all( color: CommonUtils.primaryTextColor, width: 1.5),
                         borderRadius: BorderRadius.circular(5.0),
                         color: Colors.white,
                       ),
@@ -1162,7 +1162,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                               child: const Center(
                                 child: Text(
-                                  'Apply',
+                                  'Submit',
                                   style: TextStyle(
                                     fontFamily: 'Calibri',
                                     fontSize: 14,

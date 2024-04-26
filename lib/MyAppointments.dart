@@ -56,7 +56,7 @@ class MyAppointments_screenState extends State<MyAppointments> {
         print('The Internet Is Connected');
         checkLoginuserdata();
         // fetchMyAppointments(userId);
-        getbranchedata();
+
       } else {
         print('The Internet Is not  Connected');
       }
@@ -150,21 +150,6 @@ class MyAppointments_screenState extends State<MyAppointments> {
     );
   }
 
-  Color _getStatusBorderColor(String status) {
-    switch (status) {
-    // Orange border for 'Pending' status
-      case 'Accepted':
-        return Colors.green.shade600;
-      case 'Declined':
-        return Colors.red;
-      case 'Submited':
-        return Colors.lightBlueAccent;
-    // Add more cases for other statuses if needed
-      default:
-        return Colors.orange; // Red border for other statuses
-    }
-  }
-
 
 
   void checkLoginuserdata() async {
@@ -231,2874 +216,6 @@ class MyAppointments_screenState extends State<MyAppointments> {
   }
 
 
-
-
-  void showBranchesDialog(
-      BuildContext context, MyAppointment_Model appointmentModel) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Select Branch'),
-          content: SizedBox(
-              width: double.maxFinite,
-              height: 400, // Adjust the height as needed
-              child: brancheslist.isEmpty // Check if brancheslist is empty
-                  ? const Center(
-                  child:
-                  CircularProgressIndicator()) // Show a loading indicator if brancheslist is empty
-                  : ListView.builder(
-                shrinkWrap: true,
-                itemCount: brancheslist.length,
-                itemBuilder: (context, index) {
-                  BranchModel branch = brancheslist[index];
-
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 0.0, vertical: 5.0),
-                    child: IntrinsicHeight(
-                      child: ClipRRect(
-                        borderRadius: const BorderRadius.only(
-                          topRight: Radius.circular(15.0),
-                          bottomLeft: Radius.circular(15.0),
-                        ),
-                        child: GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => slotbookingscreen(
-                                  branchId: branch.id,
-                                  branchname: branch.name,
-                                  branchlocation: branch.address,
-                                  filepath: branch.imageName != null
-                                      ? branch.imageName!
-                                      : 'assets/top_image.png',
-                                  MobileNumber: branch.mobileNumber,
-                                  appointmentId: appointmentModel
-                                      .id, // Provide the appointmentId value
-                                  screenFrom: "ReSchedule",
-                                ),
-                              ),
-                            );
-                            Navigator.of(context).pop();
-                            //
-                            // Navigator.of(context).push(
-                            //   MaterialPageRoute(builder: (context) => feedback_Screen()),
-                            // );
-                          },
-                          child: Card(
-                            shadowColor: Colors.transparent,
-                            surfaceTintColor: Colors.transparent,
-                            child: ClipRRect(
-                              borderRadius: const BorderRadius.only(
-                                topRight: Radius.circular(15.0),
-                                bottomLeft: Radius.circular(15.0),
-                              ),
-                              child: Container(
-                                decoration: const BoxDecoration(
-                                  gradient: LinearGradient(
-                                    colors: [
-                                      Color(0xFFFEE7E1), // Start color
-                                      Color(0xFFD7DEFA),
-                                    ],
-                                    begin: Alignment.centerLeft,
-                                    end: Alignment.centerRight,
-                                  ),
-                                ),
-                                child: Row(
-                                  crossAxisAlignment:
-                                  CrossAxisAlignment.center,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 15.0),
-                                      child: Container(
-                                        width: 80,
-                                        height: 50,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                          BorderRadius.circular(10.0),
-                                          border: Border.all(
-                                            color:
-                                            const Color(0xFF9FA1EE),
-                                            width: 3.0,
-                                          ),
-                                        ),
-                                        child: ClipRRect(
-                                          borderRadius:
-                                          BorderRadius.circular(7.0),
-                                          child: branch.imageName != null
-                                              ? Image.network(
-                                            branch.imageName!,
-                                            width: 80,
-                                            height: 50,
-                                            fit: BoxFit.fill,
-                                            loadingBuilder: (context,
-                                                child,
-                                                loadingProgress) {
-                                              if (loadingProgress ==
-                                                  null) {
-                                                return child;
-                                              }
-
-                                              return const Center(
-                                                  child: CircularProgressIndicator
-                                                      .adaptive());
-                                            },
-                                          )
-                                              : Image.asset(
-                                            'assets/top_image.png', // Provide the path to your default image asset
-                                            width: 110,
-                                            height: 65,
-                                            fit: BoxFit.fill,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    Expanded(
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(
-                                            left: 15.0),
-                                        child: Column(
-                                          mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                          crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                          children: [
-                                            Padding(
-                                              padding:
-                                              const EdgeInsets.only(
-                                                  top: 15.0),
-                                              child: Text(
-                                                branch.name,
-                                                style: const TextStyle(
-                                                  fontSize: 18,
-                                                  color:
-                                                  Color(0xFFFB4110),
-                                                  fontWeight:
-                                                  FontWeight.bold,
-                                                  fontFamily: 'Calibri',
-                                                ),
-                                              ),
-                                            ),
-                                            const SizedBox(height: 4.0),
-                                            Expanded(
-                                              child: Padding(
-                                                padding:
-                                                const EdgeInsets.only(
-                                                    right: 10.0),
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                  CrossAxisAlignment
-                                                      .start,
-                                                  children: [
-                                                    Row(
-                                                      mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceEvenly,
-                                                      children: [
-                                                        Image.asset(
-                                                          'assets/location_icon.png',
-                                                          width: 20,
-                                                          height: 18,
-                                                        ),
-                                                        const SizedBox(
-                                                            width: 4.0),
-                                                        Expanded(
-                                                          child: Text(
-                                                            branch
-                                                                .address,
-                                                            style:
-                                                            const TextStyle(
-                                                              fontFamily:
-                                                              'Calibri',
-                                                              fontSize:
-                                                              12,
-                                                              color: Color(
-                                                                  0xFF000000),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                    const Spacer(flex: 3),
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                            Align(
-                                              alignment:
-                                              Alignment.bottomRight,
-                                              child: Container(
-                                                height: 26,
-                                                margin:
-                                                const EdgeInsets.only(
-                                                    bottom: 10.0,
-                                                    right: 10.0),
-                                                decoration: BoxDecoration(
-                                                  color: Colors.white,
-                                                  border: Border.all(
-                                                    color: const Color(
-                                                        0xFF8d97e2),
-                                                  ),
-                                                  borderRadius:
-                                                  BorderRadius
-                                                      .circular(10.0),
-                                                ),
-                                                child: ElevatedButton(
-                                                  onPressed: () {
-                                                    // Handle button press
-                                                  },
-                                                  style: ElevatedButton
-                                                      .styleFrom(
-                                                    foregroundColor:
-                                                    Colors
-                                                        .transparent,
-                                                    backgroundColor:
-                                                    const Color(
-                                                        0xFF8d97e2),
-                                                    elevation: 0,
-                                                    shadowColor: Colors
-                                                        .transparent,
-                                                    shape:
-                                                    RoundedRectangleBorder(
-                                                      borderRadius:
-                                                      BorderRadius
-                                                          .circular(
-                                                          10.0),
-                                                    ),
-                                                  ),
-                                                  child: GestureDetector(
-                                                    onTap: () {
-                                                      print(
-                                                          'booknowbuttonisclciked');
-                                                      print(branch.id);
-                                                      print(branch.name);
-                                                      Navigator.push(
-                                                        context,
-                                                        MaterialPageRoute(
-                                                          builder:
-                                                              (context) =>
-                                                              slotbookingscreen(
-                                                                branchId:
-                                                                branch.id,
-                                                                branchname:
-                                                                branch
-                                                                    .name,
-                                                                branchlocation:
-                                                                branch
-                                                                    .address,
-                                                                filepath: branch
-                                                                    .imageName !=
-                                                                    null
-                                                                    ? branch
-                                                                    .imageName!
-                                                                    : 'assets/top_image.png',
-                                                                MobileNumber:
-                                                                branch
-                                                                    .mobileNumber,
-                                                                appointmentId:
-                                                                appointmentModel
-                                                                    .id, // Provide the appointmentId value
-                                                                screenFrom:
-                                                                "ReSchedule",
-                                                              ),
-                                                        ),
-                                                      );
-
-                                                      Navigator.of(
-                                                          context)
-                                                          .pop();
-                                                    },
-
-                                                    // Handle button press, navigate to a new screen
-
-                                                    child: Row(
-                                                      mainAxisSize:
-                                                      MainAxisSize
-                                                          .min,
-                                                      children: [
-                                                        SvgPicture.asset(
-                                                          'assets/datepicker_icon.svg',
-                                                          width: 15.0,
-                                                          height: 15.0,
-                                                        ),
-                                                        const SizedBox(
-                                                            width: 5),
-                                                        const Text(
-                                                          'Book Now',
-                                                          style:
-                                                          TextStyle(
-                                                            fontSize: 13,
-                                                            color: Color(
-                                                                0xFF8d97e2),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              )),
-        );
-      },
-    );
-  }
-
-  Future<void> getbranchedata() async {
-    setState(() {
-      isLoading = true; // Set isLoading to true before making the API call
-    });
-
-    final url = Uri.parse(baseUrl + getbranches);
-    print('url==>135: $url');
-
-    bool success = false;
-    int retries = 0;
-    const maxRetries = 1;
-
-    while (!success && retries < maxRetries) {
-      try {
-        final response = await http.get(url);
-
-        // Check if the request was successful
-        if (response.statusCode == 200) {
-          // Parse the response body
-          final data = json.decode(response.body);
-
-          List<BranchModel> branchList = [];
-          for (var item in data['listResult']) {
-            branchList.add(BranchModel(
-              id: item['id'],
-              name: item['name'],
-              imageName: item['imageName'],
-              address: item['address'],
-              startTime: item['startTime'],
-              closeTime: item['closeTime'],
-              room: item['room'],
-              mobileNumber: item['mobileNumber'],
-              isActive: item['isActive'],
-            ));
-          }
-
-          // Update the state with the fetched data
-          setState(() {
-            brancheslist = branchList;
-            isLoading = false; // Set isLoading to false after data is fetched
-          });
-
-          success = true;
-        } else {
-          // Handle error if the API request was not successful
-          print('Request failed with status: ${response.statusCode}');
-          setState(() {
-            isLoading = false; // Set isLoading to false if request fails
-          });
-        }
-      } catch (error) {
-        // Handle any exception that occurred during the API call
-        print('Error data is not getting from the api: $error');
-        setState(() {
-          isLoading = false; // Set isLoading to false if error occurs
-        });
-      }
-
-      retries++;
-    }
-
-    if (!success) {
-      // Handle the case where all retries failed
-      print('All retries failed. Unable to fetch data from the API.');
-    }
-  }
-
-  bool isPastDate(String selectedDate, String time) {
-    final now = DateTime.now();
-    // DateTime currentTime = DateTime.now();
-    //  print('currentTime: $currentTime');
-    //   int hours = currentTime.hour;
-    //  print('current hours: $hours');
-    // Format the time using a specific pattern with AM/PM
-    String formattedTime = DateFormat('hh:mm a').format(now);
-
-    final selectedDateTime = DateTime.parse(selectedDate);
-    final currentDate = DateTime(now.year, now.month, now.day);
-
-    // Agent login chey
-
-    bool isBeforeTime = false; // Assume initial value as true
-    bool isBeforeDate = selectedDateTime.isBefore(currentDate);
-    // Parse the desired time for comparison
-    DateTime desiredTime = DateFormat('hh:mm a').parse(time);
-    // Parse the current time for comparison
-    DateTime currentTime = DateFormat('hh:mm a').parse(formattedTime);
-
-    if (selectedDateTime == currentDate) {
-      int comparison = currentTime.compareTo(desiredTime);
-      print('comparison$comparison');
-      // Print the comparison result
-      if (comparison < 0) {
-        isBeforeTime = false;
-        print('The current time is earlier than 10:15 AM.');
-      } else if (comparison > 0) {
-        isBeforeTime = true;
-      } else {
-        isBeforeTime = true;
-      }
-
-      //  isBeforeTime = hours >= time;
-    }
-
-    print('isBeforeTime: $isBeforeTime');
-    print('isBeforeDate: $isBeforeDate');
-    return isBeforeTime || isBeforeDate;
-  }
-
-  AppBar _appBar() {
-    return AppBar(
-      elevation: 0,
-      backgroundColor: const Color(0xFFf15f22),
-      title: const Text(
-        'My Appointments',
-        style: TextStyle(color: Colors.white, fontSize: 16.0),
-      ),
-      centerTitle: true,
-      leading: IconButton(
-        icon: const Icon(
-          Icons.arrow_back,
-          color: Colors.white,
-        ),
-        onPressed: () {
-          Navigator.of(context).pop();
-        },
-      ),
-    );
-  }
-
-  Widget _appointments(List<MyAppointment_Model> data) {
-    return Container(
-      padding: const EdgeInsets.only(
-        top: 10,
-        bottom: 10,
-        left: 10,
-        right: 10,
-      ),
-      child: ListView.builder(
-        shrinkWrap: true,
-        itemCount: data.length,
-        itemBuilder: (context, index) {
-          MyAppointment_Model appointmentModel = data[index];
-          final borderColor = _getStatusBorderColor(appointmentModel.status);
-          final isEvenItem = index % 2 == 0;
-          DateTime dateObj = DateTime.parse(appointmentModel.date);
-          String formattedDate = DateFormat('dd MMMM, yyyy').format(dateObj);
-          String review;
-          if (appointmentModel.review != null) {
-            review = appointmentModel.review!;
-          } else {
-            review = '';
-          }
-          double ratingffromapi;
-          if (appointmentModel.rating != null) {
-            ratingffromapi = appointmentModel.rating!;
-          } else {
-            ratingffromapi = 0.0;
-          }
-          BoxDecoration boxDecoration;
-          if (appointmentModel.statusTypeId == 4) {
-            boxDecoration = isEvenItem
-                ? BoxDecoration(
-                border: Border.all(color: borderColor, width: 1.5),
-                gradient: const LinearGradient(
-                  colors: [
-                    Color(0xFFfee7e1),
-                    Color(0xFFd7defa),
-                  ],
-                  begin: Alignment.centerLeft,
-                  end: Alignment.centerRight,
-                ),
-                borderRadius: const BorderRadius.only(
-                  topRight: Radius.circular(15.0),
-                  bottomLeft: Radius.circular(15.0),
-                ))
-                : BoxDecoration(
-                border: Border.all(color: borderColor, width: 1.5),
-                gradient: const LinearGradient(
-                  colors: [
-                    Color(0xFFd7defa),
-                    Color(0xFFfee7e1),
-                  ],
-                  begin: Alignment.centerLeft,
-                  end: Alignment.centerRight,
-                ),
-                borderRadius: const BorderRadius.only(
-                  topRight: Radius.circular(15.0),
-                  bottomLeft: Radius.circular(15.0),
-                ));
-
-            return GestureDetector(
-              onTap: () {
-                print('CardView clicked!');
-              },
-              child: ClipRRect(
-                borderRadius: const BorderRadius.only(
-                  topRight: Radius.circular(15.0),
-                  bottomLeft: Radius.circular(15.0),
-                ),
-                child: Card(
-                  shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.only(
-                        topRight: Radius.circular(15.0),
-                        bottomLeft: Radius.circular(15.0),
-                      )),
-                  child: Container(
-                    padding: const EdgeInsets.only(
-                        bottom: 10, top: 5, left: 0, right: 0),
-                    decoration: boxDecoration,
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          child: ListTile(
-                            subtitle: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                // Text(
-                                //   'Branch Name',
-                                //   style: TextStyle(color: Color(0xFFF44614), fontSize: 16, fontWeight: FontWeight.bold, fontFamily: 'Calibri'),
-                                // ),
-                                SizedBox(
-                                  width: MediaQuery.of(context).size.width / 2,
-                                  //   height: MediaQuery.of(context).size.height,
-                                  child: Column(
-                                    children: [
-                                      Row(
-                                        children: [
-                                          Expanded(
-                                            flex: 3,
-                                            child: Column(
-                                              crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                              children: [
-                                                Padding(
-                                                  padding:
-                                                  const EdgeInsets.fromLTRB(
-                                                      0, 0, 0, 0),
-                                                  child: Text(
-                                                    appointmentModel.branch,
-                                                    style: const TextStyle(
-                                                        color:
-                                                        Color(0xFFF44614),
-                                                        fontSize: 16,
-                                                        fontWeight:
-                                                        FontWeight.bold,
-                                                        fontFamily: 'Calibri'),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                      Row(
-                                        children: [
-                                          const Expanded(
-                                            flex: 7,
-                                            child: Column(
-                                              crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                              children: [
-                                                Padding(
-                                                  padding: EdgeInsets.fromLTRB(
-                                                      0, 0, 0, 0),
-                                                  child: Text(
-                                                    'Slot Time',
-                                                    style: TextStyle(
-                                                        color:
-                                                        Color(0xFFF44614),
-                                                        fontSize: 12,
-                                                        fontWeight:
-                                                        FontWeight.bold,
-                                                        fontFamily: 'Calibri'),
-                                                  ),
-                                                  // Icon(
-                                                  //   Icons.lock_clock,
-                                                  //   size: 16,
-                                                  //   color: Color(0xFFF44614),
-                                                  // ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          const Expanded(
-                                            flex: 0,
-                                            child: Column(
-                                              crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                              children: [
-                                                Padding(
-                                                  padding: EdgeInsets.fromLTRB(
-                                                      0, 0, 0, 0),
-                                                  child: Text(
-                                                    ' : ',
-                                                    style: TextStyle(
-                                                        color:
-                                                        Color(0xFFF44614),
-                                                        fontSize: 12,
-                                                        fontWeight:
-                                                        FontWeight.bold,
-                                                        fontFamily: 'Calibri'),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          Expanded(
-                                            flex: 12,
-                                            child: Column(
-                                              crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                              children: [
-                                                Padding(
-                                                  padding:
-                                                  const EdgeInsets.fromLTRB(
-                                                      0, 0, 0, 0),
-                                                  child: Text(
-                                                    appointmentModel
-                                                        .slotDuration,
-                                                    style: const TextStyle(
-                                                        color:
-                                                        Color(0xFF042DE3),
-                                                        fontSize: 12,
-                                                        fontFamily: 'Calibri'),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                      Row(
-                                        children: [
-                                          const Expanded(
-                                            flex: 6,
-                                            child: Column(
-                                              crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                              children: [
-                                                Padding(
-                                                  padding: EdgeInsets.fromLTRB(
-                                                      0, 0, 0, 0),
-                                                  child: Text(
-                                                    'Purpose ',
-                                                    style: TextStyle(
-                                                        color:
-                                                        Color(0xFFF44614),
-                                                        fontSize: 12,
-                                                        fontWeight:
-                                                        FontWeight.bold,
-                                                        fontFamily: 'Calibri'),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          const Expanded(
-                                            flex: 0,
-                                            child: Column(
-                                              crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                              children: [
-                                                Padding(
-                                                  padding: EdgeInsets.fromLTRB(
-                                                      0, 0, 0, 0),
-                                                  child: Text(
-                                                    ': ',
-                                                    style: TextStyle(
-                                                        color:
-                                                        Color(0xFFF44614),
-                                                        fontSize: 12,
-                                                        fontWeight:
-                                                        FontWeight.bold,
-                                                        fontFamily: 'Calibri'),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          Expanded(
-                                            flex: 10,
-                                            child: Column(
-                                              crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                              children: [
-                                                Padding(
-                                                  padding:
-                                                  const EdgeInsets.fromLTRB(
-                                                      0, 0, 0, 0),
-                                                  child: Text(
-                                                    appointmentModel
-                                                        .purposeOfVisit,
-                                                    style: const TextStyle(
-                                                        color:
-                                                        Color(0xFF042DE3),
-                                                        fontSize: 12,
-                                                        fontFamily: 'Calibri'),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                //Spacer(),
-                              ],
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width / 2.25,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              const SizedBox(
-                                height: 25,
-                              ),
-                              Row(
-                                children: [
-                                  const Expanded(
-                                    flex: 6,
-                                    child: Column(
-                                      crossAxisAlignment:
-                                      CrossAxisAlignment.start,
-                                      children: [
-                                        Padding(
-                                          padding:
-                                          EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                          child: Text(
-                                            'Date',
-                                            style: TextStyle(
-                                                color: Color(0xFFF44614),
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.bold,
-                                                fontFamily: 'Calibri'),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  const Expanded(
-                                    flex: 0,
-                                    child: Column(
-                                      crossAxisAlignment:
-                                      CrossAxisAlignment.center,
-                                      children: [
-                                        Padding(
-                                          padding:
-                                          EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                          child: Text(
-                                            ': ',
-                                            style: TextStyle(
-                                                color: Color(0xFFF44614),
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.bold,
-                                                fontFamily: 'Calibri'),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Expanded(
-                                    flex: 10,
-                                    child: Column(
-                                      crossAxisAlignment:
-                                      CrossAxisAlignment.start,
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.fromLTRB(
-                                              0, 0, 0, 0),
-                                          child: Text(
-                                            formattedDate,
-                                            style: const TextStyle(
-                                                color: Color(0xFF042DE3),
-                                                fontSize: 12,
-                                                fontFamily: 'Calibri'),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  )
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  const Expanded(
-                                    flex: 6,
-                                    child: Column(
-                                      crossAxisAlignment:
-                                      CrossAxisAlignment.start,
-                                      children: [
-                                        Padding(
-                                          padding:
-                                          EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                          child: Text(
-                                            'Status',
-                                            style: TextStyle(
-                                                color: Color(0xFFF44614),
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.bold,
-                                                fontFamily: 'Calibri'),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  const Expanded(
-                                    flex: 0,
-                                    child: Column(
-                                      crossAxisAlignment:
-                                      CrossAxisAlignment.center,
-                                      children: [
-                                        Padding(
-                                          padding:
-                                          EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                          child: Text(
-                                            ': ',
-                                            style: TextStyle(
-                                                color: Color(0xFFF44614),
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.bold,
-                                                fontFamily: 'Calibri'),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Expanded(
-                                    flex: 10,
-                                    child: Column(
-                                      crossAxisAlignment:
-                                      CrossAxisAlignment.start,
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.fromLTRB(
-                                              0, 0, 0, 0),
-                                          child: Text(
-                                            appointmentModel.status,
-                                            style: const TextStyle(
-                                                color: Color(0xFF042DE3),
-                                                fontSize: 12,
-                                                fontFamily: 'Calibri'),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            );
-          }
-          else if (appointmentModel.statusTypeId == 5) {
-            // Customize UI for statusTypeId 2
-            boxDecoration = isEvenItem
-                ? BoxDecoration(
-                border: Border.all(color: borderColor, width: 1.5),
-                gradient: const LinearGradient(
-                  colors: [
-                    Color(0xFFfee7e1),
-                    Color(0xFFd7defa),
-                  ],
-                  begin: Alignment.centerLeft,
-                  end: Alignment.centerRight,
-                ),
-                borderRadius: const BorderRadius.only(
-                  topRight: Radius.circular(15.0),
-                  bottomLeft: Radius.circular(15.0),
-                ))
-                : BoxDecoration(
-                border: Border.all(color: borderColor, width: 1.5),
-                gradient: const LinearGradient(
-                  colors: [
-                    Color(0xFFd7defa),
-                    Color(0xFFfee7e1),
-                  ],
-                  begin: Alignment.centerLeft,
-                  end: Alignment.centerRight,
-                ),
-                borderRadius: const BorderRadius.only(
-                  topRight: Radius.circular(15.0),
-                  bottomLeft: Radius.circular(15.0),
-                ));
-
-            return GestureDetector(
-              onTap: () {
-                print('CardView clicked!');
-              },
-              child: ClipRRect(
-                borderRadius: const BorderRadius.only(
-                  topRight: Radius.circular(15.0),
-                  bottomLeft: Radius.circular(15.0),
-                ),
-                child: Card(
-                  shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.only(
-                        topRight: Radius.circular(15.0),
-                        bottomLeft: Radius.circular(15.0),
-                      )),
-                  child: Container(
-                    padding: const EdgeInsets.only(
-                        bottom: 10, top: 5, left: 0, right: 0),
-                    decoration: boxDecoration,
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          child: ListTile(
-                            subtitle: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                // Text(
-                                //   'Branch Name',
-                                //   style: TextStyle(color: Color(0xFFF44614), fontSize: 16, fontWeight: FontWeight.bold, fontFamily: 'Calibri'),
-                                // ),
-                                SizedBox(
-                                  width: MediaQuery.of(context).size.width / 2,
-                                  //   height: MediaQuery.of(context).size.height,
-                                  child: Column(
-                                    children: [
-                                      Row(
-                                        children: [
-                                          Expanded(
-                                            flex: 3,
-                                            child: Column(
-                                              crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                              children: [
-                                                Padding(
-                                                  padding:
-                                                  const EdgeInsets.fromLTRB(
-                                                      0, 0, 0, 0),
-                                                  child: Text(
-                                                    appointmentModel.branch,
-                                                    style: const TextStyle(
-                                                        color:
-                                                        Color(0xFFF44614),
-                                                        fontSize: 16,
-                                                        fontWeight:
-                                                        FontWeight.bold,
-                                                        fontFamily: 'Calibri'),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                      Row(
-                                        children: [
-                                          const Expanded(
-                                            flex: 7,
-                                            child: Column(
-                                              crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                              children: [
-                                                Padding(
-                                                  padding: EdgeInsets.fromLTRB(
-                                                      0, 0, 0, 0),
-                                                  child: Text(
-                                                    'Slot Time',
-                                                    style: TextStyle(
-                                                        color:
-                                                        Color(0xFFF44614),
-                                                        fontSize: 12,
-                                                        fontWeight:
-                                                        FontWeight.bold,
-                                                        fontFamily: 'Calibri'),
-                                                  ),
-                                                  // Icon(
-                                                  //   Icons.lock_clock,
-                                                  //   size: 16,
-                                                  //   color: Color(0xFFF44614),
-                                                  // ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          const Expanded(
-                                            flex: 0,
-                                            child: Column(
-                                              crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                              children: [
-                                                Padding(
-                                                  padding: EdgeInsets.fromLTRB(
-                                                      0, 0, 0, 0),
-                                                  child: Text(
-                                                    ' : ',
-                                                    style: TextStyle(
-                                                        color:
-                                                        Color(0xFFF44614),
-                                                        fontSize: 12,
-                                                        fontWeight:
-                                                        FontWeight.bold,
-                                                        fontFamily: 'Calibri'),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          Expanded(
-                                            flex: 12,
-                                            child: Column(
-                                              crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                              children: [
-                                                Padding(
-                                                  padding:
-                                                  const EdgeInsets.fromLTRB(
-                                                      0, 0, 0, 0),
-                                                  child: Text(
-                                                    appointmentModel
-                                                        .slotDuration,
-                                                    style: const TextStyle(
-                                                        color:
-                                                        Color(0xFF042DE3),
-                                                        fontSize: 12,
-                                                        fontFamily: 'Calibri'),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                      Row(
-                                        children: [
-                                          const Expanded(
-                                            flex: 6,
-                                            child: Column(
-                                              crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                              children: [
-                                                Padding(
-                                                  padding: EdgeInsets.fromLTRB(
-                                                      0, 0, 0, 0),
-                                                  child: Text(
-                                                    'Purpose ',
-                                                    style: TextStyle(
-                                                        color:
-                                                        Color(0xFFF44614),
-                                                        fontSize: 12,
-                                                        fontWeight:
-                                                        FontWeight.bold,
-                                                        fontFamily: 'Calibri'),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          const Expanded(
-                                            flex: 0,
-                                            child: Column(
-                                              crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                              children: [
-                                                Padding(
-                                                  padding: EdgeInsets.fromLTRB(
-                                                      0, 0, 0, 0),
-                                                  child: Text(
-                                                    ': ',
-                                                    style: TextStyle(
-                                                        color:
-                                                        Color(0xFFF44614),
-                                                        fontSize: 12,
-                                                        fontWeight:
-                                                        FontWeight.bold,
-                                                        fontFamily: 'Calibri'),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          Expanded(
-                                            flex: 10,
-                                            child: Column(
-                                              crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                              children: [
-                                                Padding(
-                                                  padding:
-                                                  const EdgeInsets.fromLTRB(
-                                                      0, 0, 0, 0),
-                                                  child: Text(
-                                                    appointmentModel
-                                                        .purposeOfVisit,
-                                                    style: const TextStyle(
-                                                        color:
-                                                        Color(0xFF042DE3),
-                                                        fontSize: 12,
-                                                        fontFamily: 'Calibri'),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                      Row(
-                                        children: [
-                                          const Expanded(
-                                            flex: 6,
-                                            child: Column(
-                                              crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                              children: [
-                                                Padding(
-                                                  padding: EdgeInsets.fromLTRB(
-                                                      0, 0, 0, 0),
-                                                  child: Text(
-                                                    'Date',
-                                                    style: TextStyle(
-                                                        color:
-                                                        Color(0xFFF44614),
-                                                        fontSize: 12,
-                                                        fontWeight:
-                                                        FontWeight.bold,
-                                                        fontFamily: 'Calibri'),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          const Expanded(
-                                            flex: 0,
-                                            child: Column(
-                                              crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                              children: [
-                                                Padding(
-                                                  padding: EdgeInsets.fromLTRB(
-                                                      0, 0, 0, 0),
-                                                  child: Text(
-                                                    ': ',
-                                                    style: TextStyle(
-                                                        color:
-                                                        Color(0xFFF44614),
-                                                        fontSize: 12,
-                                                        fontWeight:
-                                                        FontWeight.bold,
-                                                        fontFamily: 'Calibri'),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          Expanded(
-                                            flex: 10,
-                                            child: Column(
-                                              crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                              children: [
-                                                Padding(
-                                                  padding:
-                                                  const EdgeInsets.fromLTRB(
-                                                      0, 0, 0, 0),
-                                                  child: Text(
-                                                    formattedDate,
-                                                    style: const TextStyle(
-                                                        color:
-                                                        Color(0xFF042DE3),
-                                                        fontSize: 12,
-                                                        fontFamily: 'Calibri'),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                      Row(
-                                        children: [
-                                          const Expanded(
-                                            flex: 6,
-                                            child: Column(
-                                              crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                              children: [
-                                                Padding(
-                                                  padding: EdgeInsets.fromLTRB(
-                                                      0, 0, 0, 0),
-                                                  child: Text(
-                                                    'Status',
-                                                    style: TextStyle(
-                                                        color:
-                                                        Color(0xFFF44614),
-                                                        fontSize: 12,
-                                                        fontWeight:
-                                                        FontWeight.bold,
-                                                        fontFamily: 'Calibri'),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          const Expanded(
-                                            flex: 0,
-                                            child: Column(
-                                              crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                              children: [
-                                                Padding(
-                                                  padding: EdgeInsets.fromLTRB(
-                                                      0, 0, 0, 0),
-                                                  child: Text(
-                                                    ': ',
-                                                    style: TextStyle(
-                                                        color:
-                                                        Color(0xFFF44614),
-                                                        fontSize: 12,
-                                                        fontWeight:
-                                                        FontWeight.bold,
-                                                        fontFamily: 'Calibri'),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          Expanded(
-                                            flex: 10,
-                                            child: Column(
-                                              crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                              children: [
-                                                Padding(
-                                                  padding:
-                                                  const EdgeInsets.fromLTRB(
-                                                      0, 0, 0, 0),
-                                                  child: Text(
-                                                    appointmentModel.status,
-                                                    style: const TextStyle(
-                                                        color:
-                                                        Color(0xFF042DE3),
-                                                        fontSize: 12,
-                                                        fontFamily: 'Calibri'),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                //Spacer(),
-                              ],
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width / 2.25,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              SizedBox(
-                                width:
-                                130, // Ensure buttons take up the full width of the container
-                                child: ElevatedButton(
-                                  onPressed: isPastDate(appointmentModel.date,
-                                      appointmentModel.slotDuration)
-                                      ? null // Disable the button if slotDuration is before the current time
-                                      : () {
-                                    getbranchedata();
-                                    showBranchesDialog(context,
-                                        appointmentModel); // Call the function to show branches dialog
-                                    print('Reschedule');
-                                  },
-                                  style: ButtonStyle(
-                                    foregroundColor: MaterialStateProperty
-                                        .resolveWith<Color>(
-                                          (Set<MaterialState> states) {
-                                        if (states
-                                            .contains(MaterialState.disabled)) {
-                                          return Colors
-                                              .grey; // Set the text color to gray when disabled
-                                        }
-                                        return Colors
-                                            .green; // Use the default text color for enabled state
-                                      },
-                                    ),
-                                    backgroundColor: MaterialStateProperty
-                                        .resolveWith<Color>(
-                                          (Set<MaterialState> states) {
-                                        if (states
-                                            .contains(MaterialState.disabled)) {
-                                          return Colors.grey.withOpacity(
-                                              0.5); // Set the background color to gray with opacity when disabled
-                                        }
-                                        return Colors
-                                            .white; // Use the default background color for enabled state
-                                      },
-                                    ),
-                                    shape: MaterialStateProperty.all<
-                                        RoundedRectangleBorder>(
-                                      RoundedRectangleBorder(
-                                        borderRadius:
-                                        BorderRadius.circular(25.0),
-                                        side: const BorderSide(
-                                            color: Colors.green, width: 2.0),
-                                      ),
-                                    ),
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      SvgPicture.asset(
-                                        'assets/rescheduling.svg',
-                                        width: 24,
-                                        height: 24,
-                                      ),
-                                      const SizedBox(width: 5),
-                                      const Text('Reschedule'),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                width:
-                                130, // Ensure buttons take up the full width of the container
-                                child: ElevatedButton(
-                                  onPressed: isPastDate(appointmentModel.date,
-                                      appointmentModel.slotDuration)
-                                      ? null // Disable the button if slotDuration is before the current time
-                                      : () {
-                                    //conformation(appointmentModel, index);
-                                    print('rejectedbuttonisclciked');
-                                    print('Reschedule');
-                                  },
-                                  style: ButtonStyle(
-                                    foregroundColor: MaterialStateProperty
-                                        .resolveWith<Color>(
-                                          (Set<MaterialState> states) {
-                                        if (states
-                                            .contains(MaterialState.disabled)) {
-                                          return Colors
-                                              .grey; // Set the text color to gray when disabled
-                                        }
-                                        return const Color(
-                                            0xFFF44614); // Use the default text color for enabled state
-                                      },
-                                    ),
-                                    backgroundColor: MaterialStateProperty
-                                        .resolveWith<Color>(
-                                          (Set<MaterialState> states) {
-                                        if (states
-                                            .contains(MaterialState.disabled)) {
-                                          return Colors.grey.withOpacity(
-                                              0.5); // Set the background color to gray with opacity when disabled
-                                        }
-                                        return Colors
-                                            .white; // Use the default background color for enabled state
-                                      },
-                                    ),
-                                    shape: MaterialStateProperty.all<
-                                        RoundedRectangleBorder>(
-                                      RoundedRectangleBorder(
-                                        borderRadius:
-                                        BorderRadius.circular(25.0),
-                                        side: const BorderSide(
-                                            color: Color(0xFFF44614),
-                                            width: 2.0),
-                                      ),
-                                    ),
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      SvgPicture.asset(
-                                        'assets/close.svg',
-                                        width: 24,
-                                        height: 24,
-                                      ),
-                                      const SizedBox(width: 5),
-                                      const Text('Cancel'),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            );
-          }
-          else if (appointmentModel.statusTypeId == 6) {
-            boxDecoration = isEvenItem
-                ? BoxDecoration(
-                border: Border.all(color: borderColor, width: 1.5),
-                gradient: const LinearGradient(
-                  colors: [
-                    Color(0xFFfee7e1),
-                    Color(0xFFd7defa),
-                  ],
-                  begin: Alignment.centerLeft,
-                  end: Alignment.centerRight,
-                ),
-                borderRadius: const BorderRadius.only(
-                  topRight: Radius.circular(15.0),
-                  bottomLeft: Radius.circular(15.0),
-                ))
-                : BoxDecoration(
-                border: Border.all(color: borderColor, width: 1.5),
-                gradient: const LinearGradient(
-                  colors: [
-                    Color(0xFFd7defa),
-                    Color(0xFFfee7e1),
-                  ],
-                  begin: Alignment.centerLeft,
-                  end: Alignment.centerRight,
-                ),
-                borderRadius: const BorderRadius.only(
-                  topRight: Radius.circular(15.0),
-                  bottomLeft: Radius.circular(15.0),
-                ));
-
-            return GestureDetector(
-              onTap: () {
-                print('CardView clicked!');
-              },
-              child: ClipRRect(
-                borderRadius: const BorderRadius.only(
-                  topRight: Radius.circular(15.0),
-                  bottomLeft: Radius.circular(15.0),
-                ),
-                child: Card(
-                  shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.only(
-                        topRight: Radius.circular(15.0),
-                        bottomLeft: Radius.circular(15.0),
-                      )),
-                  child: Container(
-                    padding: const EdgeInsets.only(
-                        bottom: 10, top: 5, left: 0, right: 0),
-                    decoration: boxDecoration,
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          child: ListTile(
-                            subtitle: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                // Text(
-                                //   'Branch Name',
-                                //   style: TextStyle(color: Color(0xFFF44614), fontSize: 16, fontWeight: FontWeight.bold, fontFamily: 'Calibri'),
-                                // ),
-                                SizedBox(
-                                  width: MediaQuery.of(context).size.width / 2,
-                                  //   height: MediaQuery.of(context).size.height,
-                                  child: Column(
-                                    children: [
-                                      Row(
-                                        children: [
-                                          Expanded(
-                                            flex: 3,
-                                            child: Column(
-                                              crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                              children: [
-                                                Padding(
-                                                  padding:
-                                                  const EdgeInsets.fromLTRB(
-                                                      0, 0, 0, 0),
-                                                  child: Text(
-                                                    appointmentModel.branch,
-                                                    style: const TextStyle(
-                                                        color:
-                                                        Color(0xFFF44614),
-                                                        fontSize: 16,
-                                                        fontWeight:
-                                                        FontWeight.bold,
-                                                        fontFamily: 'Calibri'),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                      Row(
-                                        children: [
-                                          const Expanded(
-                                            flex: 7,
-                                            child: Column(
-                                              crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                              children: [
-                                                Padding(
-                                                  padding: EdgeInsets.fromLTRB(
-                                                      0, 0, 0, 0),
-                                                  child: Text(
-                                                    'Slot Time',
-                                                    style: TextStyle(
-                                                        color:
-                                                        Color(0xFFF44614),
-                                                        fontSize: 12,
-                                                        fontWeight:
-                                                        FontWeight.bold,
-                                                        fontFamily: 'Calibri'),
-                                                  ),
-                                                  // Icon(
-                                                  //   Icons.lock_clock,
-                                                  //   size: 16,
-                                                  //   color: Color(0xFFF44614),
-                                                  // ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          const Expanded(
-                                            flex: 0,
-                                            child: Column(
-                                              crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                              children: [
-                                                Padding(
-                                                  padding: EdgeInsets.fromLTRB(
-                                                      0, 0, 0, 0),
-                                                  child: Text(
-                                                    ' : ',
-                                                    style: TextStyle(
-                                                        color:
-                                                        Color(0xFFF44614),
-                                                        fontSize: 12,
-                                                        fontWeight:
-                                                        FontWeight.bold,
-                                                        fontFamily: 'Calibri'),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          Expanded(
-                                            flex: 12,
-                                            child: Column(
-                                              crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                              children: [
-                                                Padding(
-                                                  padding:
-                                                  const EdgeInsets.fromLTRB(
-                                                      0, 0, 0, 0),
-                                                  child: Text(
-                                                    appointmentModel
-                                                        .slotDuration,
-                                                    style: const TextStyle(
-                                                        color:
-                                                        Color(0xFF042DE3),
-                                                        fontSize: 12,
-                                                        fontFamily: 'Calibri'),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                      Row(
-                                        children: [
-                                          const Expanded(
-                                            flex: 6,
-                                            child: Column(
-                                              crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                              children: [
-                                                Padding(
-                                                  padding: EdgeInsets.fromLTRB(
-                                                      0, 0, 0, 0),
-                                                  child: Text(
-                                                    'Purpose ',
-                                                    style: TextStyle(
-                                                        color:
-                                                        Color(0xFFF44614),
-                                                        fontSize: 12,
-                                                        fontWeight:
-                                                        FontWeight.bold,
-                                                        fontFamily: 'Calibri'),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          const Expanded(
-                                            flex: 0,
-                                            child: Column(
-                                              crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                              children: [
-                                                Padding(
-                                                  padding: EdgeInsets.fromLTRB(
-                                                      0, 0, 0, 0),
-                                                  child: Text(
-                                                    ': ',
-                                                    style: TextStyle(
-                                                        color:
-                                                        Color(0xFFF44614),
-                                                        fontSize: 12,
-                                                        fontWeight:
-                                                        FontWeight.bold,
-                                                        fontFamily: 'Calibri'),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          Expanded(
-                                            flex: 10,
-                                            child: Column(
-                                              crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                              children: [
-                                                Padding(
-                                                  padding:
-                                                  const EdgeInsets.fromLTRB(
-                                                      0, 0, 0, 0),
-                                                  child: Text(
-                                                    appointmentModel
-                                                        .purposeOfVisit,
-                                                    style: const TextStyle(
-                                                        color:
-                                                        Color(0xFF042DE3),
-                                                        fontSize: 12,
-                                                        fontFamily: 'Calibri'),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                //Spacer(),
-                              ],
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width / 2.25,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              const SizedBox(
-                                height: 25,
-                              ),
-                              Row(
-                                children: [
-                                  const Expanded(
-                                    flex: 6,
-                                    child: Column(
-                                      crossAxisAlignment:
-                                      CrossAxisAlignment.start,
-                                      children: [
-                                        Padding(
-                                          padding:
-                                          EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                          child: Text(
-                                            'Date',
-                                            style: TextStyle(
-                                                color: Color(0xFFF44614),
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.bold,
-                                                fontFamily: 'Calibri'),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  const Expanded(
-                                    flex: 0,
-                                    child: Column(
-                                      crossAxisAlignment:
-                                      CrossAxisAlignment.center,
-                                      children: [
-                                        Padding(
-                                          padding:
-                                          EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                          child: Text(
-                                            ': ',
-                                            style: TextStyle(
-                                                color: Color(0xFFF44614),
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.bold,
-                                                fontFamily: 'Calibri'),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Expanded(
-                                    flex: 10,
-                                    child: Column(
-                                      crossAxisAlignment:
-                                      CrossAxisAlignment.start,
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.fromLTRB(
-                                              0, 0, 0, 0),
-                                          child: Text(
-                                            formattedDate,
-                                            style: const TextStyle(
-                                                color: Color(0xFF042DE3),
-                                                fontSize: 12,
-                                                fontFamily: 'Calibri'),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  )
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  const Expanded(
-                                    flex: 6,
-                                    child: Column(
-                                      crossAxisAlignment:
-                                      CrossAxisAlignment.start,
-                                      children: [
-                                        Padding(
-                                          padding:
-                                          EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                          child: Text(
-                                            'Status',
-                                            style: TextStyle(
-                                                color: Color(0xFFF44614),
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.bold,
-                                                fontFamily: 'Calibri'),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  const Expanded(
-                                    flex: 0,
-                                    child: Column(
-                                      crossAxisAlignment:
-                                      CrossAxisAlignment.center,
-                                      children: [
-                                        Padding(
-                                          padding:
-                                          EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                          child: Text(
-                                            ': ',
-                                            style: TextStyle(
-                                                color: Color(0xFFF44614),
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.bold,
-                                                fontFamily: 'Calibri'),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Expanded(
-                                    flex: 10,
-                                    child: Column(
-                                      crossAxisAlignment:
-                                      CrossAxisAlignment.start,
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.fromLTRB(
-                                              0, 0, 0, 0),
-                                          child: Text(
-                                            appointmentModel.status,
-                                            style: const TextStyle(
-                                                color: Color(0xFF042DE3),
-                                                fontSize: 12,
-                                                fontFamily: 'Calibri'),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            );
-          }
-          else if (appointmentModel.statusTypeId == 18) {
-            // Customize UI for statusTypeId 2
-            boxDecoration = isEvenItem
-                ? BoxDecoration(
-                border: Border.all(color: borderColor, width: 1.5),
-                gradient: const LinearGradient(
-                  colors: [
-                    Color(0xFFfee7e1),
-                    Color(0xFFd7defa),
-                  ],
-                  begin: Alignment.centerLeft,
-                  end: Alignment.centerRight,
-                ),
-                borderRadius: const BorderRadius.only(
-                  topRight: Radius.circular(15.0),
-                  bottomLeft: Radius.circular(15.0),
-                ))
-                : BoxDecoration(
-                border: Border.all(color: borderColor, width: 1.5),
-                gradient: const LinearGradient(
-                  colors: [
-                    Color(0xFFd7defa),
-                    Color(0xFFfee7e1),
-                  ],
-                  begin: Alignment.centerLeft,
-                  end: Alignment.centerRight,
-                ),
-                borderRadius: const BorderRadius.only(
-                  topRight: Radius.circular(15.0),
-                  bottomLeft: Radius.circular(15.0),
-                ));
-
-            return GestureDetector(
-              onTap: () {
-                print('CardView clicked!');
-              },
-              child: ClipRRect(
-                borderRadius: const BorderRadius.only(
-                  topRight: Radius.circular(15.0),
-                  bottomLeft: Radius.circular(15.0),
-                ),
-                child: Card(
-                  shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.only(
-                        topRight: Radius.circular(15.0),
-                        bottomLeft: Radius.circular(15.0),
-                      )),
-                  child: Container(
-                    padding: const EdgeInsets.only(
-                        bottom: 10, top: 5, left: 0, right: 0),
-                    decoration: boxDecoration,
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          child: ListTile(
-                            subtitle: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                // Text(
-                                //   'Branch Name',
-                                //   style: TextStyle(color: Color(0xFFF44614), fontSize: 16, fontWeight: FontWeight.bold, fontFamily: 'Calibri'),
-                                // ),
-                                SizedBox(
-                                  width: MediaQuery.of(context).size.width / 2,
-                                  //   height: MediaQuery.of(context).size.height,
-                                  child: Column(
-                                    children: [
-                                      Row(
-                                        children: [
-                                          Expanded(
-                                            flex: 3,
-                                            child: Column(
-                                              crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                              children: [
-                                                Padding(
-                                                  padding:
-                                                  const EdgeInsets.fromLTRB(
-                                                      0, 0, 0, 0),
-                                                  child: Text(
-                                                    appointmentModel.branch,
-                                                    style: const TextStyle(
-                                                        color:
-                                                        Color(0xFFF44614),
-                                                        fontSize: 16,
-                                                        fontWeight:
-                                                        FontWeight.bold,
-                                                        fontFamily: 'Calibri'),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                      Row(
-                                        children: [
-                                          const Expanded(
-                                            flex: 7,
-                                            child: Column(
-                                              crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                              children: [
-                                                Padding(
-                                                  padding: EdgeInsets.fromLTRB(
-                                                      0, 0, 0, 0),
-                                                  child: Text(
-                                                    'Slot Time',
-                                                    style: TextStyle(
-                                                        color:
-                                                        Color(0xFFF44614),
-                                                        fontSize: 12,
-                                                        fontWeight:
-                                                        FontWeight.bold,
-                                                        fontFamily: 'Calibri'),
-                                                  ),
-                                                  // Icon(
-                                                  //   Icons.lock_clock,
-                                                  //   size: 16,
-                                                  //   color: Color(0xFFF44614),
-                                                  // ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          const Expanded(
-                                            flex: 0,
-                                            child: Column(
-                                              crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                              children: [
-                                                Padding(
-                                                  padding: EdgeInsets.fromLTRB(
-                                                      0, 0, 0, 0),
-                                                  child: Text(
-                                                    ' : ',
-                                                    style: TextStyle(
-                                                        color:
-                                                        Color(0xFFF44614),
-                                                        fontSize: 12,
-                                                        fontWeight:
-                                                        FontWeight.bold,
-                                                        fontFamily: 'Calibri'),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          Expanded(
-                                            flex: 12,
-                                            child: Column(
-                                              crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                              children: [
-                                                Padding(
-                                                  padding:
-                                                  const EdgeInsets.fromLTRB(
-                                                      0, 0, 0, 0),
-                                                  child: Text(
-                                                    appointmentModel
-                                                        .slotDuration,
-                                                    style: const TextStyle(
-                                                        color:
-                                                        Color(0xFF042DE3),
-                                                        fontSize: 12,
-                                                        fontFamily: 'Calibri'),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                      Row(
-                                        children: [
-                                          const Expanded(
-                                            flex: 6,
-                                            child: Column(
-                                              crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                              children: [
-                                                Padding(
-                                                  padding: EdgeInsets.fromLTRB(
-                                                      0, 0, 0, 0),
-                                                  child: Text(
-                                                    'Purpose ',
-                                                    style: TextStyle(
-                                                        color:
-                                                        Color(0xFFF44614),
-                                                        fontSize: 12,
-                                                        fontWeight:
-                                                        FontWeight.bold,
-                                                        fontFamily: 'Calibri'),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          const Expanded(
-                                            flex: 0,
-                                            child: Column(
-                                              crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                              children: [
-                                                Padding(
-                                                  padding: EdgeInsets.fromLTRB(
-                                                      0, 0, 0, 0),
-                                                  child: Text(
-                                                    ': ',
-                                                    style: TextStyle(
-                                                        color:
-                                                        Color(0xFFF44614),
-                                                        fontSize: 12,
-                                                        fontWeight:
-                                                        FontWeight.bold,
-                                                        fontFamily: 'Calibri'),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          Expanded(
-                                            flex: 10,
-                                            child: Column(
-                                              crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                              children: [
-                                                Padding(
-                                                  padding:
-                                                  const EdgeInsets.fromLTRB(
-                                                      0, 0, 0, 0),
-                                                  child: Text(
-                                                    appointmentModel
-                                                        .purposeOfVisit,
-                                                    style: const TextStyle(
-                                                        color:
-                                                        Color(0xFF042DE3),
-                                                        fontSize: 12,
-                                                        fontFamily: 'Calibri'),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                      Row(
-                                        children: [
-                                          const Expanded(
-                                            flex: 6,
-                                            child: Column(
-                                              crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                              children: [
-                                                Padding(
-                                                  padding: EdgeInsets.fromLTRB(
-                                                      0, 0, 0, 0),
-                                                  child: Text(
-                                                    'Date',
-                                                    style: TextStyle(
-                                                        color:
-                                                        Color(0xFFF44614),
-                                                        fontSize: 12,
-                                                        fontWeight:
-                                                        FontWeight.bold,
-                                                        fontFamily: 'Calibri'),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          const Expanded(
-                                            flex: 0,
-                                            child: Column(
-                                              crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                              children: [
-                                                Padding(
-                                                  padding: EdgeInsets.fromLTRB(
-                                                      0, 0, 0, 0),
-                                                  child: Text(
-                                                    ': ',
-                                                    style: TextStyle(
-                                                        color:
-                                                        Color(0xFFF44614),
-                                                        fontSize: 12,
-                                                        fontWeight:
-                                                        FontWeight.bold,
-                                                        fontFamily: 'Calibri'),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          Expanded(
-                                            flex: 10,
-                                            child: Column(
-                                              crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                              children: [
-                                                Padding(
-                                                  padding:
-                                                  const EdgeInsets.fromLTRB(
-                                                      0, 0, 0, 0),
-                                                  child: Text(
-                                                    formattedDate,
-                                                    style: const TextStyle(
-                                                        color:
-                                                        Color(0xFF042DE3),
-                                                        fontSize: 12,
-                                                        fontFamily: 'Calibri'),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                      Row(
-                                        children: [
-                                          const Expanded(
-                                            flex: 6,
-                                            child: Column(
-                                              crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                              children: [
-                                                Padding(
-                                                  padding: EdgeInsets.fromLTRB(
-                                                      0, 0, 0, 0),
-                                                  child: Text(
-                                                    'Status',
-                                                    style: TextStyle(
-                                                        color:
-                                                        Color(0xFFF44614),
-                                                        fontSize: 12,
-                                                        fontWeight:
-                                                        FontWeight.bold,
-                                                        fontFamily: 'Calibri'),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          const Expanded(
-                                            flex: 0,
-                                            child: Column(
-                                              crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                              children: [
-                                                Padding(
-                                                  padding: EdgeInsets.fromLTRB(
-                                                      0, 0, 0, 0),
-                                                  child: Text(
-                                                    ': ',
-                                                    style: TextStyle(
-                                                        color:
-                                                        Color(0xFFF44614),
-                                                        fontSize: 12,
-                                                        fontWeight:
-                                                        FontWeight.bold,
-                                                        fontFamily: 'Calibri'),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          Expanded(
-                                            flex: 10,
-                                            child: Column(
-                                              crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                              children: [
-                                                Padding(
-                                                  padding:
-                                                  const EdgeInsets.fromLTRB(
-                                                      0, 0, 0, 0),
-                                                  child: Text(
-                                                    appointmentModel.status,
-                                                    style: const TextStyle(
-                                                        color:
-                                                        Color(0xFF042DE3),
-                                                        fontSize: 12,
-                                                        fontFamily: 'Calibri'),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                //Spacer(),
-                              ],
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width / 2.25,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const SizedBox(
-                                height: 20,
-                              ),
-                              SizedBox(
-                                width:
-                                130, // Ensure buttons take up the full width of the container
-                                child: ElevatedButton(
-                                  onPressed: appointmentModel.statusTypeId ==
-                                      18 // Provide a valid condition here
-                                      ? () {
-                                    // ShowAlertdialog(appointmentModel,
-                                    // ); // Call the function to show branches dialog
-                                    //  conformation(appointment_model, index);
-                                    // Handle reject button action
-                                    print('Rate Us');
-                                  }
-                                      : null,
-                                  style: ButtonStyle(
-                                    shape: MaterialStateProperty.all<
-                                        RoundedRectangleBorder>(
-                                      RoundedRectangleBorder(
-                                        borderRadius:
-                                        BorderRadius.circular(25.0),
-                                        side: const BorderSide(
-                                            color: Colors.green, width: 2.0),
-                                      ),
-                                    ),
-                                    backgroundColor: MaterialStateProperty
-                                        .resolveWith<Color>(
-                                          (Set<MaterialState> states) {
-                                        if (states
-                                            .contains(MaterialState.disabled)) {
-                                          return Colors.grey.withOpacity(
-                                              0.5); // Set the background color to gray with opacity when disabled
-                                        }
-                                        return Colors
-                                            .white; // Use the default background color for enabled state
-                                      },
-                                    ),
-                                    foregroundColor: MaterialStateProperty
-                                        .resolveWith<Color>(
-                                          (Set<MaterialState> states) {
-                                        if (states
-                                            .contains(MaterialState.disabled)) {
-                                          return Colors
-                                              .grey; // Set the text color to gray when disabled
-                                        }
-                                        return Colors
-                                            .green; // Use the default text color for enabled state
-                                      },
-                                    ),
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      SvgPicture.asset(
-                                        'assets/rate.svg', // Replace 'your_image.svg' with the path to your SVG image asset
-                                        width: 24, // Adjust width as needed
-                                        height: 24, // Adjust height as needed
-                                      ),
-                                      const SizedBox(
-                                          width:
-                                          5), // Add some space between the image and text
-                                      const Text('Rate Us'),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            );
-          } else {
-            boxDecoration = isEvenItem
-                ? BoxDecoration(
-                border: Border.all(color: borderColor, width: 1.5),
-                gradient: const LinearGradient(
-                  colors: [
-                    Color(0xFFfee7e1),
-                    Color(0xFFd7defa),
-                  ],
-                  begin: Alignment.centerLeft,
-                  end: Alignment.centerRight,
-                ),
-                borderRadius: const BorderRadius.only(
-                  topRight: Radius.circular(15.0),
-                  bottomLeft: Radius.circular(15.0),
-                ))
-                : BoxDecoration(
-                border: Border.all(color: borderColor, width: 1.5),
-                gradient: const LinearGradient(
-                  colors: [
-                    Color(0xFFd7defa),
-                    Color(0xFFfee7e1),
-                  ],
-                  begin: Alignment.centerLeft,
-                  end: Alignment.centerRight,
-                ),
-                borderRadius: const BorderRadius.only(
-                  topRight: Radius.circular(15.0),
-                  bottomLeft: Radius.circular(15.0),
-                ));
-
-            return GestureDetector(
-              onTap: () {
-                print('CardView clicked!');
-              },
-              child: ClipRRect(
-                borderRadius: const BorderRadius.only(
-                  topRight: Radius.circular(15.0),
-                  bottomLeft: Radius.circular(15.0),
-                ),
-                child: Card(
-                  shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.only(
-                        topRight: Radius.circular(15.0),
-                        bottomLeft: Radius.circular(15.0),
-                      )),
-                  child: Container(
-                    padding: const EdgeInsets.only(
-                        bottom: 10, top: 5, left: 0, right: 0),
-                    decoration: boxDecoration,
-                    child: Column(
-                      children: [
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Expanded(
-                              child: ListTile(
-                                subtitle: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    SizedBox(
-                                      width:
-                                      MediaQuery.of(context).size.width / 2,
-                                      child: Column(
-                                        children: [
-                                          Row(
-                                            children: [
-                                              Expanded(
-                                                flex: 3,
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                                  children: [
-                                                    Padding(
-                                                      padding: const EdgeInsets
-                                                          .fromLTRB(0, 0, 0, 0),
-                                                      child: Text(
-                                                        appointmentModel.branch,
-                                                        style: const TextStyle(
-                                                            color: Color(
-                                                                0xFFF44614),
-                                                            fontSize: 16,
-                                                            fontWeight:
-                                                            FontWeight.bold,
-                                                            fontFamily:
-                                                            'Calibri'),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              )
-                                            ],
-                                          ),
-                                          Row(
-                                            children: [
-                                              const Expanded(
-                                                flex: 7,
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                                  children: [
-                                                    Padding(
-                                                      padding:
-                                                      EdgeInsets.fromLTRB(
-                                                          0, 0, 0, 0),
-                                                      child: Text(
-                                                        'Slot Time',
-                                                        style: TextStyle(
-                                                            color: Color(
-                                                                0xFFF44614),
-                                                            fontSize: 12,
-                                                            fontWeight:
-                                                            FontWeight.bold,
-                                                            fontFamily:
-                                                            'Calibri'),
-                                                      ),
-                                                      // Icon(
-                                                      //   Icons.lock_clock,
-                                                      //   size: 16,
-                                                      //   color: Color(0xFFF44614),
-                                                      // ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                              const Expanded(
-                                                flex: 0,
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                                  children: [
-                                                    Padding(
-                                                      padding:
-                                                      EdgeInsets.fromLTRB(
-                                                          0, 0, 0, 0),
-                                                      child: Text(
-                                                        ' : ',
-                                                        style: TextStyle(
-                                                            color: Color(
-                                                                0xFFF44614),
-                                                            fontSize: 12,
-                                                            fontWeight:
-                                                            FontWeight.bold,
-                                                            fontFamily:
-                                                            'Calibri'),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                              Expanded(
-                                                flex: 12,
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                                  children: [
-                                                    Padding(
-                                                      padding: const EdgeInsets
-                                                          .fromLTRB(0, 0, 0, 0),
-                                                      child: Text(
-                                                        appointmentModel
-                                                            .slotDuration,
-                                                        style: const TextStyle(
-                                                            color: Color(
-                                                                0xFF042DE3),
-                                                            fontSize: 12,
-                                                            fontFamily:
-                                                            'Calibri'),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              )
-                                            ],
-                                          ),
-                                          Row(
-                                            children: [
-                                              const Expanded(
-                                                flex: 6,
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                                  children: [
-                                                    Padding(
-                                                      padding:
-                                                      EdgeInsets.fromLTRB(
-                                                          0, 0, 0, 0),
-                                                      child: Text(
-                                                        'Purpose ',
-                                                        style: TextStyle(
-                                                            color: Color(
-                                                                0xFFF44614),
-                                                            fontSize: 12,
-                                                            fontWeight:
-                                                            FontWeight.bold,
-                                                            fontFamily:
-                                                            'Calibri'),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                              const Expanded(
-                                                flex: 0,
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                                  children: [
-                                                    Padding(
-                                                      padding:
-                                                      EdgeInsets.fromLTRB(
-                                                          0, 0, 0, 0),
-                                                      child: Text(
-                                                        ': ',
-                                                        style: TextStyle(
-                                                            color: Color(
-                                                                0xFFF44614),
-                                                            fontSize: 12,
-                                                            fontWeight:
-                                                            FontWeight.bold,
-                                                            fontFamily:
-                                                            'Calibri'),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                              Expanded(
-                                                flex: 10,
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                                  children: [
-                                                    Padding(
-                                                      padding: const EdgeInsets
-                                                          .fromLTRB(0, 0, 0, 0),
-                                                      child: Text(
-                                                        appointmentModel
-                                                            .purposeOfVisit,
-                                                        style: const TextStyle(
-                                                            color: Color(
-                                                                0xFF042DE3),
-                                                            fontSize: 12,
-                                                            fontFamily:
-                                                            'Calibri'),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              )
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width / 2.25,
-                              child: Column(
-                                mainAxisAlignment:
-                                MainAxisAlignment.spaceBetween,
-                                children: [
-                                  const SizedBox(
-                                    height: 25,
-                                  ),
-                                  Row(
-                                    children: [
-                                      const Expanded(
-                                        flex: 6,
-                                        child: Column(
-                                          crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                          children: [
-                                            Padding(
-                                              padding: EdgeInsets.fromLTRB(
-                                                  0, 0, 0, 0),
-                                              child: Text(
-                                                'Date',
-                                                style: TextStyle(
-                                                    color: Color(0xFFF44614),
-                                                    fontSize: 12,
-                                                    fontWeight: FontWeight.bold,
-                                                    fontFamily: 'Calibri'),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      const Expanded(
-                                        flex: 0,
-                                        child: Column(
-                                          crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                          children: [
-                                            Padding(
-                                              padding: EdgeInsets.fromLTRB(
-                                                  0, 0, 0, 0),
-                                              child: Text(
-                                                ': ',
-                                                style: TextStyle(
-                                                    color: Color(0xFFF44614),
-                                                    fontSize: 12,
-                                                    fontWeight: FontWeight.bold,
-                                                    fontFamily: 'Calibri'),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      Expanded(
-                                        flex: 10,
-                                        child: Column(
-                                          crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                          children: [
-                                            Padding(
-                                              padding:
-                                              const EdgeInsets.fromLTRB(
-                                                  0, 0, 0, 0),
-                                              child: Text(
-                                                formattedDate,
-                                                style: const TextStyle(
-                                                    color: Color(0xFF042DE3),
-                                                    fontSize: 12,
-                                                    fontFamily: 'Calibri'),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      const Expanded(
-                                        flex: 6,
-                                        child: Column(
-                                          crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                          children: [
-                                            Padding(
-                                              padding: EdgeInsets.fromLTRB(
-                                                  0, 0, 0, 0),
-                                              child: Text(
-                                                'Status',
-                                                style: TextStyle(
-                                                    color: Color(0xFFF44614),
-                                                    fontSize: 12,
-                                                    fontWeight: FontWeight.bold,
-                                                    fontFamily: 'Calibri'),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      const Expanded(
-                                        flex: 0,
-                                        child: Column(
-                                          crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                          children: [
-                                            Padding(
-                                              padding: EdgeInsets.fromLTRB(
-                                                  0, 0, 0, 0),
-                                              child: Text(
-                                                ': ',
-                                                style: TextStyle(
-                                                    color: Color(0xFFF44614),
-                                                    fontSize: 12,
-                                                    fontWeight: FontWeight.bold,
-                                                    fontFamily: 'Calibri'),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      Expanded(
-                                        flex: 10,
-                                        child: Column(
-                                          crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                          children: [
-                                            Padding(
-                                              padding:
-                                              const EdgeInsets.fromLTRB(
-                                                  0, 0, 0, 0),
-                                              child: Text(
-                                                appointmentModel.status,
-                                                style: const TextStyle(
-                                                    color: Color(0xFF042DE3),
-                                                    fontSize: 12,
-                                                    fontFamily: 'Calibri'),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            const Expanded(
-                              flex: 6,
-                              child: Padding(
-                                padding: EdgeInsets.only(left: 15.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'Rating',
-                                      style: TextStyle(
-                                        color: Color(0xFFF44614),
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily: 'Calibri',
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            const Expanded(
-                              flex: 0,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                    child: Text(
-                                      ': ',
-                                      style: TextStyle(
-                                          color: Color(0xFFF44614),
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.bold,
-                                          fontFamily: 'Calibri'),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Expanded(
-                              flex: 24,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  RatingBar.builder(
-                                    //     initialRating: ratingffromapi,
-                                      initialRating: ratingffromapi,
-                                      minRating: 0,
-                                      itemSize: 15.0,
-                                      direction: Axis.horizontal,
-                                      allowHalfRating: true,
-                                      itemCount: 5,
-                                      itemPadding: const EdgeInsets.symmetric(
-                                          horizontal: 1.0),
-                                      itemBuilder: (context, _) => const Icon(
-                                        Icons.star,
-                                        color: Colors.amber,
-                                      ),
-                                      onRatingUpdate: (rating) {})
-                                ],
-                              ),
-                            )
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            const Expanded(
-                              flex: 6,
-                              child: Padding(
-                                padding: EdgeInsets.only(
-                                    left:
-                                    15.0), // Add left padding to the Feedback text
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'Feedback',
-                                      style: TextStyle(
-                                        color: Color(0xFFF44614),
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily: 'Calibri',
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            const Expanded(
-                              flex: 0,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    ': ',
-                                    style: TextStyle(
-                                      color: Color(0xFFF44614),
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.bold,
-                                      fontFamily: 'Calibri',
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Expanded(
-                              flex: 24,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Padding(
-                                    padding:
-                                    const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                    child: Text(
-                                      review,
-                                      style: const TextStyle(
-                                        color: Color(0xFF042DE3),
-                                        fontSize: 12,
-                                        fontFamily: 'Calibri',
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            )
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            );
-          }
-        },
-      ),
-    );
-  }
 
   void refreshTheScreen() {
     CommonUtils.checkInternetConnectivity().then(
@@ -3816,11 +933,13 @@ class _AppointmentCardState extends State<AppointmentCard> {
   final TextEditingController _commentstexteditcontroller = TextEditingController();
   double rating_star = 0.0;
   int? userId;
+   String? selecteddate;
   List<UserFeedback> userfeedbacklist = [];
   @override
   void initState() {
     super.initState();
     dateValues = parseDateString(widget.data.date);
+    selecteddate = DateFormat('yyyy-MM-dd').format(DateTime.now());
   }
 
   @override
@@ -3993,7 +1112,8 @@ class _AppointmentCardState extends State<AppointmentCard> {
 
       ],
     ),
-    )));
+    )
+      ));
   }
 
   Widget verifyStatus(int statusTypeId, MyAppointment_Model data) {
@@ -4007,75 +1127,88 @@ class _AppointmentCardState extends State<AppointmentCard> {
           children: [
             GestureDetector(
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder:
-                        (context) =>
-                            Rescheduleslotscreen( data: data,),
-                  ),
-                );
+                if (!isPastDate(data.date,  data.slotDuration)) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => Rescheduleslotscreen(data: data,),
+                    ),
+                  );
+                }
                 // Add your logic here for when the 'Reschedule' container is tapped
               },
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(3),
-                  border: Border.all(color: CommonUtils.primaryTextColor),
-                ),
-                padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
-                child: Row(
-                  children: [
-                    SvgPicture.asset(
-                      'assets/calendar-_3_.svg',
-                      width: 13,
-                      color: CommonUtils.primaryTextColor,
+              child: IgnorePointer(
+                ignoring: isPastDate(data.date,  data.slotDuration),
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(3),
+                    border: Border.all(
+                      color: isPastDate(data.date, data.slotDuration) ? Colors.grey : CommonUtils.primaryTextColor,
                     ),
-                    const Text(
-                      ' Reschedule',
-                      style:  TextStyle(
-                        fontSize: 18,
-                        fontFamily: "Calibri",
-                        fontWeight: FontWeight.w500,
-                        color: CommonUtils.primaryTextColor,
+                  ),
+                  padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
+                  child: Row(
+                    children: [
+                      SvgPicture.asset(
+                        'assets/calendar-_3_.svg',
+                        width: 13,
+                        color: isPastDate(data.date,  data.slotDuration) ? Colors.grey : CommonUtils.primaryTextColor,
                       ),
-
-                    ),
-                  ],
+                      Text(
+                        ' Reschedule',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontFamily: "Calibri",
+                          fontWeight: FontWeight.w500,
+                          color: isPastDate(data.date,  data.slotDuration) ? Colors.grey : CommonUtils.primaryTextColor,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
+
+
             const SizedBox(
               width: 10,
             ),
+
             GestureDetector(
               onTap: () {
-                conformation(data);
-                // Add your logic here for when the 'Cancel' container is tapped
+                if (!isPastDate(data.date,  data.slotDuration)) {
+                  conformation(data);
+                  // Add your logic here for when the 'Cancel' container is tapped
+                }
               },
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(3),
-                  border: Border.all(color: CommonStyles.statusRedText),
-                ),
-                padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
-                child: Row(
-                  children: [
-                    SvgPicture.asset(
-                      'assets/calendar-xmark.svg',
-                      width: 13,
-                      color: CommonStyles.statusRedText,
+              child: IgnorePointer(
+                ignoring: isPastDate(data.date,  data.slotDuration),
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(3),
+                    border: Border.all(
+                      color: isPastDate(data.date, data.slotDuration) ? Colors.grey : CommonStyles.statusRedText,
                     ),
-                    const Text(
-                      ' Cancel',
-                      style:
-                      TextStyle(
-                        fontSize: 18,
-                        fontFamily: "Calibri",
-                        fontWeight: FontWeight.w500,
-                        color: CommonStyles.statusRedText,
+                  ),
+                  padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
+                  child: Row(
+                    children: [
+                      SvgPicture.asset(
+                        'assets/calendar-xmark.svg',
+                        width: 13,
+                        color: isPastDate(data.date,  data.slotDuration) ? Colors.grey : CommonStyles.statusRedText,
                       ),
-                    ),
-                  ],
+                       Text(
+                        ' Cancel',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontFamily: "Calibri",
+                          fontWeight: FontWeight.w500,
+                          color: isPastDate(data.date,  data.slotDuration) ? Colors.grey : CommonStyles.statusRedText,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -4221,8 +1354,9 @@ class _AppointmentCardState extends State<AppointmentCard> {
                     borderRadius: BorderRadius.circular(10.0),
                     gradient: const LinearGradient(
                       colors: [
-                        Color(0xFFd7defa),
-                        Color(0xFFfee7e1),
+                        Color(0xffffffff),
+                        Color(0xffffffff),
+
                       ],
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
@@ -4235,18 +1369,19 @@ class _AppointmentCardState extends State<AppointmentCard> {
                         'Feedback',
                         style: TextStyle(
                           fontSize: 24,
-                          color: Color(0xFFf15f22),
+                          color: CommonUtils.primaryTextColor,
                           fontFamily: 'Calibri',
                         ),
                       ),
                       const SizedBox(
                         height: 15.0,
                       ),
-                      const Text(
-                        'Rating',
+                       Text(
+                         'Please Rate Your Experience For The ' + appointments.slotDuration + ' Slot At The ' + appointments.branch + ' Hair Fixing Zone',
+
                         style: TextStyle(
                           fontSize: 16,
-                          color: Color(0xFFf15f22),
+                          color: CommonUtils.primaryTextColor,
                           fontFamily: 'Calibri',
                         ),
                       ),
@@ -4265,7 +1400,7 @@ class _AppointmentCardState extends State<AppointmentCard> {
                             const EdgeInsets.symmetric(horizontal: 1.0),
                             itemBuilder: (context, _) => const Icon(
                               Icons.star,
-                              color: Colors.amber,
+                              color: CommonUtils.primaryTextColor,
                             ),
                             onRatingUpdate: (rating) {
                               setState(() {
@@ -4284,7 +1419,7 @@ class _AppointmentCardState extends State<AppointmentCard> {
                             width: MediaQuery.of(context).size.width,
                             decoration: BoxDecoration(
                               border: Border.all(
-                                  color: const Color(0xFFf15f22), width: 1.5),
+                               color: CommonUtils.primaryTextColor, width: 1.5),
                               borderRadius: BorderRadius.circular(5.0),
                               color: Colors.white,
                             ),
@@ -4316,136 +1451,78 @@ class _AppointmentCardState extends State<AppointmentCard> {
                           ),
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                            top: 20.0, left: 0.0, right: 0.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            ElevatedButton(
+                      Row(
+                        children: [
+                          Expanded(
+                            child: ElevatedButton(
                               onPressed: () {
-                                Navigator.pop(context);
+                                Navigator.of(context).pop();
                               },
                               style: ElevatedButton.styleFrom(
-                                foregroundColor: Colors.grey,
-                                elevation: 0,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(4.0),
+                                textStyle: const TextStyle(
+                                  color: CommonUtils.primaryTextColor,
+                                ),
+                                side: const BorderSide(
+                                  color: CommonUtils.primaryTextColor,
+                                ),
+                                backgroundColor: Colors.white,
+                                shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(10),
+                                  ),
                                 ),
                               ),
                               child: const Text(
                                 'Close',
                                 style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 16,
-                                    fontFamily: 'Calibri'),
-                              ),
-                            ),
-                            ElevatedButton(
-                              onPressed: () {
-                                validaterating(appointments);
-                              },
-                              style: ElevatedButton.styleFrom(
-                                foregroundColor: const Color(0xFFf15f22),
-                                elevation: 0,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(4.0),
+                                  fontFamily: 'Calibri',
+                                  fontSize: 14,
+                                  color: CommonUtils.primaryTextColor,
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              child: const Text(
-                                'Submit',
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 16,
-                                    fontFamily: 'Calibri'),
+                            ),
+                          ),
+                          const SizedBox(width: 20),
+                          Expanded(
+                            child: SizedBox(
+                              child: Center(
+                                child: GestureDetector(
+                                  onTap: () {
+
+                                    validaterating(appointments);
+                                  },
+                                  child: Container(
+                                    // width: desiredWidth * 0.9,
+                                    height: 40.0,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(15.0),
+                                      color: CommonUtils.primaryTextColor,
+                                    ),
+                                    child: const Center(
+                                      child: Text(
+                                        'Submit',
+                                        style: TextStyle(
+                                          fontFamily: 'Calibri',
+                                          fontSize: 14,
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
                               ),
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
-                      // Row(
-                      //   mainAxisAlignment: MainAxisAlignment.center,
-                      //   crossAxisAlignment: CrossAxisAlignment.center,
-                      //   children: [
-                      //     Padding(
-                      //       padding: EdgeInsets.only(top: 20.0, left: 0.0, right: 0.0),
-                      //       child: Container(
-                      //         width: MediaQuery.of(context).size.width / 3.80,
-                      //         decoration: BoxDecoration(
-                      //           color: Color(0xFFf15f22),
-                      //           borderRadius: BorderRadius.circular(6.0),
-                      //         ),
-                      //         child: ElevatedButton(
-                      //           onPressed: () {
-                      //             validaterating(appointments, index);
-                      //           },
-                      //           child: Text(
-                      //             'Submit',
-                      //             style: TextStyle(color: Colors.white, fontSize: 16, fontFamily: 'Calibri'),
-                      //           ),
-                      //           style: ElevatedButton.styleFrom(
-                      //             foregroundColor: Colors.transparent,
-                      //             elevation: 0,
-                      //             shape: RoundedRectangleBorder(
-                      //               borderRadius: BorderRadius.circular(4.0),
-                      //             ),
-                      //           ),
-                      //         ),
-                      //       ),
-                      //     ),
-                      //     SizedBox(
-                      //       width: 10,
-                      //     ),
-                      //     Padding(
-                      //       padding: EdgeInsets.only(top: 20.0, left: 0.0, right: 0.0),
-                      //       child: Container(
-                      //         width: MediaQuery.of(context).size.width / 3.80,
-                      //         decoration: BoxDecoration(
-                      //           color: Color(0xFFf15f22),
-                      //           borderRadius: BorderRadius.circular(6.0),
-                      //         ),
-                      //         child: ElevatedButton(
-                      //           onPressed: () {
-                      //
-                      //          Navigator.of(context).pop();
-                      //           },
-                      //           child: Text(
-                      //             'Cancel',
-                      //             style: TextStyle(color: Colors.white, fontSize: 16, fontFamily: 'Calibri'),
-                      //           ),
-                      //           style: ElevatedButton.styleFrom(
-                      //             foregroundColor: Colors.transparent,
-                      //             elevation: 0,
-                      //             shape: RoundedRectangleBorder(
-                      //               borderRadius: BorderRadius.circular(4.0),
-                      //             ),
-                      //           ),
-                      //         ),
-                      //       ),
-                      //     ),
-                      //   ],
-                      // )
+
                     ],
                   ),
                 ),
               ),
-              // actions: [
-              //   ElevatedButton(
-              //     onPressed: () {
-              //       Navigator.of(context).pop();
-              //     },
-              //     child: Text(
-              //       'Ok',
-              //       style: TextStyle(color: Colors.white, fontFamily: 'Calibri'), // Set text color to white
-              //     ),
-              //     style: ElevatedButton.styleFrom(
-              //       foregroundColor: Color(0xFFf15f22), // Change to your desired background color
-              //       shape: RoundedRectangleBorder(
-              //         borderRadius: BorderRadius.circular(5), // Set border radius
-              //       ),
-              //     ),
-              //   ),
-              // ],
+
             );
           },
         );
@@ -4456,6 +1533,9 @@ class _AppointmentCardState extends State<AppointmentCard> {
   Future<void> validaterating(
       MyAppointment_Model appointmens) async {
   //  print('indexinvalidating$index');
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    userId = prefs.getInt('userId');
+    print('userId validaterating : $userId');
     bool isValid = true;
     bool hasValidationFailed = false;
     int myInt = rating_star.toInt();
@@ -4500,7 +1580,7 @@ class _AppointmentCardState extends State<AppointmentCard> {
         "IsActive": true,
         "CreatedDate": dateTimeString,
         "UpdatedDate": dateTimeString,
-        "UpdatedByUserId": null,
+        "UpdatedByUserId":  appointmens.genderTypeId,
         "rating": rating_star,
         "review": _commentstexteditcontroller.text.toString(),
         "reviewSubmittedDate": dateTimeString,
@@ -4524,7 +1604,7 @@ class _AppointmentCardState extends State<AppointmentCard> {
         //  fetchMyAppointments(userId);
           CommonUtils.showCustomToastMessageLong(
               'Feedback Successfully Submited', context, 0, 4);
-
+         // refreshTheScreen();
           // if (index >= 0.0 && index < userfeedbacklist.length) {
           //   // Ensure index is within the valid range
           //   userfeedbacklist.ratingstar = rating_star;
@@ -4540,7 +1620,7 @@ class _AppointmentCardState extends State<AppointmentCard> {
           // userfeedbacklist[index].ratingstar = rating_star;
           // userfeedbacklist[index].comments = _commentstexteditcontroller.text.toString();
 
-          Navigator.pop(context);
+        //  Navigator.pop(context);
         } else {
           print(
               'Failed to send the request. Status code: ${response.statusCode}');
@@ -4557,21 +1637,38 @@ class _AppointmentCardState extends State<AppointmentCard> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Confirmation'),
-          content: const Text('Are you sure you want to Cancel?'),
+          title: const Text('Confirmation',   style: TextStyle(
+            fontSize: 16,
+            color: CommonUtils.blueColor,
+            fontFamily: 'Calibri',
+          ),),
+
+          content: Text('Are You Sure You Want To Cancel Your  ' + appointments.slotDuration + ' Slot At The' + appointments.branch + ' Hair Fixing Zone',   style: TextStyle(
+            fontSize: 16,
+            color: CommonUtils.primaryTextColor,
+            fontFamily: 'Calibri',
+          ),),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: const Text('No'),
+              child: const Text('No',  style: TextStyle(
+                fontSize: 16,
+                color: CommonUtils.blueColor,
+                fontFamily: 'Calibri',
+              ),),
             ),
             TextButton(
               onPressed: () {
                 CancelAppointment(appointments);
                 Navigator.of(context).pop();
               },
-              child: const Text('Yes'),
+              child: const Text('Yes',  style: TextStyle(
+                fontSize: 16,
+                color: CommonUtils.blueColor,
+                fontFamily: 'Calibri',
+              ),),
             ),
           ],
         );
@@ -4586,7 +1683,9 @@ class _AppointmentCardState extends State<AppointmentCard> {
     DateTime now = DateTime.now();
     String dateTimeString = now.toString();
     print('DateTime as String: $dateTimeString');
-
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    userId = prefs.getInt('userId');
+    print('userId CancelAppointment: $userId');
     //  for (MyAppointment_Model appointment in appointmens) {
     // Create the request object for each appointment
     final request = {
@@ -4656,6 +1755,47 @@ class _AppointmentCardState extends State<AppointmentCard> {
       print('Error while sending : $e');
     }
     //  }
+  }
+  bool isPastDate(String? selectedDate, String time) {
+    final now = DateTime.now();
+    // DateTime currentTime = DateTime.now();
+    //  print('currentTime: $currentTime');
+    //   int hours = currentTime.hour;
+    //  print('current hours: $hours');
+    // Format the time using a specific pattern with AM/PM
+    String formattedTime = DateFormat('hh:mm a').format(now);
+
+    final selectedDateTime = DateTime.parse(selectedDate!);
+    final currentDate = DateTime(now.year, now.month, now.day);
+
+    // Agent login chey
+
+    bool isBeforeTime = false; // Assume initial value as true
+    bool isBeforeDate = selectedDateTime.isBefore(currentDate);
+    // Parse the desired time for comparison
+    DateTime desiredTime = DateFormat('hh:mm a').parse(time);
+    // Parse the current time for comparison
+    DateTime currentTime = DateFormat('hh:mm a').parse(formattedTime);
+
+    if (selectedDateTime == currentDate) {
+      int comparison = currentTime.compareTo(desiredTime);
+      print('comparison$comparison');
+      // Print the comparison result
+      if (comparison < 0) {
+        isBeforeTime = false;
+        print('The current time is earlier than 10:15 AM.');
+      } else if (comparison > 0) {
+        isBeforeTime = true;
+      } else {
+        isBeforeTime = true;
+      }
+
+      //  isBeforeTime = hours >= time;
+    }
+
+    print('isBeforeTime: $isBeforeTime');
+    print('isBeforeDate: $isBeforeDate');
+    return isBeforeTime || isBeforeDate;
   }
 
 

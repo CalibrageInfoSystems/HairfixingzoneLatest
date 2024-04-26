@@ -424,9 +424,13 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
                         children: [
                           Text(
                             'Select Date ',
-                            style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-                          ),
-                          const Text(
+                            style: TextStyle(
+                            fontSize: 14,
+                            fontFamily: "Calibri",
+                            fontWeight: FontWeight.w500,
+                            color:Color(0xFF662e91),
+                          ),),
+                           Text(
                             '*',
                             style: TextStyle(color: Colors.red),
                           ),
@@ -447,7 +451,7 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
                           contentPadding: const EdgeInsets.only(top: 15, bottom: 10, left: 15, right: 15),
                           focusedBorder: OutlineInputBorder(
                             borderSide: BorderSide(
-                              color: Color(0xFF0f75bc),
+                              color: Color(0xFF662e91),
                             ),
                             borderRadius: BorderRadius.circular(6.0),
                           ),
@@ -465,7 +469,7 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
                           hintText: 'Select Date',
                           counterText: "",
                           hintStyle: TextStyle(color: Colors.grey, fontWeight: FontWeight.w400),
-                          suffixIcon: Icon(Icons.calendar_today),
+                          suffixIcon: Icon(Icons.calendar_today,color: Color(0xFF662e91),),
                         ),
                         //  validator: validatePassword,
                       ),
@@ -585,9 +589,13 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
                         children: [
                           Text(
                             'Select Purpose ',
-                            style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-                          ),
-                          const Text(
+                            style:  TextStyle(
+                            fontSize: 14,
+                            fontFamily: "Calibri",
+                            fontWeight: FontWeight.w500,
+                            color:Color(0xFF662e91),
+                          ),),
+                           Text(
                             '*',
                             style: TextStyle(color: Colors.red),
                           ),
