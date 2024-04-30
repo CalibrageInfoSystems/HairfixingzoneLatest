@@ -22,6 +22,7 @@ class CustomerLoginScreen extends StatefulWidget {
 
 class _LoginPageState extends State<CustomerLoginScreen> {
   bool isTextFieldFocused = false;
+  bool _obscureText = true;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _isLoading = false;
   final TextEditingController _emailController = TextEditingController();
@@ -113,10 +114,69 @@ class _LoginPageState extends State<CustomerLoginScreen> {
                               SizedBox(
                                 height: 10,
                               ),
-                              CustomeFormField(
-                                label: 'Password',
+                              // CustomeFormField(
+                              //   label: 'Password',
+                              //   validator: validatePassword,
+                              //   controller: _passwordController, // Pass the password controller
+                              // ),
+                              Row(
+                                children: [
+                                  Text(
+                                    'Password',
+                                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                                  ),
+                                  Text(
+                                    '*',
+                                    style: TextStyle(color: Colors.red),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                height: 5.0,
+                              ),
+                              TextFormField(
+                                obscureText: _obscureText,
+
+                                controller: _passwordController, // Assigning the controller
+                                keyboardType: TextInputType.visiblePassword,
+                                // obscureText: true,
+                                onTap: () {},
+                                decoration: InputDecoration(
+                                  contentPadding: const EdgeInsets.only(top: 15, bottom: 10, left: 15, right: 15),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: const BorderSide(
+                                      color: CommonUtils.primaryTextColor,
+                                    ),
+                                    borderRadius: BorderRadius.circular(6.0),
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide: const BorderSide(
+                                      color: CommonUtils.primaryTextColor,
+                                    ),
+                                    borderRadius: BorderRadius.circular(6.0),
+                                  ),
+                                  border: const OutlineInputBorder(
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(10),
+                                    ),
+                                  ),
+                                  hintText: 'Enter Password',
+                                  counterText: "",
+                                  suffixIcon: IconButton(
+                                    icon: Icon(
+                                      _obscureText ? Icons.visibility_off : Icons.visibility,
+                                      color: Colors.black,
+                                    ),
+                                    onPressed: () {
+                                      // Toggle the password visibility
+                                      setState(() {
+                                        _obscureText = !_obscureText;
+                                      });
+                                    },
+                                  ),
+                                  hintStyle: const TextStyle(color: Colors.grey, fontWeight: FontWeight.w400),
+                                ),
                                 validator: validatePassword,
-                                controller: _passwordController, // Pass the password controller
                               ),
                               SizedBox(
                                 height: 5,
@@ -204,12 +264,7 @@ class _LoginPageState extends State<CustomerLoginScreen> {
     if (value == null || value.isEmpty) {
       return 'Please Enter Password';
     }
-    // if (value.length < 4) {
-    //   return 'Password must be 4 characters or more';
-    // }
-    // if (value.length > 8) {
-    //   return 'Password must be 8 characters or less';
-    // }
+
     return null;
   }
 

@@ -48,27 +48,27 @@ class CustomeFormField extends StatelessWidget {
         TextFormField(
           controller: controller, // Assigning the controller
           decoration: InputDecoration(
-            contentPadding: const EdgeInsets.only(top: 15, bottom: 10, left: 15, right: 15),
-            focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(
-                color: Color(0xFF0f75bc),
+              contentPadding: const EdgeInsets.only(top: 15, bottom: 10, left: 15, right: 15),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                  color: Color(0xFF0f75bc),
+                ),
+                borderRadius: BorderRadius.circular(6.0),
               ),
-              borderRadius: BorderRadius.circular(6.0),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(
-                color: CommonUtils.primaryTextColor,
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                  color: CommonUtils.primaryTextColor,
+                ),
+                borderRadius: BorderRadius.circular(6.0),
               ),
-              borderRadius: BorderRadius.circular(6.0),
-            ),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.all(
-                Radius.circular(10),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(10),
+                ),
               ),
-            ),
-            hintText: 'Enter $label',
-            hintStyle: TextStyle(color: Colors.grey, fontWeight: FontWeight.w400),
-          ),
+              hintText: 'Enter $label',
+              hintStyle: TextStyle(color: Colors.grey, fontWeight: FontWeight.w400),
+              counterText: ""),
           validator: validator,
         ),
       ],

@@ -5,6 +5,7 @@ import 'package:hairfixingzone/CustomerLoginScreen.dart';
 import 'package:hairfixingzone/Dashboard_Screen.dart';
 import 'package:hairfixingzone/HomeScreen.dart';
 import 'package:hairfixingzone/MyAppointment_Model.dart';
+import 'package:hairfixingzone/slot_success_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:intl/intl.dart';
@@ -18,9 +19,11 @@ import 'api_config.dart';
 
 class Bookingscreen extends StatefulWidget {
   final int branchId;
+
   // final String branchname;
   final String branchname;
   final String branchaddress;
+
   //final MyAppointment_Model data;
   // final int appointmentId; // New field
   // final String screenFrom; // New field
@@ -30,6 +33,7 @@ class Bookingscreen extends StatefulWidget {
   //  // New field
   // });
   Bookingscreen({required this.branchId, required this.branchname, required this.branchaddress});
+
   @override
   _BookingScreenState createState() => _BookingScreenState();
 }
@@ -97,6 +101,7 @@ class _BookingScreenState extends State<Bookingscreen> {
   TextEditingController _emailController3 = TextEditingController();
   TextEditingController _purposeController4 = TextEditingController();
   bool isBackButtonActivated = false;
+
 //  TextEditingController textController4 = TextEditingController(text: 'Initial value 4');
   List<Slot> slots = [];
 
@@ -182,18 +187,6 @@ class _BookingScreenState extends State<Bookingscreen> {
     email = prefs.getString('email') ?? '';
     contactNumber = prefs.getString('contactNumber') ?? '';
     genderbyid = prefs.getString('gender');
-
-    // Create a Map to hold the retrieved user data
-    // Map<String, dynamic> userData = {
-    //   'isLoggedIn': isLoggedIn,
-    //   'userId': userId,
-    //   'userFullName': userFullName,
-    //   'userRoleId': userRoleId,
-    //   'email': email,
-    //   'contactNumber': contactNumber,
-    //   'gender': gender,
-    //   // Add other user data keys as needed
-    // };
   }
 
   Future<Holiday> fetchHolidayListByBranchId() async {
@@ -744,7 +737,8 @@ class _BookingScreenState extends State<Bookingscreen> {
       print('DateTime as String: $dateTimeString');
       print('DateTime as String: $selecteddate');
       print('_selectedTimeSlot892 $_selectedTimeSlot');
-
+      String slotdate = DateFormat('dd MMM yyyy').format(_selectedDate!);
+      print('slotdate $slotdate');
       // print('screenFrom1213: ${widget.screenFrom}');
       // print('appointmentId1214: ${widget.appointmentId}');
 
@@ -796,9 +790,17 @@ class _BookingScreenState extends State<Bookingscreen> {
           bool isSuccess = data['isSuccess'];
           if (isSuccess == true) {
             print('Request sent successfully');
-            showCustomToastMessageLong('Slot booked successfully', context, 0, 2);
+            // showCustomToastMessageLong('Slot booked successfully', context, 0, 2);
             Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (context) => HomeScreen()),
+              MaterialPageRoute(
+                  builder: (context) => SlotSuccessScreen(
+                        slotdate: '${slotdate}',
+                        slottime: '${_selectedTimeSlot}',
+                        Purpose: '$selectedName',
+                        slotbranchname: '${widget.branchname}',
+                        slotbrnach_address: '${widget.branchaddress}',
+                        // phonenumber: null,
+                      )),
             );
             // Success case
             // Handle success scenario here

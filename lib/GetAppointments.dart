@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:hairfixingzone/HomeScreen.dart';
 import 'package:hairfixingzone/MyAppointmentsProvider.dart';
 import 'package:hairfixingzone/slotbookingscreen.dart';
 
@@ -70,113 +71,123 @@ class MyAppointments_screenState extends State<GetAppointments> {
 
   @override
   Widget build(BuildContext context) {
-    return RefreshIndicator(
-      onRefresh: () async {
-        refreshTheScreen();
-      },
-      child: Consumer<MyAppointmentsProvider>(
-        builder: (context, provider, _) => Scaffold(
-          appBar: AppBar(
-              backgroundColor: const Color(0xFFf3e3ff),
-              title: Text(
-                'My Bookings',
-                style: TextStyle(
-                  color: Color(0xFF0f75bc),
-                  fontSize: 16.0,
-                  fontWeight: FontWeight.w600,
-                ),
-                textAlign: TextAlign.start,
-              ),
-              leading: IconButton(
-                icon: Icon(
-                  Icons.arrow_back_ios,
-                  color: CommonUtils.primaryTextColor,
-                ),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              )),
-          body: WillPopScope(
-            onWillPop: () async {
-              provider.clearFilter();
-              return true;
-            },
-            child: Column(
-              children: [
-                // search and filter
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10).copyWith(top: 10),
-                  child: _searchBarAndFilter(),
-                ),
-
-                //MARK: Appointment
-                Expanded(
-                  child: FutureBuilder(
-                    future: apiData,
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const Center(
-                          child: CircularProgressIndicator.adaptive(),
-                        );
-                      } else if (snapshot.hasError) {
-                        return const Center(
-                          child: Text(
-                            'No appointments found!',
-                            style: TextStyle(
-                              fontSize: 12.0,
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                              fontFamily: "Roboto",
-                            ),
-                          ),
-                        );
-                      } else {
-                        List<MyAppointment_Model> data = provider.proAppointments;
-                        if (data.isNotEmpty) {
-                          return Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: ListView.builder(
-                              itemCount: data.length,
-                              itemBuilder: (context, index) {
-                                return Column(
-                                  children: [
-                                    OpCard(
-                                      data: data[index],
-                                    ),
-                                    const SizedBox(
-                                      height: 5,
-                                    ),
-                                  ],
-                                );
-                                // return AppointmentCard(
-                                //     data: data[index],
-                                //     day: parseDayFromDate(data[index].date),);
-                              },
-                            ),
-                          );
-                        } else {
-                          return const Center(
-                            child: Text(
-                              'No appointmens available',
-                              style: TextStyle(
-                                fontSize: 12.0,
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: "Roboto",
-                              ),
-                            ),
-                          );
-                        }
-                      }
-                    },
+    return WillPopScope(
+        onWillPop: () async {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => HomeScreen(),
+            ),
+          );
+          return true;
+        },
+        child: RefreshIndicator(
+          onRefresh: () async {
+            refreshTheScreen();
+          },
+          child: Consumer<MyAppointmentsProvider>(
+            builder: (context, provider, _) => Scaffold(
+              appBar: AppBar(
+                  backgroundColor: const Color(0xFFf3e3ff),
+                  title: Text(
+                    'My Bookings',
+                    style: TextStyle(
+                      color: Color(0xFF0f75bc),
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    textAlign: TextAlign.start,
                   ),
+                  leading: IconButton(
+                    icon: Icon(
+                      Icons.arrow_back_ios,
+                      color: CommonUtils.primaryTextColor,
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  )),
+              body: WillPopScope(
+                onWillPop: () async {
+                  provider.clearFilter();
+                  return true;
+                },
+                child: Column(
+                  children: [
+                    // search and filter
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10).copyWith(top: 10),
+                      child: _searchBarAndFilter(),
+                    ),
+
+                    //MARK: Appointment
+                    Expanded(
+                      child: FutureBuilder(
+                        future: apiData,
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState == ConnectionState.waiting) {
+                            return const Center(
+                              child: CircularProgressIndicator.adaptive(),
+                            );
+                          } else if (snapshot.hasError) {
+                            return const Center(
+                              child: Text(
+                                'No appointments found!',
+                                style: TextStyle(
+                                  fontSize: 12.0,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: "Roboto",
+                                ),
+                              ),
+                            );
+                          } else {
+                            List<MyAppointment_Model> data = provider.proAppointments;
+                            if (data.isNotEmpty) {
+                              return Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: ListView.builder(
+                                  itemCount: data.length,
+                                  itemBuilder: (context, index) {
+                                    return Column(
+                                      children: [
+                                        OpCard(
+                                          data: data[index],
+                                        ),
+                                        const SizedBox(
+                                          height: 5,
+                                        ),
+                                      ],
+                                    );
+                                    // return AppointmentCard(
+                                    //     data: data[index],
+                                    //     day: parseDayFromDate(data[index].date),);
+                                  },
+                                ),
+                              );
+                            } else {
+                              return const Center(
+                                child: Text(
+                                  'No appointmens available',
+                                  style: TextStyle(
+                                    fontSize: 12.0,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: "Roboto",
+                                  ),
+                                ),
+                              );
+                            }
+                          }
+                        },
+                      ),
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
           ),
-        ),
-      ),
-    );
+        ));
   }
 
   void checkLoginuserdata() async {

@@ -399,7 +399,7 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
                               ),
                               GestureDetector(
                                 onTap: () {
-                                  Navigator.of(context, rootNavigator: true).pushNamed("/MyProfile");
+                                  Navigator.of(context, rootNavigator: true).pushNamed("/ProfileMy");
                                 },
                                 child: Column(
                                   children: [

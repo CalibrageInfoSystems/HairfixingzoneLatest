@@ -6,6 +6,8 @@ import 'package:hairfixingzone/CommonUtils.dart';
 import 'package:hairfixingzone/CustomerLoginScreen.dart';
 import 'package:http/http.dart' as http;
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:loading_progress/loading_progress.dart';
+import 'Common/common_styles.dart';
 import 'Common/custom_button.dart';
 import 'Common/custome_form_field.dart';
 import 'ForgotPasswordOtpScreen.dart';
@@ -91,60 +93,62 @@ class _ForgotPasswordscreen extends State<ForgotPasswordscreen> {
               //   child:
               //
               // ),
-              _isloading
-                  ? LoadingAnimationWidget.fourRotatingDots(
-                      color: Color(0xFF662e91),
-                      size: 40.0,
-                    )
-                  : SizedBox(
-                      height: MediaQuery.of(context).size.height - MediaQuery.of(context).size.height / 2, // Adjust the height here
-                      child: SingleChildScrollView(
-                        physics: AlwaysScrollableScrollPhysics(),
-                        child: Form(
-                            key: _formKey,
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 40),
-                              decoration: const BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(30.0),
-                                  topRight: Radius.circular(30.0),
-                                ),
-                              ),
-                              height: MediaQuery.of(context).size.height / 2,
-                              width: MediaQuery.of(context).size.width,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.center,
+              // _isloading
+              //     ? LoadingAnimationWidget.fourRotatingDots(
+              //         color: Color(0xFF662e91),
+              //         size: 40.0,
+              //       )
+              //     :
+              SizedBox(
+                  height: MediaQuery.of(context).size.height - MediaQuery.of(context).size.height / 2, // Adjust the height here
+                  child: SingleChildScrollView(
+                    physics: AlwaysScrollableScrollPhysics(),
+                    child: Form(
+                        key: _formKey,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 40),
+                          decoration: const BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(30.0),
+                              topRight: Radius.circular(30.0),
+                            ),
+                          ),
+                          height: MediaQuery.of(context).size.height / 2,
+                          width: MediaQuery.of(context).size.width,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              //  SizedBox(),
+                              // Form(
+                              //   key: _formKey,
+                              //   child:
+                              Column(
                                 children: [
-                                  SizedBox(),
-                                  // Form(
-                                  //   key: _formKey,
-                                  //   child:
-                                  Column(
-                                    children: [
-                                      CustomeFormField(
-                                        label: 'Email/User Name',
-                                        validator: validateEmail,
-                                        controller: username,
-                                      ),
-                                      SizedBox(
-                                        height: 30,
-                                      ),
-                                      CustomButton(
-                                        buttonText: 'Send OTP',
-                                        color: CommonUtils.primaryTextColor,
-                                        onPressed: forgotUser,
-                                      ),
-                                    ],
+                                  CustomeFormField(
+                                    label: 'Email/User Name',
+                                    validator: validateEmail,
+                                    controller: username,
                                   ),
-                                  // ),
+                                  SizedBox(
+                                    height: 30,
+                                  ),
+                                  Container(
+                                    width: MediaQuery.of(context).size.width,
+                                    child: CustomButton(
+                                      buttonText: 'Send OTP',
+                                      color: CommonUtils.primaryTextColor,
+                                      onPressed: forgotUser,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-
-                                      Text(  'Back to login?', style: CommonUtils.Mediumtext_14),
-
+                                      Text('Back to login?', style: CommonUtils.Mediumtext_14),
                                       GestureDetector(
                                         onTap: () {
                                           // Handle the click event for the "Click here!" text
@@ -156,21 +160,23 @@ class _ForgotPasswordscreen extends State<ForgotPasswordscreen> {
                                             ),
                                           );
                                         },
-                                        child: Text(' Click here!', style:TextStyle(
-                                          fontSize: 20,
-                                          fontFamily: "Calibri",
-                                          fontWeight: FontWeight.w700,
-                                          color: Color(0xFF0f75bc),
-                                        )
-                                        ),
+                                        child: Text(' Click here!',
+                                            style: TextStyle(
+                                              fontSize: 20,
+                                              fontFamily: "Calibri",
+                                              fontWeight: FontWeight.w700,
+                                              color: Color(0xFF0f75bc),
+                                            )),
                                       )
                                     ],
                                   ),
-
                                 ],
                               ),
-                            )),
-                      )),
+                              // ),
+                            ],
+                          ),
+                        )),
+                  )),
             ],
           )),
     );
@@ -200,7 +206,7 @@ class _ForgotPasswordscreen extends State<ForgotPasswordscreen> {
         _isloading = true; //Enable loading before getQuestions
       });
       final String apiUrl = baseUrl + validateusername;
-
+      CommonStyles.progressBar(context);
       // Prepare the request body
       Map<String, String> requestBody = {
         'userName': _username,
@@ -227,6 +233,7 @@ class _ForgotPasswordscreen extends State<ForgotPasswordscreen> {
         setState(() {
           _isloading = false; //Enable loading before getQuestions
         });
+        LoadingProgress.stop(context);
         // Handle the data accordingly
         if (isSuccess) {
           // If the user is valid, you can extract more data from 'listResult'
@@ -237,10 +244,7 @@ class _ForgotPasswordscreen extends State<ForgotPasswordscreen> {
             print('userid: ${user['id']}');
             Navigator.push(
               context,
-              MaterialPageRoute(
-                  builder: (context) => ForgotPasswordOtpScreen(
-                        id: user['id'], userName: user['userName']
-                      )),
+              MaterialPageRoute(builder: (context) => ForgotPasswordOtpScreen(id: user['id'], userName: user['userName'])),
             );
             CommonUtils.showCustomToastMessageLong('Otp has Sent to Your Mail', context, 0, 3, toastPosition: MediaQuery.of(context).size.height / 2);
           } else {
@@ -249,6 +253,7 @@ class _ForgotPasswordscreen extends State<ForgotPasswordscreen> {
           }
         } else {
           FocusScope.of(context).unfocus();
+          LoadingProgress.stop(context);
           CommonUtils.showCustomToastMessageLong("${data["statusMessage"]}", context, 1, 3, toastPosition: MediaQuery.of(context).size.height / 2);
           // Handle the case where the user is not valid
           setState(() {
@@ -260,6 +265,7 @@ class _ForgotPasswordscreen extends State<ForgotPasswordscreen> {
           }
         }
       } else {
+        LoadingProgress.stop(context);
         setState(() {
           _isloading = false; //Enable loading before getQuestions
         });

@@ -145,6 +145,11 @@ flutter:
     - assets/check.svg
     - assets/phone_call.svg
     - assets/map_marker.svg
+    - assets/id-card-clip-alt.svg
+    - assets/venus-mars.svg
+    - assets/calendar_icon.svg
+    - assets/mobile-notch.svg
+    - assets/pen-circle.svg
 
 
 

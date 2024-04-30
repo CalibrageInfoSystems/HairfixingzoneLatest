@@ -19,6 +19,7 @@ import 'GetAppointments.dart';
 import 'HomeScreen.dart';
 import 'MyAppointment_Model.dart';
 import 'MyAppointmentsProvider.dart';
+import 'ProfileMy.dart';
 import 'notifications_screen.dart';
 
 @pragma('vm:entry-point')
@@ -215,7 +216,7 @@ class MyApp extends StatelessWidget {
         '/BookAppointment': (context) => SelectCity_Branch_screen(),
         '/Mybookings': (context) => GetAppointments(),
         '/Products': (context) => ProductsMy(),
-        '/EditProfile': (context) => EditProfile()
+        '/ProfileMy': (context) => ProfileMy()
 
         // Add routes for other screens here
       },

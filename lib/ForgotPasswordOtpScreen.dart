@@ -6,17 +6,17 @@ import 'package:flutter/material.dart';
 import 'package:hairfixingzone/Common/custom_button.dart';
 import 'package:hairfixingzone/CommonUtils.dart';
 import 'package:hairfixingzone/ForgotChangePassword.dart';
+import 'package:loading_progress/loading_progress.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
+import 'Common/common_styles.dart';
 import 'api_config.dart';
 
 class ForgotPasswordOtpScreen extends StatefulWidget {
   final int id;
   final String userName;
 
-  ForgotPasswordOtpScreen({required this.id ,
-    required this.userName
-  });
+  ForgotPasswordOtpScreen({required this.id, required this.userName});
 
   @override
   State<ForgotPasswordOtpScreen> createState() => _ForgotPasswordOtpScreenState();
@@ -34,11 +34,11 @@ class _ForgotPasswordOtpScreenState extends State<ForgotPasswordOtpScreen> {
     startTimer();
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-    _otpController.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   super.dispose();
+  //   _otpController.dispose();
+  // }
 
   void startTimer() {
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
@@ -51,6 +51,12 @@ class _ForgotPasswordOtpScreenState extends State<ForgotPasswordOtpScreen> {
         }
       });
     });
+  }
+
+  void restartTimer() {
+    _timer.cancel(); // Cancel the current timer if it's running
+    _secondsRemaining = 600; // Reset seconds remaining to 10 minutes
+    startTimer(); // Start a new timer
   }
 
   String? currentText;
@@ -197,7 +203,7 @@ class _ForgotPasswordOtpScreenState extends State<ForgotPasswordOtpScreen> {
                                   //     print("Completed: ");
                                   //   },
                                   // ),
-                                  const SizedBox(
+                                  SizedBox(
                                     height: 20,
                                   ),
                                   Text(
@@ -209,37 +215,30 @@ class _ForgotPasswordOtpScreenState extends State<ForgotPasswordOtpScreen> {
                                       color: Colors.black,
                                     ),
                                   ),
-                                  const SizedBox(
+                                  SizedBox(
                                     height: 20,
                                   ),
-                                   Row(
+                                  Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Text(
-                                        'Didn\'t receive code? ',
-                                        style: TextStyle(
-                                          fontSize: 20,
-                                          fontFamily: "Calibri",
-                                          fontWeight: FontWeight.w500,
-                                          color: Colors.black,
-                                        )
-                                      ),
+                                      Text('Didn\'t receive code? ',
+                                          style: TextStyle(
+                                            fontSize: 20,
+                                            fontFamily: "Calibri",
+                                            fontWeight: FontWeight.w500,
+                                            color: Colors.black,
+                                          )),
 
                                       GestureDetector(
                                         onTap: () {
                                           // Handle the click event for the "Click here!" text
                                           print('Click here! clicked');
                                           // Add your custom logic or navigation code here
-                                       Resendotpmethod();
-
+                                          Resendotpmethod();
                                         },
-                                        child: Text('Resend code', style:TextStyle(
-                                          fontSize: 20,
-                                          fontFamily: "Calibri",
-                                          fontWeight: FontWeight.w700,
-                                          color: Color(0xFF0f75bc),
-                                        )
-                                        ),
+                                        child: Text('Resend code',
+                                            style: TextStyle(
+                                                fontSize: 20, fontFamily: "Calibri", fontWeight: FontWeight.w700, color: Color(0xFF662e91))),
                                       )
                                       // Text(
                                       //   ' Resend code',
@@ -252,38 +251,38 @@ class _ForgotPasswordOtpScreenState extends State<ForgotPasswordOtpScreen> {
                                       // ),
                                     ],
                                   ),
-                                  const SizedBox(
+                                  SizedBox(
                                     height: 20,
                                   ),
-                                  CustomButton(
-                                    buttonText: 'Validate OTP',
-                                    color: CommonUtils.primaryTextColor,
-                                    onPressed: validateOtp,
+                                  Container(
+                                    width: MediaQuery.of(context).size.width,
+                                    child: CustomButton(
+                                      buttonText: 'Validate OTP',
+                                      color: CommonUtils.primaryTextColor,
+                                      onPressed: validateOtp,
+                                    ),
                                   ),
+
                                   const SizedBox(
                                     height: 20,
                                   ),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Text(
-                                        'Back to login?',
-                                        style: TextStyle(
-                                          fontSize: 20,
-                                          fontFamily: "Calibri",
-                                          fontWeight: FontWeight.w700,
-                                          color: Colors.black,
-                                        )
-                                      ),
-                                      Text(
-                                        ' Click here',
-                                        style: TextStyle(
-                                          fontSize: 20,
-                                          fontFamily: "Calibri",
-                                          fontWeight: FontWeight.w700,
-                                          color:CommonUtils.primaryTextColor,
-                                        )
-                                      ),
+                                      Text('Back to login?',
+                                          style: TextStyle(
+                                            fontSize: 20,
+                                            fontFamily: "Calibri",
+                                            fontWeight: FontWeight.w700,
+                                            color: Colors.black,
+                                          )),
+                                      Text(' Click here',
+                                          style: TextStyle(
+                                            fontSize: 20,
+                                            fontFamily: "Calibri",
+                                            fontWeight: FontWeight.w700,
+                                            color: CommonUtils.primaryTextColor,
+                                          )),
                                     ],
                                   ),
                                 ],
@@ -333,12 +332,13 @@ class _ForgotPasswordOtpScreenState extends State<ForgotPasswordOtpScreen> {
       print('otpentered: $otpentered');
 
       Map<String, String> requestBody = {"id": widget.id.toString(), "otp": "$otpentered"};
-
+      CommonStyles.progressBar(context);
       final String apiUrl = baseUrl + validateusernameotp;
       final response = await http.post(
         Uri.parse(apiUrl),
         body: requestBody,
       );
+
       if (response.statusCode == 200) {
         // Parse the JSON response
         Map<String, dynamic> data = json.decode(response.body);
@@ -350,7 +350,7 @@ class _ForgotPasswordOtpScreenState extends State<ForgotPasswordOtpScreen> {
         // Print the result
         print('Is Success: $isSuccess');
         print('Status Message: $statusMessage');
-
+        LoadingProgress.stop(context);
         // Handle the data accordingly
         if (isSuccess) {
           // If the user is valid, you can extract more data from 'listResult'
@@ -361,15 +361,21 @@ class _ForgotPasswordOtpScreenState extends State<ForgotPasswordOtpScreen> {
             print('userid: ${user['id']}');
             Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (context) => const ForgotChangePassword(),
+                builder: (context) => ForgotChangePassword(
+                  id: widget.id,
+                ),
               ),
             );
+            // LoadingProgress.stop(context);
             CommonUtils.showCustomToastMessageLong('${data["statusMessage"]}', context, 0, 3, toastPosition: MediaQuery.of(context).size.height / 2);
           } else {
+            LoadingProgress.stop(context);
             FocusScope.of(context).unfocus();
             CommonUtils.showCustomToastMessageLong('${data["statusMessage"]} ', context, 1, 3, toastPosition: MediaQuery.of(context).size.height / 2);
           }
+          // LoadingProgress.stop(context);
         } else {
+          LoadingProgress.stop(context);
           FocusScope.of(context).unfocus();
           CommonUtils.showCustomToastMessageLong("${data["statusMessage"]}", context, 1, 3, toastPosition: MediaQuery.of(context).size.height / 2);
           // Handle the case where the user is not valid
@@ -389,77 +395,79 @@ class _ForgotPasswordOtpScreenState extends State<ForgotPasswordOtpScreen> {
     //   ),
     // );
   }
+
   Future<void> Resendotpmethod() async {
+    // Print the username and password
+    //  print('Username: $email');
+    print('userName: ${widget.userName}');
+    setState(() {
+      _isloading = true; //Enable loading before getQuestions
+    });
+    final String apiUrl = baseUrl + validateusername;
+    CommonStyles.progressBar(context);
+    // Prepare the request body
+    Map<String, String> requestBody = {
+      'userName': '${widget.userName}',
+    };
 
-      // Print the username and password
-      //  print('Username: $email');
-      print('userName: ${widget.userName}');
+    // Make the POST request
+    final response = await http.post(
+      Uri.parse(apiUrl),
+      body: requestBody,
+    );
+
+    // Check if the request was successful
+    if (response.statusCode == 200) {
+      // Parse the JSON response
+      Map<String, dynamic> data = json.decode(response.body);
+
+      // Extract the necessary information
+      bool isSuccess = data['isSuccess'];
+      String statusMessage = data['statusMessage'];
+
+      // Print the result
+      print('Is Success: $isSuccess');
+      print('Status Message: $statusMessage');
       setState(() {
-        _isloading = true; //Enable loading before getQuestions
+        _isloading = false; //Enable loading before getQuestions
       });
-      final String apiUrl = baseUrl + validateusername;
+      // Handle the data accordingly
+      if (isSuccess) {
+        // If the user is valid, you can extract more data from 'listResult'
 
-      // Prepare the request body
-      Map<String, String> requestBody = {
-        'userName': '${widget.userName}',
-      };
-
-      // Make the POST request
-      final response = await http.post(
-        Uri.parse(apiUrl),
-        body: requestBody,
-      );
-
-      // Check if the request was successful
-      if (response.statusCode == 200) {
-        // Parse the JSON response
-        Map<String, dynamic> data = json.decode(response.body);
-
-        // Extract the necessary information
-        bool isSuccess = data['isSuccess'];
-        String statusMessage = data['statusMessage'];
-
-        // Print the result
-        print('Is Success: $isSuccess');
-        print('Status Message: $statusMessage');
-        setState(() {
-          _isloading = false; //Enable loading before getQuestions
-        });
-        // Handle the data accordingly
-        if (isSuccess) {
-          // If the user is valid, you can extract more data from 'listResult'
-
-          if (data['listResult'] != null) {
-            List<dynamic> listResult = data['listResult'];
-            Map<String, dynamic> user = listResult.first;
-            print('userid: ${user['id']}');
-
-            CommonUtils.showCustomToastMessageLong('Otp has Sent to Your Mail', context, 0, 3, toastPosition: MediaQuery.of(context).size.height / 2);
-            startTimer();
-          } else {
-            FocusScope.of(context).unfocus();
-            CommonUtils.showCustomToastMessageLong('Invalid User ', context, 1, 3, toastPosition: MediaQuery.of(context).size.height / 2);
-          }
+        if (data['listResult'] != null) {
+          List<dynamic> listResult = data['listResult'];
+          Map<String, dynamic> user = listResult.first;
+          print('userid: ${user['id']}');
+          _otpController.clear();
+          LoadingProgress.stop(context);
+          CommonUtils.showCustomToastMessageLong('Otp has Sent to Your Mail', context, 0, 3, toastPosition: MediaQuery.of(context).size.height / 2);
+          restartTimer();
         } else {
           FocusScope.of(context).unfocus();
-          CommonUtils.showCustomToastMessageLong("${data["statusMessage"]}", context, 1, 3, toastPosition: MediaQuery.of(context).size.height / 2);
-          // Handle the case where the user is not valid
-          setState(() {
-            _isloading = false; //Enable loading before getQuestions
-          });
-          List<dynamic> validationErrors = data['validationErrors'];
-          if (validationErrors.isNotEmpty) {
-            // Print or handle validation errors if any
-          }
+          LoadingProgress.stop(context);
+          CommonUtils.showCustomToastMessageLong('Invalid User ', context, 1, 3, toastPosition: MediaQuery.of(context).size.height / 2);
         }
       } else {
+        LoadingProgress.stop(context);
+        FocusScope.of(context).unfocus();
+        CommonUtils.showCustomToastMessageLong("${data["statusMessage"]}", context, 1, 3, toastPosition: MediaQuery.of(context).size.height / 2);
+        // Handle the case where the user is not valid
         setState(() {
           _isloading = false; //Enable loading before getQuestions
         });
-        // Handle any error cases here
-        print('Failed to connect to the API. Status code: ${response.statusCode}');
+        List<dynamic> validationErrors = data['validationErrors'];
+        if (validationErrors.isNotEmpty) {
+          // Print or handle validation errors if any
+        }
       }
+    } else {
+      setState(() {
+        _isloading = false; //Enable loading before getQuestions
+      });
+      LoadingProgress.stop(context);
+      // Handle any error cases here
+      print('Failed to connect to the API. Status code: ${response.statusCode}');
     }
-
-
+  }
 }

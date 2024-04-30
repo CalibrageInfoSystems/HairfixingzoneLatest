@@ -9,12 +9,12 @@ import 'Common/common_styles.dart';
 import 'Common/custom_button.dart';
 import 'CommonUtils.dart';
 
-class Profile extends StatefulWidget {
+class ProfileMy extends StatefulWidget {
   @override
   Profile_screenState createState() => Profile_screenState();
 }
 
-class Profile_screenState extends State<Profile> {
+class Profile_screenState extends State<ProfileMy> {
   @override
   void initState() {
     super.initState();
@@ -38,6 +38,26 @@ class Profile_screenState extends State<Profile> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: CommonStyles.primaryTextColor,
+      appBar: AppBar(
+          backgroundColor: const Color(0xFFf3e3ff),
+          title: Text(
+            'My Profile',
+            style: TextStyle(
+              color: Color(0xFF0f75bc),
+              fontSize: 16.0,
+              fontWeight: FontWeight.w600,
+            ),
+            textAlign: TextAlign.start,
+          ),
+          leading: IconButton(
+            icon: Icon(
+              Icons.arrow_back_ios,
+              color: CommonUtils.primaryTextColor,
+            ),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          )),
       body: Column(
         children: [
           Container(
