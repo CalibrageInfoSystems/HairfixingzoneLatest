@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:loading_progress/loading_progress.dart';
 
 class CommonStyles {
   // colors
@@ -104,4 +105,34 @@ class CommonStyles {
     color: primaryTextColor,
     letterSpacing: 2,
   );
+  static const TextStyle txSty_20b_fb = TextStyle(
+    fontSize: 20,
+    fontFamily: "Calibri",
+    fontWeight: FontWeight.bold,
+    color: blackColor,
+  );
+  static const TextStyle txSty_20blu_fb = TextStyle(
+    fontSize: 20,
+    fontFamily: "Calibri",
+    fontWeight: FontWeight.bold,
+    color: blueColor,
+  );
+
+  static void progressBar(BuildContext context) {
+    LoadingProgress.start(
+      context,
+      widget: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          color: Colors.grey.withOpacity(0.6),
+        ),
+        width: MediaQuery.of(context).size.width / 4,
+        padding: EdgeInsets.all(MediaQuery.of(context).size.width / 13),
+        child: const AspectRatio(
+          aspectRatio: 1,
+          child: CircularProgressIndicator.adaptive(),
+        ),
+      ),
+    );
+  }
 }

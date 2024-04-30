@@ -281,7 +281,6 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
                                       border: Border.all(
                                         color: CommonUtils.primaryTextColor,
                                       ),
-
                                       borderRadius: BorderRadius.circular(5.0),
                                       color: Colors.white,
                                     ),
@@ -373,7 +372,9 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
                                         // ),
                                       ],
                                     ),
-                                    SizedBox(height: 5.0,),
+                                    SizedBox(
+                                      height: 5.0,
+                                    ),
                                     TextFormField(
                                       controller: AlernateMobilenum, // Assigning the controller
                                       keyboardType: TextInputType.emailAddress,
@@ -414,7 +415,6 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
                                         ),
                                         hintText: 'Alternate Mobile Number',
                                         counterText: "",
-
                                         hintStyle: TextStyle(color: Colors.grey, fontWeight: FontWeight.w400),
                                       ),
                                       maxLength: 10,
@@ -450,7 +450,9 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
                                         ),
                                       ],
                                     ),
-                                    SizedBox(height: 5.0,),
+                                    SizedBox(
+                                      height: 5.0,
+                                    ),
                                     TextFormField(
                                       controller: Email, // Assigning the controller
                                       keyboardType: TextInputType.emailAddress,
@@ -525,7 +527,9 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
                                         ),
                                       ],
                                     ),
-                                    SizedBox(height: 5.0,),
+                                    SizedBox(
+                                      height: 5.0,
+                                    ),
                                     TextFormField(
                                       controller: username, // Assigning the controller
                                       keyboardType: TextInputType.visiblePassword,
@@ -600,7 +604,9 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
                                         ),
                                       ],
                                     ),
-                                    SizedBox(height: 5.0,),
+                                    SizedBox(
+                                      height: 5.0,
+                                    ),
                                     TextFormField(
                                       controller: Password, // Assigning the controller
                                       keyboardType: TextInputType.visiblePassword,
@@ -668,7 +674,9 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
                                         ),
                                       ],
                                     ),
-                                    SizedBox(height: 5.0,),
+                                    SizedBox(
+                                      height: 5.0,
+                                    ),
                                     TextFormField(
                                       controller: ConfrimPassword, // Assigning the controller
                                       keyboardType: TextInputType.visiblePassword,

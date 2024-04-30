@@ -137,7 +137,7 @@ class MyProducts_screenState extends State<ProductsMy> {
               elevation: 0,
               backgroundColor: const Color(0xFFf3e3ff),
               title: const Text(
-                'My Bookings',
+                'My Products',
                 style: TextStyle(color: Color(0xFF0f75bc), fontSize: 16.0, fontWeight: FontWeight.w600),
               ),
               leading: IconButton(

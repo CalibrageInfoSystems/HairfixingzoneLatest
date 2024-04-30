@@ -41,7 +41,9 @@ class CustomeFormField extends StatelessWidget {
             ),
           ],
         ),
-SizedBox(height: 5.0,),
+        SizedBox(
+          height: 5.0,
+        ),
         // textfield
         TextFormField(
           controller: controller, // Assigning the controller
@@ -65,6 +67,7 @@ SizedBox(height: 5.0,),
               ),
             ),
             hintText: 'Enter $label',
+            hintStyle: TextStyle(color: Colors.grey, fontWeight: FontWeight.w400),
           ),
           validator: validator,
         ),

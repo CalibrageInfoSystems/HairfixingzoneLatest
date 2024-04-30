@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:hairfixingzone/EditProfile.dart';
 import 'package:hairfixingzone/Product_My.dart';
 import 'package:hairfixingzone/SelectCity_Branch.dart';
 import 'package:hairfixingzone/MyProductsProvider.dart';
@@ -213,7 +214,8 @@ class MyApp extends StatelessWidget {
         },
         '/BookAppointment': (context) => SelectCity_Branch_screen(),
         '/Mybookings': (context) => GetAppointments(),
-        '/Products': (context) => ProductsMy()
+        '/Products': (context) => ProductsMy(),
+        '/EditProfile': (context) => EditProfile()
 
         // Add routes for other screens here
       },

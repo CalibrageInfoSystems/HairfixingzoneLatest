@@ -5,6 +5,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_expanded_tile/flutter_expanded_tile.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:hairfixingzone/Profile.dart';
 import 'package:hairfixingzone/UserSelectionScreen.dart';
 import 'package:hairfixingzone/feedback.dart';
 import 'package:hairfixingzone/slotbookingscreen.dart';
@@ -113,8 +114,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return
-      WillPopScope(
+    return WillPopScope(
       onWillPop: () async {
         // Show a confirmation dialog
         bool confirmClose = await showDialog(
@@ -165,7 +165,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 )
               : _currentIndex == 1 || _currentIndex == 2 || _currentIndex == 3
-                  ? Text(_getAppBarTitle(_currentIndex),style: CommonUtils.header_Styles,)
+                  ? Text(
+                      _getAppBarTitle(_currentIndex),
+                      style: CommonUtils.header_Styles,
+                    )
                   : null,
           actions: [
             IconButton(
@@ -1034,7 +1037,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   'Please Rate Your Recent Experience With Us',
                   style: TextStyle(
                     fontSize: 24,
-                    color:CommonUtils.primaryTextColor,
+                    color: CommonUtils.primaryTextColor,
                     fontFamily: 'Calibri',
                   ),
                 ),
@@ -1063,7 +1066,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       itemPadding: EdgeInsets.symmetric(horizontal: 1.0),
                       itemBuilder: (context, _) => Icon(
                         Icons.star,
-                      color: CommonUtils.primaryTextColor,
+                        color: CommonUtils.primaryTextColor,
                       ),
                       onRatingUpdate: (rating) {
                         setState(() {
@@ -1080,7 +1083,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       height: 80,
                       width: MediaQuery.of(context).size.width,
                       decoration: BoxDecoration(
-                        border: Border.all( color: CommonUtils.primaryTextColor, width: 1.5),
+                        border: Border.all(color: CommonUtils.primaryTextColor, width: 1.5),
                         borderRadius: BorderRadius.circular(5.0),
                         color: Colors.white,
                       ),
@@ -1112,7 +1115,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                 ),
-
                 Row(
                   children: [
                     Expanded(
@@ -1151,7 +1153,6 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: Center(
                           child: GestureDetector(
                             onTap: () {
-
                               validaterating(appointments);
                             },
                             child: Container(
@@ -1179,7 +1180,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ],
                 ),
-
               ],
             ),
           ),
@@ -1283,12 +1283,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
       case 2:
         // Return the settings screen widget
-        return Container(
-          color: Colors.white,
-          child: Center(
-            child: Text('My Profile'),
-          ),
-        );
+        return Profile();
       case 3:
         // Return the settings screen widget
         return MyProducts();

@@ -57,6 +57,12 @@ dependencies:
   custom_date_range_picker: ^1.0.6
   loading_animation_widget: ^1.2.0+4
   readmore: ^2.2.0
+  dotted_border: ^2.0.0+1
+  loading_progress: ^1.0.2
+
+
+
+
 
 
 dev_dependencies:
@@ -136,6 +142,9 @@ flutter:
     - assets/my_bookings_icon.svg
     - assets/book_op_illusion.svg
     - assets/noun-appointment-date-2417776.svg
+    - assets/check.svg
+    - assets/phone_call.svg
+    - assets/map_marker.svg
 
 
 

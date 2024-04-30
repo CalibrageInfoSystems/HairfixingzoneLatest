@@ -19,8 +19,7 @@ class _ForgotChangePasswordState extends State<ForgotChangePassword> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController =
-  TextEditingController();
+  final TextEditingController _confirmPasswordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -47,40 +46,29 @@ class _ForgotChangePasswordState extends State<ForgotChangePassword> {
               height: MediaQuery.of(context).size.height / 2.2,
               decoration: const BoxDecoration(),
               child: Center(
-                child:
-                Column(
+                child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     SizedBox(
                       width: MediaQuery.of(context).size.height / 4.5,
-
-                      child: Image.asset(
-                          'assets/hfz_logo.png'),
+                      child: Image.asset('assets/hfz_logo.png'),
                     ),
                     const SizedBox(
                       height: 5.0,
                     ),
-                    const Text(
-                        'Forgot Password',
-                        style:  TextStyle(
+                    const Text('Forgot Password',
+                        style: TextStyle(
                           fontSize: 24,
                           fontFamily: "Calibri",
                           fontWeight: FontWeight.w700,
                           letterSpacing: 2,
                           color: Color(0xFF662d91),
-                        )
-                    ),
+                        )),
                     const SizedBox(
                       height: 20,
                     ),
-                    const Text(
-                        'Reset Your Password For Recovery ',
-                        style: CommonUtils.Sub_header_Styles
-                    ),
-                    const Text(
-                        'And Log In to Your Account ',
-                        style: CommonUtils.Sub_header_Styles
-                    ),
+                    const Text('Reset Your Password For Recovery ', style: CommonUtils.Sub_header_Styles),
+                    const Text('And Log In to Your Account ', style: CommonUtils.Sub_header_Styles),
                   ],
                 ),
                 // Column(
@@ -113,16 +101,14 @@ class _ForgotChangePasswordState extends State<ForgotChangePassword> {
               ),
             ),
             SizedBox(
-              height: MediaQuery.of(context).size.height -
-                  MediaQuery.of(context).size.height / 2,
+              height: MediaQuery.of(context).size.height - MediaQuery.of(context).size.height / 2,
               child: SingleChildScrollView(
                 physics: const AlwaysScrollableScrollPhysics(),
                 child: Form(
                   key: _formKey,
                   child: Container(
                     // height: MediaQuery.of(context).size.height,
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 20, horizontal: 40),
+                    padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 40),
                     decoration: const BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.only(
@@ -177,9 +163,7 @@ class _ForgotChangePasswordState extends State<ForgotChangePassword> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-
-                                Text( 'Back to login?', style: CommonUtils.Mediumtext_14),
-
+                                Text('Back to login?', style: CommonUtils.Mediumtext_14),
                                 GestureDetector(
                                   onTap: () {
                                     // Handle the click event for the "Click here!" text
@@ -191,13 +175,13 @@ class _ForgotChangePasswordState extends State<ForgotChangePassword> {
                                       ),
                                     );
                                   },
-                                  child: Text(' Click here!', style:TextStyle(
-                                    fontSize: 20,
-                                    fontFamily: "Calibri",
-                                    fontWeight: FontWeight.w700,
-                                    color: Color(0xFF0f75bc),
-                                  )
-                                  ),
+                                  child: Text(' Click here!',
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                        fontFamily: "Calibri",
+                                        fontWeight: FontWeight.w700,
+                                        color: Color(0xFF0f75bc),
+                                      )),
                                 )
                               ],
                             ),
@@ -259,20 +243,18 @@ class _ForgotChangePasswordState extends State<ForgotChangePassword> {
 
   void loginUser() {
     if (_formKey.currentState!.validate()) {
-      print(
-          '${_passwordController.text} and ${_confirmPasswordController.text}');
+      print('${_passwordController.text} and ${_confirmPasswordController.text}');
 
       changePassword(_passwordController.text, _confirmPasswordController.text);
     }
   }
 
-  Future<void> changePassword(
-      String newPassword, String confirmPassword) async {
+  Future<void> changePassword(String newPassword, String confirmPassword) async {
     try {
       const apiUrl = 'http://182.18.157.215/SaloonApp/API/ResetPassword';
 
       final Map<String, dynamic> requestObject = {
-        "id": 1,
+        "id": 1, //userid
         "newPassword": newPassword,
         "confirmPassword": confirmPassword,
       };
@@ -296,6 +278,7 @@ class _ForgotChangePasswordState extends State<ForgotChangePassword> {
       rethrow;
     }
   }
+
   void openDialog() async {
     await showDialog(
       context: context,
@@ -315,7 +298,8 @@ class _ForgotChangePasswordState extends State<ForgotChangePassword> {
               const SizedBox(
                 height: 50,
               ),
-              Center( // Center the text
+              Center(
+                // Center the text
                 child: const Text(
                   'Your Password Has Been Successfully Changed',
                   style: CommonUtils.txSty_18b_fb,
