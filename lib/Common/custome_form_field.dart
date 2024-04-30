@@ -47,6 +47,7 @@ class CustomeFormField extends StatelessWidget {
         // textfield
         TextFormField(
           controller: controller, // Assigning the controller
+          maxLength: 50,
           decoration: InputDecoration(
               contentPadding: const EdgeInsets.only(top: 15, bottom: 10, left: 15, right: 15),
               focusedBorder: OutlineInputBorder(

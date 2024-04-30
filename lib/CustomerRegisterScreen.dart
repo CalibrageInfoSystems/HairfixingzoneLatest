@@ -1187,7 +1187,7 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
                                   height: 5,
                                 ),
                                 CustomeFormField(
-                                  label: 'Full Name',
+                                  label: 'Full Name ',
                                   validator: validatefullname,
                                   controller: fullNameController,
                                   keyboardType: TextInputType.name,
@@ -1208,7 +1208,7 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
                                 const Row(
                                   children: [
                                     Text(
-                                      'Date of Birth',
+                                      'Date of Birth ',
                                       style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
                                     ),
                                     Text(
@@ -1348,7 +1348,7 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
                                   height: 10,
                                 ),
                                 CustomeFormField(
-                                  label: 'Mobile Number',
+                                  label: 'Mobile Number ',
                                   validator: validateMobilenum,
                                   controller: mobileNumberController,
                                   maxLength: 10,
@@ -1376,7 +1376,7 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
                                     Row(
                                       children: [
                                         Text(
-                                          'Alternate Mobile Number',
+                                          'Alternate Mobile Number ',
                                           style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
                                         ),
                                         // Text(
@@ -1453,7 +1453,7 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
                                     const Row(
                                       children: [
                                         Text(
-                                          'Email',
+                                          'Email ',
                                           style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
                                         ),
                                         Text(
@@ -1532,7 +1532,7 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
                                     const Row(
                                       children: [
                                         Text(
-                                          'User Name',
+                                          'User Name ',
                                           style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
                                         ),
                                         Text(
@@ -1610,7 +1610,7 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
                                     const Row(
                                       children: [
                                         Text(
-                                          'Password',
+                                          'Password ',
                                           style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
                                         ),
                                         Text(
@@ -1694,7 +1694,7 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
                                     const Row(
                                       children: [
                                         Text(
-                                          'Enter Confirm Password ',
+                                          'Confirm Password ',
                                           style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
                                         ),
                                         Text(

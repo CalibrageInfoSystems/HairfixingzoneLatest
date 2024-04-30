@@ -106,10 +106,56 @@ class _LoginPageState extends State<CustomerLoginScreen> {
                               SizedBox(
                                 height: 10,
                               ),
-                              CustomeFormField(
-                                label: 'Email/User Name',
+                              // CustomeFormField(
+                              //   label: 'Email/User Name',
+                              //   validator: validateEmail,
+                              //   controller: _emailController,
+                              // ),
+                              Row(
+                                children: [
+                                  Text(
+                                    'Email/User Name',
+                                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                                  ),
+                                  Text(
+                                    '*',
+                                    style: TextStyle(color: Colors.red),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                height: 5.0,
+                              ),
+                              TextFormField(
+                                controller: _emailController, // Assigning the controller
+                                keyboardType: TextInputType.visiblePassword,
+                                // obscureText: true,
+                                onTap: () {},
+                                maxLength: 50,
+                                decoration: InputDecoration(
+                                  contentPadding: const EdgeInsets.only(top: 15, bottom: 10, left: 15, right: 15),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: const BorderSide(
+                                      color: CommonUtils.primaryTextColor,
+                                    ),
+                                    borderRadius: BorderRadius.circular(6.0),
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide: const BorderSide(
+                                      color: CommonUtils.primaryTextColor,
+                                    ),
+                                    borderRadius: BorderRadius.circular(6.0),
+                                  ),
+                                  border: const OutlineInputBorder(
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(10),
+                                    ),
+                                  ),
+                                  hintText: 'Enter Email/User Name',
+                                  counterText: "",
+                                  hintStyle: const TextStyle(color: Colors.grey, fontWeight: FontWeight.w400),
+                                ),
                                 validator: validateEmail,
-                                controller: _emailController,
                               ),
                               SizedBox(
                                 height: 10,
@@ -141,6 +187,7 @@ class _LoginPageState extends State<CustomerLoginScreen> {
                                 keyboardType: TextInputType.visiblePassword,
                                 // obscureText: true,
                                 onTap: () {},
+                                maxLength: 25,
                                 decoration: InputDecoration(
                                   contentPadding: const EdgeInsets.only(top: 15, bottom: 10, left: 15, right: 15),
                                   focusedBorder: OutlineInputBorder(
@@ -199,7 +246,7 @@ class _LoginPageState extends State<CustomerLoginScreen> {
                                 ],
                               ),
                               SizedBox(
-                                height: 30,
+                                height: 15,
                               ),
                               Row(
                                 children: [
@@ -221,7 +268,7 @@ class _LoginPageState extends State<CustomerLoginScreen> {
                                 ],
                               ),
                               SizedBox(
-                                height: 30,
+                                height: 15,
                               ),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
