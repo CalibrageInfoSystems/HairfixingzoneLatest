@@ -15,7 +15,13 @@ class appointmentlist extends StatefulWidget {
   final String filepath;
   final String phonenumber;
   final String branchaddress;
-  appointmentlist({required this.userId, required this.branchid, required this.branchname, required this.filepath, required this.phonenumber, required this.branchaddress}) {}
+  appointmentlist(
+      {required this.userId,
+      required this.branchid,
+      required this.branchname,
+      required this.filepath,
+      required this.phonenumber,
+      required this.branchaddress}) {}
   @override
   _appointmentlist createState() => _appointmentlist();
 }
@@ -132,7 +138,7 @@ class _appointmentlist extends State<appointmentlist> {
                   child: Stack(
                     children: [
                       Image.network(
-                      widget.filepath,
+                        widget.filepath,
                         fit: BoxFit.cover,
                         width: double.infinity,
                         height: double.infinity,
@@ -232,7 +238,11 @@ class _appointmentlist extends State<appointmentlist> {
                     },
                     child: Text(
                       'All',
-                      style: TextStyle(color: selectedButtonIndex == 1 ? Colors.white : Color(0xFFF44614), fontWeight: FontWeight.bold, fontFamily: 'Calibri', fontSize: 14),
+                      style: TextStyle(
+                          color: selectedButtonIndex == 1 ? Colors.white : Color(0xFFF44614),
+                          fontWeight: FontWeight.bold,
+                          fontFamily: 'Calibri',
+                          fontSize: 14),
                     ),
                     style: ElevatedButton.styleFrom(
                       primary: selectedButtonIndex == 1 ? Color(0xFFF44614) : Colors.white,
@@ -253,7 +263,11 @@ class _appointmentlist extends State<appointmentlist> {
                     },
                     child: Text(
                       'Requested',
-                      style: TextStyle(color: selectedButtonIndex == 2 ? Colors.white : Color(0xFFF44614), fontWeight: FontWeight.bold, fontFamily: 'Calibri', fontSize: 14),
+                      style: TextStyle(
+                          color: selectedButtonIndex == 2 ? Colors.white : Color(0xFFF44614),
+                          fontWeight: FontWeight.bold,
+                          fontFamily: 'Calibri',
+                          fontSize: 14),
                     ),
                     style: ElevatedButton.styleFrom(
                       primary: selectedButtonIndex == 2 ? Color(0xFFF44614) : Colors.white,
@@ -274,7 +288,11 @@ class _appointmentlist extends State<appointmentlist> {
                     },
                     child: Text(
                       'Accepted',
-                      style: TextStyle(color: selectedButtonIndex == 3 ? Colors.white : Color(0xFFF44614), fontWeight: FontWeight.bold, fontFamily: 'Calibri', fontSize: 14),
+                      style: TextStyle(
+                          color: selectedButtonIndex == 3 ? Colors.white : Color(0xFFF44614),
+                          fontWeight: FontWeight.bold,
+                          fontFamily: 'Calibri',
+                          fontSize: 14),
                     ),
                     style: ElevatedButton.styleFrom(
                       primary: selectedButtonIndex == 3 ? Color(0xFFF44614) : Colors.white,
@@ -295,7 +313,11 @@ class _appointmentlist extends State<appointmentlist> {
                     },
                     child: Text(
                       'Rejected',
-                      style: TextStyle(color: selectedButtonIndex == 4 ? Colors.white : Color(0xFFF44614), fontWeight: FontWeight.bold, fontFamily: 'Calibri', fontSize: 14),
+                      style: TextStyle(
+                          color: selectedButtonIndex == 4 ? Colors.white : Color(0xFFF44614),
+                          fontWeight: FontWeight.bold,
+                          fontFamily: 'Calibri',
+                          fontSize: 14),
                     ),
                     style: ElevatedButton.styleFrom(
                       primary: selectedButtonIndex == 4 ? Color(0xFFF44614) : Colors.white,
@@ -386,7 +408,11 @@ class _appointmentlist extends State<appointmentlist> {
                                                       children: [
                                                         TextSpan(
                                                           text: 'Name : ',
-                                                          style: TextStyle(color: Color(0xFFF44614), fontSize: 12, fontWeight: FontWeight.bold, fontFamily: 'Calibri'),
+                                                          style: TextStyle(
+                                                              color: Color(0xFFF44614),
+                                                              fontSize: 12,
+                                                              fontWeight: FontWeight.bold,
+                                                              fontFamily: 'Calibri'),
                                                         ),
                                                         TextSpan(
                                                           text: appointment.customerName,
@@ -403,7 +429,11 @@ class _appointmentlist extends State<appointmentlist> {
                                                       children: [
                                                         TextSpan(
                                                           text: 'Gender : ',
-                                                          style: TextStyle(color: Color(0xFFF44614), fontSize: 12, fontWeight: FontWeight.bold, fontFamily: 'Calibri'),
+                                                          style: TextStyle(
+                                                              color: Color(0xFFF44614),
+                                                              fontSize: 12,
+                                                              fontWeight: FontWeight.bold,
+                                                              fontFamily: 'Calibri'),
                                                         ),
                                                         TextSpan(
                                                           text: appointment.gender,
@@ -420,7 +450,11 @@ class _appointmentlist extends State<appointmentlist> {
                                                       children: [
                                                         TextSpan(
                                                           text: 'Purpose : ',
-                                                          style: TextStyle(color: Color(0xFFF44614), fontSize: 12, fontWeight: FontWeight.bold, fontFamily: 'Calibri'),
+                                                          style: TextStyle(
+                                                              color: Color(0xFFF44614),
+                                                              fontSize: 12,
+                                                              fontWeight: FontWeight.bold,
+                                                              fontFamily: 'Calibri'),
                                                         ),
                                                         TextSpan(
                                                           text: appointment.purposeofvisit,
@@ -444,7 +478,11 @@ class _appointmentlist extends State<appointmentlist> {
                                                         ),
                                                         TextSpan(
                                                           text: ' : ',
-                                                          style: TextStyle(color: Color(0xFFF44614), fontSize: 12, fontWeight: FontWeight.bold, fontFamily: 'Calibri'),
+                                                          style: TextStyle(
+                                                              color: Color(0xFFF44614),
+                                                              fontSize: 12,
+                                                              fontWeight: FontWeight.bold,
+                                                              fontFamily: 'Calibri'),
                                                         ),
                                                         TextSpan(
                                                           text: appointment.email,
@@ -468,7 +506,11 @@ class _appointmentlist extends State<appointmentlist> {
                                                         ),
                                                         TextSpan(
                                                           text: ' : ',
-                                                          style: TextStyle(color: Color(0xFFF44614), fontSize: 12, fontWeight: FontWeight.bold, fontFamily: 'Calibri'),
+                                                          style: TextStyle(
+                                                              color: Color(0xFFF44614),
+                                                              fontSize: 12,
+                                                              fontWeight: FontWeight.bold,
+                                                              fontFamily: 'Calibri'),
                                                         ),
                                                         TextSpan(
                                                           text: appointment.SlotDuration,
@@ -725,77 +767,71 @@ class _appointmentlist extends State<appointmentlist> {
                                                 ),
                                               ),
                                             ),
-
                                             if (appointment.statusTypeId == 5 && !appointment.isClosed)
-                            Visibility(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  SizedBox(height: 10), // Add some spacing between the buttons
-                                  Padding(
-                                    padding: EdgeInsets.all(10.0), // Added padding for spacing
-                                    child:
-                                    ElevatedButton(
-                                      // onPressed: isPastDate(selecteddate, appointment.SlotDuration)
-                                      //     ? null
-                                      //     : () {
-    onPressed: () {
-                                        // CloseAppointment(index);
+                                              Visibility(
+                                                child: Column(
+                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                                  children: [
+                                                    SizedBox(height: 10), // Add some spacing between the buttons
+                                                    Padding(
+                                                      padding: EdgeInsets.all(10.0), // Added padding for spacing
+                                                      child: ElevatedButton(
+                                                        // onPressed: isPastDate(selecteddate, appointment.SlotDuration)
+                                                        //     ? null
+                                                        //     : () {
+                                                        onPressed: () {
+                                                          // CloseAppointment(index);
 
-                                        Appointment data = Appointment(
-                                          id: appointment.id,
-                                          branchId: appointment.branchId,
-                                          name: appointment.name,
-                                          date: appointment.date,
-                                          slotTime: appointment.slotTime,
-                                          customerName: appointment.customerName,
-                                          phoneNumber: appointment.phoneNumber,
-                                          email: appointment.email,
-                                          genderTypeId: appointment.genderTypeId,
-                                          gender: appointment.gender,
-                                          statusTypeId: appointment.statusTypeId,
-                                          status: appointment.status,
-                                          purposevisitid: appointment.purposevisitid,
-                                          purposeofvisit: appointment.purposeofvisit,
-                                          isActive: appointment.isActive,
-                                          SlotDuration: appointment.SlotDuration, review: '', rating: null,
-                                        );
+                                                          Appointment data = Appointment(
+                                                            id: appointment.id,
+                                                            branchId: appointment.branchId,
+                                                            name: appointment.name,
+                                                            date: appointment.date,
+                                                            slotTime: appointment.slotTime,
+                                                            customerName: appointment.customerName,
+                                                            phoneNumber: appointment.phoneNumber,
+                                                            email: appointment.email,
+                                                            genderTypeId: appointment.genderTypeId,
+                                                            gender: appointment.gender,
+                                                            statusTypeId: appointment.statusTypeId,
+                                                            status: appointment.status,
+                                                            purposevisitid: appointment.purposevisitid,
+                                                            purposeofvisit: appointment.purposeofvisit,
+                                                            isActive: appointment.isActive,
+                                                            SlotDuration: appointment.SlotDuration,
+                                                            review: '',
+                                                            rating: null,
+                                                          );
 
-                                        print('Button 1 pressed for ${appointment.customerName}');
-                                        closepopup(data, 18,index);
-                                       // postAppointment(data, 18,index);
-
-                                      },
-                                      child: Text('Close'),
-                                      style: ButtonStyle(
-                                        foregroundColor: MaterialStateProperty.resolveWith<Color>(
-                                              (Set<MaterialState> states) {
-
-                                            return Colors.green; // Use the default text color for enabled state
-                                          },
-                                        ),
-                                        backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                                              (Set<MaterialState> states) {
-
-
-                                            return Colors.white; // Use the default background color for enabled state
-                                          },
-                                        ),
-                                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                          RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(25.0),
-                                            side: BorderSide(color: Colors.green, width: 2.0),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-
+                                                          print('Button 1 pressed for ${appointment.customerName}');
+                                                          closepopup(data, 18, index);
+                                                          // postAppointment(data, 18,index);
+                                                        },
+                                                        child: Text('Close'),
+                                                        style: ButtonStyle(
+                                                          foregroundColor: MaterialStateProperty.resolveWith<Color>(
+                                                            (Set<MaterialState> states) {
+                                                              return Colors.green; // Use the default text color for enabled state
+                                                            },
+                                                          ),
+                                                          backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                                                            (Set<MaterialState> states) {
+                                                              return Colors.white; // Use the default background color for enabled state
+                                                            },
+                                                          ),
+                                                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                                            RoundedRectangleBorder(
+                                                              borderRadius: BorderRadius.circular(25.0),
+                                                              side: BorderSide(color: Colors.green, width: 2.0),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
                                             if (appointment.statusTypeId == 18)
-
                                               Visibility(
                                                 child: Column(
                                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -828,7 +864,11 @@ class _appointmentlist extends State<appointmentlist> {
                                                               bottom: 15,
                                                               child: Text(
                                                                 'Closed',
-                                                                style: TextStyle(color: Colors.green, fontSize: 12, fontWeight: FontWeight.bold, fontFamily: 'Calibri'),
+                                                                style: TextStyle(
+                                                                    color: Colors.green,
+                                                                    fontSize: 12,
+                                                                    fontWeight: FontWeight.bold,
+                                                                    fontFamily: 'Calibri'),
                                                               ),
                                                             ),
                                                           ],
@@ -838,7 +878,7 @@ class _appointmentlist extends State<appointmentlist> {
                                                   ],
                                                 ),
                                               ),
-                            if (appointment.statusTypeId == 6)
+                                            if (appointment.statusTypeId == 6)
                                               Visibility(
                                                 child: Column(
                                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -871,7 +911,11 @@ class _appointmentlist extends State<appointmentlist> {
                                                               bottom: 15,
                                                               child: Text(
                                                                 'Rejected',
-                                                                style: TextStyle(color: Colors.red, fontSize: 12, fontWeight: FontWeight.bold, fontFamily: 'Calibri'),
+                                                                style: TextStyle(
+                                                                    color: Colors.red,
+                                                                    fontSize: 12,
+                                                                    fontWeight: FontWeight.bold,
+                                                                    fontFamily: 'Calibri'),
                                                               ),
                                                             ),
                                                           ],
@@ -908,18 +952,20 @@ class _appointmentlist extends State<appointmentlist> {
                                                                 purposevisitid: appointment.purposevisitid,
                                                                 purposeofvisit: appointment.purposeofvisit,
                                                                 isActive: appointment.isActive,
-                                                                SlotDuration: appointment.SlotDuration,review: '', rating: null,
+                                                                SlotDuration: appointment.SlotDuration,
+                                                                review: '',
+                                                                rating: null,
                                                               );
 
                                                               print('Button 1 pressed for ${appointment.customerName}');
-                                                              postAppointment(data, 5,index,0);
+                                                              postAppointment(data, 5, index, 0);
                                                               Get_ApprovedDeclinedSlots(data, 5);
                                                               print('accpteedbuttonisclicked');
                                                             },
                                                       child: Text('Accept'),
                                                       style: ButtonStyle(
                                                         foregroundColor: MaterialStateProperty.resolveWith<Color>(
-                                                              (Set<MaterialState> states) {
+                                                          (Set<MaterialState> states) {
                                                             if (states.contains(MaterialState.disabled)) {
                                                               return Colors.grey; // Set the text color to gray when disabled
                                                             }
@@ -927,9 +973,10 @@ class _appointmentlist extends State<appointmentlist> {
                                                           },
                                                         ),
                                                         backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                                                              (Set<MaterialState> states) {
+                                                          (Set<MaterialState> states) {
                                                             if (states.contains(MaterialState.disabled)) {
-                                                              return Colors.grey.withOpacity(0.5); // Set the background color to gray with opacity when disabled
+                                                              return Colors.grey
+                                                                  .withOpacity(0.5); // Set the background color to gray with opacity when disabled
                                                             }
                                                             return Colors.white; // Use the default background color for enabled state
                                                           },
@@ -950,8 +997,6 @@ class _appointmentlist extends State<appointmentlist> {
                                                     onPressed: isPastDate(selecteddate, appointment.SlotDuration)
                                                         ? null
                                                         : () {
-
-
                                                             Appointment data = Appointment(
                                                               id: appointment.id,
                                                               branchId: appointment.branchId,
@@ -968,13 +1013,15 @@ class _appointmentlist extends State<appointmentlist> {
                                                               purposevisitid: appointment.purposevisitid,
                                                               purposeofvisit: appointment.purposeofvisit,
                                                               isActive: appointment.isActive,
-                                                              SlotDuration: appointment.SlotDuration,review: '', rating: null,
+                                                              SlotDuration: appointment.SlotDuration,
+                                                              review: '',
+                                                              rating: null,
                                                             );
 
                                                             print('Button 1 pressed for ${appointment.customerName}');
-                                                            postAppointment(data, 6,index,0);
+                                                            postAppointment(data, 6, index, 0);
                                                             // Handle reject button action
-                                                           // rejectAppointment(index);
+                                                            // rejectAppointment(index);
                                                             print('rejectedbuttonisclciked');
                                                           },
                                                     child: Text('Reject'),
@@ -990,7 +1037,8 @@ class _appointmentlist extends State<appointmentlist> {
                                                       backgroundColor: MaterialStateProperty.resolveWith<Color>(
                                                         (Set<MaterialState> states) {
                                                           if (states.contains(MaterialState.disabled)) {
-                                                            return Colors.grey.withOpacity(0.5); // Set the background color to gray with opacity when disabled
+                                                            return Colors.grey
+                                                                .withOpacity(0.5); // Set the background color to gray with opacity when disabled
                                                           }
                                                           return Colors.white; // Use the default background color for enabled state
                                                         },
@@ -1052,55 +1100,54 @@ class _appointmentlist extends State<appointmentlist> {
                                                 ),
                                               ),
                                             if (appointment.statusTypeId == 5)
-                                            if (appointment.isClosed )
-                                              Visibility(
-                                                child: Column(
-                                                  mainAxisAlignment: MainAxisAlignment.center,
-                                                  children: [
-                                                    Padding(
-                                                      padding: EdgeInsets.only(top: 10.0),
-                                                      child: Container(
-                                                        width: 75,
-                                                        height: 75,
-                                                        decoration: BoxDecoration(
-                                                          shape: BoxShape.circle,
-                                                          border: Border.all(
-                                                            color: appointment.isClosed ? Colors.green : Colors.red,
-                                                            width: 2.0,
-                                                          ),
-                                                          color: Colors.white,
-                                                        ),
-                                                        child: Stack(
-                                                          alignment: Alignment.center,
-                                                          children: [
-                                                            Positioned(
-                                                              top: 12,
-                                                              child: Icon(
-                                                                appointment.isClosed ? Icons.check : Icons.close,
-                                                                color: appointment.isClosed ? Colors.green : Colors.red,
-                                                                size: 33,
-                                                              ),
+                                              if (appointment.isClosed)
+                                                Visibility(
+                                                  child: Column(
+                                                    mainAxisAlignment: MainAxisAlignment.center,
+                                                    children: [
+                                                      Padding(
+                                                        padding: EdgeInsets.only(top: 10.0),
+                                                        child: Container(
+                                                          width: 75,
+                                                          height: 75,
+                                                          decoration: BoxDecoration(
+                                                            shape: BoxShape.circle,
+                                                            border: Border.all(
+                                                              color: appointment.isClosed ? Colors.green : Colors.red,
+                                                              width: 2.0,
                                                             ),
-                                                            Positioned(
-                                                              bottom: 15,
-                                                              child: Text(
-                                                                appointment.isClosed ? 'Closed' : 'Rejected',
-                                                                style: TextStyle(
+                                                            color: Colors.white,
+                                                          ),
+                                                          child: Stack(
+                                                            alignment: Alignment.center,
+                                                            children: [
+                                                              Positioned(
+                                                                top: 12,
+                                                                child: Icon(
+                                                                  appointment.isClosed ? Icons.check : Icons.close,
                                                                   color: appointment.isClosed ? Colors.green : Colors.red,
-                                                                  fontSize: 12,
-                                                                  fontWeight: FontWeight.bold,
-                                                                  fontFamily: 'Calibri',
+                                                                  size: 33,
                                                                 ),
                                                               ),
-                                                            ),
-                                                          ],
+                                                              Positioned(
+                                                                bottom: 15,
+                                                                child: Text(
+                                                                  appointment.isClosed ? 'Closed' : 'Rejected',
+                                                                  style: TextStyle(
+                                                                    color: appointment.isClosed ? Colors.green : Colors.red,
+                                                                    fontSize: 12,
+                                                                    fontWeight: FontWeight.bold,
+                                                                    fontFamily: 'Calibri',
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
                                                         ),
                                                       ),
-                                                    ),
-                                                  ],
+                                                    ],
+                                                  ),
                                                 ),
-                                              ),
-
                                           ],
                                         ),
                                       ],
@@ -1210,11 +1257,13 @@ class _appointmentlist extends State<appointmentlist> {
       appointments[index].isAccepted = true;
     });
   }
+
   void closeAppointment(int index) {
     setState(() {
       appointments[index].isClosed = true;
     });
   }
+
   void rejectAppointment(int index) {
     // Perform the reject action here
     setState(() {
@@ -1250,9 +1299,7 @@ class _appointmentlist extends State<appointmentlist> {
       "CreatedDate": dateTimeString,
       "UpdatedDate": dateTimeString,
       "UpdatedByUserId": widget.userId,
-      if(i == 18)
-      "price": Amount,
-
+      if (i == 18) "price": Amount,
 
       // "rating": null,
       // "review": null,
@@ -1274,27 +1321,24 @@ class _appointmentlist extends State<appointmentlist> {
 
       // Check the response status code
       if (response.statusCode == 200) {
-
         Map<String, dynamic> data = json.decode(response.body);
 
         // Extract the necessary information
         bool isSuccess = data['isSuccess'];
         if (isSuccess == true) {
           print('Request sent successfully');
-          if(i == 6){
-          rejectAppointment(index);}
-         else if(i == 18){
-            closeAppointment(index);}
+          if (i == 6) {
+            rejectAppointment(index);
+          } else if (i == 18) {
+            closeAppointment(index);
+          }
           // Success case
           // Handle success scenario here
         } else {
           // Failure case
           // Handle failure scenario here
-          CommonUtils.showCustomToastMessageLong(
-              'The request should not be canceled within 30 minutes before slot', context, 0, 2);
-
+          CommonUtils.showCustomToastMessageLong('The request should not be canceled within 30 minutes before slot', context, 0, 2);
         }
-
       } else {
         //showCustomToastMessageLong(
         // 'Failed to send the request', context, 1, 2);
@@ -1330,6 +1374,7 @@ class _appointmentlist extends State<appointmentlist> {
         throw Exception('Failed to fetch appointments');
       }
     } catch (error) {
+      print('errorinappointmrent$error');
       throw Exception('Failed to connect to the API');
     }
   }
@@ -1414,7 +1459,7 @@ class _appointmentlist extends State<appointmentlist> {
     }
   }
 
-  void closepopup( Appointment data, int i, int index) {
+  void closepopup(Appointment data, int i, int index) {
     TextEditingController priceController = TextEditingController();
     GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -1437,7 +1482,6 @@ class _appointmentlist extends State<appointmentlist> {
               ),
               child: Row(
                 children: [
-
                   Expanded(
                     child: Align(
                       alignment: Alignment.centerLeft,
@@ -1456,13 +1500,12 @@ class _appointmentlist extends State<appointmentlist> {
                             if (value!.isEmpty) {
                               CommonUtils.showCustomToastMessageLong('Please enter a price', context, 1, 4);
                               FocusScope.of(context).unfocus();
-
                             }
                             int? price = int.tryParse(value);
                             if (price == null) {
                               CommonUtils.showCustomToastMessageLong('Please enter a valid  price', context, 1, 4);
                               FocusScope.of(context).unfocus();
-                             // return 'Please enter a valid integer price';
+                              // return 'Please enter a valid integer price';
                             }
                             return null;
                           },
@@ -1500,6 +1543,4 @@ class _appointmentlist extends State<appointmentlist> {
       },
     );
   }
-
-
-  }
+}

@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hairfixingzone/EditProfile.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:intl/intl.dart';
 import 'ChangePasswordScreen.dart';
 import 'Common/common_styles.dart';
 import 'Common/custom_button.dart';
@@ -15,23 +16,66 @@ class Profile extends StatefulWidget {
 }
 
 class Profile_screenState extends State<Profile> {
+  String? fullusername;
+  String? phonenumber;
+  String? email;
+  String? contactNumber;
+  String? gender;
+  int Id = 0;
+  String? username;
+  String? dob;
+  String? formattedDate;
   @override
   void initState() {
     super.initState();
+    // getUserDataFromSharedPreferences();
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitDown,
       DeviceOrientation.portraitUp,
     ]);
 
-    CommonUtils.checkInternetConnectivity().then((isConnected) {
+    CommonUtils.checkInternetConnectivity().then((isConnected) async {
       if (isConnected) {
         print('The Internet Is Connected');
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        setState(() {
+          Id = prefs.getInt('userId') ?? 0;
+          fullusername = prefs.getString('userFullName');
+          phonenumber = prefs.getString('contactNumber');
+          username = prefs.getString('username');
+          email = prefs.getString('email');
+          contactNumber = prefs.getString('contactNumber');
+          gender = prefs.getString('gender');
+          dob = prefs.getString('dateofbirth');
+          DateTime date = DateTime.parse(dob!);
+          print('fullusername:$fullusername');
+          print('username$username');
+          print('usernameId:$Id');
+          formattedDate = DateFormat('dd-MM-yyyy').format(date);
+        });
 
         // fetchMyAppointments(userId);
       } else {
         print('The Internet Is not  Connected');
       }
     });
+  }
+
+  void getUserDataFromSharedPreferences() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    Id = prefs.getInt('userId') ?? 0;
+    fullusername = prefs.getString('userFullName');
+    phonenumber = prefs.getString('contactNumber');
+    username = prefs.getString('username');
+    email = prefs.getString('email');
+    contactNumber = prefs.getString('contactNumber');
+    gender = prefs.getString('gender');
+    dob = prefs.getString('dateofbirth');
+    DateTime date = DateTime.parse(dob!);
+    print('fullusername:$fullusername');
+
+    formattedDate = DateFormat('dd-MM-yyyy').format(date);
   }
 
   @override
@@ -41,7 +85,7 @@ class Profile_screenState extends State<Profile> {
       body: Column(
         children: [
           Container(
-            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
             height: 80,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -50,15 +94,15 @@ class Profile_screenState extends State<Profile> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Column(
+                    Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'User Name',
+                          '$fullusername',
                           style: CommonStyles.txSty_18w_fb,
                         ),
                         Text(
-                          'user email',
+                          '$email',
                           style: CommonStyles.txSty_16w_fb,
                         ),
                       ],
@@ -85,8 +129,8 @@ class Profile_screenState extends State<Profile> {
           ),
           Expanded(
             child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
-              decoration: const BoxDecoration(
+              padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+              decoration: BoxDecoration(
                 color: CommonStyles.whiteColor,
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(20),
@@ -99,15 +143,15 @@ class Profile_screenState extends State<Profile> {
                 children: [
                   Column(
                     children: [
-                      userLayOut('assets/id-card-clip-alt.svg', CommonStyles.primaryTextColor, 'User Name'),
-                      userLayOut('assets/venus-mars.svg', CommonStyles.statusGreenText, 'Male'),
-                      userLayOut('assets/calendar_icon.svg', CommonStyles.statusRedText, '10-08-1999'),
-                      userLayOut('assets/mobile-notch.svg', CommonStyles.statusYellowText, '+91 9999999999'),
-                      userLayOut('assets/mobile-notch.svg', CommonStyles.statusBlueText, '+91 9999999999'),
+                      userLayOut('assets/id-card-clip-alt.svg', CommonStyles.primaryTextColor, '$username'),
+                      userLayOut('assets/venus-mars.svg', CommonStyles.statusGreenText, '$gender'),
+                      userLayOut('assets/calendar_icon.svg', CommonStyles.statusRedText, '$formattedDate'),
+                      userLayOut('assets/mobile-notch.svg', CommonStyles.statusYellowText, '+91 $contactNumber'),
+                      userLayOut('assets/mobile-notch.svg', CommonStyles.statusBlueText, '+91 $contactNumber'),
                     ],
                   ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    padding: EdgeInsets.symmetric(horizontal: 10),
                     child: Row(
                       children: [
                         Expanded(
@@ -119,7 +163,9 @@ class Profile_screenState extends State<Profile> {
                               onPressed: () {
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
-                                    builder: (context) => const ChangePasswordScreen(),
+                                    builder: (context) => ChangePasswordScreen(
+                                      id: Id,
+                                    ),
                                   ),
                                 );
                               }),
@@ -141,7 +187,7 @@ class Profile_screenState extends State<Profile> {
       leading: CircleAvatar(
         backgroundColor: bgColor,
         child: Container(
-          padding: const EdgeInsets.all(10),
+          padding: EdgeInsets.all(10),
           child: SvgPicture.asset(
             icon,
             width: 30.0,

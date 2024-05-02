@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hairfixingzone/EditProfile.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:intl/intl.dart';
 import 'ChangePasswordScreen.dart';
 import 'Common/common_styles.dart';
 import 'Common/custom_button.dart';
@@ -15,6 +16,15 @@ class ProfileMy extends StatefulWidget {
 }
 
 class Profile_screenState extends State<ProfileMy> {
+  String? fullusername;
+  String? phonenumber;
+  String? email;
+  String? contactNumber;
+  String? gender;
+  int Id = 0;
+  String? username;
+  String? dob;
+  String? formattedDate;
   @override
   void initState() {
     super.initState();
@@ -23,9 +33,25 @@ class Profile_screenState extends State<ProfileMy> {
       DeviceOrientation.portraitUp,
     ]);
 
-    CommonUtils.checkInternetConnectivity().then((isConnected) {
+    CommonUtils.checkInternetConnectivity().then((isConnected) async {
       if (isConnected) {
         print('The Internet Is Connected');
+        setState(() async {
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          Id = prefs.getInt('userId') ?? 0;
+          fullusername = prefs.getString('userFullName');
+          phonenumber = prefs.getString('contactNumber');
+          username = prefs.getString('username');
+          email = prefs.getString('email');
+          contactNumber = prefs.getString('contactNumber');
+          gender = prefs.getString('gender');
+          dob = prefs.getString('dateofbirth');
+          DateTime date = DateTime.parse(dob!);
+          print('fullusername:$fullusername');
+          print('username$username');
+          print('usernameId:$Id');
+          formattedDate = DateFormat('dd-MM-yyyy').format(date);
+        });
 
         // fetchMyAppointments(userId);
       } else {
@@ -139,7 +165,9 @@ class Profile_screenState extends State<ProfileMy> {
                               onPressed: () {
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
-                                    builder: (context) => const ChangePasswordScreen(),
+                                    builder: (context) => ChangePasswordScreen(
+                                      id: Id,
+                                    ),
                                   ),
                                 );
                               }),

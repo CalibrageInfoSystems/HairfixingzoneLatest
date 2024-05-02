@@ -431,10 +431,12 @@ class _LoginPageState extends State<CustomerLoginScreen> {
     // Save user data using unique keys
     await prefs.setInt('userId', userData['id']);
     await prefs.setString('userFullName', userData['firstName']);
+    await prefs.setString('username', userData['userName']);
     await prefs.setInt('userRoleId', userData['roleID']);
     await prefs.setString('email', userData['email']);
     await prefs.setString('contactNumber', userData['contactNumber']);
     await prefs.setString('gender', userData['gender']);
+    await prefs.setString('dateofbirth', userData['dateofbirth']);
     // Save other user data as needed
   }
 

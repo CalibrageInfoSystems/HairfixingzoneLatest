@@ -182,7 +182,7 @@ class _BookingScreenState extends State<Bookingscreen> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     Id = prefs.getInt('userId') ?? 0;
-    userFullName = prefs.getString('userFullName') ?? '';
+    userFullName = prefs.getString('userName') ?? '';
     phonenumber = prefs.getString('contactNumber') ?? '';
     email = prefs.getString('email') ?? '';
     contactNumber = prefs.getString('contactNumber') ?? '';

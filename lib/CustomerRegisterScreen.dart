@@ -1011,6 +1011,61 @@ class CustomerRegisterScreen extends StatefulWidget {
 }
 
 class _LoginPageState extends State<CustomerRegisterScreen> {
+  // bool isTextFieldFocused = false;
+  // final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  // TextEditingController fullNameController = TextEditingController();
+  // TextEditingController dobController = TextEditingController();
+  // TextEditingController genderController = TextEditingController();
+  // TextEditingController mobileNumberController = TextEditingController();
+  // TextEditingController alernateMobileNumberController = TextEditingController();
+  // TextEditingController emailController = TextEditingController();
+  // TextEditingController userNameController = TextEditingController();
+  // TextEditingController passwordController = TextEditingController();
+  // TextEditingController confirmPasswordController = TextEditingController();
+  // List<RadioButtonOption> options = [];
+  // final ScrollController _scrollController = ScrollController();
+  // FocusNode FullnameFocus = FocusNode();
+  // FocusNode DateofBirthdFocus = FocusNode();
+  // FocusNode GenderFocus = FocusNode();
+  // FocusNode MobilenumberFocus = FocusNode();
+  // FocusNode AlernateMobilenumFocus = FocusNode();
+  // FocusNode EmailFocus = FocusNode();
+  // FocusNode usernameFocus = FocusNode();
+  // FocusNode PasswordFocus = FocusNode();
+  // FocusNode ConfrimPasswordFocus = FocusNode();
+  // DateTime selectedDate = DateTime.now();
+  // List<dynamic> dropdownItems = [];
+  // String? selectedName;
+  // late int selectedValue;
+  // String? _userNameErrorMsg;
+  // String? invalidCredentials;
+  // bool _userNameError = false;
+  // int selectedTypeCdId = -1;
+  // double keyboardHeight = 0.0;
+  // bool isGenderSelected = false;
+  // bool password_obscuretext = true;
+  // bool confirmpassword_obscuretext = true;
+  //
+  // bool isPasswordValidate = false;
+  // String _passwordStrengthMessage = '';
+  // Color _passwordStrengthColor = Colors.transparent;
+  //
+  // bool _emailError = false;
+  // String? _emailErrorMsg;
+  //
+  // bool _passwordError = false;
+  // String? _passwordErrorMsg;
+  // bool _confirmPasswordError = false;
+  // String? _confirmPasswordErrorMsg;
+  //
+  // bool _fullNameError = false;
+  // String? _fullNameErrorMsg;
+  // bool _dobError = false;
+  // String? _dobErrorMsg;
+  // bool _mobileNumberError = false;
+  // String? _mobileNumberErrorMsg;
+  // bool _altNumberError = false;
+  // String? _altNumberErrorMsg;
   bool isTextFieldFocused = false;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   TextEditingController fullNameController = TextEditingController();
@@ -1034,14 +1089,37 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
   FocusNode PasswordFocus = FocusNode();
   FocusNode ConfrimPasswordFocus = FocusNode();
   DateTime selectedDate = DateTime.now();
+  bool showPassword = true;
+  bool showConfirmPassword = true;
   List<dynamic> dropdownItems = [];
   String? selectedName;
+  String? _userNameErrorMsg;
+  String? invalidCredentials;
+  bool _userNameError = false;
   late int selectedValue;
   int selectedTypeCdId = -1;
   double keyboardHeight = 0.0;
   bool isGenderSelected = false;
-  bool password_obscuretext = true;
-  bool confirmpassword_obscuretext = true;
+  bool isPasswordValidate = false;
+  String _passwordStrengthMessage = '';
+  Color _passwordStrengthColor = Colors.transparent;
+
+  bool _emailError = false;
+  String? _emailErrorMsg;
+
+  bool _passwordError = false;
+  String? _passwordErrorMsg;
+  bool _confirmPasswordError = false;
+  String? _confirmPasswordErrorMsg;
+
+  bool _fullNameError = false;
+  String? _fullNameErrorMsg;
+  bool _dobError = false;
+  String? _dobErrorMsg;
+  bool _mobileNumberError = false;
+  String? _mobileNumberErrorMsg;
+  bool _altNumberError = false;
+  String? _altNumberErrorMsg;
   @override
   void initState() {
     super.initState();
@@ -1053,9 +1131,9 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
     final DateTime? pickedYear = await showDatePicker(
       context: context,
       initialDate: selectedDate,
-      firstDate: DateTime(1900),
+      firstDate: DateTime(DateTime.now().year - 100),
       initialEntryMode: DatePickerEntryMode.calendarOnly,
-      lastDate: DateTime(2101),
+      lastDate: DateTime.now(),
       initialDatePickerMode: DatePickerMode.year,
     );
     if (pickedYear != null && pickedYear != selectedDate) {
@@ -1186,13 +1264,36 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
                                 const SizedBox(
                                   height: 5,
                                 ),
+                                // CustomeFormField(
+                                //   label: 'Full Name ',
+                                //   validator: validatefullname,
+                                //   controller: fullNameController,
+                                //   keyboardType: TextInputType.name,
+                                //
+                                //   ///focusNode: FullnameFocus,
+                                // ),
                                 CustomeFormField(
-                                  label: 'Full Name ',
+                                  //MARK: Full Name
+                                  label: 'Full Name',
                                   validator: validatefullname,
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z]')),
+                                  ],
                                   controller: fullNameController,
                                   keyboardType: TextInputType.name,
-
-                                  ///focusNode: FullnameFocus,
+                                  errorText: _fullNameError ? _fullNameErrorMsg : null,
+                                  onChanged: (value) {
+                                    //MARK: Space restrict
+                                    setState(() {
+                                      if (value.startsWith(' ')) {
+                                        fullNameController.value = TextEditingValue(
+                                          text: value.trimLeft(),
+                                          selection: TextSelection.collapsed(offset: value.trimLeft().length),
+                                        );
+                                      }
+                                      _fullNameError = false;
+                                    });
+                                  },
                                 ),
                                 const SizedBox(
                                   height: 10,
@@ -1205,7 +1306,7 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
                                 //   focusNode: DateofBirthdFocus,
                                 //   onTap: () => _selectDate(context),
                                 // ),
-                                const Row(
+                                Row(
                                   children: [
                                     Text(
                                       'Date of Birth ',
@@ -1217,6 +1318,40 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
                                     ),
                                   ],
                                 ),
+                                // TextFormField(
+                                //   //MARK: DOB
+                                //   controller: dobController,
+                                //   onTap: () {
+                                //     _selectDate(context);
+                                //   },
+                                //   focusNode: DateofBirthdFocus,
+                                //   readOnly: true,
+                                //   decoration: InputDecoration(
+                                //     contentPadding: const EdgeInsets.only(top: 15, bottom: 10, left: 15, right: 15),
+                                //     focusedBorder: OutlineInputBorder(
+                                //       borderSide: const BorderSide(
+                                //         color: CommonUtils.primaryTextColor,
+                                //       ),
+                                //       borderRadius: BorderRadius.circular(6.0),
+                                //     ),
+                                //     enabledBorder: OutlineInputBorder(
+                                //       borderSide: const BorderSide(
+                                //         color: CommonUtils.primaryTextColor,
+                                //       ),
+                                //       borderRadius: BorderRadius.circular(6.0),
+                                //     ),
+                                //     border: const OutlineInputBorder(
+                                //       borderRadius: BorderRadius.all(
+                                //         Radius.circular(10),
+                                //       ),
+                                //     ),
+                                //     hintText: 'Date of Birth',
+                                //     counterText: "",
+                                //     hintStyle: const TextStyle(color: Colors.grey, fontWeight: FontWeight.w400),
+                                //     suffixIcon: const Icon(Icons.calendar_today),
+                                //   ),
+                                //   validator: validateDOB,
+                                // ),
                                 TextFormField(
                                   //MARK: DOB
                                   controller: dobController,
@@ -1226,6 +1361,7 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
                                   focusNode: DateofBirthdFocus,
                                   readOnly: true,
                                   decoration: InputDecoration(
+                                    errorText: _dobError ? _dobErrorMsg : null,
                                     contentPadding: const EdgeInsets.only(top: 15, bottom: 10, left: 15, right: 15),
                                     focusedBorder: OutlineInputBorder(
                                       borderSide: const BorderSide(
@@ -1250,6 +1386,11 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
                                     suffixIcon: const Icon(Icons.calendar_today),
                                   ),
                                   validator: validateDOB,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      _dobError = false;
+                                    });
+                                  },
                                 ),
 
                                 const SizedBox(
@@ -1275,7 +1416,7 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
                                       border: Border.all(
                                         color: isGenderSelected ? const Color.fromARGB(255, 175, 15, 4) : CommonUtils.primaryTextColor,
                                       ),
-                                      borderRadius: BorderRadius.circular(8.0),
+                                      borderRadius: BorderRadius.circular(5.0),
                                       color: Colors.white,
                                     ),
                                     child: DropdownButtonHideUnderline(
@@ -1303,6 +1444,7 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
                                                   print(selectedName);
                                                 }
                                                 // isDropdownValid = selectedTypeCdId != -1;
+                                                isGenderSelected = false;
                                               });
                                             },
                                             items: [
@@ -1334,7 +1476,7 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
                                       Padding(
                                         padding: EdgeInsets.symmetric(horizontal: 16, vertical: 5),
                                         child: Text(
-                                          'Please Select Gender',
+                                          'Please select gender',
                                           style: TextStyle(
                                             color: Color.fromARGB(255, 175, 15, 4),
                                             fontSize: 12,
@@ -1347,14 +1489,39 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
                                 const SizedBox(
                                   height: 10,
                                 ),
+                                // CustomeFormField(
+                                //   label: 'Mobile Number ',
+                                //   validator: validateMobilenum,
+                                //   controller: mobileNumberController,
+                                //   maxLength: 10,
+                                //
+                                //   //focusNode: MobilenumberFocus,
+                                //   keyboardType: TextInputType.number,
+                                // ),
                                 CustomeFormField(
-                                  label: 'Mobile Number ',
+                                  //MARK: Mobile Number
+                                  label: 'Mobile Number',
                                   validator: validateMobilenum,
                                   controller: mobileNumberController,
                                   maxLength: 10,
 
-                                  //focusNode: MobilenumberFocus,
-                                  keyboardType: TextInputType.number,
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.deny(RegExp(r'[0-4]')),
+                                    // FilteringTextInputFormatter.digitsOnly,
+                                  ],
+                                  keyboardType: TextInputType.phone,
+                                  errorText: _mobileNumberError ? _mobileNumberErrorMsg : null,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      if (value.startsWith(' ')) {
+                                        fullNameController.value = TextEditingValue(
+                                          text: value.trimLeft(),
+                                          selection: TextSelection.collapsed(offset: value.trimLeft().length),
+                                        );
+                                      }
+                                      _mobileNumberError = false;
+                                    });
+                                  },
                                 ),
                                 SizedBox(
                                   height: 10,
@@ -1390,7 +1557,11 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
                                     ),
                                     TextFormField(
                                       controller: alernateMobileNumberController,
-                                      keyboardType: TextInputType.number,
+                                      keyboardType: TextInputType.phone,
+                                      inputFormatters: [
+                                        FilteringTextInputFormatter.deny(RegExp(r'[0-4]')),
+                                        FilteringTextInputFormatter.digitsOnly,
+                                      ],
                                       onTap: () {
                                         setState(() {
                                           AlernateMobilenumFocus.addListener(() {
@@ -1408,7 +1579,8 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
                                       },
                                       focusNode: AlernateMobilenumFocus,
                                       decoration: InputDecoration(
-                                          contentPadding: const EdgeInsets.only(top: 0, bottom: 10, left: 15, right: 15),
+                                          errorText: _altNumberError ? _altNumberErrorMsg : null,
+                                          contentPadding: const EdgeInsets.only(top: 15, bottom: 10, left: 15, right: 15),
                                           focusedBorder: OutlineInputBorder(
                                             borderSide: const BorderSide(
                                               color: Color(0xFF0f75bc),
@@ -1431,6 +1603,11 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
                                           counterText: ""),
                                       maxLength: 10,
                                       validator: validateAlterMobilenum,
+                                      onChanged: (value) {
+                                        setState(() {
+                                          _altNumberError = false;
+                                        });
+                                      },
                                     ),
                                   ],
                                 ),
@@ -1465,6 +1642,52 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
                                     const SizedBox(
                                       height: 5.0,
                                     ),
+                                    // TextFormField(
+                                    //   controller: emailController,
+                                    //   maxLength: 60,
+                                    //   maxLengthEnforcement: MaxLengthEnforcement.enforced,
+                                    //   keyboardType: TextInputType.emailAddress,
+                                    //   onTap: () {
+                                    //     setState(() {
+                                    //       EmailFocus.addListener(() {
+                                    //         if (EmailFocus.hasFocus) {
+                                    //           Future.delayed(const Duration(milliseconds: 300), () {
+                                    //             Scrollable.ensureVisible(
+                                    //               EmailFocus.context!,
+                                    //               duration: const Duration(milliseconds: 300),
+                                    //               curve: Curves.easeInOut,
+                                    //             );
+                                    //           });
+                                    //         }
+                                    //       });
+                                    //     });
+                                    //   },
+                                    //   focusNode: EmailFocus,
+                                    //   decoration: InputDecoration(
+                                    //     contentPadding: const EdgeInsets.only(top: 15, bottom: 10, left: 15, right: 15),
+                                    //     focusedBorder: OutlineInputBorder(
+                                    //       borderSide: const BorderSide(
+                                    //         color: Color(0xFF0f75bc),
+                                    //       ),
+                                    //       borderRadius: BorderRadius.circular(6.0),
+                                    //     ),
+                                    //     enabledBorder: OutlineInputBorder(
+                                    //       borderSide: const BorderSide(
+                                    //         color: CommonUtils.primaryTextColor,
+                                    //       ),
+                                    //       borderRadius: BorderRadius.circular(6.0),
+                                    //     ),
+                                    //     border: const OutlineInputBorder(
+                                    //       borderRadius: BorderRadius.all(
+                                    //         Radius.circular(10),
+                                    //       ),
+                                    //     ),
+                                    //     hintText: 'Enter Email',
+                                    //     counterText: "",
+                                    //     hintStyle: const TextStyle(color: Colors.grey, fontWeight: FontWeight.w400),
+                                    //   ),
+                                    //   validator: validateEmail,
+                                    // ),
                                     TextFormField(
                                       controller: emailController,
                                       maxLength: 60,
@@ -1487,6 +1710,7 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
                                       },
                                       focusNode: EmailFocus,
                                       decoration: InputDecoration(
+                                        errorText: _emailError ? _emailErrorMsg : null,
                                         contentPadding: const EdgeInsets.only(top: 15, bottom: 10, left: 15, right: 15),
                                         focusedBorder: OutlineInputBorder(
                                           borderSide: const BorderSide(
@@ -1505,11 +1729,16 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
                                             Radius.circular(10),
                                           ),
                                         ),
-                                        hintText: 'Enter Email',
+                                        hintText: 'Email',
                                         counterText: "",
                                         hintStyle: const TextStyle(color: Colors.grey, fontWeight: FontWeight.w400),
                                       ),
                                       validator: validateEmail,
+                                      onChanged: (value) {
+                                        setState(() {
+                                          _emailError = false;
+                                        });
+                                      },
                                     ),
                                   ],
                                 ),
@@ -1544,24 +1773,73 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
                                     const SizedBox(
                                       height: 5.0,
                                     ),
+                                    // TextFormField(
+                                    //   controller: userNameController, // Assigning the controller
+                                    //   keyboardType: TextInputType.name,
+                                    //   // obscureText: true,
+                                    //   onTap: () {
+                                    //     setState(() {
+                                    //       usernameFocus.addListener(() {
+                                    //         if (usernameFocus.hasFocus) {
+                                    //           Future.delayed(const Duration(milliseconds: 300), () {
+                                    //             Scrollable.ensureVisible(
+                                    //               usernameFocus.context!,
+                                    //               duration: const Duration(milliseconds: 300),
+                                    //               curve: Curves.easeInOut,
+                                    //             );
+                                    //           });
+                                    //         }
+                                    //       });
+                                    //     });
+                                    //   },
+                                    //   focusNode: usernameFocus,
+                                    //   decoration: InputDecoration(
+                                    //     contentPadding: const EdgeInsets.only(top: 15, bottom: 10, left: 15, right: 15),
+                                    //     focusedBorder: OutlineInputBorder(
+                                    //       borderSide: const BorderSide(
+                                    //         color: Color(0xFF0f75bc),
+                                    //       ),
+                                    //       borderRadius: BorderRadius.circular(6.0),
+                                    //     ),
+                                    //     enabledBorder: OutlineInputBorder(
+                                    //       borderSide: const BorderSide(
+                                    //         color: CommonUtils.primaryTextColor,
+                                    //       ),
+                                    //       borderRadius: BorderRadius.circular(6.0),
+                                    //     ),
+                                    //     border: OutlineInputBorder(
+                                    //       borderRadius: BorderRadius.all(
+                                    //         Radius.circular(10),
+                                    //       ),
+                                    //     ),
+                                    //     hintText: 'Enter User Name',
+                                    //     counterText: "",
+                                    //     hintStyle: TextStyle(color: Colors.grey, fontWeight: FontWeight.w400),
+                                    //   ),
+                                    //   validator: validateusername,
+                                    // ),
                                     TextFormField(
-                                      controller: userNameController, // Assigning the controller
-                                      keyboardType: TextInputType.name,
-                                      // obscureText: true,
+                                      controller: userNameController,
+                                      maxLength: 50,
+                                      keyboardType: TextInputType.visiblePassword,
                                       onTap: () {
-                                        setState(() {
-                                          usernameFocus.addListener(() {
-                                            if (usernameFocus.hasFocus) {
-                                              Future.delayed(const Duration(milliseconds: 300), () {
-                                                Scrollable.ensureVisible(
-                                                  usernameFocus.context!,
-                                                  duration: const Duration(milliseconds: 300),
-                                                  curve: Curves.easeInOut,
-                                                );
-                                              });
-                                            }
-                                          });
-                                        });
+                                        setState(
+                                          () {
+                                            usernameFocus.addListener(
+                                              () {
+                                                if (usernameFocus.hasFocus) {
+                                                  Future.delayed(const Duration(milliseconds: 300), () {
+                                                    Scrollable.ensureVisible(
+                                                      usernameFocus.context!,
+                                                      duration: const Duration(milliseconds: 300),
+                                                      curve: Curves.easeInOut,
+                                                    );
+                                                  });
+                                                }
+                                              },
+                                            );
+                                          },
+                                        );
                                       },
                                       focusNode: usernameFocus,
                                       decoration: InputDecoration(
@@ -1578,19 +1856,38 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
                                           ),
                                           borderRadius: BorderRadius.circular(6.0),
                                         ),
-                                        border: OutlineInputBorder(
+                                        border: const OutlineInputBorder(
                                           borderRadius: BorderRadius.all(
                                             Radius.circular(10),
                                           ),
                                         ),
-                                        hintText: 'Enter User Name',
+                                        hintText: 'User Name',
                                         counterText: "",
-                                        hintStyle: TextStyle(color: Colors.grey, fontWeight: FontWeight.w400),
+                                        hintStyle: const TextStyle(color: Colors.grey, fontWeight: FontWeight.w400),
+                                        errorText: _userNameError ? _userNameErrorMsg : null,
                                       ),
-                                      validator: validateusername,
+                                      onChanged: (value) {
+                                        setState(() {
+                                          if (value.startsWith(' ')) {
+                                            userNameController.value = TextEditingValue(
+                                              text: value.trimLeft(),
+                                              selection: TextSelection.collapsed(offset: value.trimLeft().length),
+                                            );
+                                            return;
+                                          }
+                                          _userNameError = false;
+                                        });
+                                      },
+                                      // onChanged: (_) {
+                                      //   setState(() {
+                                      //     _userNameError = false;
+                                      //   });
+                                      // },
+                                      validator: validateUserName,
                                     ),
                                   ],
                                 ),
+
                                 const SizedBox(
                                   height: 10,
                                 ),
@@ -1622,63 +1919,151 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
                                     const SizedBox(
                                       height: 5.0,
                                     ),
-                                    TextFormField(
-                                      obscureText: password_obscuretext,
-                                      controller: passwordController, // Assigning the controller
-                                      keyboardType: TextInputType.visiblePassword,
-
-                                      onTap: () {
-                                        setState(() {
-                                          PasswordFocus.addListener(() {
-                                            if (PasswordFocus.hasFocus) {
-                                              Future.delayed(const Duration(milliseconds: 300), () {
-                                                Scrollable.ensureVisible(
-                                                  PasswordFocus.context!,
-                                                  duration: const Duration(milliseconds: 300),
-                                                  curve: Curves.easeInOut,
-                                                );
-                                              });
-                                            }
-                                          });
-                                        });
-                                      },
-                                      focusNode: PasswordFocus,
-                                      decoration: InputDecoration(
-                                        contentPadding: const EdgeInsets.only(top: 15, bottom: 10, left: 15, right: 15),
-                                        focusedBorder: OutlineInputBorder(
-                                          borderSide: const BorderSide(
-                                            color: Color(0xFF0f75bc),
-                                          ),
-                                          borderRadius: BorderRadius.circular(6.0),
-                                        ),
-                                        enabledBorder: OutlineInputBorder(
-                                          borderSide: const BorderSide(
-                                            color: CommonUtils.primaryTextColor,
-                                          ),
-                                          borderRadius: BorderRadius.circular(6.0),
-                                        ),
-                                        border: const OutlineInputBorder(
-                                          borderRadius: BorderRadius.all(
-                                            Radius.circular(10),
-                                          ),
-                                        ),
-                                        hintText: 'Enter Password',
-                                        counterText: "",
-                                        suffixIcon: IconButton(
-                                          icon: Icon(
-                                            password_obscuretext ? Icons.visibility_off : Icons.visibility,
-                                            color: Colors.black,
-                                          ),
-                                          onPressed: () {
-                                            // Toggle the password visibility
+                                    // TextFormField(
+                                    //   obscureText: password_obscuretext,
+                                    //   controller: passwordController, // Assigning the controller
+                                    //   keyboardType: TextInputType.visiblePassword,
+                                    //
+                                    //   onTap: () {
+                                    //     setState(() {
+                                    //       PasswordFocus.addListener(() {
+                                    //         if (PasswordFocus.hasFocus) {
+                                    //           Future.delayed(const Duration(milliseconds: 300), () {
+                                    //             Scrollable.ensureVisible(
+                                    //               PasswordFocus.context!,
+                                    //               duration: const Duration(milliseconds: 300),
+                                    //               curve: Curves.easeInOut,
+                                    //             );
+                                    //           });
+                                    //         }
+                                    //       });
+                                    //     });
+                                    //   },
+                                    //   focusNode: PasswordFocus,
+                                    //   decoration: InputDecoration(
+                                    //     contentPadding: const EdgeInsets.only(top: 15, bottom: 10, left: 15, right: 15),
+                                    //     focusedBorder: OutlineInputBorder(
+                                    //       borderSide: const BorderSide(
+                                    //         color: Color(0xFF0f75bc),
+                                    //       ),
+                                    //       borderRadius: BorderRadius.circular(6.0),
+                                    //     ),
+                                    //     enabledBorder: OutlineInputBorder(
+                                    //       borderSide: const BorderSide(
+                                    //         color: CommonUtils.primaryTextColor,
+                                    //       ),
+                                    //       borderRadius: BorderRadius.circular(6.0),
+                                    //     ),
+                                    //     border: const OutlineInputBorder(
+                                    //       borderRadius: BorderRadius.all(
+                                    //         Radius.circular(10),
+                                    //       ),
+                                    //     ),
+                                    //     hintText: 'Enter Password',
+                                    //     counterText: "",
+                                    //     suffixIcon: IconButton(
+                                    //       icon: Icon(
+                                    //         password_obscuretext ? Icons.visibility_off : Icons.visibility,
+                                    //         color: Colors.black,
+                                    //       ),
+                                    //       onPressed: () {
+                                    //         // Toggle the password visibility
+                                    //         setState(() {
+                                    //           password_obscuretext = !password_obscuretext;
+                                    //         });
+                                    //       },
+                                    //     ),
+                                    //     hintStyle: const TextStyle(color: Colors.grey, fontWeight: FontWeight.w400),
+                                    //   ),
+                                    //   validator: validatePassword,
+                                    // ),
+                                    Column(
+                                      children: [
+                                        TextFormField(
+                                          controller: passwordController,
+                                          keyboardType: TextInputType.visiblePassword,
+                                          obscureText: showPassword,
+                                          maxLength: 25,
+                                          maxLengthEnforcement: MaxLengthEnforcement.enforced,
+                                          onTap: () {
                                             setState(() {
-                                              password_obscuretext = !password_obscuretext;
+                                              PasswordFocus.addListener(() {
+                                                if (PasswordFocus.hasFocus) {
+                                                  Future.delayed(const Duration(milliseconds: 300), () {
+                                                    Scrollable.ensureVisible(
+                                                      PasswordFocus.context!,
+                                                      duration: const Duration(milliseconds: 300),
+                                                      curve: Curves.easeInOut,
+                                                    );
+                                                  });
+                                                }
+                                              });
+                                            });
+                                          },
+                                          focusNode: PasswordFocus,
+                                          decoration: InputDecoration(
+                                            errorText: _passwordError ? _passwordErrorMsg : null,
+                                            suffixIcon: GestureDetector(
+                                              onTap: () {
+                                                setState(() {
+                                                  showPassword = !showPassword;
+                                                });
+                                              },
+                                              child: Icon(showPassword ? Icons.visibility : Icons.visibility_off),
+                                            ),
+                                            contentPadding: const EdgeInsets.only(top: 15, bottom: 10, left: 15, right: 15),
+                                            focusedBorder: OutlineInputBorder(
+                                              borderSide: const BorderSide(
+                                                color: Color(0xFF0f75bc),
+                                              ),
+                                              borderRadius: BorderRadius.circular(6.0),
+                                            ),
+                                            enabledBorder: OutlineInputBorder(
+                                              borderSide: const BorderSide(
+                                                color: CommonUtils.primaryTextColor,
+                                              ),
+                                              borderRadius: BorderRadius.circular(6.0),
+                                            ),
+                                            border: const OutlineInputBorder(
+                                              borderRadius: BorderRadius.all(
+                                                Radius.circular(10),
+                                              ),
+                                            ),
+                                            hintText: 'Password',
+                                            counterText: "",
+                                            hintStyle: const TextStyle(color: Colors.grey, fontWeight: FontWeight.w400),
+                                          ),
+                                          validator: validatePassword,
+                                          onChanged: (value) {
+                                            setState(() {
+                                              if (value.startsWith(' ')) {
+                                                passwordController.value = TextEditingValue(
+                                                  text: value.trimLeft(),
+                                                  selection: TextSelection.collapsed(offset: value.trimLeft().length),
+                                                );
+                                                return;
+                                              }
+                                              _passwordError = false;
+                                              if (isPasswordValidate) {
+                                                _updatePasswordStrengthMessage(value);
+                                              }
                                             });
                                           },
                                         ),
-                                        hintStyle: const TextStyle(color: Colors.grey, fontWeight: FontWeight.w400),
-                                      ),
-                                      validator: validatePassword,
+                                        if (isPasswordValidate)
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.start,
+                                            children: [
+                                              Padding(
+                                                padding: const EdgeInsets.only(top: 5, left: 12),
+                                                child: Text(
+                                                  _passwordStrengthMessage,
+                                                  style: TextStyle(color: _passwordStrengthColor, fontSize: 12),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                      ],
                                     ),
                                   ],
                                 ),
@@ -1706,11 +2091,70 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
                                     const SizedBox(
                                       height: 5.0,
                                     ),
+                                    // TextFormField(
+                                    //   obscureText: confirmpassword_obscuretext,
+                                    //   controller: confirmPasswordController, // Assigning the controller
+                                    //   keyboardType: TextInputType.visiblePassword,
+                                    //
+                                    //   onTap: () {
+                                    //     setState(() {
+                                    //       ConfrimPasswordFocus.addListener(() {
+                                    //         if (ConfrimPasswordFocus.hasFocus) {
+                                    //           Future.delayed(const Duration(milliseconds: 300), () {
+                                    //             Scrollable.ensureVisible(
+                                    //               ConfrimPasswordFocus.context!,
+                                    //               duration: const Duration(milliseconds: 300),
+                                    //               curve: Curves.easeInOut,
+                                    //             );
+                                    //           });
+                                    //         }
+                                    //       });
+                                    //     });
+                                    //   },
+                                    //   focusNode: ConfrimPasswordFocus,
+                                    //   decoration: InputDecoration(
+                                    //     contentPadding: const EdgeInsets.only(top: 15, bottom: 10, left: 15, right: 15),
+                                    //     focusedBorder: OutlineInputBorder(
+                                    //       borderSide: const BorderSide(
+                                    //         color: CommonUtils.primaryTextColor,
+                                    //       ),
+                                    //       borderRadius: BorderRadius.circular(6.0),
+                                    //     ),
+                                    //     enabledBorder: OutlineInputBorder(
+                                    //       borderSide: const BorderSide(
+                                    //         color: CommonUtils.primaryTextColor,
+                                    //       ),
+                                    //       borderRadius: BorderRadius.circular(6.0),
+                                    //     ),
+                                    //     border: const OutlineInputBorder(
+                                    //       borderRadius: BorderRadius.all(
+                                    //         Radius.circular(10),
+                                    //       ),
+                                    //     ),
+                                    //     hintText: 'Confirm Password',
+                                    //     counterText: "",
+                                    //     suffixIcon: IconButton(
+                                    //       icon: Icon(
+                                    //         confirmpassword_obscuretext ? Icons.visibility_off : Icons.visibility,
+                                    //         color: Colors.black,
+                                    //       ),
+                                    //       onPressed: () {
+                                    //         // Toggle the password visibility
+                                    //         setState(() {
+                                    //           confirmpassword_obscuretext = !confirmpassword_obscuretext;
+                                    //         });
+                                    //       },
+                                    //     ),
+                                    //     hintStyle: const TextStyle(color: Colors.grey, fontWeight: FontWeight.w400),
+                                    //   ),
+                                    //   validator: validateconfirmpassword,
+                                    // ),
                                     TextFormField(
-                                      obscureText: confirmpassword_obscuretext,
-                                      controller: confirmPasswordController, // Assigning the controller
+                                      controller: confirmPasswordController,
                                       keyboardType: TextInputType.visiblePassword,
-
+                                      obscureText: showConfirmPassword,
+                                      maxLength: 25,
+                                      maxLengthEnforcement: MaxLengthEnforcement.enforced,
                                       onTap: () {
                                         setState(() {
                                           ConfrimPasswordFocus.addListener(() {
@@ -1728,6 +2172,15 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
                                       },
                                       focusNode: ConfrimPasswordFocus,
                                       decoration: InputDecoration(
+                                        errorText: _confirmPasswordError ? _confirmPasswordErrorMsg : null,
+                                        suffixIcon: GestureDetector(
+                                          onTap: () {
+                                            setState(() {
+                                              showConfirmPassword = !showConfirmPassword;
+                                            });
+                                          },
+                                          child: Icon(showConfirmPassword ? Icons.visibility : Icons.visibility_off),
+                                        ),
                                         contentPadding: const EdgeInsets.only(top: 15, bottom: 10, left: 15, right: 15),
                                         focusedBorder: OutlineInputBorder(
                                           borderSide: const BorderSide(
@@ -1748,21 +2201,21 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
                                         ),
                                         hintText: 'Confirm Password',
                                         counterText: "",
-                                        suffixIcon: IconButton(
-                                          icon: Icon(
-                                            confirmpassword_obscuretext ? Icons.visibility_off : Icons.visibility,
-                                            color: Colors.black,
-                                          ),
-                                          onPressed: () {
-                                            // Toggle the password visibility
-                                            setState(() {
-                                              confirmpassword_obscuretext = !confirmpassword_obscuretext;
-                                            });
-                                          },
-                                        ),
                                         hintStyle: const TextStyle(color: Colors.grey, fontWeight: FontWeight.w400),
                                       ),
                                       validator: validateconfirmpassword,
+                                      onChanged: (value) {
+                                        setState(() {
+                                          if (value.startsWith(' ')) {
+                                            confirmPasswordController.value = TextEditingValue(
+                                              text: value.trimLeft(),
+                                              selection: TextSelection.collapsed(offset: value.trimLeft().length),
+                                            );
+                                            return;
+                                          }
+                                          _confirmPasswordError = false;
+                                        });
+                                      },
                                     ),
                                   ],
                                 ),
@@ -1841,36 +2294,136 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
     }
   }
 
-  String? validateEmail(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Please Enter Email/User Name';
-    } else if (!RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(value)) {
-      return 'Please enter a valid email address';
+  // String? validateEmail(String? value) {
+  //   if (value == null || value.isEmpty) {
+  //     return 'Please Enter Email/User Name';
+  //   } else if (!RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(value)) {
+  //     return 'Please enter a valid email address';
+  //   }
+  //   return null;
+  // }
+  //
+  // String? validatePassword(String? value) {
+  //   if (value == null || value.isEmpty) {
+  //     return 'Please Enter Password';
+  //   } else if (value.length < 8) {
+  //     return 'Password must be 8 characters or above';
+  //   }
+  //   return null;
+  // }
+  //
+  // String? validateconfirmpassword(String? value) {
+  //   if (value == null || value.isEmpty) {
+  //     return 'Please Enter Confirm Password';
+  //   }
+  //   if (passwordController.text != confirmPasswordController.text) {
+  //     return 'Confirm Password must be same as Password';
+  //   }
+  //   return null;
+  // }
+  //
+  // void validateGender(String? value) {
+  //   print('gender: $value');
+  //   if (value == null || value.isEmpty) {
+  //     isGenderSelected = true;
+  //   } else {
+  //     isGenderSelected = false;
+  //   }
+  //   setState(() {});
+  // }
+  //
+  // String? validatedob(String? value) {
+  //   if (value == null || value.isEmpty) {
+  //     return 'Please Enter Date of Birth';
+  //   }
+  //
+  //   return null;
+  // }
+  //
+  // String? validatefullname(String? value) {
+  //   if (value == null || value.isEmpty) {
+  //     return 'Please Enter Full Name';
+  //   }
+  //   return null;
+  // }
+  //
+  // String? validateMobilenum(String? value) {
+  //   if (value == null || value.isEmpty) {
+  //     return 'Please Enter Mobile Number';
+  //   } else if (value.contains(RegExp(r'[a-zA-Z]'))) {
+  //     return 'Mobile number should contain only digits';
+  //   } else if (value.length != 10) {
+  //     return 'Mobile Number must have 10 digits';
+  //   }
+  //
+  //   return null;
+  // }
+  //
+  // String? validateAlterMobilenum(String? value) {
+  //   if (value == null || value.isEmpty) {
+  //     return 'Please Enter Alternate Mobile Number';
+  //   } else if (value.contains(RegExp(r'[a-zA-Z]'))) {
+  //     return 'Alternate number should contain only digits';
+  //   } else if (value.length != 10) {
+  //     return 'Alternate Number must have 10 digits';
+  //   }
+  //
+  //   return null;
+  // }
+  //
+  // String? validateusername(String? value) {
+  //   if (value == null || value.isEmpty) {
+  //     return 'Please Enter User Name';
+  //   }
+  //   return null;
+  // }
+  //
+  // String? validateDOB(String? value) {
+  //   if (value == null || value.isEmpty) {
+  //     return 'Please Select DOB';
+  //   }
+  //   return null;
+  // }
+  String? validatefullname(String? value) {
+    if (value!.isEmpty) {
+      setState(() {
+        _fullNameError = true;
+        _fullNameErrorMsg = 'Full Name is Required';
+      });
+      return null;
+    }
+    if (value.length < 2) {
+      setState(() {
+        _fullNameError = true;
+        _fullNameErrorMsg = 'Full Name should contains minimum 2 charactes';
+      });
+      return null;
+    }
+    if (!RegExp(r'^[a-zA-Z]+$').hasMatch(value)) {
+      return 'Full Name should only contain alphabetic characters';
+    }
+    if (!RegExp(r'^[a-zA-Z]+$').hasMatch(value)) {
+      setState(() {
+        _fullNameError = true;
+        _fullNameErrorMsg = 'Full Name Should Only Contain Alphabets';
+      });
+      return null;
     }
     return null;
   }
 
-  String? validatePassword(String? value) {
+  String? validateDOB(String? value) {
     if (value == null || value.isEmpty) {
-      return 'Please Enter Password';
-    } else if (value.length < 8) {
-      return 'Password must be 8 characters or above';
-    }
-    return null;
-  }
-
-  String? validateconfirmpassword(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Please Enter Confirm Password';
-    }
-    if (passwordController.text != confirmPasswordController.text) {
-      return 'Confirm Password must be same as Password';
+      setState(() {
+        _dobError = true;
+        _dobErrorMsg = 'Please Select Date of Birth';
+      });
+      return null;
     }
     return null;
   }
 
   void validateGender(String? value) {
-    print('gender: $value');
     if (value == null || value.isEmpty) {
       isGenderSelected = true;
     } else {
@@ -1879,57 +2432,201 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
     setState(() {});
   }
 
-  String? validatedob(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Please Enter Date of Birth';
-    }
-
-    return null;
-  }
-
-  String? validatefullname(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Please Enter Full Name';
-    }
-    return null;
-  }
-
   String? validateMobilenum(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Please Enter Mobile Number';
-    } else if (value.contains(RegExp(r'[a-zA-Z]'))) {
-      return 'Mobile number should contain only digits';
-    } else if (value.length != 10) {
-      return 'Mobile Number must have 10 digits';
+    if (value!.isEmpty) {
+      setState(() {
+        _mobileNumberError = true;
+        _mobileNumberErrorMsg = 'Please Enter Mobile Number';
+      });
+      return null;
+    }
+    if (value.startsWith(RegExp('[1-4]'))) {
+      setState(() {
+        _mobileNumberError = true;
+        _mobileNumberErrorMsg = 'Mobile Number Should Not Start with 1-4';
+      });
+      return null;
+    }
+    if (value.contains(RegExp(r'[a-zA-Z]'))) {
+      setState(() {
+        _mobileNumberError = true;
+        _mobileNumberErrorMsg = 'Mobile Number should contain only digits';
+      });
+      return null;
+    }
+    if (value.length != 10) {
+      setState(() {
+        _mobileNumberError = true;
+        _mobileNumberErrorMsg = 'Mobile Number Must Have 10 Digits';
+      });
+      return null;
     }
 
     return null;
   }
 
   String? validateAlterMobilenum(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Please Enter Alternate Mobile Number';
-    } else if (value.contains(RegExp(r'[a-zA-Z]'))) {
-      return 'Alternate number should contain only digits';
-    } else if (value.length != 10) {
-      return 'Alternate Number must have 10 digits';
+    if (value!.isEmpty) {
+      return null;
     }
-
+    if (value.startsWith(RegExp('[1-4]'))) {
+      setState(() {
+        _altNumberError = true;
+        _altNumberErrorMsg = 'Alternate Number Should Not Start with 1-4';
+      });
+      return null;
+    }
+    if (value.contains(RegExp(r'[a-zA-Z]'))) {
+      setState(() {
+        _altNumberError = true;
+        _altNumberErrorMsg = 'Alternate Number Should Contain Only Digits';
+      });
+      return null;
+    }
+    if (value.length != 10) {
+      setState(() {
+        _altNumberError = true;
+        _altNumberErrorMsg = 'Alternate Number Must Have 10 Digits';
+      });
+      return null;
+    }
     return null;
   }
 
-  String? validateusername(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Please Enter User Name';
+  String? validateEmail(String? value) {
+    if (value!.isEmpty) {
+      setState(() {
+        _emailError = true;
+        _emailErrorMsg = 'Email is Required';
+      });
+      return null;
+    } else if (!RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(value)) {
+      setState(() {
+        _emailError = true;
+        _emailErrorMsg = 'Please Enter a Valid Email Address';
+      });
+      return null;
     }
     return null;
   }
 
-  String? validateDOB(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Please Select DOB';
+  String? validateUserName(String? value) {
+    if (value!.isEmpty) {
+      setState(() {
+        _userNameError = true;
+        _userNameErrorMsg = 'User Name is Required';
+      });
+      return null;
+    }
+    if (value.length < 2) {
+      setState(() {
+        _userNameError = true;
+        _userNameErrorMsg = 'User Name Should Contains Minimum 2 Charactes';
+      });
+      return null;
+    }
+    if (invalidCredentials != null) {
+      setState(() {
+        _userNameError = true;
+        _userNameErrorMsg = null;
+      });
+      return null;
     }
     return null;
+  }
+
+  String? validatePassword(String? value) {
+    if (value!.isEmpty) {
+      setState(() {
+        isPasswordValidate = false;
+        _passwordError = true;
+        _passwordErrorMsg = 'Password is Required';
+      });
+      return null;
+    } else if (value.length < 8) {
+      setState(() {
+        isPasswordValidate = false;
+        _passwordError = true;
+        _passwordErrorMsg = 'Password must be 8 characters or above';
+      });
+      return null;
+    } else if (value.length > 30) {
+      setState(() {
+        isPasswordValidate = false;
+        _passwordError = true;
+        _passwordErrorMsg = 'Password must be below 30 characters';
+      });
+      return null;
+    }
+
+    final hasAlphabets = RegExp(r'[a-zA-Z]').hasMatch(value);
+    final hasNumbers = RegExp(r'\d').hasMatch(value);
+    final hasSpecialCharacters = RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(value);
+    final hasCapitalLetter = RegExp(r'[A-Z]').hasMatch(value);
+
+    if (!hasAlphabets || !hasNumbers || !hasSpecialCharacters || !hasCapitalLetter) {
+      setState(() {
+        isPasswordValidate = false;
+        _passwordError = true;
+        _passwordErrorMsg = 'Password must contain at least one alphabets, numbers, special characters, and capital letter';
+      });
+      return null;
+    }
+    setState(() {
+      isPasswordValidate = true;
+    });
+    return null;
+  }
+
+  void _updatePasswordStrengthMessage(String password) {
+    setState(() {
+      if (password.isEmpty) {
+        _passwordStrengthMessage = '';
+        _passwordStrengthColor = Colors.transparent;
+      } else if (_containsSpecialCharacters(password) && _containsNumbers(password)) {
+        _passwordStrengthMessage = 'Strong password';
+        _passwordStrengthColor = const Color.fromARGB(255, 2, 131, 68);
+      } else if (_containsNumbers(password)) {
+        _passwordStrengthMessage = 'Good password';
+        _passwordStrengthColor = Colors.orange;
+      } else {
+        _passwordStrengthMessage = 'Weak password';
+        _passwordStrengthColor = Colors.yellow;
+      }
+    });
+  }
+
+  bool _containsNumbers(String value) {
+    return RegExp(r'\d').hasMatch(value);
+  }
+
+  bool _containsSpecialCharacters(String value) {
+    return RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(value);
+  }
+
+  String? validateconfirmpassword(String? value) {
+    if (value!.isEmpty) {
+      setState(() {
+        _confirmPasswordError = true;
+        _confirmPasswordErrorMsg = 'Confirm Password is Required';
+      });
+      return null;
+    } else if (passwordController.text != confirmPasswordController.text) {
+      setState(() {
+        _confirmPasswordError = true;
+        _confirmPasswordErrorMsg = 'Confirm Password Must be Same as Password';
+      });
+      return null;
+    }
+    return null;
+  }
+
+  void endUserMessageFromApi(String endUserMessage) {
+    setState(() {
+      _userNameError = true;
+      _userNameErrorMsg = 'User with this name is already exits';
+      FocusScope.of(context).requestFocus(ConfrimPasswordFocus);
+    });
   }
 
   void loginUser() {
@@ -2002,13 +2699,13 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
           bool isSuccess = data['isSuccess'];
           if (isSuccess == true) {
             print('Request sent successfully');
-            CommonUtils.showCustomToastMessageLong('${data['statusMessage']}', context, 1, 2);
+            CommonUtils.showCustomToastMessageLong('${data['statusMessage']}', context, 0, 5);
             Navigator.pop(context);
             LoadingProgress.stop(context);
           } else {
             LoadingProgress.stop(context);
 
-            CommonUtils.showCustomToastMessageLong('${data['statusMessage']}', context, 0, 2);
+            CommonUtils.showCustomToastMessageLong('${data['statusMessage']}', context, 0, 5);
           }
         } else {
           LoadingProgress.stop(context);

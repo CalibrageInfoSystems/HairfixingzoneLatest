@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hairfixingzone/CommonUtils.dart';
 
 import 'package:flutter/material.dart';
@@ -9,18 +10,30 @@ class CustomeFormField extends StatelessWidget {
   final String label;
   final TextInputType keyboardType;
   final int? maxLength;
+  final MaxLengthEnforcement? maxLengthEnforcement;
+  final bool obscureText;
+  final Widget? suffixIcon;
   final VoidCallback? onTap;
+  final String? errorText;
+  final void Function(String)? onChanged;
+  final List<TextInputFormatter>? inputFormatters;
 
   final String? Function(String?)? validator;
-  final TextEditingController? controller; // Added controller parameter
+  final TextEditingController? controller;
   const CustomeFormField({
     Key? key,
     required this.label,
-    this.validator,
-    this.onTap,
-    this.controller,
     this.keyboardType = TextInputType.text,
     this.maxLength,
+    this.maxLengthEnforcement,
+    this.obscureText = false,
+    this.suffixIcon,
+    this.onTap,
+    this.errorText,
+    this.onChanged,
+    this.inputFormatters,
+    this.validator,
+    this.controller,
   }) : super(key: key);
 
   @override
@@ -33,7 +46,7 @@ class CustomeFormField extends StatelessWidget {
           children: [
             Text(
               '$label ',
-              style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
             ),
             const Text(
               '*',
@@ -41,36 +54,49 @@ class CustomeFormField extends StatelessWidget {
             ),
           ],
         ),
-        SizedBox(
+        const SizedBox(
           height: 5.0,
         ),
         // textfield
         TextFormField(
-          controller: controller, // Assigning the controller
-          maxLength: 50,
+          controller: controller,
           decoration: InputDecoration(
+              suffixIcon: suffixIcon,
               contentPadding: const EdgeInsets.only(top: 15, bottom: 10, left: 15, right: 15),
               focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(
+                borderSide: const BorderSide(
                   color: Color(0xFF0f75bc),
                 ),
                 borderRadius: BorderRadius.circular(6.0),
               ),
               enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(
+                borderSide: const BorderSide(
                   color: CommonUtils.primaryTextColor,
                 ),
                 borderRadius: BorderRadius.circular(6.0),
               ),
-              border: OutlineInputBorder(
+              border: const OutlineInputBorder(
                 borderRadius: BorderRadius.all(
                   Radius.circular(10),
                 ),
               ),
+              errorBorder: OutlineInputBorder(
+                borderSide: const BorderSide(
+                  color: Color.fromARGB(255, 175, 15, 4),
+                ),
+                borderRadius: BorderRadius.circular(6.0),
+              ),
               hintText: 'Enter $label',
-              hintStyle: TextStyle(color: Colors.grey, fontWeight: FontWeight.w400),
+              hintStyle: const TextStyle(color: Colors.grey, fontWeight: FontWeight.w400),
+              errorText: errorText,
               counterText: ""),
+          inputFormatters: inputFormatters,
           validator: validator,
+          onChanged: onChanged,
+          keyboardType: keyboardType,
+          obscureText: obscureText,
+          maxLength: maxLength,
+          maxLengthEnforcement: maxLengthEnforcement,
         ),
       ],
     );

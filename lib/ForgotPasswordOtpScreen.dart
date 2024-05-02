@@ -10,6 +10,7 @@ import 'package:loading_progress/loading_progress.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
 import 'Common/common_styles.dart';
+import 'CustomerLoginScreen.dart';
 import 'api_config.dart';
 
 class ForgotPasswordOtpScreen extends StatefulWidget {
@@ -269,20 +270,26 @@ class _ForgotPasswordOtpScreenState extends State<ForgotPasswordOtpScreen> {
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Text('Back to login?',
-                                          style: TextStyle(
-                                            fontSize: 20,
-                                            fontFamily: "Calibri",
-                                            fontWeight: FontWeight.w700,
-                                            color: Colors.black,
-                                          )),
-                                      Text(' Click here',
-                                          style: TextStyle(
-                                            fontSize: 20,
-                                            fontFamily: "Calibri",
-                                            fontWeight: FontWeight.w700,
-                                            color: CommonUtils.primaryTextColor,
-                                          )),
+                                      Text('Back to login?', style: CommonUtils.Mediumtext_14),
+                                      GestureDetector(
+                                        onTap: () {
+                                          // Handle the click event for the "Click here!" text
+                                          print('Click here! clicked');
+                                          // Add your custom logic or navigation code here
+                                          Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                              builder: (context) => CustomerLoginScreen(),
+                                            ),
+                                          );
+                                        },
+                                        child: Text(' Click here!',
+                                            style: TextStyle(
+                                              fontSize: 20,
+                                              fontFamily: "Calibri",
+                                              fontWeight: FontWeight.w700,
+                                              color: Color(0xFF0f75bc),
+                                            )),
+                                      )
                                     ],
                                   ),
                                 ],

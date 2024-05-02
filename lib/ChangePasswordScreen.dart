@@ -1,13 +1,22 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hairfixingzone/Common/custom_button.dart';
 import 'package:hairfixingzone/Common/custome_form_field.dart';
 import 'package:hairfixingzone/CommonUtils.dart';
 import 'package:hairfixingzone/CustomerLoginScreen.dart';
+import 'package:hairfixingzone/HomeScreen.dart';
+import 'package:loading_progress/loading_progress.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
+import 'Common/common_styles.dart';
+import 'api_config.dart';
 
 class ChangePasswordScreen extends StatefulWidget {
-  const ChangePasswordScreen({super.key});
+  final int id;
+
+  ChangePasswordScreen({required this.id});
 
   @override
   State<ChangePasswordScreen> createState() => _ChangePasswordScreenState();
@@ -58,7 +67,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                         validator: validateCurrentPassword,
                         controller: _currentController,
                       ),
-                      const SizedBox(
+                      SizedBox(
                         height: 10,
                       ),
                       CustomeFormField(
@@ -100,16 +109,70 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
     );
   }
 
-  void changePassword() {
+  Future<void> changePassword() async {
     if (_formKey.currentState!.validate()) {
-      print('xxx: login success');
+      String? currentpassword = _currentController.text;
+      String? newpassword = _newController.text;
+      String? confirmnewpassword = _confirmNewController.text;
+      // Print the username and password
+      int id = widget.id;
+      CommonStyles.progressBar(context);
+
+      final String apiUrl = 'http://182.18.157.215/SaloonApp/API/ChangePassword';
+
+      // Prepare the request body
+      Map<String, dynamic> requestBody = {
+        "id": id.toInt(),
+        "oldPassword": "$currentpassword",
+        "newPassword": "$newpassword",
+        "confirmPassword": "$confirmnewpassword"
+      };
+      print('requestBody${json.encode(requestBody)}');
+      // Make the POST request
+      final response = await http.post(
+        Uri.parse(apiUrl),
+        body: json.encode(requestBody),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      );
+      Map<String, dynamic> data = json.decode(response.body);
+
+      if (response.statusCode == 200) {
+        // Parse the JSON response
+        Map<String, dynamic> data = json.decode(response.body);
+
+        // Check the value of "isSuccess" in the JSON data
+        bool isSuccess = data["isSuccess"];
+
+        // Extract the status message from the JSON data
+        String statusMessage = data["statusMessage"];
+
+        // Show the appropriate toast message based on "isSuccess"
+        if (isSuccess) {
+          // Success case: show the success message
+          LoadingProgress.stop(context);
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => HomeScreen(),
+            ),
+          );
+          CommonUtils.showCustomToastMessageLong('$statusMessage', context, 0, 5, toastPosition: MediaQuery.of(context).size.height / 2);
+        } else {
+          LoadingProgress.stop(context);
+          // Failure case: show the status message
+          CommonUtils.showCustomToastMessageLong('$statusMessage', context, 1, 5, toastPosition: MediaQuery.of(context).size.height / 2);
+        }
+      } else {
+        FocusScope.of(context).unfocus();
+        CommonUtils.showCustomToastMessageLong('${data["statusMessage"]} ', context, 1, 5, toastPosition: MediaQuery.of(context).size.height / 2);
+        setState(() {
+          LoadingProgress.stop(context);
+        });
+        // Handle any error cases here
+        print('Failed to connect to the API. Status code: ${response.statusCode}');
+      }
     }
-    // if we got success response we have to navigate to next screen
-    // Navigator.of(context).push(
-    //                 MaterialPageRoute(
-    //                   builder: (context) => const ChangePasswordScreen(),
-    //                 ),
-    //               );
   }
 
   String? validateCurrentPassword(String? value) {

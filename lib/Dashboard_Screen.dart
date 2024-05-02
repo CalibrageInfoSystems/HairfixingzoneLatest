@@ -91,7 +91,7 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
   }
 
   Future<void> getMarqueeText() async {
-    final apiUrl = Uri.parse('http://182.18.157.215/SaloonApp/API/GetContent');
+    final apiUrl = Uri.parse('http://182.18.157.215/SaloonApp/API/GetContent/true');
 
     try {
       final jsonResponse = await http.get(apiUrl);
