@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hairfixingzone/Common/common_styles.dart';
 import 'package:hairfixingzone/HomeScreen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SlotSuccessScreen extends StatefulWidget {
   final String slotdate;
@@ -10,16 +12,15 @@ class SlotSuccessScreen extends StatefulWidget {
   final String Purpose;
   final String slotbranchname;
   final String slotbrnach_address;
-//  final int phonenumber;
+  final String phonenumber;
 
-  SlotSuccessScreen({
-    required this.slotdate,
-    required this.slottime,
-    required this.Purpose,
-    required this.slotbranchname,
-    required this.slotbrnach_address,
-    // required this.phonenumber
-  });
+  SlotSuccessScreen(
+      {required this.slotdate,
+      required this.slottime,
+      required this.Purpose,
+      required this.slotbranchname,
+      required this.slotbrnach_address,
+      required this.phonenumber});
   @override
   State<SlotSuccessScreen> createState() => _SlotSuccessScreenState();
 }
@@ -244,18 +245,23 @@ class _SlotSuccessScreenState extends State<SlotSuccessScreen> with TickerProvid
                                   ),
                                   Row(
                                     children: [
-                                      Container(
-                                        padding: const EdgeInsets.all(10),
-                                        decoration: BoxDecoration(
-                                            border: Border.all(
-                                              color: CommonStyles.statusGreenText,
-                                            ),
-                                            shape: BoxShape.circle),
-                                        child: SvgPicture.asset(
-                                          'assets/phone_call.svg',
-                                          width: 30,
-                                          height: 30,
-                                          color: CommonStyles.statusGreenText,
+                                      GestureDetector(
+                                        onTap: () {
+                                          _makePhoneCall(widget.phonenumber);
+                                        },
+                                        child: Container(
+                                          padding: const EdgeInsets.all(10),
+                                          decoration: BoxDecoration(
+                                              border: Border.all(
+                                                color: CommonStyles.statusGreenText,
+                                              ),
+                                              shape: BoxShape.circle),
+                                          child: SvgPicture.asset(
+                                            'assets/phone_call.svg',
+                                            width: 30,
+                                            height: 30,
+                                            color: CommonStyles.statusGreenText,
+                                          ),
                                         ),
                                       ),
                                       const SizedBox(
@@ -297,6 +303,7 @@ class _SlotSuccessScreenState extends State<SlotSuccessScreen> with TickerProvid
                             child: InkWell(
                               onTap: () {
                                 print('Back to Home btn clicked');
+                                // sharedprefsdelete();
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(builder: (context) => HomeScreen()),
@@ -346,5 +353,20 @@ class _SlotSuccessScreenState extends State<SlotSuccessScreen> with TickerProvid
             ),
           ),
         ));
+  }
+
+  Future<void> _makePhoneCall(String phoneNumber) async {
+    if (await canLaunch(phoneNumber)) {
+      await launch(phoneNumber);
+    } else {
+      throw 'Could not launch $phoneNumber';
+    }
+  }
+
+  Future<void> sharedprefsdelete() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool('isLoggedIn', false);
+    prefs.remove('userId'); // Remove userId from SharedPreferences
+    prefs.remove('userRoleId');
   }
 }

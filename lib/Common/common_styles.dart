@@ -135,4 +135,25 @@ class CommonStyles {
       ),
     );
   }
+
+  static void startProgress(BuildContext context) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return Center(
+            child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Colors.grey,
+                ),
+                padding: const EdgeInsets.all(20),
+                child: const CircularProgressIndicator.adaptive()));
+      },
+    );
+  }
+
+  static void stopProgress(BuildContext context) {
+    Navigator.of(context).pop();
+  }
 }

@@ -1,32 +1,70 @@
 import 'dart:convert';
+import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'Common/custom_button.dart';
 import 'Common/custome_form_field.dart';
 import 'CommonUtils.dart';
 import 'package:intl/intl.dart';
 
+import 'HomeScreen.dart';
 import 'api_config.dart';
 
 class EditProfile extends StatefulWidget {
+  final String createdDate;
+  EditProfile({required this.createdDate});
+
   @override
   EditProfile_screenState createState() => EditProfile_screenState();
 }
 
 class EditProfile_screenState extends State<EditProfile> {
   List<dynamic> dropdownItems = [];
-  late String selectedName;
+
+  String? selectedName;
   late int selectedValue;
   int selectedTypeCdId = -1;
-  TextEditingController Fullname = new TextEditingController();
-  TextEditingController DateofBirth = new TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  TextEditingController AlernateMobilenum = new TextEditingController();
-  TextEditingController Mobilenumber = new TextEditingController();
-  TextEditingController Email = new TextEditingController();
+  TextEditingController fullNameController = TextEditingController();
+  TextEditingController dobController = TextEditingController();
+  TextEditingController genderController = TextEditingController();
+  TextEditingController mobileNumberController = TextEditingController();
+  TextEditingController alernateMobileNumberController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+
+  bool _fullNameError = false;
+  String? _fullNameErrorMsg;
+  bool _dobError = false;
+  String? _dobErrorMsg;
+  bool _emailError = false;
+  String? _emailErrorMsg;
+  bool _mobileNumberError = false;
+  String? _mobileNumberErrorMsg;
+  bool _altNumberError = false;
+  String? _altNumberErrorMsg;
+
+  bool isFullNameValidate = false;
+  bool isDobValidate = false;
+  bool isGenderValidate = false;
+  bool isMobileNumberValidate = false;
+  bool isAltMobileNumberValidate = false;
+  bool isEmailValidate = false;
+  bool isGenderSelected = false;
+  int? Id;
+  String? phonenumber;
+  String? username;
+  String? email;
+  String? contactNumber;
+  String? gender;
+  String? dob;
+  String? formattedDate;
+  int? roleId;
+  String? password;
+  String? fullname;
   DateTime selectedDate = DateTime.now();
   @override
   void initState() {
@@ -36,10 +74,32 @@ class EditProfile_screenState extends State<EditProfile> {
       DeviceOrientation.portraitUp,
     ]);
 
-    CommonUtils.checkInternetConnectivity().then((isConnected) {
+    CommonUtils.checkInternetConnectivity().then((isConnected) async {
       if (isConnected) {
         print('The Internet Is Connected');
         fetchRadioButtonOptions();
+        setState(() async {
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          Id = prefs.getInt('userId') ?? 0;
+          fullname = prefs.getString('userFullName');
+          phonenumber = prefs.getString('contactNumber');
+          username = prefs.getString('username');
+          email = prefs.getString('email');
+          contactNumber = prefs.getString('contactNumber');
+          gender = prefs.getString('gender');
+          dob = prefs.getString('dateofbirth');
+          DateTime date = DateTime.parse(dob!);
+          roleId = prefs.getInt('userRoleId');
+          password = prefs.getString('password');
+          print('fullname$fullname');
+          print('usernameId:$Id');
+          formattedDate = DateFormat('dd-MM-yyyy').format(date);
+          fullNameController.text = '$fullname';
+          dobController.text = '$formattedDate';
+          emailController.text = '$email';
+          mobileNumberController.text = '$contactNumber';
+        });
+
         // fetchMyAppointments(userId);
       } else {
         print('The Internet Is not  Connected');
@@ -47,65 +107,60 @@ class EditProfile_screenState extends State<EditProfile> {
     });
   }
 
-  String? validatefullname(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Please Enter Full Name';
-    }
-
-    return null;
-  }
-
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? pickedYear = await showDatePicker(
       context: context,
       initialDate: selectedDate,
-      firstDate: DateTime(1900),
+      firstDate: DateTime(DateTime.now().year - 100),
       initialEntryMode: DatePickerEntryMode.calendarOnly,
-      lastDate: DateTime(2101),
+      lastDate: DateTime.now(),
       initialDatePickerMode: DatePickerMode.year,
     );
     if (pickedYear != null && pickedYear != selectedDate) {
       setState(() {
         selectedDate = pickedYear;
-        DateofBirth.text = DateFormat('dd-MM-yyyy').format(selectedDate);
+        dobController.text = DateFormat('dd-MM-yyyy').format(selectedDate);
+        _dobError = false;
       });
       // After year selection, open month selection dialog
+      await _selectMonth(context);
     }
   }
 
-  String? validateMobilenum(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Please Enter Mobile Number';
+  Future<void> _selectMonth(BuildContext context) async {
+    final DateTime? pickedMonth = await showDatePicker(
+      context: context,
+      initialDate: selectedDate,
+      firstDate: DateTime(selectedDate.year),
+      initialEntryMode: DatePickerEntryMode.calendarOnly,
+      lastDate: DateTime.now(),
+      initialDatePickerMode: DatePickerMode.day, // Start with day mode to enable month view
+    );
+    if (pickedMonth != null && pickedMonth != selectedDate) {
+      setState(() {
+        selectedDate = pickedMonth;
+        dobController.text = DateFormat('dd-MM-yyyy').format(selectedDate);
+      });
+      // After month selection, open day selection dialog
+      await _selectDay(context);
     }
-
-    return null;
   }
 
-  String? validateEmail(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Please Enter Email/User Name';
+  Future<void> _selectDay(BuildContext context) async {
+    final DateTime? pickedDay = await showDatePicker(
+      context: context,
+      initialDate: selectedDate,
+      initialEntryMode: DatePickerEntryMode.calendarOnly,
+      firstDate: DateTime(selectedDate.year, selectedDate.month),
+      lastDate: DateTime(selectedDate.year, selectedDate.month + 1, 0),
+      initialDatePickerMode: DatePickerMode.day,
+    );
+    if (pickedDay != null && pickedDay != selectedDate) {
+      setState(() {
+        selectedDate = pickedDay;
+        dobController.text = DateFormat('dd-MM-yyyy').format(selectedDate);
+      });
     }
-    // else if (!RegExp(
-    //     r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-    //     .hasMatch(value)) {
-    //   return 'Please enter a valid email address';
-    // }
-    return null;
-  }
-
-  // String? validateMobilenum(String? value) {
-  //   if (value == null || value.isEmpty) {
-  //     return 'Please Enter Mobile Number';
-  //   }
-  //
-  //   return null;
-  // }
-  String? validateAlterMobilenum(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Please Enter Alternate Mobile Number';
-    }
-
-    return null;
   }
 
   Future<void> fetchRadioButtonOptions() async {
@@ -152,7 +207,7 @@ class EditProfile_screenState extends State<EditProfile> {
                   style: TextStyle(color: Color(0xFF0f75bc), fontSize: 16.0, fontWeight: FontWeight.w600),
                 ),
                 leading: IconButton(
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.arrow_back_ios,
                     color: CommonUtils.primaryTextColor,
                   ),
@@ -167,18 +222,33 @@ class EditProfile_screenState extends State<EditProfile> {
                       padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 15),
                       child: Column(
                         children: [
-                          SizedBox(
+                          const SizedBox(
                             height: 5,
                           ),
                           CustomeFormField(
+                            //MARK: Full Name
                             label: 'Full Name',
                             validator: validatefullname,
-                            controller: Fullname,
+                            inputFormatters: [
+                              FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z]')),
+                            ],
+                            controller: fullNameController,
                             keyboardType: TextInputType.name,
-
-                            ///focusNode: FullnameFocus,
+                            errorText: _fullNameError ? _fullNameErrorMsg : null,
+                            onChanged: (value) {
+                              //MARK: Space restrict
+                              setState(() {
+                                if (value.startsWith(' ')) {
+                                  fullNameController.value = TextEditingValue(
+                                    text: value.trimLeft(),
+                                    selection: TextSelection.collapsed(offset: value.trimLeft().length),
+                                  );
+                                }
+                                _fullNameError = false;
+                              });
+                            },
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
 
@@ -189,7 +259,7 @@ class EditProfile_screenState extends State<EditProfile> {
                           //   focusNode: DateofBirthdFocus,
                           //   onTap: () => _selectDate(context),
                           // ),
-                          Row(
+                          const Row(
                             children: [
                               Text(
                                 'Date of Birth',
@@ -201,69 +271,76 @@ class EditProfile_screenState extends State<EditProfile> {
                               ),
                             ],
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 5,
                           ),
+
                           TextFormField(
-                            controller: DateofBirth, // Assigning the controller
-                            keyboardType: TextInputType.visiblePassword,
+                            //MARK: DOB
+                            controller: dobController,
                             onTap: () {
                               _selectDate(context);
                             },
-                            // focusNode: DateofBirthdFocus,
                             readOnly: true,
                             decoration: InputDecoration(
+                              errorText: _dobError ? _dobErrorMsg : null,
                               contentPadding: const EdgeInsets.only(top: 15, bottom: 10, left: 15, right: 15),
                               focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: Color(0xFF0f75bc),
-                                ),
-                                borderRadius: BorderRadius.circular(6.0),
-                              ),
-                              enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
+                                borderSide: const BorderSide(
                                   color: CommonUtils.primaryTextColor,
                                 ),
                                 borderRadius: BorderRadius.circular(6.0),
                               ),
-                              border: OutlineInputBorder(
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                  color: CommonUtils.primaryTextColor,
+                                ),
+                                borderRadius: BorderRadius.circular(6.0),
+                              ),
+                              border: const OutlineInputBorder(
                                 borderRadius: BorderRadius.all(
                                   Radius.circular(10),
                                 ),
                               ),
-                              hintText: 'Date of Birth',
+                              hintText: 'Enter Date of Birth',
                               counterText: "",
-                              hintStyle: TextStyle(color: Colors.grey, fontWeight: FontWeight.w400),
-                              suffixIcon: Icon(Icons.calendar_today),
+                              hintStyle: const TextStyle(color: Colors.grey, fontWeight: FontWeight.w400),
+                              suffixIcon: const Icon(Icons.calendar_today),
                             ),
-                            //  validator: validatePassword,
+                            validator: validateDOB,
+                            onChanged: (value) {
+                              setState(() {
+                                _dobError = false;
+                              });
+                            },
                           ),
 
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
-                          Row(
+                          const Row(
                             children: [
                               Text(
                                 'Gender ',
                                 style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
                               ),
-                              const Text(
+                              Text(
                                 '*',
                                 style: TextStyle(color: Colors.red),
                               ),
                             ],
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 5,
                           ),
+
                           Padding(
-                            padding: EdgeInsets.only(left: 0, top: 0.0, right: 0),
+                            padding: const EdgeInsets.only(left: 0, top: 5.0, right: 0),
                             child: Container(
                               width: MediaQuery.of(context).size.width,
                               decoration: BoxDecoration(
                                 border: Border.all(
-                                  color: CommonUtils.primaryTextColor,
+                                  color: isGenderSelected ? const Color.fromARGB(255, 175, 15, 4) : CommonUtils.primaryTextColor,
                                 ),
                                 borderRadius: BorderRadius.circular(5.0),
                                 color: Colors.white,
@@ -275,7 +352,7 @@ class EditProfile_screenState extends State<EditProfile> {
                                       value: selectedTypeCdId,
                                       iconSize: 30,
                                       icon: null,
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         color: Colors.black,
                                       ),
                                       onChanged: (value) {
@@ -284,6 +361,7 @@ class EditProfile_screenState extends State<EditProfile> {
                                           if (selectedTypeCdId != -1) {
                                             selectedValue = dropdownItems[selectedTypeCdId]['typeCdId'];
                                             selectedName = dropdownItems[selectedTypeCdId]['desc'];
+
                                             print("selectedValue:$selectedValue");
                                             print("selectedName:$selectedName");
                                           } else {
@@ -292,15 +370,16 @@ class EditProfile_screenState extends State<EditProfile> {
                                             print(selectedName);
                                           }
                                           // isDropdownValid = selectedTypeCdId != -1;
+                                          isGenderSelected = false;
                                         });
                                       },
                                       items: [
-                                        DropdownMenuItem<int>(
+                                        const DropdownMenuItem<int>(
                                           value: -1,
                                           child: Text(
                                             'Select Gender',
                                             style: TextStyle(color: Colors.grey, fontWeight: FontWeight.w500),
-                                          ), // Static text
+                                          ),
                                         ),
                                         ...dropdownItems.asMap().entries.map((entry) {
                                           final index = entry.key;
@@ -315,107 +394,233 @@ class EditProfile_screenState extends State<EditProfile> {
                               ),
                             ),
                           ),
-                          SizedBox(
+                          //MARK: Gender condition
+                          if (isGenderSelected)
+                            const Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 5),
+                                  child: Text(
+                                    'Please select gender',
+                                    style: TextStyle(
+                                      color: Color.fromARGB(255, 175, 15, 4),
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+
+                          const SizedBox(
                             height: 10,
                           ),
-                          CustomeFormField(
-                            label: 'Mail ID',
+
+                          const Row(
+                            children: [
+                              Text(
+                                'Email',
+                                style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                              ),
+                              Text(
+                                '*',
+                                style: TextStyle(color: Colors.red),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 5.0,
+                          ),
+                          TextFormField(
+                            controller: emailController,
+                            maxLength: 60,
+                            maxLengthEnforcement: MaxLengthEnforcement.enforced,
+                            keyboardType: TextInputType.emailAddress,
+                            onTap: () {
+                              // setState(() {
+                              //   EmailFocus.addListener(() {
+                              //     if (EmailFocus.hasFocus) {
+                              //       Future.delayed(
+                              //           const Duration(
+                              //               milliseconds: 300), () {
+                              //         // Scrollable.ensureVisible(
+                              //         //   EmailFocus.context!,
+                              //         //   duration: const Duration(
+                              //         //       milliseconds: 300),
+                              //         //   curve: Curves.easeInOut,
+                              //         // );
+                              //       });
+                              //     }
+                              //   });
+                              // });
+                            },
+                            decoration: InputDecoration(
+                              errorText: _emailError ? _emailErrorMsg : null,
+                              contentPadding: const EdgeInsets.only(top: 15, bottom: 10, left: 15, right: 15),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                  color: Color(0xFF0f75bc),
+                                ),
+                                borderRadius: BorderRadius.circular(6.0),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                  color: CommonUtils.primaryTextColor,
+                                ),
+                                borderRadius: BorderRadius.circular(6.0),
+                              ),
+                              border: const OutlineInputBorder(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(10),
+                                ),
+                              ),
+                              hintText: 'Enter Email',
+                              counterText: "",
+                              hintStyle: const TextStyle(color: Colors.grey, fontWeight: FontWeight.w400),
+                            ),
                             validator: validateEmail,
-                            controller: Email,
-                            maxLength: 10,
-                            //focusNode: MobilenumberFocus,
-                            keyboardType: TextInputType.number,
+                            onChanged: (value) {
+                              setState(() {
+                                _emailError = false;
+                              });
+                            },
                           ),
-                          SizedBox(
+
+                          const SizedBox(
                             height: 10,
                           ),
+
                           CustomeFormField(
+                            //MARK: Mobile Number
                             label: 'Mobile Number',
                             validator: validateMobilenum,
-                            controller: Mobilenumber,
+                            controller: mobileNumberController,
                             maxLength: 10,
-                            //focusNode: MobilenumberFocus,
-                            keyboardType: TextInputType.number,
+
+                            inputFormatters: [
+                              FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                            ],
+                            keyboardType: TextInputType.phone,
+                            errorText: _mobileNumberError ? _mobileNumberErrorMsg : null,
+                            onChanged: (value) {
+                              setState(() {
+                                if (value.length == 1 && ['1', '2', '3', '4'].contains(value)) {
+                                  mobileNumberController.clear();
+                                }
+                                if (value.startsWith(' ')) {
+                                  mobileNumberController.value = TextEditingValue(
+                                    text: value.trimLeft(),
+                                    selection: TextSelection.collapsed(offset: value.trimLeft().length),
+                                  );
+                                }
+                                _mobileNumberError = false;
+                              });
+                            },
                           ),
-                          SizedBox(
+
+                          const SizedBox(
                             height: 10,
                           ),
-                          // CustomeFormField(
-                          //   label: 'Alternate Mobile Number',
-                          //   validator: validateAlterMobilenum,
-                          //   controller: AlernateMobilenum,
-                          //   maxLength: 10,
-                          //   //   focusNode: AlernateMobilenumFocus,
-                          //   keyboardType: TextInputType.number,
-                          // ),
+
                           ListView(
                             padding: EdgeInsets.zero,
                             shrinkWrap: true,
-                            physics: NeverScrollableScrollPhysics(),
+                            physics: const NeverScrollableScrollPhysics(),
                             children: [
                               // SizedBox(height: 5),
-                              Row(
+                              const Row(
                                 children: [
                                   Text(
                                     'Alternate Mobile Number',
                                     style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
                                   ),
-                                  // Text(
-                                  //   '',
-                                  //   style: TextStyle(color: Colors.red),
-                                  // ),
                                 ],
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 5.0,
                               ),
                               TextFormField(
-                                controller: AlernateMobilenum, // Assigning the controller
-                                keyboardType: TextInputType.emailAddress,
+                                controller: alernateMobileNumberController,
+                                keyboardType: TextInputType.phone,
                                 onTap: () {
-                                  setState(() {});
+                                  // setState(() {
+                                  //   AlernateMobilenumFocus.addListener(
+                                  //       () {
+                                  //     if (AlernateMobilenumFocus
+                                  //         .hasFocus) {
+                                  //       Future.delayed(
+                                  //           const Duration(
+                                  //               milliseconds: 300), () {
+                                  //         Scrollable.ensureVisible(
+                                  //           AlernateMobilenumFocus
+                                  //               .context!,
+                                  //           duration: const Duration(
+                                  //               milliseconds: 300),
+                                  //           curve: Curves.easeInOut,
+                                  //         );
+                                  //       });
+                                  //     }
+                                  //   });
+                                  // });
                                 },
-
                                 decoration: InputDecoration(
+                                  counterText: '',
+                                  errorText: _altNumberError ? _altNumberErrorMsg : null,
                                   contentPadding: const EdgeInsets.only(top: 15, bottom: 10, left: 15, right: 15),
                                   focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
+                                    borderSide: const BorderSide(
                                       color: Color(0xFF0f75bc),
                                     ),
                                     borderRadius: BorderRadius.circular(6.0),
                                   ),
                                   enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
+                                    borderSide: const BorderSide(
                                       color: CommonUtils.primaryTextColor,
                                     ),
                                     borderRadius: BorderRadius.circular(6.0),
                                   ),
-                                  border: OutlineInputBorder(
+                                  border: const OutlineInputBorder(
                                     borderRadius: BorderRadius.all(
                                       Radius.circular(10),
                                     ),
                                   ),
-                                  hintText: 'Alternate Mobile Number',
-                                  counterText: "",
-                                  hintStyle: TextStyle(color: Colors.grey, fontWeight: FontWeight.w400),
+                                  hintText: 'Enter Alternate Mobile Number',
+                                  hintStyle: const TextStyle(color: Colors.grey, fontWeight: FontWeight.w400),
                                 ),
                                 maxLength: 10,
                                 validator: validateAlterMobilenum,
+                                onChanged: (value) {
+                                  setState(() {
+                                    if (value.length == 1 && ['1', '2', '3', '4'].contains(value)) {
+                                      alernateMobileNumberController.clear();
+                                    }
+                                    if (value.startsWith(' ')) {
+                                      alernateMobileNumberController.value = TextEditingValue(
+                                        text: value.trimLeft(),
+                                        selection: TextSelection.collapsed(offset: value.trimLeft().length),
+                                      );
+                                    }
+                                    _altNumberError = false;
+                                  });
+                                },
                               ),
                             ],
                           ),
-                          SizedBox(
-                            height: 25,
+                          const SizedBox(
+                            height: 40,
                           ),
-                          Container(
-                            width: MediaQuery.of(context).size.width / 1.5,
-                            child: CustomButton(
-                              buttonText: 'Update Details',
-                              color: CommonUtils.primaryTextColor,
-                              onPressed: validating,
-                            ),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: CustomButton(
+                                  buttonText: 'Update Details',
+                                  color: CommonUtils.primaryTextColor,
+                                  onPressed: validating,
+                                ),
+                              ),
+                            ],
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
                         ],
@@ -424,6 +629,232 @@ class EditProfile_screenState extends State<EditProfile> {
   }
 
   Future<void> validating() async {
-    if (_formKey.currentState!.validate()) {}
+    validateGender(selectedName);
+    if (_formKey.currentState!.validate()) {
+      updateUser();
+    }
+  }
+
+//MARK: Validations
+
+  String? validatefullname(String? value) {
+    if (value!.isEmpty) {
+      setState(() {
+        _fullNameError = true;
+        _fullNameErrorMsg = 'Please Enter Full Name';
+      });
+      isFullNameValidate = false;
+      return null;
+    }
+    if (value.length < 2) {
+      setState(() {
+        _fullNameError = true;
+        _fullNameErrorMsg = 'Full Name should contains minimum 2 charactes';
+      });
+      isFullNameValidate = false;
+      return null;
+    }
+    if (!RegExp(r'^[a-zA-Z]+$').hasMatch(value)) {
+      return 'Full Name should only contain alphabetic characters';
+    }
+    if (!RegExp(r'^[a-zA-Z]+$').hasMatch(value)) {
+      setState(() {
+        _fullNameError = true;
+        _fullNameErrorMsg = 'Full Name Should Only Contain Alphabets';
+      });
+      isFullNameValidate = false;
+      return null;
+    }
+    isFullNameValidate = true;
+    return null;
+  }
+
+  String? validateDOB(String? value) {
+    if (value == null || value.isEmpty) {
+      setState(() {
+        _dobError = true;
+        _dobErrorMsg = 'Please Select Date of Birth';
+      });
+      isDobValidate = false;
+      return null;
+    }
+    isDobValidate = true;
+    return null;
+  }
+
+  void validateGender(String? value) {
+    if (value == null || value.isEmpty) {
+      isGenderSelected = true;
+      isGenderValidate = false;
+    } else {
+      isGenderSelected = false;
+      isGenderValidate = true;
+    }
+    setState(() {});
+  }
+
+  String? validateEmail(String? value) {
+    if (value!.isEmpty) {
+      setState(() {
+        _emailError = true;
+        _emailErrorMsg = 'Please Enter Email';
+      });
+      isEmailValidate = false;
+      return null;
+    } else if (!RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(value)) {
+      setState(() {
+        _emailError = true;
+        _emailErrorMsg = 'Please Enter a Valid Email Address';
+      });
+      isEmailValidate = false;
+      return null;
+    }
+    isEmailValidate = true;
+    return null;
+  }
+
+  String? validateMobilenum(String? value) {
+    if (value!.isEmpty) {
+      setState(() {
+        _mobileNumberError = true;
+        _mobileNumberErrorMsg = 'Please Enter Mobile Number';
+      });
+      isMobileNumberValidate = false;
+      return null;
+    }
+    if (value.startsWith(RegExp('[1-4]'))) {
+      setState(() {
+        _mobileNumberError = true;
+        _mobileNumberErrorMsg = 'Mobile Number Should Not Start with 1-4';
+      });
+      isMobileNumberValidate = false;
+      return null;
+    }
+    if (value.contains(RegExp(r'[a-zA-Z]'))) {
+      setState(() {
+        _mobileNumberError = true;
+        _mobileNumberErrorMsg = 'Mobile Number should contain only digits';
+      });
+      isMobileNumberValidate = false;
+      return null;
+    }
+    if (value.length != 10) {
+      setState(() {
+        _mobileNumberError = true;
+        _mobileNumberErrorMsg = 'Mobile Number Must Have 10 Digits';
+      });
+      isMobileNumberValidate = false;
+      return null;
+    }
+    isMobileNumberValidate = true;
+    return null;
+  }
+
+  String? validateAlterMobilenum(String? value) {
+    if (value!.isEmpty) {
+      return null;
+    }
+    if (value.startsWith(RegExp('[1-4]'))) {
+      setState(() {
+        _altNumberError = true;
+        _altNumberErrorMsg = 'Alternate Number Should Not Start with 1-4';
+      });
+      isAltMobileNumberValidate = false;
+      return null;
+    }
+    if (value.contains(RegExp(r'[a-zA-Z]'))) {
+      setState(() {
+        _altNumberError = true;
+        _altNumberErrorMsg = 'Alternate Number Should Contain Only Digits';
+      });
+      isAltMobileNumberValidate = false;
+      return null;
+    }
+    if (value.length != 10) {
+      setState(() {
+        _altNumberError = true;
+        _altNumberErrorMsg = 'Alternate Number Must Have 10 Digits';
+      });
+      isAltMobileNumberValidate = false;
+      return null;
+    }
+    isAltMobileNumberValidate = true;
+    return null;
+  }
+
+  Future<void> updateUser() async {
+    validateGender(selectedName);
+    if (_formKey.currentState!.validate()) {
+      final url = Uri.parse('http://182.18.157.215/SaloonApp/API/UpdateUser');
+      DateTime now = DateTime.now();
+
+      final request = {
+        "id": 1,
+        "userId": null, //null
+        "firstName": "$fullname",
+        "middleName": "",
+        "lastName": "",
+        "contactNumber": "$phonenumber",
+        "mobileNumber": "$phonenumber",
+        "userName": "$username",
+        "password": "$password", //saved
+        "confirmPassword": "$password",
+        "email": "$email",
+        "isActive": true,
+        "createdByUserId": 1,
+        "createdDate": "${widget.createdDate}",
+        "updatedByUserId": 1,
+        "updatedDate": "$now",
+        "roleId": roleId,
+        "gender": gender,
+        "dateofbirth": "$dob",
+        "branchIds": "null"
+      };
+
+      print('Editprofileapi: ${json.encode(request)}');
+      try {
+        final response = await http.post(
+          url,
+          body: json.encode(request),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        );
+
+        if (response.statusCode == 200) {
+          Map<String, dynamic> data = json.decode(response.body);
+
+          // Extract the necessary information
+          bool isSuccess = data['isSuccess'];
+          if (isSuccess == true) {
+            print('Request sent successfully');
+            // showCustomToastMessageLong('Slot booked successfully', context, 0, 2);
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => HomeScreen(),
+              ),
+            );
+            print('statusmesssage:${data['statusMessage']}');
+            CommonUtils.showCustomToastMessageLong('${data['statusMessage']}', context, 0, 5);
+            // Success case
+            // Handle success scenario here
+          } else {
+            // Failure case
+            // Handle failure scenario here
+            print('statusmesssage${data['statusMessage']}');
+            CommonUtils.showCustomToastMessageLong('${data['statusMessage']}', context, 1, 5);
+          }
+        } else {
+          //showCustomToastMessageLong(
+          // 'Failed to send the request', context, 1, 2);
+          print('Failed to send the request. Status code: ${response.statusCode}');
+        }
+      } catch (e) {
+        print('Error slot: $e');
+      }
+      // if (isFullNameValidate && isDobValidate && isGenderValidate && isMobileNumberValidate && isAltMobileNumberValidate && isEmailValidate) {
+      //
+      // }
+    }
   }
 }

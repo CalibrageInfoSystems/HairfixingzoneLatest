@@ -18,7 +18,6 @@ import 'Room.dart';
 import 'api_config.dart';
 
 class SelectCity_Branch_screen extends StatefulWidget {
-
   @override
   _BookingScreenState createState() => _BookingScreenState();
 }
@@ -241,6 +240,7 @@ class _BookingScreenState extends State<SelectCity_Branch_screen> {
                                             branchId: branchnames.Id!,
                                             branchname: branchnames.branchName!,
                                             branchaddress: branchnames.address!,
+                                            phonenumber: branchnames.PhoneNumber!,
                                           ),
                                         ),
                                       );

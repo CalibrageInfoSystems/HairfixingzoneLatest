@@ -81,8 +81,8 @@ class _ForgotPasswordscreen extends State<ForgotPasswordscreen> {
                       SizedBox(
                         height: 20,
                       ),
-                      Text('Enter your email address and ', style: CommonUtils.Sub_header_Styles),
-                      Text('we will send you a code', style: CommonUtils.Sub_header_Styles),
+                      Text('Enter Your Email/User Name', style: CommonUtils.Sub_header_Styles),
+                      Text('We Will Send You a Code', style: CommonUtils.Sub_header_Styles),
                     ],
                   ),
                 ),

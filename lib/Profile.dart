@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -9,6 +11,7 @@ import 'ChangePasswordScreen.dart';
 import 'Common/common_styles.dart';
 import 'Common/custom_button.dart';
 import 'CommonUtils.dart';
+import 'package:http/http.dart' as http;
 
 class Profile extends StatefulWidget {
   @override
@@ -25,6 +28,7 @@ class Profile_screenState extends State<Profile> {
   String? username;
   String? dob;
   String? formattedDate;
+  String? createdDate;
   @override
   void initState() {
     super.initState();
@@ -53,7 +57,7 @@ class Profile_screenState extends State<Profile> {
           print('usernameId:$Id');
           formattedDate = DateFormat('dd-MM-yyyy').format(date);
         });
-
+        fetchdetailsofcustomer(Id);
         // fetchMyAppointments(userId);
       } else {
         print('The Internet Is not  Connected');
@@ -111,7 +115,7 @@ class Profile_screenState extends State<Profile> {
                       onTap: () {
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (context) => EditProfile(),
+                            builder: (context) => EditProfile(createdDate: "$createdDate"),
                           ),
                         );
                       },
@@ -198,5 +202,56 @@ class Profile_screenState extends State<Profile> {
       ),
       title: Text(data),
     );
+  }
+
+  Future<void> fetchdetailsofcustomer(int id) async {
+    String apiurl = 'http://182.18.157.215/SaloonApp/API/GetCustomerData?id=$id';
+    print('apirul:$apiurl');
+    final response = await http.get(
+      Uri.parse(apiurl),
+    );
+
+    // Check if the request was successful
+    if (response.statusCode == 200) {
+      // Parse the JSON response
+      Map<String, dynamic> data = json.decode(response.body);
+
+      // Extract the necessary information
+      bool isSuccess = data['isSuccess'];
+      String statusMessage = data['statusMessage'];
+
+      // Print the result
+      print('Is Success: $isSuccess');
+      print('Status Message: $statusMessage');
+
+      // Handle the data accordingly
+      if (isSuccess) {
+        // If the user is valid, you can extract more data from 'listResult'
+
+        if (data['listResult'] != null) {
+          List<dynamic> listResult = data['listResult'];
+          Map<String, dynamic> user = listResult.first;
+
+          print('CreatedDate ${user['createdDate']}');
+          setState(() {
+            createdDate = user['createdDate'];
+          });
+
+          // Extract other user information as needed
+        } else {
+          FocusScope.of(context).unfocus();
+
+          CommonUtils.showCustomToastMessageLong("${data["statusMessage"]}", context, 1, 3, toastPosition: MediaQuery.of(context).size.height / 2);
+          // Handle the case where the user is not valid
+          List<dynamic> validationErrors = data['validationErrors'];
+          if (validationErrors.isNotEmpty) {
+            // Print or handle validation errors if any
+          }
+        }
+      } else {
+        // Handle any error cases here
+        print('Failed to connect to the API. Status code: ${response.statusCode}');
+      }
+    }
   }
 }

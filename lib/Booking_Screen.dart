@@ -6,11 +6,13 @@ import 'package:hairfixingzone/Dashboard_Screen.dart';
 import 'package:hairfixingzone/HomeScreen.dart';
 import 'package:hairfixingzone/MyAppointment_Model.dart';
 import 'package:hairfixingzone/slot_success_screen.dart';
+import 'package:loading_progress/loading_progress.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'Common/common_styles.dart';
 import 'Common/custom_button.dart';
 import 'CommonUtils.dart';
 import 'CustomRadioButton.dart';
@@ -23,7 +25,7 @@ class Bookingscreen extends StatefulWidget {
   // final String branchname;
   final String branchname;
   final String branchaddress;
-
+  final String phonenumber;
   //final MyAppointment_Model data;
   // final int appointmentId; // New field
   // final String screenFrom; // New field
@@ -32,7 +34,7 @@ class Bookingscreen extends StatefulWidget {
   //   required this.data,
   //  // New field
   // });
-  Bookingscreen({required this.branchId, required this.branchname, required this.branchaddress});
+  Bookingscreen({required this.branchId, required this.branchname, required this.branchaddress, required this.phonenumber});
 
   @override
   _BookingScreenState createState() => _BookingScreenState();
@@ -122,7 +124,7 @@ class _BookingScreenState extends State<Bookingscreen> {
   List<dynamic> dropdownItems = [];
   int selectedTypeCdId = -1;
   late int selectedValue;
-  late String selectedName;
+  String? selectedName;
   String userFullName = '';
   String email = '';
   String phonenumber = '';
@@ -133,7 +135,7 @@ class _BookingScreenState extends State<Bookingscreen> {
   bool showConfirmationDialog = false;
   int? Id;
   String? genderbyid;
-
+  bool ispurposeselected = false;
   @override
   void dispose() {
     _dateController.dispose();
@@ -182,7 +184,8 @@ class _BookingScreenState extends State<Bookingscreen> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     Id = prefs.getInt('userId') ?? 0;
-    userFullName = prefs.getString('userName') ?? '';
+    userFullName = prefs.getString('userFullName') ?? '';
+
     phonenumber = prefs.getString('contactNumber') ?? '';
     email = prefs.getString('email') ?? '';
     contactNumber = prefs.getString('contactNumber') ?? '';
@@ -647,30 +650,33 @@ class _BookingScreenState extends State<Bookingscreen> {
                           width: double.infinity,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10.0),
+                            // border: Border.all(
+                            //   color: CommonUtils.primaryTextColor,
+                            // ),
                             border: Border.all(
-                              color: CommonUtils.primaryTextColor,
+                              color: ispurposeselected ? const Color.fromARGB(255, 175, 15, 4) : CommonUtils.primaryTextColor,
                             ),
                           ),
                           child: DropdownButtonHideUnderline(
                             child: ButtonTheme(
                               alignedDropdown: true,
-                              child: DropdownButtonFormField<int>(
+                              child: DropdownButton<int>(
                                   value: selectedTypeCdId,
                                   iconSize: 30,
                                   //  validator: (value) => value == null ? "Select a country" : null,
-                                  validator: (value) {
-                                    if (value == -1) {
-                                      return 'Choose Date to Check Slots';
-                                    }
-                                  },
+                                  // validator: (value) {
+                                  //   if (value == -1) {
+                                  //     return 'Choose Date to Check Slots';
+                                  //   }
+                                  // },
                                   icon: null,
                                   style: TextStyle(
                                     color: Colors.black,
                                   ),
-                                  decoration: InputDecoration(
-                                    contentPadding: EdgeInsets.zero,
-                                    border: InputBorder.none, // Hide the underline here
-                                  ),
+                                  // decoration: InputDecoration(
+                                  //   contentPadding: EdgeInsets.zero,
+                                  //   border: InputBorder.none, // Hide the underline here
+                                  // ),
                                   onChanged: (value) {
                                     setState(() {
                                       selectedTypeCdId = value!;
@@ -685,6 +691,7 @@ class _BookingScreenState extends State<Bookingscreen> {
                                         print(selectedValue);
                                         print(selectedName);
                                       }
+                                      ispurposeselected = false;
                                       // isDropdownValid = selectedTypeCdId != -1;
                                     });
                                   },
@@ -710,6 +717,22 @@ class _BookingScreenState extends State<Bookingscreen> {
                           ),
                         ),
                       ),
+                      if (ispurposeselected)
+                        const Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 5),
+                              child: Text(
+                                'Please Select Purpose of Visit',
+                                style: TextStyle(
+                                  color: Color.fromARGB(255, 175, 15, 4),
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       SizedBox(height: 25),
                       Container(
                         width: MediaQuery.of(context).size.width / 1.5,
@@ -726,7 +749,17 @@ class _BookingScreenState extends State<Bookingscreen> {
             )));
   }
 
+  void validatePurpose(String? value) {
+    if (value == null || value.isEmpty) {
+      ispurposeselected = true;
+    } else {
+      ispurposeselected = false;
+    }
+    setState(() {});
+  }
+
   Future<void> bookappointment() async {
+    validatePurpose(selectedName);
     if (_formKey.currentState!.validate()) {
       final url = Uri.parse(baseUrl + postApiAppointment);
       print('url==>890: $url');
@@ -741,7 +774,7 @@ class _BookingScreenState extends State<Bookingscreen> {
       print('slotdate $slotdate');
       // print('screenFrom1213: ${widget.screenFrom}');
       // print('appointmentId1214: ${widget.appointmentId}');
-
+      // CommonStyles.progressBar(context);
       final request = {
         "id": null,
         "branchId": widget.branchId,
@@ -785,10 +818,11 @@ class _BookingScreenState extends State<Bookingscreen> {
 
         if (response.statusCode == 200) {
           Map<String, dynamic> data = json.decode(response.body);
-
+          // LoadingProgress.stop(context);
           // Extract the necessary information
           bool isSuccess = data['isSuccess'];
           if (isSuccess == true) {
+            //LoadingProgress.stop(context);
             print('Request sent successfully');
             // showCustomToastMessageLong('Slot booked successfully', context, 0, 2);
             Navigator.of(context).pushReplacement(
@@ -798,26 +832,31 @@ class _BookingScreenState extends State<Bookingscreen> {
                         slottime: '${_selectedTimeSlot}',
                         Purpose: '$selectedName',
                         slotbranchname: '${widget.branchname}',
-                        slotbrnach_address: '${widget.branchaddress}',
+                        slotbrnach_address: '${widget.branchaddress}', phonenumber: widget.phonenumber,
                         // phonenumber: null,
                       )),
             );
             // Success case
             // Handle success scenario here
           } else {
+            // LoadingProgress.stop(context);
             // Failure case
             // Handle failure scenario here
-            CommonUtils.showCustomToastMessageLong('${data['statusMessage']}', context, 0, 2);
+            print('statusmesssage${data['statusMessage']}');
+            CommonUtils.showCustomToastMessageLong('${data['statusMessage']}', context, 1, 5);
           }
+          // LoadingProgress.stop(context);
           setState(() {
             isButtonEnabled = true;
           });
         } else {
+          LoadingProgress.stop(context);
           //showCustomToastMessageLong(
           // 'Failed to send the request', context, 1, 2);
           print('Failed to send the request. Status code: ${response.statusCode}');
         }
       } catch (e) {
+        LoadingProgress.stop(context);
         print('Error slot: $e');
       }
     }

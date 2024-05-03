@@ -7,6 +7,7 @@ import 'Common/common_styles.dart';
 import 'Common/custom_button.dart';
 import 'Common/custome_form_field.dart';
 import 'CustomerRegisterScreen.dart';
+import 'ForgotChangePassword.dart';
 import 'ForgotPasswordscreen.dart';
 import 'HomeScreen.dart';
 import 'api_config.dart';
@@ -130,7 +131,7 @@ class _LoginPageState extends State<CustomerLoginScreen> {
                                 controller: _emailController, // Assigning the controller
                                 keyboardType: TextInputType.visiblePassword,
                                 // obscureText: true,
-                                onTap: () {},
+
                                 maxLength: 50,
                                 decoration: InputDecoration(
                                   contentPadding: const EdgeInsets.only(top: 15, bottom: 10, left: 15, right: 15),
@@ -237,6 +238,14 @@ class _LoginPageState extends State<CustomerLoginScreen> {
                                         context,
                                         MaterialPageRoute(builder: (context) => ForgotPasswordscreen()),
                                       );
+
+                                      // Navigator.push(
+                                      //   context,
+                                      //   MaterialPageRoute(
+                                      //       builder: (context) => ForgotChangePassword(
+                                      //             id: 1,
+                                      //           )),
+                                      // );
                                     },
                                     child: Text(
                                       'Forgot Password?',
@@ -437,6 +446,7 @@ class _LoginPageState extends State<CustomerLoginScreen> {
     await prefs.setString('contactNumber', userData['contactNumber']);
     await prefs.setString('gender', userData['gender']);
     await prefs.setString('dateofbirth', userData['dateofbirth']);
+    await prefs.setString('password', userData['password']);
     // Save other user data as needed
   }
 
