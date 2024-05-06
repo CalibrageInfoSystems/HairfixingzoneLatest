@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'AgentLogin.dart';
 import 'CommonUtils.dart';
 import 'CustomerLoginScreen.dart';
 import 'CustomerRegisterScreen.dart';
@@ -172,7 +173,7 @@ class _startingscreenState extends State<startingscreen> {
                                 // Add your custom logic or navigation code here
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
-                                    builder: (context) => agentloginscreen(),
+                                    builder: (context) => AgentLogin(),
                                   ),
                                 );
                               },

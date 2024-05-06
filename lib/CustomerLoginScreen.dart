@@ -235,14 +235,14 @@ class _LoginPageState extends State<CustomerLoginScreen> {
                                 children: [
                                   GestureDetector(
                                     onTap: () {
-                                      // Navigator.push(
-                                      //   context,
-                                      //   MaterialPageRoute(builder: (context) => ForgotPasswordscreen()),
-                                      // );
                                       Navigator.push(
                                         context,
-                                        MaterialPageRoute(builder: (context) => AddConsulationscreen()),
+                                        MaterialPageRoute(builder: (context) => ForgotPasswordscreen()),
                                       );
+                                      // Navigator.push(
+                                      //   context,
+                                      //   MaterialPageRoute(builder: (context) => AddConsulationscreen()),
+                                      // );
                                       // Navigator.push(
                                       //   context,
                                       //   MaterialPageRoute(

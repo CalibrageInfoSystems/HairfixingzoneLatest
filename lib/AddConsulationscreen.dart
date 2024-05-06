@@ -26,7 +26,7 @@ class AddConsulationscreen_screenState extends State<AddConsulationscreen> {
   late int selectedValue;
   FocusNode _focusNode = FocusNode();
   String? branchName;
-  late int branchValue;
+   int? branchValue;
   int selectedTypeCdId = -1;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   TextEditingController fullNameController = TextEditingController();
