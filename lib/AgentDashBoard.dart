@@ -65,6 +65,7 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
       );
     });
   }
+
   void checkLoginAgentdata() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
@@ -90,15 +91,13 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
       // }
     });
   }
+
   void _fetchItems() async {
-    final response = await http.get(
-        Uri.parse('http://182.18.157.215/SaloonApp/API/GetBanner?Id=null'));
+    final response = await http.get(Uri.parse('http://182.18.157.215/SaloonApp/API/GetBanner?Id=null'));
 
     if (response.statusCode == 200) {
       setState(() {
-        _items = (json.decode(response.body)['listResult'] as List)
-            .map((item) => Item.fromJson(item))
-            .toList();
+        _items = (json.decode(response.body)['listResult'] as List).map((item) => Item.fromJson(item)).toList();
       });
     } else {
       throw Exception('Failed to load items');
@@ -106,26 +105,21 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
   }
 
   Future<List<Consultation>?> getAgentBranches(int agentId) async {
-    final apiUrl = Uri.parse(
-        'http://182.18.157.215/SaloonApp/API/api/Consultation/GetConsultationsByBranchId/$agentId');
+    final apiUrl = Uri.parse('http://182.18.157.215/SaloonApp/API/api/Consultation/GetConsultationsByBranchId/$agentId');
     try {
       final response = await http.get(apiUrl);
       if (response.statusCode == 200) {
         final Map<String, dynamic> responseData = jsonDecode(response.body);
         if (responseData['listResult'] != null) {
           final List<dynamic> appointmentsData = responseData['listResult'];
-          return appointmentsData
-              .map((appointment) => Consultation.fromJson(appointment))
-              .toList();
+          return appointmentsData.map((appointment) => Consultation.fromJson(appointment)).toList();
         } else {
           print('No data found');
           return null;
         }
       } else {
-        print(
-            'Failed to fetch appointments. Status code: ${response.statusCode}');
-        throw Exception(
-            'Failed to fetch appointments. Status code: ${response.statusCode}');
+        print('Failed to fetch appointments. Status code: ${response.statusCode}');
+        throw Exception('Failed to fetch appointments. Status code: ${response.statusCode}');
       }
     } catch (error) {
       print('Failed to connect to the API: $error');
@@ -136,52 +130,98 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: CommonStyles.primaryTextColor,
-      // appBar: _appBar(),
-      body: Column(
-        children: [
-          //MARK: Welcome Text
-          welcomeText(),
-          //MARK: Main Card
-          Expanded(
-            child: SingleChildScrollView(
-              child: Container(
-                decoration: const BoxDecoration(
-                  color: CommonStyles.whiteColor,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(20),
-                    topRight: Radius.circular(20),
-                  ),
-                ),
-                child: Column(
-                  children: [
-                    marquee(),
-                    Column(
+        backgroundColor: CommonStyles.primaryTextColor,
+        // appBar: _appBar(),
+        body: IntrinsicHeight(
+          child: Column(
+            children: [
+              //MARK: Welcome Text
+              welcomeText(),
+              //MARK: Main Card
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Container(
+                    height: MediaQuery.of(context).size.height,
+                    decoration: const BoxDecoration(
+                      color: CommonStyles.whiteColor,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20),
+                        topRight: Radius.circular(20),
+                      ),
+                    ),
+                    child: Column(
                       children: [
-                        carousel(),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 10),
-                          child: Column(
-                            children: [
-                              screens(),
-                              const SizedBox(height: 10),
-                              agentBranches(),
-                            ],
-                          ),
+                        marquee(),
+                        Column(
+                          children: [
+                            carousel(),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                for (int i = 0; i < _items.length; i++)
+                                  Container(
+                                    margin: const EdgeInsets.all(2),
+                                    width: 10,
+                                    height: 10,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      border: Border.all(color: CommonStyles.primaryTextColor, width: 1.5),
+                                      color: _currentPage == i ? Colors.grey.withOpacity(0.9) : Colors.transparent,
+                                    ),
+                                  )
+                              ],
+                            ),
+                            SizedBox(
+                              height: 15,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 20),
+                              child: Column(
+                                children: [
+                                  screens(),
+                                  const SizedBox(height: 10),
+                                  agentBranches(),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
-                  ],
+                  ),
                 ),
-              ),
-            ),
-          )
-        ],
-      ),
-    );
+              )
+            ],
+          ),
+        ));
   }
 
-  getMarqueeText() {}
+  getMarqueeText() async {
+    final apiUrl = Uri.parse('http://182.18.157.215/SaloonApp/API/GetContent/true');
+
+    try {
+      final jsonResponse = await http.get(apiUrl);
+
+      if (jsonResponse.statusCode == 200) {
+        final response = json.decode(jsonResponse.body);
+
+        if (response['isSuccess']) {
+          int records = response['affectedRecords'];
+          for (var i = 0; i < records; i++) {
+            marqueeText = '${marqueeText + response['listResult'][i]['text']}  ';
+            // marqueeText += response['listResult'][i]['text'];
+          }
+        } else {
+          print('api failed');
+          throw Exception('api failed');
+        }
+      } else {
+        throw Exception('Request failed with status: ${jsonResponse.statusCode}');
+      }
+    } catch (error) {
+      rethrow;
+    }
+  }
 
   AppBar _appBar() {
     return AppBar(
@@ -189,10 +229,7 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
       backgroundColor: const Color(0xFFf3e3ff),
       title: const Text(
         'Agent DashBoard',
-        style: TextStyle(
-            color: Color(0xFF0f75bc),
-            fontSize: 16.0,
-            fontWeight: FontWeight.w600),
+        style: TextStyle(color: Color(0xFF0f75bc), fontSize: 16.0, fontWeight: FontWeight.w600),
       ),
       leading: IconButton(
         icon: const Icon(
@@ -210,7 +247,7 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
       height: 80,
-      child:  Column(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -241,12 +278,8 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
               return const SizedBox();
             } else {
               return Marquee(
-                text: 'marqueeText   ',
-                style: const TextStyle(
-                    fontSize: 16,
-                    fontFamily: "Calibri",
-                    fontWeight: FontWeight.w600,
-                    color: Color(0xFFff0176)),
+                text: marqueeText,
+                style: const TextStyle(fontSize: 16, fontFamily: "Calibri", fontWeight: FontWeight.w600, color: Color(0xFFff0176)),
               );
             }
           },
@@ -311,7 +344,7 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
 
   Widget agentBranches() {
     return SizedBox(
-      height: MediaQuery.of(context).size.height / 3.5,
+      height: MediaQuery.of(context).size.height / 4.2,
       child: FutureBuilder(
         future: apiData,
         builder: (context, snapshot) {
@@ -323,7 +356,9 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
             );
           } else {
             List<BranchList>? data = snapshot.data!;
-            return Expanded(
+            return Container(
+              width: MediaQuery.of(context).size.width,
+              // height: MediaQuery.of(context).size.height / 3.5,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
                 itemCount: data.length,
@@ -351,8 +386,7 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
       if (jsonResponse.statusCode == 200) {
         Map<String, dynamic> response = jsonDecode(jsonResponse.body);
         List<dynamic> branchesData = response['listResult'];
-        List<BranchList> result =
-        branchesData.map((e) => BranchList.fromJson(e)).toList();
+        List<BranchList> result = branchesData.map((e) => BranchList.fromJson(e)).toList();
         print('result: ${result[0].name}');
         print('result: ${result[0].address}');
         print('result: ${result[0].imageName}');
@@ -395,7 +429,12 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
               ),
               const SizedBox(height: 5),
               const Text(
-                'Check \n Appointments',
+                'Check',
+                style: CommonStyles.txSty_14p_f5,
+                textAlign: TextAlign.center,
+              ),
+              const Text(
+                'Appointments',
                 style: CommonStyles.txSty_14p_f5,
               ),
             ],
@@ -410,7 +449,10 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
           onTap: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => Add_Consulation_screen( agentId: AgentId!,)),
+              MaterialPageRoute(
+                  builder: (context) => Add_Consulation_screen(
+                        agentId: AgentId!,
+                      )),
             );
             // Navigator.of(context, rootNavigator: true)
             //     .pushNamed("/Products");
@@ -430,8 +472,17 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
                 ),
               ),
               const SizedBox(height: 5),
+              // const Text(
+              //   'Add Consultation',
+              //   style: CommonStyles.txSty_14p_f5,
+              // ),
               const Text(
-                'Add Consultation',
+                'Add',
+                style: CommonStyles.txSty_14p_f5,
+                textAlign: TextAlign.center,
+              ),
+              const Text(
+                'Consultation',
                 style: CommonStyles.txSty_14p_f5,
               ),
             ],
@@ -441,7 +492,10 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
           onTap: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => View_Consultation_screen( agentId: AgentId!,)),
+              MaterialPageRoute(
+                  builder: (context) => View_Consultation_screen(
+                        agentId: AgentId!,
+                      )),
             );
             // Navigator.of(context, rootNavigator: true)
             //     .pushNamed("/Products");
@@ -462,9 +516,17 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
                 ),
               ),
               const SizedBox(height: 5),
+              // const Text(
+              //   'View Consultation',
+              //   style: CommonStyles.txSty_14p_f5,
+              // ),
               const Text(
-
-                'View Consultation',
+                'View',
+                style: CommonStyles.txSty_14p_f5,
+                textAlign: TextAlign.center,
+              ),
+              const Text(
+                'Consultation',
                 style: CommonStyles.txSty_14p_f5,
               ),
             ],

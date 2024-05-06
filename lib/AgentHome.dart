@@ -66,22 +66,22 @@ class _AgentHomeState extends State<AgentHome> {
           automaticallyImplyLeading: false,
           title: _currentIndex == 0
               ? SizedBox(
-            width: 85,
-            height: 40,
-            child: FractionallySizedBox(
-              widthFactor: 1,
-              child: Image.asset(
-                'assets/hfz_logo.png',
-                fit: BoxFit.fitWidth,
-              ),
-            ),
-          )
+                  width: 85,
+                  height: 40,
+                  child: FractionallySizedBox(
+                    widthFactor: 1,
+                    child: Image.asset(
+                      'assets/hfz_logo.png',
+                      fit: BoxFit.fitWidth,
+                    ),
+                  ),
+                )
               : _currentIndex == 1 || _currentIndex == 2 || _currentIndex == 3
-              ? Text(
-            _getAppBarTitle(_currentIndex),
-            style: CommonUtils.header_Styles,
-          )
-              : null,
+                  ? Text(
+                      _getAppBarTitle(_currentIndex),
+                      style: CommonUtils.header_Styles,
+                    )
+                  : null,
           actions: [
             IconButton(
               icon: SvgPicture.asset(
@@ -114,9 +114,7 @@ class _AgentHomeState extends State<AgentHome> {
                 'assets/objects-column.svg',
                 width: 24,
                 height: 24,
-                color: _currentIndex == 0
-                    ? CommonUtils.primaryTextColor
-                    : Colors.grey,
+                color: _currentIndex == 0 ? CommonUtils.primaryTextColor : Colors.grey,
               ),
               title: const Text(
                 'Home',
@@ -129,9 +127,7 @@ class _AgentHomeState extends State<AgentHome> {
                 'assets/calendar-day.svg',
                 width: 24,
                 height: 24,
-                color: _currentIndex == 1
-                    ? CommonUtils.primaryTextColor
-                    : Colors.grey,
+                color: _currentIndex == 1 ? CommonUtils.primaryTextColor : Colors.grey,
               ),
               title: const Text(
                 'Add Consultation',
@@ -144,15 +140,12 @@ class _AgentHomeState extends State<AgentHome> {
                 'assets/calendar-lines.svg',
                 width: 24,
                 height: 24,
-                color: _currentIndex == 2
-                    ? CommonUtils.primaryTextColor
-                    : Colors.grey,
+                color: _currentIndex == 2 ? CommonUtils.primaryTextColor : Colors.grey,
               ),
               title: const Text('View Consultation'),
               activeColor: Colors.blue,
               textAlign: TextAlign.center,
             ),
-
           ],
         ),
       ),
@@ -162,7 +155,7 @@ class _AgentHomeState extends State<AgentHome> {
   Widget _buildScreens(int index) {
     switch (index) {
       case 0:
-        return const AgentDashBoard();
+        return AgentDashBoard();
 
       case 1:
         return AddConsulationscreen(
@@ -173,7 +166,6 @@ class _AgentHomeState extends State<AgentHome> {
         return ViewConsultation(
           agentId: widget.userId,
         );
-
 
       default:
         return const AgentDashBoard();
@@ -216,7 +208,7 @@ class _AgentHomeState extends State<AgentHome> {
 
     Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(builder: (context) => const AgentLogin()),
-          (route) => false,
+      (route) => false,
     );
   }
 
