@@ -8,11 +8,15 @@ import 'package:hairfixingzone/MyAppointments.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'AddConsulationscreen.dart';
 import 'AgentDashBoard.dart';
 import 'AgentLogin.dart';
+import 'ViewConsultation.dart';
 
 class AgentHome extends StatefulWidget {
-  const AgentHome({super.key});
+  final int userId;
+
+  AgentHome({required this.userId});
 
   @override
   State<AgentHome> createState() => _AgentHomeState();
@@ -115,14 +119,14 @@ class _AgentHomeState extends State<AgentHome> {
                     : Colors.grey,
               ),
               title: const Text(
-                'Screen1',
+                'Home',
               ),
               activeColor: Colors.blue,
               textAlign: TextAlign.center,
             ),
             BottomNavyBarItem(
               icon: SvgPicture.asset(
-                'assets/invite-alt.svg',
+                'assets/calendar-day.svg',
                 width: 24,
                 height: 24,
                 color: _currentIndex == 1
@@ -130,37 +134,25 @@ class _AgentHomeState extends State<AgentHome> {
                     : Colors.grey,
               ),
               title: const Text(
-                'Screen2',
+                'Add Consultation',
               ),
               activeColor: Colors.blue,
               textAlign: TextAlign.center,
             ),
             BottomNavyBarItem(
               icon: SvgPicture.asset(
-                'assets/invite-alt.svg',
+                'assets/calendar-lines.svg',
                 width: 24,
                 height: 24,
                 color: _currentIndex == 2
                     ? CommonUtils.primaryTextColor
                     : Colors.grey,
               ),
-              title: const Text('Screen3'),
+              title: const Text('View Consultation'),
               activeColor: Colors.blue,
               textAlign: TextAlign.center,
             ),
-            BottomNavyBarItem(
-              icon: SvgPicture.asset(
-                'assets/bin-bottles.svg',
-                width: 24,
-                height: 24,
-                color: _currentIndex == 3
-                    ? CommonUtils.primaryTextColor
-                    : Colors.grey,
-              ),
-              title: const Text('Screen4'),
-              activeColor: Colors.blue,
-              textAlign: TextAlign.center,
-            ),
+
           ],
         ),
       ),
@@ -173,13 +165,15 @@ class _AgentHomeState extends State<AgentHome> {
         return const AgentDashBoard();
 
       case 1:
-        return const MyAppointments();
+        return AddConsulationscreen(
+          agentId: widget.userId,
+        );
 
       case 2:
-        return const MyAppointments();
+        return ViewConsultation(
+          agentId: widget.userId,
+        );
 
-      case 3:
-        return const MyAppointments();
 
       default:
         return const AgentDashBoard();
@@ -231,13 +225,12 @@ class _AgentHomeState extends State<AgentHome> {
       case 0:
         return '';
       case 1:
-        return 'Test1';
+        return 'Add Consultation';
       case 2:
-        return 'Test2';
-      case 3:
-        return 'Test3';
+        return 'View Consultation';
+
       default:
-        return 'default';
+        return '';
     }
   }
 }

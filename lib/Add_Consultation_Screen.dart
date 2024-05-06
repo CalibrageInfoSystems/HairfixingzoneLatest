@@ -14,15 +14,15 @@ import 'package:intl/intl.dart';
 import 'HomeScreen.dart';
 import 'api_config.dart';
 
-class AddConsulationscreen extends StatefulWidget {
+class Add_Consulation_screen extends StatefulWidget {
   final int agentId;
-  const AddConsulationscreen({super.key, required this.agentId});
+  const Add_Consulation_screen({super.key, required this.agentId});
 
   @override
   AddConsulationscreen_screenState createState() => AddConsulationscreen_screenState();
 }
 
-class AddConsulationscreen_screenState extends State<AddConsulationscreen> {
+class AddConsulationscreen_screenState extends State<Add_Consulation_screen> {
   List<dynamic> dropdownItems = [];
   List<dynamic> BranchesdropdownItems = [];
   String? selectedName;
@@ -163,22 +163,22 @@ class AddConsulationscreen_screenState extends State<AddConsulationscreen> {
           return true;
         },
         child: Scaffold(
-            // appBar: AppBar(
-            //     elevation: 0,
-            //     backgroundColor: const Color(0xFFf3e3ff),
-            //     title: const Text(
-            //       'Add Consultation',
-            //       style: TextStyle(color: Color(0xFF0f75bc), fontSize: 16.0, fontWeight: FontWeight.w600),
-            //     ),
-            //     leading: IconButton(
-            //       icon: const Icon(
-            //         Icons.arrow_back_ios,
-            //         color: CommonUtils.primaryTextColor,
-            //       ),
-            //       onPressed: () {
-            //         Navigator.of(context).pop();
-            //       },
-            //     )),
+            appBar: AppBar(
+                elevation: 0,
+                backgroundColor: const Color(0xFFf3e3ff),
+                title: const Text(
+                  'Add Consultation',
+                  style: TextStyle(color: Color(0xFF0f75bc), fontSize: 16.0, fontWeight: FontWeight.w600),
+                ),
+                leading: IconButton(
+                  icon: const Icon(
+                    Icons.arrow_back_ios,
+                    color: CommonUtils.primaryTextColor,
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                )),
             body: SingleChildScrollView(
               child: Form(
                   key: _formKey,

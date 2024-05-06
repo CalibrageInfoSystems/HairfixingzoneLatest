@@ -8,13 +8,16 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:hairfixingzone/MyAppointmentsProvider.dart';
+
 import 'package:hairfixingzone/slotbookingscreen.dart';
 
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'AgentAppointmentsProvider.dart';
+import 'AgentHome.dart';
+import 'Appointment.dart';
 import 'BranchModel.dart';
 import 'Common/common_styles.dart';
 import 'Commonutils.dart';
@@ -22,16 +25,28 @@ import 'MyAppointment_Model.dart';
 import 'Rescheduleslotscreen.dart';
 import 'api_config.dart';
 
-class MyAppointments extends StatefulWidget {
-  const MyAppointments({super.key});
+class Agentappointmentlist extends StatefulWidget {
 
+  final int userId;
+  final int branchid;
+  final String branchname;
+  final String filepath;
+  final String phonenumber;
+  final String branchaddress;
+  Agentappointmentlist(
+      {required this.userId,
+        required this.branchid,
+        required this.branchname,
+        required this.filepath,
+        required this.phonenumber,
+        required this.branchaddress}) {}
   @override
   MyAppointments_screenState createState() => MyAppointments_screenState();
 }
 
-class MyAppointments_screenState extends State<MyAppointments> {
+class MyAppointments_screenState extends State<Agentappointmentlist> {
 
-  Future<List<MyAppointment_Model>>? apiData;
+  Future<List<Appointment>>? apiData;
   int? userId;
   @override
   void initState() {
@@ -51,103 +66,134 @@ class MyAppointments_screenState extends State<MyAppointments> {
       }
     });
   }
-  MyAppointmentsProvider? myAppointmentsProvider;
+  AgentAppointmentsProvider? myAppointmentsProvider;
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    myAppointmentsProvider = Provider.of<MyAppointmentsProvider>(context);
+    myAppointmentsProvider = Provider.of<AgentAppointmentsProvider>(context);
   }
 
   @override
   Widget build(BuildContext context) {
-    return RefreshIndicator(
-      onRefresh: () async {
-        refreshTheScreen();
-      },
-      child: Consumer<MyAppointmentsProvider>(
-        builder: (context, provider, _) => Scaffold(
-          body: WillPopScope(
-            onWillPop: () async {
-              provider.clearFilter();
-              return true;
-            },
-            child: Column(
-              children: [
-                // search and filter
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10).copyWith(top: 10),
-                  child: _searchBarAndFilter(),
-                ),
-
-                //MARK: Appointment
-                Expanded(
-                  child: FutureBuilder(
-                    future: apiData,
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const Center(
-                          child: CircularProgressIndicator.adaptive(),
-                        );
-                      } else if (snapshot.hasError) {
-                        return const Center(
-                          child: Text(
-                            'No appointments found!',
-                            style: TextStyle(
-                              fontSize: 12.0,
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                              fontFamily: "Roboto",
-                            ),
-                          ),
-                        );
-                      } else {
-                        List<MyAppointment_Model> data = provider.proAppointments;
-                        if (data.isNotEmpty) {
-                          return Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: ListView.builder(
-                              itemCount: data.length,
-                              itemBuilder: (context, index) {
-                                return Column(
-                                  children: [
-                                    OpCard(
-                                      data: data[index],
-                                    ),
-                                    const SizedBox(
-                                      height: 5,
-                                    ),
-                                  ],
-                                );
-                                // return AppointmentCard(
-                                //     data: data[index],
-                                //     day: parseDayFromDate(data[index].date),);
-                              },
-                            ),
-                          );
-                        } else {
-                          return const Center(
-                            child: Text(
-                              'No appointmens available',
-                              style: TextStyle(
-                                fontSize: 12.0,
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: "Roboto",
-                              ),
-                            ),
-                          );
-                        }
-                      }
-                    },
+    return WillPopScope(
+        onWillPop: () async {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => AgentHome(userId: userId!,),
+            ),
+          );
+          return true;
+        },
+        child: RefreshIndicator(
+          onRefresh: () async {
+            refreshTheScreen();
+          },
+          child: Consumer<AgentAppointmentsProvider>(
+            builder: (context, provider, _) => Scaffold(
+              appBar: AppBar(
+                  backgroundColor: const Color(0xFFf3e3ff),
+                  title: Text(
+                    'Appointments',
+                    style: TextStyle(
+                      color: Color(0xFF0f75bc),
+                      fontSize: 16.0,
+                      fontFamily: "Calibri",
+                      fontWeight: FontWeight.w600,
+                    ),
+                    textAlign: TextAlign.start,
                   ),
+                  leading: IconButton(
+                    icon: Icon(
+                      Icons.arrow_back_ios,
+                      color: CommonUtils.primaryTextColor,
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  )),
+              body: WillPopScope(
+                onWillPop: () async {
+                  provider.clearFilter();
+                  return true;
+                },
+                child: Column(
+                  children: [
+                    // search and filter
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10).copyWith(top: 10),
+                      child: _searchBarAndFilter(),
+                    ),
+
+                    //MARK: Appointment
+                    Expanded(
+                      child: FutureBuilder(
+                        future: apiData,
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState == ConnectionState.waiting) {
+                            return const Center(
+                              child: CircularProgressIndicator.adaptive(),
+                            );
+                          } else if (snapshot.hasError) {
+                            return const Center(
+                              child: Text(
+                                'No appointments found!',
+                                style: TextStyle(
+                                  fontSize: 12.0,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: "Roboto",
+                                ),
+                              ),
+                            );
+                          } else {
+                            List<Appointment> data = provider.proAppointments;
+                            if (data.isNotEmpty) {
+                              return Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: ListView.builder(
+                                  itemCount: data.length,
+                                  itemBuilder: (context, index) {
+                                    return Column(
+                                      children: [
+                                        OpCard(
+                                          data: data[index],userId :widget.userId,branchid: widget.branchid,branchaddress : widget.branchaddress
+                                        ),
+                                        const SizedBox(
+                                          height: 5,
+                                        ),
+                                      ],
+                                    );
+                                    // return AppointmentCard(
+                                    //     data: data[index],
+                                    //     day: parseDayFromDate(data[index].date),);
+                                  },
+                                ),
+                              );
+                            } else {
+                              return const Center(
+                                child: Text(
+                                  'No appointmens available',
+                                  style: TextStyle(
+                                    fontSize: 12.0,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: "Roboto",
+                                  ),
+                                ),
+                              );
+                            }
+                          }
+                        },
+                      ),
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
           ),
-        ),
-      ),
-    );
+        ));
   }
 
   void checkLoginuserdata() async {
@@ -160,7 +206,7 @@ class MyAppointments_screenState extends State<MyAppointments> {
   }
 
   void initializeData(int? userId) {
-    apiData = fetchMyAppointments(userId);
+    apiData = fetchagentAppointments(userId,widget.branchid);
     apiData!.then((value) {
       myAppointmentsProvider!.storeIntoProvider = value;
     }).catchError((error) {
@@ -168,11 +214,11 @@ class MyAppointments_screenState extends State<MyAppointments> {
     });
   }
 
-  Future<List<MyAppointment_Model>> fetchMyAppointments(int? userId) async {
-    final url = Uri.parse('http://182.18.157.215/SaloonApp/API/api/Appointment/GetAppointmentByUserid');
-
+  Future<List<Appointment>> fetchagentAppointments(int? userId, int branchid) async {
+    final url = Uri.parse('http://182.18.157.215/SaloonApp/API/api/Appointment/GetAppointment');
+    // {"userId":8,"branchId":2,"fromDate":"2024-05-01","toDate":"2024-05-17","statusTypeId":null}
     try {
-      final request = {"userid": userId, "branchId": null, "fromdate": null, "toDate": null, "statustypeId": null};
+      final request = {"userId": userId, "branchId": branchid, "fromdate": "2024-05-01", "toDate": "2024-05-17", "statustypeId": null};
       print('GetAppointmentByUserid: ${json.encode(request)}');
 
       final jsonResponse = await http.post(
@@ -188,7 +234,7 @@ class MyAppointments_screenState extends State<MyAppointments> {
 
         if (response['listResult'] != null) {
           List<dynamic> listResult = response['listResult'];
-          List<MyAppointment_Model> result = listResult.map((item) => MyAppointment_Model.fromJson(item)).toList();
+          List<Appointment> result = listResult.map((item) => Appointment.fromJson(item)).toList();
           return result;
         } else {
           throw Exception('No appointments found!');
@@ -205,7 +251,7 @@ class MyAppointments_screenState extends State<MyAppointments> {
 
   void refreshTheScreen() {
     CommonUtils.checkInternetConnectivity().then(
-      (isConnected) {
+          (isConnected) {
         if (isConnected) {
           print('The Internet Is Connected');
 
@@ -309,10 +355,41 @@ class MyAppointments_screenState extends State<MyAppointments> {
   void filterAppointment(String input) {
     apiData!.then((data) {
       setState(() {
-        myAppointmentsProvider!.filterProviderData(data.where((item) => item.branch.toLowerCase().contains(input.toLowerCase())).toList());
+        myAppointmentsProvider!.filterProviderData(data.where((item) => item.name.toLowerCase().contains(input.toLowerCase())).toList());
       });
     });
   }
+  // void fetchAppointments(int userId, int branchid, {required status, required date}) async {
+  //   appointments.clear();
+  //   final url = Uri.parse(baseUrl + GetAppointment + '$userId/$branchid/$status/$date');
+  //   print('url==842===$url');
+  //   try {
+  //     final response = await http.get(url);
+  //     if (response.statusCode == 200) {
+  //       final Map<String, dynamic> responseData = jsonDecode(response.body);
+  //       if (responseData['listResult'] != null) {
+  //         final List<dynamic> appointmentsData = responseData['listResult'];
+  //         setState(() {
+  //           appointments = appointmentsData.map((appointment) => Appointment.fromJson(appointment)).toList();
+  //           isLoading = false;
+  //         });
+  //       } else {
+  //         setState(() {
+  //           isLoading = false;
+  //         });
+  //         //  textFieldController.text = 'No Slots Available';
+  //         print('No Slots Available');
+  //       }
+  //     } else {
+  //       throw Exception('Failed to fetch appointments');
+  //     }
+  //   } catch (error) {
+  //     print('errorinappointmrent$error');
+  //     throw Exception('Failed to connect to the API');
+  //   }
+  // }
+
+
 }
 
 class FilterAppointmentBottomSheet extends StatefulWidget {
@@ -340,11 +417,11 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
   String? apiFromDate;
   String? apiToDate;
 
-  late MyAppointmentsProvider myAppointmentsProvider;
+   AgentAppointmentsProvider? myAppointmentsProvider;
   @override
   void initState() {
     super.initState();
-    apiData = fetchbranches();
+    apiData = fetchbranches(widget.userId);
     prostatus = fetchstatus();
   }
 
@@ -352,12 +429,12 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    myAppointmentsProvider = Provider.of<MyAppointmentsProvider>(context);
-    From_todates.text = myAppointmentsProvider.getDisplayDate;
+    myAppointmentsProvider = Provider.of<AgentAppointmentsProvider>(context);
+    From_todates.text = myAppointmentsProvider!.getDisplayDate;
   }
 
   Future<void> filterAppointments(Map<String, dynamic> requestBody) async {
-    final url = Uri.parse('http://182.18.157.215/SaloonApp/API/api/Appointment/GetAppointmentByUserid');
+    final url = Uri.parse('http://182.18.157.215/SaloonApp/API/api/Appointment/GetAppointment');
 
     try {
       Map<String, dynamic> request = requestBody;
@@ -376,13 +453,13 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
 
         if (response['listResult'] != null) {
           List<dynamic> listResult = response['listResult'];
-          myAppointmentsProvider.storeIntoProvider = listResult.map((item) => MyAppointment_Model.fromJson(item)).toList();
+          myAppointmentsProvider!.storeIntoProvider = listResult.map((item) => Appointment.fromJson(item)).toList();
         } else {
-          myAppointmentsProvider.storeIntoProvider = [];
+          myAppointmentsProvider!.storeIntoProvider = [];
           throw Exception('No appointments found!');
         }
       } else {
-        myAppointmentsProvider.storeIntoProvider = [];
+        myAppointmentsProvider!.storeIntoProvider = [];
         print('Request failed with status: ${jsonResponse.statusCode}');
         throw Exception('Request failed with status: ${jsonResponse.statusCode}');
       }
@@ -394,7 +471,7 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<MyAppointmentsProvider>(
+    return Consumer<AgentAppointmentsProvider>(
       builder: (context, provider, _) => SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(10),
@@ -464,8 +541,8 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                               //MARK: Date
                               endDate = e;
                               startDate = s;
-                              provider.getDisplayDate =
-                                  '${startDate != null ? DateFormat("dd, MMM").format(startDate!) : '-'} / ${endDate != null ? DateFormat("dd, MMM").format(endDate!) : '-'}';
+                              provider!.getDisplayDate =
+                              '${startDate != null ? DateFormat("dd, MMM").format(startDate!) : '-'} / ${endDate != null ? DateFormat("dd, MMM").format(endDate!) : '-'}';
                               From_todates.text = provider.getDisplayDate;
                               provider.getApiFromDate = DateFormat('yyyy-MM-dd').format(startDate!);
                               provider.getApiToDate = DateFormat('yyyy-MM-dd').format(endDate!);
@@ -557,10 +634,10 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                                       //MARK: Brach id
                                       onTap: () {
                                         setState(() {
-                                          provider.selectedBranch = index;
+                                          provider!.selectedBranch = index;
 
                                           // provider.getbranch = branchmodel.id;
-                                          provider.getApiBranchId = branchmodel.id;
+                                          provider!.getApiBranchId = branchmodel.id;
                                           print('filter: ${provider.getbranch}');
 
                                           print('Filter branchmodel: ${branchmodel.id}');
@@ -740,11 +817,11 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                                   //MARK: Filter Apply
                                   // filterAppointments(widget.userId);
                                   filterAppointments({
-                                    "userid": widget.userId,
-                                    "branchId": myAppointmentsProvider.getApiBranchId,
-                                    "fromdate": myAppointmentsProvider.getApiFromDate,
-                                    "toDate": myAppointmentsProvider.getApiToDate,
-                                    "statustypeId": myAppointmentsProvider.getApiStatusTypeId,
+                                    "userId": widget.userId,
+                                    "branchId": myAppointmentsProvider?.getApiBranchId,
+                                    "fromdate": myAppointmentsProvider?.getApiFromDate,
+                                    "toDate": myAppointmentsProvider?.getApiToDate,
+                                    "statustypeId": myAppointmentsProvider?.getApiStatusTypeId,
                                   }).whenComplete(() => provider.filterStatus = true);
                                 },
                                 child: Container(
@@ -794,8 +871,8 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
     }
   }
 
-  Future<List<BranchModel>> fetchbranches() async {
-    final response = await http.get(Uri.parse(baseUrl + getbranches));
+  Future<List<BranchModel>> fetchbranches(userId) async {
+    final response = await http.get(Uri.parse(baseUrl + GetBranchByUserId + '$userId'));
     if (response.statusCode == 200) {
       final List<dynamic> responseData = json.decode(response.body)['listResult'];
       List<BranchModel> result = responseData.map((json) => BranchModel.fromJson(json)).toList();
@@ -807,7 +884,7 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
   }
 
   Future<void> clearFilterAppointments(Map<String, dynamic> requestBody) async {
-    final url = Uri.parse('http://182.18.157.215/SaloonApp/API/api/Appointment/GetAppointmentByUserid');
+    final url = Uri.parse('http://182.18.157.215/SaloonApp/API/api/Appointment/GetAppointment');
 
     try {
       Map<String, dynamic> request = requestBody;
@@ -826,13 +903,13 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
 
         if (response['listResult'] != null) {
           List<dynamic> listResult = response['listResult'];
-          myAppointmentsProvider.storeIntoProvider = listResult.map((item) => MyAppointment_Model.fromJson(item)).toList();
+          myAppointmentsProvider!.storeIntoProvider = listResult.map((item) => Appointment.fromJson(item)).toList();
         } else {
-          myAppointmentsProvider.storeIntoProvider = [];
+          myAppointmentsProvider!.storeIntoProvider = [];
           throw Exception('No appointments found!');
         }
       } else {
-        myAppointmentsProvider.storeIntoProvider = [];
+        myAppointmentsProvider!.storeIntoProvider = [];
         print('Request failed with status: ${jsonResponse.statusCode}');
         throw Exception('Request failed with status: ${jsonResponse.statusCode}');
       }
@@ -840,7 +917,7 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
       print('catch: $error');
     }
     Navigator.of(context).pop();
-    myAppointmentsProvider.clearFilter();
+    myAppointmentsProvider!.clearFilter();
   }
 }
 
@@ -852,8 +929,11 @@ class UserFeedback {
 }
 
 class OpCard extends StatefulWidget {
-  final MyAppointment_Model data;
-  const OpCard({super.key, required this.data});
+  final Appointment data;
+  int? userId;
+  int? branchid;
+  String ? branchaddress;
+   OpCard({super.key, required this.data, required int userId, required int branchid, required String branchaddress});
 
   @override
   State<OpCard> createState() => _OpCardState();
@@ -890,7 +970,8 @@ class _OpCardState extends State<OpCard> {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       elevation: 5,
       child: Container(
-        height: widget.data.statusTypeId == 4 || widget.data.statusTypeId == 6 ? 90 : 120,
+        //height: widget.data.statusTypeId == 4 || widget.data.statusTypeId == 6 ? 90 : 120,
+          height: 150,
         padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10.0),
@@ -947,7 +1028,7 @@ class _OpCardState extends State<OpCard> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  widget.data.slotDuration,
+                                  widget.data.SlotDuration,
                                   style: TextStyle(
                                     fontSize: 16,
                                     fontFamily: "Calibri",
@@ -955,8 +1036,10 @@ class _OpCardState extends State<OpCard> {
                                     color: Color(0xFF0f75bc),
                                   ),
                                 ),
-                                Text(widget.data.purposeOfVisit, style: CommonStyles.txSty_16black_f5),
-                                Text(widget.data.branch, style: CommonStyles.txSty_16black_f5),
+                                Text(widget.data.customerName, style: CommonStyles.txSty_16black_f5),
+                                Text(widget.data.email, style: CommonStyles.txSty_16black_f5),
+                                Text(widget.data.purposeofvisit, style: CommonStyles.txSty_16black_f5),
+                                Text(widget.data.name, style: CommonStyles.txSty_16black_f5),
                               ],
                             ),
                           ),
@@ -966,10 +1049,21 @@ class _OpCardState extends State<OpCard> {
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
                               statusBasedBgById(widget.data.statusTypeId, widget.data.status),
-                              // Text('status'),
                               SizedBox(
-                                height: 10.0,
+                                height: 2.0,
                               ),
+
+                              Text(widget.data.phoneNumber, style: CommonStyles.txSty_16black_f5),
+                              SizedBox(
+                                height: 3.0,
+                              ),
+                              Text(widget.data.gender ?? ' ', style: CommonStyles.txSty_16black_f5),
+
+                          //    Text(widget.data.gender!, style: CommonStyles.txSty_16black_f5),
+                              SizedBox(
+                                height: 5.0,
+                              ),
+
                               if (widget.data.statusTypeId == 11)
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.end,
@@ -1004,7 +1098,7 @@ class _OpCardState extends State<OpCard> {
                     mainAxisAlignment: widget.data.statusTypeId == 11 ? MainAxisAlignment.start : MainAxisAlignment.end,
                     children: [
                       verifyStatus(
-                        widget.data,
+                        widget.data, widget.userId
                       ),
                     ],
                   ),
@@ -1074,32 +1168,35 @@ class _OpCardState extends State<OpCard> {
     );
   }
 
-  Widget verifyStatus(MyAppointment_Model data) {
+  Widget verifyStatus(Appointment data, int? userId) {
     switch (data.statusTypeId) {
       case 4: // Submited
-        return const SizedBox();
-      case 5: // Accepted
+     //   return const SizedBox();
         return Row(
           children: [
             GestureDetector(
               onTap: () {
-                if (!isPastDate(data.date, data.slotDuration)) {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => Rescheduleslotscreen(
-                        data: data,
-                      ),
-                    ),
-                  );
+                if (!isPastDate(data.date, data.SlotDuration)) {
+                  print('Button 1 pressed for ${data.customerName}');
+                  postAppointment(data, 5,0,userId);
+                  Get_ApprovedDeclinedSlots(data, 5);
+                  print('accpteedbuttonisclicked');
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //     builder: (context) => Rescheduleslotscreen(
+                  //       data: data,
+                  //     ),
+                  //   ),
+                  // );
                 }
               },
               child: IgnorePointer(
-                ignoring: isPastDate(data.date, data.slotDuration),
+                ignoring: isPastDate(data.date, data.SlotDuration),
                 child: Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(3),
-                    border: Border.all(color: isPastDate(data.date, data.slotDuration) ? Colors.grey : CommonStyles.primaryTextColor),
+                    border: Border.all(color: isPastDate(data.date, data.SlotDuration) ? Colors.grey : CommonStyles.primaryTextColor),
                   ),
                   padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
                   child: Row(
@@ -1107,13 +1204,13 @@ class _OpCardState extends State<OpCard> {
                       SvgPicture.asset(
                         'assets/calendar-_3_.svg',
                         width: 13,
-                        color: isPastDate(data.date, data.slotDuration) ? Colors.grey : CommonUtils.primaryTextColor,
+                        color: isPastDate(data.date, data.SlotDuration) ? Colors.grey : CommonUtils.primaryTextColor,
                       ),
                       Text(
-                        '  Reschedule',
+                        '  Accept',
                         style: TextStyle(
                           fontSize: 15,
-                          color: isPastDate(data.date, data.slotDuration) ? Colors.grey : CommonUtils.primaryTextColor,
+                          color: isPastDate(data.date, data.SlotDuration) ? Colors.grey : CommonUtils.primaryTextColor,
                         ),
                       ),
                     ],
@@ -1126,18 +1223,18 @@ class _OpCardState extends State<OpCard> {
             ),
             GestureDetector(
               onTap: () {
-                if (!isPastDate(data.date, data.slotDuration)) {
+                if (!isPastDate(data.date, data.SlotDuration)) {
                   conformation(data);
                   // Add your logic here for when the 'Cancel' container is tapped
                 }
               },
               child: IgnorePointer(
-                ignoring: isPastDate(data.date, data.slotDuration),
+                ignoring: isPastDate(data.date, data.SlotDuration),
                 child: Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(3),
                     border: Border.all(
-                      color: isPastDate(data.date, data.slotDuration) ? Colors.grey : CommonStyles.statusRedText,
+                      color: isPastDate(data.date, data.SlotDuration) ? Colors.grey : CommonStyles.statusRedText,
                     ),
                   ),
                   padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
@@ -1146,7 +1243,7 @@ class _OpCardState extends State<OpCard> {
                       SvgPicture.asset(
                         'assets/calendar-xmark.svg',
                         width: 12,
-                        color: isPastDate(data.date, data.slotDuration) ? Colors.grey : CommonStyles.statusRedText,
+                        color: isPastDate(data.date, data.SlotDuration) ? Colors.grey : CommonStyles.statusRedText,
                       ),
                       Text(
                         '  Cancel',
@@ -1154,7 +1251,53 @@ class _OpCardState extends State<OpCard> {
                           fontSize: 16,
                           fontFamily: "Calibri",
                           fontWeight: FontWeight.w500,
-                          color: isPastDate(data.date, data.slotDuration) ? Colors.grey : CommonStyles.statusRedText,
+                          color: isPastDate(data.date, data.SlotDuration) ? Colors.grey : CommonStyles.statusRedText,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
+        );
+      case 5: // Accepted
+      //  return const SizedBox();
+        return Row(
+          children: [
+
+            GestureDetector(
+              onTap: () {
+                closepopup(data, 18,userId);
+                // if (!isPastDate(data.date, data.SlotDuration)) {
+                //   conformation(data);
+                //   // Add your logic here for when the 'Cancel' container is tapped
+                // }
+              },
+              child: IgnorePointer(
+                ignoring: isPastDate(data.date, data.SlotDuration),
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(3),
+                    border: Border.all(
+                      color: isPastDate(data.date, data.SlotDuration) ? Colors.grey : CommonStyles.statusRedText,
+                    ),
+                  ),
+                  padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
+                  child: Row(
+                    children: [
+                      SvgPicture.asset(
+                        'assets/calendar-xmark.svg',
+                        width: 12,
+                        color: isPastDate(data.date, data.SlotDuration) ? Colors.grey : CommonStyles.statusRedText,
+                      ),
+                      Text(
+                        '  Close',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontFamily: "Calibri",
+                          fontWeight: FontWeight.w500,
+                          color: isPastDate(data.date, data.SlotDuration) ? Colors.grey : CommonStyles.statusRedText,
                         ),
                       ),
                     ],
@@ -1172,62 +1315,33 @@ class _OpCardState extends State<OpCard> {
         );
 
       case 18: // Closed
-        return GestureDetector(
-          onTap: () {
-            showDialogForRating(data);
-          },
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(3),
-              border: Border.all(
-                color: CommonStyles.primaryTextColor,
-              ),
-            ),
-            padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
-            child: const Row(
-              children: [
-                Icon(
-                  Icons.star_border_outlined,
-                  size: 13,
-                  color: CommonStyles.primaryTextColor,
-                ),
-                Text(
-                  ' Rate Us',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: CommonStyles.primaryTextColor,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
-      case 19: // Reschuduled
         return const SizedBox();
+      // case 19: // Reschuduled
+      //   return const SizedBox();
       default:
         return const SizedBox();
-      //  return Container(
-      //     decoration: BoxDecoration(
-      //         borderRadius: BorderRadius.circular(3),
-      //         border: Border.all(color: CommonUtils.blackColor)),
-      //     padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
-      //     child: const Row(
-      //       children: [
-      //         Icon(
-      //           Icons.star_border_outlined,
-      //           size: 13,
-      //           color: CommonStyles.primaryTextColor,
-      //         ),
-      //         Text(
-      //           ' Rate Us',
-      //           style: TextStyle(
-      //             fontSize: 11,
-      //             color: CommonStyles.primaryTextColor,
-      //           ),
-      //         ),
-      //       ],
-      //     ),
-      //   );
+    //  return Container(
+    //     decoration: BoxDecoration(
+    //         borderRadius: BorderRadius.circular(3),
+    //         border: Border.all(color: CommonUtils.blackColor)),
+    //     padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
+    //     child: const Row(
+    //       children: [
+    //         Icon(
+    //           Icons.star_border_outlined,
+    //           size: 13,
+    //           color: CommonStyles.primaryTextColor,
+    //         ),
+    //         Text(
+    //           ' Rate Us',
+    //           style: TextStyle(
+    //             fontSize: 11,
+    //             color: CommonStyles.primaryTextColor,
+    //           ),
+    //         ),
+    //       ],
+    //     ),
+    //   );
     }
   }
 
@@ -1273,7 +1387,7 @@ class _OpCardState extends State<OpCard> {
     return isBeforeTime || isBeforeDate;
   }
 
-  void showDialogForRating(MyAppointment_Model appointments) {
+  void showDialogForRating(Appointment appointments) {
     _commentstexteditcontroller.clear();
     showDialog(
       barrierDismissible: true,
@@ -1314,7 +1428,7 @@ class _OpCardState extends State<OpCard> {
                         height: 15.0,
                       ),
                       Text(
-                        'Please Rate Your Experience For The ${appointments.slotDuration} Slot At The ${appointments.branch} Hair Fixing Zone',
+                        'Please Rate Your Experience For The ${appointments.SlotDuration} Slot At The ${appointments.name} Hair Fixing Zone',
                         style: const TextStyle(
                           fontSize: 16,
                           color: CommonUtils.primaryTextColor,
@@ -1460,7 +1574,7 @@ class _OpCardState extends State<OpCard> {
     );
   }
 
-  Future<void> validateRating(MyAppointment_Model appointmens) async {
+  Future<void> validateRating(Appointment appointmens) async {
     //  print('indexinvalidating$index');
     SharedPreferences prefs = await SharedPreferences.getInstance();
     userId = prefs.getInt('userId');
@@ -1497,12 +1611,12 @@ class _OpCardState extends State<OpCard> {
         "Date": appointmens.date,
         "SlotTime": appointmens.slotTime,
         "CustomerName": appointmens.customerName,
-        "PhoneNumber": appointmens.contactNumber,
+        "PhoneNumber": appointmens.phoneNumber,
         "Email": appointmens.email,
         "GenderTypeId": appointmens.genderTypeId,
         "StatusTypeId": 11,
-        "PurposeOfVisitId": appointmens.purposeOfVisitId,
-        "PurposeOfVisit": appointmens.purposeOfVisit,
+        "PurposeOfVisitId": appointmens.purposevisitid,
+        "PurposeOfVisit": appointmens.purposeofvisit,
         "IsActive": true,
         "CreatedDate": dateTimeString,
         "UpdatedDate": dateTimeString,
@@ -1556,7 +1670,7 @@ class _OpCardState extends State<OpCard> {
     }
   }
 
-  void conformation(MyAppointment_Model appointments) {
+  void conformation(Appointment appointments) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -1570,7 +1684,7 @@ class _OpCardState extends State<OpCard> {
             ),
           ),
           content: Text(
-            'Are You Sure You Want To Cancel Your  ${appointments.slotDuration} Slot At The${appointments.branch} Hair Fixing Zone',
+            'Are You Sure You Want To Cancel Your  ${appointments.purposeofvisit} Slot At The${appointments.name} Hair Fixing Zone',
             style: const TextStyle(
               fontSize: 16,
               color: CommonUtils.primaryTextColor,
@@ -1611,7 +1725,7 @@ class _OpCardState extends State<OpCard> {
     );
   }
 
-  Future<void> cancelAppointment(MyAppointment_Model appointmens) async {
+  Future<void> cancelAppointment(Appointment appointmens) async {
     final url = Uri.parse(baseUrl + postApiAppointment);
     print('url==>890: $url');
     DateTime now = DateTime.now();
@@ -1628,12 +1742,12 @@ class _OpCardState extends State<OpCard> {
       "Date": appointmens.date,
       "SlotTime": appointmens.slotTime,
       "CustomerName": appointmens.customerName,
-      "PhoneNumber": appointmens.contactNumber, // Changed from appointments.phoneNumber
+      "PhoneNumber": appointmens.phoneNumber, // Changed from appointments.phoneNumber
       "Email": appointmens.email,
       "GenderTypeId": appointmens.genderTypeId,
       "StatusTypeId": 6,
-      "PurposeOfVisitId": appointmens.purposeOfVisitId,
-      "PurposeOfVisit": appointmens.purposeOfVisit,
+      "PurposeOfVisitId": appointmens.purposevisitid,
+      "PurposeOfVisit": appointmens.purposeofvisit,
       "IsActive": true,
       "CreatedDate": dateTimeString,
       "UpdatedDate": dateTimeString,
@@ -1682,5 +1796,285 @@ class _OpCardState extends State<OpCard> {
       print('Error while sending : $e');
     }
     //  }
+  }
+
+  Future<void> postAppointment(Appointment data, int i, int Amount, int? userId) async {
+    final url = Uri.parse(baseUrl + postApiAppointment);
+    print('url==>890: $url');
+    print('url==>userId: $userId');
+    // final url = Uri.parse('http://182.18.157.215/SaloonApp/API/api/Appointment');
+    DateTime now = DateTime.now();
+
+    // Using toString() method
+    String dateTimeString = now.toString();
+    print('DateTime as String: $dateTimeString');
+
+    // Create the request object
+    final request = {
+      "Id": data.id,
+      "BranchId": data.branchId,
+      "Date": data.date,
+      "SlotTime": data.slotTime,
+      "CustomerName": data.customerName,
+      "PhoneNumber": data.phoneNumber,
+      "Email": data.email,
+      "GenderTypeId": data.genderTypeId,
+      "StatusTypeId": i,
+      "PurposeOfVisitId": data.purposevisitid,
+      "PurposeOfVisit": data.purposeofvisit,
+      "IsActive": true,
+      "CreatedDate": dateTimeString,
+      "UpdatedDate": dateTimeString,
+      "customerId": data.CustomerId,
+      "UpdatedByUserId": widget.userId,
+      "timeofSlot": data.timeofslot,
+      if (i == 18) "price": Amount,
+
+      // "rating": null,
+      // "review": null,
+      // "reviewSubmittedDate": null,
+      // "timeofslot": null,
+      // "customerId":  data.c
+    };
+    print('Accept Or reject object: : ${json.encode(request)}');
+    print('Accept Or reject object: $request');
+    try {
+      // Send the POST request
+      final response = await http.post(
+        url,
+        body: json.encode(request),
+        headers: {
+          'Content-Type': 'application/json', // Set the content type header
+        },
+      );
+
+      // Check the response status code
+      if (response.statusCode == 200) {
+        Map<String, dynamic> data = json.decode(response.body);
+
+        // Extract the necessary information
+        bool isSuccess = data['isSuccess'];
+        if (isSuccess == true) {
+          print('Request sent successfully');
+          // if (i == 6) {
+          //   rejectAppointment(index);
+          // } else if (i == 18) {
+          //   closeAppointment(index);
+          // }
+          // Success case
+          // Handle success scenario here
+        } else {
+          // Failure case
+          // Handle failure scenario here
+          CommonUtils.showCustomToastMessageLong('The request should not be canceled within 60 minutes before slot', context, 0, 2);
+        }
+      } else {
+        //showCustomToastMessageLong(
+        // 'Failed to send the request', context, 1, 2);
+        print('Failed to send the request. Status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error: $e');
+    }
+  }
+
+
+  void closepopup(Appointment data, int i, int? userId) {
+    TextEditingController priceController = TextEditingController();
+    GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Enter Price '),
+          content: Form(
+            key: _formKey,
+            child: Container(
+              width: 345.0,
+           height: 120.0,
+
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Column(
+                    children: [
+                      SizedBox(
+                        height: 10,
+                      ),
+                      // CustomeFormField(
+                      //   label: 'Email/User Name',
+                      //   validator: validateEmail,
+                      //   controller: _emailController,
+                      // ),
+                      Row(
+                        children: [
+                          Text(
+                            'Amount',
+                            style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            ' *',
+                            style: TextStyle(color: Colors.red),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 5.0,
+                      ),
+                      TextFormField(
+                        controller: priceController, // Assigning the controller
+                        keyboardType: TextInputType.number,
+                        // obscureText: true,
+
+                        maxLength: 50,
+                        decoration: InputDecoration(
+                          contentPadding: const EdgeInsets.only(top: 15, bottom: 10, left: 15, right: 15),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                              color: CommonUtils.primaryTextColor,
+                            ),
+                            borderRadius: BorderRadius.circular(6.0),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                              color: CommonUtils.primaryTextColor,
+                            ),
+                            borderRadius: BorderRadius.circular(6.0),
+                          ),
+                          border: const OutlineInputBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(10),
+                            ),
+                          ),
+                          hintText: 'Enter Amount in Rs',
+                          counterText: "",
+                          hintStyle: const TextStyle(color: Colors.grey, fontWeight: FontWeight.w400),
+                        ),
+                        validator: validateAmount,
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+
+                    ],
+                  ),
+                ],
+              ),
+              // child: Row(
+              //   children: [
+              //     Expanded(
+              //       child: Align(
+              //         alignment: Alignment.centerLeft,
+              //         child: Padding(
+              //           padding: EdgeInsets.only(left: 10.0, top: 6.0),
+              //           child: TextFormField(
+              //             controller: priceController,
+              //             keyboardType: TextInputType.number,
+              //             style: TextStyle(
+              //               fontSize: 14,
+              //               fontFamily: 'Calibri',
+              //               color: Color(0xFF042DE3),
+              //               fontWeight: FontWeight.w300,
+              //             ),
+              //             validator: (value) {
+              //               if (value!.isEmpty) {
+              //                 CommonUtils.showCustomToastMessageLong('Please enter a price', context, 1, 4);
+              //                 FocusScope.of(context).unfocus();
+              //               }
+              //               int? price = int.tryParse(value);
+              //               if (price == null) {
+              //                 CommonUtils.showCustomToastMessageLong('Please enter a valid  price', context, 1, 4);
+              //                 FocusScope.of(context).unfocus();
+              //                 // return 'Please enter a valid integer price';
+              //               }
+              //               return null;
+              //             },
+              //             decoration: InputDecoration(
+              //               hintText: ' Price in Rs',
+              //               hintStyle: TextStyle(
+              //                 fontSize: 14,
+              //                 fontFamily: 'Calibri',
+              //                 color: Color(0xFF042DE3),
+              //                 fontWeight: FontWeight.w300,
+              //               ),
+              //               border: InputBorder.none,
+              //             ),
+              //           ),
+              //         ),
+              //       ),
+              //     ),
+              //   ],
+              // ),
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                if (_formKey.currentState!.validate()) {
+                  int? price = int.tryParse(priceController.text);
+                  postAppointment(data, 18, price!,userId);
+                  Navigator.of(context).pop();
+                }
+              },
+              child: Text('Submit'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  String? validateAmount(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please Enter Amount in Rs';
+    }
+    // else if (!RegExp(
+    //     r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+    //     .hasMatch(value)) {
+    //   return 'Please enter a valid email address';
+    // }
+    return null;
+  }
+
+
+}
+
+Future<void> Get_ApprovedDeclinedSlots(Appointment data, int i) async {
+  final url = Uri.parse(baseUrl + GetApprovedDeclinedSlots);
+  print('url==>55555: $url');
+
+  final request = {
+    "Id": data.id,
+    "StatusTypeId": 5,
+    "BranchName": data.name,
+    "Date": data.date,
+    "SlotTime": data.slotTime,
+    "CustomerName": data.customerName,
+    "PhoneNumber": data.phoneNumber,
+    "Email": data.email,
+    "Address": "",
+    "SlotDuration": data.SlotDuration
+  };
+  print('Get_ApprovedSlotsmail: $request');
+  try {
+    // Send the POST request
+    final response = await http.post(
+      url,
+      body: json.encode(request),
+      headers: {
+        'Content-Type': 'application/json', // Set the content type header
+      },
+    );
+
+    // Check the response status code
+    if (response.statusCode == 204) {
+      print('Request sent successfully');
+    } else {
+      print('Failed to send the request. Status code: ${response.statusCode}');
+    }
+  } catch (e) {
+    print('Error: $e');
   }
 }

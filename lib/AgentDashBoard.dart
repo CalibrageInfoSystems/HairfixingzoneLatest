@@ -8,12 +8,15 @@ import 'package:hairfixingzone/BranchesModel.dart';
 import 'package:hairfixingzone/Common/common_styles.dart';
 import 'package:hairfixingzone/Consultation.dart';
 import 'package:hairfixingzone/Dashboard_Screen.dart';
-import 'package:hairfixingzone/api_config.dart';
+import 'package:hairfixingzone/View_Consultation_screen.dart';
 
 import 'package:marquee/marquee.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'AddConsulationscreen.dart';
+import 'Add_Consultation_Screen.dart';
+import 'Branches_screen.dart';
 
 class AgentDashBoard extends StatefulWidget {
   const AgentDashBoard({
@@ -31,10 +34,16 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
   String marqueeText = '';
   int _currentPage = 0;
   Future<List<BranchList>>? apiData;
-
+  String userFullName = '';
+  String email = '';
+  String phonenumber = '';
+  int? AgentId;
+//  String gender ='';
+  String Gender = '';
   @override
   void initState() {
     super.initState();
+    checkLoginAgentdata();
     _fetchItems();
     _startAutoScroll();
     apiData = getBranchsData();
@@ -56,7 +65,31 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
       );
     });
   }
+  void checkLoginAgentdata() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
 
+    setState(() {
+      userFullName = prefs.getString('userFullName') ?? '';
+      email = prefs.getString('email') ?? '';
+      phonenumber = prefs.getString('contactNumber') ?? '';
+      Gender = prefs.getString('gender') ?? '';
+      AgentId = prefs.getInt('userId');
+      // _fullnameController1.text = userFullName;
+      // _emailController3.text = email;
+      // _phonenumberController2.text = phonenumber;
+      // gender = selectedGender;
+      print('AgentId:$AgentId');
+      print('userFullName:$userFullName');
+      print('gender:$Gender');
+      // if (gender == 1) {
+      //   Gender = 'Female';
+      // } else if (gender == 2) {
+      //   Gender = 'Male';
+      // } else if (gender == 3) {
+      //   Gender = 'Other';
+      // }
+    });
+  }
   void _fetchItems() async {
     final response = await http.get(
         Uri.parse('http://182.18.157.215/SaloonApp/API/GetBanner?Id=null'));
@@ -177,7 +210,7 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
       height: 80,
-      child: const Column(
+      child:  Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -186,7 +219,7 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
             style: CommonStyles.txSty_16w_fb,
           ),
           Text(
-            'AgentName',
+            '$userFullName',
             style: CommonStyles.txSty_18w_fb,
           ),
         ],
@@ -339,8 +372,10 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
       children: [
         GestureDetector(
           onTap: () {
-            // Navigator.of(context, rootNavigator: true)
-            //     .pushNamed("/ProfileMy");
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => Branches_screen(userId: AgentId!)),
+            );
           },
           child: Column(
             children: [
@@ -349,27 +384,36 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
                 width: MediaQuery.of(context).size.width / 7,
                 //   height: 60,
                 decoration: const BoxDecoration(
-                  color: Color(0xFF295f5a),
+                  color: Color(0xFFe656ae),
+                  // color: Color(0xFF295f5a),
                   shape: BoxShape.circle,
                 ),
                 child: SvgPicture.asset(
-                  'assets/my_profile_icon.svg',
+                  'assets/calendar-lines.svg',
                   color: CommonStyles.whiteColor,
                 ),
               ),
               const SizedBox(height: 5),
               const Text(
-                'Check Appointments',
+                'Check \n Appointments',
                 style: CommonStyles.txSty_14p_f5,
               ),
             ],
           ),
         ),
         GestureDetector(
+          // onTap: () {
+          //   print('_______test_______');
+          //   Navigator.of(context, rootNavigator: true)
+          //       .pushNamed("/ViewConsultation");
+          // },
           onTap: () {
-            print('_______test_______');
-            Navigator.of(context, rootNavigator: true)
-                .pushNamed("/ViewConsultation");
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => Add_Consulation_screen( agentId: AgentId!,)),
+            );
+            // Navigator.of(context, rootNavigator: true)
+            //     .pushNamed("/Products");
           },
           child: Column(
             children: [
@@ -377,17 +421,17 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
                 width: MediaQuery.of(context).size.width / 7,
                 padding: const EdgeInsets.all(15),
                 decoration: const BoxDecoration(
-                  color: Color(0xFFe656ae),
+                  color: Color(0xFFe44561),
                   shape: BoxShape.circle,
                 ),
                 child: SvgPicture.asset(
-                  'assets/my_bookings_icon.svg',
+                  'assets/calendar-day.svg',
                   color: CommonStyles.whiteColor,
                 ),
               ),
               const SizedBox(height: 5),
               const Text(
-                'View Consultation',
+                'Add Consultation',
                 style: CommonStyles.txSty_14p_f5,
               ),
             ],
@@ -397,7 +441,7 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
           onTap: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => AddConsulationscreen()),
+              MaterialPageRoute(builder: (context) => View_Consultation_screen( agentId: AgentId!,)),
             );
             // Navigator.of(context, rootNavigator: true)
             //     .pushNamed("/Products");
@@ -409,17 +453,18 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
                 //height: 60,
                 padding: const EdgeInsets.all(15),
                 decoration: const BoxDecoration(
-                  color: Color(0xFFe44561),
+                  color: Color(0xFF662d91),
                   shape: BoxShape.circle,
                 ),
                 child: SvgPicture.asset(
-                  'assets/products_icon.svg',
+                  'assets/overview.svg',
                   color: CommonStyles.whiteColor,
                 ),
               ),
               const SizedBox(height: 5),
               const Text(
-                'Add Consultation',
+
+                'View Consultation',
                 style: CommonStyles.txSty_14p_f5,
               ),
             ],

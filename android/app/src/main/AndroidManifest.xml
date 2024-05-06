@@ -26,7 +26,7 @@
             android:allowBackup="false"
             android:fullBackupOnly="false"
             android:name="${applicationName}"
-            android:icon="@drawable/hair_fixing_2">
+            android:icon="@drawable/hair_fixing_app_logo">
             <activity
                 android:name=".MainActivity"
                 android:exported="true"

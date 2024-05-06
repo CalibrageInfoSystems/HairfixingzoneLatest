@@ -21,7 +21,7 @@ class Appointment {
   final String? review;
   final double? rating;
   final int? CustomerId;
-  final String timeofslot;
+  final String? timeofslot;
 
   Appointment(
       {required this.id,

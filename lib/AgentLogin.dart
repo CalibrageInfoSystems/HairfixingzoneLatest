@@ -234,7 +234,7 @@ class _AgentLoginState extends State<AgentLogin> {
                                       if (_formKey.currentState!.validate()) {
                                         if (validateUserEmail &&
                                             validateUserPassword) {
-                                          loginUser();
+                                          _handleLogin();
                                         }
                                       }
                                     },
@@ -345,66 +345,6 @@ class _AgentLoginState extends State<AgentLogin> {
     return null;
   }
 
-  Future<void> loginUser() async {
-    String? email = _emailController.text;
-    String? password = _passwordController.text;
-
-    final String apiUrl = baseUrl + ValidateUser;
-    print('apiData: $apiUrl');
-    Map<String, String> requestBody = {
-      'userName': email,
-      'password': password,
-      "deviceTokens": "",
-    };
-
-    print('apiData: ${jsonEncode(requestBody)}');
-
-    final response = await http.post(
-      Uri.parse(apiUrl),
-      body: requestBody,
-    );
-
-    if (response.statusCode == 200) {
-      Map<String, dynamic> data = json.decode(response.body);
-
-      bool isSuccess = data['isSuccess'];
-      String statusMessage = data['statusMessage'];
-
-      print('Is Success: $isSuccess');
-      print('Status Message: $statusMessage');
-
-      if (isSuccess) {
-        if (data['listResult'] != null) {
-          List<dynamic> listResult = data['listResult'];
-          List<AgentBranchesModel> result =
-          listResult.map((e) => AgentBranchesModel.fromJson(e)).toList();
-          Map<String, dynamic> user = listResult.first;
-          print('User ID: ${user['id']}');
-          print('Full Name: ${user['fullName']}');
-          print('Role ID: ${user['roleID']}');
-          await saveUserDataToSharedPreferences(user);
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const AgentHome()),
-          );
-          // if (user['roleID'] == 2) {
-          // } else {}
-        } else {
-          print('Api got failed');
-        }
-      } else {
-        print('apiData: else executes');
-        invalidCredentials = data["statusMessage"];
-        endUserMessageFromApi(10, data["statusMessage"]);
-      }
-    } else {
-      print(
-          'apiData: else Failed to connect to the API. Status code: ${response.statusCode}');
-
-      print(
-          'Failed to connect to the API. Status code: ${response.statusCode}');
-    }
-  }
 
   Future<void> _handleLogin() async {
     String username = _emailController.text;
@@ -470,10 +410,17 @@ class _AgentLoginState extends State<AgentLogin> {
         if (responseData["isSuccess"]) {
           List<dynamic>? listResult = responseData["listResult"];
 
+          Map<String, dynamic> user =  listResult![0];
+          print('User ID: ${user['id']}');
+          print('Full Name: ${user['firstName']}');
+          print('Role ID: ${user['roleID']}');
+          await saveUserDataToSharedPreferences(user);
           if (listResult != null &&
               listResult.isNotEmpty &&
               listResult[0]['roleID'] == 3) {
             agentId = listResult[0]["id"];
+
+
 
             final Map<String, dynamic> agentSlotsDetailsMap = {
               "AgentSlotsdetails": [],
@@ -540,7 +487,7 @@ class _AgentLoginState extends State<AgentLogin> {
         headers: {"Content-Type": "application/json"},
         body: jsonEncode(agentSlotsDetailsMap),
       );
-
+      print('requestObject==483${jsonEncode(agentSlotsDetailsMap)}');
       if (addSlotResponse.statusCode == 200) {
         final Map<String, dynamic> responseJson =
         jsonDecode(addSlotResponse.body);
@@ -556,11 +503,13 @@ class _AgentLoginState extends State<AgentLogin> {
           int userId = agentId; // Replace with the actual user ID
           print('userId==$userId');
           prefs.setInt('userId', userId); // Save the user ID
+
           Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => const AgentHome(),
+                builder: (context) =>  AgentHome(userId: agentId),
               ));
+
         } else {
           print("Error: ${responseJson["statusMessage"]}");
           // setState(() {
@@ -576,7 +525,7 @@ class _AgentLoginState extends State<AgentLogin> {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => Branches_screen(userId: agentId),
+                  builder: (context) => AgentHome(userId: agentId),
                 ));
           } else {
             // setState(() {

@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:hairfixingzone/startingscreen.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'AgentHome.dart';
 import 'Branches_screen.dart';
 import 'HomeScreen.dart';
 import 'UserLoginScreen.dart';
@@ -145,7 +146,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
           // For example, you might have a different screen for users with role ID 2
           Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => Branches_screen(userId: userId)));
+              MaterialPageRoute(builder: (context) => AgentHome(userId: userId)));
 
         }
       } else {

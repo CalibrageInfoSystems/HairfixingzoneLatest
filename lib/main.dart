@@ -15,6 +15,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart';
 
+import 'AgentAppointmentsProvider.dart';
 import 'GetAppointments.dart';
 import 'HomeScreen.dart';
 import 'MyAppointment_Model.dart';
@@ -38,6 +39,7 @@ void main() async {
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (context) => MyProductProvider()),
     ChangeNotifierProvider(create: (context) => MyAppointmentsProvider()),
+    ChangeNotifierProvider(create: (context) => AgentAppointmentsProvider()),
   ], child: MyApp()));
 }
 

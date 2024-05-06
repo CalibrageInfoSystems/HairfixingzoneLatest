@@ -150,6 +150,9 @@ flutter:
     - assets/calendar_icon.svg
     - assets/mobile-notch.svg
     - assets/pen-circle.svg
+    - assets/calendar-day.svg
+    - assets/calendar-lines.svg
+    - assets/overview.svg
 
 
 
