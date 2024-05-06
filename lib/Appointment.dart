@@ -7,8 +7,8 @@ class Appointment {
   final String customerName;
   final String phoneNumber;
   final String email;
-  final int genderTypeId;
-  final String gender;
+  final int? genderTypeId;
+  final String? gender;
   final int statusTypeId;
   final String status;
   final int purposevisitid;
@@ -20,31 +20,33 @@ class Appointment {
   final String SlotDuration;
   final String? review;
   final double? rating;
+  final int? CustomerId;
+  final String timeofslot;
 
-  Appointment({
-    required this.id,
-    required this.branchId,
-    required this.name,
-    required this.date,
-    required this.slotTime,
-    required this.customerName,
-    required this.phoneNumber,
-    required this.email,
-    required this.genderTypeId,
-    required this.gender,
-    required this.statusTypeId,
-    required this.status,
-    required this.purposevisitid,
-    required this.purposeofvisit,
-    required this.isActive,
-    this.isAccepted = false,
-    this.isRejected =false,
-    this.isClosed =false,
-    required this.SlotDuration,
-    required this.review,
-    required this.rating,
-
-  });
+  Appointment(
+      {required this.id,
+      required this.branchId,
+      required this.name,
+      required this.date,
+      required this.slotTime,
+      required this.customerName,
+      required this.phoneNumber,
+      required this.email,
+      required this.genderTypeId,
+      required this.gender,
+      required this.statusTypeId,
+      required this.status,
+      required this.purposevisitid,
+      required this.purposeofvisit,
+      required this.isActive,
+      this.isAccepted = false,
+      this.isRejected = false,
+      this.isClosed = false,
+      required this.SlotDuration,
+      required this.review,
+      required this.rating,
+      required this.timeofslot,
+      required this.CustomerId});
 
   factory Appointment.fromJson(Map<String, dynamic> json) {
     return Appointment(
@@ -66,8 +68,8 @@ class Appointment {
       SlotDuration: json['slotDuration'],
       review: json['review'],
       rating: json['rating'] != null ? json['rating'].toDouble() : null,
-
+      CustomerId: json['customerId'],
+      timeofslot: json['timeofSlot'],
     );
   }
 }
-

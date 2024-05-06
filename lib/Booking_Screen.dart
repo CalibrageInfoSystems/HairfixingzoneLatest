@@ -134,8 +134,10 @@ class _BookingScreenState extends State<Bookingscreen> {
   String? contactNumber;
   bool showConfirmationDialog = false;
   int? Id;
-  String? genderbyid;
+  //String? genderbyid;
   bool ispurposeselected = false;
+  String? _selectedTimeSlot24;
+  int? genderttypeid;
   @override
   void dispose() {
     _dateController.dispose();
@@ -149,6 +151,7 @@ class _BookingScreenState extends State<Bookingscreen> {
     getUserDataFromSharedPreferences();
     //fetchdropdown();
     BranchId = widget.branchId;
+    print('BranchId:$BranchId');
     dropValue = 'Select';
     _dateController.text = DateFormat('dd-MM-yyyy').format(DateTime.now());
     selecteddate = DateFormat('yyyy-MM-dd').format(DateTime.now());
@@ -185,11 +188,11 @@ class _BookingScreenState extends State<Bookingscreen> {
 
     Id = prefs.getInt('userId') ?? 0;
     userFullName = prefs.getString('userFullName') ?? '';
-
+    genderttypeid = prefs.getInt('genderTypeId');
     phonenumber = prefs.getString('contactNumber') ?? '';
     email = prefs.getString('email') ?? '';
     contactNumber = prefs.getString('contactNumber') ?? '';
-    genderbyid = prefs.getString('gender');
+    // genderbyid = prefs.getString('gender');
   }
 
   Future<Holiday> fetchHolidayListByBranchId() async {
@@ -203,10 +206,7 @@ class _BookingScreenState extends State<Bookingscreen> {
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
-        body: jsonEncode(<String, dynamic>{
-          'id': widget.branchId,
-          'isActive': true, // Add isActive filter
-        }),
+        body: jsonEncode(<String, dynamic>{'id': widget.branchId, 'isActive': true, "fromdate": null, "todate": null}),
       );
 
       if (response.statusCode == 200) {
@@ -552,6 +552,8 @@ class _BookingScreenState extends State<Bookingscreen> {
                                                     slotselection = true;
                                                     print('===123==$timeSlotParts[0]');
                                                     print('===12===$timeSlotParts[1]');
+                                                    _selectedTimeSlot24 = DateFormat('HH:mm').format(DateFormat('h:mm a').parse(_selectedTimeSlot));
+                                                    print('_selectedTimeSlot24 $_selectedTimeSlot24');
                                                     print('==234==$_selectedTimeSlot');
                                                     print('===567==$_selectedSlot');
                                                     print('==900==$AvailableSlots');
@@ -783,7 +785,7 @@ class _BookingScreenState extends State<Bookingscreen> {
         "customerName": userFullName,
         "phoneNumber": phonenumber,
         "email": email,
-        "genderTypeId": genderbyid, //Sharedprefs
+        "genderTypeId": genderttypeid, //Sharedprefs
         "statusTypeId": 4,
         "purposeOfVisitId": selectedValue,
         "isActive": true,
@@ -793,7 +795,7 @@ class _BookingScreenState extends State<Bookingscreen> {
         "rating": null,
         "review": null,
         "reviewSubmittedDate": null,
-        "timeofslot": null,
+        "timeofslot": '$_selectedTimeSlot24',
         "customerId": Id
       };
 

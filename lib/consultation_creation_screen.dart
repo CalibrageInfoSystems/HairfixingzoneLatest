@@ -108,26 +108,7 @@ class _ConsulationCreationScreenState extends State<ConsulationCreationScreen> {
         setState(() {
           dropdownItems = data['listResult'];
         });
-        // List<BranchModel> branchList = [];
-        // for (var item in data['listResult']) {
-        //   branchList.add(BranchModel(
-        //     id: item['id'],
-        //     name: item['name'],
-        //     imageName: item['imageName'],
-        //     address: item['address'],
-        //     startTime: item['startTime'],
-        //     closeTime: item['closeTime'],
-        //     room: item['room'],
-        //     mobileNumber: item['mobileNumber'],
-        //     isActive: item['isActive'],
-        //   ));
-        // }
-        //
-        // setState(() {
-        //   brancheslist = branchList;
-        //
-        //   // _isLoading = false;
-        // });
+
         return; // Exit the function after successful response
       } else {
         print('Request failed with status: ${response.statusCode}');
@@ -187,17 +168,15 @@ class _ConsulationCreationScreenState extends State<ConsulationCreationScreen> {
                                   fontWeight: FontWeight.w300,
                                 ),
                                 decoration: const InputDecoration(
-                                  hintText: 'Customer Name',
-                                  hintStyle: TextStyle(
-                                    fontFamily: 'Calibri',
-                                    fontSize: 14,
-                                    color: Color(0xFFFB4110),
-                                    fontWeight: FontWeight.w300,
-                                  ),
-                                  border: InputBorder.none,
-                               counterText: ""
-                                )
-                                ,
+                                    hintText: 'Customer Name',
+                                    hintStyle: TextStyle(
+                                      fontFamily: 'Calibri',
+                                      fontSize: 14,
+                                      color: Color(0xFFFB4110),
+                                      fontWeight: FontWeight.w300,
+                                    ),
+                                    border: InputBorder.none,
+                                    counterText: ""),
                               ),
                             ),
                           ),
@@ -311,7 +290,6 @@ class _ConsulationCreationScreenState extends State<ConsulationCreationScreen> {
                                     fontSize: 14,
                                     color: Color(0xFFFB4110),
                                     fontWeight: FontWeight.w300,
-
                                   ),
                                   counterText: "",
                                   border: InputBorder.none,
@@ -475,9 +453,7 @@ class _ConsulationCreationScreenState extends State<ConsulationCreationScreen> {
                 child: SizedBox(
                   child: Center(
                     child: GestureDetector(
-                      onTap: () => {
-                        validatedata()
-                      },
+                      onTap: () => {validatedata()},
                       child: Container(
                         width: screenWidth * 0.9,
                         height: 40.0,

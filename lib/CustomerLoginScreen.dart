@@ -3,6 +3,7 @@ import 'package:hairfixingzone/CommonUtils.dart';
 import 'package:loading_progress/loading_progress.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'AddConsulationscreen.dart';
 import 'Common/common_styles.dart';
 import 'Common/custom_button.dart';
 import 'Common/custome_form_field.dart';
@@ -234,11 +235,14 @@ class _LoginPageState extends State<CustomerLoginScreen> {
                                 children: [
                                   GestureDetector(
                                     onTap: () {
+                                      // Navigator.push(
+                                      //   context,
+                                      //   MaterialPageRoute(builder: (context) => ForgotPasswordscreen()),
+                                      // );
                                       Navigator.push(
                                         context,
-                                        MaterialPageRoute(builder: (context) => ForgotPasswordscreen()),
+                                        MaterialPageRoute(builder: (context) => AddConsulationscreen()),
                                       );
-
                                       // Navigator.push(
                                       //   context,
                                       //   MaterialPageRoute(
@@ -389,7 +393,7 @@ class _LoginPageState extends State<CustomerLoginScreen> {
             List<dynamic> listResult = data['listResult'];
             Map<String, dynamic> user = listResult.first;
             print('User ID: ${user['id']}');
-            print('Full Name: ${user['fullName']}');
+            print('Full Name: ${user['firstName']}');
             print('Role ID: ${user['roleID']}');
             await saveUserDataToSharedPreferences(user);
             // Extract other user information as needed
@@ -447,6 +451,7 @@ class _LoginPageState extends State<CustomerLoginScreen> {
     await prefs.setString('gender', userData['gender']);
     await prefs.setString('dateofbirth', userData['dateofbirth']);
     await prefs.setString('password', userData['password']);
+    await prefs.setInt('genderTypeId', userData['genderTypeId']);
     // Save other user data as needed
   }
 

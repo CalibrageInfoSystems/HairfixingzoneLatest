@@ -801,6 +801,8 @@ class _appointmentlist extends State<appointmentlist> {
                                                             SlotDuration: appointment.SlotDuration,
                                                             review: '',
                                                             rating: null,
+                                                            CustomerId: appointment.CustomerId,
+                                                            timeofslot: appointment.timeofslot,
                                                           );
 
                                                           print('Button 1 pressed for ${appointment.customerName}');
@@ -955,6 +957,8 @@ class _appointmentlist extends State<appointmentlist> {
                                                                 SlotDuration: appointment.SlotDuration,
                                                                 review: '',
                                                                 rating: null,
+                                                                CustomerId: appointment.CustomerId,
+                                                                timeofslot: appointment.timeofslot,
                                                               );
 
                                                               print('Button 1 pressed for ${appointment.customerName}');
@@ -1016,6 +1020,8 @@ class _appointmentlist extends State<appointmentlist> {
                                                               SlotDuration: appointment.SlotDuration,
                                                               review: '',
                                                               rating: null,
+                                                              CustomerId: appointment.CustomerId,
+                                                              timeofslot: appointment.timeofslot,
                                                             );
 
                                                             print('Button 1 pressed for ${appointment.customerName}');
@@ -1298,7 +1304,9 @@ class _appointmentlist extends State<appointmentlist> {
       "IsActive": true,
       "CreatedDate": dateTimeString,
       "UpdatedDate": dateTimeString,
+      "customerId": data.CustomerId,
       "UpdatedByUserId": widget.userId,
+      "timeofSlot": data.timeofslot,
       if (i == 18) "price": Amount,
 
       // "rating": null,
@@ -1337,7 +1345,7 @@ class _appointmentlist extends State<appointmentlist> {
         } else {
           // Failure case
           // Handle failure scenario here
-          CommonUtils.showCustomToastMessageLong('The request should not be canceled within 30 minutes before slot', context, 0, 2);
+          CommonUtils.showCustomToastMessageLong('The request should not be canceled within 60 minutes before slot', context, 0, 2);
         }
       } else {
         //showCustomToastMessageLong(
