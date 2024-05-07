@@ -241,6 +241,8 @@ class _BookingScreenState extends State<SelectCity_Branch_screen> {
                                             branchname: branchnames.branchName!,
                                             branchaddress: branchnames.address!,
                                             phonenumber: branchnames.PhoneNumber!,
+                                            branchImage: branchnames.imageName!,
+
                                           ),
                                         ),
                                       );

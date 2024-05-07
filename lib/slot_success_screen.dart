@@ -1,4 +1,5 @@
 import 'package:dotted_border/dotted_border.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hairfixingzone/Common/common_styles.dart';
@@ -13,19 +14,23 @@ class SlotSuccessScreen extends StatefulWidget {
   final String slotbranchname;
   final String slotbrnach_address;
   final String phonenumber;
+  final String branchImage;
 
-  SlotSuccessScreen(
-      {required this.slotdate,
-      required this.slottime,
-      required this.Purpose,
-      required this.slotbranchname,
-      required this.slotbrnach_address,
-      required this.phonenumber});
+  const SlotSuccessScreen(
+      {super.key,
+        required this.slotdate,
+        required this.slottime,
+        required this.Purpose,
+        required this.slotbranchname,
+        required this.slotbrnach_address,
+        required this.phonenumber,
+        required this.branchImage});
   @override
   State<SlotSuccessScreen> createState() => _SlotSuccessScreenState();
 }
 
-class _SlotSuccessScreenState extends State<SlotSuccessScreen> with TickerProviderStateMixin {
+class _SlotSuccessScreenState extends State<SlotSuccessScreen>
+    with TickerProviderStateMixin {
   late AnimationController _controller;
   late AnimationController _controller2;
   static const textStyle = TextStyle(
@@ -77,7 +82,10 @@ class _SlotSuccessScreenState extends State<SlotSuccessScreen> with TickerProvid
             backgroundColor: const Color(0xFFf3e3ff),
             title: const Text(
               'Booked Successfully',
-              style: TextStyle(color: Color(0xFF0f75bc), fontSize: 16.0, fontWeight: FontWeight.w600),
+              style: TextStyle(
+                  color: Color(0xFF0f75bc),
+                  fontSize: 16.0,
+                  fontWeight: FontWeight.w600),
             ),
             centerTitle: true,
             automaticallyImplyLeading: false,
@@ -111,7 +119,8 @@ class _SlotSuccessScreenState extends State<SlotSuccessScreen> with TickerProvid
                             children: [
                               Center(
                                 child: RotationTransition(
-                                  turns: Tween(begin: 0.0, end: 1.0).animate(_controller),
+                                  turns: Tween(begin: 0.0, end: 1.0)
+                                      .animate(_controller),
                                   child: DottedBorder(
                                     borderType: BorderType.Circle,
                                     strokeWidth: 3,
@@ -129,7 +138,8 @@ class _SlotSuccessScreenState extends State<SlotSuccessScreen> with TickerProvid
                                 ),
                               ),
                               RotationTransition(
-                                turns: Tween(begin: 0.0, end: 1.0).animate(_controller2),
+                                turns: Tween(begin: 0.0, end: 1.0)
+                                    .animate(_controller2),
                                 child: SvgPicture.asset(
                                   'assets/check.svg',
                                   width: 70,
@@ -156,7 +166,7 @@ class _SlotSuccessScreenState extends State<SlotSuccessScreen> with TickerProvid
                           ),
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 20,
                       ),
                       Column(
@@ -164,20 +174,20 @@ class _SlotSuccessScreenState extends State<SlotSuccessScreen> with TickerProvid
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text(
+                              const Text(
                                 'On ',
                                 style: textStyle,
                               ),
                               Text(
-                                '${widget.slotdate}',
+                                widget.slotdate,
                                 style: CommonStyles.txSty_20b_fb,
                               ),
-                              Text(
+                              const Text(
                                 ' by ',
                                 style: textStyle,
                               ),
                               Text(
-                                '${widget.slottime}',
+                                widget.slottime,
                                 style: CommonStyles.txSty_20b_fb,
                               ),
                             ],
@@ -185,23 +195,23 @@ class _SlotSuccessScreenState extends State<SlotSuccessScreen> with TickerProvid
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text(
+                              const Text(
                                 'for ',
                                 style: textStyle,
                               ),
                               Text(
-                                '${widget.Purpose}',
+                                widget.Purpose,
                                 style: CommonStyles.txSty_20b_fb,
                               ),
-                              Text(
+                              const Text(
                                 ' at ',
                                 style: textStyle,
                               ),
                               Text(
-                                '${widget.slotbranchname}',
+                                widget.slotbranchname,
                                 style: CommonStyles.txSty_20b_fb,
                               ),
-                              Text(
+                              const Text(
                                 ' branch',
                                 style: textStyle,
                               ),
@@ -224,37 +234,31 @@ class _SlotSuccessScreenState extends State<SlotSuccessScreen> with TickerProvid
                         elevation: 4,
                         child: Container(
                           padding: const EdgeInsets.all(10),
-                          // decoration: BoxDecoration(
-                          //   color: Colors.white,
-                          //   borderRadius: BorderRadius.circular(10),
-                          // ),
                           decoration: BoxDecoration(
                             color: Colors.white,
-                            borderRadius: BorderRadius.circular(10.0),
-                            // borderRadius: BorderRadius.circular(30), //border corner radius
-                            boxShadow: [
-                              BoxShadow(
-                                color: Color(0xFF960efd).withOpacity(0.2), //color of shadow
-                                spreadRadius: 2, //spread radius
-                                blurRadius: 4, // blur radius
-                                offset: Offset(0, 2), // changes position of shadow
-                              ),
-                            ],
+                            borderRadius: BorderRadius.circular(10),
                           ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Container(
-                                    color: Colors.red,
-                                    child: Image.asset(
-                                      'assets/hairfixing_logo.png',
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(10),
+                                    child: Image.network(
+                                      widget.branchImage,
+                                      fit: BoxFit.cover,
                                       width: 100,
                                       height: 60,
                                     ),
+                                    // Image.asset(
+                                    //   'assets/hairfixing_logo.png',
+                                    //   width: 100,
+                                    //   height: 60,
+                                    // ),
                                   ),
                                   Row(
                                     children: [
@@ -266,7 +270,8 @@ class _SlotSuccessScreenState extends State<SlotSuccessScreen> with TickerProvid
                                           padding: const EdgeInsets.all(10),
                                           decoration: BoxDecoration(
                                               border: Border.all(
-                                                color: CommonStyles.statusGreenText,
+                                                color: CommonStyles
+                                                    .statusGreenText,
                                               ),
                                               shape: BoxShape.circle),
                                           child: SvgPicture.asset(
@@ -282,7 +287,11 @@ class _SlotSuccessScreenState extends State<SlotSuccessScreen> with TickerProvid
                                       ),
                                       Container(
                                         padding: const EdgeInsets.all(10),
-                                        decoration: BoxDecoration(border: Border.all(color: CommonStyles.primaryTextColor), shape: BoxShape.circle),
+                                        decoration: BoxDecoration(
+                                            border: Border.all(
+                                                color: CommonStyles
+                                                    .primaryTextColor),
+                                            shape: BoxShape.circle),
                                         child: SvgPicture.asset(
                                           'assets/map_marker.svg',
                                           width: 30,
@@ -294,15 +303,15 @@ class _SlotSuccessScreenState extends State<SlotSuccessScreen> with TickerProvid
                                   )
                                 ],
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 10,
                               ),
                               Text(
-                                '${widget.slotbranchname}',
+                                widget.slotbranchname,
                                 style: CommonStyles.txSty_20blu_fb,
                               ),
                               Text(
-                                '${widget.slotbrnach_address}',
+                                widget.slotbrnach_address,
                                 maxLines: 3,
                                 overflow: TextOverflow.ellipsis,
                               ),
@@ -319,7 +328,8 @@ class _SlotSuccessScreenState extends State<SlotSuccessScreen> with TickerProvid
                                 // sharedprefsdelete();
                                 Navigator.push(
                                   context,
-                                  MaterialPageRoute(builder: (context) => HomeScreen()),
+                                  MaterialPageRoute(
+                                      builder: (context) => const HomeScreen()),
                                 );
                               },
                               child: Container(
@@ -328,7 +338,8 @@ class _SlotSuccessScreenState extends State<SlotSuccessScreen> with TickerProvid
                                   borderRadius: BorderRadius.circular(5),
                                   border: Border.all(color: primaryTextColor),
                                 ),
-                                child: const Center(child: Text('Back to Home')),
+                                child:
+                                const Center(child: Text('Back to Home')),
                               ),
                             ),
                           ),
@@ -339,7 +350,8 @@ class _SlotSuccessScreenState extends State<SlotSuccessScreen> with TickerProvid
                             child: InkWell(
                               onTap: () {
                                 print('My Appointments btn clicked');
-                                Navigator.of(context, rootNavigator: true).pushNamed("/Mybookings");
+                                Navigator.of(context, rootNavigator: true)
+                                    .pushNamed("/Mybookings");
                               },
                               child: Container(
                                 padding: const EdgeInsets.all(5),
