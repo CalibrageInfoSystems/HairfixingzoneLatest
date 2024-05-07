@@ -2170,12 +2170,13 @@ class _OpCardState extends State<OpCard> {
                 buttonText: 'Done',
                 color: CommonUtils.primaryTextColor,
                 onPressed: () {
-                  Navigator.of(context).pop();
-                  // Navigator.of(context).push(
-                  //   MaterialPageRoute(
-                  //     builder: (context) => const CustomerLoginScreen(),
-                  //   ),
-                  // );
+                Navigator.of(context).pop();
+
+               //    Navigator.of(context).push(
+               //      MaterialPageRoute(
+               //        builder: (context) =>  Agentappointmentlist(),
+               //      ),
+               //    );
                 },
               ),
             ],

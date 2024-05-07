@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hairfixingzone/CustomerLoginScreen.dart';
 import 'package:hairfixingzone/MyAppointment_Model.dart';
+import 'package:hairfixingzone/slot_success_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:intl/intl.dart';
@@ -390,12 +391,24 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
                             Container(
                                 padding: EdgeInsets.all(10),
                                 // width: MediaQuery.of(context).size.width / 4,
-                                child: Image.asset(
-                                  'assets/top_image.png',
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(10.0),
+                                child: Image.network(
+                                  widget.data.imagename.isNotEmpty ? widget.data.imagename : 'https://example.com/placeholder-image.jpg',
                                   fit: BoxFit.cover,
                                   height: MediaQuery.of(context).size.height / 4 / 2,
-                                  width: MediaQuery.of(context).size.width / 2.8,
-                                )),
+                                  width: MediaQuery.of(context).size.width / 3.2,
+                                  errorBuilder: (context, error, stackTrace) {
+                                    return Image.asset(
+                                      'assets/hairfixing_logo.png', // Path to your PNG placeholder image
+                                      fit: BoxFit.cover,
+                                      height: MediaQuery.of(context).size.height / 4 / 2,
+                                      width: MediaQuery.of(context).size.width / 3.2,
+                                    );
+                                  },
+                                ),
+                              ),
+                            ),
                             Container(
                               width: MediaQuery.of(context).size.width / 2.2,
                               padding: EdgeInsets.only(top: 15),
@@ -718,7 +731,8 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
       print('DateTime as String: $dateTimeString');
       print('DateTime as String: $selecteddate');
       print('_selectedTimeSlot892 $_selectedTimeSlot');
-
+      String slotdate = DateFormat('dd MMM yyyy').format(_selectedDate!);
+      print('slotdate $slotdate');
       // print('screenFrom1213: ${widget.screenFrom}');
       // print('appointmentId1214: ${widget.appointmentId}');
 
@@ -770,8 +784,21 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
           bool isSuccess = data['isSuccess'];
           if (isSuccess == true) {
             print('Request sent successfully');
-            showCustomToastMessageLong('Slot booked successfully', context, 0, 2);
-            Navigator.pop(context);
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(
+                  builder: (context) => SlotSuccessScreen(
+                    slotdate: slotdate,
+                    slottime: _selectedTimeSlot,
+                    Purpose: '$selectedName',
+                    slotbranchname:widget.data.branch,
+                    slotbrnach_address: widget.data.address!,
+                    phonenumber: widget.data.contactNumber,
+                    branchImage:widget.data.imagename,
+                    // phonenumber: null,
+                  )),
+            );
+            // showCustomToastMessageLong('Slot booked successfully', context, 0, 2);
+            // Navigator.pop(context);
             // Success case
             // Handle success scenario here
           } else {
