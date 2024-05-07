@@ -260,7 +260,8 @@ class _SlotSuccessScreenState extends State<SlotSuccessScreen> with TickerProvid
                                     children: [
                                       GestureDetector(
                                         onTap: () {
-                                          _makePhoneCall(widget.phonenumber);
+                                          String phoneNumber = widget.phonenumber;
+                                          launch("tel:$phoneNumber");
                                         },
                                         child: Container(
                                           padding: const EdgeInsets.all(10),

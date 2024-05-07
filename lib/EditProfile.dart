@@ -46,7 +46,7 @@ class EditProfile_screenState extends State<EditProfile> {
   String? _mobileNumberErrorMsg;
   bool _altNumberError = false;
   String? _altNumberErrorMsg;
-
+  String? selectedGender;
   bool isFullNameValidate = false;
   bool isDobValidate = false;
   bool isGenderValidate = false;
@@ -66,6 +66,7 @@ class EditProfile_screenState extends State<EditProfile> {
   String? password;
   String? fullname;
   DateTime selectedDate = DateTime.now();
+  late SharedPreferences prefs;
   @override
   void initState() {
     super.initState();
@@ -79,7 +80,7 @@ class EditProfile_screenState extends State<EditProfile> {
         print('The Internet Is Connected');
         fetchRadioButtonOptions();
         setState(() async {
-          SharedPreferences prefs = await SharedPreferences.getInstance();
+          prefs = await SharedPreferences.getInstance();
           Id = prefs.getInt('userId') ?? 0;
           fullname = prefs.getString('userFullName');
           phonenumber = prefs.getString('contactNumber');
@@ -93,11 +94,16 @@ class EditProfile_screenState extends State<EditProfile> {
           password = prefs.getString('password');
           print('fullname$fullname');
           print('usernameId:$Id');
+          print('gender:$gender');
           formattedDate = DateFormat('dd-MM-yyyy').format(date);
           fullNameController.text = '$fullname';
           dobController.text = '$formattedDate';
           emailController.text = '$email';
           mobileNumberController.text = '$contactNumber';
+          //  gender = '$selectedName';
+          selectedGender = gender!;
+          selectedTypeCdId = dropdownItems.indexWhere((item) => item['desc'] == selectedGender);
+          isGenderSelected = false;
         });
 
         // fetchMyAppointments(userId);
@@ -348,48 +354,52 @@ class EditProfile_screenState extends State<EditProfile> {
                               child: DropdownButtonHideUnderline(
                                 child: ButtonTheme(
                                   alignedDropdown: true,
-                                  child: DropdownButton<int>(
-                                      value: selectedTypeCdId,
-                                      iconSize: 30,
-                                      icon: null,
-                                      style: const TextStyle(
-                                        color: Colors.black,
-                                      ),
-                                      onChanged: (value) {
-                                        setState(() {
-                                          selectedTypeCdId = value!;
-                                          if (selectedTypeCdId != -1) {
-                                            selectedValue = dropdownItems[selectedTypeCdId]['typeCdId'];
-                                            selectedName = dropdownItems[selectedTypeCdId]['desc'];
-
-                                            print("selectedValue:$selectedValue");
-                                            print("selectedName:$selectedName");
-                                          } else {
-                                            print("==========");
-                                            print(selectedValue);
-                                            print(selectedName);
-                                          }
-                                          // isDropdownValid = selectedTypeCdId != -1;
-                                          isGenderSelected = false;
-                                        });
-                                      },
-                                      items: [
-                                        const DropdownMenuItem<int>(
-                                          value: -1,
-                                          child: Text(
-                                            'Select Gender',
-                                            style: TextStyle(color: Colors.grey, fontWeight: FontWeight.w500),
-                                          ),
+                                  child: DropdownButton<String>(
+                                    value: selectedGender,
+                                    iconSize: 30,
+                                    icon: null,
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                    ),
+                                    onChanged: (value) {
+                                      setState(() {
+                                        // selectedTypeCdId = value!;
+                                        // if (selectedTypeCdId != -1) {
+                                        //   selectedValue = dropdownItems[selectedTypeCdId]['typeCdId'];
+                                        //   selectedName = dropdownItems[selectedTypeCdId]['desc'];
+                                        //
+                                        //   print("selectedValue:$selectedValue");
+                                        //   print("selectedName:$selectedName");
+                                        // } else {
+                                        //   print("==========");
+                                        //   print(selectedValue);
+                                        //   print(selectedName);
+                                        // }
+                                        // // isDropdownValid = selectedTypeCdId != -1;
+                                        // isGenderSelected = false;
+                                        selectedGender = value!; // Update the selectedGender variable
+                                        selectedTypeCdId = dropdownItems.indexWhere((item) => item['desc'] == selectedGender);
+                                        isGenderSelected = true;
+                                        // Save the selected gender to SharedPreferences
+                                        prefs.setString('gender', selectedGender!);
+                                      });
+                                    },
+                                    items: [
+                                      const DropdownMenuItem<String>(
+                                        value: '',
+                                        child: Text(
+                                          'Select Gender',
+                                          style: TextStyle(color: Colors.grey, fontWeight: FontWeight.w500),
                                         ),
-                                        ...dropdownItems.asMap().entries.map((entry) {
-                                          final index = entry.key;
-                                          final item = entry.value;
-                                          return DropdownMenuItem<int>(
-                                            value: index,
-                                            child: Text(item['desc']),
-                                          );
-                                        }).toList(),
-                                      ]),
+                                      ),
+                                      ...dropdownItems.map((item) {
+                                        return DropdownMenuItem<String>(
+                                          value: item['desc'],
+                                          child: Text(item['desc']),
+                                        );
+                                      }).toList(),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
@@ -402,7 +412,7 @@ class EditProfile_screenState extends State<EditProfile> {
                                 Padding(
                                   padding: EdgeInsets.symmetric(horizontal: 16, vertical: 5),
                                   child: Text(
-                                    'Please select gender',
+                                    'Please Select gender',
                                     style: TextStyle(
                                       color: Color.fromARGB(255, 175, 15, 4),
                                       fontSize: 12,

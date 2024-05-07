@@ -151,7 +151,7 @@ class Profile_screenState extends State<Profile> {
                       userLayOut('assets/venus-mars.svg', CommonStyles.statusGreenText, '$gender'),
                       userLayOut('assets/calendar_icon.svg', CommonStyles.statusRedText, '$formattedDate'),
                       userLayOut('assets/mobile-notch.svg', CommonStyles.statusYellowText, '+91 $contactNumber'),
-                      userLayOut('assets/mobile-notch.svg', CommonStyles.statusBlueText, '+91 $contactNumber'),
+                      userLayOut('assets/mobile-notch.svg', CommonStyles.statusBlueText, ''),
                     ],
                   ),
                   Padding(

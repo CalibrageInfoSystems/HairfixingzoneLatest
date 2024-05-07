@@ -306,6 +306,7 @@ class _BookingScreenState extends State<SelectCity_Branch_screen> {
                                                 ),
                                                 Text(
                                                   '${branchnames.address}',
+                                                  maxLines: 2,
                                                   style: TextStyle(color: Colors.black, fontSize: 12.0, fontWeight: FontWeight.w600),
                                                 ),
                                               ],

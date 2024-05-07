@@ -233,89 +233,100 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
                         children: [
                           //MARK: Book Appointment
                           IntrinsicHeight(
-                              child: Container(
-                            width: double.infinity,
-                            height: MediaQuery.of(context).size.height / 9.5,
-                            //height: 60,
-                            padding: const EdgeInsets.all(5),
-                            decoration: BoxDecoration(
-                              border: Border.all(color: CommonStyles.primaryTextColor),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
                             child: GestureDetector(
-                                onTap: () {
-                                  Navigator.of(context, rootNavigator: true).pushNamed("/BookAppointment");
-                                },
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Container(
-                                      padding: const EdgeInsets.all(15),
-                                      decoration: const BoxDecoration(shape: BoxShape.circle, color: CommonStyles.primaryTextColor),
-                                      child: Center(
-                                        child: SvgPicture.asset(
-                                          'assets/noun-appointment-date-2417776.svg',
-                                          width: 30.0,
-                                          height: 30.0,
-                                          color: CommonStyles.whiteColor,
+                              onTap: () {
+                                Navigator.of(context, rootNavigator: true).pushNamed("/BookAppointment");
+                              },
+                              child: Container(
+                                  width: double.infinity,
+                                  height: MediaQuery.of(context).size.height / 11,
+                                  //height: 60,
+                                  padding: const EdgeInsets.all(5),
+                                  decoration: BoxDecoration(
+                                    border: Border.all(color: CommonStyles.primaryTextColor),
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child:
+                                      // GestureDetector(
+                                      //     onTap: () {
+                                      //       Navigator.of(context, rootNavigator: true).pushNamed("/BookAppointment");
+                                      //     },
+                                      //     child:
+                                      Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      SizedBox(
+                                        width: 2,
+                                      ),
+                                      Container(
+                                        padding: const EdgeInsets.all(15),
+                                        decoration: const BoxDecoration(shape: BoxShape.circle, color: CommonStyles.primaryTextColor),
+                                        child: Center(
+                                          child: SvgPicture.asset(
+                                            'assets/noun-appointment-date-2417776.svg',
+                                            width: 30.0,
+                                            height: 30.0,
+                                            color: CommonStyles.whiteColor,
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                    const SizedBox(
-                                      width: 10,
-                                    ),
-                                    // Expanded(
-                                    //   child: Column(
-                                    //     crossAxisAlignment: CrossAxisAlignment.start,
-                                    //     children: [
-                                    //       Text(
-                                    //         'Click Here',
-                                    //         style: CommonStyles.txSty_16p_f5,
-                                    //       ),
-                                    //       Text(
-                                    //         'To Book an Appointment',
-                                    //         style: CommonStyles.txSty_20p_fb,
-                                    //       ),
-                                    //     ],
-                                    //   ),
-                                    // ),
-                                    SizedBox(
-                                      width: MediaQuery.of(context).size.width / 2,
-                                      child: const Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: [
-                                          Text(
-                                            'Click Here',
-                                            style: CommonStyles.txSty_16p_f5,
-                                          ),
-                                          Text(
-                                            'To Book an Appointment',
-
-                                            /// style: CommonStyles.txSty_20p_fb,
-                                            style: TextStyle(
-                                              fontSize: 14,
-                                              fontFamily: "Calibri",
-                                              fontWeight: FontWeight.bold,
-                                              color: CommonStyles.primaryTextColor,
-                                              letterSpacing: 2,
-                                            ),
-                                          ),
-                                        ],
+                                      const SizedBox(
+                                        width: 10,
                                       ),
-                                    ),
-                                    const SizedBox(
-                                      width: 10,
-                                    ),
-                                    SvgPicture.asset(
-                                      'assets/book_op_illusion.svg',
-                                      width: 60.0,
-                                      height: 55.0,
-                                      alignment: Alignment.centerRight,
-                                    ),
-                                  ],
-                                )),
-                          )),
+                                      // Expanded(
+                                      //   child: Column(
+                                      //     crossAxisAlignment: CrossAxisAlignment.start,
+                                      //     children: [
+                                      //       Text(
+                                      //         'Click Here',
+                                      //         style: CommonStyles.txSty_16p_f5,
+                                      //       ),
+                                      //       Text(
+                                      //         'To Book an Appointment',
+                                      //         style: CommonStyles.txSty_20p_fb,
+                                      //       ),
+                                      //     ],
+                                      //   ),
+                                      // ),
+                                      SizedBox(
+                                        width: MediaQuery.of(context).size.width / 2,
+                                        child: const Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              'Click Here To',
+                                              style: CommonStyles.txSty_16p_f5,
+                                            ),
+                                            Text(
+                                              'Book an Appointment',
+
+                                              /// style: CommonStyles.txSty_20p_fb,
+                                              style: TextStyle(
+                                                fontSize: 14,
+                                                fontFamily: "Calibri",
+                                                fontWeight: FontWeight.bold,
+                                                color: CommonStyles.primaryTextColor,
+                                                letterSpacing: 2,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        width: 10,
+                                      ),
+                                      SvgPicture.asset(
+                                        'assets/book_op_illusion.svg',
+                                        width: 60.0,
+                                        height: 55.0,
+                                        alignment: Alignment.centerRight,
+                                      ),
+                                    ],
+                                  )),
+                              // )
+                            ),
+                          ),
                           const SizedBox(
                             height: 10,
                           ),
