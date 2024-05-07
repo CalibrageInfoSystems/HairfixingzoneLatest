@@ -21,12 +21,12 @@ import 'Room.dart';
 import 'api_config.dart';
 
 class Bookingscreen extends StatefulWidget {
-  final int branchId;
-
   // final String branchname;
+  final int branchId;
   final String branchname;
   final String branchaddress;
   final String phonenumber;
+  final String branchImage;
   //final MyAppointment_Model data;
   // final int appointmentId; // New field
   // final String screenFrom; // New field
@@ -35,7 +35,14 @@ class Bookingscreen extends StatefulWidget {
   //   required this.data,
   //  // New field
   // });
-  Bookingscreen({required this.branchId, required this.branchname, required this.branchaddress, required this.phonenumber});
+   Bookingscreen(
+      {super.key,
+        required this.branchId,
+        required this.branchname,
+        required this.branchaddress,
+        required this.phonenumber,
+        required this.branchImage});
+
 
   @override
   _BookingScreenState createState() => _BookingScreenState();
@@ -842,13 +849,15 @@ class _BookingScreenState extends State<Bookingscreen> {
             Navigator.of(context).pushReplacement(
               MaterialPageRoute(
                   builder: (context) => SlotSuccessScreen(
-                        slotdate: '${slotdate}',
-                        slottime: '${_selectedTimeSlot}',
-                        Purpose: '$selectedName',
-                        slotbranchname: '${widget.branchname}',
-                        slotbrnach_address: '${widget.branchaddress}', phonenumber: widget.phonenumber,
-                        // phonenumber: null,
-                      )),
+                    slotdate: slotdate,
+                    slottime: _selectedTimeSlot,
+                    Purpose: '$selectedName',
+                    slotbranchname: widget.branchname,
+                    slotbrnach_address: widget.branchaddress,
+                    phonenumber: widget.phonenumber,
+                    branchImage: widget.branchImage,
+                    // phonenumber: null,
+                  )),
             );
             // Success case
             // Handle success scenario here

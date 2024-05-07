@@ -1789,7 +1789,7 @@ class _OpCardState extends State<OpCard> {
                 height: 10,
               ),
               SizedBox(
-                width: 130,
+                width: 100,
                 child: Image.asset('assets/rejected.png'),
               ),
               const SizedBox(

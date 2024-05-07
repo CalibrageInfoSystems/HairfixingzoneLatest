@@ -2149,7 +2149,7 @@ class _OpCardState extends State<OpCard> {
                 height: 10,
               ),
               SizedBox(
-                width: 130,
+                width: 100,
                 child: Image.asset('assets/rejected.png'),
               ),
               const SizedBox(
@@ -2170,12 +2170,13 @@ class _OpCardState extends State<OpCard> {
                 buttonText: 'Done',
                 color: CommonUtils.primaryTextColor,
                 onPressed: () {
-                  Navigator.of(context).pop();
-                  // Navigator.of(context).push(
-                  //   MaterialPageRoute(
-                  //     builder: (context) => const CustomerLoginScreen(),
-                  //   ),
-                  // );
+                Navigator.of(context).pop();
+
+               //    Navigator.of(context).push(
+               //      MaterialPageRoute(
+               //        builder: (context) =>  Agentappointmentlist(),
+               //      ),
+               //    );
                 },
               ),
             ],
