@@ -1282,16 +1282,16 @@ class _BookingScreenState extends State<Bookingscreen> {
     print('time=======$time');
     eventTime = convertStringToTimeOfDay(time);
     print('eventTime=======$eventTime');
-    // await notificationService.showNotification(
-    //   0,
-    //   _textEditingController.text,
-    //   "A new event has been created.",
-    //   jsonEncode({
-    //     "title": _textEditingController.text,
-    //     "eventDate": DateFormat("EEEE, d MMM y").format(eventDate!),
-    //     "eventTime": eventTime!.format(context),
-    //   }),
-    // );
+    await notificationService.showNotification(
+      0,
+      _textEditingController.text,
+      "A new Appointment has been created.",
+      jsonEncode({
+        "title": _textEditingController.text,
+        "eventDate": DateFormat("EEEE, d MMM y").format(eventDate!),
+        "eventTime": eventTime!.format(context),
+      }),
+    );
 
     await notificationService.scheduleNotification(
       1,

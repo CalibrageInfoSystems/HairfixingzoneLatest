@@ -156,6 +156,9 @@ flutter:
     - assets/overview.svg
     - assets/undraw_cancel_re_pkdm.svg
     - assets/undraw_order_confirmed.svg
+    - assets/checked.png
+    - assets/rejected.png
+    - assets/check.png
 
 
 
