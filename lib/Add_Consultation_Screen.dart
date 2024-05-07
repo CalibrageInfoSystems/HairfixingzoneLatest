@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'AgentHome.dart';
 import 'Common/custom_button.dart';
 import 'Common/custome_form_field.dart';
 import 'CommonUtils.dart';
@@ -163,7 +164,11 @@ class AddConsulationscreen_screenState extends State<Add_Consulation_screen> {
   Widget build(BuildContext context) {
     return WillPopScope(
         onWillPop: () async {
-          return true;
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => AgentHome(userId: widget.agentId)),
+          );
+          return false;
         },
         child: Scaffold(
             appBar: AppBar(
@@ -799,7 +804,11 @@ class AddConsulationscreen_screenState extends State<Add_Consulation_screen> {
 
           CommonUtils.showCustomToastMessageLong('$statusMessage', context, 0, 2);
           print('${response.body}');
-          Navigator.pop(context);
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => AgentHome(userId: widget.agentId)),
+          );
+          //    Navigator.pop(context);
         } else {
           CommonUtils.showCustomToastMessageLong('$statusMessage', context, 1, 2);
           print('Failed to send the request. Status code: ${response.statusCode}');

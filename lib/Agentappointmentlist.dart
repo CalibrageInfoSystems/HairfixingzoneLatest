@@ -970,159 +970,162 @@ class _OpCardState extends State<OpCard> {
   @override
   Widget build(BuildContext context) {
     return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      elevation: 5,
-      child: Container(
-        height: widget.data.statusTypeId == 4 || widget.data.statusTypeId == 6 ? 150 : 180,
-        //   height: 150,
-        padding: const EdgeInsets.all(10),
-        // decoration: BoxDecoration(
-        //   borderRadius: BorderRadius.circular(10.0),
-        // ),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(10.0),
-          // borderRadius: BorderRadius.circular(30), //border corner radius
-          boxShadow: [
-            BoxShadow(
-              color: Color(0xFF960efd).withOpacity(0.2), //color of shadow
-              spreadRadius: 2, //spread radius
-              blurRadius: 4, // blur radius
-              offset: Offset(0, 2), // changes position of shadow
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        elevation: 5,
+        child: IntrinsicHeight(
+          child: Container(
+            // height: widget.data.statusTypeId == 4 || widget.data.statusTypeId == 6
+            //     ? 150
+            //     : 180,
+            //   height: 150,
+            padding: const EdgeInsets.all(10),
+            // decoration: BoxDecoration(
+            //   borderRadius: BorderRadius.circular(10.0),
+            // ),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(10.0),
+              // borderRadius: BorderRadius.circular(30), //border corner radius
+              boxShadow: [
+                BoxShadow(
+                  color: Color(0xFF960efd).withOpacity(0.2), //color of shadow
+                  spreadRadius: 2, //spread radius
+                  blurRadius: 4, // blur radius
+                  offset: Offset(0, 2), // changes position of shadow
+                ),
+              ],
             ),
-          ],
-        ),
-        child: Row(
-          children: [
-            Container(
-              //  height: MediaQuery.of(context).size.height,
-              width: MediaQuery.of(context).size.height / 16,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    '${dateValues[1]}',
-                    style: CommonUtils.txSty_18p_f7,
-                  ),
-                  Text(
-                    '${dateValues[0]}',
-                    style: TextStyle(
-                      fontSize: 22,
-                      fontFamily: "Calibri",
-                      // letterSpacing: 1.5,
-                      fontWeight: FontWeight.w700,
-                      color: Color(0xFF0f75bc),
-                    ),
-                  ),
-                  Text(
-                    '${dateValues[2]}',
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontFamily: "Calibri",
-                      fontWeight: FontWeight.w700,
-                      color: Color(0xFF0f75bc),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const VerticalDivider(
-              color: CommonUtils.primaryTextColor,
-            ),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Container(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  widget.data.slotDuration,
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontFamily: "Calibri",
-                                    fontWeight: FontWeight.w700,
-                                    color: Color(0xFF0f75bc),
-                                  ),
-                                ),
-                                Text(widget.data.customerName, style: CommonStyles.txSty_16black_f5),
-                                Text(widget.data.email ?? '', style: CommonStyles.txSty_16black_f5),
-                                Text(widget.data.purposeOfVisit, style: CommonStyles.txSty_16black_f5),
-                                Text(widget.data.name, style: CommonStyles.txSty_16black_f5),
-                              ],
-                            ),
-                          ),
+            child: Row(
+              children: [
+                Container(
+                  //  height: MediaQuery.of(context).size.height,
+                  width: MediaQuery.of(context).size.height / 16,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        '${dateValues[1]}',
+                        style: CommonUtils.txSty_18p_f7,
+                      ),
+                      Text(
+                        '${dateValues[0]}',
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontFamily: "Calibri",
+                          // letterSpacing: 1.5,
+                          fontWeight: FontWeight.w700,
+                          color: Color(0xFF0f75bc),
                         ),
-                        Container(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              statusBasedBgById(widget.data.statusTypeId, widget.data.status),
-                              SizedBox(
-                                height: 2.0,
-                              ),
-
-                              Text(widget.data.phoneNumber ?? '', style: CommonStyles.txSty_16black_f5),
-                              SizedBox(
-                                height: 3.0,
-                              ),
-                              Text(widget.data.gender ?? ' ', style: CommonStyles.txSty_16black_f5),
-
-                              //    Text(widget.data.gender!, style: CommonStyles.txSty_16black_f5),
-                              SizedBox(
-                                height: 5.0,
-                              ),
-
-                              if (widget.data.statusTypeId == 11)
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
+                      ),
+                      Text(
+                        '${dateValues[2]}',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontFamily: "Calibri",
+                          fontWeight: FontWeight.w700,
+                          color: Color(0xFF0f75bc),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const VerticalDivider(
+                  color: CommonUtils.primaryTextColor,
+                ),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Container(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
+                                    Text(
+                                      widget.data.slotDuration,
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontFamily: "Calibri",
+                                        fontWeight: FontWeight.w700,
+                                        color: Color(0xFF0f75bc),
+                                      ),
+                                    ),
+                                    Text(widget.data.customerName, style: CommonStyles.txSty_16black_f5),
+                                    Text(widget.data.email ?? '', style: CommonStyles.txSty_16black_f5),
+                                    Text(widget.data.purposeOfVisit, style: CommonStyles.txSty_16black_f5),
+                                    Text(widget.data.name, style: CommonStyles.txSty_16black_f5),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Container(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  statusBasedBgById(widget.data.statusTypeId, widget.data.status),
+                                  SizedBox(
+                                    height: 2.0,
+                                  ),
+
+                                  Text(widget.data.phoneNumber ?? '', style: CommonStyles.txSty_16black_f5),
+                                  SizedBox(
+                                    height: 3.0,
+                                  ),
+                                  Text(widget.data.gender ?? ' ', style: CommonStyles.txSty_16black_f5),
+
+                                  //    Text(widget.data.gender!, style: CommonStyles.txSty_16black_f5),
+                                  SizedBox(
+                                    height: 5.0,
+                                  ),
+
+                                  if (widget.data.statusTypeId == 11)
                                     Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
                                       children: [
-                                        const Icon(
-                                          Icons.star_border_outlined,
-                                          size: 13,
-                                          color: CommonStyles.greenColor,
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.only(right: 8.0), // Adjust the value as needed
-                                          child: Text(
-                                            '${widget.data.rating ?? 'No rating'}',
-                                            style: CommonStyles.txSty_14g_f5,
-                                          ),
+                                        Row(
+                                          children: [
+                                            const Icon(
+                                              Icons.star_border_outlined,
+                                              size: 13,
+                                              color: CommonStyles.greenColor,
+                                            ),
+                                            Padding(
+                                              padding: const EdgeInsets.only(right: 8.0), // Adjust the value as needed
+                                              child: Text(
+                                                '${widget.data.rating ?? 'No rating'}',
+                                                style: CommonStyles.txSty_14g_f5,
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                       ],
                                     ),
-                                  ],
-                                ),
-                            ],
-                          ),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                  ),
+                      ),
 
-                  // based on status hide this row
-                  Row(
-                    mainAxisAlignment: widget.data.statusTypeId == 11 ? MainAxisAlignment.start : MainAxisAlignment.end,
-                    children: [
-                      verifyStatus(widget.data, widget.userId),
+                      // based on status hide this row
+                      Row(
+                        mainAxisAlignment: widget.data.statusTypeId == 11 ? MainAxisAlignment.start : MainAxisAlignment.end,
+                        children: [
+                          verifyStatus(widget.data, widget.userId),
+                        ],
+                      ),
                     ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
-    );
+          ),
+        ));
   }
 
   Widget statusBasedBgById(int statusTypeId, String status) {
@@ -1238,7 +1241,7 @@ class _OpCardState extends State<OpCard> {
             GestureDetector(
               onTap: () {
                 if (!isPastDate(data.date, data.slotDuration)) {
-                  conformation(context,data);
+                  conformation(context, data);
                   // Add your logic here for when the 'Cancel' container is tapped
                 }
               },
@@ -1682,6 +1685,7 @@ class _OpCardState extends State<OpCard> {
       //  }
     }
   }
+
   void conformation(BuildContext context, Appointment appointments) {
     showDialog(
       context: context,
@@ -1705,7 +1709,7 @@ class _OpCardState extends State<OpCard> {
               const SizedBox(
                 height: 10,
               ),
-               Center(
+              Center(
                 // Center the text
                 child: Text(
                   'Are You Sure You Want To Cancel   ${appointments.purposeOfVisit} Slot At The ${appointments.name} Hair Fixing Zone',
@@ -1887,7 +1891,7 @@ class _OpCardState extends State<OpCard> {
           print('Request sent successfully');
           openDialogreject();
           //  fetchMyAppointments(userId);
-        //  CommonUtils.showCustomToastMessageLong('Cancelled  Successfully ', context, 0, 4);
+          //  CommonUtils.showCustomToastMessageLong('Cancelled  Successfully ', context, 0, 4);
           //   Navigator.pop(context);
           // Success case
           // Handle success scenario here
@@ -2131,6 +2135,7 @@ class _OpCardState extends State<OpCard> {
       },
     );
   }
+
   void openDialogreject() async {
     await showDialog(
       context: context,
@@ -2179,8 +2184,6 @@ class _OpCardState extends State<OpCard> {
       },
     );
   }
-
-
 
   String? validateAmount(String? value) {
     if (value == null || value.isEmpty) {

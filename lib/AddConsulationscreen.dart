@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/widgets.dart';
+import 'package:hairfixingzone/AgentDashBoard.dart';
+import 'package:hairfixingzone/AgentHome.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -31,6 +33,7 @@ class AddConsulationscreen_screenState extends State<AddConsulationscreen> {
   String? branchName;
   int? branchValue;
   int selectedTypeCdId = -1;
+  int branchselectedTypeCdId = -1;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   TextEditingController fullNameController = TextEditingController();
   TextEditingController dobController = TextEditingController();
@@ -165,7 +168,11 @@ class AddConsulationscreen_screenState extends State<AddConsulationscreen> {
   Widget build(BuildContext context) {
     return WillPopScope(
         onWillPop: () async {
-          return true;
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => AgentHome(userId: widget.agentId)),
+          );
+          return false;
         },
         child: Scaffold(
             // appBar: AppBar(
@@ -249,7 +256,7 @@ class AddConsulationscreen_screenState extends State<AddConsulationscreen> {
                       ),
 
                       Padding(
-                        padding: const EdgeInsets.only(left: 0, top: 5.0, right: 0),
+                        padding: const EdgeInsets.only(left: 0, top: 0.0, right: 0),
                         child: Container(
                           width: MediaQuery.of(context).size.width,
                           decoration: BoxDecoration(
@@ -461,7 +468,7 @@ class AddConsulationscreen_screenState extends State<AddConsulationscreen> {
                             child: ButtonTheme(
                               alignedDropdown: true,
                               child: DropdownButton<int>(
-                                  value: selectedTypeCdId,
+                                  value: branchselectedTypeCdId,
                                   iconSize: 30,
                                   icon: null,
                                   style: const TextStyle(
@@ -469,10 +476,10 @@ class AddConsulationscreen_screenState extends State<AddConsulationscreen> {
                                   ),
                                   onChanged: (value) {
                                     setState(() {
-                                      selectedTypeCdId = value!;
-                                      if (selectedTypeCdId != -1) {
-                                        branchValue = BranchesdropdownItems[selectedTypeCdId]['id'];
-                                        branchName = BranchesdropdownItems[selectedTypeCdId]['name'];
+                                      branchselectedTypeCdId = value!;
+                                      if (branchselectedTypeCdId != -1) {
+                                        branchValue = BranchesdropdownItems[branchselectedTypeCdId]['id'];
+                                        branchName = BranchesdropdownItems[branchselectedTypeCdId]['name'];
 
                                         print("branchValue:$branchValue");
                                         print("branchName:$branchName");
@@ -583,7 +590,7 @@ class AddConsulationscreen_screenState extends State<AddConsulationscreen> {
                               Radius.circular(10),
                             ),
                           ),
-                          hintText: 'Enter Remarks',
+                          hintText: 'Enter Remark ',
                           counterText: "",
                           hintStyle: TextStyle(color: Colors.grey, fontWeight: FontWeight.w400),
                         ),
@@ -638,7 +645,7 @@ class AddConsulationscreen_screenState extends State<AddConsulationscreen> {
                         children: [
                           Expanded(
                             child: CustomButton(
-                              buttonText: 'Add Consulation',
+                              buttonText: 'Add Consultation',
                               color: CommonUtils.primaryTextColor,
                               onPressed: validating,
                             ),
@@ -720,7 +727,7 @@ class AddConsulationscreen_screenState extends State<AddConsulationscreen> {
     if (value!.isEmpty) {
       setState(() {
         _remarksError = true;
-        _remarksErrorMsg = 'Please Enter Remarks';
+        _remarksErrorMsg = 'Please Enter Remark';
       });
       isRemarksValidate = false;
       return null;
@@ -837,11 +844,15 @@ class AddConsulationscreen_screenState extends State<AddConsulationscreen> {
         if (response.statusCode == 200) {
           print('Request sent successfully');
 
-          CommonUtils.showCustomToastMessageLong('$statusMessage', context, 0, 2);
+          CommonUtils.showCustomToastMessageLong('$statusMessage', context, 0, 5);
           print('${response.body}');
-          Navigator.pop(context);
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => AgentHome(userId: widget.agentId)),
+          );
+          // Navigator.pop(context);
         } else {
-          CommonUtils.showCustomToastMessageLong('$statusMessage', context, 1, 2);
+          CommonUtils.showCustomToastMessageLong('$statusMessage', context, 1, 5);
           print('Failed to send the request. Status code: ${response.statusCode}');
         }
       } catch (e) {
