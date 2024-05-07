@@ -977,8 +977,8 @@ class _OpCardState extends State<OpCard> {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       elevation: 5,
       child: Container(
-        //height: widget.data.statusTypeId == 4 || widget.data.statusTypeId == 6 ? 90 : 120,
-          height: 150,
+        height: widget.data.statusTypeId == 4 || widget.data.statusTypeId == 6 ? 150 : 180,
+       //   height: 150,
         padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10.0),
@@ -1691,7 +1691,7 @@ class _OpCardState extends State<OpCard> {
             ),
           ),
           content: Text(
-            'Are You Sure You Want To Cancel Your  ${appointments.purposeOfVisit} Slot At The${appointments.name} Hair Fixing Zone',
+            'Are You Sure You Want To Cancel   ${appointments.purposeOfVisit} Slot At The${appointments.name} Hair Fixing Zone',
             style: const TextStyle(
               fontSize: 16,
               color: CommonUtils.primaryTextColor,

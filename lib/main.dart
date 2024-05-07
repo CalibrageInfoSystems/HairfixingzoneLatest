@@ -8,6 +8,7 @@ import 'package:hairfixingzone/MyProductsProvider.dart';
 import 'package:hairfixingzone/Rescheduleslotscreen.dart';
 import 'package:hairfixingzone/aboutus_screen.dart';
 import 'package:hairfixingzone/services/local_notifications.dart';
+import 'package:hairfixingzone/services/notification_service.dart';
 import 'package:hairfixingzone/splash_screen.dart';
 import 'package:provider/provider.dart';
 // import 'package:hairfixingservice/services/local_notifications.dart';
@@ -34,6 +35,10 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   FirebaseMessaging.onBackgroundMessage(backgroundHandler);
+
+  NotificationService notificationService = NotificationService();
+  await notificationService.init();
+  await notificationService.requestIOSPermissions();
   // LocalNotificationService.initialize();
 
   runApp(MultiProvider(providers: [
@@ -42,6 +47,7 @@ void main() async {
     ChangeNotifierProvider(create: (context) => AgentAppointmentsProvider()),
   ], child: MyApp()));
 }
+final GlobalKey<NavigatorState> navigatorKey = new GlobalKey<NavigatorState>();
 
 class MyApp extends StatelessWidget {
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;

@@ -5,6 +5,7 @@ import 'package:hairfixingzone/CustomerLoginScreen.dart';
 import 'package:hairfixingzone/Dashboard_Screen.dart';
 import 'package:hairfixingzone/HomeScreen.dart';
 import 'package:hairfixingzone/MyAppointment_Model.dart';
+import 'package:hairfixingzone/services/notification_service.dart';
 import 'package:hairfixingzone/slot_success_screen.dart';
 import 'package:loading_progress/loading_progress.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -138,6 +139,15 @@ class _BookingScreenState extends State<Bookingscreen> {
   bool ispurposeselected = false;
   String? _selectedTimeSlot24;
   int? genderttypeid;
+
+  NotificationService notificationService = NotificationService();
+  TextEditingController _textEditingController =
+  TextEditingController(text: "Hair fixing Appointment");
+  DateTime currentDate = DateTime.now();
+  DateTime? eventDate;
+
+  TimeOfDay currentTime = TimeOfDay.now();
+  TimeOfDay? eventTime;
   @override
   void dispose() {
     _dateController.dispose();
@@ -824,6 +834,8 @@ class _BookingScreenState extends State<Bookingscreen> {
           // Extract the necessary information
           bool isSuccess = data['isSuccess'];
           if (isSuccess == true) {
+            onCreate( '${slotdate}',
+             '${_selectedTimeSlot}','${widget.branchname}','${widget.branchaddress}');
             //LoadingProgress.stop(context);
             print('Request sent successfully');
             // showCustomToastMessageLong('Slot booked successfully', context, 0, 2);
@@ -1262,6 +1274,58 @@ class _BookingScreenState extends State<Bookingscreen> {
     // Return false to indicate that we handled the back button press
     return Future.value(false);
   }
+
+  Future<void> onCreate(String date,String time, String branchname, String branchaddress) async {
+    print('date=======$date');
+     eventDate = DateFormat("dd MMM yyyy").parse(date);
+    print('eventDate=======$eventDate');
+    print('time=======$time');
+    eventTime = convertStringToTimeOfDay(time);
+    print('eventTime=======$eventTime');
+    // await notificationService.showNotification(
+    //   0,
+    //   _textEditingController.text,
+    //   "A new event has been created.",
+    //   jsonEncode({
+    //     "title": _textEditingController.text,
+    //     "eventDate": DateFormat("EEEE, d MMM y").format(eventDate!),
+    //     "eventTime": eventTime!.format(context),
+    //   }),
+    // );
+
+    await notificationService.scheduleNotification(
+      1,
+      _textEditingController.text,
+      "Reminder for your scheduled Appointment at ${eventTime!.format(context)} At ${branchname} branch  at ${branchaddress}",
+      eventDate!,
+      eventTime!,
+      jsonEncode({
+        "title": _textEditingController.text,
+        "eventDate": DateFormat("EEEE, d MMM y").format(eventDate!),
+        "eventTime": eventTime!.format(context),
+      }),
+     // getDateTimeComponents(),
+    );
+
+  //  resetForm();
+  }
+
+  TimeOfDay convertStringToTimeOfDay(String timeString) {
+    // Split the timeString into hour, minute, and period (AM/PM)
+    List<String> timeParts = timeString.split(':');
+    int hour = int.parse(timeParts[0]);
+    int minute = int.parse(timeParts[1].split(' ')[0]);
+    String period = timeParts[1].split(' ')[1];
+
+    // Adjust hour if it's PM
+    if (period == 'PM' && hour != 12) {
+      hour += 12;
+    }
+
+    // Create and return a TimeOfDay object
+    return TimeOfDay(hour: hour, minute: minute);
+  }
+
 }
 
 class RadioButtonOption {

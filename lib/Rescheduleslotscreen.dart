@@ -97,7 +97,7 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
   bool isBackButtonActivated = false;
 //  TextEditingController textController4 = TextEditingController(text: 'Initial value 4');
   List<Slot> slots = [];
-
+  String? _selectedTimeSlot24;
   // String _selectedTimeSlot = '';
   // String AvailableSlots = '';
   // List<String> timeSlotParts =[];
@@ -528,6 +528,8 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
                                                     print('===123==$timeSlotParts[0]');
                                                     print('===12===$timeSlotParts[1]');
                                                     print('==234==$_selectedTimeSlot');
+                                                    _selectedTimeSlot24 = DateFormat('HH:mm').format(DateFormat('h:mm a').parse(_selectedTimeSlot));
+                                                    print('_selectedTimeSlot24 $_selectedTimeSlot24');
                                                     print('===567==$_selectedSlot');
                                                     print('==900==$AvailableSlots');
                                                   });
@@ -737,7 +739,7 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
         "rating": null,
         "review": null,
         "reviewSubmittedDate": null,
-        "timeofslot": null,
+        "timeofslot": '$_selectedTimeSlot24',
         "customerId": widget.data.id
       };
 
