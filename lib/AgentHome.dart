@@ -2,6 +2,7 @@ import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:hairfixingzone/Common/common_styles.dart';
 import 'package:hairfixingzone/CommonUtils.dart';
 import 'package:hairfixingzone/CustomerLoginScreen.dart';
 import 'package:hairfixingzone/MyAppointments.dart';
@@ -16,7 +17,7 @@ import 'ViewConsultation.dart';
 class AgentHome extends StatefulWidget {
   final int userId;
 
-  AgentHome({required this.userId});
+  const AgentHome({super.key, required this.userId});
 
   @override
   State<AgentHome> createState() => _AgentHomeState();
@@ -61,41 +62,50 @@ class _AgentHomeState extends State<AgentHome> {
         return Future.value(false);
       },
       child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: const Color(0xFFf3e3ff),
-          automaticallyImplyLeading: false,
-          title: _currentIndex == 0
-              ? SizedBox(
-                  width: 85,
-                  height: 40,
-                  child: FractionallySizedBox(
-                    widthFactor: 1,
-                    child: Image.asset(
-                      'assets/hfz_logo.png',
-                      fit: BoxFit.fitWidth,
-                    ),
-                  ),
-                )
-              : _currentIndex == 1 || _currentIndex == 2 || _currentIndex == 3
-                  ? Text(
-                      _getAppBarTitle(_currentIndex),
-                      style: CommonUtils.header_Styles,
-                    )
-                  : null,
-          actions: [
-            IconButton(
-              icon: SvgPicture.asset(
-                'assets/sign-out-alt.svg',
-                color: const Color(0xFF662e91),
-                width: 24,
-                height: 24,
+        appBar: _currentIndex == 0
+            ? CommonStyles.homeAppBar()
+            : CommonStyles.remainingAppBars(
+                context,
+                title: _getAppBarTitle(_currentIndex),
+                onPressed: () {
+                  logOutDialog();
+                },
               ),
-              onPressed: () {
-                logOutDialog();
-              },
-            ),
-          ],
-        ),
+        //  AppBar(
+        //   backgroundColor: const Color(0xFFf3e3ff),
+        //   automaticallyImplyLeading: false,
+        //   title: _currentIndex == 0
+        //       ? SizedBox(
+        //           width: 85,
+        //           height: 40,
+        //           child: FractionallySizedBox(
+        //             widthFactor: 1,
+        //             child: Image.asset(
+        //               'assets/hfz_logo.png',
+        //               fit: BoxFit.fitWidth,
+        //             ),
+        //           ),
+        //         )
+        //       : _currentIndex == 1 || _currentIndex == 2 || _currentIndex == 3
+        //           ? Text(
+        //               _getAppBarTitle(_currentIndex),
+        //               style: CommonUtils.header_Styles,
+        //             )
+        //           : null,
+        //   actions: [
+        //     IconButton(
+        //       icon: SvgPicture.asset(
+        //         'assets/sign-out-alt.svg',
+        //         color: const Color(0xFF662e91),
+        //         width: 24,
+        //         height: 24,
+        //       ),
+        //       onPressed: () {
+        //         logOutDialog();
+        //       },
+        //     ),
+        //   ],
+        // ),
         body: _buildScreens(_currentIndex),
         bottomNavigationBar: BottomNavyBar(
           selectedIndex: _currentIndex,
@@ -129,8 +139,15 @@ class _AgentHomeState extends State<AgentHome> {
                 height: 24,
                 color: _currentIndex == 1 ? CommonUtils.primaryTextColor : Colors.grey,
               ),
-              title: const Text(
-                'Add Consultation',
+              title: const Column(
+                children: [
+                  Text(
+                    'Add',
+                  ),
+                  Text(
+                    'Consultation',
+                  ),
+                ],
               ),
               activeColor: Colors.blue,
               textAlign: TextAlign.center,
@@ -142,7 +159,12 @@ class _AgentHomeState extends State<AgentHome> {
                 height: 24,
                 color: _currentIndex == 2 ? CommonUtils.primaryTextColor : Colors.grey,
               ),
-              title: const Text('View Consultation'),
+              title: const Column(
+                children: [
+                  Text('View'),
+                  Text('Consultation'),
+                ],
+              ),
               activeColor: Colors.blue,
               textAlign: TextAlign.center,
             ),
@@ -155,7 +177,7 @@ class _AgentHomeState extends State<AgentHome> {
   Widget _buildScreens(int index) {
     switch (index) {
       case 0:
-        return AgentDashBoard();
+        return const AgentDashBoard();
 
       case 1:
         return AddConsulationscreen(

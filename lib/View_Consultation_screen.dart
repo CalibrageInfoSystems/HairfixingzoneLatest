@@ -40,7 +40,7 @@ class _ViewConsultationState extends State<View_Consultation_screen> {
     startDate = DateTime.now().subtract(const Duration(days: 14));
     endDate = DateTime.now();
     fromToDates.text =
-    '${startDate != null ? DateFormat("dd, MMM").format(startDate!) : '-'} / ${endDate != null ? DateFormat("dd, MMM").format(endDate!) : '-'}';
+        '${startDate != null ? DateFormat("dd, MMM").format(startDate!) : '-'} / ${endDate != null ? DateFormat("dd, MMM").format(endDate!) : '-'}';
   }
 
   // static Future<List<AgentBranchesModel>> getAgentBranches() async {
@@ -80,178 +80,200 @@ class _ViewConsultationState extends State<View_Consultation_screen> {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-           appBar: _appBar(context),
-          body: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                children: [
-                  //MARK: FromToDates
-                  TextFormField(
-                    controller: fromToDates,
-                    keyboardType: TextInputType.visiblePassword,
-                    onTap: () {
-                      showCustomDateRangePicker(
-                        context,
-                        dismissible: true,
-                        endDate: endDate,
-                        startDate: startDate,
-                        maximumDate: DateTime.now().add(Duration(days: 50)),
-                        minimumDate: DateTime.now().subtract(Duration(days: 50)),
-                        onApplyClick: (s, e) {
-                          setState(() {
-                            //MARK: Date
-                            endDate = e;
-                            startDate = s;
-                            fromToDates.text =
+      appBar: _appBar(context),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            children: [
+              //MARK: FromToDates
+              TextFormField(
+                controller: fromToDates,
+                keyboardType: TextInputType.visiblePassword,
+                onTap: () {
+                  showCustomDateRangePicker(
+                    context,
+                    dismissible: true,
+                    endDate: endDate,
+                    startDate: startDate,
+                    maximumDate: DateTime.now().add(Duration(days: 50)),
+                    minimumDate: DateTime.now().subtract(Duration(days: 50)),
+                    onApplyClick: (s, e) {
+                      setState(() {
+                        //MARK: Date
+                        endDate = e;
+                        startDate = s;
+                        fromToDates.text =
                             '${startDate != null ? DateFormat("dd, MMM").format(startDate!) : '-'} / ${endDate != null ? DateFormat("dd, MMM").format(endDate!) : '-'}';
-                          });
-                        },
-                        onCancelClick: () {
-                          setState(() {
-                            endDate = null;
-                            startDate = null;
-                          });
-                        },
-                      );
+                      });
                     },
-                    readOnly: true,
-                    decoration: InputDecoration(
-                      contentPadding: const EdgeInsets.only(top: 15, bottom: 10, left: 15, right: 15),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                          color: Color(0xFF0f75bc),
-                        ),
-                        borderRadius: BorderRadius.circular(6.0),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                          color: CommonUtils.primaryTextColor,
-                        ),
-                        borderRadius: BorderRadius.circular(6.0),
-                      ),
-                      border: const OutlineInputBorder(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(10),
-                        ),
-                      ),
-                      hintText: 'Select Between Dates',
-                      counterText: "",
-                      hintStyle: const TextStyle(color: Colors.grey, fontWeight: FontWeight.w400),
-                      prefixIcon: const Icon(Icons.calendar_today),
+                    onCancelClick: () {
+                      setState(() {
+                        endDate = null;
+                        startDate = null;
+                      });
+                    },
+                  );
+                },
+                readOnly: true,
+                decoration: InputDecoration(
+                  contentPadding: const EdgeInsets.only(top: 15, bottom: 10, left: 15, right: 15),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(
+                      color: Color(0xFF0f75bc),
                     ),
-                    //  validator: validatePassword,
+                    borderRadius: BorderRadius.circular(6.0),
                   ),
-
-                  const SizedBox(
-                    height: 15.0,
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(
+                      color: CommonUtils.primaryTextColor,
+                    ),
+                    borderRadius: BorderRadius.circular(6.0),
                   ),
-                  FutureBuilder(
-                    future: agentData,
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const Center(
-                          child: CircularProgressIndicator.adaptive(),
-                        );
-                      } else if (snapshot.hasError) {
-                        return Center(
-                          child: Text(snapshot.error.toString()),
-                        );
-                      } else {
-                        List<BranchModel> data = snapshot.data!;
-                        if (data.isEmpty) {
-                          return const Center(
-                            child: Text('No Branches are Found!'),
-                          );
-                        } else {
-                          return ListView.builder(
-                            itemCount: data.length,
-                            shrinkWrap: true,
-                            physics: AlwaysScrollableScrollPhysics(),
-                            itemBuilder: (context, index) {
-                              BranchModel agent = data[index];
-                              String? imageUrl = agent.imageName; // Use String? for nullable type
+                  border: const OutlineInputBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(10),
+                    ),
+                  ),
+                  hintText: 'Select Between Dates',
+                  counterText: "",
+                  hintStyle: const TextStyle(color: Colors.grey, fontWeight: FontWeight.w400),
+                  prefixIcon: const Icon(Icons.calendar_today),
+                ),
+                //  validator: validatePassword,
+              ),
 
-                              // Check if imageUrl is null or empty, then assign default image URL or asset path
-                              if (imageUrl == null || imageUrl.isEmpty) {
-                                imageUrl = 'assets/top_image.png'; // Default image asset path
-                              }
-                              return Container(
-                                padding: const EdgeInsets.only(bottom: 15.0),
-                                width: MediaQuery.of(context).size.width,
-                                child: GestureDetector(
-                                  onTap: () {
-                                    print('brnachid${agent.id}');
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => viewconsulationlistscreen(
+              const SizedBox(
+                height: 15.0,
+              ),
+              FutureBuilder(
+                future: agentData,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(
+                      child: CircularProgressIndicator.adaptive(),
+                    );
+                  } else if (snapshot.hasError) {
+                    return Center(
+                      child: Text(snapshot.error.toString()),
+                    );
+                  } else {
+                    List<BranchModel> data = snapshot.data!;
+                    if (data.isEmpty) {
+                      return const Center(
+                        child: Text('No Branches are Found!'),
+                      );
+                    } else {
+                      return ListView.builder(
+                        itemCount: data.length,
+                        shrinkWrap: true,
+                        physics: AlwaysScrollableScrollPhysics(),
+                        itemBuilder: (context, index) {
+                          BranchModel agent = data[index];
+                          String? imageUrl = agent.imageName; // Use String? for nullable type
+
+                          // Check if imageUrl is null or empty, then assign default image URL or asset path
+                          if (imageUrl == null || imageUrl.isEmpty) {
+                            imageUrl = 'assets/top_image.png'; // Default image asset path
+                          }
+                          return Container(
+                            padding: const EdgeInsets.only(bottom: 15.0),
+                            width: MediaQuery.of(context).size.width,
+                            child: GestureDetector(
+                              onTap: () {
+                                print('brnachid${agent.id}');
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => viewconsulationlistscreen(
                                             branchid: agent.id,
                                             fromdate: '$startDate',
                                             todate: '$endDate',
                                           )),
-                                    );
-                                  },
-                                  child: Container(
-                                    height: MediaQuery.of(context).size.height / 8,
-                                    width: MediaQuery.of(context).size.width,
-                                    decoration: BoxDecoration(
-                                      border: Border.all(color: const Color(0xFF662e91), width: 1.0),
-                                      borderRadius: BorderRadius.circular(10.0),
+                                );
+                              },
+                              child: Container(
+                                height: MediaQuery.of(context).size.height / 8,
+                                width: MediaQuery.of(context).size.width,
+                                // decoration: BoxDecoration(
+                                //   border: Border.all(color: const Color(0xFF662e91), width: 1.0),
+                                //   borderRadius: BorderRadius.circular(10.0),
+                                // ),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  // borderRadius: BorderRadius.circular(30), //border corner radius
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Color(0xFF960efd).withOpacity(0.2), //color of shadow
+                                      spreadRadius: 2, //spread radius
+                                      blurRadius: 4, // blur radius
+                                      offset: Offset(0, 2), // changes position of shadow
                                     ),
-                                    child: Row(
-                                      children: [
-                                        Container(
-                                            padding: const EdgeInsets.all(10),
-                                            // width: MediaQuery.of(context).size.width / 4,
-                                            child: Image.network(
-                                              imageUrl,
-                                              fit: BoxFit.cover,
-                                              height: MediaQuery.of(context).size.height / 4 / 2,
-                                              width: MediaQuery.of(context).size.width / 3.2,
-                                            )),
-                                        SizedBox(
-                                          width: MediaQuery.of(context).size.width / 2.2,
-                                          //    padding: EdgeInsets.only(top: 7),
-                                          // width: MediaQuery.of(context).size.width / 4,
-                                          child: Column(
-                                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                agent.name,
-                                                style: const TextStyle(
-                                                  color: Color(0xFF0f75bc),
-                                                  fontSize: 14.0,
-                                                  fontWeight: FontWeight.w600,
-                                                ),
-                                              ),
-                                              const SizedBox(
-                                                height: 5,
-                                              ),
-                                              Text(
-                                                agent.address,
-                                                style: const TextStyle(color: Colors.black, fontSize: 12.0, fontWeight: FontWeight.w600),
-                                              ),
-                                            ],
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
+                                  ],
                                 ),
-                              );
-                            },
+                                child: Row(
+                                  children: [
+                                    Container(
+                                      padding: const EdgeInsets.all(10),
+                                      // width: MediaQuery.of(context).size.width / 4,
+                                      child: Image.network(
+                                        imageUrl.isNotEmpty ? imageUrl : 'https://example.com/placeholder-image.jpg',
+                                        fit: BoxFit.cover,
+                                        height: MediaQuery.of(context).size.height / 4 / 2,
+                                        width: MediaQuery.of(context).size.width / 3.2,
+                                        errorBuilder: (context, error, stackTrace) {
+                                          return Image.asset(
+                                            'assets/hairfixing_logo.png', // Path to your PNG placeholder image
+                                            fit: BoxFit.cover,
+                                            height: MediaQuery.of(context).size.height / 4 / 2,
+                                            width: MediaQuery.of(context).size.width / 3.2,
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width / 2.2,
+                                      //    padding: EdgeInsets.only(top: 7),
+                                      // width: MediaQuery.of(context).size.width / 4,
+                                      child: Column(
+                                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            agent.name,
+                                            style: const TextStyle(
+                                              color: Color(0xFF0f75bc),
+                                              fontSize: 14.0,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            height: 5,
+                                          ),
+                                          Text(
+                                            agent.address,
+                                            style: const TextStyle(color: Colors.black, fontSize: 12.0, fontWeight: FontWeight.w600),
+                                          ),
+                                        ],
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
                           );
-                        }
-                      }
-                    },
-                  ),
-                ],
+                        },
+                      );
+                    }
+                  }
+                },
               ),
-            ),
+            ],
           ),
-        ));
+        ),
+      ),
+    ));
   }
 
   AppBar _appBar(BuildContext context) {

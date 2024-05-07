@@ -139,55 +139,53 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
               welcomeText(),
               //MARK: Main Card
               Expanded(
-                child: SingleChildScrollView(
-                  child: Container(
-                    height: MediaQuery.of(context).size.height,
-                    decoration: const BoxDecoration(
-                      color: CommonStyles.whiteColor,
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(20),
-                        topRight: Radius.circular(20),
-                      ),
+                child: Container(
+                  height: MediaQuery.of(context).size.height,
+                  decoration: const BoxDecoration(
+                    color: CommonStyles.whiteColor,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20),
                     ),
-                    child: Column(
-                      children: [
-                        marquee(),
-                        Column(
-                          children: [
-                            carousel(),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                for (int i = 0; i < _items.length; i++)
-                                  Container(
-                                    margin: const EdgeInsets.all(2),
-                                    width: 10,
-                                    height: 10,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                      border: Border.all(color: CommonStyles.primaryTextColor, width: 1.5),
-                                      color: _currentPage == i ? Colors.grey.withOpacity(0.9) : Colors.transparent,
-                                    ),
-                                  )
+                  ),
+                  child: Column(
+                    children: [
+                      marquee(),
+                      Column(
+                        children: [
+                          carousel(),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              for (int i = 0; i < _items.length; i++)
+                                Container(
+                                  margin: const EdgeInsets.all(2),
+                                  width: 10,
+                                  height: 10,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    border: Border.all(color: CommonStyles.primaryTextColor, width: 1.5),
+                                    color: _currentPage == i ? Colors.grey.withOpacity(0.9) : Colors.transparent,
+                                  ),
+                                )
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            child: Column(
+                              children: [
+                                screens(),
+                                const SizedBox(height: 10),
+                                agentBranches(),
                               ],
                             ),
-                            SizedBox(
-                              height: 15,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 20),
-                              child: Column(
-                                children: [
-                                  screens(),
-                                  const SizedBox(height: 10),
-                                  agentBranches(),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
               )
@@ -251,12 +249,12 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(
+          const Text(
             'Hello!',
             style: CommonStyles.txSty_16w_fb,
           ),
           Text(
-            '$userFullName',
+            userFullName,
             style: CommonStyles.txSty_18w_fb,
           ),
         ],
@@ -356,7 +354,7 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
             );
           } else {
             List<BranchList>? data = snapshot.data!;
-            return Container(
+            return SizedBox(
               width: MediaQuery.of(context).size.width,
               // height: MediaQuery.of(context).size.height / 3.5,
               child: ListView.builder(

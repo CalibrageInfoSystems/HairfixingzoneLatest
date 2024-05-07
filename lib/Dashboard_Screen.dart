@@ -131,12 +131,21 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
-                  'Hello!',
-                  style: CommonStyles.txSty_16w_fb,
+                GestureDetector(
+                  onTap: () {
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(
+                    //       builder: (context) => const AgentDashBoard()),
+                    // );
+                  },
+                  child: const Text(
+                    'Hello!',
+                    style: CommonStyles.txSty_16w_fb,
+                  ),
                 ),
                 Text(
-                  '$userFullName',
+                  userFullName,
                   style: CommonStyles.txSty_18w_fb,
                 ),
               ],
@@ -216,7 +225,7 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
                           )
                       ],
                     ),
-                    SizedBox(height: 5),
+                    const SizedBox(height: 5),
 
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 15.0),
@@ -241,7 +250,7 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     Container(
-                                      padding: EdgeInsets.all(15),
+                                      padding: const EdgeInsets.all(15),
                                       decoration: const BoxDecoration(shape: BoxShape.circle, color: CommonStyles.primaryTextColor),
                                       child: Center(
                                         child: SvgPicture.asset(
@@ -252,7 +261,7 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
                                         ),
                                       ),
                                     ),
-                                    SizedBox(
+                                    const SizedBox(
                                       width: 10,
                                     ),
                                     // Expanded(
@@ -270,9 +279,9 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
                                     //     ],
                                     //   ),
                                     // ),
-                                    Container(
+                                    SizedBox(
                                       width: MediaQuery.of(context).size.width / 2,
-                                      child: Column(
+                                      child: const Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
@@ -295,7 +304,7 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
                                         ],
                                       ),
                                     ),
-                                    SizedBox(
+                                    const SizedBox(
                                       width: 10,
                                     ),
                                     SvgPicture.asset(
@@ -307,7 +316,7 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
                                   ],
                                 )),
                           )),
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
                           //MARK: Screens
@@ -333,8 +342,8 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
                                         color: CommonStyles.whiteColor,
                                       ),
                                     ),
-                                    SizedBox(height: 5),
-                                    Text(
+                                    const SizedBox(height: 5),
+                                    const Text(
                                       'My Bookings',
                                       style: CommonStyles.txSty_14p_f5,
                                     ),
@@ -360,8 +369,8 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
                                         color: CommonStyles.whiteColor,
                                       ),
                                     ),
-                                    SizedBox(height: 5),
-                                    Text(
+                                    const SizedBox(height: 5),
+                                    const Text(
                                       'Products',
                                       style: CommonStyles.txSty_14p_f5,
                                     ),
@@ -389,8 +398,8 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
                                         // height: 11.0,
                                       ),
                                     ),
-                                    SizedBox(height: 5),
-                                    Text(
+                                    const SizedBox(height: 5),
+                                    const Text(
                                       'About Us',
                                       style: CommonStyles.txSty_14p_f5,
                                     ),
@@ -416,8 +425,8 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
                                         color: CommonStyles.whiteColor,
                                       ),
                                     ),
-                                    SizedBox(height: 5),
-                                    Text(
+                                    const SizedBox(height: 5),
+                                    const Text(
                                       'My Profile',
                                       style: CommonStyles.txSty_14p_f5,
                                     ),
@@ -426,9 +435,9 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
                               )
                             ],
                           ),
-                          SizedBox(height: 10),
+                          const SizedBox(height: 10),
                           //MARK: Branches
-                          Row(
+                          const Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               Text(
@@ -538,7 +547,7 @@ class BranchCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 5,
+      elevation: 2,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
       ),
@@ -639,7 +648,7 @@ class BranchCard extends StatelessWidget {
                     branch.name,
                     style: CommonStyles.txSty_16p_fb,
                   ),
-                  Text(branch.address, style: CommonStyles.txSty_12b_f5),
+                  Text(branch.address, maxLines: 3, overflow: TextOverflow.ellipsis, style: CommonStyles.txSty_12b_f5),
                 ],
               ),
             ),
@@ -670,7 +679,7 @@ class ItemBuilder extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
         ),
-        elevation: 4, // Optional: Add elevation for a shadow effect
+        elevation: 4,
         child: ClipRRect(
           borderRadius: BorderRadius.circular(10),
           child: Image.network(

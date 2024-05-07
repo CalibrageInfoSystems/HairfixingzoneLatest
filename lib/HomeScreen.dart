@@ -5,6 +5,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_expanded_tile/flutter_expanded_tile.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:hairfixingzone/Common/common_styles.dart';
 import 'package:hairfixingzone/Profile.dart';
 import 'package:hairfixingzone/UserSelectionScreen.dart';
 import 'package:hairfixingzone/feedback.dart';
@@ -32,6 +33,8 @@ import 'api_config.dart';
 import 'CommonUtils.dart';
 
 class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
+
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
@@ -121,16 +124,16 @@ class _HomeScreenState extends State<HomeScreen> {
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-              title: Text('Confirm Exit'),
-              content: Text('Are you sure you want to close the app?'),
+              title: const Text('Confirm Exit'),
+              content: const Text('Are you sure you want to close the app?'),
               actions: <Widget>[
                 TextButton(
                   onPressed: () => Navigator.of(context).pop(false), // Close the dialog and return false
-                  child: Text('No'),
+                  child: const Text('No'),
                 ),
                 TextButton(
                   onPressed: () => Navigator.of(context).pop(true), // Close the dialog and return true
-                  child: Text('Yes'),
+                  child: const Text('Yes'),
                 ),
               ],
             );
@@ -149,42 +152,52 @@ class _HomeScreenState extends State<HomeScreen> {
       // child: MaterialApp(
       //   debugShowCheckedModeBanner: false,
       child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: const Color(0xFFf3e3ff),
-          automaticallyImplyLeading: false,
-          title: _currentIndex == 0
-              ? Container(
-                  width: 85,
-                  height: 40,
-                  child: FractionallySizedBox(
-                    widthFactor: 1,
-                    child: Image.asset(
-                      'assets/hfz_logo.png',
-                      fit: BoxFit.fitWidth,
-                    ),
-                  ),
-                )
-              : _currentIndex == 1 || _currentIndex == 2 || _currentIndex == 3
-                  ? Text(
-                      _getAppBarTitle(_currentIndex),
-                      style: CommonUtils.header_Styles,
-                    )
-                  : null,
-          actions: [
-            IconButton(
-              icon: SvgPicture.asset(
-                'assets/sign-out-alt.svg',
-                color: Color(0xFF662e91),
-                width: 24,
-                height: 24,
+        appBar: _currentIndex == 0
+            ? CommonStyles.homeAppBar()
+            : CommonStyles.remainingAppBars(
+                context,
+                title: _getAppBarTitle(_currentIndex),
+                onPressed: () {
+                  logOutDialog();
+                },
               ),
-              onPressed: () {
-                logOutDialog();
-                // Add logout functionality here
-              },
-            ),
-          ],
-        ),
+
+        // AppBar(
+        //   backgroundColor: const Color(0xFFf3e3ff),
+        //   automaticallyImplyLeading: false,
+        //   title: _currentIndex == 0
+        //       ? Container(
+        //           width: 85,
+        //           height: 40,
+        //           child: FractionallySizedBox(
+        //             widthFactor: 1,
+        //             child: Image.asset(
+        //               'assets/hfz_logo.png',
+        //               fit: BoxFit.fitWidth,
+        //             ),
+        //           ),
+        //         )
+        //       : _currentIndex == 1 || _currentIndex == 2 || _currentIndex == 3
+        //           ? Text(
+        //               _getAppBarTitle(_currentIndex),
+        //               style: CommonUtils.header_Styles,
+        //             )
+        //           : null,
+        //   actions: [
+        //     IconButton(
+        //       icon: SvgPicture.asset(
+        //         'assets/sign-out-alt.svg',
+        //         color: Color(0xFF662e91),
+        //         width: 24,
+        //         height: 24,
+        //       ),
+        //       onPressed: () {
+        //         logOutDialog();
+        //         // Add logout functionality here
+        //       },
+        //     ),
+        //   ],
+        // ),
 
         body: _buildScreens(_currentIndex),
 
@@ -660,26 +673,24 @@ class _HomeScreenState extends State<HomeScreen> {
         // ),
         bottomNavigationBar: BottomNavyBar(
           selectedIndex: _currentIndex,
-          backgroundColor: Color(0xFFf3e3ff), // Background color for BottomNavyBar
+          backgroundColor: const Color(0xFFf3e3ff),
           showElevation: true,
           itemCornerRadius: 24,
           curve: Curves.easeIn,
           onItemSelected: (index) => setState(() {
             setState(() {
               _currentIndex = index;
-              //  _appBarTitle = _getAppBarTitle(index); // Update app bar title
             });
           }),
-          //onItemSelected: (index) => setState(() => _currentIndex = index),
           items: <BottomNavyBarItem>[
             BottomNavyBarItem(
               icon: SvgPicture.asset(
                 'assets/objects-column.svg',
                 width: 24,
                 height: 24,
-                color: _currentIndex == 0 ? CommonUtils.primaryTextColor : Colors.grey, // Change color based on selection
+                color: _currentIndex == 0 ? CommonUtils.primaryTextColor : Colors.grey,
               ),
-              title: Text(
+              title: const Text(
                 'Home',
               ),
               activeColor: Colors.blue,
@@ -692,7 +703,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 height: 24,
                 color: _currentIndex == 1 ? CommonUtils.primaryTextColor : Colors.grey, // Change color based
               ),
-              title: Text(
+              title: const Text(
                 'Bookings',
               ),
               activeColor: Colors.blue,
@@ -705,7 +716,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 height: 24,
                 color: _currentIndex == 2 ? CommonUtils.primaryTextColor : Colors.grey, // Change color based on selection
               ),
-              title: Text('My Profile'),
+              title: const Text('My Profile'),
               activeColor: Colors.blue,
               textAlign: TextAlign.center,
             ),
@@ -716,7 +727,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 height: 24,
                 color: _currentIndex == 3 ? CommonUtils.primaryTextColor : Colors.grey, // Change color based on selection
               ),
-              title: Text('Products'),
+              title: const Text('Products'),
               activeColor: Colors.blue,
               textAlign: TextAlign.center,
             ),
@@ -758,7 +769,7 @@ class _HomeScreenState extends State<HomeScreen> {
       case 0:
         return '';
       case 1:
-        return 'My Bookings'; // Display "My Bookings" text for index 1
+        return 'My Bookings';
       case 2:
         return 'My Profile';
       case 3:
@@ -777,7 +788,7 @@ class _HomeScreenState extends State<HomeScreen> {
     CommonUtils.showCustomToastMessageLong("Logout Successful", context, 0, 3);
 
     Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(builder: (context) => CustomerLoginScreen()),
+      MaterialPageRoute(builder: (context) => const CustomerLoginScreen()),
       (route) => false,
     );
   }
@@ -788,7 +799,7 @@ class _HomeScreenState extends State<HomeScreen> {
     });
 
     // Add a timeout of 8 seconds using Future.delayed
-    Future.delayed(Duration(seconds: 15), () {
+    Future.delayed(const Duration(seconds: 15), () {
       if (isLoading) {
         setState(() {
           isLoading = false;
@@ -806,7 +817,7 @@ class _HomeScreenState extends State<HomeScreen> {
     });
 
     // Add a timeout of 8 seconds using Future.delayed
-    Future.delayed(Duration(seconds: 15), () {
+    Future.delayed(const Duration(seconds: 15), () {
       if (isLoading) {
         setState(() {
           isLoading = false;
@@ -977,7 +988,7 @@ class _HomeScreenState extends State<HomeScreen> {
       });
 
       // Print each appointment in the logs
-      appointments.forEach((appointment) {
+      for (var appointment in appointments) {
         print('Appointment ID: ${appointment.id}');
         print('Branch: ${appointment.branch}');
         print('Date: ${appointment.date}');
@@ -991,10 +1002,10 @@ class _HomeScreenState extends State<HomeScreen> {
         print('Slot Duration: ${appointment.slotDuration}');
         print('Appointment Time: ${appointment.appointmentTime}');
         print('');
-        WidgetsBinding.instance!.addPostFrameCallback((_) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
           _showBottomSheet(context, appointments);
         });
-      });
+      }
     } else {
       throw Exception('Failed to load appointments');
     }
@@ -1004,7 +1015,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Container(
       width: 8,
       height: 8,
-      margin: EdgeInsets.symmetric(horizontal: 4),
+      margin: const EdgeInsets.symmetric(horizontal: 4),
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         color: index == currentIndex ? Colors.orange : Colors.grey,
@@ -1012,7 +1023,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  TextEditingController _commentstexteditcontroller = TextEditingController();
+  final TextEditingController _commentstexteditcontroller = TextEditingController();
   double rating_star = 0.0;
 
   void _showBottomSheet(BuildContext context, List<LastAppointment> appointments) {
@@ -1033,7 +1044,7 @@ class _HomeScreenState extends State<HomeScreen> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
+                const Text(
                   'Please Rate Your Recent Experience With Us',
                   style: TextStyle(
                     fontSize: 24,
@@ -1041,10 +1052,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     fontFamily: 'Calibri',
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 15.0,
                 ),
-                Text(
+                const Text(
                   'Rating',
                   style: TextStyle(
                     fontSize: 16,
@@ -1052,10 +1063,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     fontFamily: 'Calibri',
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 15.0,
                 ),
-                Container(
+                SizedBox(
                     width: MediaQuery.of(context).size.width,
                     child: RatingBar.builder(
                       initialRating: 0,
@@ -1063,8 +1074,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       direction: Axis.horizontal,
                       allowHalfRating: true,
                       itemCount: 5,
-                      itemPadding: EdgeInsets.symmetric(horizontal: 1.0),
-                      itemBuilder: (context, _) => Icon(
+                      itemPadding: const EdgeInsets.symmetric(horizontal: 1.0),
+                      itemBuilder: (context, _) => const Icon(
                         Icons.star,
                         color: CommonUtils.primaryTextColor,
                       ),
@@ -1076,7 +1087,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       },
                     )),
                 Padding(
-                  padding: EdgeInsets.only(left: 0, top: 10.0, right: 0),
+                  padding: const EdgeInsets.only(left: 0, top: 10.0, right: 0),
                   child: GestureDetector(
                     onTap: () async {},
                     child: Container(
@@ -1089,7 +1100,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       child: TextFormField(
                         controller: _commentstexteditcontroller,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontFamily: 'Calibri',
                           fontSize: 14,
                           fontWeight: FontWeight.w300,
@@ -1097,7 +1108,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         maxLines: null,
                         maxLength: 256,
                         // Set maxLines to null for multiline input
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           hintText: 'Comments',
                           hintStyle: TextStyle(
                             color: Colors.black54,
@@ -1191,7 +1202,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> validaterating(List<LastAppointment> appointments) async {
     bool isValid = true;
     bool hasValidationFailed = false;
-    if (rating_star != null && rating_star <= 0.0) {
+    if (rating_star <= 0.0) {
       CommonUtils.showCustomToastMessageLong('Please Give Rating', context, 1, 4);
       isValid = false;
       hasValidationFailed = true;
@@ -1275,21 +1286,21 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildScreens(int index) {
     switch (index) {
       case 0:
-        return Dashboard_Screen();
+        return const Dashboard_Screen();
 
       case 1:
         // Return the messages screen widget
-        return MyAppointments();
+        return const MyAppointments();
 
       case 2:
         // Return the settings screen widget
         return Profile();
       case 3:
         // Return the settings screen widget
-        return MyProducts();
+        return const MyProducts();
 
       default:
-        return Dashboard_Screen();
+        return const Dashboard_Screen();
     }
   }
 }

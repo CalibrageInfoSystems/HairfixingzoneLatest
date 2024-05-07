@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:loading_progress/loading_progress.dart';
 
 class CommonStyles {
@@ -155,5 +156,81 @@ class CommonStyles {
 
   static void stopProgress(BuildContext context) {
     Navigator.of(context).pop();
+  }
+
+  static Widget customAppBar(BuildContext context, {required String title}) {
+    return Container(
+      color: const Color(0xFFf3e3ff),
+      child: Row(
+        children: [
+          IconButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            icon: const Icon(
+              Icons.arrow_back_ios,
+              size: 20,
+            ),
+          ),
+          Text(
+            title,
+            style: const TextStyle(color: Color(0xFF0f75bc), fontSize: 16.0),
+          ),
+        ],
+      ),
+    );
+  }
+
+  static AppBar homeAppBar() {
+    return AppBar(
+      backgroundColor: const Color(0xFFf3e3ff),
+      automaticallyImplyLeading: false,
+      title: SizedBox(
+        width: 85,
+        height: 40,
+        child: FractionallySizedBox(
+          widthFactor: 1,
+          child: Image.asset(
+            'assets/hfz_logo.png',
+            fit: BoxFit.fitWidth,
+          ),
+        ),
+      ),
+    );
+  }
+
+  static AppBar remainingAppBars(BuildContext context, {required String title, required void Function()? onPressed}) {
+    return AppBar(
+      backgroundColor: const Color(0xFFf3e3ff),
+      automaticallyImplyLeading: false,
+      title: Row(
+        children: [
+          IconButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            icon: const Icon(
+              Icons.arrow_back_ios,
+              size: 20,
+            ),
+          ),
+          Text(
+            title,
+            style: const TextStyle(color: Color(0xFF0f75bc), fontSize: 16.0),
+          ),
+        ],
+      ),
+      actions: [
+        IconButton(
+          icon: SvgPicture.asset(
+            'assets/sign-out-alt.svg',
+            color: const Color(0xFF662e91),
+            width: 24,
+            height: 24,
+          ),
+          onPressed: onPressed,
+        ),
+      ],
+    );
   }
 }

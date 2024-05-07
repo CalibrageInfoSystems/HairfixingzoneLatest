@@ -224,9 +224,22 @@ class _SlotSuccessScreenState extends State<SlotSuccessScreen> with TickerProvid
                         elevation: 4,
                         child: Container(
                           padding: const EdgeInsets.all(10),
+                          // decoration: BoxDecoration(
+                          //   color: Colors.white,
+                          //   borderRadius: BorderRadius.circular(10),
+                          // ),
                           decoration: BoxDecoration(
                             color: Colors.white,
-                            borderRadius: BorderRadius.circular(10),
+                            borderRadius: BorderRadius.circular(10.0),
+                            // borderRadius: BorderRadius.circular(30), //border corner radius
+                            boxShadow: [
+                              BoxShadow(
+                                color: Color(0xFF960efd).withOpacity(0.2), //color of shadow
+                                spreadRadius: 2, //spread radius
+                                blurRadius: 4, // blur radius
+                                offset: Offset(0, 2), // changes position of shadow
+                              ),
+                            ],
                           ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,

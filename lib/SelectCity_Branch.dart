@@ -248,21 +248,43 @@ class _BookingScreenState extends State<SelectCity_Branch_screen> {
                                     child: Container(
                                       height: MediaQuery.of(context).size.height / 8,
                                       width: MediaQuery.of(context).size.width,
+                                      // decoration: BoxDecoration(
+                                      //   border: Border.all(color: Color(0xFF662e91), width: 1.0),
+                                      //   borderRadius: BorderRadius.circular(10.0),
+                                      // ),
                                       decoration: BoxDecoration(
-                                        border: Border.all(color: Color(0xFF662e91), width: 1.0),
+                                        color: Colors.white,
                                         borderRadius: BorderRadius.circular(10.0),
+                                        // borderRadius: BorderRadius.circular(30), //border corner radius
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Color(0xFF960efd).withOpacity(0.2), //color of shadow
+                                            spreadRadius: 2, //spread radius
+                                            blurRadius: 4, // blur radius
+                                            offset: Offset(0, 2), // changes position of shadow
+                                          ),
+                                        ],
                                       ),
                                       child: Row(
                                         children: [
                                           Container(
-                                              padding: EdgeInsets.all(10),
-                                              // width: MediaQuery.of(context).size.width / 4,
-                                              child: Image.network(
-                                                '${imageUrl}',
-                                                fit: BoxFit.cover,
-                                                height: MediaQuery.of(context).size.height / 4 / 2,
-                                                width: MediaQuery.of(context).size.width / 3.2,
-                                              )),
+                                            padding: EdgeInsets.all(10),
+                                            // width: MediaQuery.of(context).size.width / 4,
+                                            child: Image.network(
+                                              imageUrl.isNotEmpty ? imageUrl : 'https://example.com/placeholder-image.jpg',
+                                              fit: BoxFit.cover,
+                                              height: MediaQuery.of(context).size.height / 4 / 2,
+                                              width: MediaQuery.of(context).size.width / 3.2,
+                                              errorBuilder: (context, error, stackTrace) {
+                                                return Image.asset(
+                                                  'assets/hairfixing_logo.png', // Path to your PNG placeholder image
+                                                  fit: BoxFit.cover,
+                                                  height: MediaQuery.of(context).size.height / 4 / 2,
+                                                  width: MediaQuery.of(context).size.width / 3.2,
+                                                );
+                                              },
+                                            ),
+                                          ),
                                           Container(
                                             width: MediaQuery.of(context).size.width / 2.2,
                                             //    padding: EdgeInsets.only(top: 7),

@@ -34,15 +34,15 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
   String? month;
   String? date;
   String? year;
-
+  late Future<List<Consultation>> ConsultationData;
   @override
   void initState() {
     super.initState();
     print('branchid ${widget.branchid} fromdate${widget.fromdate} todate ${widget.todate}');
-    getviewconsulationlist();
+    ConsultationData = getviewconsulationlist();
   }
 
-  Future<void> getviewconsulationlist() async {
+  Future<List<Consultation>> getviewconsulationlist() async {
     final String apiUrl = 'http://182.18.157.215/SaloonApp/API/api/Consultation/GetConsultationsByBranchId';
     print('getconsulationapi:$apiUrl');
     final Map<String, dynamic> requestObject = {"branchId": widget.branchid, "fromDate": "${widget.fromdate}", "toDate": "${widget.todate}"};
@@ -75,6 +75,7 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
             setState(() {
               consultationslist = consultations;
             });
+            return consultations;
             print(consultations);
           } else {
             print("ListResult is null or not a List<dynamic>");
@@ -86,6 +87,7 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
     } catch (e) {
       print("Exception: $e");
     }
+    return [];
   }
 
   @override
@@ -95,12 +97,33 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
             appBar: _appBar(context),
             body: SingleChildScrollView(
                 child: Container(
-                    padding: const EdgeInsets.all(10),
-                    child: ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: consultationslist.length == 0 ? 1 : consultationslist.length,
-                        itemBuilder: (context, index) {
-                          if (consultationslist.length > 0) {
+              padding: const EdgeInsets.all(10),
+              child: FutureBuilder(
+                future: ConsultationData,
+                builder: (BuildContext context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(
+                      child: CircularProgressIndicator.adaptive(),
+                    );
+                  } else if (snapshot.hasError) {
+                    return Center(
+                      child: Text(snapshot.error.toString()),
+                    );
+                  } else {
+                    List<Consultation> data = snapshot.data!;
+                    if (data.isEmpty) {
+                      return Container(
+                          height: MediaQuery.of(context).size.height,
+                          width: MediaQuery.of(context).size.height,
+                          child: Center(
+                            child: Text('No View Consulation Found'),
+                          ));
+                    } else {
+                      return ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: consultationslist.length == 0 ? 1 : consultationslist.length,
+                          itemBuilder: (context, index) {
+                            // if (consultationslist.length > 0) {
                             return Card(
                               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                               elevation: 5,
@@ -108,8 +131,23 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
                                   child: Container(
                                 //   height: MediaQuery.of(context).size.height / 5,
                                 padding: const EdgeInsets.all(10),
+                                // decoration: BoxDecoration(
+                                //   borderRadius: BorderRadius.circular(10.0),
+                                //   color: Colors.white,
+                                //
+                                // ),
                                 decoration: BoxDecoration(
+                                  color: Colors.white,
                                   borderRadius: BorderRadius.circular(10.0),
+                                  // borderRadius: BorderRadius.circular(30), //border corner radius
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Color(0xFF960efd).withOpacity(0.2), //color of shadow
+                                      spreadRadius: 2, //spread radius
+                                      blurRadius: 4, // blur radius
+                                      offset: Offset(0, 2), // changes position of shadow
+                                    ),
+                                  ],
                                 ),
                                 child: Row(
                                   children: [
@@ -234,23 +272,13 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
                                 ),
                               )),
                             );
-                          } else if (consultationslist.isEmpty || consultationslist.length == 0) {
-                            return Container(
-                                height: MediaQuery.of(context).size.height / 1.5,
-                                width: MediaQuery.of(context).size.width,
-                                child: Center(
-                                  child: Text(
-                                    'No View Consultation Available',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontFamily: "Calibri",
-                                      fontWeight: FontWeight.w800,
-                                      color: Color(0xFF5f5f5f),
-                                    ),
-                                  ),
-                                ));
-                          }
-                        })))));
+                            //  }
+                          });
+                    }
+                  }
+                },
+              ),
+            ))));
   }
 
   AppBar _appBar(BuildContext context) {

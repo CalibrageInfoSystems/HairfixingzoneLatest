@@ -36,6 +36,7 @@ class AddConsulationscreen_screenState extends State<Add_Consulation_screen> {
   TextEditingController dobController = TextEditingController();
   TextEditingController genderController = TextEditingController();
   TextEditingController mobileNumberController = TextEditingController();
+  FocusNode remarksFocus = FocusNode();
 
   TextEditingController emailController = TextEditingController();
   TextEditingController remarksController = TextEditingController();
@@ -49,7 +50,9 @@ class AddConsulationscreen_screenState extends State<Add_Consulation_screen> {
   String? _mobileNumberErrorMsg;
   bool _altNumberError = false;
   String? _altNumberErrorMsg;
-
+  bool _remarksError = false;
+  String? _remarksErrorMsg;
+  bool isRemarksValidate = false;
   bool isFullNameValidate = false;
   bool isDobValidate = false;
   bool isGenderValidate = false;
@@ -522,7 +525,7 @@ class AddConsulationscreen_screenState extends State<Add_Consulation_screen> {
                           const SizedBox(
                             height: 10,
                           ),
-                          Row(
+                          const Row(
                             children: [
                               Text(
                                 'Remarks ',
@@ -534,98 +537,74 @@ class AddConsulationscreen_screenState extends State<Add_Consulation_screen> {
                               ),
                             ],
                           ),
-                          Padding(
-                            padding: EdgeInsets.only(left: 0, top: 5.0, right: 0),
-                            child: GestureDetector(
-                              onTap: () async {
-                                if (!_focusNode.hasFocus) {
-                                  _focusNode.requestFocus();
-                                }
-                              },
-                              child: Container(
-                                width: MediaQuery.of(context).size.width,
-                                decoration: BoxDecoration(
-                                  // border: Border.all(
-                                  //   color: CommonUtils.primaryTextColor,
-                                  // ),
-                                  borderRadius: BorderRadius.circular(5.0),
-                                  color: Colors.white,
+                          const SizedBox(
+                            height: 5.0,
+                          ),
+                          TextFormField(
+                            controller: remarksController,
+                            maxLengthEnforcement: MaxLengthEnforcement.enforced,
+                            maxLength: 256,
+                            maxLines: 6,
+                            onTap: () {
+                              setState(() {
+                                remarksFocus.addListener(() {
+                                  if (remarksFocus.hasFocus) {
+                                    Future.delayed(const Duration(milliseconds: 300), () {
+                                      // Scrollable.ensureVisible(
+                                      //   EmailFocus.context!,
+                                      //   duration: const Duration(
+                                      //       milliseconds: 300),
+                                      //   curve: Curves.easeInOut,
+                                      // );
+                                    });
+                                  }
+                                });
+                              });
+                            },
+                            decoration: InputDecoration(
+                              errorText: _remarksError ? _remarksErrorMsg : null,
+                              contentPadding: const EdgeInsets.only(top: 15, bottom: 10, left: 15, right: 15),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                  color: Color(0xFF0f75bc),
                                 ),
-                                child: Stack(
-                                  children: [
-                                    TextFormField(
-                                      focusNode: _focusNode,
-                                      controller: remarksController,
-                                      style: TextStyle(
-                                        fontFamily: 'Calibri',
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w300,
-                                      ),
-                                      maxLines: null,
-                                      onChanged: (value) {
-                                        setState(() {
-                                          if (value.startsWith(' ')) {
-                                            remarksController.value = TextEditingValue(
-                                              text: value.trimLeft(),
-                                              selection: TextSelection.collapsed(offset: value.trimLeft().length),
-                                            );
-                                          }
-                                          if (value.length > 256) {
-                                            // Trim the text if it exceeds 256 characters
-                                            remarksController.value = TextEditingValue(
-                                              text: value.substring(0, 256),
-                                              selection: TextSelection.collapsed(offset: 256),
-                                            );
-                                          }
-                                        }); // Update the UI when text changes
-                                      },
-                                      decoration: InputDecoration(
-                                        hintText: 'Enter Remarks',
-                                        hintStyle: TextStyle(
-                                          color: Colors.black54,
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.bold,
-                                          fontFamily: 'Calibri',
-                                        ),
-                                        enabledBorder: OutlineInputBorder(
-                                          borderSide: const BorderSide(
-                                            color: CommonUtils.primaryTextColor,
-                                          ),
-                                          borderRadius: BorderRadius.circular(6.0),
-                                        ),
-                                        contentPadding: EdgeInsets.symmetric(
-                                          horizontal: 16.0,
-                                          vertical: 12.0,
-                                        ),
-                                        border: InputBorder.none,
-                                      ),
-                                    ),
-                                    Positioned(
-                                      bottom: 8.0,
-                                      right: 8.0,
-                                      child: Container(
-                                        padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-                                        // decoration: BoxDecoration(
-                                        //   color: Colors.black.withOpacity(0.6),
-                                        //   borderRadius: BorderRadius.circular(4.0),
-                                        // ),
-                                        child: Text(
-                                          '${remarksController.text.length}/${remarksController.text.length > 256 ? 256 : 256}',
-                                          style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.bold,
-                                            fontFamily: 'Calibri',
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
+                                borderRadius: BorderRadius.circular(6.0),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                  color: CommonUtils.primaryTextColor,
+                                ),
+                                borderRadius: BorderRadius.circular(6.0),
+                              ),
+                              border: const OutlineInputBorder(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(10),
                                 ),
                               ),
+                              hintText: 'Enter Remarks',
+                              counterText: "",
+                              hintStyle: TextStyle(color: Colors.grey, fontWeight: FontWeight.w400),
                             ),
+                            validator: validateremarks,
+                            onChanged: (value) {
+                              setState(() {
+                                if (value.startsWith(' ')) {
+                                  remarksController.value = TextEditingValue(
+                                    text: value.trimLeft(),
+                                    selection: TextSelection.collapsed(offset: value.trimLeft().length),
+                                  );
+                                }
+                                if (value.length > 256) {
+                                  // Trim the text if it exceeds 256 characters
+                                  remarksController.value = TextEditingValue(
+                                    text: value.substring(0, 256),
+                                    selection: TextSelection.collapsed(offset: 256),
+                                  );
+                                }
+                                _remarksError = false;
+                              }); // Update the UI when text changes
+                            },
                           ),
-
                           Row(
                             children: [
                               Expanded(
@@ -653,6 +632,16 @@ class AddConsulationscreen_screenState extends State<Add_Consulation_screen> {
   }
 
 //MARK: Validations
+  String? validateremarks(String? value) {
+    if (value!.isEmpty) {
+      setState(() {
+        _remarksError = true;
+        _remarksErrorMsg = 'Please Enter Remarks';
+      });
+      isRemarksValidate = false;
+      return null;
+    }
+  }
 
   String? validatefullname(String? value) {
     if (value!.isEmpty) {

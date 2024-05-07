@@ -30,7 +30,6 @@ class MyAppointments extends StatefulWidget {
 }
 
 class MyAppointments_screenState extends State<MyAppointments> {
-
   Future<List<MyAppointment_Model>>? apiData;
   int? userId;
   @override
@@ -51,6 +50,7 @@ class MyAppointments_screenState extends State<MyAppointments> {
       }
     });
   }
+
   MyAppointmentsProvider? myAppointmentsProvider;
   @override
   void didChangeDependencies() {
@@ -892,8 +892,21 @@ class _OpCardState extends State<OpCard> {
       child: Container(
         height: widget.data.statusTypeId == 4 || widget.data.statusTypeId == 6 ? 90 : 120,
         padding: const EdgeInsets.all(10),
+        // decoration: BoxDecoration(
+        //   borderRadius: BorderRadius.circular(10.0),
+        // ),
         decoration: BoxDecoration(
+          color: Colors.white,
           borderRadius: BorderRadius.circular(10.0),
+          // borderRadius: BorderRadius.circular(30), //border corner radius
+          boxShadow: [
+            BoxShadow(
+              color: Color(0xFF960efd).withOpacity(0.2), //color of shadow
+              spreadRadius: 2, //spread radius
+              blurRadius: 4, // blur radius
+              offset: Offset(0, 2), // changes position of shadow
+            ),
+          ],
         ),
         child: Row(
           children: [

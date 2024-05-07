@@ -27,7 +27,6 @@ import 'Rescheduleslotscreen.dart';
 import 'api_config.dart';
 
 class Agentappointmentlist extends StatefulWidget {
-
   final int userId;
   final int branchid;
   final String branchname;
@@ -36,17 +35,16 @@ class Agentappointmentlist extends StatefulWidget {
   final String branchaddress;
   Agentappointmentlist(
       {required this.userId,
-        required this.branchid,
-        required this.branchname,
-        required this.filepath,
-        required this.phonenumber,
-        required this.branchaddress}) {}
+      required this.branchid,
+      required this.branchname,
+      required this.filepath,
+      required this.phonenumber,
+      required this.branchaddress}) {}
   @override
   MyAppointments_screenState createState() => MyAppointments_screenState();
 }
 
 class MyAppointments_screenState extends State<Agentappointmentlist> {
-
   Future<List<Appointment>>? apiData;
   int? userId;
   int? branchid;
@@ -68,6 +66,7 @@ class MyAppointments_screenState extends State<Agentappointmentlist> {
       }
     });
   }
+
   AgentAppointmentsProvider? myAppointmentsProvider;
   @override
   void didChangeDependencies() {
@@ -83,7 +82,9 @@ class MyAppointments_screenState extends State<Agentappointmentlist> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => AgentHome(userId: userId!,),
+              builder: (context) => AgentHome(
+                userId: userId!,
+              ),
             ),
           );
           return true;
@@ -160,8 +161,7 @@ class MyAppointments_screenState extends State<Agentappointmentlist> {
                                     return Column(
                                       children: [
                                         OpCard(
-                                          data: data[index],userId :widget.userId,branchid: widget.branchid,branchaddress : widget.branchaddress
-                                        ),
+                                            data: data[index], userId: widget.userId, branchid: widget.branchid, branchaddress: widget.branchaddress),
                                         const SizedBox(
                                           height: 5,
                                         ),
@@ -208,7 +208,7 @@ class MyAppointments_screenState extends State<Agentappointmentlist> {
   }
 
   void initializeData(int? userId) {
-    apiData = fetchagentAppointments(userId,widget.branchid);
+    apiData = fetchagentAppointments(userId, widget.branchid);
     apiData!.then((value) {
       myAppointmentsProvider!.storeIntoProvider = value;
     }).catchError((error) {
@@ -221,8 +221,8 @@ class MyAppointments_screenState extends State<Agentappointmentlist> {
     // {"userId":8,"branchId":2,"fromDate":"2024-05-01","toDate":"2024-05-17","statusTypeId":null}
 
     try {
-     final request = {"userId": userId, "branchId": branchid, "fromdate":null, "toDate": null, "statustypeId": null};
-   //   final request = {"userId": userId, "branchId": branchid, "fromdate":"2024-05-01", "toDate": "2024-05-17", "statustypeId": null};
+      final request = {"userId": userId, "branchId": branchid, "fromdate": null, "toDate": null, "statustypeId": null};
+      //   final request = {"userId": userId, "branchId": branchid, "fromdate":"2024-05-01", "toDate": "2024-05-17", "statustypeId": null};
       print('GetAppointment: ${json.encode(request)}');
 
       final jsonResponse = await http.post(
@@ -255,7 +255,7 @@ class MyAppointments_screenState extends State<Agentappointmentlist> {
 
   void refreshTheScreen() {
     CommonUtils.checkInternetConnectivity().then(
-          (isConnected) {
+      (isConnected) {
         if (isConnected) {
           print('The Internet Is Connected');
 
@@ -336,9 +336,7 @@ class MyAppointments_screenState extends State<Agentappointmentlist> {
                     padding: EdgeInsets.only(
                       bottom: MediaQuery.of(context).viewInsets.bottom,
                     ),
-                    child: FilterAppointmentBottomSheet(
-                      userId: userId,branchid: widget.branchid
-                    ),
+                    child: FilterAppointmentBottomSheet(userId: userId, branchid: widget.branchid),
                   ),
                 );
               },
@@ -392,14 +390,12 @@ class MyAppointments_screenState extends State<Agentappointmentlist> {
   //     throw Exception('Failed to connect to the API');
   //   }
   // }
-
-
 }
 
 class FilterAppointmentBottomSheet extends StatefulWidget {
   final int? userId;
   final int? branchid;
-   FilterAppointmentBottomSheet({Key? key, required this.userId, required this.branchid}) : super(key: key);
+  FilterAppointmentBottomSheet({Key? key, required this.userId, required this.branchid}) : super(key: key);
 
   @override
   State<FilterAppointmentBottomSheet> createState() => _FilterBottomSheetState();
@@ -422,7 +418,7 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
   String? apiFromDate;
   String? apiToDate;
 
-   AgentAppointmentsProvider? myAppointmentsProvider;
+  AgentAppointmentsProvider? myAppointmentsProvider;
   @override
   void initState() {
     super.initState();
@@ -498,8 +494,8 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                     onTap: () {
                       clearFilterAppointments({
                         "userid": widget.userId,
-                      //  "branchId": 2,
-                      "branchId": widget.branchid,
+                        //  "branchId": 2,
+                        "branchId": widget.branchid,
                         "fromdate": null,
                         "toDate": null,
                         "statustypeId": null,
@@ -548,7 +544,7 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                               endDate = e;
                               startDate = s;
                               provider!.getDisplayDate =
-                              '${startDate != null ? DateFormat("dd, MMM").format(startDate!) : '-'} / ${endDate != null ? DateFormat("dd, MMM").format(endDate!) : '-'}';
+                                  '${startDate != null ? DateFormat("dd, MMM").format(startDate!) : '-'} / ${endDate != null ? DateFormat("dd, MMM").format(endDate!) : '-'}';
                               From_todates.text = provider.getDisplayDate;
                               provider.getApiFromDate = DateFormat('yyyy-MM-dd').format(startDate!);
                               provider.getApiToDate = DateFormat('yyyy-MM-dd').format(endDate!);
@@ -824,8 +820,8 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                                   // filterAppointments(widget.userId);
                                   filterAppointments({
                                     "userId": widget.userId,
-                                   // "branchId": 2,
-                                   "branchId":  widget.branchid,
+                                    // "branchId": 2,
+                                    "branchId": widget.branchid,
                                     "fromdate": myAppointmentsProvider?.getApiFromDate,
                                     "toDate": myAppointmentsProvider?.getApiToDate,
                                     "statustypeId": myAppointmentsProvider?.getApiStatusTypeId,
@@ -939,8 +935,8 @@ class OpCard extends StatefulWidget {
   final Appointment data;
   int? userId;
   int? branchid;
-  String ? branchaddress;
-   OpCard({super.key, required this.data, required int userId, required int branchid, required String branchaddress});
+  String? branchaddress;
+  OpCard({super.key, required this.data, required int userId, required int branchid, required String branchaddress});
 
   @override
   State<OpCard> createState() => _OpCardState();
@@ -978,10 +974,23 @@ class _OpCardState extends State<OpCard> {
       elevation: 5,
       child: Container(
         height: widget.data.statusTypeId == 4 || widget.data.statusTypeId == 6 ? 150 : 180,
-       //   height: 150,
+        //   height: 150,
         padding: const EdgeInsets.all(10),
+        // decoration: BoxDecoration(
+        //   borderRadius: BorderRadius.circular(10.0),
+        // ),
         decoration: BoxDecoration(
+          color: Colors.white,
           borderRadius: BorderRadius.circular(10.0),
+          // borderRadius: BorderRadius.circular(30), //border corner radius
+          boxShadow: [
+            BoxShadow(
+              color: Color(0xFF960efd).withOpacity(0.2), //color of shadow
+              spreadRadius: 2, //spread radius
+              blurRadius: 4, // blur radius
+              offset: Offset(0, 2), // changes position of shadow
+            ),
+          ],
         ),
         child: Row(
           children: [
@@ -1060,13 +1069,13 @@ class _OpCardState extends State<OpCard> {
                                 height: 2.0,
                               ),
 
-                              Text(widget.data.phoneNumber?? '', style: CommonStyles.txSty_16black_f5),
+                              Text(widget.data.phoneNumber ?? '', style: CommonStyles.txSty_16black_f5),
                               SizedBox(
                                 height: 3.0,
                               ),
                               Text(widget.data.gender ?? ' ', style: CommonStyles.txSty_16black_f5),
 
-                          //    Text(widget.data.gender!, style: CommonStyles.txSty_16black_f5),
+                              //    Text(widget.data.gender!, style: CommonStyles.txSty_16black_f5),
                               SizedBox(
                                 height: 5.0,
                               ),
@@ -1104,9 +1113,7 @@ class _OpCardState extends State<OpCard> {
                   Row(
                     mainAxisAlignment: widget.data.statusTypeId == 11 ? MainAxisAlignment.start : MainAxisAlignment.end,
                     children: [
-                      verifyStatus(
-                        widget.data, widget.userId
-                      ),
+                      verifyStatus(widget.data, widget.userId),
                     ],
                   ),
                 ],
@@ -1178,14 +1185,14 @@ class _OpCardState extends State<OpCard> {
   Widget verifyStatus(Appointment data, int? userId) {
     switch (data.statusTypeId) {
       case 4: // Submited
-     //   return const SizedBox();
+        //   return const SizedBox();
         return Row(
           children: [
             GestureDetector(
               onTap: () {
                 if (!isPastDate(data.date, data.slotDuration)) {
                   print('Button 1 pressed for ${data.customerName}');
-                  postAppointment(data, 5,0,userId);
+                  postAppointment(data, 5, 0, userId);
                   Get_ApprovedDeclinedSlots(data, 5);
                   print('accpteedbuttonisclicked');
                   // Navigator.push(
@@ -1269,13 +1276,12 @@ class _OpCardState extends State<OpCard> {
           ],
         );
       case 5: // Accepted
-      //  return const SizedBox();
+        //  return const SizedBox();
         return Row(
           children: [
-
             GestureDetector(
               onTap: () {
-                closepopup(data, 18,userId);
+                closepopup(data, 18, userId);
                 // if (!isPastDate(data.date, data.SlotDuration)) {
                 //   conformation(data);
                 //   // Add your logic here for when the 'Cancel' container is tapped
@@ -1327,28 +1333,28 @@ class _OpCardState extends State<OpCard> {
       //   return const SizedBox();
       default:
         return const SizedBox();
-    //  return Container(
-    //     decoration: BoxDecoration(
-    //         borderRadius: BorderRadius.circular(3),
-    //         border: Border.all(color: CommonUtils.blackColor)),
-    //     padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
-    //     child: const Row(
-    //       children: [
-    //         Icon(
-    //           Icons.star_border_outlined,
-    //           size: 13,
-    //           color: CommonStyles.primaryTextColor,
-    //         ),
-    //         Text(
-    //           ' Rate Us',
-    //           style: TextStyle(
-    //             fontSize: 11,
-    //             color: CommonStyles.primaryTextColor,
-    //           ),
-    //         ),
-    //       ],
-    //     ),
-    //   );
+      //  return Container(
+      //     decoration: BoxDecoration(
+      //         borderRadius: BorderRadius.circular(3),
+      //         border: Border.all(color: CommonUtils.blackColor)),
+      //     padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
+      //     child: const Row(
+      //       children: [
+      //         Icon(
+      //           Icons.star_border_outlined,
+      //           size: 13,
+      //           color: CommonStyles.primaryTextColor,
+      //         ),
+      //         Text(
+      //           ' Rate Us',
+      //           style: TextStyle(
+      //             fontSize: 11,
+      //             color: CommonStyles.primaryTextColor,
+      //           ),
+      //         ),
+      //       ],
+      //     ),
+      //   );
     }
   }
 
@@ -1886,7 +1892,6 @@ class _OpCardState extends State<OpCard> {
     }
   }
 
-
   void closepopup(Appointment data, int i, int? userId) {
     TextEditingController priceController = TextEditingController();
     GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -1900,7 +1905,7 @@ class _OpCardState extends State<OpCard> {
             key: _formKey,
             child: Container(
               width: 345.0,
-           height: 120.0,
+              height: 120.0,
 
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1965,7 +1970,6 @@ class _OpCardState extends State<OpCard> {
                       SizedBox(
                         height: 10,
                       ),
-
                     ],
                   ),
                 ],
@@ -2022,7 +2026,7 @@ class _OpCardState extends State<OpCard> {
               onPressed: () {
                 if (_formKey.currentState!.validate()) {
                   int? price = int.tryParse(priceController.text);
-                  postAppointment(data, 18, price!,userId);
+                  postAppointment(data, 18, price!, userId);
                   Navigator.of(context).pop();
                 }
               },
@@ -2045,7 +2049,6 @@ class _OpCardState extends State<OpCard> {
     // }
     return null;
   }
-
 
   void openDialogaccept() async {
     await showDialog(
@@ -2095,7 +2098,6 @@ class _OpCardState extends State<OpCard> {
       },
     );
   }
-
 }
 
 Future<void> Get_ApprovedDeclinedSlots(Appointment data, int i) async {
