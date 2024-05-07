@@ -20,6 +20,7 @@ import 'AgentHome.dart';
 import 'Appointment.dart';
 import 'BranchModel.dart';
 import 'Common/common_styles.dart';
+import 'Common/custom_button.dart';
 import 'Commonutils.dart';
 import 'MyAppointment_Model.dart';
 import 'Rescheduleslotscreen.dart';
@@ -48,6 +49,7 @@ class MyAppointments_screenState extends State<Agentappointmentlist> {
 
   Future<List<Appointment>>? apiData;
   int? userId;
+  int? branchid;
   @override
   void initState() {
     super.initState();
@@ -217,9 +219,11 @@ class MyAppointments_screenState extends State<Agentappointmentlist> {
   Future<List<Appointment>> fetchagentAppointments(int? userId, int branchid) async {
     final url = Uri.parse('http://182.18.157.215/SaloonApp/API/api/Appointment/GetAppointment');
     // {"userId":8,"branchId":2,"fromDate":"2024-05-01","toDate":"2024-05-17","statusTypeId":null}
+
     try {
-      final request = {"userId": userId, "branchId": branchid, "fromdate": "2024-05-01", "toDate": "2024-05-17", "statustypeId": null};
-      print('GetAppointmentByUserid: ${json.encode(request)}');
+     final request = {"userId": userId, "branchId": branchid, "fromdate":null, "toDate": null, "statustypeId": null};
+   //   final request = {"userId": userId, "branchId": branchid, "fromdate":"2024-05-01", "toDate": "2024-05-17", "statustypeId": null};
+      print('GetAppointment: ${json.encode(request)}');
 
       final jsonResponse = await http.post(
         url,
@@ -333,7 +337,7 @@ class MyAppointments_screenState extends State<Agentappointmentlist> {
                       bottom: MediaQuery.of(context).viewInsets.bottom,
                     ),
                     child: FilterAppointmentBottomSheet(
-                      userId: userId,
+                      userId: userId,branchid: widget.branchid
                     ),
                   ),
                 );
@@ -394,7 +398,8 @@ class MyAppointments_screenState extends State<Agentappointmentlist> {
 
 class FilterAppointmentBottomSheet extends StatefulWidget {
   final int? userId;
-  const FilterAppointmentBottomSheet({Key? key, required this.userId}) : super(key: key);
+  final int? branchid;
+   FilterAppointmentBottomSheet({Key? key, required this.userId, required this.branchid}) : super(key: key);
 
   @override
   State<FilterAppointmentBottomSheet> createState() => _FilterBottomSheetState();
@@ -493,7 +498,8 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                     onTap: () {
                       clearFilterAppointments({
                         "userid": widget.userId,
-                        "branchId": null,
+                      //  "branchId": 2,
+                      "branchId": widget.branchid,
                         "fromdate": null,
                         "toDate": null,
                         "statustypeId": null,
@@ -587,103 +593,103 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                       ),
                       //  validator: validatePassword,
                     ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    //MARK: Filter Category
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10),
-                      child: FutureBuilder(
-                          future: apiData,
-                          builder: (context, snapshot) {
-                            if (snapshot.connectionState == ConnectionState.waiting) {
-                              return CircularProgressIndicator.adaptive(
-                                backgroundColor: Colors.transparent,
-                                valueColor: AlwaysStoppedAnimation<Color>(orangeColor),
-                              );
-                            } else if (snapshot.hasError) {
-                              return Text('Error: ${snapshot.error}');
-                            } else {
-                              List<BranchModel> data = snapshot.data!;
-                              return SizedBox(
-                                height: 40,
-                                child: ListView.builder(
-                                  scrollDirection: Axis.horizontal,
-                                  shrinkWrap: true,
-                                  itemCount: data.length + 1,
-                                  itemBuilder: (BuildContext context, int index) {
-                                    bool isSelected = index == provider.selectedBranch;
-                                    BranchModel branchmodel;
-
-                                    if (index == 0) {
-                                      branchmodel = BranchModel(
-                                        id: 0,
-                                        name: "All",
-                                        imageName: null,
-                                        address: " ",
-                                        startTime: 0,
-                                        closeTime: 0,
-                                        room: 0,
-                                        mobileNumber: "",
-                                        isActive: true,
-                                      );
-                                    } else {
-                                      branchmodel = data[index - 1];
-                                    }
-                                    return GestureDetector(
-                                      //MARK: Brach id
-                                      onTap: () {
-                                        setState(() {
-                                          provider!.selectedBranch = index;
-
-                                          // provider.getbranch = branchmodel.id;
-                                          provider!.getApiBranchId = branchmodel.id;
-                                          print('filter: ${provider.getbranch}');
-
-                                          print('Filter branchmodel: ${branchmodel.id}');
-                                        });
-                                      },
-                                      child: Container(
-                                        margin: const EdgeInsets.symmetric(horizontal: 4.0),
-                                        decoration: BoxDecoration(
-                                          color: isSelected ? orangeColor : orangeColor.withOpacity(0.1),
-                                          border: Border.all(
-                                            color: isSelected ? orangeColor : orangeColor,
-                                            width: 1.0,
-                                          ),
-                                          borderRadius: BorderRadius.circular(8.0),
-                                        ),
-                                        child: IntrinsicWidth(
-                                          child: Column(
-                                            mainAxisAlignment: MainAxisAlignment.center,
-                                            children: [
-                                              Container(
-                                                padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                                                child: Row(
-                                                  children: [
-                                                    Text(
-                                                      branchmodel.name.toString(),
-                                                      style: TextStyle(
-                                                        fontSize: 12.0,
-                                                        fontWeight: FontWeight.bold,
-                                                        fontFamily: "Roboto",
-                                                        color: isSelected ? Colors.white : Colors.black,
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                ),
-                              );
-                            }
-                          }),
-                    ),
+                    // const SizedBox(
+                    //   height: 10,
+                    // ),
+                    // //MARK: Filter Category
+                    // Padding(
+                    //   padding: const EdgeInsets.symmetric(vertical: 10),
+                    //   child: FutureBuilder(
+                    //       future: apiData,
+                    //       builder: (context, snapshot) {
+                    //         if (snapshot.connectionState == ConnectionState.waiting) {
+                    //           return CircularProgressIndicator.adaptive(
+                    //             backgroundColor: Colors.transparent,
+                    //             valueColor: AlwaysStoppedAnimation<Color>(orangeColor),
+                    //           );
+                    //         } else if (snapshot.hasError) {
+                    //           return Text('Error: ${snapshot.error}');
+                    //         } else {
+                    //           List<BranchModel> data = snapshot.data!;
+                    //           return SizedBox(
+                    //             height: 40,
+                    //             child: ListView.builder(
+                    //               scrollDirection: Axis.horizontal,
+                    //               shrinkWrap: true,
+                    //               itemCount: data.length + 1,
+                    //               itemBuilder: (BuildContext context, int index) {
+                    //                 bool isSelected = index == provider.selectedBranch;
+                    //                 BranchModel branchmodel;
+                    //
+                    //                 if (index == 0) {
+                    //                   branchmodel = BranchModel(
+                    //                     id: 0,
+                    //                     name: "All",
+                    //                     imageName: null,
+                    //                     address: " ",
+                    //                     startTime: 0,
+                    //                     closeTime: 0,
+                    //                     room: 0,
+                    //                     mobileNumber: "",
+                    //                     isActive: true,
+                    //                   );
+                    //                 } else {
+                    //                   branchmodel = data[index - 1];
+                    //                 }
+                    //                 return GestureDetector(
+                    //                   //MARK: Brach id
+                    //                   onTap: () {
+                    //                     setState(() {
+                    //                       provider!.selectedBranch = index;
+                    //
+                    //                       // provider.getbranch = branchmodel.id;
+                    //                       provider!.getApiBranchId = branchmodel.id;
+                    //                       print('filter: ${provider.getbranch}');
+                    //
+                    //                       print('Filter branchmodel: ${branchmodel.id}');
+                    //                     });
+                    //                   },
+                    //                   child: Container(
+                    //                     margin: const EdgeInsets.symmetric(horizontal: 4.0),
+                    //                     decoration: BoxDecoration(
+                    //                       color: isSelected ? orangeColor : orangeColor.withOpacity(0.1),
+                    //                       border: Border.all(
+                    //                         color: isSelected ? orangeColor : orangeColor,
+                    //                         width: 1.0,
+                    //                       ),
+                    //                       borderRadius: BorderRadius.circular(8.0),
+                    //                     ),
+                    //                     child: IntrinsicWidth(
+                    //                       child: Column(
+                    //                         mainAxisAlignment: MainAxisAlignment.center,
+                    //                         children: [
+                    //                           Container(
+                    //                             padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                    //                             child: Row(
+                    //                               children: [
+                    //                                 Text(
+                    //                                   branchmodel.name.toString(),
+                    //                                   style: TextStyle(
+                    //                                     fontSize: 12.0,
+                    //                                     fontWeight: FontWeight.bold,
+                    //                                     fontFamily: "Roboto",
+                    //                                     color: isSelected ? Colors.white : Colors.black,
+                    //                                   ),
+                    //                                 ),
+                    //                               ],
+                    //                             ),
+                    //                           ),
+                    //                         ],
+                    //                       ),
+                    //                     ),
+                    //                   ),
+                    //                 );
+                    //               },
+                    //             ),
+                    //           );
+                    //         }
+                    //       }),
+                    // ),
                     const SizedBox(
                       height: 10,
                     ),
@@ -818,7 +824,8 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                                   // filterAppointments(widget.userId);
                                   filterAppointments({
                                     "userId": widget.userId,
-                                    "branchId": myAppointmentsProvider?.getApiBranchId,
+                                   // "branchId": 2,
+                                   "branchId":  widget.branchid,
                                     "fromdate": myAppointmentsProvider?.getApiFromDate,
                                     "toDate": myAppointmentsProvider?.getApiToDate,
                                     "statustypeId": myAppointmentsProvider?.getApiStatusTypeId,
@@ -1028,7 +1035,7 @@ class _OpCardState extends State<OpCard> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  widget.data.SlotDuration,
+                                  widget.data.slotDuration,
                                   style: TextStyle(
                                     fontSize: 16,
                                     fontFamily: "Calibri",
@@ -1037,8 +1044,8 @@ class _OpCardState extends State<OpCard> {
                                   ),
                                 ),
                                 Text(widget.data.customerName, style: CommonStyles.txSty_16black_f5),
-                                Text(widget.data.email, style: CommonStyles.txSty_16black_f5),
-                                Text(widget.data.purposeofvisit, style: CommonStyles.txSty_16black_f5),
+                                Text(widget.data.email ?? '', style: CommonStyles.txSty_16black_f5),
+                                Text(widget.data.purposeOfVisit, style: CommonStyles.txSty_16black_f5),
                                 Text(widget.data.name, style: CommonStyles.txSty_16black_f5),
                               ],
                             ),
@@ -1053,7 +1060,7 @@ class _OpCardState extends State<OpCard> {
                                 height: 2.0,
                               ),
 
-                              Text(widget.data.phoneNumber, style: CommonStyles.txSty_16black_f5),
+                              Text(widget.data.phoneNumber?? '', style: CommonStyles.txSty_16black_f5),
                               SizedBox(
                                 height: 3.0,
                               ),
@@ -1176,7 +1183,7 @@ class _OpCardState extends State<OpCard> {
           children: [
             GestureDetector(
               onTap: () {
-                if (!isPastDate(data.date, data.SlotDuration)) {
+                if (!isPastDate(data.date, data.slotDuration)) {
                   print('Button 1 pressed for ${data.customerName}');
                   postAppointment(data, 5,0,userId);
                   Get_ApprovedDeclinedSlots(data, 5);
@@ -1192,11 +1199,11 @@ class _OpCardState extends State<OpCard> {
                 }
               },
               child: IgnorePointer(
-                ignoring: isPastDate(data.date, data.SlotDuration),
+                ignoring: isPastDate(data.date, data.slotDuration),
                 child: Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(3),
-                    border: Border.all(color: isPastDate(data.date, data.SlotDuration) ? Colors.grey : CommonStyles.primaryTextColor),
+                    border: Border.all(color: isPastDate(data.date, data.slotDuration) ? Colors.grey : CommonStyles.primaryTextColor),
                   ),
                   padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
                   child: Row(
@@ -1204,13 +1211,13 @@ class _OpCardState extends State<OpCard> {
                       SvgPicture.asset(
                         'assets/calendar-_3_.svg',
                         width: 13,
-                        color: isPastDate(data.date, data.SlotDuration) ? Colors.grey : CommonUtils.primaryTextColor,
+                        color: isPastDate(data.date, data.slotDuration) ? Colors.grey : CommonUtils.primaryTextColor,
                       ),
                       Text(
                         '  Accept',
                         style: TextStyle(
                           fontSize: 15,
-                          color: isPastDate(data.date, data.SlotDuration) ? Colors.grey : CommonUtils.primaryTextColor,
+                          color: isPastDate(data.date, data.slotDuration) ? Colors.grey : CommonUtils.primaryTextColor,
                         ),
                       ),
                     ],
@@ -1223,18 +1230,18 @@ class _OpCardState extends State<OpCard> {
             ),
             GestureDetector(
               onTap: () {
-                if (!isPastDate(data.date, data.SlotDuration)) {
+                if (!isPastDate(data.date, data.slotDuration)) {
                   conformation(data);
                   // Add your logic here for when the 'Cancel' container is tapped
                 }
               },
               child: IgnorePointer(
-                ignoring: isPastDate(data.date, data.SlotDuration),
+                ignoring: isPastDate(data.date, data.slotDuration),
                 child: Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(3),
                     border: Border.all(
-                      color: isPastDate(data.date, data.SlotDuration) ? Colors.grey : CommonStyles.statusRedText,
+                      color: isPastDate(data.date, data.slotDuration) ? Colors.grey : CommonStyles.statusRedText,
                     ),
                   ),
                   padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
@@ -1243,7 +1250,7 @@ class _OpCardState extends State<OpCard> {
                       SvgPicture.asset(
                         'assets/calendar-xmark.svg',
                         width: 12,
-                        color: isPastDate(data.date, data.SlotDuration) ? Colors.grey : CommonStyles.statusRedText,
+                        color: isPastDate(data.date, data.slotDuration) ? Colors.grey : CommonStyles.statusRedText,
                       ),
                       Text(
                         '  Cancel',
@@ -1251,7 +1258,7 @@ class _OpCardState extends State<OpCard> {
                           fontSize: 16,
                           fontFamily: "Calibri",
                           fontWeight: FontWeight.w500,
-                          color: isPastDate(data.date, data.SlotDuration) ? Colors.grey : CommonStyles.statusRedText,
+                          color: isPastDate(data.date, data.slotDuration) ? Colors.grey : CommonStyles.statusRedText,
                         ),
                       ),
                     ],
@@ -1275,12 +1282,12 @@ class _OpCardState extends State<OpCard> {
                 // }
               },
               child: IgnorePointer(
-                ignoring: isPastDate(data.date, data.SlotDuration),
+                ignoring: isPastDate(data.date, data.slotDuration),
                 child: Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(3),
                     border: Border.all(
-                      color: isPastDate(data.date, data.SlotDuration) ? Colors.grey : CommonStyles.statusRedText,
+                      color: isPastDate(data.date, data.slotDuration) ? Colors.grey : CommonStyles.statusRedText,
                     ),
                   ),
                   padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
@@ -1289,7 +1296,7 @@ class _OpCardState extends State<OpCard> {
                       SvgPicture.asset(
                         'assets/calendar-xmark.svg',
                         width: 12,
-                        color: isPastDate(data.date, data.SlotDuration) ? Colors.grey : CommonStyles.statusRedText,
+                        color: isPastDate(data.date, data.slotDuration) ? Colors.grey : CommonStyles.statusRedText,
                       ),
                       Text(
                         '  Close',
@@ -1297,7 +1304,7 @@ class _OpCardState extends State<OpCard> {
                           fontSize: 16,
                           fontFamily: "Calibri",
                           fontWeight: FontWeight.w500,
-                          color: isPastDate(data.date, data.SlotDuration) ? Colors.grey : CommonStyles.statusRedText,
+                          color: isPastDate(data.date, data.slotDuration) ? Colors.grey : CommonStyles.statusRedText,
                         ),
                       ),
                     ],
@@ -1428,7 +1435,7 @@ class _OpCardState extends State<OpCard> {
                         height: 15.0,
                       ),
                       Text(
-                        'Please Rate Your Experience For The ${appointments.SlotDuration} Slot At The ${appointments.name} Hair Fixing Zone',
+                        'Please Rate Your Experience For The ${appointments.slotDuration} Slot At The ${appointments.name} Hair Fixing Zone',
                         style: const TextStyle(
                           fontSize: 16,
                           color: CommonUtils.primaryTextColor,
@@ -1615,8 +1622,8 @@ class _OpCardState extends State<OpCard> {
         "Email": appointmens.email,
         "GenderTypeId": appointmens.genderTypeId,
         "StatusTypeId": 11,
-        "PurposeOfVisitId": appointmens.purposevisitid,
-        "PurposeOfVisit": appointmens.purposeofvisit,
+        "PurposeOfVisitId": appointmens.purposeOfVisitId,
+        "PurposeOfVisit": appointmens.purposeOfVisit,
         "IsActive": true,
         "CreatedDate": dateTimeString,
         "UpdatedDate": dateTimeString,
@@ -1684,7 +1691,7 @@ class _OpCardState extends State<OpCard> {
             ),
           ),
           content: Text(
-            'Are You Sure You Want To Cancel Your  ${appointments.purposeofvisit} Slot At The${appointments.name} Hair Fixing Zone',
+            'Are You Sure You Want To Cancel Your  ${appointments.purposeOfVisit} Slot At The${appointments.name} Hair Fixing Zone',
             style: const TextStyle(
               fontSize: 16,
               color: CommonUtils.primaryTextColor,
@@ -1746,8 +1753,8 @@ class _OpCardState extends State<OpCard> {
       "Email": appointmens.email,
       "GenderTypeId": appointmens.genderTypeId,
       "StatusTypeId": 6,
-      "PurposeOfVisitId": appointmens.purposevisitid,
-      "PurposeOfVisit": appointmens.purposeofvisit,
+      "PurposeOfVisitId": appointmens.purposeOfVisitId,
+      "PurposeOfVisit": appointmens.purposeOfVisit,
       "IsActive": true,
       "CreatedDate": dateTimeString,
       "UpdatedDate": dateTimeString,
@@ -1820,14 +1827,14 @@ class _OpCardState extends State<OpCard> {
       "Email": data.email,
       "GenderTypeId": data.genderTypeId,
       "StatusTypeId": i,
-      "PurposeOfVisitId": data.purposevisitid,
-      "PurposeOfVisit": data.purposeofvisit,
+      "PurposeOfVisitId": data.purposeOfVisitId,
+      "PurposeOfVisit": data.purposeOfVisit,
       "IsActive": true,
       "CreatedDate": dateTimeString,
       "UpdatedDate": dateTimeString,
-      "customerId": data.CustomerId,
+      "customerId": data.customerId,
       "UpdatedByUserId": widget.userId,
-      "timeofSlot": data.timeofslot,
+      "timeofSlot": data.timeofSlot,
       if (i == 18) "price": Amount,
 
       // "rating": null,
@@ -1856,9 +1863,10 @@ class _OpCardState extends State<OpCard> {
         bool isSuccess = data['isSuccess'];
         if (isSuccess == true) {
           print('Request sent successfully');
-          // if (i == 6) {
-          //   rejectAppointment(index);
-          // } else if (i == 18) {
+          if (i == 5) {
+            openDialogaccept();
+          }
+          // else if (i == 18) {
           //   closeAppointment(index);
           // }
           // Success case
@@ -2039,6 +2047,55 @@ class _OpCardState extends State<OpCard> {
   }
 
 
+  void openDialogaccept() async {
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const SizedBox(
+                height: 10,
+              ),
+              SizedBox(
+                width: 150,
+                child: Image.asset('assets/password_success.png'),
+              ),
+              const SizedBox(
+                height: 50,
+              ),
+              const Center(
+                // Center the text
+                child: Text(
+                  'Your Appointment Has Been Accepted Successfully ',
+                  style: CommonUtils.txSty_18b_fb,
+                  textAlign: TextAlign.center, // Optionally, align the text center
+                ),
+              ),
+              const SizedBox(
+                height: 30,
+              ),
+              CustomButton(
+                buttonText: 'Done',
+                color: CommonUtils.primaryTextColor,
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  // Navigator.of(context).push(
+                  //   MaterialPageRoute(
+                  //     builder: (context) => const CustomerLoginScreen(),
+                  //   ),
+                  // );
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
 }
 
 Future<void> Get_ApprovedDeclinedSlots(Appointment data, int i) async {
@@ -2055,7 +2112,7 @@ Future<void> Get_ApprovedDeclinedSlots(Appointment data, int i) async {
     "PhoneNumber": data.phoneNumber,
     "Email": data.email,
     "Address": "",
-    "SlotDuration": data.SlotDuration
+    "SlotDuration": data.slotDuration
   };
   print('Get_ApprovedSlotsmail: $request');
   try {

@@ -429,7 +429,7 @@ class _ForgotChangePasswordState extends State<ForgotChangePassword> {
         final Map<String, dynamic> response = jsonDecode(jsonResponse.body);
         if (response['isSuccess']) {
           print('Password Reset Successfully');
-          // openDialog();
+         openDialog();
         } else {
           print('Failed');
         }
@@ -439,51 +439,51 @@ class _ForgotChangePasswordState extends State<ForgotChangePassword> {
     }
   }
 
-  // void openDialog() async {
-  //   await showDialog(
-  //     context: context,
-  //     builder: (BuildContext context) {
-  //       return AlertDialog(
-  //         content: Column(
-  //           mainAxisSize: MainAxisSize.min,
-  //           mainAxisAlignment: MainAxisAlignment.center,
-  //           children: [
-  //             const SizedBox(
-  //               height: 10,
-  //             ),
-  //             SizedBox(
-  //               width: 150,
-  //               child: Image.asset('assets/password_success.png'),
-  //             ),
-  //             const SizedBox(
-  //               height: 50,
-  //             ),
-  //             const Center(
-  //               // Center the text
-  //               child: Text(
-  //                 'Your Password Has Been Successfully Changed',
-  //                 style: CommonUtils.txSty_18b_fb,
-  //                 textAlign: TextAlign.center, // Optionally, align the text center
-  //               ),
-  //             ),
-  //             const SizedBox(
-  //               height: 30,
-  //             ),
-  //             CustomButton(
-  //               buttonText: 'Done',
-  //               color: CommonUtils.primaryTextColor,
-  //               onPressed: () {
-  //                 Navigator.of(context).push(
-  //                   MaterialPageRoute(
-  //                     builder: (context) => const CustomerLoginScreen(),
-  //                   ),
-  //                 );
-  //               },
-  //             ),
-  //           ],
-  //         ),
-  //       );
-  //     },
-  //   );
-  // }
+  void openDialog() async {
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const SizedBox(
+                height: 10,
+              ),
+              SizedBox(
+                width: 150,
+                child: Image.asset('assets/password_success.png'),
+              ),
+              const SizedBox(
+                height: 50,
+              ),
+              const Center(
+                // Center the text
+                child: Text(
+                  'Your Password Has Been Successfully Changed',
+                  style: CommonUtils.txSty_18b_fb,
+                  textAlign: TextAlign.center, // Optionally, align the text center
+                ),
+              ),
+              const SizedBox(
+                height: 30,
+              ),
+              CustomButton(
+                buttonText: 'Done',
+                color: CommonUtils.primaryTextColor,
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const CustomerLoginScreen(),
+                    ),
+                  );
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
 }

@@ -72,7 +72,8 @@ class _BranchesscreenState extends State<Branches_screen> {
     final desiredWidth = screenWidth;
 
      return Scaffold(
-         appBar: AppBar(
+         appBar:
+         AppBar(
              elevation: 0,
              backgroundColor: const Color(0xFFf3e3ff),
              title: const Text(
