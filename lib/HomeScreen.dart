@@ -153,7 +153,7 @@ class _HomeScreenState extends State<HomeScreen> {
       //   debugShowCheckedModeBanner: false,
       child: Scaffold(
         appBar: _currentIndex == 0
-            ? CommonStyles.homeAppBar()
+            ? CommonStyles.homeAppBar(onPressed: () => logOutDialog(),)
             : CommonStyles.remainingAppBars(
                 context,
                 title: _getAppBarTitle(_currentIndex),

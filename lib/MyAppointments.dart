@@ -17,6 +17,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'BranchModel.dart';
 import 'Common/common_styles.dart';
+import 'Common/custom_button.dart';
 import 'Commonutils.dart';
 import 'MyAppointment_Model.dart';
 import 'Rescheduleslotscreen.dart';
@@ -1140,7 +1141,7 @@ class _OpCardState extends State<OpCard> {
             GestureDetector(
               onTap: () {
                 if (!isPastDate(data.date, data.slotDuration)) {
-                  conformation(data);
+                  conformation(context,data);
                   // Add your logic here for when the 'Cancel' container is tapped
                 }
               },
@@ -1568,8 +1569,7 @@ class _OpCardState extends State<OpCard> {
       //  }
     }
   }
-
-  void conformation(MyAppointment_Model appointments) {
+  void conformation(BuildContext context, MyAppointment_Model appointments) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -1582,13 +1582,36 @@ class _OpCardState extends State<OpCard> {
               fontFamily: 'Calibri',
             ),
           ),
-          content: Text(
-            'Are You Sure You Want To Cancel Your  ${appointments.slotDuration} Slot At The${appointments.branch} Hair Fixing Zone',
-            style: const TextStyle(
-              fontSize: 16,
-              color: CommonUtils.primaryTextColor,
-              fontFamily: 'Calibri',
-            ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SizedBox(
+                width: 130,
+                child: Image.asset('assets/check.png'),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Center(
+                // Center the text
+                child: Text(
+                  'Are You Sure You Want To Cancel Your  ${appointments.slotDuration} Slot At The${appointments.branch} Hair Fixing Zone',
+                  style: CommonUtils.txSty_18b_fb,
+                  textAlign: TextAlign.center, // Optionally, align the text center
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              // Text(
+              //   'Are You Sure You Want To Cancel   ${appointments.purposeOfVisit} Slot At The ${appointments.name} Hair Fixing Zone',
+              //   style: const TextStyle(
+              //     fontSize: 16,
+              //     color: CommonUtils.primaryTextColor,
+              //     fontFamily: 'Calibri',
+              //   ),
+              // ),
+            ],
           ),
           actions: [
             TextButton(
@@ -1623,6 +1646,61 @@ class _OpCardState extends State<OpCard> {
       },
     );
   }
+
+  // void conformation(MyAppointment_Model appointments) {
+  //   showDialog(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return AlertDialog(
+  //         title: const Text(
+  //           'Confirmation',
+  //           style: TextStyle(
+  //             fontSize: 16,
+  //             color: CommonUtils.blueColor,
+  //             fontFamily: 'Calibri',
+  //           ),
+  //         ),
+  //         content: Text(
+  //           'Are You Sure You Want To Cancel Your  ${appointments.slotDuration} Slot At The${appointments.branch} Hair Fixing Zone',
+  //           style: const TextStyle(
+  //             fontSize: 16,
+  //             color: CommonUtils.primaryTextColor,
+  //             fontFamily: 'Calibri',
+  //           ),
+  //         ),
+  //         actions: [
+  //           TextButton(
+  //             onPressed: () {
+  //               Navigator.of(context).pop();
+  //             },
+  //             child: const Text(
+  //               'No',
+  //               style: TextStyle(
+  //                 fontSize: 16,
+  //                 color: CommonUtils.blueColor,
+  //                 fontFamily: 'Calibri',
+  //               ),
+  //             ),
+  //           ),
+  //           TextButton(
+  //             onPressed: () {
+  //               cancelAppointment(appointments);
+  //               Navigator.of(context).pop();
+  //             },
+  //             child: const Text(
+  //               'Yes',
+  //               style: TextStyle(
+  //                 fontSize: 16,
+  //                 color: CommonUtils.blueColor,
+  //                 fontFamily: 'Calibri',
+  //               ),
+  //             ),
+  //           ),
+  //         ],
+  //       );
+  //     },
+  //   );
+  // }
 
   Future<void> cancelAppointment(MyAppointment_Model appointmens) async {
     final url = Uri.parse(baseUrl + postApiAppointment);
@@ -1676,8 +1754,9 @@ class _OpCardState extends State<OpCard> {
         bool isSuccess = data['isSuccess'];
         if (isSuccess == true) {
           print('Request sent successfully');
+          openDialogreject();
           //  fetchMyAppointments(userId);
-          CommonUtils.showCustomToastMessageLong('Cancelled  Successfully ', context, 0, 4);
+      //    CommonUtils.showCustomToastMessageLong('Cancelled  Successfully ', context, 0, 4);
           //   Navigator.pop(context);
           // Success case
           // Handle success scenario here
@@ -1696,4 +1775,54 @@ class _OpCardState extends State<OpCard> {
     }
     //  }
   }
+
+  void openDialogreject() async {
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const SizedBox(
+                height: 10,
+              ),
+              SizedBox(
+                width: 130,
+                child: Image.asset('assets/rejected.png'),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              const Center(
+                // Center the text
+                child: Text(
+                  'Your Appointment Has Been Cancelled Successfully ',
+                  style: CommonUtils.txSty_18b_fb,
+                  textAlign: TextAlign.center, // Optionally, align the text center
+                ),
+              ),
+              const SizedBox(
+                height: 30,
+              ),
+              CustomButton(
+                buttonText: 'Done',
+                color: CommonUtils.primaryTextColor,
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const MyAppointments(),
+                    ),
+                  );
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
 }

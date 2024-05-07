@@ -122,6 +122,7 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
   int gender = 0;
   String Gender = '';
   int? userId;
+  int? Id;
   bool showConfirmationDialog = false;
   @override
   @override
@@ -134,7 +135,7 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
   @override
   initState() {
     super.initState();
-
+    getUserDataFromSharedPreferences();
     //fetchdropdown();
     BranchId = widget.data.branchId;
     dropValue = 'Select';
@@ -740,7 +741,7 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
         "review": null,
         "reviewSubmittedDate": null,
         "timeofslot": '$_selectedTimeSlot24',
-        "customerId": widget.data.id
+        "customerId": Id
       };
 
       print('Object: ${json.encode(request)}');
@@ -1190,6 +1191,19 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
     // Return false to indicate that we handled the back button press
     return Future.value(false);
   }
+
+  Future<void> getUserDataFromSharedPreferences() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    Id = prefs.getInt('userId') ?? 0;
+    userFullName = prefs.getString('userFullName') ?? '';
+  //  genderttypeid = prefs.getInt('genderTypeId');
+    phonenumber = prefs.getString('contactNumber') ?? '';
+    email = prefs.getString('email') ?? '';
+   // contactNumber = prefs.getString('contactNumber') ?? '';
+    // genderbyid = prefs.getString('gender');
+  }
+
 }
 
 class RadioButtonOption {

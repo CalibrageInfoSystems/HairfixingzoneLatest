@@ -63,7 +63,7 @@ class _AgentHomeState extends State<AgentHome> {
       },
       child: Scaffold(
         appBar: _currentIndex == 0
-            ? CommonStyles.homeAppBar()
+            ? CommonStyles.homeAppBar(onPressed: () => logOutDialog(),)
             : CommonStyles.remainingAppBars(
                 context,
                 title: _getAppBarTitle(_currentIndex),
@@ -140,6 +140,7 @@ class _AgentHomeState extends State<AgentHome> {
                 color: _currentIndex == 1 ? CommonUtils.primaryTextColor : Colors.grey,
               ),
               title: const Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
                     'Add',
@@ -160,6 +161,7 @@ class _AgentHomeState extends State<AgentHome> {
                 color: _currentIndex == 2 ? CommonUtils.primaryTextColor : Colors.grey,
               ),
               title: const Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text('View'),
                   Text('Consultation'),

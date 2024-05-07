@@ -181,7 +181,7 @@ class CommonStyles {
     );
   }
 
-  static AppBar homeAppBar() {
+  static AppBar homeAppBar( { required void Function()? onPressed}) {
     return AppBar(
       backgroundColor: const Color(0xFFf3e3ff),
       automaticallyImplyLeading: false,
@@ -196,6 +196,17 @@ class CommonStyles {
           ),
         ),
       ),
+      actions: [
+        IconButton(
+          icon: SvgPicture.asset(
+            'assets/sign-out-alt.svg',
+            color: const Color(0xFF662e91),
+            width: 24,
+            height: 24,
+          ),
+          onPressed: onPressed,
+        ),
+      ],
     );
   }
 
@@ -205,15 +216,15 @@ class CommonStyles {
       automaticallyImplyLeading: false,
       title: Row(
         children: [
-          IconButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            icon: const Icon(
-              Icons.arrow_back_ios,
-              size: 20,
-            ),
-          ),
+          // IconButton(
+          //   onPressed: () {
+          //     Navigator.of(context).pop();
+          //   },
+          //   icon: const Icon(
+          //     Icons.arrow_back_ios,
+          //     size: 20,
+          //   ),
+          // ),
           Text(
             title,
             style: const TextStyle(color: Color(0xFF0f75bc), fontSize: 16.0),
