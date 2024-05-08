@@ -18,6 +18,7 @@ class AgentAppointmentsProvider extends ChangeNotifier {
   bool get filterStatus => isFilterApplied;
   set filterStatus(bool newStatus) {
     isFilterApplied = newStatus;
+    print('xxx: isFilterApplied: $isFilterApplied');
     notifyListeners();
   }
 
@@ -77,6 +78,8 @@ class AgentAppointmentsProvider extends ChangeNotifier {
     displayDate = 'Select between dates';
     selectedStatus = 0;
     selectedBranch = 0;
+    apiFromDate = null;
+    apiToDate = null;
     filterStatus = false;
     notifyListeners();
   }
