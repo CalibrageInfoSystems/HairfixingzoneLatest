@@ -140,7 +140,7 @@ class MyAppointments_screenState extends State<GetAppointments> {
                         } else if (snapshot.hasError) {
                           return const Center(
                             child: Text(
-                              'No appointments found!',
+                              'No appointments found',
                               style: TextStyle(
                                 fontSize: 12.0,
                                 color: Colors.black,
@@ -177,7 +177,7 @@ class MyAppointments_screenState extends State<GetAppointments> {
                           } else {
                             return const Center(
                               child: Text(
-                                'No appointmens available',
+                                'No Appointments Available',
                                 style: TextStyle(
                                   fontSize: 12.0,
                                   color: Colors.black,
@@ -543,7 +543,7 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                     },
                     child: const Text(
                       //MARK: Clear all filters
-                      'Clear all filters',
+                      'Clear All Filters',
                       style: CommonStyles.txSty_16blu_f5,
                     ),
                   ),
@@ -1125,7 +1125,7 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
               .toList();
         } else {
           myAppointmentsProvider.storeIntoProvider = [];
-          throw Exception('No appointments found!');
+          throw Exception('No Appointments found');
         }
       } else {
         myAppointmentsProvider.storeIntoProvider = [];

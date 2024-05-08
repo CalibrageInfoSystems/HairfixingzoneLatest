@@ -243,7 +243,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                       Row(
                         children: [
                           Text(
-                            'Confirm New Password ',
+                            'Confirm  Password ',
                             style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
                           ),
                           Text(
@@ -426,7 +426,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
       return 'Please Enter Confirm Password';
     }
     if (_newController.text != _confirmNewController.text) {
-      return 'Confirm Password must be same as new password';
+      return 'Confirm Password Must Be Same As New Password';
     }
     return null;
   }

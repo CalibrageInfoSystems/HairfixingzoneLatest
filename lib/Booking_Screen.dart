@@ -801,7 +801,7 @@ class _BookingScreenState extends State<Bookingscreen> {
     if (!isSlotsAvailable) {
       showCustomToastMessageLong('No Slots Available Today', context, 1, 4);}
     else if (!slotselection) {
-      showCustomToastMessageLong('Please Select a slot', context, 1, 4);
+      showCustomToastMessageLong('Please Select A Slot', context, 1, 4);
     }
     // if (visablelength == disabledlength) {
     //   // showCustomToastMessageLong('No Slots Available Today ', context, 1, 4);

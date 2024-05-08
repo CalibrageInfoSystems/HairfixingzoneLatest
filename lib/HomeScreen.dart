@@ -743,7 +743,7 @@ class _HomeScreenState extends State<HomeScreen> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text('Logout'),
-          content: const Text('Are you sure you want to Logout?'),
+          content: const Text('Are You Sure You Want To Logout?'),
           actions: [
             TextButton(
               onPressed: () {

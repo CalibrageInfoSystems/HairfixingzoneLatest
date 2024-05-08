@@ -195,7 +195,7 @@ class MyAppointments_screenState extends State<Agentappointmentlist> {
                             } else {
                               return const Center(
                                 child: Text(
-                                  'No Appointmens Available',
+                                  'No Appointments Available',
                                   style: TextStyle(
                                     fontSize: 12.0,
                                     color: Colors.black,
