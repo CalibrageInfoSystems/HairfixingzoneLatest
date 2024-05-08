@@ -13,6 +13,7 @@ import 'Common/custom_button.dart';
 import 'CommonUtils.dart';
 import 'package:http/http.dart' as http;
 
+import 'CustomerLoginScreen.dart';
 import 'User.dart';
 
 class ProfileMy extends StatefulWidget {
@@ -130,10 +131,81 @@ class Profile_screenState extends State<ProfileMy> {
     await prefs.setString('profilecreateddate', customerData['createdDate'] ?? '');
   }
 
+  void logOutDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Logout'),
+          content: const Text('Are you sure you want to Logout?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                onConfirmLogout(context);
+              },
+              child: const Text('Logout'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> onConfirmLogout(BuildContext context) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool('isLoggedIn', false);
+    prefs.remove('userId'); // Remove userId from SharedPreferences
+    prefs.remove('userRoleId'); // Remove roleId from SharedPreferences
+    CommonUtils.showCustomToastMessageLong("Logout Successful", context, 0, 3);
+
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(builder: (context) => CustomerLoginScreen()),
+      (route) => false,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: CommonStyles.primaryTextColor,
+      appBar: AppBar(
+          elevation: 0,
+          backgroundColor: const Color(0xFFf3e3ff),
+          title: const Text(
+            'My Profile',
+            style: TextStyle(color: Color(0xFF0f75bc), fontSize: 16.0),
+          ),
+          actions: [
+            IconButton(
+              icon: SvgPicture.asset(
+                'assets/sign-out-alt.svg', // Path to your SVG asset
+                color: Color(0xFF662e91),
+                width: 24, // Adjust width as needed
+                height: 24, // Adjust height as needed
+              ),
+              onPressed: () {
+                logOutDialog(context);
+                // Add logout functionality here
+              },
+            ),
+          ],
+          // centerTitle: true,
+          leading: IconButton(
+            icon: Icon(
+              Icons.arrow_back_ios,
+              color: CommonUtils.primaryTextColor,
+            ),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          )),
       body: Column(
         children: [
           Container(
