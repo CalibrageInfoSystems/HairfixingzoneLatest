@@ -1806,30 +1806,67 @@ class _OpCardState extends State<OpCard> {
             ],
           ),
           actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text(
-                'No',
-                style: TextStyle(
-                  fontSize: 16,
-                  color: CommonUtils.blueColor,
-                  fontFamily: 'Calibri',
+
+
+            Container(
+
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                style: ElevatedButton.styleFrom(
+                  textStyle: const TextStyle(
+                    color: CommonUtils.primaryTextColor,
+                  ),
+                  side: const BorderSide(
+                    color: CommonUtils.primaryTextColor,
+                  ),
+                  backgroundColor: Colors.white,
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(5),
+                    ),
+                  ),
+                ),
+                child: const Text(
+                  'No',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color:  CommonUtils.primaryTextColor,
+                    fontFamily: 'Calibri',
+                  ),
                 ),
               ),
             ),
-            TextButton(
-              onPressed: () {
-                cancelAppointment(appointments);
-                Navigator.of(context).pop();
-              },
-              child: const Text(
-                'Yes',
-                style: TextStyle(
-                  fontSize: 16,
-                  color: CommonUtils.blueColor,
-                  fontFamily: 'Calibri',
+            const SizedBox(width: 10), // Add spacing between buttons
+            Container(
+
+              child: ElevatedButton(
+                onPressed: () {
+                  cancelAppointment(appointments);
+                  Navigator.of(context).pop();
+                },
+                style: ElevatedButton.styleFrom(
+                  textStyle: const TextStyle(
+                    color: CommonUtils.primaryTextColor,
+                  ),
+                  side: const BorderSide(
+                    color: CommonUtils.primaryTextColor,
+                  ),
+                  backgroundColor: CommonUtils.primaryTextColor,
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(5),
+                    ),
+                  ),
+                ),
+                child: const Text(
+                  'Yes',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color:Colors.white,
+                    fontFamily: 'Calibri',
+                  ),
                 ),
               ),
             ),
@@ -1838,7 +1875,6 @@ class _OpCardState extends State<OpCard> {
       },
     );
   }
-
   // void conformation(MyAppointment_Model appointments) {
   //   showDialog(
   //     context: context,

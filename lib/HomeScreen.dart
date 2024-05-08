@@ -2,6 +2,7 @@ import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_expanded_tile/flutter_expanded_tile.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
@@ -1002,9 +1003,12 @@ class _HomeScreenState extends State<HomeScreen> {
         print('Slot Duration: ${appointment.slotDuration}');
         print('Appointment Time: ${appointment.appointmentTime}');
         print('');
-        WidgetsBinding.instance.addPostFrameCallback((_) {
+        SchedulerBinding.instance.addPostFrameCallback((_) {
           _showBottomSheet(context, appointments);
         });
+        // WidgetsBinding.instance.addPostFrameCallback((_) {
+        //   _showBottomSheet(context, appointments);
+        // });
       }
     } else {
       throw Exception('Failed to load appointments');

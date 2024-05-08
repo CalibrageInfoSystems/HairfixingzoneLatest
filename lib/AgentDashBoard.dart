@@ -138,7 +138,7 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
           //MARK: Welcome Text
           //     welcomeText(),
           //MARK: Main Card
-          Expanded(
+          Container(
             child: Container(
               height: MediaQuery.of(context).size.height,
               decoration: const BoxDecoration(
@@ -298,7 +298,7 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
           return SizedBox(
             child: Row(
               children: [
-                Expanded(
+                Container(
                   child: ItemBuilder(items: _items, index: itemIndex),
                 ),
               ],

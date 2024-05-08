@@ -153,8 +153,7 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
           // ),
           //MARK: Main Card
 
-          Expanded(
-            child: SingleChildScrollView(
+          SingleChildScrollView(
               child: Container(
                 decoration: const BoxDecoration(
                   color: CommonStyles.whiteColor,
@@ -163,53 +162,60 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
                     topRight: Radius.circular(20),
                   ),
                 ),
-                child: Column(
+                child:
+                Column(
                   children: [
                     //MARK: Marquee
-                    SizedBox(
-                      height: 30,
-                      child: FutureBuilder(
-                        future: getMarqueeText(),
-                        builder: (context, snapshot) {
-                          if (snapshot.connectionState == ConnectionState.waiting) {
-                            return const SizedBox();
-                          } else if (snapshot.hasError) {
-                            return const SizedBox();
-                          } else {
-                            return Marquee(
-                              text: marqueeText,
-                              style: const TextStyle(fontSize: 16, fontFamily: "Calibri", fontWeight: FontWeight.w600, color: Color(0xFFff0176)),
-                            );
-                          }
-                        },
-                      ),
-                    ),
-                    //MARK: Carosel
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width,
-                      height: 180,
-                      child: PageView.builder(
-                        controller: _pageController,
-                        itemCount: _items.length,
-                        itemBuilder: (context, index) {
-                          final itemIndex = index % _items.length;
-                          return SizedBox(
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  child: ItemBuilder(items: _items, index: itemIndex),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start, // Adjust as needed
+                      children: [
+                        SizedBox(
+                          height: 30,
+                          child: FutureBuilder(
+                            future: getMarqueeText(),
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState == ConnectionState.waiting) {
+                                return const SizedBox();
+                              } else if (snapshot.hasError) {
+                                return const SizedBox();
+                              } else {
+                                return Marquee(
+                                  text: marqueeText,
+                                  style: const TextStyle(fontSize: 16, fontFamily: "Calibri", fontWeight: FontWeight.w600, color: Color(0xFFff0176)),
+                                );
+                              }
+                            },
+                          ),
+                        ),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width,
+                          height: 180,
+                          child: PageView.builder(
+                            controller: _pageController,
+                            itemCount: _items.length,
+                            itemBuilder: (context, index) {
+                              final itemIndex = index % _items.length;
+                              return SizedBox(
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: ItemBuilder(items: _items, index: itemIndex),
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
-                          );
-                        },
-                        onPageChanged: (int page) {
-                          setState(() {
-                            _currentPage = page;
-                          });
-                        },
-                      ),
+                              );
+                            },
+                            onPageChanged: (int page) {
+                              setState(() {
+                                _currentPage = page;
+                              });
+                            },
+                          ),
+                        ),
+                      ],
                     ),
+
+
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
@@ -226,7 +232,7 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
                           )
                       ],
                     ),
-                    const SizedBox(height: 5),
+                    const SizedBox(height: 8.0),
 
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 15.0),
@@ -472,7 +478,7 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
                                   );
                                 } else {
                                   List<BranchList>? data = snapshot.data!;
-                                  return Expanded(
+                                  return Container(
                                     child: ListView.builder(
                                       scrollDirection: Axis.horizontal,
                                       itemCount: data.length,
@@ -494,7 +500,7 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
                 ),
               ),
             ),
-          )
+
         ],
       ),
     );
@@ -684,8 +690,8 @@ class ItemBuilder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-      height: 200,
+      margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+      height: 180,
       width: 150,
       child: Card(
         shape: RoundedRectangleBorder(

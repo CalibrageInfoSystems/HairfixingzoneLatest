@@ -116,7 +116,7 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
                           height: MediaQuery.of(context).size.height,
                           width: MediaQuery.of(context).size.height,
                           child: Center(
-                            child: Text('No View Consulation Found'),
+                            child: Text('No  Consultation Found'),
                           ));
                     } else {
                       return ListView.builder(
@@ -286,7 +286,7 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
         elevation: 0,
         backgroundColor: const Color(0xFFf3e3ff),
         title: const Text(
-          'View Consulation',
+          'View Consultation',
           style: TextStyle(color: Color(0xFF0f75bc), fontSize: 16.0),
         ),
         actions: [

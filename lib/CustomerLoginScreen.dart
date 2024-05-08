@@ -178,7 +178,7 @@ class _LoginPageState extends State<CustomerLoginScreen> {
                                     style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
                                   ),
                                   Text(
-                                    '*',
+                                    ' *',
                                     style: TextStyle(color: Colors.red),
                                   ),
                                 ],
