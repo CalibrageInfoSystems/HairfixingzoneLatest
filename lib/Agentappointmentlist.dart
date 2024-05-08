@@ -176,6 +176,19 @@ class MyAppointments_screenState extends State<Agentappointmentlist> {
                                             setState(() {
                                               // Refresh logic
                                               refreshTheScreen();
+
+                                              // Navigator.of(context).push(
+                                              //   MaterialPageRoute(
+                                              //     builder: (context) => Agentappointmentlist(
+                                              //       userId: widget.userId,
+                                              //       branchid: widget.branchid,
+                                              //       branchname: widget.branchname,
+                                              //       filepath:widget.filepath != null ? widget.filepath! : 'assets/top_image.png',
+                                              //       phonenumber: widget.phonenumber,
+                                              //       branchaddress: widget.branchaddress,
+                                              //     ),
+                                              //   ),
+                                              // );
                                             });
                                           },
                                         ),
@@ -1549,298 +1562,6 @@ class _OpCardState extends State<OpCard> {
     return isBeforeTime || isBeforeDate;
   }
 
-  void showDialogForRating(Appointment appointments) {
-    _commentstexteditcontroller.clear();
-    showDialog(
-      barrierDismissible: true,
-      context: context,
-      builder: (BuildContext context) {
-        return StatefulBuilder(
-          builder: (context, setState) {
-            return AlertDialog(
-              backgroundColor: Colors.transparent,
-              surfaceTintColor: Colors.transparent,
-              title: SingleChildScrollView(
-                child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  padding: const EdgeInsets.only(
-                      top: 15.0, left: 15.0, right: 15.0, bottom: 20.0),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10.0),
-                    gradient: const LinearGradient(
-                      colors: [
-                        Color(0xffffffff),
-                        Color(0xffffffff),
-                      ],
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                    ),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        'Feedback',
-                        style: TextStyle(
-                          fontSize: 24,
-                          color: CommonUtils.primaryTextColor,
-                          fontFamily: 'Calibri',
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 15.0,
-                      ),
-                      Text(
-                        'Please Rate Your Experience For The ${appointments.slotDuration} Slot At The ${appointments.name} Hair Fixing Zone',
-                        style: const TextStyle(
-                          fontSize: 16,
-                          color: CommonUtils.primaryTextColor,
-                          fontFamily: 'Calibri',
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 15.0,
-                      ),
-                      SizedBox(
-                          width: MediaQuery.of(context).size.width,
-                          child: RatingBar.builder(
-                            initialRating: 0,
-                            minRating: 0,
-                            direction: Axis.horizontal,
-                            allowHalfRating: true,
-                            itemCount: 5,
-                            itemPadding:
-                            const EdgeInsets.symmetric(horizontal: 1.0),
-                            itemBuilder: (context, _) => const Icon(
-                              Icons.star,
-                              color: CommonUtils.primaryTextColor,
-                            ),
-                            onRatingUpdate: (rating) {
-                              setState(() {
-                                rating_star = rating;
-                                print('rating_star$rating_star');
-                              });
-                            },
-                          )),
-                      Padding(
-                        padding:
-                        const EdgeInsets.only(left: 0, top: 10.0, right: 0),
-                        child: GestureDetector(
-                          onTap: () async {},
-                          child: Container(
-                            height: 80,
-                            width: MediaQuery.of(context).size.width,
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                  color: CommonUtils.primaryTextColor,
-                                  width: 1.5),
-                              borderRadius: BorderRadius.circular(5.0),
-                              color: Colors.white,
-                            ),
-                            child: TextFormField(
-                              controller: _commentstexteditcontroller,
-                              style: const TextStyle(
-                                fontFamily: 'Calibri',
-                                fontSize: 14,
-                                fontWeight: FontWeight.w300,
-                              ),
-                              maxLines: null,
-                              maxLength: 256,
-                              // Set maxLines to null for multiline input
-                              decoration: const InputDecoration(
-                                hintText: 'Comments',
-                                hintStyle: TextStyle(
-                                  color: Colors.black54,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: 'Calibri',
-                                ),
-                                contentPadding: EdgeInsets.symmetric(
-                                  horizontal: 16.0,
-                                  vertical: 12.0,
-                                ),
-                                border: InputBorder.none,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: ElevatedButton(
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                              style: ElevatedButton.styleFrom(
-                                textStyle: const TextStyle(
-                                  color: CommonUtils.primaryTextColor,
-                                ),
-                                side: const BorderSide(
-                                  color: CommonUtils.primaryTextColor,
-                                ),
-                                backgroundColor: Colors.white,
-                                shape: const RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(10),
-                                  ),
-                                ),
-                              ),
-                              child: const Text(
-                                'Close',
-                                style: TextStyle(
-                                  fontFamily: 'Calibri',
-                                  fontSize: 14,
-                                  color: CommonUtils.primaryTextColor,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 20),
-                          Expanded(
-                            child: SizedBox(
-                              child: Center(
-                                child: GestureDetector(
-                                  onTap: () {
-                                    validateRating(appointments);
-                                  },
-                                  child: Container(
-                                    // width: desiredWidth * 0.9,
-                                    height: 40.0,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(15.0),
-                                      color: CommonUtils.primaryTextColor,
-                                    ),
-                                    child: const Center(
-                                      child: Text(
-                                        'Submit',
-                                        style: TextStyle(
-                                          fontFamily: 'Calibri',
-                                          fontSize: 14,
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            );
-          },
-        );
-      },
-    );
-  }
-
-  Future<void> validateRating(Appointment appointmens) async {
-    //  print('indexinvalidating$index');
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    userId = prefs.getInt('userId');
-    print('userId validaterating : $userId');
-    bool isValid = true;
-    bool hasValidationFailed = false;
-    int myInt = rating_star.toInt();
-    print('changedintoint$myInt');
-    if (rating_star <= 0.0) {
-      FocusScope.of(context).unfocus();
-      CommonUtils.showCustomToastMessageLong(
-          'Please Give Rating', context, 1, 4);
-      isValid = false;
-      hasValidationFailed = true;
-    }
-
-    if (isValid && _commentstexteditcontroller.text.trim().isEmpty) {
-      FocusScope.of(context).unfocus();
-      CommonUtils.showCustomToastMessageLong(
-          'Please Enter Comments', context, 1, 4);
-      isValid = false;
-      hasValidationFailed = true;
-    }
-    if (isValid) {
-      final url = Uri.parse(baseUrl + postApiAppointment);
-      print('url==>890: $url');
-      DateTime now = DateTime.now();
-      String dateTimeString = now.toString();
-      print('DateTime as String: $dateTimeString');
-
-      //  for (MyAppointment_Model appointment in appointmens) {
-      // Create the request object for each appointment
-      final request = {
-        "Id": appointmens.id,
-        "BranchId": appointmens.branchId,
-        "Date": appointmens.date,
-        "SlotTime": appointmens.slotTime,
-        "CustomerName": appointmens.customerName,
-        "PhoneNumber": appointmens.phoneNumber,
-        "Email": appointmens.email,
-        "GenderTypeId": appointmens.genderTypeId,
-        "StatusTypeId": 11,
-        "PurposeOfVisitId": appointmens.purposeOfVisitId,
-        "PurposeOfVisit": appointmens.purposeOfVisit,
-        "IsActive": true,
-        "CreatedDate": dateTimeString,
-        "UpdatedDate": dateTimeString,
-        "UpdatedByUserId": appointmens.genderTypeId,
-        "rating": rating_star,
-        "review": _commentstexteditcontroller.text.toString(),
-        "reviewSubmittedDate": dateTimeString,
-        "timeofslot": null,
-        "customerId": userId
-      };
-      print('AddUpdatefeedback object: : ${json.encode(request)}');
-
-      try {
-        // Send the POST request for each appointment
-        final response = await http.post(
-          url,
-          body: json.encode(request),
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        );
-
-        if (response.statusCode == 200) {
-          print('Request sent successfully');
-          widget.onRefresh?.call();
-          //  fetchMyAppointments(userId);
-          CommonUtils.showCustomToastMessageLong(
-              'Feedback Successfully Submited', context, 0, 4);
-          // refreshTheScreen();
-          // if (index >= 0.0 && index < userfeedbacklist.length) {
-          //   // Ensure index is within the valid range
-          //   userfeedbacklist.ratingstar = rating_star;
-          //   userfeedbacklist.comments = _commentstexteditcontroller.text.toString();
-          //
-          //   print('rating_starapi${userfeedbacklist[].ratingstar}  comments${userfeedbacklist[].comments}');
-          //
-          //   Navigator.pop(context);
-          // } else {
-          //   print('Invalid index: $index');
-          // }
-          // _printAppointments();
-          // userfeedbacklist[index].ratingstar = rating_star;
-          // userfeedbacklist[index].comments = _commentstexteditcontroller.text.toString();
-
-          Navigator.pop(context);
-        } else {
-          print(
-              'Failed to send the request. Status code: ${response.statusCode}');
-        }
-      } catch (e) {
-        print('Error while sending : $e');
-      }
-      //  }
-    }
-  }
 
   void conformation(BuildContext context, Appointment appointments) {
     showDialog(
@@ -1868,7 +1589,7 @@ class _OpCardState extends State<OpCard> {
               Center(
                 // Center the text
                 child: Text(
-                  'Are You Sure You Want To Cancel   ${appointments.purposeOfVisit} Slot At The ${appointments.name} Hair Fixing Zone',
+                  'Are You Sure You Want To Cancel   ${appointments.purposeOfVisit} Slot At The ${appointments.name} Hair Fixing Zone ?',
                   style: CommonUtils.txSty_18b_fb,
                   textAlign:
                   TextAlign.center, // Optionally, align the text center
@@ -2201,7 +1922,9 @@ class _OpCardState extends State<OpCard> {
           if (i == 5) {
             openDialogaccept();
           }
-
+        else  if (i == 18) {
+            openDialogclosed();
+          }
           // Success case
           // Handle success scenario here
         } else {
@@ -2256,7 +1979,7 @@ class _OpCardState extends State<OpCard> {
                       const Row(
                         children: [
                           Text(
-                            'Amount',
+                            'Amount (Rs)',
                             style: TextStyle(
                                 fontSize: 12, fontWeight: FontWeight.bold),
                           ),
@@ -2363,7 +2086,7 @@ class _OpCardState extends State<OpCard> {
                   int? price = int.tryParse(priceController.text);
                   postAppointment(data, 18, price!, userId);
                   Navigator.of(context).pop();
-                  widget.onRefresh?.call();
+
                 }
               },
               child: const Text('Submit'),
@@ -2409,9 +2132,10 @@ class _OpCardState extends State<OpCard> {
                 buttonText: 'Done',
                 color: CommonUtils.primaryTextColor,
                 onPressed: () {
-                  Navigator.of(context).pop();
+
                   // Refresh the screen
                   widget.onRefresh?.call();
+                  Navigator.of(context).pop();
                   //    Navigator.of(context).push(
                   //      MaterialPageRoute(
                   //        builder: (context) =>  Agentappointmentlist(),
@@ -2473,8 +2197,61 @@ class _OpCardState extends State<OpCard> {
                 buttonText: 'Done',
                 color: CommonUtils.primaryTextColor,
                 onPressed: () {
-                  Navigator.of(context).pop();
+
                   widget.onRefresh?.call();
+                  Navigator.of(context).pop();
+                  // Navigator.of(context).push(
+                  //   MaterialPageRoute(
+                  //     builder: (context) => const CustomerLoginScreen(),
+                  //   ),
+                  // );
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  void openDialogclosed() async {
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const SizedBox(
+                height: 10,
+              ),
+              SizedBox(
+                width: 130,
+                child: Image.asset('assets/checked.png'),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              const Center(
+                // Center the text
+                child: Text(
+                  'Your Appointment Has Been Closed Successfully ',
+                  style: CommonUtils.txSty_18b_fb,
+                  textAlign:
+                  TextAlign.center, // Optionally, align the text center
+                ),
+              ),
+              const SizedBox(
+                height: 30,
+              ),
+              CustomButton(
+                buttonText: 'Done',
+                color: CommonUtils.primaryTextColor,
+                onPressed: () {
+
+                  widget.onRefresh?.call();
+                  Navigator.of(context).pop();
                   // Navigator.of(context).push(
                   //   MaterialPageRoute(
                   //     builder: (context) => const CustomerLoginScreen(),

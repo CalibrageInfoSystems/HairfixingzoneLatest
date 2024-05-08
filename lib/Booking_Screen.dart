@@ -782,14 +782,26 @@ class _BookingScreenState extends State<Bookingscreen> {
                           ],
                         ),
                       SizedBox(height: 25),
-                      Container(
-                        width: MediaQuery.of(context).size.width / 1.5,
-                        child: CustomButton(
-                          buttonText: 'Book Appointment',
-                          color: CommonUtils.primaryTextColor,
-                          onPressed: bookappointment,
+                      Visibility(
+                        visible: !isLoading, // Show the Container if isLoading is false
+                        child: Container(
+                          width: MediaQuery.of(context).size.width / 1.5,
+                          child: CustomButton(
+                            buttonText: 'Book Appointment',
+                            color: CommonUtils.primaryTextColor,
+                            onPressed: bookappointment,
+                          ),
                         ),
                       )
+
+                      // Container(
+                      //   width: MediaQuery.of(context).size.width / 1.5,
+                      //   child: CustomButton(
+                      //     buttonText: 'Book Appointment',
+                      //     color: CommonUtils.primaryTextColor,
+                      //     onPressed: bookappointment,
+                      //   ),
+                      // )
                     ],
                   ),
                 ),

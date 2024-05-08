@@ -712,7 +712,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             BottomNavyBarItem(
               icon: SvgPicture.asset(
-                'assets/invite-alt.svg',
+                'assets/my_profile_icon.svg',
                 width: 24,
                 height: 24,
                 color: _currentIndex == 2 ? CommonUtils.primaryTextColor : Colors.grey, // Change color based on selection
@@ -1113,7 +1113,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         maxLength: 256,
                         // Set maxLines to null for multiline input
                         decoration: const InputDecoration(
-                          hintText: 'Comments',
+                          hintText: 'Comment',
                           hintStyle: TextStyle(
                             color: Colors.black54,
                             fontSize: 14,
@@ -1207,14 +1207,14 @@ class _HomeScreenState extends State<HomeScreen> {
     bool isValid = true;
     bool hasValidationFailed = false;
     if (rating_star <= 0.0) {
-      CommonUtils.showCustomToastMessageLong('Please Give Rating', context, 1, 4);
+      CommonUtils.showCustomToastMessageLong('Please Rate Your Experience', context, 1, 4);
       isValid = false;
       hasValidationFailed = true;
       FocusScope.of(context).unfocus();
     }
 
     if (isValid && _commentstexteditcontroller.text.trim().isEmpty) {
-      CommonUtils.showCustomToastMessageLong('Please Enter Comments', context, 1, 4);
+      CommonUtils.showCustomToastMessageLong('Please Enter Comment', context, 1, 4);
       isValid = false;
       hasValidationFailed = true;
       FocusScope.of(context).unfocus();
@@ -1250,7 +1250,7 @@ class _HomeScreenState extends State<HomeScreen> {
         "PhoneNumber": appointment.contactNumber, // Changed from appointments.phoneNumber
         "Email": appointment.email,
         "GenderTypeId": appointment.genderTypeId,
-        "StatusTypeId": 11,
+        "StatusTypeId": appointment.statusTypeId,
         "PurposeOfVisitId": appointment.purposeOfVisitId,
         "PurposeOfVisit": appointment.purposeOfVisit,
         "IsActive": true,

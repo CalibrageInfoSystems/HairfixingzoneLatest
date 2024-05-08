@@ -1562,7 +1562,7 @@ class _OpCardState extends State<OpCard> {
                               maxLength: 256,
                               // Set maxLines to null for multiline input
                               decoration: const InputDecoration(
-                                hintText: 'Comments',
+                                hintText: 'Comment',
                                 hintStyle: TextStyle(
                                   color: Colors.black54,
                                   fontSize: 14,
@@ -1667,7 +1667,7 @@ class _OpCardState extends State<OpCard> {
     if (rating_star <= 0.0) {
       FocusScope.of(context).unfocus();
       CommonUtils.showCustomToastMessageLong(
-          'Please Give Rating', context, 1, 4);
+          'Please Rate Your Experience', context, 1, 4);
       isValid = false;
       hasValidationFailed = true;
     }
@@ -1675,7 +1675,7 @@ class _OpCardState extends State<OpCard> {
     if (isValid && _commentstexteditcontroller.text.trim().isEmpty) {
       FocusScope.of(context).unfocus();
       CommonUtils.showCustomToastMessageLong(
-          'Please Enter Comments', context, 1, 4);
+          'Please Enter Comment', context, 1, 4);
       isValid = false;
       hasValidationFailed = true;
     }
@@ -1697,7 +1697,7 @@ class _OpCardState extends State<OpCard> {
         "PhoneNumber": appointmens.contactNumber,
         "Email": appointmens.email,
         "GenderTypeId": appointmens.genderTypeId,
-        "StatusTypeId": 11,
+        "StatusTypeId": appointmens.statusTypeId,
         "PurposeOfVisitId": appointmens.purposeOfVisitId,
         "PurposeOfVisit": appointmens.purposeOfVisit,
         "IsActive": true,

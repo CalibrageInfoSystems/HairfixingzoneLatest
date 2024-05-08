@@ -47,7 +47,7 @@ class _AgentLoginState extends State<AgentLogin> {
   @override
   void initState() {
     super.initState();
-
+    FocusScope.of(context).unfocus();
     // LocalNotificationService.initialize();
 
     // Terminated State
@@ -176,7 +176,7 @@ class _AgentLoginState extends State<AgentLogin> {
                                   height: 10,
                                 ),
                                 CustomeFormField(
-                                  label: 'Email/User Name',
+                                  label: 'Email / User Name',
                                   errorText: _emailError ? _emailErrorMsg : null,
                                   onChanged: (_) {
                                     setState(() {
@@ -303,7 +303,7 @@ class _AgentLoginState extends State<AgentLogin> {
     if (value!.isEmpty) {
       setState(() {
         _emailError = true;
-        _emailErrorMsg = 'Please Enter Email/User Name';
+        _emailErrorMsg = 'Please Enter Email / User Name';
       });
       return null;
     }
@@ -470,6 +470,7 @@ class _AgentLoginState extends State<AgentLogin> {
           FocusScope.of(context).unfocus();
           CommonUtils.showCustomToastMessageLong(responseData["statusMessage"], context, 1, 4);
           print("API returned an error: ${responseData["statusMessage"]}");
+
         }
       } else {
         print("Error: ${response.statusCode}");
@@ -532,6 +533,7 @@ class _AgentLoginState extends State<AgentLogin> {
             //   _isLoading = false;
 
             // });
+            FocusScope.of(context).unfocus();
             CommonUtils.showCustomToastMessageLong("${responseJson["statusMessage"]}", context, 1, 4);
           }
         }
