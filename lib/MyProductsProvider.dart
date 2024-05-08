@@ -7,6 +7,14 @@ class MyProductProvider extends ChangeNotifier {
   int selectedGenderIndex = 0;
   int? _selectedGender;
   int? _selectedCategory;
+  bool isFilterApplied = false;
+
+  bool get filterStatus => isFilterApplied;
+  set filterStatus(bool newStatus) {
+    isFilterApplied = newStatus;
+    print('xxx: mypro filter: $isFilterApplied');
+    notifyListeners();
+  }
 
   int? get getGender => _selectedGender;
   set getGender(int? newGender) {
@@ -45,14 +53,13 @@ class MyProductProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-
   void clearFilter() {
     selectedGender = 0;
     selectedCategory = 0;
     getGender = null;
     getCategory = null;
-
     proProducts = [];
+    filterStatus = false;
     notifyListeners();
   }
 }

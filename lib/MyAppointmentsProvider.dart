@@ -5,7 +5,7 @@ class MyAppointmentsProvider extends ChangeNotifier {
   List<MyAppointment_Model> proAppointments = [];
   int selectedCategoryIndex = 0;
   List<MyAppointment_Model> get storeIntoProvider => proAppointments;
-  int? _selectedCategory;
+
 // varibles
   String displayDate = 'Select between dates';
   String? apiFromDate;
@@ -17,6 +17,7 @@ class MyAppointmentsProvider extends ChangeNotifier {
   bool get filterStatus => isFilterApplied;
   set filterStatus(bool newStatus) {
     isFilterApplied = newStatus;
+    print('xxx: isFilterApplied: $isFilterApplied');
     notifyListeners();
   }
 

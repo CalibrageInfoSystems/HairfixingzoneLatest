@@ -152,6 +152,7 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
             ),
           ),
           //MARK: Main Card
+
           Expanded(
             child: SingleChildScrollView(
               child: Container(

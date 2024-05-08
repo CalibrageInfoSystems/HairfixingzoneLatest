@@ -125,7 +125,7 @@ class _HomeScreenState extends State<HomeScreen> {
           builder: (BuildContext context) {
             return AlertDialog(
               title: const Text('Confirm Exit'),
-              content: const Text('Are you sure you want to close the app?'),
+              content: const Text('Are You Sure You Want To Close The App?'),
               actions: <Widget>[
                 TextButton(
                   onPressed: () => Navigator.of(context).pop(false), // Close the dialog and return false

@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:hairfixingzone/Common/common_styles.dart';
 import 'package:hairfixingzone/MyProductsProvider.dart';
 import 'package:hairfixingzone/Product_Model.dart';
 import 'package:hairfixingzone/slotbookingscreen.dart';
@@ -47,6 +48,7 @@ class MyProducts_screenState extends State<MyProducts> {
   ProductCategory? selectedCategory;
 
   final orangeColor = const Color(0xFFe78337);
+  bool isOpVisited = true;
 
   @override
   void initState() {
@@ -85,6 +87,12 @@ class MyProducts_screenState extends State<MyProducts> {
     super.didChangeDependencies();
 
     myProductProvider = Provider.of<MyProductProvider>(context);
+
+    if (isOpVisited) {
+      myProductProvider.clearFilter();
+    }
+    print('xxx: isOpVisited did: $isOpVisited');
+    isOpVisited = false;
   }
 
   Future<void> fetchRadioButtonOptions() async {
@@ -95,10 +103,13 @@ class MyProducts_screenState extends State<MyProducts> {
       final response = await http.get(url);
       if (response.statusCode == 200) {
         final dynamic responseData = jsonDecode(response.body);
-        if (responseData != null && responseData['listResult'] is List<dynamic>) {
+        if (responseData != null &&
+            responseData['listResult'] is List<dynamic>) {
           final List<dynamic> optionsData = responseData['listResult'];
           setState(() {
-            options = optionsData.map((data) => RadioButtonOption.fromJson(data)).toList();
+            options = optionsData
+                .map((data) => RadioButtonOption.fromJson(data))
+                .toList();
           });
         } else {
           throw Exception('Invalid response format');
@@ -112,10 +123,13 @@ class MyProducts_screenState extends State<MyProducts> {
   }
 
   Future<List<ProductCategory>> fetchProductsCategory() async {
-    final response = await http.get(Uri.parse('http://182.18.157.215/SaloonApp/API/GetProduct/6'));
+    final response = await http
+        .get(Uri.parse('http://182.18.157.215/SaloonApp/API/GetProduct/6'));
     if (response.statusCode == 200) {
-      final List<dynamic> responseData = json.decode(response.body)['listResult'];
-      List<ProductCategory> result = responseData.map((json) => ProductCategory.fromJson(json)).toList();
+      final List<dynamic> responseData =
+      json.decode(response.body)['listResult'];
+      List<ProductCategory> result =
+      responseData.map((json) => ProductCategory.fromJson(json)).toList();
       print('fetchProductsCategory: ${result[0].desc}');
       return result;
     } else {
@@ -123,79 +137,112 @@ class MyProducts_screenState extends State<MyProducts> {
     }
   }
 
+  void refreshTheScreen() {
+    CommonUtils.checkInternetConnectivity().then(
+          (isConnected) {
+        if (isConnected) {
+          try {
+            initializeData();
+          } catch (e) {
+            print('catch: $e');
+            rethrow;
+          }
+        } else {
+          CommonUtils.showCustomToastMessageLong(
+              'Please check your internet  connection', context, 1, 4);
+          print('The Internet Is not  Connected');
+        }
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(5),
-        child: Column(
-          children: [
-            // search and filter
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 0).copyWith(top: 10),
-              child: _searchBarAndFilter(),
-            ),
-
-            // products
-            Expanded(
-              child: Consumer<MyProductProvider>(
-                builder: (context, provider, _) => FutureBuilder(
-                  future: apiData,
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(
-                        child: CircularProgressIndicator.adaptive(),
-                      );
-                    } else if (snapshot.hasError) {
-                      return Center(
-                        child: Text(
-                          'Error: ${snapshot.error.toString()}',
-                          style: const TextStyle(
-                            fontSize: 12.0,
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: "Roboto",
-                          ),
-                        ),
-                      );
-                    } else {
-                      List<ProductList>? data = provider.getProProducts;
-                      if (provider.getProProducts.isNotEmpty) {
-                        return ListView.builder(
-                          itemCount: data.length,
-                          itemBuilder: (context, index) {
-                            return ProductCard(product: data[index]);
-                          },
-                        );
-                      } else {
-                        return const Center(
-                          child: Text(
-                            'No products found!',
-                            style: TextStyle(
-                              fontSize: 12.0,
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                              fontFamily: "Roboto",
-                            ),
-                          ),
-                        );
-                      }
-                    }
-                  },
+    return RefreshIndicator(
+      onRefresh: () async {
+        refreshTheScreen();
+      },
+      child: Consumer<MyProductProvider>(
+        builder: (context, provider, _) => Scaffold(
+          body: Padding(
+            padding: const EdgeInsets.all(5),
+            child: Column(
+              children: [
+                // search and filter
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 0)
+                      .copyWith(top: 10),
+                  child: _searchBarAndFilter(),
                 ),
-              ),
-            )
-          ],
+
+                // products
+                Expanded(
+                  child: Consumer<MyProductProvider>(
+                    builder: (context, provider, _) => FutureBuilder(
+                      future: apiData,
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const Center(
+                            child: CircularProgressIndicator.adaptive(),
+                          );
+                        } else if (snapshot.hasError) {
+                          return Center(
+                            child: Text(
+                              'Error: ${snapshot.error.toString()}',
+                              style: const TextStyle(
+                                fontSize: 12.0,
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: "Roboto",
+                              ),
+                            ),
+                          );
+                        } else {
+                          List<ProductList>? data = provider.getProProducts;
+                          if (provider.getProProducts.isNotEmpty) {
+                            return ListView.builder(
+                              itemCount: data.length,
+                              itemBuilder: (context, index) {
+                                return ProductCard(product: data[index]);
+                              },
+                            );
+                          } else {
+                            return const Center(
+                              child: Text(
+                                'No products found!',
+                                style: TextStyle(
+                                  fontSize: 12.0,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: "Roboto",
+                                ),
+                              ),
+                            );
+                          }
+                        }
+                      },
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
         ),
       ),
     );
   }
 
-  Future<List<ProductList>> fetchproducts({int? id, int? categoryTypeId, int? genderTypeId}) async {
+  Future<List<ProductList>> fetchproducts(
+      {int? id, int? categoryTypeId, int? genderTypeId}) async {
     const apiurl = 'http://182.18.157.215/SaloonApp/API/GetProductById';
 
     try {
-      final request = {"id": id, "categoryTypeId": categoryTypeId, "genderTypeId": genderTypeId};
+      final request = {
+        "id": id,
+        "categoryTypeId": categoryTypeId,
+        "genderTypeId": genderTypeId
+      };
       final response = await http.post(
         Uri.parse(apiurl),
         body: json.encode(request),
@@ -209,7 +256,8 @@ class MyProducts_screenState extends State<MyProducts> {
         final data = json.decode(response.body);
         if (data['listResult'] != null) {
           List<dynamic> list = data['listResult'];
-          List<ProductList> result = list.map((item) => ProductList.fromJson(item)).toList();
+          List<ProductList> result =
+          list.map((item) => ProductList.fromJson(item)).toList();
           return result;
         } else {
           print('listResult is null');
@@ -224,28 +272,6 @@ class MyProducts_screenState extends State<MyProducts> {
       print('Error data is not getting from the api: $error');
       throw Exception('catch: $error');
     }
-  }
-
-  AppBar _appBar() {
-    return AppBar(
-      elevation: 0,
-      backgroundColor: const Color(0xFFf15f22),
-      title: const Text(
-        'Products',
-        style: TextStyle(color: Colors.white, fontSize: 16.0),
-      ),
-      centerTitle: true,
-      leading: IconButton(
-        icon: const Icon(
-          Icons.arrow_back,
-          color: Colors.white,
-        ),
-        onPressed: () {
-          myProductProvider.clearFilter();
-          Navigator.of(context).pop();
-        },
-      ),
-    );
   }
 
   Widget _searchBarAndFilter() {
@@ -268,16 +294,17 @@ class MyProducts_screenState extends State<MyProducts> {
                   // suffixIcon: const Icon(Icons.search),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
-                    borderSide: const BorderSide(color: CommonUtils.primaryTextColor),
+                    borderSide:
+                    const BorderSide(color: CommonUtils.primaryTextColor),
                   ),
 
                   focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
+                    borderSide: const BorderSide(
                       color: Color(0xFF0f75bc),
                     ),
                     borderRadius: BorderRadius.circular(10.0),
                   ),
-                  enabledBorder: OutlineInputBorder(
+                  enabledBorder: const OutlineInputBorder(
                     borderSide: BorderSide(
                       color: CommonUtils.primaryTextColor,
                     ),
@@ -293,6 +320,9 @@ class MyProducts_screenState extends State<MyProducts> {
             height: 45,
             width: 45,
             decoration: BoxDecoration(
+              color: myProductProvider.filterStatus
+                  ? const Color.fromARGB(255, 171, 111, 211)
+                  : Colors.white,
               borderRadius: BorderRadius.circular(10),
               border: Border.all(
                 color: CommonUtils.primaryTextColor,
@@ -301,7 +331,9 @@ class MyProducts_screenState extends State<MyProducts> {
             child: IconButton(
               icon: SvgPicture.asset(
                 'assets/filter.svg', // Path to your SVG asset
-                color: Color(0xFF662e91),
+                color: myProductProvider.filterStatus
+                    ? Colors.black
+                    : const Color(0xFF662e91),
                 width: 24, // Adjust width as needed
                 height: 24, // Adjust height as needed
               ),
@@ -328,7 +360,10 @@ class MyProducts_screenState extends State<MyProducts> {
   void filterProducts(String input) {
     apiData.then((data) {
       setState(() {
-        myProductProvider.storeIntoProvider(data.where((item) => item.name.toLowerCase().contains(input.toLowerCase())).toList());
+        myProductProvider.storeIntoProvider(data
+            .where(
+                (item) => item.name.toLowerCase().contains(input.toLowerCase()))
+            .toList());
       });
     });
   }
@@ -361,7 +396,9 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
   }
 
   Future<void> filterProducts() async {
-    apiData = fetchproducts(genderTypeId: myProductProvider.getGender, categoryTypeId: myProductProvider.getCategory);
+    apiData = fetchproducts(
+        genderTypeId: myProductProvider.getGender,
+        categoryTypeId: myProductProvider.getCategory);
     apiData.then((data) {
       myProductProvider.getProProducts = data;
       // Navigator.of(context).pop();
@@ -389,11 +426,16 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
     myProductProvider = Provider.of<MyProductProvider>(context);
   }
 
-  Future<List<ProductList>> fetchproducts({int? id, int? categoryTypeId, int? genderTypeId}) async {
+  Future<List<ProductList>> fetchproducts(
+      {int? id, int? categoryTypeId, int? genderTypeId}) async {
     const apiurl = 'http://182.18.157.215/SaloonApp/API/GetProductById';
 
     try {
-      final request = {"id": id, "categoryTypeId": categoryTypeId, "genderTypeId": genderTypeId};
+      final request = {
+        "id": id,
+        "categoryTypeId": categoryTypeId,
+        "genderTypeId": genderTypeId
+      };
       final response = await http.post(
         Uri.parse(apiurl),
         body: json.encode(request),
@@ -407,7 +449,8 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
         final data = json.decode(response.body);
         if (data['listResult'] != null) {
           List<dynamic> list = data['listResult'];
-          List<ProductList> result = list.map((item) => ProductList.fromJson(item)).toList();
+          List<ProductList> result =
+          list.map((item) => ProductList.fromJson(item)).toList();
           return result;
         } else {
           print('listResult is null');
@@ -427,7 +470,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
   @override
   Widget build(BuildContext context) {
     return Consumer<MyProductProvider>(
-      builder: (context, provider, child) => SingleChildScrollView(
+      builder: (context, provider, _) => SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(20),
           child: Column(
@@ -476,7 +519,8 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                           return Row(
                             children: [
                               CustomRadioButton(
-                                selected: provider.selectedGender == option.typeCdId,
+                                selected:
+                                provider.selectedGender == option.typeCdId,
                                 onTap: () {
                                   setState(() {
                                     provider.getGender = option.typeCdId;
@@ -515,10 +559,12 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                       child: FutureBuilder(
                           future: proCatogary,
                           builder: (context, snapshot) {
-                            if (snapshot.connectionState == ConnectionState.waiting) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
                               return CircularProgressIndicator.adaptive(
                                 backgroundColor: Colors.transparent,
-                                valueColor: AlwaysStoppedAnimation<Color>(orangeColor),
+                                valueColor:
+                                AlwaysStoppedAnimation<Color>(orangeColor),
                               );
                             } else if (snapshot.hasError) {
                               return Text('Error: ${snapshot.error}');
@@ -530,8 +576,10 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                                   scrollDirection: Axis.horizontal,
                                   shrinkWrap: true,
                                   itemCount: data.length + 1,
-                                  itemBuilder: (BuildContext context, int index) {
-                                    bool isSelected = index == provider.selectedCategory;
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    bool isSelected =
+                                        index == provider.selectedCategory;
                                     ProductCategory productCategory;
 
                                     if (index == 0) {
@@ -547,35 +595,50 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                                         setState(() {
                                           provider.selectedCategory = index;
 
-                                          provider.getCategory = productCategory.typecdid;
-                                          print('filter: ${provider.getCategory}');
+                                          provider.getCategory =
+                                              productCategory.typecdid;
+                                          print(
+                                              'filter: ${provider.getCategory}');
                                         });
                                       },
                                       child: Container(
-                                        margin: const EdgeInsets.symmetric(horizontal: 4.0),
+                                        margin: const EdgeInsets.symmetric(
+                                            horizontal: 4.0),
                                         decoration: BoxDecoration(
-                                          color: isSelected ? orangeColor : orangeColor.withOpacity(0.1),
+                                          color: isSelected
+                                              ? orangeColor
+                                              : orangeColor.withOpacity(0.1),
                                           border: Border.all(
-                                            color: isSelected ? orangeColor : orangeColor,
+                                            color: isSelected
+                                                ? orangeColor
+                                                : orangeColor,
                                             width: 1.0,
                                           ),
-                                          borderRadius: BorderRadius.circular(8.0),
+                                          borderRadius:
+                                          BorderRadius.circular(8.0),
                                         ),
                                         child: IntrinsicWidth(
                                           child: Column(
-                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            mainAxisAlignment:
+                                            MainAxisAlignment.center,
                                             children: [
                                               Container(
-                                                padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                                                padding:
+                                                const EdgeInsets.symmetric(
+                                                    horizontal: 10.0),
                                                 child: Row(
                                                   children: [
                                                     Text(
-                                                      productCategory.desc.toString(),
+                                                      productCategory.desc
+                                                          .toString(),
                                                       style: TextStyle(
                                                         fontSize: 12.0,
-                                                        fontWeight: FontWeight.bold,
+                                                        fontWeight:
+                                                        FontWeight.bold,
                                                         fontFamily: "Roboto",
-                                                        color: isSelected ? Colors.white : Colors.black,
+                                                        color: isSelected
+                                                            ? Colors.white
+                                                            : Colors.black,
                                                       ),
                                                     ),
                                                   ],
@@ -641,13 +704,10 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                             onTap: () {
                               filterProducts().whenComplete(() {
                                 Navigator.of(context).pop();
+                                provider.filterStatus = true;
                               });
-                              // fetchproducts(
-                              //     genderTypeId: gender,
-                              //     categoryTypeId: selectedCategory?.typecdid);
                             },
                             child: Container(
-                              // width: desiredWidth * 0.9,
                               height: 40.0,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(15.0),
@@ -687,10 +747,13 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
       final response = await http.get(url);
       if (response.statusCode == 200) {
         final dynamic responseData = jsonDecode(response.body);
-        if (responseData != null && responseData['listResult'] is List<dynamic>) {
+        if (responseData != null &&
+            responseData['listResult'] is List<dynamic>) {
           final List<dynamic> optionsData = responseData['listResult'];
           setState(() {
-            options = optionsData.map((data) => RadioButtonOption.fromJson(data)).toList();
+            options = optionsData
+                .map((data) => RadioButtonOption.fromJson(data))
+                .toList();
           });
         } else {
           throw Exception('Invalid response format');
@@ -704,10 +767,13 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
   }
 
   Future<List<ProductCategory>> fetchProductsCategory() async {
-    final response = await http.get(Uri.parse('http://182.18.157.215/SaloonApp/API/GetProduct/6'));
+    final response = await http
+        .get(Uri.parse('http://182.18.157.215/SaloonApp/API/GetProduct/6'));
     if (response.statusCode == 200) {
-      final List<dynamic> responseData = json.decode(response.body)['listResult'];
-      List<ProductCategory> result = responseData.map((json) => ProductCategory.fromJson(json)).toList();
+      final List<dynamic> responseData =
+      json.decode(response.body)['listResult'];
+      List<ProductCategory> result =
+      responseData.map((json) => ProductCategory.fromJson(json)).toList();
       print('fetchProductsCategory: ${result[0].desc}');
       return result;
     } else {
@@ -735,10 +801,10 @@ class ProductCard extends StatelessWidget {
           // borderRadius: BorderRadius.circular(30), //border corner radius
           boxShadow: [
             BoxShadow(
-              color: Color(0xFF960efd).withOpacity(0.2), //color of shadow
+              color: const Color(0xFF960efd).withOpacity(0.2), //color of shadow
               spreadRadius: 2, //spread radius
               blurRadius: 4, // blur radius
-              offset: Offset(0, 2), // changes position of shadow
+              offset: const Offset(0, 2), // changes position of shadow
             ),
           ],
         ),
@@ -763,23 +829,23 @@ class ProductCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Text(
-                  product.name + " (" + product.code + ") ",
+                  "${product.name} (${product.code}) ",
                   style: CommonUtils.txSty_18p_f7,
                 ),
-                SizedBox(height: 8), // Add space here
+                const SizedBox(height: 8), // Add space here
                 Text(
                   product.categoryName,
                   style: CommonUtils.txSty_12bs_fb,
                 ),
-                SizedBox(height: 8), // Add space here
+                const SizedBox(height: 8), // Add space here
                 Text(
                   product.gender ?? ' ',
                   style: CommonUtils.txSty_12bs_fb,
                 ),
-                SizedBox(height: 8), // Add space here
+                const SizedBox(height: 8), // Add space here
                 Text(
                   '₹ ${formatNumber(product.maxPrice)} /-',
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 24,
                     fontFamily: "Calibri",
                     fontWeight: FontWeight.w500,
