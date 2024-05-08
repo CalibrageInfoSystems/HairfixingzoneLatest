@@ -13,7 +13,13 @@ class AgentAppointmentsProvider extends ChangeNotifier {
   int? apiBranchId;
   int? apiStatusTypeId;
   bool isFilterApplied = false;
+  List<Appointment> filteredAppointments = []; // Add this property
 
+  // Method to update filtered data
+  void updateFilteredData(List<Appointment> data) {
+    filteredAppointments = data;
+    notifyListeners(); // Ensure listeners are notified when filtered data changes
+  }
   List<Appointment> get storeIntoProvider => proAppointments;
   set storeIntoProvider(List<Appointment> products) {
     print('xxx: storeIntoProvider');

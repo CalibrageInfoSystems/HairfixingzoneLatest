@@ -67,9 +67,14 @@ class MyAppointmentsProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  // void filterProviderData(List<MyAppointment_Model> items) {
+  //   proAppointments.clear();
+  //   proAppointments.addAll(items);
+  //   notifyListeners();
+  // }
   void filterProviderData(List<MyAppointment_Model> items) {
-    proAppointments.clear();
-    proAppointments.addAll(items);
+    print('xxx: filterProviderData');
+    proAppointments = List<MyAppointment_Model>.from(items);
     notifyListeners();
   }
 
