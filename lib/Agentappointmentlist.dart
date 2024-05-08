@@ -47,6 +47,7 @@ class Agentappointmentlist extends StatefulWidget {
 
 class MyAppointments_screenState extends State<Agentappointmentlist> {
   Future<List<Appointment>>? apiData;
+  List<Appointment> temp = [];
   int? userId;
   int? branchid;
   @override
@@ -230,6 +231,7 @@ class MyAppointments_screenState extends State<Agentappointmentlist> {
     apiData = fetchagentAppointments(userId, widget.branchid);
     apiData!.then((value) {
       myAppointmentsProvider!.storeIntoProvider = value;
+      temp.addAll(value);
     }).catchError((error) {
       print('catchError: Error occurred.');
     });
@@ -390,35 +392,16 @@ class MyAppointments_screenState extends State<Agentappointmentlist> {
     return dateTime
         .day; //[dateTime.day, DateFormat.MMM().format(dateTime), dateTime.year];
   }
+
   void filterAppointment(String input) {
-    apiData!.then((data) {
-      setState(() {
-        myAppointmentsProvider!.filterProviderData(data
-            .where((item) =>
-        item.customerName.toLowerCase().contains(input.toLowerCase()) ||
-            item.purposeOfVisit.toLowerCase().contains(input.toLowerCase()))
-            .toList());
-      });
-    });
+    myAppointmentsProvider!.filterProviderData(temp.where((item) {
+      return item.purposeOfVisit.toLowerCase().contains(input.toLowerCase()) ||
+          item.customerName.toLowerCase().contains(input.toLowerCase()) ||
+          item.email!.toLowerCase().contains(input.toLowerCase());
+      // ||
+      // item.email!.toLowerCase().contains(input.toLowerCase());
+    }).toList());
   }
-
-  // void filterAppointment(String input) {
-  //   apiData!.then((data) {
-  //     setState(() {
-  //       myAppointmentsProvider!.filterProviderData(data
-  //           .where((item) =>
-  //       // item.customerName
-  //       //         .toLowerCase()
-  //       //         .contains(input.toLowerCase())
-  //       // ||
-  //       // item.name.toLowerCase().contains(input.toLowerCase()) ||
-  //       // item.email!.toLowerCase().contains(input.toLowerCase()) ||
-  //       item.customerName.toLowerCase().contains(input.toLowerCase()))
-  //           .toList());
-  //     });
-  //   });
-  // }
-
 // void fetchAppointments(int userId, int branchid, {required status, required date}) async {
 //   appointments.clear();
 //   final url = Uri.parse(baseUrl + GetAppointment + '$userId/$branchid/$status/$date');
