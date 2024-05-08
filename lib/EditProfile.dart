@@ -16,6 +16,7 @@ import 'api_config.dart';
 
 class EditProfile extends StatefulWidget {
   final String createdDate;
+
   EditProfile({required this.createdDate});
 
   @override
@@ -55,6 +56,9 @@ class EditProfile_screenState extends State<EditProfile> {
   bool isEmailValidate = false;
   bool isGenderSelected = false;
   int? Id;
+  int? createdByUserId;
+  String? UserId;
+  String? createdDate;
   String? phonenumber;
   String? username;
   String? email;
@@ -82,18 +86,31 @@ class EditProfile_screenState extends State<EditProfile> {
         fetchRadioButtonOptions();
         setState(() async {
           prefs = await SharedPreferences.getInstance();
-          Id = prefs.getInt('userId');
-          fullname = prefs.getString('userFullName');
-          phonenumber = prefs.getString('contactNumber');
+
+          Id = prefs.getInt('profileId');
+          UserId = prefs.getString('profileUserId');
+          fullname = prefs.getString('profilefullname');
+          dob = prefs.getString('profiledateofbirth');
+          gender = prefs.getString('profilegender');
+          gendertypeid = prefs.getInt('profilegenderId');
+          email = prefs.getString('profileemail');
+          contactNumber = prefs.getString('profilecontactNumber');
+          phonenumber = prefs.getString('profilealternatenumber');
+          //  createdByUserId = prefs.getInt('profilecreatedId');
+          createdDate = prefs.getString('profilecreateddate');
+
+          // Id = prefs.getInt('userId');
+          // fullname = prefs.getString('userFullName');
+          // phonenumber = prefs.getString('contactNumber');
           username = prefs.getString('username');
-          email = prefs.getString('email');
-          contactNumber = prefs.getString('contactNumber');
-          gender = prefs.getString('gender');
-          dob = prefs.getString('dateofbirth');
+          // email = prefs.getString('email');
+          // contactNumber = prefs.getString('contactNumber');
+          // gender = prefs.getString('gender');
+          // dob = prefs.getString('dateofbirth');
           DateTime date = DateTime.parse(dob!);
           roleId = prefs.getInt('userRoleId');
           password = prefs.getString('password');
-          gendertypeid = prefs.getInt('genderTypeId');
+          //gendertypeid = prefs.getInt('genderTypeId');
           print('fullname$fullname');
           print('usernameId:$Id');
           print('gender:$gender');
@@ -370,8 +387,13 @@ class EditProfile_screenState extends State<EditProfile> {
                                       ),
                                       onChanged: (value) {
                                         setState(() {
+                                          // selectedGender = value!;
+                                          // print('selectgender:$selectedGender');
+
                                           selectedGender = value!;
-                                          print('selectgender:$selectedGender');
+                                          // Update the gendertypeid based on the selected gender
+                                          gendertypeid = dropdownItems.firstWhere((item) => item['desc'] == selectedGender)['typeCdId'];
+
                                           // if (selectedTypeCdId != -1) {
                                           //   selectedValue = dropdownItems[selectedTypeCdId]['typeCdId'];
                                           //   selectedName = dropdownItems[selectedTypeCdId]['desc'];
@@ -875,21 +897,21 @@ class EditProfile_screenState extends State<EditProfile> {
       DateTime now = DateTime.now();
 
       final request = {
-        "id": 1,
-        "userId": null, //null
+        "id": Id,
+        "userId": UserId, //null
         "firstName": "$fullname",
         "middleName": "",
         "lastName": "",
-        "contactNumber": "$phonenumber",
+        "contactNumber": "$contactNumber",
         "mobileNumber": "$phonenumber",
         "userName": "$username",
         "password": "$password", //saved
         "confirmPassword": "$password",
         "email": "$email",
         "isActive": true,
-        "createdByUserId": 1,
-        "createdDate": "${widget.createdDate}",
-        "updatedByUserId": 1,
+        "createdByUserId": createdByUserId,
+        "createdDate": createdDate,
+        "updatedByUserId": Id,
         "updatedDate": "$now",
         "roleId": roleId,
         "gender": gendertypeid,

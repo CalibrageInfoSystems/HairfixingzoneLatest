@@ -246,7 +246,8 @@ class _ForgotPasswordscreen extends State<ForgotPasswordscreen> {
               context,
               MaterialPageRoute(builder: (context) => ForgotPasswordOtpScreen(id: user['id'], userName: user['userName'])),
             );
-            CommonUtils.showCustomToastMessageLong('OTP Has Sent To Your Mail', context, 0, 3, toastPosition: MediaQuery.of(context).size.height / 2);
+            CommonUtils.showCustomToastMessageLong('OTP Has Sent To Your Email', context, 0, 3,
+                toastPosition: MediaQuery.of(context).size.height / 2);
           } else {
             FocusScope.of(context).unfocus();
             CommonUtils.showCustomToastMessageLong('Invalid User ', context, 1, 3, toastPosition: MediaQuery.of(context).size.height / 2);

@@ -13,22 +13,26 @@ import 'Common/custom_button.dart';
 import 'CommonUtils.dart';
 import 'package:http/http.dart' as http;
 
+import 'User.dart';
+
 class Profile extends StatefulWidget {
   @override
   Profile_screenState createState() => Profile_screenState();
 }
 
 class Profile_screenState extends State<Profile> {
-  String? fullusername;
+  String fullusername = '';
   String? phonenumber;
   String? email;
   String? contactNumber;
-  String? gender;
+  String gender = '';
   int Id = 0;
-  String? username;
+  String username = '';
+  String mobileNumber = '';
   String? dob;
-  String? formattedDate;
-  String? createdDate;
+  String formattedDate = '';
+  DateTime? createdDate;
+  List<User> userlist = [];
   @override
   void initState() {
     super.initState();
@@ -44,20 +48,9 @@ class Profile_screenState extends State<Profile> {
         SharedPreferences prefs = await SharedPreferences.getInstance();
         setState(() {
           Id = prefs.getInt('userId') ?? 0;
-          fullusername = prefs.getString('userFullName');
-          phonenumber = prefs.getString('contactNumber');
-          username = prefs.getString('username');
-          email = prefs.getString('email');
-          contactNumber = prefs.getString('contactNumber');
-          gender = prefs.getString('gender');
-          dob = prefs.getString('dateofbirth');
-          DateTime date = DateTime.parse(dob!);
-          print('fullusername:$fullusername');
-          print('username$username');
-          print('usernameId:$Id');
-          formattedDate = DateFormat('dd-MM-yyyy').format(date);
+          fetchdetailsofcustomer(Id);
         });
-        fetchdetailsofcustomer(Id);
+
         // fetchMyAppointments(userId);
       } else {
         print('The Internet Is not  Connected');
@@ -65,21 +58,76 @@ class Profile_screenState extends State<Profile> {
     });
   }
 
-  void getUserDataFromSharedPreferences() async {
+  Future<void> fetchdetailsofcustomer(int id) async {
+    String apiUrl = 'http://182.18.157.215/SaloonApp/API/GetCustomerData?id=$id';
+
+    try {
+      final response = await http.get(Uri.parse(apiUrl));
+
+      if (response.statusCode == 200) {
+        // Parse the JSON response
+        Map<String, dynamic> jsonResponse = json.decode(response.body);
+
+        // Access the 'listResult' from the response
+        List<dynamic> listResult = jsonResponse['listResult'];
+
+        // Assuming there's only one item in the listResult
+        Map<String, dynamic> customerData = listResult[0];
+
+        setState(() {
+          username = customerData['userName'] ?? '';
+          fullusername = customerData['firstname'] ?? '';
+          String lastName = customerData['lastname'] ?? '';
+          contactNumber = customerData['contactNumber'] ?? '';
+          email = customerData['email'] ?? '';
+          gender = customerData['gender'] ?? '';
+          String roleName = customerData['rolename'] ?? '';
+          String dob = customerData['dateofbirth'];
+          if (mobileNumber != null) {
+            mobileNumber = customerData['mobileNumber'] ?? '';
+          } else {
+            mobileNumber = '';
+          }
+
+          formattedDate = DateFormat('dd-MM-yyyy').format(DateTime.parse(dob));
+          // fullusername = firstName;
+          // contactNumber = contactnumber;
+          // email = Email;
+
+          // Use the data as needed
+          //  print('First Name: $firstName');
+          print('Last Name: $lastName');
+          print('Contact Number: $contactNumber');
+          print('Email: $email');
+          print('Role Name: $roleName');
+        });
+
+        await saveUserDataToSharedPreferences(customerData);
+        // Now you can access individual fields like 'firstname', 'lastname', etc.
+      } else {
+        // Handle error cases
+        print('Request failed with status: ${response.statusCode}');
+      }
+    } catch (e) {
+      // Handle exceptions
+      print('Exception occurred: $e');
+    }
+  }
+
+  Future<void> saveUserDataToSharedPreferences(Map<String, dynamic> customerData) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    Id = prefs.getInt('userId') ?? 0;
-    fullusername = prefs.getString('userFullName');
-    phonenumber = prefs.getString('contactNumber');
-    username = prefs.getString('username');
-    email = prefs.getString('email');
-    contactNumber = prefs.getString('contactNumber');
-    gender = prefs.getString('gender');
-    dob = prefs.getString('dateofbirth');
-    DateTime date = DateTime.parse(dob!);
-    print('fullusername:$fullusername');
-
-    formattedDate = DateFormat('dd-MM-yyyy').format(date);
+    await prefs.setInt('profileId', customerData['id'] ?? '');
+    await prefs.setString('profileUserId', customerData['userid'] ?? '');
+    await prefs.setString('profilefullname', customerData['firstname'] ?? '');
+    await prefs.setString('profiledateofbirth', customerData['dateofbirth'] ?? '');
+    await prefs.setString('profilegender', customerData['gender'] ?? '');
+    await prefs.setInt('profilegenderId', customerData['genderId'] ?? '');
+    await prefs.setString('profileemail', customerData['email'] ?? '');
+    await prefs.setString('profilecontactNumber', customerData['contactNumber'] ?? '');
+    await prefs.setString('profilealternatenumber', customerData['mobileNumber'] ?? '');
+    // await prefs.setInt('profilecreatedId', customerData['createdByUserId'] ?? '');
+    await prefs.setString('profilecreateddate', customerData['createdDate'] ?? '');
   }
 
   @override
@@ -147,10 +195,10 @@ class Profile_screenState extends State<Profile> {
                 children: [
                   Column(
                     children: [
-                      userLayOut('assets/id-card-clip-alt.svg', CommonStyles.primaryTextColor, '$username'),
-                      userLayOut('assets/venus-mars.svg', CommonStyles.statusGreenText, '$gender'),
-                      userLayOut('assets/calendar_icon.svg', CommonStyles.statusRedText, '$formattedDate'),
-                      userLayOut('assets/mobile-notch.svg', CommonStyles.statusYellowText, '+91 $contactNumber'),
+                      userLayOut('assets/id-card-clip-alt.svg', CommonStyles.primaryTextColor, username),
+                      userLayOut('assets/venus-mars.svg', CommonStyles.statusGreenText, gender),
+                      userLayOut('assets/calendar_icon.svg', CommonStyles.statusRedText, formattedDate),
+                      userLayOut('assets/mobile-notch.svg', CommonStyles.statusYellowText, '+91 ${contactNumber}'),
                       userLayOut('assets/mobile-notch.svg', CommonStyles.statusBlueText, ''),
                     ],
                   ),
@@ -204,54 +252,54 @@ class Profile_screenState extends State<Profile> {
     );
   }
 
-  Future<void> fetchdetailsofcustomer(int id) async {
-    String apiurl = 'http://182.18.157.215/SaloonApp/API/GetCustomerData?id=$id';
-    print('apirul:$apiurl');
-    final response = await http.get(
-      Uri.parse(apiurl),
-    );
-
-    // Check if the request was successful
-    if (response.statusCode == 200) {
-      // Parse the JSON response
-      Map<String, dynamic> data = json.decode(response.body);
-
-      // Extract the necessary information
-      bool isSuccess = data['isSuccess'];
-      String statusMessage = data['statusMessage'];
-
-      // Print the result
-      print('Is Success: $isSuccess');
-      print('Status Message: $statusMessage');
-
-      // Handle the data accordingly
-      if (isSuccess) {
-        // If the user is valid, you can extract more data from 'listResult'
-
-        if (data['listResult'] != null) {
-          List<dynamic> listResult = data['listResult'];
-          Map<String, dynamic> user = listResult.first;
-
-          print('CreatedDate ${user['createdDate']}');
-          setState(() {
-            createdDate = user['createdDate'];
-          });
-
-          // Extract other user information as needed
-        } else {
-          FocusScope.of(context).unfocus();
-
-          CommonUtils.showCustomToastMessageLong("${data["statusMessage"]}", context, 1, 3, toastPosition: MediaQuery.of(context).size.height / 2);
-          // Handle the case where the user is not valid
-          List<dynamic> validationErrors = data['validationErrors'];
-          if (validationErrors.isNotEmpty) {
-            // Print or handle validation errors if any
-          }
-        }
-      } else {
-        // Handle any error cases here
-        print('Failed to connect to the API. Status code: ${response.statusCode}');
-      }
-    }
-  }
+  // Future<void> fetchdetailsofcustomer(int id) async {
+  //   String apiUrl = 'http://182.18.157.215/SaloonApp/API/GetCustomerData?id=$id';
+  //   print('apiUrl: $apiUrl');
+  //
+  //   final response = await http.get(Uri.parse(apiUrl));
+  //
+  //   // Check if the request was successful
+  //   if (response.statusCode == 200) {
+  //     // Parse the JSON response
+  //     Map<String, dynamic> data = json.decode(response.body);
+  //
+  //     // Extract the necessary information
+  //     bool isSuccess = data['isSuccess'];
+  //     String statusMessage = data['statusMessage'];
+  //
+  //     // Print the result
+  //     print('Is Success: $isSuccess');
+  //     print('Status Message: $statusMessage');
+  //
+  //     // Handle the data accordingly
+  //     if (isSuccess) {
+  //       // If the user is valid, you can extract more data from 'listResult'
+  //       Map<String, dynamic> user = data['listResult'];
+  //
+  //       if (data['listResult'] != null && data['listResult'] is List && data['listResult'].isNotEmpty) {
+  //         List<dynamic> userList = data['listResult'];
+  //         Map<String, dynamic> user = data['listResult'];
+  //
+  //         // Now 'user' should be a map containing user data
+  //         String userDataJsonString = jsonEncode(user);
+  //         final users = User.fromJson(jsonDecode(userDataJsonString));
+  //
+  //         // Update the state with user data
+  //         setState(() {
+  //           fullusername = users.userName;
+  //           gender = users.gender;
+  //           formattedDate = DateFormat('dd-MM-yyyy').format(users.dateOfBirth);
+  //           contactNumber = users.contactNumber;
+  //           createdDate = users.createdDate;
+  //         });
+  //       } else {
+  //         // Handle the case where the user is not valid or listResult is empty
+  //         print('No user data found');
+  //       }
+  //     } else {
+  //       // Handle any error cases here
+  //       print('Failed to connect to the API. Status code: ${response.statusCode}');
+  //     }
+  //   }
+  // }
 }
