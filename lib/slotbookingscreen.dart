@@ -163,7 +163,7 @@ class _BookingScreenState extends State<slotbookingscreen>  {
         fetchData();
 
       } else {
-        CommonUtils.showCustomToastMessageLong('Not connected to the internet', context, 1, 4);
+        CommonUtils.showCustomToastMessageLong('Please Check Your Internet Connection', context, 1, 4);
         print('Not connected to the internet');
       }
     });
@@ -1353,7 +1353,7 @@ class _BookingScreenState extends State<slotbookingscreen>  {
       });
       fetchRadioButtonOptions();
     } else {
-      CommonUtils.showCustomToastMessageLong('Not connected to the internet', context, 1, 4);
+      CommonUtils.showCustomToastMessageLong('Please Check Your Internet Connection', context, 1, 4);
       print('Not connected to the internet');
     }
   }

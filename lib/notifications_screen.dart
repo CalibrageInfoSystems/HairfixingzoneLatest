@@ -36,7 +36,7 @@ class _notifications_screenState extends State<notifications_screen> {
       if (isConnected) {
         print('Connected to the internet');
         fetchAppointments(widget.userId,widget.formattedDate);
-      } else { CommonUtils.showCustomToastMessageLong('Not connected to the internet', context, 1, 4);
+      } else {    CommonUtils.showCustomToastMessageLong('Please Check Your Internet Connection', context, 1, 4);
       print('Not connected to the internet');  // Not connected to the internet
       }
     });

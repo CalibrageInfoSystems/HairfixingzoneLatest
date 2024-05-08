@@ -357,7 +357,7 @@ class _BookingScreenState extends State<Bookingscreen> {
         print('Error fetching time slots: $error');
       });
     } else {
-      CommonUtils.showCustomToastMessageLong('Not connected to the internet', context, 1, 4);
+      CommonUtils.showCustomToastMessageLong('Please Check Your Internet Connection', context, 1, 4);
       print('Not connected to the internet');
     }
   }

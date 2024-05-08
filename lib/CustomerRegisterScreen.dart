@@ -413,7 +413,7 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
                                       Padding(
                                         padding: EdgeInsets.symmetric(horizontal: 16, vertical: 5),
                                         child: Text(
-                                          'Please select gender',
+                                          'Please Select Gender',
                                           style: TextStyle(
                                             color: Color.fromARGB(255, 175, 15, 4),
                                             fontSize: 12,
@@ -764,7 +764,7 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
                                                   showPassword = !showPassword;
                                                 });
                                               },
-                                              child: Icon(showPassword ? Icons.visibility : Icons.visibility_off),
+                                              child: Icon(showPassword ? Icons.visibility_off : Icons.visibility),
                                             ),
                                             contentPadding: const EdgeInsets.only(top: 15, bottom: 10, left: 15, right: 15),
                                             focusedBorder: OutlineInputBorder(
@@ -880,7 +880,7 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
                                               showConfirmPassword = !showConfirmPassword;
                                             });
                                           },
-                                          child: Icon(showConfirmPassword ? Icons.visibility : Icons.visibility_off),
+                                          child: Icon(showConfirmPassword ? Icons.visibility_off : Icons.visibility),
                                         ),
                                         contentPadding: const EdgeInsets.only(top: 15, bottom: 10, left: 15, right: 15),
                                         focusedBorder: OutlineInputBorder(
@@ -947,7 +947,7 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         const Text(
-                          'Already have an Account?',
+                          'Already Have an Account?',
                           style: TextStyle(
                             fontSize: 15,
                             color: Colors.black,
@@ -1012,13 +1012,13 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
     if (value.length < 2) {
       setState(() {
         _fullNameError = true;
-        _fullNameErrorMsg = 'Full Name should contains minimum 2 charactes';
+        _fullNameErrorMsg = 'Full Name Should Contains Minimum 2 Charactes';
       });
       isFullNameValidate = false;
       return null;
     }
     if (!RegExp(r'^[a-zA-Z]+$').hasMatch(value)) {
-      return 'Full Name should only contain alphabetic characters';
+      return 'Full Name Should Only Contain Alphabetic Characters';
     }
     if (!RegExp(r'^[a-zA-Z]+$').hasMatch(value)) {
       setState(() {
@@ -1076,7 +1076,7 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
     if (value.contains(RegExp(r'[a-zA-Z]'))) {
       setState(() {
         _mobileNumberError = true;
-        _mobileNumberErrorMsg = 'Mobile Number should contain only digits';
+        _mobileNumberErrorMsg = 'Mobile Number Should Contain Only Digits';
       });
       isMobileNumberValidate = false;
       return null;
@@ -1190,7 +1190,7 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
       setState(() {
         isPasswordValidate = false;
         _passwordError = true;
-        _passwordErrorMsg = 'Password must be 8 characters or above';
+        _passwordErrorMsg = 'Password Must be 8 Characters or Above';
       });
       isPswdValidate = false;
       return null;
@@ -1233,7 +1233,7 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
         isPasswordValidate = false;
       } else {
         if (_containsSpecialCharacters(password) && _containsCharacters(password) && _containsNumbers(password)) {
-          _passwordStrengthMessage = 'Strong password';
+          _passwordStrengthMessage = 'Strong Password';
           _passwordStrengthColor = const Color.fromARGB(255, 2, 131, 68);
         } else if (_containsNumbers(password) && _containsCharacters(password)) {
           _passwordStrengthMessage = 'Good password';

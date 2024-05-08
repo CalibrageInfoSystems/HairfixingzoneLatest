@@ -93,6 +93,7 @@ class AddConsulationscreen_screenState extends State<Add_Consulation_screen> {
 
         // fetchMyAppointments(userId);
       } else {
+        CommonUtils.showCustomToastMessageLong('Please Check Your Internet Connection', context, 1, 4);
         print('The Internet Is not  Connected');
       }
     });

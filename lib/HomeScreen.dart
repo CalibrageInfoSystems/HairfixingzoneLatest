@@ -81,7 +81,7 @@ class _HomeScreenState extends State<HomeScreen> {
         //fetchimagesslider();
         fetchImages();
       } else {
-        CommonUtils.showCustomToastMessageLong('No Internet Connection', context, 1, 4);
+        CommonUtils.showCustomToastMessageLong('Please Check Your Internet Connection', context, 1, 4);
         print('Not connected to the internet'); // Not connected to the internet
       }
     });
@@ -962,7 +962,7 @@ class _HomeScreenState extends State<HomeScreen> {
         fetchData();
         fetchimagesslider();
       } else {
-        CommonUtils.showCustomToastMessageLong('No Internet Connection', context, 1, 4);
+        CommonUtils.showCustomToastMessageLong('Please Check Your Internet Connection', context, 1, 4);
         print('Not connected to the internet'); // Not connected to the internet
       }
     });

@@ -278,8 +278,20 @@ class _LoginPageState extends State<CustomerLoginScreen> {
                                       child: CustomButton(
                                         buttonText: 'Login',
                                         color: CommonUtils.primaryTextColor,
-                                        onPressed: loginUser,
-                                      ),
+                                        onPressed: () {
+                                          FocusManager.instance.primaryFocus?.unfocus();
+                                          CommonUtils.checkInternetConnectivity().then((isConnected) {
+                                            if (isConnected) {
+                                              loginUser();
+                                              print('The Internet Is Connected');
+                                            } else {
+                                              CommonUtils.showCustomToastMessageLong('Please Check Your Internet Connection', context, 1, 4);
+                                              print('The Internet Is not Connected');
+                                            }
+                                          });
+                                        },
+                                      )
+
                                     ),
                                   ),
                                 ],

@@ -206,7 +206,7 @@ class _AgentLoginState extends State<AgentLogin> {
                                         showPassword = !showPassword;
                                       });
                                     },
-                                    child: Icon(showPassword ? Icons.visibility : Icons.visibility_off),
+                                    child: Icon(showPassword ? Icons.visibility_off : Icons.visibility),
                                   ),
                                 ),
                                 const SizedBox(
@@ -303,7 +303,7 @@ class _AgentLoginState extends State<AgentLogin> {
     if (value!.isEmpty) {
       setState(() {
         _emailError = true;
-        _emailErrorMsg = 'Email is required';
+        _emailErrorMsg = 'Please Enter Email';
       });
       return null;
     }
@@ -322,7 +322,7 @@ class _AgentLoginState extends State<AgentLogin> {
     if (value!.isEmpty) {
       setState(() {
         _passwordError = true;
-        _passwordErrorMsg = 'Password is required';
+        _passwordErrorMsg = 'Please Enter Password';
       });
       return null;
     }
@@ -377,7 +377,7 @@ class _AgentLoginState extends State<AgentLogin> {
         print('Connected to the internet');
         login(username, password);
       } else {
-        CommonUtils.showCustomToastMessageLong('No Internet Connection', context, 1, 4);
+        CommonUtils.showCustomToastMessageLong('Please Check Your Internet Connection', context, 1, 4);
         FocusScope.of(context).unfocus();
         print('Not connected to the internet');
       }

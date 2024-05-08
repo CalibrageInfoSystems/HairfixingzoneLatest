@@ -108,6 +108,7 @@ class EditProfile_screenState extends State<EditProfile> {
 
         // fetchMyAppointments(userId);
       } else {
+        CommonUtils.showCustomToastMessageLong('Please Check Your Internet Connection', context, 1, 4);
         print('The Internet Is not  Connected');
       }
     });
