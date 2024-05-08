@@ -39,7 +39,7 @@ class AddConsulationscreen_screenState extends State<Add_Consulation_screen> {
   TextEditingController dobController = TextEditingController();
   TextEditingController genderController = TextEditingController();
   TextEditingController mobileNumberController = TextEditingController();
-
+  bool isBranchValidate = false;
   TextEditingController emailController = TextEditingController();
   TextEditingController remarksController = TextEditingController();
   bool _fullNameError = false;
@@ -78,6 +78,7 @@ class AddConsulationscreen_screenState extends State<Add_Consulation_screen> {
   String? password;
   String? fullname;
   DateTime selectedDate = DateTime.now();
+
   @override
   void initState() {
     super.initState();
@@ -354,7 +355,7 @@ class AddConsulationscreen_screenState extends State<Add_Consulation_screen> {
                             errorText: _mobileNumberError ? _mobileNumberErrorMsg : null,
                             onChanged: (value) {
                               setState(() {
-                                if (value.length == 1 && ['0','1', '2', '3', '4'].contains(value)) {
+                                if (value.length == 1 && ['0', '1', '2', '3', '4'].contains(value)) {
                                   mobileNumberController.clear();
                                 }
                                 if (value.startsWith(' ')) {
@@ -664,8 +665,18 @@ class AddConsulationscreen_screenState extends State<Add_Consulation_screen> {
   Future<void> validating() async {
     validateGender(selectedName);
     validatebranch(branchName);
+
     if (_formKey.currentState!.validate()) {
-      updateUser();
+      print(isFullNameValidate);
+      print(isGenderValidate);
+      print(isMobileNumberValidate);
+      print(isEmailValidate);
+      print(isBranchValidate);
+      print(isRemarksValidate);
+
+      if (isFullNameValidate && isGenderValidate && isMobileNumberValidate && isEmailValidate && isBranchValidate && isRemarksValidate) {
+        updateUser();
+      }
     }
   }
 
@@ -703,6 +714,27 @@ class AddConsulationscreen_screenState extends State<Add_Consulation_screen> {
     return null;
   }
 
+  String? validateremarks(String? value) {
+    if (value!.isEmpty) {
+      setState(() {
+        _remarksError = true;
+        _remarksErrorMsg = 'Please Enter Remark';
+      });
+      isRemarksValidate = false;
+      return null;
+    }
+    if (value!.length < 3) {
+      setState(() {
+        _remarksError = true;
+        _remarksErrorMsg = 'Please Enter Remarks';
+      });
+      isRemarksValidate = false;
+      return null;
+    }
+    isRemarksValidate = true;
+    return null;
+  }
+
   String? validateDOB(String? value) {
     if (value == null || value.isEmpty) {
       setState(() {
@@ -727,24 +759,13 @@ class AddConsulationscreen_screenState extends State<Add_Consulation_screen> {
     //   setState(() {});
   }
 
-  String? validateremarks(String? value) {
-    if (value!.isEmpty) {
-      setState(() {
-        _remarksError = true;
-        _remarksErrorMsg = 'Please Enter Remark';
-      });
-      isRemarksValidate = false;
-      return null;
-    }
-  }
-
   void validatebranch(String? value) {
     if (value == null || value.isEmpty) {
       isBranchSelected = true;
-      isGenderValidate = false;
+      isBranchValidate = false;
     } else {
       isBranchSelected = false;
-      isGenderValidate = true;
+      isBranchValidate = true;
     }
     //  setState(() {});
   }
@@ -760,7 +781,7 @@ class AddConsulationscreen_screenState extends State<Add_Consulation_screen> {
     } else if (!RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(value)) {
       setState(() {
         _emailError = true;
-        _emailErrorMsg = 'Please Enter a Valid Email Address';
+        _emailErrorMsg = 'Please Enter A Valid Email';
       });
       isEmailValidate = false;
       return null;
