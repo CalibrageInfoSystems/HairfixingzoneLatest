@@ -130,13 +130,13 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: CommonStyles.primaryTextColor,
+      //  backgroundColor: CommonStyles.primaryTextColor,
         // appBar: _appBar(),
         body: IntrinsicHeight(
           child: Column(
             children: [
               //MARK: Welcome Text
-              welcomeText(),
+         //     welcomeText(),
               //MARK: Main Card
               Expanded(
                 child: Container(
@@ -241,26 +241,26 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
     );
   }
 
-  Widget welcomeText() {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-      height: 80,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Text(
-            'Hello!',
-            style: CommonStyles.txSty_16w_fb,
-          ),
-          Text(
-            userFullName,
-            style: CommonStyles.txSty_18w_fb,
-          ),
-        ],
-      ),
-    );
-  }
+  // Widget welcomeText() {
+  //   return Container(
+  //     padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+  //     height: 80,
+  //     child: Column(
+  //       crossAxisAlignment: CrossAxisAlignment.stretch,
+  //       mainAxisAlignment: MainAxisAlignment.center,
+  //       children: [
+  //         const Text(
+  //           'Hello!',
+  //           style: CommonStyles.txSty_16w_fb,
+  //         ),
+  //         Text(
+  //           userFullName,
+  //           style: CommonStyles.txSty_18w_fb,
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 
   Widget marquee() {
     return Padding(
@@ -342,7 +342,7 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
 
   Widget agentBranches() {
     return SizedBox(
-      height: MediaQuery.of(context).size.height / 4.2,
+      height: MediaQuery.of(context).size.height / 4,
       child: FutureBuilder(
         future: apiData,
         builder: (context, snapshot) {

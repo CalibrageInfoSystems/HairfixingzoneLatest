@@ -303,7 +303,7 @@ class _AgentLoginState extends State<AgentLogin> {
     if (value!.isEmpty) {
       setState(() {
         _emailError = true;
-        _emailErrorMsg = 'Please Enter Email';
+        _emailErrorMsg = 'Please Enter Email/User Name';
       });
       return null;
     }

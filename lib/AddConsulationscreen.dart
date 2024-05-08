@@ -326,7 +326,7 @@ class AddConsulationscreen_screenState extends State<AddConsulationscreen> {
                             Padding(
                               padding: EdgeInsets.symmetric(horizontal: 16, vertical: 5),
                               child: Text(
-                                'Please select gender',
+                                'Please Select Gender',
                                 style: TextStyle(
                                   color: Color.fromARGB(255, 175, 15, 4),
                                   fontSize: 12,

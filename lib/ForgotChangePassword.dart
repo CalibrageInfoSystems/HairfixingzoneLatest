@@ -384,7 +384,7 @@ class _ForgotChangePasswordState extends State<ForgotChangePassword> {
       setState(() {
         isPasswordValidate = false;
         _passwordError = true;
-        _passwordErrorMsg = 'Password is Required';
+        _passwordErrorMsg = 'Please Enter Password';
       });
       return null;
     } else if (value.length < 8) {
@@ -435,7 +435,7 @@ class _ForgotChangePasswordState extends State<ForgotChangePassword> {
     }
     if (_passwordController.text != _confirmPasswordController.text) {
       isConfirmPasswordValidate = false;
-      return 'Confirm Password must be same as Password';
+      return 'Confirm Password Must Be Same As Password';
     }
     isConfirmPasswordValidate = true;
     return null;

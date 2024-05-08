@@ -120,37 +120,37 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: CommonStyles.primaryTextColor,
+     // backgroundColor: CommonStyles.primaryTextColor,
       body: Column(
         children: [
           //MARK: Welcome Text
-          Container(
-            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-            height: 80,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //       builder: (context) => const AgentDashBoard()),
-                    // );
-                  },
-                  child: const Text(
-                    'Hello!',
-                    style: CommonStyles.txSty_16w_fb,
-                  ),
-                ),
-                Text(
-                  userFullName,
-                  style: CommonStyles.txSty_18w_fb,
-                ),
-              ],
-            ),
-          ),
+          // Container(
+          //   padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+          //   height: 80,
+          //   child: Column(
+          //     crossAxisAlignment: CrossAxisAlignment.stretch,
+          //     mainAxisAlignment: MainAxisAlignment.center,
+          //     children: [
+          //       GestureDetector(
+          //         onTap: () {
+          //           // Navigator.push(
+          //           //   context,
+          //           //   MaterialPageRoute(
+          //           //       builder: (context) => const AgentDashBoard()),
+          //           // );
+          //         },
+          //         child: const Text(
+          //           'Hello!',
+          //           style: CommonStyles.txSty_16w_fb,
+          //         ),
+          //       ),
+          //       Text(
+          //         userFullName,
+          //         style: CommonStyles.txSty_18w_fb,
+          //       ),
+          //     ],
+          //   ),
+          // ),
           //MARK: Main Card
 
           Expanded(
@@ -187,7 +187,7 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
                     //MARK: Carosel
                     SizedBox(
                       width: MediaQuery.of(context).size.width,
-                      height: 200,
+                      height: 180,
                       child: PageView.builder(
                         controller: _pageController,
                         itemCount: _items.length,
