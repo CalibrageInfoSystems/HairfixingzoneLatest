@@ -1211,7 +1211,7 @@ class _OpCardState extends State<OpCard> {
                                     height: 5.0,
                                   ),
 
-                                  if (widget.data.statusTypeId == 11)
+                                  if (widget.data.rating != null)
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.end,
                                       children: [
@@ -1227,7 +1227,7 @@ class _OpCardState extends State<OpCard> {
                                                   right:
                                                   8.0), // Adjust the value as needed
                                               child: Text(
-                                                '${widget.data.rating ?? 'No rating'}',
+                                                '${widget.data.rating ?? ''}',
                                                 style:
                                                 CommonStyles.txSty_14g_f5,
                                               ),
@@ -1245,7 +1245,7 @@ class _OpCardState extends State<OpCard> {
 
                       // based on status hide this row
                       Row(
-                        mainAxisAlignment: widget.data.statusTypeId == 11
+                        mainAxisAlignment: widget.data.rating != null
                             ? MainAxisAlignment.start
                             : MainAxisAlignment.end,
                         children: [
@@ -1481,16 +1481,29 @@ class _OpCardState extends State<OpCard> {
         );
       case 6: // Declined
         return const SizedBox();
-      case 11: // FeedBack
-        return Flexible(
-          child: Text('" ${data.review} "' ?? '',
-              overflow: TextOverflow.ellipsis,
-              maxLines: 2,
-              style: CommonStyles.txSty_16blu_f5),
-        );
+      // case 11: // FeedBack
+      //   return Flexible(
+      //     child: Text('" ${data.review} "' ?? '',
+      //         overflow: TextOverflow.ellipsis,
+      //         maxLines: 2,
+      //         style: CommonStyles.txSty_16blu_f5),
+      //   );
 
       case 18: // Closed
-        return const SizedBox();
+
+        if ( data.review == null) {
+          // If status is Closed, show review or rate button
+          return const SizedBox();
+        }
+        else {
+          // If status is not Closed, show the review
+          return Flexible(
+            child:  Text('" ${data.review} "' ?? '',
+                overflow: TextOverflow.ellipsis,
+                maxLines: 2,
+                style: CommonStyles.txSty_16blu_f5),
+          );
+        }
     // case 19: // Reschuduled
     //   return const SizedBox();
       default:

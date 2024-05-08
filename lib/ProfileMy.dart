@@ -31,6 +31,7 @@ class Profile_screenState extends State<ProfileMy> {
   String username = '';
   String mobileNumber = '';
   String? dob;
+  bool isloading = false;
   String formattedDate = '';
   DateTime? createdDate;
   List<User> userlist = [];
@@ -61,7 +62,9 @@ class Profile_screenState extends State<ProfileMy> {
 
   Future<void> fetchdetailsofcustomer(int id) async {
     String apiUrl = 'http://182.18.157.215/SaloonApp/API/GetCustomerData?id=$id';
-
+    setState(() {
+      isloading = true;
+    });
     try {
       final response = await http.get(Uri.parse(apiUrl));
 
@@ -76,6 +79,7 @@ class Profile_screenState extends State<ProfileMy> {
         Map<String, dynamic> customerData = listResult[0];
 
         setState(() {
+          isloading = false;
           username = customerData['userName'] ?? '';
           fullusername = customerData['firstname'] ?? '';
           String lastName = customerData['lastname'] ?? '';
@@ -83,6 +87,7 @@ class Profile_screenState extends State<ProfileMy> {
           email = customerData['email'] ?? '';
           gender = customerData['gender'] ?? '';
           String roleName = customerData['rolename'] ?? '';
+          // Mobilenumber = customerData['MobileNumber']??'';
           String dob = customerData['dateofbirth'];
           if (mobileNumber != null) {
             mobileNumber = customerData['mobileNumber'] ?? '';
@@ -107,9 +112,15 @@ class Profile_screenState extends State<ProfileMy> {
         // Now you can access individual fields like 'firstname', 'lastname', etc.
       } else {
         // Handle error cases
+        setState(() {
+          isloading = true;
+        });
         print('Request failed with status: ${response.statusCode}');
       }
     } catch (e) {
+      setState(() {
+        isloading = true;
+      });
       // Handle exceptions
       print('Exception occurred: $e');
     }
@@ -167,7 +178,7 @@ class Profile_screenState extends State<ProfileMy> {
 
     Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(builder: (context) => CustomerLoginScreen()),
-      (route) => false,
+          (route) => false,
     );
   }
 
@@ -206,7 +217,9 @@ class Profile_screenState extends State<ProfileMy> {
               Navigator.of(context).pop();
             },
           )),
-      body: Column(
+      body:
+
+      Column(
         children: [
           Container(
             padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
@@ -251,9 +264,15 @@ class Profile_screenState extends State<ProfileMy> {
               ],
             ),
           ),
-          Expanded(
-            child: Container(
-              padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+          isloading?Center(
+            child: CircularProgressIndicator.adaptive(),
+          ): Expanded(
+            child:
+
+
+            Container(
+              //height:   MediaQuery.of(context).size.height,
+              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
               decoration: BoxDecoration(
                 color: CommonStyles.whiteColor,
                 borderRadius: BorderRadius.only(
@@ -262,28 +281,86 @@ class Profile_screenState extends State<ProfileMy> {
                 ),
               ),
               width: double.infinity,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
+              child:
+              Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   Column(
                     children: [
-                      userLayOut('assets/id-card-clip-alt.svg', CommonStyles.primaryTextColor, username),
-                      userLayOut('assets/venus-mars.svg', CommonStyles.statusGreenText, gender),
-                      userLayOut('assets/calendar_icon.svg', CommonStyles.statusRedText, formattedDate),
-                      userLayOut('assets/mobile-notch.svg', CommonStyles.statusYellowText, '+91 ${contactNumber}'),
-                      userLayOut('assets/mobile-notch.svg', CommonStyles.statusBlueText, ''),
+                      // userLayOut('assets/id-card-clip-alt.svg', CommonStyles.primaryTextColor, username,'UserName'),
+                      // userLayOut('assets/venus-mars.svg', CommonStyles.statusGreenText, gender,'Gender'),
+                      // userLayOut('assets/calendar_icon.svg', CommonStyles.statusRedText, formattedDate,'Date of Birth'),
+                      // userLayOut('assets/mobile-notch.svg', CommonStyles.statusYellowText, '+91 ${contactNumber}','Contact Number'),
+                      // userLayOut('assets/mobile-notch.svg', CommonStyles.statusBlueText, '+91${Mobilenumber}','Alternate Number'),
+                      Container(
+                          height:50,
+                          child:  UserLayout(
+                            icon: 'assets/id-card-clip-alt.svg',
+                            bgColor: CommonStyles.primaryTextColor,
+                            data: '$username',
+                            tooltipMessage: 'Username',
+                          )
+                      ),
+                      SizedBox(height: 15),
+
+                      Container(
+                          height:50,
+                          child:  UserLayout(
+                            icon: 'assets/venus-mars.svg',
+                            bgColor:  CommonStyles.statusGreenText,
+                            data: '$gender',
+                            tooltipMessage: 'Gender',
+                          )
+                      ),SizedBox(height: 15),
+                      Container(
+                          height:50,
+                          child:  UserLayout(
+                            icon: 'assets/calendar_icon.svg',
+                            bgColor: CommonStyles.statusRedText,
+                            data: '$formattedDate',
+                            tooltipMessage: 'Date of Birth',
+                          )
+                      ),SizedBox(height: 15),
+                      Container(
+                          height:50,
+                          child:  UserLayout(
+                            icon: 'assets/mobile-notch.svg',
+                            bgColor: CommonStyles.statusYellowText,
+                            data: '+91 ${contactNumber}',
+                            tooltipMessage: 'Contact Number',
+                          )
+                      ),
+                      SizedBox(height: 15),
+                      Container(
+                        height: 50,
+                        child: Visibility(
+                          visible: mobileNumber != null && mobileNumber.isNotEmpty,
+                          child: UserLayout(
+                            icon: 'assets/mobile-notch.svg',
+                            bgColor: CommonStyles.statusBlueText,
+                            data: '+91 ${mobileNumber}',
+                            tooltipMessage: 'Alternate Mobile Number',
+                          ),
+                        ),
+                      )
+
+
                     ],
                   ),
+
                   Padding(
+                    // height:  MediaQuery.of(context).size.height,
+                    //  width: MediaQuery.of(context).size.width,
                     padding: EdgeInsets.symmetric(horizontal: 10),
                     child: Row(
                       children: [
                         Expanded(
                           child: CustomButton(
                               buttonText: 'Change Password',
-                              textColor: CommonStyles.primaryTextColor,
+                              textColor: CommonStyles.whiteColor,
                               borderColor: CommonStyles.primaryTextColor,
-                              color: CommonStyles.whiteColor,
+                              color: CommonStyles.primaryTextColor,
                               onPressed: () {
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
@@ -297,11 +374,11 @@ class Profile_screenState extends State<ProfileMy> {
                       ],
                     ),
                   )
+
                 ],
               ),
             ),
-          ),
-        ],
+          )],
       ),
     );
   }
@@ -374,4 +451,94 @@ class Profile_screenState extends State<ProfileMy> {
 //     }
 //   }
 // }
+}
+class UserLayout extends StatefulWidget {
+  final String icon;
+  final Color bgColor;
+  final String data;
+  final String tooltipMessage;
+
+  const UserLayout({
+    Key? key,
+    required this.icon,
+    required this.bgColor,
+    required this.data,
+    required this.tooltipMessage,
+  }) : super(key: key);
+
+  @override
+  _UserLayoutState createState() => _UserLayoutState();
+}
+
+class _UserLayoutState extends State<UserLayout> {
+  bool _isTooltipVisible = false;
+  final GlobalKey _tooltipKey = GlobalKey();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 100,
+      child: GestureDetector(
+        onTap: () {
+          setState(() {
+            _isTooltipVisible = !_isTooltipVisible;
+          });
+          if (_isTooltipVisible) {
+            Future.delayed(Duration(seconds: 5), () {
+              setState(() {
+                _isTooltipVisible = false;
+              });
+            });
+          }
+        },
+        child: Stack(
+          children: [
+            ListTile(
+              leading: FloatingActionButton(
+                mini: true,
+                backgroundColor: widget.bgColor,
+                onPressed: () {
+
+                },
+                tooltip: '${widget.tooltipMessage}',
+                child: Container(
+                  padding: EdgeInsets.all(10),
+                  child: SvgPicture.asset(
+                    widget.icon,
+                    width: 30.0,
+                    height: 30.0,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+              title: Text(widget.data),
+            ),
+            if (_isTooltipVisible)
+              LayoutBuilder(
+                builder: (context, constraints) {
+                  return Positioned(
+                    key: _tooltipKey,
+                    top: 80, // Adjust position to show below the widget
+                    left: 10, // Adjust position as needed
+                    width: constraints.maxWidth, // Adjust width based on parent width
+                    child: Container(
+                      padding: EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: Colors.grey.withOpacity(0.9),
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      child: Text(
+                        widget.tooltipMessage,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  );
+                },
+              ),
+          ],
+        ),
+      ),
+    );
+  }
 }

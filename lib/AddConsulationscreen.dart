@@ -379,7 +379,7 @@ class AddConsulationscreen_screenState extends State<AddConsulationscreen> {
                             style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
                           ),
                           Text(
-                            '*',
+                            ' *',
                             style: TextStyle(color: Colors.red),
                           ),
                         ],

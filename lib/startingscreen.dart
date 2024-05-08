@@ -74,7 +74,7 @@ class _startingscreenState extends State<startingscreen> {
                       alignment: Alignment.topCenter,
                       child: Padding(
                         padding: const EdgeInsets.only(top: 20.0, left: 12.0, right: 12.0),
-                        child: Text('Helping you to take good ', style: CommonUtils.header_Styles),
+                        child: Text('Helping You To Take Good ', style: CommonUtils.header_Styles),
                       ),
                     ),
 
@@ -82,7 +82,7 @@ class _startingscreenState extends State<startingscreen> {
                       alignment: Alignment.topCenter,
                       child: Padding(
                         padding: const EdgeInsets.only(top: 5.0, left: 12.0, right: 12.0),
-                        child: Text(' care of you Hair!', style: CommonUtils.header_Styles),
+                        child: Text(' Care Of Your Hair!', style: CommonUtils.header_Styles),
                       ),
                     ),
                     SizedBox(height: 20), // Space between text and buttons

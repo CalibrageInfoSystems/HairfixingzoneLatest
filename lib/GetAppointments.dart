@@ -1286,7 +1286,7 @@ class _OpCardState extends State<OpCard> {
                               const SizedBox(
                                 height: 10.0,
                               ),
-                              if (widget.data.statusTypeId == 11)
+                              if (widget.data.rating != null)
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
@@ -1302,7 +1302,7 @@ class _OpCardState extends State<OpCard> {
                                               right:
                                               8.0), // Adjust the value as needed
                                           child: Text(
-                                            '${widget.data.rating ?? 'No rating'}',
+                                            '${widget.data.rating ?? ''}',
                                             style: CommonStyles.txSty_14g_f5,
                                           ),
                                         ),
@@ -1319,7 +1319,7 @@ class _OpCardState extends State<OpCard> {
 
                   // based on status hide this row
                   Row(
-                    mainAxisAlignment: widget.data.statusTypeId == 11
+                    mainAxisAlignment: widget.data.rating != null
                         ? MainAxisAlignment.start
                         : MainAxisAlignment.end,
                     children: [
@@ -1502,45 +1502,57 @@ class _OpCardState extends State<OpCard> {
         );
       case 6: // Declined
         return const SizedBox();
-      case 11: // FeedBack
-        return Flexible(
-          child: Text('" ${data.review} "' ?? '',
-              overflow: TextOverflow.ellipsis,
-              maxLines: 2,
-              style: CommonStyles.txSty_16blu_f5),
-        );
+      // case 11: // FeedBack
+      //   return Flexible(
+      //     child: Text('" ${data.review} "' ?? '',
+      //         overflow: TextOverflow.ellipsis,
+      //         maxLines: 2,
+      //         style: CommonStyles.txSty_16blu_f5),
+      //   );
 
       case 18: // Closed
-        return GestureDetector(
-          onTap: () {
-            showDialogForRating(data);
-          },
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(3),
-              border: Border.all(
-                color: CommonStyles.primaryTextColor,
-              ),
-            ),
-            padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
-            child: const Row(
-              children: [
-                Icon(
-                  Icons.star_border_outlined,
-                  size: 13,
+        if ( data.review == null) {
+          // If status is Closed, show review or rate button
+          return GestureDetector(
+            onTap: () {
+              showDialogForRating(data);
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(3),
+                border: Border.all(
                   color: CommonStyles.primaryTextColor,
                 ),
-                Text(
-                  ' Rate Us',
-                  style: TextStyle(
-                    fontSize: 16,
+              ),
+              padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
+              child: const Row(
+                children: [
+                  Icon(
+                    Icons.star_border_outlined,
+                    size: 13,
                     color: CommonStyles.primaryTextColor,
                   ),
-                ),
-              ],
+                  Text(
+                    ' Rate Us',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: CommonStyles.primaryTextColor,
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-        );
+          );
+        }
+        else {
+          // If status is not Closed, show the review
+          return Flexible(
+            child:  Text('" ${data.review} "' ?? '',
+                overflow: TextOverflow.ellipsis,
+                maxLines: 2,
+                style: CommonStyles.txSty_16blu_f5),
+          );
+        }
       case 19: // Reschuduled
         return const SizedBox();
       default:
@@ -1711,7 +1723,7 @@ class _OpCardState extends State<OpCard> {
                               maxLength: 256,
                               // Set maxLines to null for multiline input
                               decoration: const InputDecoration(
-                                hintText: 'Comments',
+                                hintText: 'Comment',
                                 hintStyle: TextStyle(
                                   color: Colors.black54,
                                   fontSize: 14,
@@ -1816,7 +1828,7 @@ class _OpCardState extends State<OpCard> {
     if (rating_star <= 0.0) {
       FocusScope.of(context).unfocus();
       CommonUtils.showCustomToastMessageLong(
-          'Please Give Rating', context, 1, 4);
+          'Please Rate Your Experience', context, 1, 4);
       isValid = false;
       hasValidationFailed = true;
     }
@@ -1824,7 +1836,7 @@ class _OpCardState extends State<OpCard> {
     if (isValid && _commentstexteditcontroller.text.trim().isEmpty) {
       FocusScope.of(context).unfocus();
       CommonUtils.showCustomToastMessageLong(
-          'Please Enter Comments', context, 1, 4);
+          'Please Enter Comment', context, 1, 4);
       isValid = false;
       hasValidationFailed = true;
     }
@@ -1847,7 +1859,7 @@ class _OpCardState extends State<OpCard> {
         appointmens.contactNumber, // Changed from appointments.phoneNumber
         "Email": appointmens.email,
         "GenderTypeId": appointmens.genderTypeId,
-        "StatusTypeId": 11,
+        "StatusTypeId": 18,
         "PurposeOfVisitId": appointmens.purposeOfVisitId,
         "PurposeOfVisit": appointmens.purposeOfVisit,
         "IsActive": true,

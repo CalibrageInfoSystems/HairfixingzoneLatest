@@ -283,7 +283,7 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
                                       style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
                                     ),
                                     Text(
-                                      '*',
+                                      ' *',
                                       style: TextStyle(color: Colors.red),
                                     ),
                                   ],
@@ -340,7 +340,7 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
                                       style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
                                     ),
                                     Text(
-                                      '*',
+                                      ' *',
                                       style: TextStyle(color: Colors.red),
                                     ),
                                   ],
@@ -555,7 +555,7 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
                                           style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
                                         ),
                                         Text(
-                                          '*',
+                                          ' *',
                                           style: TextStyle(color: Colors.red),
                                         ),
                                       ],
@@ -633,7 +633,7 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
                                           style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
                                         ),
                                         Text(
-                                          '*',
+                                          ' *',
                                           style: TextStyle(color: Colors.red),
                                         ),
                                       ],
@@ -724,7 +724,7 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
                                           style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
                                         ),
                                         Text(
-                                          '*',
+                                          ' *',
                                           style: TextStyle(color: Colors.red),
                                         ),
                                       ],
@@ -842,7 +842,7 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
                                           style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
                                         ),
                                         Text(
-                                          '*',
+                                          ' *',
                                           style: TextStyle(color: Colors.red),
                                         ),
                                       ],

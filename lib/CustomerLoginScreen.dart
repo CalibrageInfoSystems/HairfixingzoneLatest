@@ -120,7 +120,7 @@ class _LoginPageState extends State<CustomerLoginScreen> {
                               Row(
                                 children: [
                                   Text(
-                                    'Email/User Name',
+                                    'Email / User Name',
                                     style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
                                   ),
                                   Text(
@@ -157,7 +157,7 @@ class _LoginPageState extends State<CustomerLoginScreen> {
                                       Radius.circular(10),
                                     ),
                                   ),
-                                  hintText: 'Enter Email/User Name',
+                                  hintText: 'Enter Email / User Name',
                                   counterText: "",
                                   hintStyle: const TextStyle(color: Colors.grey, fontWeight: FontWeight.w400),
                                 ),
@@ -346,7 +346,7 @@ class _LoginPageState extends State<CustomerLoginScreen> {
 
   String? validateEmail(String? value) {
     if (value == null || value.isEmpty) {
-      return 'Please Enter Email/User Name';
+      return 'Please Enter Email / User Name';
     }
     // else if (!RegExp(
     //     r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")

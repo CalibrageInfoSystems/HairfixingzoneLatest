@@ -47,7 +47,7 @@ class _AgentLoginState extends State<AgentLogin> {
   @override
   void initState() {
     super.initState();
-    FocusScope.of(context).unfocus();
+
     // LocalNotificationService.initialize();
 
     // Terminated State
@@ -375,6 +375,7 @@ class _AgentLoginState extends State<AgentLogin> {
       bool isConnected = await CommonUtils.checkInternetConnectivity();
       if (isConnected) {
         print('Connected to the internet');
+        FocusScope.of(context).unfocus();
         login(username, password);
       } else {
         CommonUtils.showCustomToastMessageLong('Please Check Your Internet Connection', context, 1, 4);
@@ -466,9 +467,11 @@ class _AgentLoginState extends State<AgentLogin> {
           //   _isLoading = false;
 
           // });
-          LoadingProgress.stop(context);
           FocusScope.of(context).unfocus();
-          CommonUtils.showCustomToastMessageLong(responseData["statusMessage"], context, 1, 4);
+          LoadingProgress.stop(context);
+
+          CommonUtils.showCustomToastMessageLong("${responseData["statusMessage"]}", context, 1, 3, toastPosition: MediaQuery.of(context).size.height / 2);
+
           print("API returned an error: ${responseData["statusMessage"]}");
 
         }
