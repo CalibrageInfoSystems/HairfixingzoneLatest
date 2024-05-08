@@ -214,7 +214,6 @@ class MyAppointments_screenState extends State<GetAppointments> {
       print('catchError: Error occurred.');
     });
   }
-
   Future<List<MyAppointment_Model>> fetchMyAppointments(int? userId) async {
     final url = Uri.parse('http://182.18.157.215/SaloonApp/API/api/Appointment/GetAppointmentByUserid');
 
@@ -235,7 +234,12 @@ class MyAppointments_screenState extends State<GetAppointments> {
 
         if (response['listResult'] != null) {
           List<dynamic> listResult = response['listResult'];
+
+          // Filter out records with "statusTypeId": 19
+          listResult = listResult.where((item) => item['statusTypeId'] != 19).toList();
+
           List<MyAppointment_Model> result = listResult.map((item) => MyAppointment_Model.fromJson(item)).toList();
+
           return result;
         } else {
           throw Exception('No appointments found!');
@@ -249,6 +253,8 @@ class MyAppointments_screenState extends State<GetAppointments> {
       rethrow;
     }
   }
+
+
 
   void refreshTheScreen() {
     CommonUtils.checkInternetConnectivity().then(
@@ -423,7 +429,12 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
 
         if (response['listResult'] != null) {
           List<dynamic> listResult = response['listResult'];
-          myAppointmentsProvider.storeIntoProvider = listResult.map((item) => MyAppointment_Model.fromJson(item)).toList();
+          print('listResult: ${listResult.length}');
+          // Filter out records with "statusTypeId": 19
+          List<dynamic> filteredList = listResult.where((item) => item['statusTypeId'] != 19).toList();
+          print('filteredList: ${filteredList.length}');
+          // Convert the filtered list to MyAppointment_Model objects if needed
+          myAppointmentsProvider.storeIntoProvider = filteredList.map((item) => MyAppointment_Model.fromJson(item)).toList();
         } else {
           myAppointmentsProvider.storeIntoProvider = [];
           throw Exception('No appointments found!');
@@ -438,7 +449,6 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
     }
     Navigator.of(context).pop();
   }
-
   @override
   Widget build(BuildContext context) {
     return Consumer<MyAppointmentsProvider>(
@@ -658,6 +668,90 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                       height: 10,
                     ),
                     //MARK: Filter Status
+                    // Padding(
+                    //   padding: const EdgeInsets.symmetric(vertical: 10),
+                    //   child: FutureBuilder(
+                    //       future: prostatus,
+                    //       builder: (context, snapshot) {
+                    //         if (snapshot.connectionState == ConnectionState.waiting) {
+                    //           return CircularProgressIndicator.adaptive(
+                    //             backgroundColor: Colors.transparent,
+                    //             valueColor: AlwaysStoppedAnimation<Color>(orangeColor),
+                    //           );
+                    //         } else if (snapshot.hasError) {
+                    //           return Text('Error: ${snapshot.error}');
+                    //         } else {
+                    //           List<Statusmodel> data = snapshot.data!;
+                    //           return SizedBox(
+                    //             height: 40,
+                    //             child: ListView.builder(
+                    //               scrollDirection: Axis.horizontal,
+                    //               shrinkWrap: true,
+                    //               itemCount: data.length + 1,
+                    //               itemBuilder: (BuildContext context, int index) {
+                    //                 bool isSelected = index == provider.selectedstatus;
+                    //                 Statusmodel status;
+                    //
+                    //                 if (index == 0) {
+                    //                   status = Statusmodel(
+                    //                     typeCdId: null,
+                    //                     desc: 'All',
+                    //                   );
+                    //                 } else {
+                    //                   status = data[index - 1];
+                    //                 }
+                    //                 return GestureDetector(
+                    //                   onTap: () {
+                    //                     setState(() {
+                    //                       provider.selectedStatus = index;
+                    //
+                    //                       // provider.getStatus = status.typeCdId;
+                    //                       provider.getApiStatusTypeId = status.typeCdId;
+                    //                       print('filter: ${provider.getStatus}');
+                    //                       print('Filter status.typeCdId: ${status.typeCdId}');
+                    //                     });
+                    //                   },
+                    //                   child: Container(
+                    //                     margin: const EdgeInsets.symmetric(horizontal: 4.0),
+                    //                     decoration: BoxDecoration(
+                    //                       color: isSelected ? orangeColor : orangeColor.withOpacity(0.1),
+                    //                       border: Border.all(
+                    //                         color: isSelected ? orangeColor : orangeColor,
+                    //                         width: 1.0,
+                    //                       ),
+                    //                       borderRadius: BorderRadius.circular(8.0),
+                    //                     ),
+                    //                     child: IntrinsicWidth(
+                    //                       child: Column(
+                    //                         mainAxisAlignment: MainAxisAlignment.center,
+                    //                         children: [
+                    //                           Container(
+                    //                             padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                    //                             child: Row(
+                    //                               children: [
+                    //                                 Text(
+                    //                                   status.desc.toString(),
+                    //                                   style: TextStyle(
+                    //                                     fontSize: 12.0,
+                    //                                     fontWeight: FontWeight.bold,
+                    //                                     fontFamily: "Roboto",
+                    //                                     color: isSelected ? Colors.white : Colors.black,
+                    //                                   ),
+                    //                                 ),
+                    //                               ],
+                    //                             ),
+                    //                           ),
+                    //                         ],
+                    //                       ),
+                    //                     ),
+                    //                   ),
+                    //                 );
+                    //               },
+                    //             ),
+                    //           );
+                    //         }
+                    //       }),
+                    // ),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10),
                       child: FutureBuilder(
@@ -672,6 +766,10 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                               return Text('Error: ${snapshot.error}');
                             } else {
                               List<Statusmodel> data = snapshot.data!;
+
+                              // Filter out items with "typeCdId": 19
+                              data = data.where((item) => item.typeCdId != 19).toList();
+
                               return SizedBox(
                                 height: 40,
                                 child: ListView.builder(
@@ -740,8 +838,10 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                                 ),
                               );
                             }
-                          }),
+                          }
+                      ),
                     ),
+
                     const SizedBox(
                       height: 10,
                     ),
@@ -829,17 +929,39 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
     );
   }
 
+  // Future<List<Statusmodel>> fetchstatus() async {
+  //   final response = await http.get(Uri.parse(baseUrl + getstatus));
+  //   if (response.statusCode == 200) {
+  //     final List<dynamic> responseData = json.decode(response.body)['listResult'];
+  //     List<Statusmodel> result = responseData.map((json) => Statusmodel.fromJson(json)).toList();
+  //     print('fetch branchname: ${result[0].desc}');
+  //     return result;
+  //   } else {
+  //     throw Exception('Failed to load products');
+  //   }
+  // }
   Future<List<Statusmodel>> fetchstatus() async {
     final response = await http.get(Uri.parse(baseUrl + getstatus));
     if (response.statusCode == 200) {
       final List<dynamic> responseData = json.decode(response.body)['listResult'];
-      List<Statusmodel> result = responseData.map((json) => Statusmodel.fromJson(json)).toList();
+
+      print('Before filtering: $responseData');
+
+      // Filter out items with "typeCdId": 19
+      final List<dynamic> filteredData = responseData.where((item) => item['typeCdId'] != 19).toList();
+
+      print('After filtering: $filteredData');
+
+      // Map the filtered data to Statusmodel
+      List<Statusmodel> result = filteredData.map((json) => Statusmodel.fromJson(json)).toList();
+
       print('fetch branchname: ${result[0].desc}');
       return result;
     } else {
       throw Exception('Failed to load products');
     }
   }
+
 
   Future<List<BranchModel>> fetchbranches() async {
     final response = await http.get(Uri.parse(baseUrl + getbranches));
@@ -873,7 +995,13 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
 
         if (response['listResult'] != null) {
           List<dynamic> listResult = response['listResult'];
-          myAppointmentsProvider.storeIntoProvider = listResult.map((item) => MyAppointment_Model.fromJson(item)).toList();
+
+          // Filter out records with "statusTypeId": 19
+          List<dynamic> filteredList = listResult.where((item) => item['statusTypeId'] != 19).toList();
+
+          // Convert the filtered list to MyAppointment_Model objects if needed
+          myAppointmentsProvider.storeIntoProvider = filteredList.map((item) => MyAppointment_Model.fromJson(item)).toList();
+
         } else {
           myAppointmentsProvider.storeIntoProvider = [];
           throw Exception('No appointments found!');
@@ -1604,7 +1732,12 @@ class _OpCardState extends State<OpCard> {
           // userfeedbacklist[index].ratingstar = rating_star;
           // userfeedbacklist[index].comments = _commentstexteditcontroller.text.toString();
 
-          Navigator.pop(context);
+          Navigator.of(context).pop();
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) =>  GetAppointments(),
+            ),
+          );
         } else {
           print('Failed to send the request. Status code: ${response.statusCode}');
         }

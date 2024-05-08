@@ -161,7 +161,18 @@ class MyAppointments_screenState extends State<Agentappointmentlist> {
                                     return Column(
                                       children: [
                                         OpCard(
-                                            data: data[index], userId: widget.userId, branchid: widget.branchid, branchaddress: widget.branchaddress),
+                                          data: data[index], userId: widget.userId, branchid: widget.branchid, branchaddress: widget.branchaddress,
+                                          onRefresh: () {
+                                            // Implement the refresh logic here
+                                            setState(() {
+                                              // Refresh logic
+                                              refreshTheScreen();
+                                            });
+                                          },
+                                        ),
+
+                                        // OpCard(
+                                        //     data: data[index], userId: widget.userId, branchid: widget.branchid, branchaddress: widget.branchaddress),
                                         const SizedBox(
                                           height: 5,
                                         ),
@@ -357,7 +368,7 @@ class MyAppointments_screenState extends State<Agentappointmentlist> {
   void filterAppointment(String input) {
     apiData!.then((data) {
       setState(() {
-        myAppointmentsProvider!.filterProviderData(data.where((item) => item.name.toLowerCase().contains(input.toLowerCase())).toList());
+        myAppointmentsProvider!.filterProviderData(data.where((item) => item.customerName.toLowerCase().contains(input.toLowerCase())).toList());
       });
     });
   }
@@ -930,18 +941,36 @@ class UserFeedback {
 
   UserFeedback({required this.ratingstar, required this.comments});
 }
-
+//
+// class OpCard extends StatefulWidget {
+//   final Appointment data;
+//   int? userId;
+//   int? branchid;
+//   String? branchaddress;
+//   OpCard({super.key, required this.data, required int userId, required int branchid, required String branchaddress});
+//
+//   @override
+//   State<OpCard> createState() => _OpCardState();
+// }
 class OpCard extends StatefulWidget {
   final Appointment data;
   int? userId;
   int? branchid;
   String? branchaddress;
-  OpCard({super.key, required this.data, required int userId, required int branchid, required String branchaddress});
+  final VoidCallback? onRefresh;
+
+  OpCard({
+    Key? key,
+    required this.data,
+    required int userId,
+    required int branchid,
+    required String branchaddress,
+    this.onRefresh,
+  }) : super(key: key);
 
   @override
   State<OpCard> createState() => _OpCardState();
 }
-
 class _OpCardState extends State<OpCard> {
   late List<dynamic> dateValues;
   final TextEditingController _commentstexteditcontroller = TextEditingController();
@@ -1657,6 +1686,7 @@ class _OpCardState extends State<OpCard> {
 
         if (response.statusCode == 200) {
           print('Request sent successfully');
+          widget.onRefresh?.call();
           //  fetchMyAppointments(userId);
           CommonUtils.showCustomToastMessageLong('Feedback Successfully Submited', context, 0, 4);
           // refreshTheScreen();
@@ -2126,6 +2156,7 @@ class _OpCardState extends State<OpCard> {
                   int? price = int.tryParse(priceController.text);
                   postAppointment(data, 18, price!, userId);
                   Navigator.of(context).pop();
+                  widget.onRefresh?.call();
                 }
               },
               child: Text('Submit'),
@@ -2170,8 +2201,10 @@ class _OpCardState extends State<OpCard> {
                 buttonText: 'Done',
                 color: CommonUtils.primaryTextColor,
                 onPressed: () {
-                Navigator.of(context).pop();
 
+                Navigator.of(context).pop();
+                // Refresh the screen
+                widget.onRefresh?.call();
                //    Navigator.of(context).push(
                //      MaterialPageRoute(
                //        builder: (context) =>  Agentappointmentlist(),
@@ -2233,6 +2266,7 @@ class _OpCardState extends State<OpCard> {
                 color: CommonUtils.primaryTextColor,
                 onPressed: () {
                   Navigator.of(context).pop();
+                  widget.onRefresh?.call();
                   // Navigator.of(context).push(
                   //   MaterialPageRoute(
                   //     builder: (context) => const CustomerLoginScreen(),

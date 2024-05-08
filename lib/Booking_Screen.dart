@@ -431,12 +431,30 @@ class _BookingScreenState extends State<Bookingscreen> {
                             Container(
                                 padding: EdgeInsets.all(10),
                                 // width: MediaQuery.of(context).size.width / 4,
-                                child: Image.asset(
-                                  'assets/top_image.png',
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(10.0),
+                                child: Image.network(
+                                  widget.branchImage.isNotEmpty ? widget.branchImage : 'https://example.com/placeholder-image.jpg',
                                   fit: BoxFit.cover,
                                   height: MediaQuery.of(context).size.height / 4 / 2,
-                                  width: MediaQuery.of(context).size.width / 2.8,
-                                )),
+                                  width: MediaQuery.of(context).size.width / 3.2,
+                                  errorBuilder: (context, error, stackTrace) {
+                                    return Image.asset(
+                                      'assets/hairfixing_logo.png', // Path to your PNG placeholder image
+                                      fit: BoxFit.cover,
+                                      height: MediaQuery.of(context).size.height / 4 / 2,
+                                      width: MediaQuery.of(context).size.width / 3.2,
+                                    );
+                                  },
+                                ),
+                              ),
+                                // child: Image.asset(
+                                //   'assets/top_image.png',
+                                //   fit: BoxFit.cover,
+                                //   height: MediaQuery.of(context).size.height / 4 / 2,
+                                //   width: MediaQuery.of(context).size.width / 2.8,
+                                // )
+                            ),
                             Container(
                               width: MediaQuery.of(context).size.width / 2.2,
                               padding: EdgeInsets.only(top: 15),

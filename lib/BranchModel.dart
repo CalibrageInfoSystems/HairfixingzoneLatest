@@ -1,6 +1,6 @@
 
 class BranchModel {
-  final int id;
+  final int? id;
   final String name;
   final String? imageName;
   final String address;

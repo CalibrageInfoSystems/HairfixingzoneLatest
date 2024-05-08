@@ -186,7 +186,7 @@ class _ViewConsultationState extends State<View_Consultation_screen> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => viewconsulationlistscreen(
-                                            branchid: agent.id,
+                                            branchid: agent.id!,
                                             fromdate: '$startDate',
                                             todate: '$endDate',
                                           )),
@@ -284,19 +284,19 @@ class _ViewConsultationState extends State<View_Consultation_screen> {
           'View Consulation',
           style: TextStyle(color: Color(0xFF0f75bc), fontSize: 16.0),
         ),
-        actions: [
-          IconButton(
-            icon: SvgPicture.asset(
-              'assets/sign-out-alt.svg', // Path to your SVG asset
-              color: const Color(0xFF662e91),
-              width: 24, // Adjust width as needed
-              height: 24, // Adjust height as needed
-            ),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-        ],
+        // actions: [
+        //   IconButton(
+        //     icon: SvgPicture.asset(
+        //       'assets/sign-out-alt.svg', // Path to your SVG asset
+        //       color: const Color(0xFF662e91),
+        //       width: 24, // Adjust width as needed
+        //       height: 24, // Adjust height as needed
+        //     ),
+        //     onPressed: () {
+        //       Navigator.of(context).pop();
+        //     },
+        //   ),
+        // ],
         leading: IconButton(
           icon: const Icon(
             Icons.arrow_back_ios,

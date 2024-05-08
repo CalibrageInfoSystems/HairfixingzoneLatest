@@ -87,10 +87,10 @@ class _AgentLoginState extends State<AgentLogin> {
     return WillPopScope(
         onWillPop: () async {
           Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => startingscreen(),
-              ));
+            context,
+            MaterialPageRoute(builder: (context) => startingscreen()),
+          );
+
           return true;
         },
         child: Scaffold(
@@ -102,15 +102,15 @@ class _AgentLoginState extends State<AgentLogin> {
                 color: CommonUtils.primaryTextColor,
               ),
               onPressed: () {
-                Navigator.of(
-                  context,
-                ).pop();
+                // Navigator.of(
+                //   context,
+                // ).pop();
 
-                // Navigator.push(
-                //     context,
-                //     MaterialPageRoute(
-                //       builder: (context) => startingscreen(),
-                //     ));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => startingscreen(),
+                    ));
               },
             ),
             backgroundColor: Colors.transparent,

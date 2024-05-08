@@ -158,7 +158,7 @@ class _BranchesscreenState extends State<Branches_screen> {
                                   MaterialPageRoute(
                                     builder: (context) => Agentappointmentlist(
                                       userId: widget.userId,
-                                      branchid: branchnames.id,
+                                      branchid: branchnames.id!,
                                       branchname: branchnames.name,
                                       filepath: branchnames.imageName != null ? branchnames.imageName! : 'assets/top_image.png',
                                       phonenumber: branchnames.mobileNumber,

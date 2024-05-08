@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hairfixingzone/CommonUtils.dart';
+import 'package:hairfixingzone/startingscreen.dart';
 import 'package:loading_progress/loading_progress.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -40,7 +41,10 @@ class _LoginPageState extends State<CustomerLoginScreen> {
             color: CommonUtils.primaryTextColor,
           ),
           onPressed: () {
-            Navigator.of(context).pop();
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => startingscreen()),
+            );
           },
         ),
         backgroundColor: Colors.transparent, // Transparent app bar

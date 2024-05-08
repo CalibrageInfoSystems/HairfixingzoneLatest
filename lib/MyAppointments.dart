@@ -189,7 +189,12 @@ class MyAppointments_screenState extends State<MyAppointments> {
 
         if (response['listResult'] != null) {
           List<dynamic> listResult = response['listResult'];
+
+          // Filter out records with "statusTypeId": 19
+          listResult = listResult.where((item) => item['statusTypeId'] != 19).toList();
+
           List<MyAppointment_Model> result = listResult.map((item) => MyAppointment_Model.fromJson(item)).toList();
+
           return result;
         } else {
           throw Exception('No appointments found!');
@@ -377,7 +382,13 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
 
         if (response['listResult'] != null) {
           List<dynamic> listResult = response['listResult'];
-          myAppointmentsProvider.storeIntoProvider = listResult.map((item) => MyAppointment_Model.fromJson(item)).toList();
+
+          // Filter out records with "statusTypeId": 19
+          List<dynamic> filteredList = listResult.where((item) => item['statusTypeId'] != 19).toList();
+
+          // Convert the filtered list to MyAppointment_Model objects if needed
+          myAppointmentsProvider.storeIntoProvider = filteredList.map((item) => MyAppointment_Model.fromJson(item)).toList();
+
         } else {
           myAppointmentsProvider.storeIntoProvider = [];
           throw Exception('No appointments found!');
@@ -541,7 +552,7 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
 
                                     if (index == 0) {
                                       branchmodel = BranchModel(
-                                        id: 0,
+                                        id: null,
                                         name: "All",
                                         imageName: null,
                                         address: " ",
@@ -563,8 +574,8 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                                           // provider.getbranch = branchmodel.id;
                                           provider.getApiBranchId = branchmodel.id;
                                           print('filter: ${provider.getbranch}');
-
-                                          print('Filter branchmodel: ${branchmodel.id}');
+                                          print('filter brach id: ${provider.getApiBranchId}');
+                                          print('Filter branchmodel: ${branchmodel.id!}');
                                         });
                                       },
                                       child: Container(
@@ -626,6 +637,10 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                               return Text('Error: ${snapshot.error}');
                             } else {
                               List<Statusmodel> data = snapshot.data!;
+
+                              // Filter out items with "typeCdId": 19
+                              data = data.where((item) => item.typeCdId != 19).toList();
+
                               return SizedBox(
                                 height: 40,
                                 child: ListView.builder(
@@ -694,8 +709,10 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                                 ),
                               );
                             }
-                          }),
+                          }
+                      ),
                     ),
+
                     const SizedBox(
                       height: 10,
                     ),
@@ -787,13 +804,24 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
     final response = await http.get(Uri.parse(baseUrl + getstatus));
     if (response.statusCode == 200) {
       final List<dynamic> responseData = json.decode(response.body)['listResult'];
-      List<Statusmodel> result = responseData.map((json) => Statusmodel.fromJson(json)).toList();
+
+      print('Before filtering: $responseData');
+
+      // Filter out items with "typeCdId": 19
+      final List<dynamic> filteredData = responseData.where((item) => item['typeCdId'] != 19).toList();
+
+      print('After filtering: $filteredData');
+
+      // Map the filtered data to Statusmodel
+      List<Statusmodel> result = filteredData.map((json) => Statusmodel.fromJson(json)).toList();
+
       print('fetch branchname: ${result[0].desc}');
       return result;
     } else {
       throw Exception('Failed to load products');
     }
   }
+
 
   Future<List<BranchModel>> fetchbranches() async {
     final response = await http.get(Uri.parse(baseUrl + getbranches));
@@ -827,7 +855,13 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
 
         if (response['listResult'] != null) {
           List<dynamic> listResult = response['listResult'];
-          myAppointmentsProvider.storeIntoProvider = listResult.map((item) => MyAppointment_Model.fromJson(item)).toList();
+
+          // Filter out records with "statusTypeId": 19
+          List<dynamic> filteredList = listResult.where((item) => item['statusTypeId'] != 19).toList();
+
+          // Convert the filtered list to MyAppointment_Model objects if needed
+          myAppointmentsProvider.storeIntoProvider = filteredList.map((item) => MyAppointment_Model.fromJson(item)).toList();
+
         } else {
           myAppointmentsProvider.storeIntoProvider = [];
           throw Exception('No appointments found!');
@@ -1559,7 +1593,12 @@ class _OpCardState extends State<OpCard> {
           // userfeedbacklist[index].ratingstar = rating_star;
           // userfeedbacklist[index].comments = _commentstexteditcontroller.text.toString();
 
-          Navigator.pop(context);
+          Navigator.of(context).pop();
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) =>  MyAppointments(),
+            ),
+          );
         } else {
           print('Failed to send the request. Status code: ${response.statusCode}');
         }

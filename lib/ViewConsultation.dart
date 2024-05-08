@@ -202,7 +202,7 @@ class _ViewConsultationState extends State<ViewConsultation> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => viewconsulationlistscreen(
-                                            branchid: agent.id,
+                                            branchid: agent.id!,
                                             fromdate: '$startDate',
                                             todate: '$endDate',
                                           )),

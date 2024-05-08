@@ -209,7 +209,9 @@ class AddConsulationscreen_screenState extends State<AddConsulationscreen> {
                           FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z]')),
                         ],
                         controller: fullNameController,
+                        maxLength: 40,
                         keyboardType: TextInputType.name,
+
                         errorText: _fullNameError ? _fullNameErrorMsg : null,
                         onChanged: (value) {
                           //MARK: Space restrict
@@ -385,7 +387,7 @@ class AddConsulationscreen_screenState extends State<AddConsulationscreen> {
                       ),
                       TextFormField(
                         controller: emailController,
-                        maxLength: 60,
+                        maxLength: 40,
                         maxLengthEnforcement: MaxLengthEnforcement.enforced,
                         keyboardType: TextInputType.emailAddress,
                         onTap: () {
@@ -591,7 +593,7 @@ class AddConsulationscreen_screenState extends State<AddConsulationscreen> {
                             ),
                           ),
                           hintText: 'Enter Remark ',
-                          counterText: "",
+                          // counterText: "",
                           hintStyle: TextStyle(color: Colors.grey, fontWeight: FontWeight.w400),
                         ),
                         validator: validateremarks,
