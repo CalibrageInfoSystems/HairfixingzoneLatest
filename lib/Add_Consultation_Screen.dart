@@ -354,7 +354,7 @@ class AddConsulationscreen_screenState extends State<Add_Consulation_screen> {
                             errorText: _mobileNumberError ? _mobileNumberErrorMsg : null,
                             onChanged: (value) {
                               setState(() {
-                                if (value.length == 1 && ['1', '2', '3', '4'].contains(value)) {
+                                if (value.length == 1 && ['0','1', '2', '3', '4'].contains(value)) {
                                   mobileNumberController.clear();
                                 }
                                 if (value.startsWith(' ')) {

@@ -785,7 +785,7 @@ class _HomeScreenState extends State<HomeScreen> {
     prefs.setBool('isLoggedIn', false);
     prefs.remove('userId'); // Remove userId from SharedPreferences
     prefs.remove('userRoleId'); // Remove roleId from SharedPreferences
-    CommonUtils.showCustomToastMessageLong("Logout Successful", context, 0, 3);
+    CommonUtils.showCustomToastMessageLong("Logout Successfully", context, 0, 3);
 
     Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(builder: (context) => const CustomerLoginScreen()),

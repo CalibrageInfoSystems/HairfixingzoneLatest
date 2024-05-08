@@ -202,7 +202,7 @@ class _AgentHomeState extends State<AgentHome> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text('Logout'),
-          content: const Text('Are you sure you want to Logout?'),
+          content: const Text('Are You Sure You Want To Logout?'),
           actions: [
             TextButton(
               onPressed: () {
@@ -228,7 +228,10 @@ class _AgentHomeState extends State<AgentHome> {
     prefs.setBool('isLoggedIn', false);
     prefs.remove('userId');
     prefs.remove('userRoleId');
-    CommonUtils.showCustomToastMessageLong("Logout Successful", context, 0, 3);
+    CommonUtils.showCustomToastMessageLong("Logout Successfully", context, 0, 3);
+
+
+
 
     Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(builder: (context) => const AgentLogin()),

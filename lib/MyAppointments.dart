@@ -206,7 +206,7 @@ class MyAppointments_screenState extends State<MyAppointments> {
 
           return result;
         } else {
-          throw Exception('No appointments found!');
+          throw Exception('No Appointments Found!');
         }
       } else {
         print('Request failed with status: ${jsonResponse.statusCode}');
@@ -400,7 +400,7 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
           myAppointmentsProvider.storeIntoProvider = filteredList.map((item) => MyAppointment_Model.fromJson(item)).toList();
         } else {
           myAppointmentsProvider.storeIntoProvider = [];
-          throw Exception('No appointments found!');
+          throw Exception('No Appointments Found!');
         }
       } else {
         myAppointmentsProvider.storeIntoProvider = [];
@@ -870,7 +870,7 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
           myAppointmentsProvider.storeIntoProvider = filteredList.map((item) => MyAppointment_Model.fromJson(item)).toList();
         } else {
           myAppointmentsProvider.storeIntoProvider = [];
-          throw Exception('No appointments found!');
+          throw Exception('No Appointments Found!');
         }
       } else {
         myAppointmentsProvider.storeIntoProvider = [];

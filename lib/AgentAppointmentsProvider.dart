@@ -5,7 +5,6 @@ import 'Appointment.dart';
 class AgentAppointmentsProvider extends ChangeNotifier {
   List<Appointment> proAppointments = [];
   int selectedCategoryIndex = 0;
-  List<Appointment> get storeIntoProvider => proAppointments;
   int? _selectedCategory;
 // varibles
   String displayDate = 'Select between dates';
@@ -14,6 +13,19 @@ class AgentAppointmentsProvider extends ChangeNotifier {
   int? apiBranchId;
   int? apiStatusTypeId;
   bool isFilterApplied = false;
+
+  List<Appointment> get storeIntoProvider => proAppointments;
+  set storeIntoProvider(List<Appointment> products) {
+    print('xxx: storeIntoProvider');
+    proAppointments = List<Appointment>.from(products);
+    notifyListeners();
+  }
+
+  void filterProviderData(List<Appointment> items) {
+    print('xxx: filterProviderData');
+    proAppointments = List<Appointment>.from(items);
+    notifyListeners();
+  }
 
   bool get filterStatus => isFilterApplied;
   set filterStatus(bool newStatus) {
@@ -62,18 +74,11 @@ class AgentAppointmentsProvider extends ChangeNotifier {
   List<Statusmodel> get storeIntobranchProvider => probranches;
   int? _selectedbranch;
 
-  set storeIntoProvider(List<Appointment> products) {
-    proAppointments.clear();
-    proAppointments = products;
-    notifyListeners();
-  }
-
-  void filterProviderData(List<Appointment> items) {
-    proAppointments.clear();
-    proAppointments.addAll(items);
-    notifyListeners();
-  }
-
+  // void filterProviderData(List<Appointment> items) {
+  //   proAppointments.clear();
+  //   proAppointments.addAll(items);
+  //   notifyListeners();
+  // }
   void clearFilter() {
     displayDate = 'Select between dates';
     selectedStatus = 0;

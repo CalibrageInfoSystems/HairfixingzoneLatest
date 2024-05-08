@@ -747,7 +747,7 @@ class _BookingScreenState extends State<Bookingscreen> {
                                     DropdownMenuItem<int>(
                                       value: -1,
                                       child: Text(
-                                        'Select Purpose of Visit',
+                                        ' Purpose of Visit',
                                         style: TextStyle(color: Colors.grey, fontWeight: FontWeight.w500),
                                       ),
                                       // Static text
@@ -798,25 +798,33 @@ class _BookingScreenState extends State<Bookingscreen> {
   }
 
   void validatePurpose(String? value) {
-    if (value == null || value.isEmpty) {
-      ispurposeselected = true;
-    } else {
-      ispurposeselected = false;
+    if (!isSlotsAvailable) {
+      showCustomToastMessageLong('No Slots Available Today', context, 1, 4);}
+    else if (!slotselection) {
+      showCustomToastMessageLong('Please Select a slot', context, 1, 4);
     }
-    setState(() {});
+    // if (visablelength == disabledlength) {
+    //   // showCustomToastMessageLong('No Slots Available Today ', context, 1, 4);
+    //   // isValid = false;
+    //   // hasValidationFailed = true;
+    //  }
+    else {
+      if (value == null || value.isEmpty) {
+        ispurposeselected = true;
+      } else {
+        ispurposeselected = false;
+      }
+      setState(() {});
+    }
   }
 
-  // void validatislot() {
-  //   if (_selectedSlot == null) {
-  //     showCustomToastMessageLong('Please Select Time Slot', context, 1, 4);
-  //     return;
-  //   }
-  // }
+
 
   Future<void> bookappointment() async {
     // validatislot();
     validatePurpose(selectedName);
     if (_formKey.currentState!.validate()) {
+
       final url = Uri.parse(baseUrl + postApiAppointment);
       print('url==>890: $url');
 

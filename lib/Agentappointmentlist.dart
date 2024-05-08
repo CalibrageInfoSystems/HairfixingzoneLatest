@@ -95,31 +95,31 @@ class MyAppointments_screenState extends State<Agentappointmentlist> {
           onRefresh: () async {
             refreshTheScreen();
           },
-          child: Consumer<AgentAppointmentsProvider>(
-            builder: (context, provider, _) => Scaffold(
-              appBar: AppBar(
-                  backgroundColor: const Color(0xFFf3e3ff),
-                  title: const Text(
-                    'Appointments',
-                    style: TextStyle(
-                      color: Color(0xFF0f75bc),
-                      fontSize: 16.0,
-                      fontFamily: "Calibri",
-                      fontWeight: FontWeight.w600,
-                    ),
-                    textAlign: TextAlign.start,
+          child: Scaffold(
+            appBar: AppBar(
+                backgroundColor: const Color(0xFFf3e3ff),
+                title: const Text(
+                  'Appointments',
+                  style: TextStyle(
+                    color: Color(0xFF0f75bc),
+                    fontSize: 16.0,
+                    fontFamily: "Calibri",
+                    fontWeight: FontWeight.w600,
                   ),
-                  leading: IconButton(
-                    icon: const Icon(
-                      Icons.arrow_back_ios,
-                      color: CommonUtils.primaryTextColor,
-                    ),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                      provider.clearFilter();
-                    },
-                  )),
-              body: WillPopScope(
+                  textAlign: TextAlign.start,
+                ),
+                leading: IconButton(
+                  icon: const Icon(
+                    Icons.arrow_back_ios,
+                    color: CommonUtils.primaryTextColor,
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    myAppointmentsProvider!.clearFilter();
+                  },
+                )),
+            body: Consumer<AgentAppointmentsProvider>(
+              builder: (context, provider, _) => WillPopScope(
                 onWillPop: () async {
                   provider.clearFilter();
                   return true;
@@ -396,10 +396,13 @@ class MyAppointments_screenState extends State<Agentappointmentlist> {
       setState(() {
         myAppointmentsProvider!.filterProviderData(data
             .where((item) =>
-        item.customerName.toLowerCase().contains(input.toLowerCase()) ||
-            item.name.toLowerCase().contains(input.toLowerCase()) ||
-            item.email!.toLowerCase().contains(input.toLowerCase()) ||
-            item.purposeOfVisit.toLowerCase().contains(input.toLowerCase()))
+        // item.customerName
+        //         .toLowerCase()
+        //         .contains(input.toLowerCase())
+        // ||
+        // item.name.toLowerCase().contains(input.toLowerCase()) ||
+        // item.email!.toLowerCase().contains(input.toLowerCase()) ||
+        item.purposeOfVisit.toLowerCase().contains(input.toLowerCase()))
             .toList());
       });
     });

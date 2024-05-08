@@ -141,7 +141,7 @@ class MyAppointments_screenState extends State<GetAppointments> {
                           } else if (snapshot.hasError) {
                             return const Center(
                               child: Text(
-                                'No appointments found!',
+                                'No Appointments Found!',
                                 style: TextStyle(
                                   fontSize: 12.0,
                                   color: Colors.black,
@@ -245,7 +245,7 @@ class MyAppointments_screenState extends State<GetAppointments> {
 
           return result;
         } else {
-          throw Exception('No appointments found!');
+          throw Exception('No Appointments Found!');
         }
       } else {
         print('Request failed with status: ${jsonResponse.statusCode}');
@@ -439,7 +439,7 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
           myAppointmentsProvider.storeIntoProvider = filteredList.map((item) => MyAppointment_Model.fromJson(item)).toList();
         } else {
           myAppointmentsProvider.storeIntoProvider = [];
-          throw Exception('No appointments found!');
+          throw Exception('No Appointments Found!');
         }
       } else {
         myAppointmentsProvider.storeIntoProvider = [];
@@ -484,7 +484,7 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                     },
                     child: const Text(
                       //MARK: Clear all filters
-                      'Clear all filters',
+                      'Clear All Filters',
                       style: CommonStyles.txSty_16blu_f5,
                     ),
                   ),
@@ -1005,7 +1005,7 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
           myAppointmentsProvider.storeIntoProvider = filteredList.map((item) => MyAppointment_Model.fromJson(item)).toList();
         } else {
           myAppointmentsProvider.storeIntoProvider = [];
-          throw Exception('No appointments found!');
+          throw Exception('No Appointments Found!');
         }
       } else {
         myAppointmentsProvider.storeIntoProvider = [];
@@ -1775,7 +1775,7 @@ class _OpCardState extends State<OpCard> {
               Center(
                 // Center the text
                 child: Text(
-                  'Are You Sure You Want To Cancel Your  ${appointments.slotDuration} Slot At The${appointments.branch} Hair Fixing Zone',
+                  'Are You Sure You Want To Cancel Your  ${appointments.slotDuration} Slot At The ${appointments.branch} Hair Fixing Zone',
                   style: CommonUtils.txSty_18b_fb,
                   textAlign: TextAlign.center, // Optionally, align the text center
                 ),
