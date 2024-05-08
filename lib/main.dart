@@ -47,6 +47,7 @@ void main() async {
     ChangeNotifierProvider(create: (context) => AgentAppointmentsProvider()),
   ], child: MyApp()));
 }
+
 final GlobalKey<NavigatorState> navigatorKey = new GlobalKey<NavigatorState>();
 
 class MyApp extends StatelessWidget {

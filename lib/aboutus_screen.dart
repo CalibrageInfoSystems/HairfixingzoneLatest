@@ -59,7 +59,7 @@ class AboutUsScreen extends StatelessWidget {
                         )),
                     SizedBox(height: 5),
                     Text(
-                      'At Hair Fixing Zone, our journey began with a simple yet profound mission: to empower individuals to embrace their unique beauty with confidence. Recognizing the transformation power of hair, we embarked on a quest to offer innovation solutions that go beyond conventional norms. Over the years, we have honed our expertise, staying at the forefront of industry advancements to deliver unparalleled results to our estmeed clientele',
+                      'At Hair Fixing Zone, Our journey began with a simple yet profound mission: to empower individuals to embrace their unique beauty with confidence. Recognizing the transformation power of hair, we embarked on a quest to offer innovation solutions that go beyond conventional norms. Over the years, we have honed our expertise, staying at the forefront of industry advancements to deliver unparalleled results to our estmeed clientele',
                       style: TextStyle(
                         wordSpacing: 3.0,
                         letterSpacing: 1.5,

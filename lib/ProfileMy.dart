@@ -13,6 +13,8 @@ import 'Common/custom_button.dart';
 import 'CommonUtils.dart';
 import 'package:http/http.dart' as http;
 
+import 'CustomerLoginScreen.dart';
+
 class ProfileMy extends StatefulWidget {
   @override
   Profile_screenState createState() => Profile_screenState();
@@ -32,6 +34,7 @@ class Profile_screenState extends State<ProfileMy> {
   @override
   void initState() {
     super.initState();
+    // getUserDataFromSharedPreferences();
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitDown,
       DeviceOrientation.portraitUp,
@@ -40,8 +43,8 @@ class Profile_screenState extends State<ProfileMy> {
     CommonUtils.checkInternetConnectivity().then((isConnected) async {
       if (isConnected) {
         print('The Internet Is Connected');
-        setState(() async {
-          SharedPreferences prefs = await SharedPreferences.getInstance();
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        setState(() {
           Id = prefs.getInt('userId') ?? 0;
           fullusername = prefs.getString('userFullName');
           phonenumber = prefs.getString('contactNumber');
@@ -55,9 +58,8 @@ class Profile_screenState extends State<ProfileMy> {
           print('username$username');
           print('usernameId:$Id');
           formattedDate = DateFormat('dd-MM-yyyy').format(date);
-          fetchdetailsofcustomer(Id);
         });
-
+        fetchdetailsofcustomer(Id);
         // fetchMyAppointments(userId);
       } else {
         CommonUtils.showCustomToastMessageLong('Please Check Your Internet Connection', context, 1, 4);
@@ -66,21 +68,89 @@ class Profile_screenState extends State<ProfileMy> {
     });
   }
 
+  void getUserDataFromSharedPreferences() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    Id = prefs.getInt('userId') ?? 0;
+    fullusername = prefs.getString('userFullName');
+    phonenumber = prefs.getString('contactNumber');
+    username = prefs.getString('username');
+    email = prefs.getString('email');
+    contactNumber = prefs.getString('contactNumber');
+    gender = prefs.getString('gender');
+    dob = prefs.getString('dateofbirth');
+    DateTime date = DateTime.parse(dob!);
+    print('fullusername:$fullusername');
+
+    formattedDate = DateFormat('dd-MM-yyyy').format(date);
+  }
+
+  void logOutDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Logout'),
+          content: const Text('Are you sure you want to Logout?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                onConfirmLogout(context);
+              },
+              child: const Text('Logout'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> onConfirmLogout(BuildContext context) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool('isLoggedIn', false);
+    prefs.remove('userId'); // Remove userId from SharedPreferences
+    prefs.remove('userRoleId'); // Remove roleId from SharedPreferences
+    CommonUtils.showCustomToastMessageLong("Logout Successful", context, 0, 3);
+
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(builder: (context) => CustomerLoginScreen()),
+      (route) => false,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: CommonStyles.primaryTextColor,
       appBar: AppBar(
+          elevation: 0,
           backgroundColor: const Color(0xFFf3e3ff),
-          title: Text(
+          title: const Text(
             'My Profile',
-            style: TextStyle(
-              color: Color(0xFF0f75bc),
-              fontSize: 16.0,
-              fontWeight: FontWeight.w600,
-            ),
-            textAlign: TextAlign.start,
+            style: TextStyle(color: Color(0xFF0f75bc), fontSize: 16.0),
           ),
+          actions: [
+            IconButton(
+              icon: SvgPicture.asset(
+                'assets/sign-out-alt.svg', // Path to your SVG asset
+                color: Color(0xFF662e91),
+                width: 24, // Adjust width as needed
+                height: 24, // Adjust height as needed
+              ),
+              onPressed: () {
+                logOutDialog(context);
+                // Add logout functionality here
+              },
+            ),
+          ],
+          // centerTitle: true,
           leading: IconButton(
             icon: Icon(
               Icons.arrow_back_ios,
@@ -93,7 +163,7 @@ class Profile_screenState extends State<ProfileMy> {
       body: Column(
         children: [
           Container(
-            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
             height: 80,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -102,15 +172,15 @@ class Profile_screenState extends State<ProfileMy> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Column(
+                    Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'User Name',
+                          '$fullusername',
                           style: CommonStyles.txSty_18w_fb,
                         ),
                         Text(
-                          'user email',
+                          '$email',
                           style: CommonStyles.txSty_16w_fb,
                         ),
                       ],
@@ -119,9 +189,7 @@ class Profile_screenState extends State<ProfileMy> {
                       onTap: () {
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (context) => EditProfile(
-                              createdDate: "$createdDate",
-                            ),
+                            builder: (context) => EditProfile(createdDate: "$createdDate"),
                           ),
                         );
                       },
@@ -139,8 +207,8 @@ class Profile_screenState extends State<ProfileMy> {
           ),
           Expanded(
             child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
-              decoration: const BoxDecoration(
+              padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+              decoration: BoxDecoration(
                 color: CommonStyles.whiteColor,
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(20),
@@ -153,15 +221,15 @@ class Profile_screenState extends State<ProfileMy> {
                 children: [
                   Column(
                     children: [
-                      userLayOut('assets/id-card-clip-alt.svg', CommonStyles.primaryTextColor, 'User Name'),
-                      userLayOut('assets/venus-mars.svg', CommonStyles.statusGreenText, 'Male'),
-                      userLayOut('assets/calendar_icon.svg', CommonStyles.statusRedText, '10-08-1999'),
-                      userLayOut('assets/mobile-notch.svg', CommonStyles.statusYellowText, '+91 9999999999'),
-                      userLayOut('assets/mobile-notch.svg', CommonStyles.statusBlueText, '+91 9999999999'),
+                      userLayOut('assets/id-card-clip-alt.svg', CommonStyles.primaryTextColor, '$username'),
+                      userLayOut('assets/venus-mars.svg', CommonStyles.statusGreenText, '$gender'),
+                      userLayOut('assets/calendar_icon.svg', CommonStyles.statusRedText, '$formattedDate'),
+                      userLayOut('assets/mobile-notch.svg', CommonStyles.statusYellowText, '+91 $contactNumber'),
+                      userLayOut('assets/mobile-notch.svg', CommonStyles.statusBlueText, ''),
                     ],
                   ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    padding: EdgeInsets.symmetric(horizontal: 10),
                     child: Row(
                       children: [
                         Expanded(
@@ -197,7 +265,7 @@ class Profile_screenState extends State<ProfileMy> {
       leading: CircleAvatar(
         backgroundColor: bgColor,
         child: Container(
-          padding: const EdgeInsets.all(10),
+          padding: EdgeInsets.all(10),
           child: SvgPicture.asset(
             icon,
             width: 30.0,

@@ -1,4 +1,3 @@
-
 class BranchModel {
   final int? id;
   final String name;
@@ -45,4 +44,3 @@ class BranchModel {
     );
   }
 }
-

@@ -120,7 +120,7 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-     // backgroundColor: CommonStyles.primaryTextColor,
+      // backgroundColor: CommonStyles.primaryTextColor,
       body: Column(
         children: [
           //MARK: Welcome Text

@@ -207,7 +207,7 @@ class MyProducts_screenState extends State<ProductsMy> {
                           } else {
                             return const Center(
                               child: Text(
-                                'No products found!',
+                                'No Products Found!',
                                 style: TextStyle(
                                   fontSize: 12.0,
                                   color: Colors.black,
@@ -512,7 +512,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                       });
                     },
                     child: const Text(
-                      'Clear all filters',
+                      'Clear All Filters',
                       style: CommonUtils.Mediumtext_o_14,
                     ),
                   ),

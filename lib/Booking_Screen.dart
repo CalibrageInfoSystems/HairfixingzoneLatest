@@ -35,14 +35,13 @@ class Bookingscreen extends StatefulWidget {
   //   required this.data,
   //  // New field
   // });
-   Bookingscreen(
+  Bookingscreen(
       {super.key,
-        required this.branchId,
-        required this.branchname,
-        required this.branchaddress,
-        required this.phonenumber,
-        required this.branchImage});
-
+      required this.branchId,
+      required this.branchname,
+      required this.branchaddress,
+      required this.phonenumber,
+      required this.branchImage});
 
   @override
   _BookingScreenState createState() => _BookingScreenState();
@@ -148,8 +147,7 @@ class _BookingScreenState extends State<Bookingscreen> {
   int? genderttypeid;
 
   NotificationService notificationService = NotificationService();
-  TextEditingController _textEditingController =
-  TextEditingController(text: "Hair fixing Appointment");
+  TextEditingController _textEditingController = TextEditingController(text: "Hair fixing Appointment");
   DateTime currentDate = DateTime.now();
   DateTime? eventDate;
 
@@ -422,17 +420,30 @@ class _BookingScreenState extends State<Bookingscreen> {
                       Container(
                         height: MediaQuery.of(context).size.height / 6,
                         width: MediaQuery.of(context).size.width,
+                        // decoration: BoxDecoration(
+                        //   border: Border.all(color: Color(0xFF662e91), width: 1.0),
+                        //   borderRadius: BorderRadius.circular(10.0),
+                        // ),
                         decoration: BoxDecoration(
-                          border: Border.all(color: Color(0xFF662e91), width: 1.0),
+                          color: Colors.white,
                           borderRadius: BorderRadius.circular(10.0),
+                          // borderRadius: BorderRadius.circular(30), //border corner radius
+                          boxShadow: [
+                            BoxShadow(
+                              color: Color(0xFF960efd).withOpacity(0.2), //color of shadow
+                              spreadRadius: 2, //spread radius
+                              blurRadius: 4, // blur radius
+                              offset: Offset(0, 2), // changes position of shadow
+                            ),
+                          ],
                         ),
                         child: Row(
                           children: [
                             Container(
-                                padding: EdgeInsets.all(10),
-                                // width: MediaQuery.of(context).size.width / 4,
+                              padding: EdgeInsets.all(10),
+                              // width: MediaQuery.of(context).size.width / 4,
                               child: ClipRRect(
-                                borderRadius: BorderRadius.circular(10.0),
+                                //  borderRadius: BorderRadius.circular(10.0),
                                 child: Image.network(
                                   widget.branchImage.isNotEmpty ? widget.branchImage : 'https://example.com/placeholder-image.jpg',
                                   fit: BoxFit.cover,
@@ -448,12 +459,12 @@ class _BookingScreenState extends State<Bookingscreen> {
                                   },
                                 ),
                               ),
-                                // child: Image.asset(
-                                //   'assets/top_image.png',
-                                //   fit: BoxFit.cover,
-                                //   height: MediaQuery.of(context).size.height / 4 / 2,
-                                //   width: MediaQuery.of(context).size.width / 2.8,
-                                // )
+                              // child: Image.asset(
+                              //   'assets/top_image.png',
+                              //   fit: BoxFit.cover,
+                              //   height: MediaQuery.of(context).size.height / 4 / 2,
+                              //   width: MediaQuery.of(context).size.width / 2.8,
+                              // )
                             ),
                             Container(
                               width: MediaQuery.of(context).size.width / 2.2,
@@ -490,7 +501,7 @@ class _BookingScreenState extends State<Bookingscreen> {
                       Row(
                         children: [
                           Text(
-                            'Select Date ',
+                            'Date ',
                             style: TextStyle(
                               fontSize: 14,
                               fontFamily: "Calibri",
@@ -539,7 +550,7 @@ class _BookingScreenState extends State<Bookingscreen> {
                               Radius.circular(10),
                             ),
                           ),
-                          hintText: 'Select Date',
+                          hintText: 'Date',
                           counterText: "",
                           hintStyle: TextStyle(color: Colors.grey, fontWeight: FontWeight.w400),
                           suffixIcon: Icon(
@@ -632,7 +643,7 @@ class _BookingScreenState extends State<Bookingscreen> {
                                           mainAxisAlignment: MainAxisAlignment.center,
                                           children: [
                                             Text(
-                                              'Today is a holiday',
+                                              'Today is a Holiday',
                                               style: TextStyle(
                                                 fontFamily: 'Calibri',
                                                 fontSize: 12,
@@ -666,7 +677,7 @@ class _BookingScreenState extends State<Bookingscreen> {
                       Row(
                         children: [
                           Text(
-                            'Select Purpose ',
+                            'Purpose of Visit ',
                             style: TextStyle(
                               fontSize: 14,
                               fontFamily: "Calibri",
@@ -795,7 +806,15 @@ class _BookingScreenState extends State<Bookingscreen> {
     setState(() {});
   }
 
+  // void validatislot() {
+  //   if (_selectedSlot == null) {
+  //     showCustomToastMessageLong('Please Select Time Slot', context, 1, 4);
+  //     return;
+  //   }
+  // }
+
   Future<void> bookappointment() async {
+    // validatislot();
     validatePurpose(selectedName);
     if (_formKey.currentState!.validate()) {
       final url = Uri.parse(baseUrl + postApiAppointment);
@@ -859,23 +878,22 @@ class _BookingScreenState extends State<Bookingscreen> {
           // Extract the necessary information
           bool isSuccess = data['isSuccess'];
           if (isSuccess == true) {
-            onCreate( '${slotdate}',
-             '${_selectedTimeSlot}','${widget.branchname}','${widget.branchaddress}');
+            onCreate('${slotdate}', '${_selectedTimeSlot}', '${widget.branchname}', '${widget.branchaddress}');
             //LoadingProgress.stop(context);
             print('Request sent successfully');
             // showCustomToastMessageLong('Slot booked successfully', context, 0, 2);
             Navigator.of(context).pushReplacement(
               MaterialPageRoute(
                   builder: (context) => SlotSuccessScreen(
-                    slotdate: slotdate,
-                    slottime: _selectedTimeSlot,
-                    Purpose: '$selectedName',
-                    slotbranchname: widget.branchname,
-                    slotbrnach_address: widget.branchaddress,
-                    phonenumber: widget.phonenumber,
-                    branchImage: widget.branchImage,
-                    // phonenumber: null,
-                  )),
+                        slotdate: slotdate,
+                        slottime: _selectedTimeSlot,
+                        Purpose: '$selectedName',
+                        slotbranchname: widget.branchname,
+                        slotbrnach_address: widget.branchaddress,
+                        phonenumber: widget.phonenumber,
+                        branchImage: widget.branchImage,
+                        // phonenumber: null,
+                      )),
             );
             // Success case
             // Handle success scenario here
@@ -1302,9 +1320,9 @@ class _BookingScreenState extends State<Bookingscreen> {
     return Future.value(false);
   }
 
-  Future<void> onCreate(String date,String time, String branchname, String branchaddress) async {
+  Future<void> onCreate(String date, String time, String branchname, String branchaddress) async {
     print('date=======$date');
-     eventDate = DateFormat("dd MMM yyyy").parse(date);
+    eventDate = DateFormat("dd MMM yyyy").parse(date);
     print('eventDate=======$eventDate');
     print('time=======$time');
     eventTime = convertStringToTimeOfDay(time);
@@ -1331,10 +1349,10 @@ class _BookingScreenState extends State<Bookingscreen> {
         "eventDate": DateFormat("EEEE, d MMM y").format(eventDate!),
         "eventTime": eventTime!.format(context),
       }),
-     // getDateTimeComponents(),
+      // getDateTimeComponents(),
     );
 
-  //  resetForm();
+    //  resetForm();
   }
 
   TimeOfDay convertStringToTimeOfDay(String timeString) {
@@ -1352,7 +1370,6 @@ class _BookingScreenState extends State<Bookingscreen> {
     // Create and return a TimeOfDay object
     return TimeOfDay(hour: hour, minute: minute);
   }
-
 }
 
 class RadioButtonOption {

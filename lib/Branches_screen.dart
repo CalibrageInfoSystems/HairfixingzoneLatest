@@ -246,12 +246,10 @@ class _BranchesscreenState extends State<Branches_screen> {
                                               ),
                                               Text(
                                                 '${branchnames.address}',
-
                                                 style: TextStyle(color: Colors.black, fontSize: 12.0, fontWeight: FontWeight.w600),
                                                 maxLines: 3,
                                                 overflow: TextOverflow.ellipsis,
                                               ),
-
                                             ],
                                           ),
                                         ))

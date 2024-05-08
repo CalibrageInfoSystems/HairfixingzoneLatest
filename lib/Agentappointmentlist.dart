@@ -141,7 +141,7 @@ class MyAppointments_screenState extends State<Agentappointmentlist> {
                           } else if (snapshot.hasError) {
                             return const Center(
                               child: Text(
-                                'No appointments found!',
+                                'No Appointments found!',
                                 style: TextStyle(
                                   fontSize: 12.0,
                                   color: Colors.black,
@@ -161,7 +161,10 @@ class MyAppointments_screenState extends State<Agentappointmentlist> {
                                     return Column(
                                       children: [
                                         OpCard(
-                                          data: data[index], userId: widget.userId, branchid: widget.branchid, branchaddress: widget.branchaddress,
+                                          data: data[index],
+                                          userId: widget.userId,
+                                          branchid: widget.branchid,
+                                          branchaddress: widget.branchaddress,
                                           onRefresh: () {
                                             // Implement the refresh logic here
                                             setState(() {
@@ -187,7 +190,7 @@ class MyAppointments_screenState extends State<Agentappointmentlist> {
                             } else {
                               return const Center(
                                 child: Text(
-                                  'No appointmens available',
+                                  'No Appointmens Available',
                                   style: TextStyle(
                                     fontSize: 12.0,
                                     color: Colors.black,
@@ -514,7 +517,7 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                     },
                     child: const Text(
                       //MARK: Clear all filters
-                      'Clear all filters',
+                      'Clear All Filters',
                       style: CommonStyles.txSty_16blu_f5,
                     ),
                   ),
@@ -941,6 +944,7 @@ class UserFeedback {
 
   UserFeedback({required this.ratingstar, required this.comments});
 }
+
 //
 // class OpCard extends StatefulWidget {
 //   final Appointment data;
@@ -971,6 +975,7 @@ class OpCard extends StatefulWidget {
   @override
   State<OpCard> createState() => _OpCardState();
 }
+
 class _OpCardState extends State<OpCard> {
   late List<dynamic> dateValues;
   final TextEditingController _commentstexteditcontroller = TextEditingController();
@@ -2201,15 +2206,14 @@ class _OpCardState extends State<OpCard> {
                 buttonText: 'Done',
                 color: CommonUtils.primaryTextColor,
                 onPressed: () {
-
-                Navigator.of(context).pop();
-                // Refresh the screen
-                widget.onRefresh?.call();
-               //    Navigator.of(context).push(
-               //      MaterialPageRoute(
-               //        builder: (context) =>  Agentappointmentlist(),
-               //      ),
-               //    );
+                  Navigator.of(context).pop();
+                  // Refresh the screen
+                  widget.onRefresh?.call();
+                  //    Navigator.of(context).push(
+                  //      MaterialPageRoute(
+                  //        builder: (context) =>  Agentappointmentlist(),
+                  //      ),
+                  //    );
                 },
               ),
             ],

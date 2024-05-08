@@ -67,6 +67,7 @@ class EditProfile_screenState extends State<EditProfile> {
   String? fullname;
   DateTime selectedDate = DateTime.now();
   late SharedPreferences prefs;
+  int? gendertypeid;
   @override
   void initState() {
     super.initState();
@@ -81,7 +82,7 @@ class EditProfile_screenState extends State<EditProfile> {
         fetchRadioButtonOptions();
         setState(() async {
           prefs = await SharedPreferences.getInstance();
-          Id = prefs.getInt('userId') ?? 0;
+          Id = prefs.getInt('userId');
           fullname = prefs.getString('userFullName');
           phonenumber = prefs.getString('contactNumber');
           username = prefs.getString('username');
@@ -92,6 +93,7 @@ class EditProfile_screenState extends State<EditProfile> {
           DateTime date = DateTime.parse(dob!);
           roleId = prefs.getInt('userRoleId');
           password = prefs.getString('password');
+          gendertypeid = prefs.getInt('genderTypeId');
           print('fullname$fullname');
           print('usernameId:$Id');
           print('gender:$gender');
@@ -102,8 +104,13 @@ class EditProfile_screenState extends State<EditProfile> {
           mobileNumberController.text = '$contactNumber';
           //  gender = '$selectedName';
           selectedGender = gender!;
-          selectedTypeCdId = dropdownItems.indexWhere((item) => item['desc'] == selectedGender);
-          isGenderSelected = false;
+          // selectedTypeCdId = dropdownItems.indexWhere((item) => item['desc'] == selectedGender);
+          // isGenderSelected = false;
+          // if (selectedGender != null) {
+          //   // Update the selectedTypeCdId based on the saved gender
+          //   selectedTypeCdId = dropdownItems.indexWhere((item) => item['desc'] == selectedGender);
+          //   isGenderSelected = false;
+          // }
         });
 
         // fetchMyAppointments(userId);
@@ -340,14 +347,13 @@ class EditProfile_screenState extends State<EditProfile> {
                           const SizedBox(
                             height: 5,
                           ),
-
                           Padding(
                             padding: const EdgeInsets.only(left: 0, top: 5.0, right: 0),
                             child: Container(
                               width: MediaQuery.of(context).size.width,
                               decoration: BoxDecoration(
                                 border: Border.all(
-                                  color: isGenderSelected ? const Color.fromARGB(255, 175, 15, 4) : CommonUtils.primaryTextColor,
+                                  color: CommonUtils.primaryTextColor,
                                 ),
                                 borderRadius: BorderRadius.circular(5.0),
                                 color: Colors.white,
@@ -356,72 +362,141 @@ class EditProfile_screenState extends State<EditProfile> {
                                 child: ButtonTheme(
                                   alignedDropdown: true,
                                   child: DropdownButton<String>(
-                                    value: selectedGender,
-                                    iconSize: 30,
-                                    icon: null,
-                                    style: const TextStyle(
-                                      color: Colors.black,
-                                    ),
-                                    onChanged: (value) {
-                                      setState(() {
-                                        // selectedTypeCdId = value!;
-                                        // if (selectedTypeCdId != -1) {
-                                        //   selectedValue = dropdownItems[selectedTypeCdId]['typeCdId'];
-                                        //   selectedName = dropdownItems[selectedTypeCdId]['desc'];
-                                        //
-                                        //   print("selectedValue:$selectedValue");
-                                        //   print("selectedName:$selectedName");
-                                        // } else {
-                                        //   print("==========");
-                                        //   print(selectedValue);
-                                        //   print(selectedName);
-                                        // }
-                                        // // isDropdownValid = selectedTypeCdId != -1;
-                                        // isGenderSelected = false;
-                                        selectedGender = value!; // Update the selectedGender variable
-                                        selectedTypeCdId = dropdownItems.indexWhere((item) => item['desc'] == selectedGender);
-                                        isGenderSelected = true;
-                                        // Save the selected gender to SharedPreferences
-                                        prefs.setString('gender', selectedGender!);
-                                      });
-                                    },
-                                    items: [
-                                      const DropdownMenuItem<String>(
-                                        value: '',
-                                        child: Text(
-                                          'Select Gender',
-                                          style: TextStyle(color: Colors.grey, fontWeight: FontWeight.w500),
-                                        ),
+                                      value: selectedGender,
+                                      iconSize: 30,
+                                      icon: null,
+                                      style: const TextStyle(
+                                        color: Colors.black,
                                       ),
-                                      ...dropdownItems.map((item) {
-                                        return DropdownMenuItem<String>(
-                                          value: item['desc'],
-                                          child: Text(item['desc']),
-                                        );
-                                      }).toList(),
-                                    ],
-                                  ),
+                                      onChanged: (value) {
+                                        setState(() {
+                                          selectedGender = value!;
+                                          print('selectgender:$selectedGender');
+                                          // if (selectedTypeCdId != -1) {
+                                          //   selectedValue = dropdownItems[selectedTypeCdId]['typeCdId'];
+                                          //   selectedName = dropdownItems[selectedTypeCdId]['desc'];
+                                          //
+                                          //   print("selectedValue:$selectedValue");
+                                          //   print("selectedName:$selectedName");
+                                          // } else {
+                                          //   print("==========");
+                                          //   print(selectedValue);
+                                          //   print(selectedName);
+                                          // }
+                                          // isDropdownValid = selectedTypeCdId != -1;
+                                          //    isGenderSelected = false;
+                                        });
+                                      },
+                                      items: [
+                                        // const DropdownMenuItem<String>(
+                                        //   value: -1,
+                                        //   child: Text(
+                                        //     'Select Gender',
+                                        //     style: TextStyle(color: Colors.grey, fontWeight: FontWeight.w500),
+                                        //   ),
+                                        // ),
+                                        ...dropdownItems.map((item) {
+                                          return DropdownMenuItem<String>(
+                                            value: item['desc'],
+                                            child: Text(item['desc']),
+                                          );
+                                        }).toList(),
+                                      ]),
                                 ),
                               ),
                             ),
                           ),
-                          //MARK: Gender condition
-                          if (isGenderSelected)
-                            const Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 5),
-                                  child: Text(
-                                    'Please Select gender',
-                                    style: TextStyle(
-                                      color: Color.fromARGB(255, 175, 15, 4),
-                                      fontSize: 12,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
+                          //
+                          // Padding(
+                          //   padding: const EdgeInsets.only(left: 0, top: 5.0, right: 0),
+                          //   child: Container(
+                          //     width: MediaQuery.of(context).size.width,
+                          //     decoration: BoxDecoration(
+                          //       border: Border.all(
+                          //         color: isGenderSelected ? const Color.fromARGB(255, 175, 15, 4) : CommonUtils.primaryTextColor,
+                          //       ),
+                          //       borderRadius: BorderRadius.circular(5.0),
+                          //       color: Colors.white,
+                          //     ),
+                          //     child: DropdownButtonHideUnderline(
+                          //       child: ButtonTheme(
+                          //         alignedDropdown: true,
+                          //         child: DropdownButton<String>(
+                          //           value: selectedGender,
+                          //           iconSize: 30,
+                          //           icon: null,
+                          //           style: const TextStyle(
+                          //             color: Colors.black,
+                          //           ),
+                          //           onChanged: (value) {
+                          //             setState(() {
+                          //               // selectedTypeCdId = value!;
+                          //               // if (selectedTypeCdId != -1) {
+                          //               //   selectedValue = dropdownItems[selectedTypeCdId]['typeCdId'];
+                          //               //   selectedName = dropdownItems[selectedTypeCdId]['desc'];
+                          //               //
+                          //               //   print("selectedValue:$selectedValue");
+                          //               //   print("selectedName:$selectedName");
+                          //               // } else {
+                          //               //   print("==========");
+                          //               //   print(selectedValue);
+                          //               //   print(selectedName);
+                          //               // }
+                          //               // // isDropdownValid = selectedTypeCdId != -1;
+                          //               // isGenderSelected = false;
+                          //
+                          //               selectedGender = value!;
+                          //               selectedTypeCdId = dropdownItems.indexWhere((item) => item['desc'] == selectedGender);
+                          //               isGenderSelected = false;
+                          //               prefs.setString('gender', selectedGender!);
+                          //
+                          //               // selectedGender = value!; // Update the selectedGender variable
+                          //               // selectedTypeCdId = dropdownItems.indexWhere((item) => item['desc'] == selectedGender);
+                          //               // isGenderSelected = false;
+                          //               // // Save the selected gender to SharedPreferences
+                          //               // prefs.setString('gender', selectedGender!);
+                          //             });
+                          //             print('Selected TypeCdId: $selectedTypeCdId');
+                          //             isGenderSelected = false;
+                          //             prefs.setString('gender', selectedGender!);
+                          //           },
+                          //           items: [
+                          //             // const DropdownMenuItem<String>(
+                          //             //   value: '',
+                          //             //   child: Text(
+                          //             //     'Select Gender',
+                          //             //     style: TextStyle(color: Colors.grey, fontWeight: FontWeight.w500),
+                          //             //   ),
+                          //             // ),
+                          //             ...dropdownItems.map((item) {
+                          //               return DropdownMenuItem<String>(
+                          //                 value: item['desc'],
+                          //                 child: Text(item['desc']),
+                          //               );
+                          //             }).toList(),
+                          //           ],
+                          //         ),
+                          //       ),
+                          //     ),
+                          //   ),
+                          // ),
+                          // //MARK: Gender condition
+                          // if (isGenderSelected)
+                          //   const Row(
+                          //     mainAxisAlignment: MainAxisAlignment.start,
+                          //     children: [
+                          //       Padding(
+                          //         padding: EdgeInsets.symmetric(horizontal: 16, vertical: 5),
+                          //         child: Text(
+                          //           'Please Select Gender',
+                          //           style: TextStyle(
+                          //             color: Color.fromARGB(255, 175, 15, 4),
+                          //             fontSize: 12,
+                          //           ),
+                          //         ),
+                          //       ),
+                          //     ],
+                          //   ),
 
                           const SizedBox(
                             height: 10,
@@ -515,7 +590,7 @@ class EditProfile_screenState extends State<EditProfile> {
                             errorText: _mobileNumberError ? _mobileNumberErrorMsg : null,
                             onChanged: (value) {
                               setState(() {
-                                if (value.length == 1 && ['1', '2', '3', '4'].contains(value)) {
+                                if (value.length == 1 && ['0', '1', '2', '3', '4'].contains(value)) {
                                   mobileNumberController.clear();
                                 }
                                 if (value.startsWith(' ')) {
@@ -602,7 +677,7 @@ class EditProfile_screenState extends State<EditProfile> {
                                 validator: validateAlterMobilenum,
                                 onChanged: (value) {
                                   setState(() {
-                                    if (value.length == 1 && ['1', '2', '3', '4'].contains(value)) {
+                                    if (value.length == 1 && ['0', '1', '2', '3', '4'].contains(value)) {
                                       alernateMobileNumberController.clear();
                                     }
                                     if (value.startsWith(' ')) {
@@ -817,7 +892,7 @@ class EditProfile_screenState extends State<EditProfile> {
         "updatedByUserId": 1,
         "updatedDate": "$now",
         "roleId": roleId,
-        "gender": gender,
+        "gender": gendertypeid,
         "dateofbirth": "$dob",
         "branchIds": "null"
       };

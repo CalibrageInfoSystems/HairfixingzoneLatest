@@ -86,8 +86,7 @@ class MyAppointments_screenState extends State<MyAppointments> {
               children: [
                 // search and filter
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10)
-                      .copyWith(top: 10),
+                  padding: const EdgeInsets.symmetric(horizontal: 10).copyWith(top: 10),
                   child: _searchBarAndFilter(),
                 ),
 
@@ -103,7 +102,7 @@ class MyAppointments_screenState extends State<MyAppointments> {
                       } else if (snapshot.hasError) {
                         return const Center(
                           child: Text(
-                            'No appointments found!',
+                            'No Appointments Found!',
                             style: TextStyle(
                               fontSize: 12.0,
                               color: Colors.black,
@@ -113,8 +112,7 @@ class MyAppointments_screenState extends State<MyAppointments> {
                           ),
                         );
                       } else {
-                        List<MyAppointment_Model> data =
-                            provider.proAppointments;
+                        List<MyAppointment_Model> data = provider.proAppointments;
                         if (data.isNotEmpty) {
                           return Padding(
                             padding: const EdgeInsets.all(10.0),
@@ -140,7 +138,7 @@ class MyAppointments_screenState extends State<MyAppointments> {
                         } else {
                           return const Center(
                             child: Text(
-                              'No appointmens available',
+                              'No Appointments Available',
                               style: TextStyle(
                                 fontSize: 12.0,
                                 color: Colors.black,
@@ -181,17 +179,10 @@ class MyAppointments_screenState extends State<MyAppointments> {
   }
 
   Future<List<MyAppointment_Model>> fetchMyAppointments(int? userId) async {
-    final url = Uri.parse(
-        'http://182.18.157.215/SaloonApp/API/api/Appointment/GetAppointmentByUserid');
+    final url = Uri.parse('http://182.18.157.215/SaloonApp/API/api/Appointment/GetAppointmentByUserid');
 
     try {
-      final request = {
-        "userid": userId,
-        "branchId": null,
-        "fromdate": null,
-        "toDate": null,
-        "statustypeId": null
-      };
+      final request = {"userid": userId, "branchId": null, "fromdate": null, "toDate": null, "statustypeId": null};
       print('GetAppointmentByUserid: ${json.encode(request)}');
 
       final jsonResponse = await http.post(
@@ -209,12 +200,9 @@ class MyAppointments_screenState extends State<MyAppointments> {
           List<dynamic> listResult = response['listResult'];
 
           // Filter out records with "statusTypeId": 19
-          listResult =
-              listResult.where((item) => item['statusTypeId'] != 19).toList();
+          listResult = listResult.where((item) => item['statusTypeId'] != 19).toList();
 
-          List<MyAppointment_Model> result = listResult
-              .map((item) => MyAppointment_Model.fromJson(item))
-              .toList();
+          List<MyAppointment_Model> result = listResult.map((item) => MyAppointment_Model.fromJson(item)).toList();
 
           return result;
         } else {
@@ -222,8 +210,7 @@ class MyAppointments_screenState extends State<MyAppointments> {
         }
       } else {
         print('Request failed with status: ${jsonResponse.statusCode}');
-        throw Exception(
-            'Request failed with status: ${jsonResponse.statusCode}');
+        throw Exception('Request failed with status: ${jsonResponse.statusCode}');
       }
     } catch (error) {
       print('catch: $error');
@@ -233,7 +220,7 @@ class MyAppointments_screenState extends State<MyAppointments> {
 
   void refreshTheScreen() {
     CommonUtils.checkInternetConnectivity().then(
-          (isConnected) {
+      (isConnected) {
         if (isConnected) {
           print('The Internet Is Connected');
 
@@ -246,8 +233,7 @@ class MyAppointments_screenState extends State<MyAppointments> {
             rethrow;
           }
         } else {
-          CommonUtils.showCustomToastMessageLong(
-              'Please check your internet  connection', context, 1, 4);
+          CommonUtils.showCustomToastMessageLong('Please Check Your Internet  Connection', context, 1, 4);
           print('The Internet Is not  Connected');
         }
       },
@@ -270,8 +256,7 @@ class MyAppointments_screenState extends State<MyAppointments> {
                   hintText: 'Search Appointment',
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
-                    borderSide:
-                    const BorderSide(color: CommonUtils.primaryTextColor),
+                    borderSide: const BorderSide(color: CommonUtils.primaryTextColor),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderSide: const BorderSide(
@@ -296,9 +281,7 @@ class MyAppointments_screenState extends State<MyAppointments> {
             height: 45,
             width: 45,
             decoration: BoxDecoration(
-              color: myAppointmentsProvider!.filterStatus
-                  ? const Color.fromARGB(255, 220, 186, 243)
-                  : Colors.white,
+              color: myAppointmentsProvider!.filterStatus ? const Color.fromARGB(255, 220, 186, 243) : Colors.white,
               borderRadius: BorderRadius.circular(10),
               border: Border.all(
                 color: CommonUtils.primaryTextColor,
@@ -307,9 +290,7 @@ class MyAppointments_screenState extends State<MyAppointments> {
             child: IconButton(
               icon: SvgPicture.asset(
                 'assets/filter.svg',
-                color: myAppointmentsProvider!.filterStatus
-                    ? Colors.black
-                    : CommonUtils.primaryTextColor,
+                color: myAppointmentsProvider!.filterStatus ? Colors.black : CommonUtils.primaryTextColor,
                 width: 24,
                 height: 24,
               ),
@@ -336,20 +317,15 @@ class MyAppointments_screenState extends State<MyAppointments> {
 
   int parseDayFromDate(String dateString) {
     DateTime dateTime = DateTime.parse(dateString);
-    print(
-        'dateFormate: ${dateTime.day} - ${DateFormat.MMM().format(dateTime)} - ${dateTime.year}');
+    print('dateFormate: ${dateTime.day} - ${DateFormat.MMM().format(dateTime)} - ${dateTime.year}');
     // int ,       String ,                           int
-    return dateTime
-        .day; //[dateTime.day, DateFormat.MMM().format(dateTime), dateTime.year];
+    return dateTime.day; //[dateTime.day, DateFormat.MMM().format(dateTime), dateTime.year];
   }
 
   void filterAppointment(String input) {
     apiData!.then((data) {
       setState(() {
-        myAppointmentsProvider!.filterProviderData(data
-            .where((item) =>
-            item.branch.toLowerCase().contains(input.toLowerCase()))
-            .toList());
+        myAppointmentsProvider!.filterProviderData(data.where((item) => item.branch.toLowerCase().contains(input.toLowerCase())).toList());
       });
     });
   }
@@ -357,12 +333,10 @@ class MyAppointments_screenState extends State<MyAppointments> {
 
 class FilterAppointmentBottomSheet extends StatefulWidget {
   final int? userId;
-  const FilterAppointmentBottomSheet({Key? key, required this.userId})
-      : super(key: key);
+  const FilterAppointmentBottomSheet({Key? key, required this.userId}) : super(key: key);
 
   @override
-  State<FilterAppointmentBottomSheet> createState() =>
-      _FilterBottomSheetState();
+  State<FilterAppointmentBottomSheet> createState() => _FilterBottomSheetState();
 }
 
 class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
@@ -399,8 +373,7 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
   }
 
   Future<void> filterAppointments(Map<String, dynamic> requestBody) async {
-    final url = Uri.parse(
-        'http://182.18.157.215/SaloonApp/API/api/Appointment/GetAppointmentByUserid');
+    final url = Uri.parse('http://182.18.157.215/SaloonApp/API/api/Appointment/GetAppointmentByUserid');
 
     try {
       Map<String, dynamic> request = requestBody;
@@ -421,13 +394,10 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
           List<dynamic> listResult = response['listResult'];
 
           // Filter out records with "statusTypeId": 19
-          List<dynamic> filteredList =
-          listResult.where((item) => item['statusTypeId'] != 19).toList();
+          List<dynamic> filteredList = listResult.where((item) => item['statusTypeId'] != 19).toList();
 
           // Convert the filtered list to MyAppointment_Model objects if needed
-          myAppointmentsProvider.storeIntoProvider = filteredList
-              .map((item) => MyAppointment_Model.fromJson(item))
-              .toList();
+          myAppointmentsProvider.storeIntoProvider = filteredList.map((item) => MyAppointment_Model.fromJson(item)).toList();
         } else {
           myAppointmentsProvider.storeIntoProvider = [];
           throw Exception('No appointments found!');
@@ -435,8 +405,7 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
       } else {
         myAppointmentsProvider.storeIntoProvider = [];
         print('Request failed with status: ${jsonResponse.statusCode}');
-        throw Exception(
-            'Request failed with status: ${jsonResponse.statusCode}');
+        throw Exception('Request failed with status: ${jsonResponse.statusCode}');
       }
     } catch (error) {
       print('catch: $error');
@@ -476,7 +445,7 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                     },
                     child: const Text(
                       //MARK: Clear all filters
-                      'Clear all filters',
+                      'Clear All Filters',
                       style: CommonStyles.txSty_16blu_f5,
                     ),
                   ),
@@ -509,22 +478,18 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                           dismissible: true,
                           endDate: endDate,
                           startDate: startDate,
-                          maximumDate:
-                          DateTime.now().add(const Duration(days: 50)),
-                          minimumDate:
-                          DateTime.now().subtract(const Duration(days: 50)),
+                          maximumDate: DateTime.now().add(const Duration(days: 50)),
+                          minimumDate: DateTime.now().subtract(const Duration(days: 50)),
                           onApplyClick: (s, e) {
                             setState(() {
                               //MARK: Date
                               endDate = e;
                               startDate = s;
                               provider.getDisplayDate =
-                              '${startDate != null ? DateFormat("dd, MMM").format(startDate!) : '-'} / ${endDate != null ? DateFormat("dd, MMM").format(endDate!) : '-'}';
+                                  '${startDate != null ? DateFormat("dd, MMM").format(startDate!) : '-'} / ${endDate != null ? DateFormat("dd, MMM").format(endDate!) : '-'}';
                               From_todates.text = provider.getDisplayDate;
-                              provider.getApiFromDate =
-                                  DateFormat('yyyy-MM-dd').format(startDate!);
-                              provider.getApiToDate =
-                                  DateFormat('yyyy-MM-dd').format(endDate!);
+                              provider.getApiFromDate = DateFormat('yyyy-MM-dd').format(startDate!);
+                              provider.getApiToDate = DateFormat('yyyy-MM-dd').format(endDate!);
 
                               print('Filter apiFromDate: $apiFromDate');
                               print('Filter apiToDate: $apiToDate');
@@ -541,8 +506,7 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                       focusNode: DateofBirthdFocus,
                       readOnly: true,
                       decoration: InputDecoration(
-                        contentPadding: const EdgeInsets.only(
-                            top: 15, bottom: 10, left: 15, right: 15),
+                        contentPadding: const EdgeInsets.only(top: 15, bottom: 10, left: 15, right: 15),
                         focusedBorder: OutlineInputBorder(
                           borderSide: const BorderSide(
                             color: Color(0xFF0f75bc),
@@ -562,8 +526,7 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                         ),
                         hintText: 'Select Between Dates',
                         counterText: "",
-                        hintStyle: const TextStyle(
-                            color: Colors.grey, fontWeight: FontWeight.w400),
+                        hintStyle: const TextStyle(color: Colors.grey, fontWeight: FontWeight.w400),
                         prefixIcon: const Icon(Icons.calendar_today),
                       ),
                       //  validator: validatePassword,
@@ -577,12 +540,10 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                       child: FutureBuilder(
                           future: apiData,
                           builder: (context, snapshot) {
-                            if (snapshot.connectionState ==
-                                ConnectionState.waiting) {
+                            if (snapshot.connectionState == ConnectionState.waiting) {
                               return CircularProgressIndicator.adaptive(
                                 backgroundColor: Colors.transparent,
-                                valueColor:
-                                AlwaysStoppedAnimation<Color>(orangeColor),
+                                valueColor: AlwaysStoppedAnimation<Color>(orangeColor),
                               );
                             } else if (snapshot.hasError) {
                               return Text('Error: ${snapshot.error}');
@@ -594,10 +555,8 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                                   scrollDirection: Axis.horizontal,
                                   shrinkWrap: true,
                                   itemCount: data.length + 1,
-                                  itemBuilder:
-                                      (BuildContext context, int index) {
-                                    bool isSelected =
-                                        index == provider.selectedBranch;
+                                  itemBuilder: (BuildContext context, int index) {
+                                    bool isSelected = index == provider.selectedBranch;
                                     BranchModel branchmodel;
 
                                     if (index == 0) {
@@ -622,54 +581,37 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                                           provider.selectedBranch = index;
 
                                           // provider.getbranch = branchmodel.id;
-                                          provider.getApiBranchId =
-                                              branchmodel.id;
-                                          print(
-                                              'filter: ${provider.getbranch}');
-                                          print(
-                                              'filter brach id: ${provider.getApiBranchId}');
-                                          print(
-                                              'Filter branchmodel: ${branchmodel.id!}');
+                                          provider.getApiBranchId = branchmodel.id;
+                                          print('filter: ${provider.getbranch}');
+                                          print('filter brach id: ${provider.getApiBranchId}');
+                                          print('Filter branchmodel: ${branchmodel.id!}');
                                         });
                                       },
                                       child: Container(
-                                        margin: const EdgeInsets.symmetric(
-                                            horizontal: 4.0),
+                                        margin: const EdgeInsets.symmetric(horizontal: 4.0),
                                         decoration: BoxDecoration(
-                                          color: isSelected
-                                              ? orangeColor
-                                              : orangeColor.withOpacity(0.1),
+                                          color: isSelected ? orangeColor : orangeColor.withOpacity(0.1),
                                           border: Border.all(
-                                            color: isSelected
-                                                ? orangeColor
-                                                : orangeColor,
+                                            color: isSelected ? orangeColor : orangeColor,
                                             width: 1.0,
                                           ),
-                                          borderRadius:
-                                          BorderRadius.circular(8.0),
+                                          borderRadius: BorderRadius.circular(8.0),
                                         ),
                                         child: IntrinsicWidth(
                                           child: Column(
-                                            mainAxisAlignment:
-                                            MainAxisAlignment.center,
+                                            mainAxisAlignment: MainAxisAlignment.center,
                                             children: [
                                               Container(
-                                                padding:
-                                                const EdgeInsets.symmetric(
-                                                    horizontal: 10.0),
+                                                padding: const EdgeInsets.symmetric(horizontal: 10.0),
                                                 child: Row(
                                                   children: [
                                                     Text(
-                                                      branchmodel.name
-                                                          .toString(),
+                                                      branchmodel.name.toString(),
                                                       style: TextStyle(
                                                         fontSize: 12.0,
-                                                        fontWeight:
-                                                        FontWeight.bold,
+                                                        fontWeight: FontWeight.bold,
                                                         fontFamily: "Roboto",
-                                                        color: isSelected
-                                                            ? Colors.white
-                                                            : Colors.black,
+                                                        color: isSelected ? Colors.white : Colors.black,
                                                       ),
                                                     ),
                                                   ],
@@ -695,12 +637,10 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                       child: FutureBuilder(
                           future: prostatus,
                           builder: (context, snapshot) {
-                            if (snapshot.connectionState ==
-                                ConnectionState.waiting) {
+                            if (snapshot.connectionState == ConnectionState.waiting) {
                               return CircularProgressIndicator.adaptive(
                                 backgroundColor: Colors.transparent,
-                                valueColor:
-                                AlwaysStoppedAnimation<Color>(orangeColor),
+                                valueColor: AlwaysStoppedAnimation<Color>(orangeColor),
                               );
                             } else if (snapshot.hasError) {
                               return Text('Error: ${snapshot.error}');
@@ -708,9 +648,7 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                               List<Statusmodel> data = snapshot.data!;
 
                               // Filter out items with "typeCdId": 19
-                              data = data
-                                  .where((item) => item.typeCdId != 19)
-                                  .toList();
+                              data = data.where((item) => item.typeCdId != 19).toList();
 
                               return SizedBox(
                                 height: 40,
@@ -718,10 +656,8 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                                   scrollDirection: Axis.horizontal,
                                   shrinkWrap: true,
                                   itemCount: data.length + 1,
-                                  itemBuilder:
-                                      (BuildContext context, int index) {
-                                    bool isSelected =
-                                        index == provider.selectedstatus;
+                                  itemBuilder: (BuildContext context, int index) {
+                                    bool isSelected = index == provider.selectedstatus;
                                     Statusmodel status;
 
                                     if (index == 0) {
@@ -738,51 +674,36 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                                           provider.selectedStatus = index;
 
                                           // provider.getStatus = status.typeCdId;
-                                          provider.getApiStatusTypeId =
-                                              status.typeCdId;
-                                          print(
-                                              'filter: ${provider.getStatus}');
-                                          print(
-                                              'Filter status.typeCdId: ${status.typeCdId}');
+                                          provider.getApiStatusTypeId = status.typeCdId;
+                                          print('filter: ${provider.getStatus}');
+                                          print('Filter status.typeCdId: ${status.typeCdId}');
                                         });
                                       },
                                       child: Container(
-                                        margin: const EdgeInsets.symmetric(
-                                            horizontal: 4.0),
+                                        margin: const EdgeInsets.symmetric(horizontal: 4.0),
                                         decoration: BoxDecoration(
-                                          color: isSelected
-                                              ? orangeColor
-                                              : orangeColor.withOpacity(0.1),
+                                          color: isSelected ? orangeColor : orangeColor.withOpacity(0.1),
                                           border: Border.all(
-                                            color: isSelected
-                                                ? orangeColor
-                                                : orangeColor,
+                                            color: isSelected ? orangeColor : orangeColor,
                                             width: 1.0,
                                           ),
-                                          borderRadius:
-                                          BorderRadius.circular(8.0),
+                                          borderRadius: BorderRadius.circular(8.0),
                                         ),
                                         child: IntrinsicWidth(
                                           child: Column(
-                                            mainAxisAlignment:
-                                            MainAxisAlignment.center,
+                                            mainAxisAlignment: MainAxisAlignment.center,
                                             children: [
                                               Container(
-                                                padding:
-                                                const EdgeInsets.symmetric(
-                                                    horizontal: 10.0),
+                                                padding: const EdgeInsets.symmetric(horizontal: 10.0),
                                                 child: Row(
                                                   children: [
                                                     Text(
                                                       status.desc.toString(),
                                                       style: TextStyle(
                                                         fontSize: 12.0,
-                                                        fontWeight:
-                                                        FontWeight.bold,
+                                                        fontWeight: FontWeight.bold,
                                                         fontFamily: "Roboto",
-                                                        color: isSelected
-                                                            ? Colors.white
-                                                            : Colors.black,
+                                                        color: isSelected ? Colors.white : Colors.black,
                                                       ),
                                                     ),
                                                   ],
@@ -846,16 +767,11 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                                   // filterAppointments(widget.userId);
                                   filterAppointments({
                                     "userid": widget.userId,
-                                    "branchId":
-                                    myAppointmentsProvider.getApiBranchId,
-                                    "fromdate":
-                                    myAppointmentsProvider.getApiFromDate,
-                                    "toDate":
-                                    myAppointmentsProvider.getApiToDate,
-                                    "statustypeId": myAppointmentsProvider
-                                        .getApiStatusTypeId,
-                                  }).whenComplete(
-                                          () => provider.filterStatus = true);
+                                    "branchId": myAppointmentsProvider.getApiBranchId,
+                                    "fromdate": myAppointmentsProvider.getApiFromDate,
+                                    "toDate": myAppointmentsProvider.getApiToDate,
+                                    "statustypeId": myAppointmentsProvider.getApiStatusTypeId,
+                                  }).whenComplete(() => provider.filterStatus = true);
                                 },
                                 child: Container(
                                   // width: desiredWidth * 0.9,
@@ -895,20 +811,17 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
   Future<List<Statusmodel>> fetchstatus() async {
     final response = await http.get(Uri.parse(baseUrl + getstatus));
     if (response.statusCode == 200) {
-      final List<dynamic> responseData =
-      json.decode(response.body)['listResult'];
+      final List<dynamic> responseData = json.decode(response.body)['listResult'];
 
       print('Before filtering: $responseData');
 
       // Filter out items with "typeCdId": 19
-      final List<dynamic> filteredData =
-      responseData.where((item) => item['typeCdId'] != 19).toList();
+      final List<dynamic> filteredData = responseData.where((item) => item['typeCdId'] != 19).toList();
 
       print('After filtering: $filteredData');
 
       // Map the filtered data to Statusmodel
-      List<Statusmodel> result =
-      filteredData.map((json) => Statusmodel.fromJson(json)).toList();
+      List<Statusmodel> result = filteredData.map((json) => Statusmodel.fromJson(json)).toList();
 
       print('fetch branchname: ${result[0].desc}');
       return result;
@@ -920,10 +833,8 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
   Future<List<BranchModel>> fetchbranches() async {
     final response = await http.get(Uri.parse(baseUrl + getbranches));
     if (response.statusCode == 200) {
-      final List<dynamic> responseData =
-      json.decode(response.body)['listResult'];
-      List<BranchModel> result =
-      responseData.map((json) => BranchModel.fromJson(json)).toList();
+      final List<dynamic> responseData = json.decode(response.body)['listResult'];
+      List<BranchModel> result = responseData.map((json) => BranchModel.fromJson(json)).toList();
       print('fetch branchname: ${result[0].name}');
       return result;
     } else {
@@ -932,8 +843,7 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
   }
 
   Future<void> clearFilterAppointments(Map<String, dynamic> requestBody) async {
-    final url = Uri.parse(
-        'http://182.18.157.215/SaloonApp/API/api/Appointment/GetAppointmentByUserid');
+    final url = Uri.parse('http://182.18.157.215/SaloonApp/API/api/Appointment/GetAppointmentByUserid');
 
     try {
       Map<String, dynamic> request = requestBody;
@@ -954,13 +864,10 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
           List<dynamic> listResult = response['listResult'];
 
           // Filter out records with "statusTypeId": 19
-          List<dynamic> filteredList =
-          listResult.where((item) => item['statusTypeId'] != 19).toList();
+          List<dynamic> filteredList = listResult.where((item) => item['statusTypeId'] != 19).toList();
 
           // Convert the filtered list to MyAppointment_Model objects if needed
-          myAppointmentsProvider.storeIntoProvider = filteredList
-              .map((item) => MyAppointment_Model.fromJson(item))
-              .toList();
+          myAppointmentsProvider.storeIntoProvider = filteredList.map((item) => MyAppointment_Model.fromJson(item)).toList();
         } else {
           myAppointmentsProvider.storeIntoProvider = [];
           throw Exception('No appointments found!');
@@ -968,8 +875,7 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
       } else {
         myAppointmentsProvider.storeIntoProvider = [];
         print('Request failed with status: ${jsonResponse.statusCode}');
-        throw Exception(
-            'Request failed with status: ${jsonResponse.statusCode}');
+        throw Exception('Request failed with status: ${jsonResponse.statusCode}');
       }
     } catch (error) {
       print('catch: $error');
@@ -996,8 +902,7 @@ class OpCard extends StatefulWidget {
 
 class _OpCardState extends State<OpCard> {
   late List<dynamic> dateValues;
-  final TextEditingController _commentstexteditcontroller =
-  TextEditingController();
+  final TextEditingController _commentstexteditcontroller = TextEditingController();
   double rating_star = 0.0;
   int? userId;
 
@@ -1015,8 +920,7 @@ class _OpCardState extends State<OpCard> {
 
   List<dynamic> parseDateString(String dateString) {
     DateTime dateTime = DateTime.parse(dateString);
-    print(
-        'dateFormate: ${dateTime.day} - ${DateFormat.MMM().format(dateTime)} - ${dateTime.year}');
+    print('dateFormate: ${dateTime.day} - ${DateFormat.MMM().format(dateTime)} - ${dateTime.year}');
     //         int ,       String ,                           int
     return [dateTime.day, DateFormat.MMM().format(dateTime), dateTime.year];
   }
@@ -1027,9 +931,7 @@ class _OpCardState extends State<OpCard> {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       elevation: 5,
       child: Container(
-        height: widget.data.statusTypeId == 4 || widget.data.statusTypeId == 6
-            ? 90
-            : 120,
+        height: widget.data.statusTypeId == 4 || widget.data.statusTypeId == 6 ? 90 : 120,
         padding: const EdgeInsets.all(10),
         // decoration: BoxDecoration(
         //   borderRadius: BorderRadius.circular(10.0),
@@ -1107,10 +1009,8 @@ class _OpCardState extends State<OpCard> {
                                     color: Color(0xFF0f75bc),
                                   ),
                                 ),
-                                Text(widget.data.purposeOfVisit,
-                                    style: CommonStyles.txSty_16black_f5),
-                                Text(widget.data.branch,
-                                    style: CommonStyles.txSty_16black_f5),
+                                Text(widget.data.purposeOfVisit, style: CommonStyles.txSty_16black_f5),
+                                Text(widget.data.branch, style: CommonStyles.txSty_16black_f5),
                               ],
                             ),
                           ),
@@ -1119,8 +1019,7 @@ class _OpCardState extends State<OpCard> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
-                              statusBasedBgById(
-                                  widget.data.statusTypeId, widget.data.status),
+                              statusBasedBgById(widget.data.statusTypeId, widget.data.status),
                               // Text('status'),
                               const SizedBox(
                                 height: 10.0,
@@ -1137,9 +1036,7 @@ class _OpCardState extends State<OpCard> {
                                           color: CommonStyles.greenColor,
                                         ),
                                         Padding(
-                                          padding: const EdgeInsets.only(
-                                              right:
-                                              8.0), // Adjust the value as needed
+                                          padding: const EdgeInsets.only(right: 8.0), // Adjust the value as needed
                                           child: Text(
                                             '${widget.data.rating ?? 'No rating'}',
                                             style: CommonStyles.txSty_14g_f5,
@@ -1158,9 +1055,7 @@ class _OpCardState extends State<OpCard> {
 
                   // based on status hide this row
                   Row(
-                    mainAxisAlignment: widget.data.statusTypeId == 11
-                        ? MainAxisAlignment.start
-                        : MainAxisAlignment.end,
+                    mainAxisAlignment: widget.data.statusTypeId == 11 ? MainAxisAlignment.start : MainAxisAlignment.end,
                     children: [
                       verifyStatus(
                         widget.data,
@@ -1214,8 +1109,7 @@ class _OpCardState extends State<OpCard> {
         break;
     }
     return Container(
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(15), color: statusBgColor),
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(15), color: statusBgColor),
       padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 15),
       child: Row(
         children: [
@@ -1259,29 +1153,21 @@ class _OpCardState extends State<OpCard> {
                 child: Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(3),
-                    border: Border.all(
-                        color: isPastDate(data.date, data.slotDuration)
-                            ? Colors.grey
-                            : CommonStyles.primaryTextColor),
+                    border: Border.all(color: isPastDate(data.date, data.slotDuration) ? Colors.grey : CommonStyles.primaryTextColor),
                   ),
-                  padding:
-                  const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
+                  padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
                   child: Row(
                     children: [
                       SvgPicture.asset(
                         'assets/calendar-_3_.svg',
                         width: 13,
-                        color: isPastDate(data.date, data.slotDuration)
-                            ? Colors.grey
-                            : CommonUtils.primaryTextColor,
+                        color: isPastDate(data.date, data.slotDuration) ? Colors.grey : CommonUtils.primaryTextColor,
                       ),
                       Text(
                         '  Reschedule',
                         style: TextStyle(
                           fontSize: 15,
-                          color: isPastDate(data.date, data.slotDuration)
-                              ? Colors.grey
-                              : CommonUtils.primaryTextColor,
+                          color: isPastDate(data.date, data.slotDuration) ? Colors.grey : CommonUtils.primaryTextColor,
                         ),
                       ),
                     ],
@@ -1305,21 +1191,16 @@ class _OpCardState extends State<OpCard> {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(3),
                     border: Border.all(
-                      color: isPastDate(data.date, data.slotDuration)
-                          ? Colors.grey
-                          : CommonStyles.statusRedText,
+                      color: isPastDate(data.date, data.slotDuration) ? Colors.grey : CommonStyles.statusRedText,
                     ),
                   ),
-                  padding:
-                  const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
+                  padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
                   child: Row(
                     children: [
                       SvgPicture.asset(
                         'assets/calendar-xmark.svg',
                         width: 12,
-                        color: isPastDate(data.date, data.slotDuration)
-                            ? Colors.grey
-                            : CommonStyles.statusRedText,
+                        color: isPastDate(data.date, data.slotDuration) ? Colors.grey : CommonStyles.statusRedText,
                       ),
                       Text(
                         '  Cancel',
@@ -1327,9 +1208,7 @@ class _OpCardState extends State<OpCard> {
                           fontSize: 16,
                           fontFamily: "Calibri",
                           fontWeight: FontWeight.w500,
-                          color: isPastDate(data.date, data.slotDuration)
-                              ? Colors.grey
-                              : CommonStyles.statusRedText,
+                          color: isPastDate(data.date, data.slotDuration) ? Colors.grey : CommonStyles.statusRedText,
                         ),
                       ),
                     ],
@@ -1343,10 +1222,7 @@ class _OpCardState extends State<OpCard> {
         return const SizedBox();
       case 11: // FeedBack
         return Flexible(
-          child: Text('" ${data.review} "' ?? '',
-              overflow: TextOverflow.ellipsis,
-              maxLines: 2,
-              style: CommonStyles.txSty_16blu_f5),
+          child: Text('" ${data.review} "' ?? '', overflow: TextOverflow.ellipsis, maxLines: 2, style: CommonStyles.txSty_16blu_f5),
         );
 
       case 18: // Closed
@@ -1384,28 +1260,28 @@ class _OpCardState extends State<OpCard> {
         return const SizedBox();
       default:
         return const SizedBox();
-    //  return Container(
-    //     decoration: BoxDecoration(
-    //         borderRadius: BorderRadius.circular(3),
-    //         border: Border.all(color: CommonUtils.blackColor)),
-    //     padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
-    //     child: const Row(
-    //       children: [
-    //         Icon(
-    //           Icons.star_border_outlined,
-    //           size: 13,
-    //           color: CommonStyles.primaryTextColor,
-    //         ),
-    //         Text(
-    //           ' Rate Us',
-    //           style: TextStyle(
-    //             fontSize: 11,
-    //             color: CommonStyles.primaryTextColor,
-    //           ),
-    //         ),
-    //       ],
-    //     ),
-    //   );
+      //  return Container(
+      //     decoration: BoxDecoration(
+      //         borderRadius: BorderRadius.circular(3),
+      //         border: Border.all(color: CommonUtils.blackColor)),
+      //     padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
+      //     child: const Row(
+      //       children: [
+      //         Icon(
+      //           Icons.star_border_outlined,
+      //           size: 13,
+      //           color: CommonStyles.primaryTextColor,
+      //         ),
+      //         Text(
+      //           ' Rate Us',
+      //           style: TextStyle(
+      //             fontSize: 11,
+      //             color: CommonStyles.primaryTextColor,
+      //           ),
+      //         ),
+      //       ],
+      //     ),
+      //   );
     }
   }
 
@@ -1465,8 +1341,7 @@ class _OpCardState extends State<OpCard> {
               title: SingleChildScrollView(
                 child: Container(
                   width: MediaQuery.of(context).size.width,
-                  padding: const EdgeInsets.only(
-                      top: 15.0, left: 15.0, right: 15.0, bottom: 20.0),
+                  padding: const EdgeInsets.only(top: 15.0, left: 15.0, right: 15.0, bottom: 20.0),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10.0),
                     gradient: const LinearGradient(
@@ -1511,8 +1386,7 @@ class _OpCardState extends State<OpCard> {
                             direction: Axis.horizontal,
                             allowHalfRating: true,
                             itemCount: 5,
-                            itemPadding:
-                            const EdgeInsets.symmetric(horizontal: 1.0),
+                            itemPadding: const EdgeInsets.symmetric(horizontal: 1.0),
                             itemBuilder: (context, _) => const Icon(
                               Icons.star,
                               color: CommonUtils.primaryTextColor,
@@ -1525,17 +1399,14 @@ class _OpCardState extends State<OpCard> {
                             },
                           )),
                       Padding(
-                        padding:
-                        const EdgeInsets.only(left: 0, top: 10.0, right: 0),
+                        padding: const EdgeInsets.only(left: 0, top: 10.0, right: 0),
                         child: GestureDetector(
                           onTap: () async {},
                           child: Container(
                             height: 80,
                             width: MediaQuery.of(context).size.width,
                             decoration: BoxDecoration(
-                              border: Border.all(
-                                  color: CommonUtils.primaryTextColor,
-                                  width: 1.5),
+                              border: Border.all(color: CommonUtils.primaryTextColor, width: 1.5),
                               borderRadius: BorderRadius.circular(5.0),
                               color: Colors.white,
                             ),
@@ -1654,16 +1525,14 @@ class _OpCardState extends State<OpCard> {
     print('changedintoint$myInt');
     if (rating_star <= 0.0) {
       FocusScope.of(context).unfocus();
-      CommonUtils.showCustomToastMessageLong(
-          'Please Give Rating', context, 1, 4);
+      CommonUtils.showCustomToastMessageLong('Please Give Rating', context, 1, 4);
       isValid = false;
       hasValidationFailed = true;
     }
 
     if (isValid && _commentstexteditcontroller.text.trim().isEmpty) {
       FocusScope.of(context).unfocus();
-      CommonUtils.showCustomToastMessageLong(
-          'Please Enter Comments', context, 1, 4);
+      CommonUtils.showCustomToastMessageLong('Please Enter Comments', context, 1, 4);
       isValid = false;
       hasValidationFailed = true;
     }
@@ -1713,8 +1582,7 @@ class _OpCardState extends State<OpCard> {
         if (response.statusCode == 200) {
           print('Request sent successfully');
           //  fetchMyAppointments(userId);
-          CommonUtils.showCustomToastMessageLong(
-              'Feedback Successfully Submited', context, 0, 4);
+          CommonUtils.showCustomToastMessageLong('Feedback Successfully Submited', context, 0, 4);
           // refreshTheScreen();
           // if (index >= 0.0 && index < userfeedbacklist.length) {
           //   // Ensure index is within the valid range
@@ -1738,8 +1606,7 @@ class _OpCardState extends State<OpCard> {
             ),
           );
         } else {
-          print(
-              'Failed to send the request. Status code: ${response.statusCode}');
+          print('Failed to send the request. Status code: ${response.statusCode}');
         }
       } catch (e) {
         print('Error while sending : $e');
@@ -1776,8 +1643,7 @@ class _OpCardState extends State<OpCard> {
                 child: Text(
                   'Are You Sure You Want To Cancel Your  ${appointments.slotDuration} Slot At The${appointments.branch} Hair Fixing Zone',
                   style: CommonUtils.txSty_18b_fb,
-                  textAlign:
-                  TextAlign.center, // Optionally, align the text center
+                  textAlign: TextAlign.center, // Optionally, align the text center
                 ),
               ),
               const SizedBox(
@@ -1899,8 +1765,7 @@ class _OpCardState extends State<OpCard> {
       "Date": appointmens.date,
       "SlotTime": appointmens.slotTime,
       "CustomerName": appointmens.customerName,
-      "PhoneNumber":
-      appointmens.contactNumber, // Changed from appointments.phoneNumber
+      "PhoneNumber": appointmens.contactNumber, // Changed from appointments.phoneNumber
       "Email": appointmens.email,
       "GenderTypeId": appointmens.genderTypeId,
       "StatusTypeId": 6,
@@ -1944,17 +1809,12 @@ class _OpCardState extends State<OpCard> {
         } else {
           // Failure case
           // Handle failure scenario here
-          CommonUtils.showCustomToastMessageLong(
-              'The request should not be canceled within 30 minutes before slot',
-              context,
-              0,
-              2);
+          CommonUtils.showCustomToastMessageLong('The request should not be canceled within 30 minutes before slot', context, 0, 2);
         }
       } else {
         //showCustomToastMessageLong(
         // 'Failed to send the request', context, 1, 2);
-        print(
-            'Failed to send the request. Status code: ${response.statusCode}');
+        print('Failed to send the request. Status code: ${response.statusCode}');
       }
     } catch (e) {
       print('Error while sending : $e');
@@ -1986,8 +1846,7 @@ class _OpCardState extends State<OpCard> {
                 child: Text(
                   'Your Appointment Has Been Cancelled Successfully ',
                   style: CommonUtils.txSty_18b_fb,
-                  textAlign:
-                  TextAlign.center, // Optionally, align the text center
+                  textAlign: TextAlign.center, // Optionally, align the text center
                 ),
               ),
               const SizedBox(

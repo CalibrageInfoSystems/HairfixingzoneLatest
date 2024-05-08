@@ -540,7 +540,7 @@ class AddConsulationscreen_screenState extends State<AddConsulationscreen> {
                       const Row(
                         children: [
                           Text(
-                            'Remarks ',
+                            'Remark ',
                             style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
                           ),
                           Text(
@@ -555,7 +555,7 @@ class AddConsulationscreen_screenState extends State<AddConsulationscreen> {
                       TextFormField(
                         controller: remarksController,
                         maxLengthEnforcement: MaxLengthEnforcement.enforced,
-                        maxLength: 256,
+                        maxLength: 250,
                         maxLines: 6,
                         onTap: () {
                           setState(() {
@@ -594,6 +594,7 @@ class AddConsulationscreen_screenState extends State<AddConsulationscreen> {
                             ),
                           ),
                           hintText: 'Enter Remark ',
+                          counterText: "",
                           // counterText: "",
                           hintStyle: TextStyle(color: Colors.grey, fontWeight: FontWeight.w400),
                         ),
@@ -606,11 +607,11 @@ class AddConsulationscreen_screenState extends State<AddConsulationscreen> {
                                 selection: TextSelection.collapsed(offset: value.trimLeft().length),
                               );
                             }
-                            if (value.length > 256) {
+                            if (value.length > 250) {
                               // Trim the text if it exceeds 256 characters
                               remarksController.value = TextEditingValue(
-                                text: value.substring(0, 256),
-                                selection: TextSelection.collapsed(offset: 256),
+                                text: value.substring(0, 250),
+                                selection: TextSelection.collapsed(offset: 250),
                               );
                             }
                             _remarksError = false;

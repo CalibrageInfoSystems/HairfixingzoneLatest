@@ -130,68 +130,68 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //  backgroundColor: CommonStyles.primaryTextColor,
+        //  backgroundColor: CommonStyles.primaryTextColor,
         // appBar: _appBar(),
         body: IntrinsicHeight(
-          child: Column(
-            children: [
-              //MARK: Welcome Text
-         //     welcomeText(),
-              //MARK: Main Card
-              Expanded(
-                child: Container(
-                  height: MediaQuery.of(context).size.height,
-                  decoration: const BoxDecoration(
-                    color: CommonStyles.whiteColor,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(20),
-                      topRight: Radius.circular(20),
-                    ),
-                  ),
-                  child: Column(
+      child: Column(
+        children: [
+          //MARK: Welcome Text
+          //     welcomeText(),
+          //MARK: Main Card
+          Expanded(
+            child: Container(
+              height: MediaQuery.of(context).size.height,
+              decoration: const BoxDecoration(
+                color: CommonStyles.whiteColor,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(20),
+                  topRight: Radius.circular(20),
+                ),
+              ),
+              child: Column(
+                children: [
+                  marquee(),
+                  Column(
                     children: [
-                      marquee(),
-                      Column(
-                        children: [
-                          carousel(),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              for (int i = 0; i < _items.length; i++)
-                                Container(
-                                  margin: const EdgeInsets.all(2),
-                                  width: 10,
-                                  height: 10,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    border: Border.all(color: CommonStyles.primaryTextColor, width: 1.5),
-                                    color: _currentPage == i ? Colors.grey.withOpacity(0.9) : Colors.transparent,
-                                  ),
-                                )
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 15,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 20),
-                            child: Column(
-                              children: [
-                                screens(),
-                                const SizedBox(height: 10),
-                                agentBranches(),
-                              ],
-                            ),
-                          ),
+                      carousel(),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          for (int i = 0; i < _items.length; i++)
+                            Container(
+                              margin: const EdgeInsets.all(2),
+                              width: 10,
+                              height: 10,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(color: CommonStyles.primaryTextColor, width: 1.5),
+                                color: _currentPage == i ? Colors.grey.withOpacity(0.9) : Colors.transparent,
+                              ),
+                            )
                         ],
+                      ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Column(
+                          children: [
+                            screens(),
+                            const SizedBox(height: 10),
+                            agentBranches(),
+                          ],
+                        ),
                       ),
                     ],
                   ),
-                ),
-              )
-            ],
-          ),
-        ));
+                ],
+              ),
+            ),
+          )
+        ],
+      ),
+    ));
   }
 
   getMarqueeText() async {

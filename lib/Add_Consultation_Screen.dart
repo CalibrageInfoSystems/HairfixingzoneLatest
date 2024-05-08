@@ -1,12 +1,13 @@
 import 'dart:convert';
 import 'package:flutter/widgets.dart';
+import 'package:hairfixingzone/AgentDashBoard.dart';
+import 'package:hairfixingzone/AgentHome.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'AgentHome.dart';
 import 'Common/custom_button.dart';
 import 'Common/custome_form_field.dart';
 import 'CommonUtils.dart';
@@ -28,16 +29,16 @@ class AddConsulationscreen_screenState extends State<Add_Consulation_screen> {
   List<dynamic> BranchesdropdownItems = [];
   String? selectedName;
   late int selectedValue;
-  FocusNode _focusNode = FocusNode();
+  FocusNode remarksFocus = FocusNode();
   String? branchName;
   int? branchValue;
   int selectedTypeCdId = -1;
+  int branchselectedTypeCdId = -1;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   TextEditingController fullNameController = TextEditingController();
   TextEditingController dobController = TextEditingController();
   TextEditingController genderController = TextEditingController();
   TextEditingController mobileNumberController = TextEditingController();
-  FocusNode remarksFocus = FocusNode();
 
   TextEditingController emailController = TextEditingController();
   TextEditingController remarksController = TextEditingController();
@@ -47,19 +48,22 @@ class AddConsulationscreen_screenState extends State<Add_Consulation_screen> {
   String? _dobErrorMsg;
   bool _emailError = false;
   String? _emailErrorMsg;
+
+  bool _remarksError = false;
+  String? _remarksErrorMsg;
+
   bool _mobileNumberError = false;
   String? _mobileNumberErrorMsg;
   bool _altNumberError = false;
   String? _altNumberErrorMsg;
-  bool _remarksError = false;
-  String? _remarksErrorMsg;
-  bool isRemarksValidate = false;
+
   bool isFullNameValidate = false;
   bool isDobValidate = false;
   bool isGenderValidate = false;
   bool isMobileNumberValidate = false;
   bool isAltMobileNumberValidate = false;
   bool isEmailValidate = false;
+  bool isRemarksValidate = false;
   bool isGenderSelected = false;
   bool isBranchSelected = false;
   int? Id;
@@ -206,7 +210,9 @@ class AddConsulationscreen_screenState extends State<Add_Consulation_screen> {
                               FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z]')),
                             ],
                             controller: fullNameController,
+                            maxLength: 40,
                             keyboardType: TextInputType.name,
+
                             errorText: _fullNameError ? _fullNameErrorMsg : null,
                             onChanged: (value) {
                               //MARK: Space restrict
@@ -253,7 +259,7 @@ class AddConsulationscreen_screenState extends State<Add_Consulation_screen> {
                           ),
 
                           Padding(
-                            padding: const EdgeInsets.only(left: 0, top: 5.0, right: 0),
+                            padding: const EdgeInsets.only(left: 0, top: 0.0, right: 0),
                             child: Container(
                               width: MediaQuery.of(context).size.width,
                               decoration: BoxDecoration(
@@ -320,7 +326,7 @@ class AddConsulationscreen_screenState extends State<Add_Consulation_screen> {
                                 Padding(
                                   padding: EdgeInsets.symmetric(horizontal: 16, vertical: 5),
                                   child: Text(
-                                    'Please select gender',
+                                    'Please Select Gender',
                                     style: TextStyle(
                                       color: Color.fromARGB(255, 175, 15, 4),
                                       fontSize: 12,
@@ -382,7 +388,7 @@ class AddConsulationscreen_screenState extends State<Add_Consulation_screen> {
                           ),
                           TextFormField(
                             controller: emailController,
-                            maxLength: 60,
+                            maxLength: 40,
                             maxLengthEnforcement: MaxLengthEnforcement.enforced,
                             keyboardType: TextInputType.emailAddress,
                             onTap: () {
@@ -425,7 +431,7 @@ class AddConsulationscreen_screenState extends State<Add_Consulation_screen> {
                               ),
                               hintText: 'Enter Email',
                               counterText: "",
-                              hintStyle: const TextStyle(color: Colors.grey, fontWeight: FontWeight.w400),
+                              hintStyle: TextStyle(color: Colors.grey, fontWeight: FontWeight.w400),
                             ),
                             validator: validateEmail,
                             onChanged: (value) {
@@ -465,7 +471,7 @@ class AddConsulationscreen_screenState extends State<Add_Consulation_screen> {
                                 child: ButtonTheme(
                                   alignedDropdown: true,
                                   child: DropdownButton<int>(
-                                      value: selectedTypeCdId,
+                                      value: branchselectedTypeCdId,
                                       iconSize: 30,
                                       icon: null,
                                       style: const TextStyle(
@@ -473,10 +479,10 @@ class AddConsulationscreen_screenState extends State<Add_Consulation_screen> {
                                       ),
                                       onChanged: (value) {
                                         setState(() {
-                                          selectedTypeCdId = value!;
-                                          if (selectedTypeCdId != -1) {
-                                            branchValue = BranchesdropdownItems[selectedTypeCdId]['id'];
-                                            branchName = BranchesdropdownItems[selectedTypeCdId]['name'];
+                                          branchselectedTypeCdId = value!;
+                                          if (branchselectedTypeCdId != -1) {
+                                            branchValue = BranchesdropdownItems[branchselectedTypeCdId]['id'];
+                                            branchName = BranchesdropdownItems[branchselectedTypeCdId]['name'];
 
                                             print("branchValue:$branchValue");
                                             print("branchName:$branchName");
@@ -512,7 +518,7 @@ class AddConsulationscreen_screenState extends State<Add_Consulation_screen> {
                           ),
                           //MARK: Gender condition
                           if (isBranchSelected)
-                            const Row(
+                            Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 Padding(
@@ -534,7 +540,7 @@ class AddConsulationscreen_screenState extends State<Add_Consulation_screen> {
                           const Row(
                             children: [
                               Text(
-                                'Remarks ',
+                                'Remark ',
                                 style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
                               ),
                               Text(
@@ -549,7 +555,7 @@ class AddConsulationscreen_screenState extends State<Add_Consulation_screen> {
                           TextFormField(
                             controller: remarksController,
                             maxLengthEnforcement: MaxLengthEnforcement.enforced,
-                            maxLength: 256,
+                            maxLength: 250,
                             maxLines: 6,
                             onTap: () {
                               setState(() {
@@ -587,8 +593,9 @@ class AddConsulationscreen_screenState extends State<Add_Consulation_screen> {
                                   Radius.circular(10),
                                 ),
                               ),
-                              hintText: 'Enter Remarks',
+                              hintText: 'Enter Remark ',
                               counterText: "",
+                              // counterText: "",
                               hintStyle: TextStyle(color: Colors.grey, fontWeight: FontWeight.w400),
                             ),
                             validator: validateremarks,
@@ -600,30 +607,54 @@ class AddConsulationscreen_screenState extends State<Add_Consulation_screen> {
                                     selection: TextSelection.collapsed(offset: value.trimLeft().length),
                                   );
                                 }
-                                if (value.length > 256) {
+                                if (value.length > 250) {
                                   // Trim the text if it exceeds 256 characters
                                   remarksController.value = TextEditingValue(
-                                    text: value.substring(0, 256),
-                                    selection: TextSelection.collapsed(offset: 256),
+                                    text: value.substring(0, 250),
+                                    selection: TextSelection.collapsed(offset: 250),
                                   );
                                 }
                                 _remarksError = false;
                               }); // Update the UI when text changes
                             },
                           ),
+                          // Align(
+                          //   alignment: Alignment.centerRight,
+                          //   child: Positioned(
+                          //     bottom: 8.0,
+                          //     right: 8.0,
+                          //     child: Container(
+                          //       padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+                          //       // decoration: BoxDecoration(
+                          //       //   color: Colors.black.withOpacity(0.6),
+                          //       //   borderRadius: BorderRadius.circular(4.0),
+                          //       // ),
+                          //       child: Text(
+                          //         '${remarksController.text.length}/${remarksController.text.length > 256 ? 256 : 256}',
+                          //         style: TextStyle(
+                          //           color: Colors.black,
+                          //           fontSize: 12,
+                          //           fontWeight: FontWeight.bold,
+                          //           fontFamily: 'Calibri',
+                          //         ),
+                          //       ),
+                          //     ),
+                          //   ),
+                          // ),
+
+                          const SizedBox(
+                            height: 10,
+                          ),
                           Row(
                             children: [
                               Expanded(
                                 child: CustomButton(
-                                  buttonText: 'Add Consulation',
+                                  buttonText: 'Add Consultation',
                                   color: CommonUtils.primaryTextColor,
                                   onPressed: validating,
                                 ),
                               ),
                             ],
-                          ),
-                          const SizedBox(
-                            height: 10,
                           ),
                         ],
                       ))),
@@ -632,22 +663,13 @@ class AddConsulationscreen_screenState extends State<Add_Consulation_screen> {
 
   Future<void> validating() async {
     validateGender(selectedName);
+    validatebranch(branchName);
     if (_formKey.currentState!.validate()) {
       updateUser();
     }
   }
 
 //MARK: Validations
-  String? validateremarks(String? value) {
-    if (value!.isEmpty) {
-      setState(() {
-        _remarksError = true;
-        _remarksErrorMsg = 'Please Enter Remarks';
-      });
-      isRemarksValidate = false;
-      return null;
-    }
-  }
 
   String? validatefullname(String? value) {
     if (value!.isEmpty) {
@@ -702,7 +724,29 @@ class AddConsulationscreen_screenState extends State<Add_Consulation_screen> {
       isGenderSelected = false;
       isGenderValidate = true;
     }
-    setState(() {});
+    //   setState(() {});
+  }
+
+  String? validateremarks(String? value) {
+    if (value!.isEmpty) {
+      setState(() {
+        _remarksError = true;
+        _remarksErrorMsg = 'Please Enter Remark';
+      });
+      isRemarksValidate = false;
+      return null;
+    }
+  }
+
+  void validatebranch(String? value) {
+    if (value == null || value.isEmpty) {
+      isBranchSelected = true;
+      isGenderValidate = false;
+    } else {
+      isBranchSelected = false;
+      isGenderValidate = true;
+    }
+    //  setState(() {});
   }
 
   String? validateEmail(String? value) {
@@ -764,6 +808,7 @@ class AddConsulationscreen_screenState extends State<Add_Consulation_screen> {
 
   Future<void> updateUser() async {
     validateGender(selectedName);
+    validatebranch(branchName);
     if (_formKey.currentState!.validate()) {
       DateTime now = DateTime.now();
       String mobilenumber = mobileNumberController.text;
@@ -803,15 +848,15 @@ class AddConsulationscreen_screenState extends State<Add_Consulation_screen> {
         if (response.statusCode == 200) {
           print('Request sent successfully');
 
-          CommonUtils.showCustomToastMessageLong('$statusMessage', context, 0, 2);
+          CommonUtils.showCustomToastMessageLong('$statusMessage', context, 0, 5);
           print('${response.body}');
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => AgentHome(userId: widget.agentId)),
           );
-          //    Navigator.pop(context);
+          // Navigator.pop(context);
         } else {
-          CommonUtils.showCustomToastMessageLong('$statusMessage', context, 1, 2);
+          CommonUtils.showCustomToastMessageLong('$statusMessage', context, 1, 5);
           print('Failed to send the request. Status code: ${response.statusCode}');
         }
       } catch (e) {

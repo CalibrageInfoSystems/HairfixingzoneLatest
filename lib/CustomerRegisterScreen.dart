@@ -440,7 +440,7 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
                                   errorText: _mobileNumberError ? _mobileNumberErrorMsg : null,
                                   onChanged: (value) {
                                     setState(() {
-                                      if (value.length == 1 && ['1', '2', '3', '4'].contains(value)) {
+                                      if (value.length == 1 && ['0', '1', '2', '3', '4'].contains(value)) {
                                         mobileNumberController.clear();
                                       }
                                       if (value.startsWith(' ')) {
@@ -524,7 +524,7 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
                                       validator: validateAlterMobilenum,
                                       onChanged: (value) {
                                         setState(() {
-                                          if (value.length == 1 && ['1', '2', '3', '4'].contains(value)) {
+                                          if (value.length == 1 && ['0', '1', '2', '3', '4'].contains(value)) {
                                             alernateMobileNumberController.clear();
                                           }
                                           if (value.startsWith(' ')) {
@@ -1136,7 +1136,7 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
     } else if (!RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(value)) {
       setState(() {
         _emailError = true;
-        _emailErrorMsg = 'Please Enter a Valid Email Address';
+        _emailErrorMsg = 'Please Enter a Valid Email';
       });
       isEmailValidate = false;
       return null;
@@ -1373,7 +1373,9 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
             bool isSuccess = data['isSuccess'];
             if (isSuccess == true) {
               print('Request sent successfully');
-              CommonUtils.showCustomToastMessageLong('${data['statusMessage']}', context, 0, 2);
+              CommonUtils.showCustomToastMessageLong('User Registered Successfully}', context, 0, 2);
+
+              /// CommonUtils.showCustomToastMessageLong('${data['statusMessage']}', context, 0, 2);
               Navigator.pop(context);
             } else {
               // CommonStyles.stopProgress(context);

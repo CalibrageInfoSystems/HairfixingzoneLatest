@@ -103,13 +103,10 @@ class MyProducts_screenState extends State<MyProducts> {
       final response = await http.get(url);
       if (response.statusCode == 200) {
         final dynamic responseData = jsonDecode(response.body);
-        if (responseData != null &&
-            responseData['listResult'] is List<dynamic>) {
+        if (responseData != null && responseData['listResult'] is List<dynamic>) {
           final List<dynamic> optionsData = responseData['listResult'];
           setState(() {
-            options = optionsData
-                .map((data) => RadioButtonOption.fromJson(data))
-                .toList();
+            options = optionsData.map((data) => RadioButtonOption.fromJson(data)).toList();
           });
         } else {
           throw Exception('Invalid response format');
@@ -123,13 +120,10 @@ class MyProducts_screenState extends State<MyProducts> {
   }
 
   Future<List<ProductCategory>> fetchProductsCategory() async {
-    final response = await http
-        .get(Uri.parse('http://182.18.157.215/SaloonApp/API/GetProduct/6'));
+    final response = await http.get(Uri.parse('http://182.18.157.215/SaloonApp/API/GetProduct/6'));
     if (response.statusCode == 200) {
-      final List<dynamic> responseData =
-      json.decode(response.body)['listResult'];
-      List<ProductCategory> result =
-      responseData.map((json) => ProductCategory.fromJson(json)).toList();
+      final List<dynamic> responseData = json.decode(response.body)['listResult'];
+      List<ProductCategory> result = responseData.map((json) => ProductCategory.fromJson(json)).toList();
       print('fetchProductsCategory: ${result[0].desc}');
       return result;
     } else {
@@ -139,7 +133,7 @@ class MyProducts_screenState extends State<MyProducts> {
 
   void refreshTheScreen() {
     CommonUtils.checkInternetConnectivity().then(
-          (isConnected) {
+      (isConnected) {
         if (isConnected) {
           try {
             initializeData();
@@ -148,8 +142,7 @@ class MyProducts_screenState extends State<MyProducts> {
             rethrow;
           }
         } else {
-          CommonUtils.showCustomToastMessageLong(
-              'Please check your internet  connection', context, 1, 4);
+          CommonUtils.showCustomToastMessageLong('Please Check Your Internet Connection', context, 1, 4);
           print('The Internet Is not  Connected');
         }
       },
@@ -170,8 +163,7 @@ class MyProducts_screenState extends State<MyProducts> {
               children: [
                 // search and filter
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 0)
-                      .copyWith(top: 10),
+                  padding: const EdgeInsets.symmetric(horizontal: 0).copyWith(top: 10),
                   child: _searchBarAndFilter(),
                 ),
 
@@ -181,8 +173,7 @@ class MyProducts_screenState extends State<MyProducts> {
                     builder: (context, provider, _) => FutureBuilder(
                       future: apiData,
                       builder: (context, snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
+                        if (snapshot.connectionState == ConnectionState.waiting) {
                           return const Center(
                             child: CircularProgressIndicator.adaptive(),
                           );
@@ -210,7 +201,7 @@ class MyProducts_screenState extends State<MyProducts> {
                           } else {
                             return const Center(
                               child: Text(
-                                'No products found!',
+                                'No Products Found!',
                                 style: TextStyle(
                                   fontSize: 12.0,
                                   color: Colors.black,
@@ -233,16 +224,11 @@ class MyProducts_screenState extends State<MyProducts> {
     );
   }
 
-  Future<List<ProductList>> fetchproducts(
-      {int? id, int? categoryTypeId, int? genderTypeId}) async {
+  Future<List<ProductList>> fetchproducts({int? id, int? categoryTypeId, int? genderTypeId}) async {
     const apiurl = 'http://182.18.157.215/SaloonApp/API/GetProductById';
 
     try {
-      final request = {
-        "id": id,
-        "categoryTypeId": categoryTypeId,
-        "genderTypeId": genderTypeId
-      };
+      final request = {"id": id, "categoryTypeId": categoryTypeId, "genderTypeId": genderTypeId};
       final response = await http.post(
         Uri.parse(apiurl),
         body: json.encode(request),
@@ -256,8 +242,7 @@ class MyProducts_screenState extends State<MyProducts> {
         final data = json.decode(response.body);
         if (data['listResult'] != null) {
           List<dynamic> list = data['listResult'];
-          List<ProductList> result =
-          list.map((item) => ProductList.fromJson(item)).toList();
+          List<ProductList> result = list.map((item) => ProductList.fromJson(item)).toList();
           return result;
         } else {
           print('listResult is null');
@@ -294,8 +279,7 @@ class MyProducts_screenState extends State<MyProducts> {
                   // suffixIcon: const Icon(Icons.search),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
-                    borderSide:
-                    const BorderSide(color: CommonUtils.primaryTextColor),
+                    borderSide: const BorderSide(color: CommonUtils.primaryTextColor),
                   ),
 
                   focusedBorder: OutlineInputBorder(
@@ -320,9 +304,7 @@ class MyProducts_screenState extends State<MyProducts> {
             height: 45,
             width: 45,
             decoration: BoxDecoration(
-              color: myProductProvider.filterStatus
-                  ? const Color.fromARGB(255, 171, 111, 211)
-                  : Colors.white,
+              color: myProductProvider.filterStatus ? const Color.fromARGB(255, 171, 111, 211) : Colors.white,
               borderRadius: BorderRadius.circular(10),
               border: Border.all(
                 color: CommonUtils.primaryTextColor,
@@ -331,9 +313,7 @@ class MyProducts_screenState extends State<MyProducts> {
             child: IconButton(
               icon: SvgPicture.asset(
                 'assets/filter.svg', // Path to your SVG asset
-                color: myProductProvider.filterStatus
-                    ? Colors.black
-                    : const Color(0xFF662e91),
+                color: myProductProvider.filterStatus ? Colors.black : const Color(0xFF662e91),
                 width: 24, // Adjust width as needed
                 height: 24, // Adjust height as needed
               ),
@@ -360,10 +340,7 @@ class MyProducts_screenState extends State<MyProducts> {
   void filterProducts(String input) {
     apiData.then((data) {
       setState(() {
-        myProductProvider.storeIntoProvider(data
-            .where(
-                (item) => item.name.toLowerCase().contains(input.toLowerCase()))
-            .toList());
+        myProductProvider.storeIntoProvider(data.where((item) => item.name.toLowerCase().contains(input.toLowerCase())).toList());
       });
     });
   }
@@ -396,9 +373,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
   }
 
   Future<void> filterProducts() async {
-    apiData = fetchproducts(
-        genderTypeId: myProductProvider.getGender,
-        categoryTypeId: myProductProvider.getCategory);
+    apiData = fetchproducts(genderTypeId: myProductProvider.getGender, categoryTypeId: myProductProvider.getCategory);
     apiData.then((data) {
       myProductProvider.getProProducts = data;
       // Navigator.of(context).pop();
@@ -426,16 +401,11 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
     myProductProvider = Provider.of<MyProductProvider>(context);
   }
 
-  Future<List<ProductList>> fetchproducts(
-      {int? id, int? categoryTypeId, int? genderTypeId}) async {
+  Future<List<ProductList>> fetchproducts({int? id, int? categoryTypeId, int? genderTypeId}) async {
     const apiurl = 'http://182.18.157.215/SaloonApp/API/GetProductById';
 
     try {
-      final request = {
-        "id": id,
-        "categoryTypeId": categoryTypeId,
-        "genderTypeId": genderTypeId
-      };
+      final request = {"id": id, "categoryTypeId": categoryTypeId, "genderTypeId": genderTypeId};
       final response = await http.post(
         Uri.parse(apiurl),
         body: json.encode(request),
@@ -449,8 +419,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
         final data = json.decode(response.body);
         if (data['listResult'] != null) {
           List<dynamic> list = data['listResult'];
-          List<ProductList> result =
-          list.map((item) => ProductList.fromJson(item)).toList();
+          List<ProductList> result = list.map((item) => ProductList.fromJson(item)).toList();
           return result;
         } else {
           print('listResult is null');
@@ -493,7 +462,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                       });
                     },
                     child: const Text(
-                      'Clear all filters',
+                      'Clear All Filters',
                       style: CommonUtils.Mediumtext_o_14,
                     ),
                   ),
@@ -519,8 +488,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                           return Row(
                             children: [
                               CustomRadioButton(
-                                selected:
-                                provider.selectedGender == option.typeCdId,
+                                selected: provider.selectedGender == option.typeCdId,
                                 onTap: () {
                                   setState(() {
                                     provider.getGender = option.typeCdId;
@@ -559,12 +527,10 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                       child: FutureBuilder(
                           future: proCatogary,
                           builder: (context, snapshot) {
-                            if (snapshot.connectionState ==
-                                ConnectionState.waiting) {
+                            if (snapshot.connectionState == ConnectionState.waiting) {
                               return CircularProgressIndicator.adaptive(
                                 backgroundColor: Colors.transparent,
-                                valueColor:
-                                AlwaysStoppedAnimation<Color>(orangeColor),
+                                valueColor: AlwaysStoppedAnimation<Color>(orangeColor),
                               );
                             } else if (snapshot.hasError) {
                               return Text('Error: ${snapshot.error}');
@@ -576,10 +542,8 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                                   scrollDirection: Axis.horizontal,
                                   shrinkWrap: true,
                                   itemCount: data.length + 1,
-                                  itemBuilder:
-                                      (BuildContext context, int index) {
-                                    bool isSelected =
-                                        index == provider.selectedCategory;
+                                  itemBuilder: (BuildContext context, int index) {
+                                    bool isSelected = index == provider.selectedCategory;
                                     ProductCategory productCategory;
 
                                     if (index == 0) {
@@ -595,50 +559,35 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                                         setState(() {
                                           provider.selectedCategory = index;
 
-                                          provider.getCategory =
-                                              productCategory.typecdid;
-                                          print(
-                                              'filter: ${provider.getCategory}');
+                                          provider.getCategory = productCategory.typecdid;
+                                          print('filter: ${provider.getCategory}');
                                         });
                                       },
                                       child: Container(
-                                        margin: const EdgeInsets.symmetric(
-                                            horizontal: 4.0),
+                                        margin: const EdgeInsets.symmetric(horizontal: 4.0),
                                         decoration: BoxDecoration(
-                                          color: isSelected
-                                              ? orangeColor
-                                              : orangeColor.withOpacity(0.1),
+                                          color: isSelected ? orangeColor : orangeColor.withOpacity(0.1),
                                           border: Border.all(
-                                            color: isSelected
-                                                ? orangeColor
-                                                : orangeColor,
+                                            color: isSelected ? orangeColor : orangeColor,
                                             width: 1.0,
                                           ),
-                                          borderRadius:
-                                          BorderRadius.circular(8.0),
+                                          borderRadius: BorderRadius.circular(8.0),
                                         ),
                                         child: IntrinsicWidth(
                                           child: Column(
-                                            mainAxisAlignment:
-                                            MainAxisAlignment.center,
+                                            mainAxisAlignment: MainAxisAlignment.center,
                                             children: [
                                               Container(
-                                                padding:
-                                                const EdgeInsets.symmetric(
-                                                    horizontal: 10.0),
+                                                padding: const EdgeInsets.symmetric(horizontal: 10.0),
                                                 child: Row(
                                                   children: [
                                                     Text(
-                                                      productCategory.desc
-                                                          .toString(),
+                                                      productCategory.desc.toString(),
                                                       style: TextStyle(
                                                         fontSize: 12.0,
-                                                        fontWeight:
-                                                        FontWeight.bold,
+                                                        fontWeight: FontWeight.bold,
                                                         fontFamily: "Roboto",
-                                                        color: isSelected
-                                                            ? Colors.white
-                                                            : Colors.black,
+                                                        color: isSelected ? Colors.white : Colors.black,
                                                       ),
                                                     ),
                                                   ],
@@ -747,13 +696,10 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
       final response = await http.get(url);
       if (response.statusCode == 200) {
         final dynamic responseData = jsonDecode(response.body);
-        if (responseData != null &&
-            responseData['listResult'] is List<dynamic>) {
+        if (responseData != null && responseData['listResult'] is List<dynamic>) {
           final List<dynamic> optionsData = responseData['listResult'];
           setState(() {
-            options = optionsData
-                .map((data) => RadioButtonOption.fromJson(data))
-                .toList();
+            options = optionsData.map((data) => RadioButtonOption.fromJson(data)).toList();
           });
         } else {
           throw Exception('Invalid response format');
@@ -767,13 +713,10 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
   }
 
   Future<List<ProductCategory>> fetchProductsCategory() async {
-    final response = await http
-        .get(Uri.parse('http://182.18.157.215/SaloonApp/API/GetProduct/6'));
+    final response = await http.get(Uri.parse('http://182.18.157.215/SaloonApp/API/GetProduct/6'));
     if (response.statusCode == 200) {
-      final List<dynamic> responseData =
-      json.decode(response.body)['listResult'];
-      List<ProductCategory> result =
-      responseData.map((json) => ProductCategory.fromJson(json)).toList();
+      final List<dynamic> responseData = json.decode(response.body)['listResult'];
+      List<ProductCategory> result = responseData.map((json) => ProductCategory.fromJson(json)).toList();
       print('fetchProductsCategory: ${result[0].desc}');
       return result;
     } else {
