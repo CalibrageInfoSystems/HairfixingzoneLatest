@@ -552,7 +552,7 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                     },
                     child: const Text(
                       //MARK: Clear all filters
-                      'Clear all filters',
+                      'Clear All Filters',
                       style: CommonStyles.txSty_16blu_f5,
                     ),
                   ),
