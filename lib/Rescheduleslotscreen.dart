@@ -10,6 +10,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'Common/common_styles.dart';
 import 'Common/custom_button.dart';
 import 'CommonUtils.dart';
 import 'CustomRadioButton.dart';
@@ -66,6 +67,7 @@ class Slot {
     );
   }
 }
+
 class _BookingScreenState extends State<Rescheduleslotscreen> {
   List<String> timeSlots = [];
   List<String> availableSlots = [];
@@ -118,8 +120,7 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
   int selectedTypeCdId = -1; // Initial value for dropdown selection
   String selectedName = ''; // Prepopulated selectedName
 
-
-   int? selectedValue;
+  int? selectedValue;
   // String? selectedName;
   String userFullName = '';
   String email = '';
@@ -187,7 +188,6 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
         print('Not connected to the internet');
       }
     });
-
   }
 
   Future<void> getUserDataFromSharedPreferences() async {
@@ -253,7 +253,7 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
 
     Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(builder: (context) => CustomerLoginScreen()),
-          (route) => false,
+      (route) => false,
     );
   }
 
@@ -558,110 +558,110 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
                       Scrollbar(
                         child: isLoading
                             ? Center(
-                          child: CircularProgressIndicator(),
-                        )
+                                child: CircularProgressIndicator(),
+                              )
                             : isSlotsAvailable
-                            ? GridView.builder(
-                          shrinkWrap: true,
-                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 3,
-                            childAspectRatio: 2.5,
-                          ),
-                          itemCount: getVisibleSlots(slots, isTodayHoliday).length,
-                          itemBuilder: (BuildContext context, int i) {
-                            final visibleSlots = getVisibleSlots(slots, isTodayHoliday);
-                            if (i >= visibleSlots.length) {
-                              return SizedBox.shrink();
-                            }
+                                ? GridView.builder(
+                                    shrinkWrap: true,
+                                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 3,
+                                      childAspectRatio: 2.5,
+                                    ),
+                                    itemCount: getVisibleSlots(slots, isTodayHoliday).length,
+                                    itemBuilder: (BuildContext context, int i) {
+                                      final visibleSlots = getVisibleSlots(slots, isTodayHoliday);
+                                      if (i >= visibleSlots.length) {
+                                        return SizedBox.shrink();
+                                      }
 
-                            final slot = visibleSlots[i];
+                                      final slot = visibleSlots[i];
 
-                            return Container(
-                              margin: EdgeInsets.symmetric(vertical: 2, horizontal: 2),
-                              child: ElevatedButton(
-                                onPressed: slot.availableSlots <= 0
-                                    ? null
-                                    : () {
-                                  setState(() {
-                                    _selectedTimeSlot = slot.SlotTimeSpan;
-                                    _selectedSlot = slot.slot;
-                                    AvailableSlots = slot.availableSlots.toString();
-                                    timeSlotParts = _selectedSlot.split(' - ');
-                                    slotselection = true;
-                                    print('===123==$timeSlotParts[0]');
-                                    print('===12===$timeSlotParts[1]');
-                                    _selectedTimeSlot24 = DateFormat('HH:mm').format(DateFormat('h:mm a').parse(_selectedTimeSlot));
-                                    print('_selectedTimeSlot24 $_selectedTimeSlot24');
-                                    print('==234==$_selectedTimeSlot');
-                                    print('===567==$_selectedSlot');
-                                    print('==900==$AvailableSlots');
-                                  });
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  padding: EdgeInsets.symmetric(vertical: 1.0, horizontal: 1.0),
-                                  primary: _selectedTimeSlot == slot.SlotTimeSpan
-                                      ? CommonUtils.primaryTextColor
-                                      : (slot.availableSlots <= 0 ? Colors.grey : Colors.white),
-                                  side: BorderSide(
-                                    color: _selectedTimeSlot == slot.SlotTimeSpan
-                                        ? CommonUtils.primaryTextColor
-                                        : (slot.availableSlots <= 0 ? Colors.transparent : CommonUtils.primaryTextColor),
-                                    width: 1.0,
-                                  ),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(5.0),
-                                  ),
-                                  textStyle: TextStyle(
-                                    color: _selectedTimeSlot == slot.SlotTimeSpan ? Colors.white : Colors.black,
-                                  ),
-                                ),
-                                child: Text(
-                                  slot.SlotTimeSpan,
-                                  style: TextStyle(
-                                    color: _selectedTimeSlot == slot.SlotTimeSpan
-                                        ? Colors.white
-                                        : (slot.availableSlots <= 0 ? Colors.white : Colors.black),
-                                    fontFamily: 'Calibri',
-                                    fontSize: 12,
-                                  ),
-                                ),
-                              ),
-                            );
-                          },
-                        )
-                            : isTodayHoliday
-                            ? Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                'Today is a Holiday',
-                                style: TextStyle(
-                                  fontFamily: 'Calibri',
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                          ),
-                        )
-                        // Show your regular widget when today is not a holiday
+                                      return Container(
+                                        margin: EdgeInsets.symmetric(vertical: 2, horizontal: 2),
+                                        child: ElevatedButton(
+                                          onPressed: slot.availableSlots <= 0
+                                              ? null
+                                              : () {
+                                                  setState(() {
+                                                    _selectedTimeSlot = slot.SlotTimeSpan;
+                                                    _selectedSlot = slot.slot;
+                                                    AvailableSlots = slot.availableSlots.toString();
+                                                    timeSlotParts = _selectedSlot.split(' - ');
+                                                    slotselection = true;
+                                                    print('===123==$timeSlotParts[0]');
+                                                    print('===12===$timeSlotParts[1]');
+                                                    _selectedTimeSlot24 = DateFormat('HH:mm').format(DateFormat('h:mm a').parse(_selectedTimeSlot));
+                                                    print('_selectedTimeSlot24 $_selectedTimeSlot24');
+                                                    print('==234==$_selectedTimeSlot');
+                                                    print('===567==$_selectedSlot');
+                                                    print('==900==$AvailableSlots');
+                                                  });
+                                                },
+                                          style: ElevatedButton.styleFrom(
+                                            padding: EdgeInsets.symmetric(vertical: 1.0, horizontal: 1.0),
+                                            primary: _selectedTimeSlot == slot.SlotTimeSpan
+                                                ? CommonUtils.primaryTextColor
+                                                : (slot.availableSlots <= 0 ? Colors.grey : Colors.white),
+                                            side: BorderSide(
+                                              color: _selectedTimeSlot == slot.SlotTimeSpan
+                                                  ? CommonUtils.primaryTextColor
+                                                  : (slot.availableSlots <= 0 ? Colors.transparent : CommonUtils.primaryTextColor),
+                                              width: 1.0,
+                                            ),
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.circular(5.0),
+                                            ),
+                                            textStyle: TextStyle(
+                                              color: _selectedTimeSlot == slot.SlotTimeSpan ? Colors.white : Colors.black,
+                                            ),
+                                          ),
+                                          child: Text(
+                                            slot.SlotTimeSpan,
+                                            style: TextStyle(
+                                              color: _selectedTimeSlot == slot.SlotTimeSpan
+                                                  ? Colors.white
+                                                  : (slot.availableSlots <= 0 ? Colors.white : Colors.black),
+                                              fontFamily: 'Calibri',
+                                              fontSize: 12,
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  )
+                                : isTodayHoliday
+                                    ? Center(
+                                        child: Column(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              'Today is a Holiday',
+                                              style: TextStyle(
+                                                fontFamily: 'Calibri',
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      )
+                                    // Show your regular widget when today is not a holiday
 
-                            : Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                'No Slots Available',
-                                style: TextStyle(
-                                  fontFamily: 'Calibri',
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
+                                    : Center(
+                                        child: Column(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              'No Slots Available',
+                                              style: TextStyle(
+                                                fontFamily: 'Calibri',
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
                       ),
                       SizedBox(
                         height: 15,
@@ -685,57 +685,57 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
                       ),
                       SizedBox(height: 5),
 
-                  Padding(
-                    padding: EdgeInsets.only(left: 0, top: .0, right: 0),
-                    child: Container(
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10.0),
-                        border: Border.all(
-                          color: ispurposeselected ? const Color.fromARGB(255, 175, 15, 4) : CommonUtils.primaryTextColor,
-                        ),
-                      ),
-                      child: DropdownButtonHideUnderline(
-                        child: ButtonTheme(
-                          alignedDropdown: true,
-                          child: DropdownButton<int>(
-                            value: selectedTypeCdId,
-                            iconSize: 30,
-                            style: TextStyle(
-                              color: Colors.black,
+                      Padding(
+                        padding: EdgeInsets.only(left: 0, top: .0, right: 0),
+                        child: Container(
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10.0),
+                            border: Border.all(
+                              color: ispurposeselected ? const Color.fromARGB(255, 175, 15, 4) : CommonUtils.primaryTextColor,
                             ),
-                            onChanged: (value) {
-                              setState(() {
-                                selectedTypeCdId = value!;
-                                if (selectedTypeCdId != -1) {
-                                  selectedName = dropdownItems[selectedTypeCdId]['desc'];
-                                  print("selectedName:$selectedName");
-                                }
-                                ispurposeselected = false;
-                              });
-                            },
-                            items: [
-                              DropdownMenuItem<int>(
-                                value: -1,
-                                child: Text(
-                                  ' Purpose of Visit',
-                                  style: TextStyle(color: Colors.grey, fontWeight: FontWeight.w500),
+                          ),
+                          child: DropdownButtonHideUnderline(
+                            child: ButtonTheme(
+                              alignedDropdown: true,
+                              child: DropdownButton<int>(
+                                value: selectedTypeCdId,
+                                iconSize: 30,
+                                style: TextStyle(
+                                  color: Colors.black,
                                 ),
+                                onChanged: (value) {
+                                  setState(() {
+                                    selectedTypeCdId = value!;
+                                    if (selectedTypeCdId != -1) {
+                                      selectedName = dropdownItems[selectedTypeCdId]['desc'];
+                                      print("selectedName:$selectedName");
+                                    }
+                                    ispurposeselected = false;
+                                  });
+                                },
+                                items: [
+                                  DropdownMenuItem<int>(
+                                    value: -1,
+                                    child: Text(
+                                      ' Purpose of Visit',
+                                      style: TextStyle(color: Colors.grey, fontWeight: FontWeight.w500),
+                                    ),
+                                  ),
+                                  ...dropdownItems.asMap().entries.map((entry) {
+                                    final index = entry.key;
+                                    final item = entry.value;
+                                    return DropdownMenuItem<int>(
+                                      value: index,
+                                      child: Text(item['desc']),
+                                    );
+                                  }).toList(),
+                                ],
                               ),
-                              ...dropdownItems.asMap().entries.map((entry) {
-                                final index = entry.key;
-                                final item = entry.value;
-                                return DropdownMenuItem<int>(
-                                  value: index,
-                                  child: Text(item['desc']),
-                                );
-                              }).toList(),
-                            ],
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ),
 
                       if (ispurposeselected)
                         const Row(
@@ -780,10 +780,11 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
               ),
             )));
   }
+
   void validatePurpose(String? value) {
     if (!isSlotsAvailable) {
-      showCustomToastMessageLong('No Slots Available Today', context, 1, 4);}
-    else if (!slotselection) {
+      showCustomToastMessageLong('No Slots Available Today', context, 1, 4);
+    } else if (!slotselection) {
       showCustomToastMessageLong('Please Select A Slot', context, 1, 4);
     }
     // if (visablelength == disabledlength) {
@@ -813,7 +814,10 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
       print('url==>890: $url');
 
       DateTime now = DateTime.now();
+      ProgressDialog progressDialog = ProgressDialog(context);
 
+      // Show the progress dialog
+      progressDialog.show();
       String dateTimeString = now.toString();
       print('DateTime as String: $dateTimeString');
       print('DateTime as String: $selecteddate');
@@ -870,38 +874,43 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
           // Extract the necessary information
           bool isSuccess = data['isSuccess'];
           if (isSuccess == true) {
+            progressDialog.dismiss();
             print('Request sent successfully');
             Navigator.of(context).pushReplacement(
               MaterialPageRoute(
                   builder: (context) => SlotSuccessScreen(
-                    slotdate: slotdate,
-                    slottime: _selectedTimeSlot,
-                    Purpose: '$selectedName',
-                    slotbranchname:widget.data.branch,
-                    slotbrnach_address: widget.data.address!,
-                    phonenumber: widget.data.contactNumber,
-                    branchImage:widget.data.imagename,
-                    // phonenumber: null,
-                  )),
+                        slotdate: slotdate,
+                        slottime: _selectedTimeSlot,
+                        Purpose: '$selectedName',
+                        slotbranchname: widget.data.branch,
+                        slotbrnach_address: widget.data.address!,
+                        phonenumber: widget.data.contactNumber,
+                        branchImage: widget.data.imagename,
+                        // phonenumber: null,
+                      )),
             );
             // showCustomToastMessageLong('Slot booked successfully', context, 0, 2);
             // Navigator.pop(context);
             // Success case
             // Handle success scenario here
           } else {
+            progressDialog.dismiss();
             // Failure case
             // Handle failure scenario here
             CommonUtils.showCustomToastMessageLong('${data['statusMessage']}', context, 0, 2);
           }
           setState(() {
             isButtonEnabled = true;
+            progressDialog.dismiss();
           });
         } else {
+          progressDialog.dismiss();
           //showCustomToastMessageLong(
           // 'Failed to send the request', context, 1, 2);
           print('Failed to send the request. Status code: ${response.statusCode}');
         }
       } catch (e) {
+        progressDialog.dismiss();
         print('Error slot: $e');
       }
     }
@@ -1329,11 +1338,11 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
   }
 
   void showCustomToastMessageLong(
-      String message,
-      BuildContext context,
-      int backgroundColorType,
-      int length,
-      ) {
+    String message,
+    BuildContext context,
+    int backgroundColorType,
+    int length,
+  ) {
     final double screenWidth = MediaQuery.of(context).size.width;
     final double textWidth = screenWidth / 1.5; // Adjust multiplier as needed
 
@@ -1413,7 +1422,7 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
         print("selectedTypeCdId: $selectedTypeCdId"); // Print selectedTypeCdId
         if (selectedTypeCdId != -1) {
           selectedName = widget.data.purposeOfVisit;
-          selectedValue = widget.data.purposeOfVisitId;// Prepopulate selectedName
+          selectedValue = widget.data.purposeOfVisitId; // Prepopulate selectedName
         }
         print('BranchId:$BranchId');
         print('selectedName:$selectedName');

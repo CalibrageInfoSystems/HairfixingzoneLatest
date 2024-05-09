@@ -348,8 +348,11 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
       String? confirmnewpassword = _confirmNewController.text;
       // Print the username and password
       int id = widget.id;
-      CommonStyles.progressBar(context);
+      // CommonStyles.progressBar(context);
+      ProgressDialog progressDialog = ProgressDialog(context);
 
+      // Show the progress dialog
+      progressDialog.show();
       final String apiUrl = 'http://182.18.157.215/SaloonApp/API/ChangePassword';
 
       // Prepare the request body
@@ -383,7 +386,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
         // Show the appropriate toast message based on "isSuccess"
         if (isSuccess) {
           // Success case: show the success message
-          LoadingProgress.stop(context);
+          progressDialog.dismiss();
           Navigator.of(context).push(
             MaterialPageRoute(
               builder: (context) => HomeScreen(),
@@ -391,7 +394,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
           );
           CommonUtils.showCustomToastMessageLong('$statusMessage', context, 0, 5, toastPosition: MediaQuery.of(context).size.height / 2);
         } else {
-          LoadingProgress.stop(context);
+          progressDialog.dismiss();
           // Failure case: show the status message
           CommonUtils.showCustomToastMessageLong('$statusMessage', context, 1, 5, toastPosition: MediaQuery.of(context).size.height / 2);
         }
@@ -399,7 +402,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
         FocusScope.of(context).unfocus();
         CommonUtils.showCustomToastMessageLong('${data["statusMessage"]} ', context, 1, 5, toastPosition: MediaQuery.of(context).size.height / 2);
         setState(() {
-          LoadingProgress.stop(context);
+          progressDialog.dismiss();
         });
         // Handle any error cases here
         print('Failed to connect to the API. Status code: ${response.statusCode}');

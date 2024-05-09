@@ -811,8 +811,8 @@ class _BookingScreenState extends State<Bookingscreen> {
 
   void validatePurpose(String? value) {
     if (!isSlotsAvailable) {
-      showCustomToastMessageLong('No Slots Available Today', context, 1, 4);}
-    else if (!slotselection) {
+      showCustomToastMessageLong('No Slots Available Today', context, 1, 4);
+    } else if (!slotselection) {
       showCustomToastMessageLong('Please Select A Slot', context, 1, 4);
     }
     // if (visablelength == disabledlength) {
@@ -830,17 +830,19 @@ class _BookingScreenState extends State<Bookingscreen> {
     }
   }
 
-
-
   Future<void> bookappointment() async {
     // validatislot();
     validatePurpose(selectedName);
     if (_formKey.currentState!.validate()) {
-
       final url = Uri.parse(baseUrl + postApiAppointment);
       print('url==>890: $url');
 
       DateTime now = DateTime.now();
+      // CommonStyles.startProgress(context);
+      ProgressDialog progressDialog = ProgressDialog(context);
+
+      // Show the progress dialog
+      progressDialog.show();
 
       String dateTimeString = now.toString();
       print('DateTime as String: $dateTimeString');
@@ -897,9 +899,12 @@ class _BookingScreenState extends State<Bookingscreen> {
           // LoadingProgress.stop(context);
           // Extract the necessary information
           bool isSuccess = data['isSuccess'];
+          progressDialog.dismiss();
           if (isSuccess == true) {
+            //CommonStyles.stopProgress(context);
+            //   ProgressManager.stopProgress();
             onCreate('${slotdate}', '${_selectedTimeSlot}', '${widget.branchname}', '${widget.branchaddress}');
-            //LoadingProgress.stop(context);
+            // LoadingProgress.stop(context,rootNavigator);
             print('Request sent successfully');
             // showCustomToastMessageLong('Slot booked successfully', context, 0, 2);
             Navigator.of(context).pushReplacement(
@@ -918,24 +923,30 @@ class _BookingScreenState extends State<Bookingscreen> {
             // Success case
             // Handle success scenario here
           } else {
+            progressDialog.dismiss();
             // LoadingProgress.stop(context);
             // Failure case
             // Handle failure scenario here
+            //   ProgressManager.stopProgress();
             print('statusmesssage${data['statusMessage']}');
             CommonUtils.showCustomToastMessageLong('${data['statusMessage']}', context, 1, 5);
           }
           // LoadingProgress.stop(context);
+          //  ProgressManager.stopProgress();
           setState(() {
             isButtonEnabled = true;
+            progressDialog.dismiss();
           });
         } else {
-          LoadingProgress.stop(context);
+          progressDialog.dismiss();
+          // ProgressManager.stopProgress();
           //showCustomToastMessageLong(
           // 'Failed to send the request', context, 1, 2);
           print('Failed to send the request. Status code: ${response.statusCode}');
         }
       } catch (e) {
-        LoadingProgress.stop(context);
+        progressDialog.dismiss();
+        // ProgressManager.stopProgress();
         print('Error slot: $e');
       }
     }

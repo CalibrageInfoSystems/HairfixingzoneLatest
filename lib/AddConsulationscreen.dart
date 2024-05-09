@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'Common/common_styles.dart';
 import 'Common/custom_button.dart';
 import 'Common/custome_form_field.dart';
 import 'CommonUtils.dart';
@@ -836,6 +837,10 @@ class AddConsulationscreen_screenState extends State<AddConsulationscreen> {
       String api_email = emailController.text.toString();
       String api_usrname = fullNameController.text.toString();
       String api_remarks = remarksController.text.toString();
+      ProgressDialog progressDialog = ProgressDialog(context);
+
+      // Show the progress dialog
+      progressDialog.show();
       final request = {
         "id": null,
         "name": api_usrname,
@@ -868,7 +873,7 @@ class AddConsulationscreen_screenState extends State<AddConsulationscreen> {
         // Check the response status code
         if (response.statusCode == 200) {
           print('Request sent successfully');
-
+          progressDialog.dismiss();
           CommonUtils.showCustomToastMessageLong('$statusMessage', context, 0, 5);
           print('${response.body}');
           Navigator.push(
@@ -877,10 +882,12 @@ class AddConsulationscreen_screenState extends State<AddConsulationscreen> {
           );
           // Navigator.pop(context);
         } else {
+          progressDialog.dismiss();
           CommonUtils.showCustomToastMessageLong('$statusMessage', context, 1, 5);
           print('Failed to send the request. Status code: ${response.statusCode}');
         }
       } catch (e) {
+        progressDialog.dismiss();
         print('Error slot: $e');
       }
     }

@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'Common/common_styles.dart';
 import 'Common/custom_button.dart';
 import 'Common/custome_form_field.dart';
 import 'CommonUtils.dart';
@@ -119,6 +120,7 @@ class EditProfile_screenState extends State<EditProfile> {
           dobController.text = '$formattedDate';
           emailController.text = '$email';
           mobileNumberController.text = '$contactNumber';
+          alernateMobileNumberController.text = '$phonenumber';
           //  gender = '$selectedName';
           selectedGender = gender!;
           // selectedTypeCdId = dropdownItems.indexWhere((item) => item['desc'] == selectedGender);
@@ -258,7 +260,7 @@ class EditProfile_screenState extends State<EditProfile> {
                           ),
                           CustomeFormField(
                             //MARK: Full Name
-                            label: 'Full Name',
+                            label: 'Full Name ',
                             validator: validatefullname,
                             inputFormatters: [
                               FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z]')),
@@ -293,7 +295,7 @@ class EditProfile_screenState extends State<EditProfile> {
                           const Row(
                             children: [
                               Text(
-                                'Date of Birth',
+                                'Date of Birth ',
                                 style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
                               ),
                               Text(
@@ -527,7 +529,7 @@ class EditProfile_screenState extends State<EditProfile> {
                           const Row(
                             children: [
                               Text(
-                                'Email',
+                                'Email ',
                                 style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
                               ),
                               Text(
@@ -600,7 +602,7 @@ class EditProfile_screenState extends State<EditProfile> {
 
                           CustomeFormField(
                             //MARK: Mobile Number
-                            label: 'Mobile Number',
+                            label: 'Mobile Number ',
                             validator: validateMobilenum,
                             controller: mobileNumberController,
                             maxLength: 10,
@@ -639,7 +641,7 @@ class EditProfile_screenState extends State<EditProfile> {
                               const Row(
                                 children: [
                                   Text(
-                                    'Alternate Mobile Number',
+                                    'Alternate Mobile Number ',
                                     style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
                                   ),
                                 ],
@@ -895,11 +897,14 @@ class EditProfile_screenState extends State<EditProfile> {
     if (_formKey.currentState!.validate()) {
       final url = Uri.parse('http://182.18.157.215/SaloonApp/API/UpdateUser');
       DateTime now = DateTime.now();
+      ProgressDialog progressDialog = ProgressDialog(context);
 
+      // Show the progress dialog
+      progressDialog.show();
       final request = {
         "id": Id,
         "userId": UserId, //null
-        "firstName": "$fullname",
+        "firstName": "${fullNameController.text}",
         "middleName": "",
         "lastName": "",
         "contactNumber": "$contactNumber",
@@ -935,6 +940,7 @@ class EditProfile_screenState extends State<EditProfile> {
           // Extract the necessary information
           bool isSuccess = data['isSuccess'];
           if (isSuccess == true) {
+            progressDialog.dismiss();
             print('Request sent successfully');
             // showCustomToastMessageLong('Slot booked successfully', context, 0, 2);
             Navigator.of(context).push(
@@ -947,17 +953,20 @@ class EditProfile_screenState extends State<EditProfile> {
             // Success case
             // Handle success scenario here
           } else {
+            progressDialog.dismiss();
             // Failure case
             // Handle failure scenario here
             print('statusmesssage${data['statusMessage']}');
             CommonUtils.showCustomToastMessageLong('${data['statusMessage']}', context, 1, 5);
           }
         } else {
+          progressDialog.dismiss();
           //showCustomToastMessageLong(
           // 'Failed to send the request', context, 1, 2);
           print('Failed to send the request. Status code: ${response.statusCode}');
         }
       } catch (e) {
+        progressDialog.dismiss();
         print('Error slot: $e');
       }
       // if (isFullNameValidate && isDobValidate && isGenderValidate && isMobileNumberValidate && isAltMobileNumberValidate && isEmailValidate) {

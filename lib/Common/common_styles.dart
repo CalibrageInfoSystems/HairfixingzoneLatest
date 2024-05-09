@@ -181,7 +181,7 @@ class CommonStyles {
     );
   }
 
-  static AppBar homeAppBar( { required void Function()? onPressed}) {
+  static AppBar homeAppBar({required void Function()? onPressed}) {
     return AppBar(
       backgroundColor: const Color(0xFFf3e3ff),
       automaticallyImplyLeading: false,
@@ -245,3 +245,93 @@ class CommonStyles {
     );
   }
 }
+
+class ProgressDialog {
+  final BuildContext context;
+  late bool _isShowing;
+
+  ProgressDialog(this.context) {
+    _isShowing = false;
+    show();
+  }
+
+  Future<void> show() async {
+    if (!_isShowing) {
+      _isShowing = true;
+      await showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return Center(
+              child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.grey,
+                  ),
+                  padding: const EdgeInsets.all(20),
+                  child: const CircularProgressIndicator.adaptive()));
+        },
+      );
+      _isShowing = false; // Set _isShowing back to false after dialog is dismissed
+    }
+  }
+
+  void dismiss() {
+    if (_isShowing) {
+      _isShowing = false;
+      Navigator.of(context).pop();
+    }
+  }
+}
+
+// class ProgressManager {
+//   static late ProgressDialog _progressDialog;
+//
+//   static void startProgress(BuildContext context) {
+//     _progressDialog = ProgressDialog(context);
+//     _progressDialog.show();
+//   }
+//
+//   static void stopProgress() {
+//     if (_progressDialog != null) {
+//       _progressDialog.dismiss();
+//     }
+//   }
+// }
+//
+// class ProgressDialog {
+//   final BuildContext context;
+//   late AlertDialog _dialog;
+//   late bool _isShowing;
+//
+//   ProgressDialog(this.context) {
+//     _isShowing = false;
+//     _dialog = AlertDialog(
+//         content: Center(
+//             child: Container(
+//                 decoration: BoxDecoration(
+//                   borderRadius: BorderRadius.circular(10),
+//                   color: Colors.grey,
+//                 ),
+//                 padding: const EdgeInsets.all(20),
+//                 child: const CircularProgressIndicator.adaptive())));
+//   }
+//
+//   void show() {
+//     if (!_isShowing) {
+//       _isShowing = true;
+//       showDialog(
+//         context: context,
+//         barrierDismissible: false,
+//         builder: (BuildContext context) => _dialog,
+//       );
+//     }
+//   }
+//
+//   void dismiss() {
+//     if (_isShowing) {
+//       _isShowing = false;
+//       Navigator.of(context).pop();
+//     }
+//   }
+// }
