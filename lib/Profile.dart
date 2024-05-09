@@ -89,14 +89,37 @@ class Profile_screenState extends State<Profile> {
           gender = customerData['gender'] ?? '';
           String roleName = customerData['rolename'] ?? '';
           // Mobilenumber = customerData['MobileNumber']??'';
-          String dob = customerData['dateofbirth'];
+
+          String dob = customerData['dateofbirth'] ?? '';
+          //  formattedDate = DateFormat('dd-MM-yyyy').format(DateTime.parse(dob));
+          // if (dob != null) {
+          //   formattedDate = DateFormat('dd-MM-yyyy').format(DateTime.parse(dob));
+          // } else {
+          //   formattedDate = '';
+          // }
+
+          if (dob.isNotEmpty) {
+            formattedDate = DateFormat('dd-MM-yyyy').format(DateTime.parse(dob));
+          } else {
+            formattedDate = '';
+          }
+
+          if (!formattedDate.isEmpty) {
+            formattedDate = DateFormat('dd-MM-yyyy').format(DateTime.parse(dob));
+          } else {
+            formattedDate = '';
+          }
+          // if (dob != null) {
+          //   formattedDate = DateFormat('dd-MM-yyyy').format(DateTime.parse(dob));
+          // } else {
+          //   formattedDate = '';
+          // }
           if (mobileNumber != null) {
             mobileNumber = customerData['mobileNumber'] ?? '';
           } else {
             mobileNumber = '';
           }
 
-          formattedDate = DateFormat('dd-MM-yyyy').format(DateTime.parse(dob));
           // fullusername = firstName;
           // contactNumber = contactnumber;
           // email = Email;
@@ -214,7 +237,8 @@ class Profile_screenState extends State<Profile> {
                       child: CircularProgressIndicator.adaptive(),
                     )
                   : Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      //mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Column(
                           children: [

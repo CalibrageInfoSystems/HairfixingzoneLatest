@@ -89,15 +89,27 @@ class Profile_screenState extends State<ProfileMy> {
           email = customerData['email'] ?? '';
           gender = customerData['gender'] ?? '';
           String roleName = customerData['rolename'] ?? '';
+
           // Mobilenumber = customerData['MobileNumber']??'';
           String dob = customerData['dateofbirth'];
+          if (dob!.isNotEmpty) {
+            formattedDate = DateFormat('dd-MM-yyyy').format(DateTime.parse(dob!));
+          } else {
+            formattedDate = '';
+          }
+
+          if (!formattedDate!.isEmpty) {
+            formattedDate = DateFormat('dd-MM-yyyy').format(DateTime.parse(dob!));
+          } else {
+            formattedDate = '';
+          }
           if (mobileNumber != null) {
             mobileNumber = customerData['mobileNumber'] ?? '';
           } else {
             mobileNumber = '';
           }
 
-          formattedDate = DateFormat('dd-MM-yyyy').format(DateTime.parse(dob));
+          // formattedDate = DateFormat('dd-MM-yyyy').format(DateTime.parse(dob));
           // fullusername = firstName;
           // contactNumber = contactnumber;
           // email = Email;

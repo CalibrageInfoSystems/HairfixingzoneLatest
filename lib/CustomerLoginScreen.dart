@@ -269,30 +269,28 @@ class _LoginPageState extends State<CustomerLoginScreen> {
                                 children: [
                                   Expanded(
                                     child: GestureDetector(
-                                      onTap: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(builder: (context) => HomeScreen()),
-                                        );
-                                      },
-                                      child: CustomButton(
-                                        buttonText: 'Login',
-                                        color: CommonUtils.primaryTextColor,
-                                        onPressed: () {
-                                          FocusManager.instance.primaryFocus?.unfocus();
-                                          CommonUtils.checkInternetConnectivity().then((isConnected) {
-                                            if (isConnected) {
-                                              loginUser();
-                                              print('The Internet Is Connected');
-                                            } else {
-                                              CommonUtils.showCustomToastMessageLong('Please Check Your Internet Connection', context, 1, 4);
-                                              print('The Internet Is not Connected');
-                                            }
-                                          });
+                                        onTap: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(builder: (context) => HomeScreen()),
+                                          );
                                         },
-                                      )
-
-                                    ),
+                                        child: CustomButton(
+                                          buttonText: 'Login',
+                                          color: CommonUtils.primaryTextColor,
+                                          onPressed: () {
+                                            FocusManager.instance.primaryFocus?.unfocus();
+                                            CommonUtils.checkInternetConnectivity().then((isConnected) {
+                                              if (isConnected) {
+                                                loginUser();
+                                                print('The Internet Is Connected');
+                                              } else {
+                                                CommonUtils.showCustomToastMessageLong('Please Check Your Internet Connection', context, 1, 4);
+                                                print('The Internet Is not Connected');
+                                              }
+                                            });
+                                          },
+                                        )),
                                   ),
                                 ],
                               ),
@@ -368,8 +366,11 @@ class _LoginPageState extends State<CustomerLoginScreen> {
       setState(() {
         _isLoading = true; //Enable loading before getQuestions
       });
-      CommonStyles.progressBar(context);
+      // CommonStyles.progressBar(context);
+      ProgressDialog progressDialog = ProgressDialog(context);
 
+      // Show the progress dialog
+      progressDialog.show();
       final String apiUrl = baseUrl + ValidateUser;
 
       // Prepare the request body
@@ -406,6 +407,8 @@ class _LoginPageState extends State<CustomerLoginScreen> {
             setState(() {
               _isLoading = false;
             });
+            progressDialog.dismiss();
+
             List<dynamic> listResult = data['listResult'];
             Map<String, dynamic> user = listResult.first;
             print('User ID: ${user['id']}');
@@ -413,7 +416,6 @@ class _LoginPageState extends State<CustomerLoginScreen> {
             print('Role ID: ${user['roleID']}');
             await saveUserDataToSharedPreferences(user);
             // Extract other user information as needed
-            LoadingProgress.stop(context);
 
             if (user['roleID'] == 2) {
               Navigator.push(
@@ -429,11 +431,11 @@ class _LoginPageState extends State<CustomerLoginScreen> {
           } else {
             FocusScope.of(context).unfocus();
             CommonUtils.showCustomToastMessageLong('Invalid User ', context, 1, 3, toastPosition: MediaQuery.of(context).size.height / 2);
-            LoadingProgress.stop(context);
+            progressDialog.dismiss();
           }
         } else {
           FocusScope.of(context).unfocus();
-          LoadingProgress.stop(context);
+          progressDialog.dismiss();
 
           CommonUtils.showCustomToastMessageLong("${data["statusMessage"]}", context, 1, 3, toastPosition: MediaQuery.of(context).size.height / 2);
           // Handle the case where the user is not valid
@@ -445,7 +447,7 @@ class _LoginPageState extends State<CustomerLoginScreen> {
       } else {
         setState(() {
           _isLoading = false;
-          LoadingProgress.stop(context);
+          progressDialog.dismiss();
         });
         // Handle any error cases here
         print('Failed to connect to the API. Status code: ${response.statusCode}');
@@ -465,7 +467,7 @@ class _LoginPageState extends State<CustomerLoginScreen> {
     await prefs.setString('email', userData['email']);
     await prefs.setString('contactNumber', userData['contactNumber']);
     await prefs.setString('gender', userData['gender']);
-    await prefs.setString('dateofbirth', userData['dateofbirth']);
+    await prefs.setString('dateofbirth', userData['dateofbirth'] ?? '');
     await prefs.setString('password', userData['password']);
     await prefs.setInt('genderTypeId', userData['genderTypeId']);
     // Save other user data as needed
