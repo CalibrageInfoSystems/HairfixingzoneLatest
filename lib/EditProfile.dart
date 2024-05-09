@@ -123,8 +123,10 @@ class EditProfile_screenState extends State<EditProfile> {
           alernateMobileNumberController.text = '$phonenumber';
           //  gender = '$selectedName';
           selectedGender = gender!;
+          isGenderSelected = true;
+          isGenderValidate = false;
           // selectedTypeCdId = dropdownItems.indexWhere((item) => item['desc'] == selectedGender);
-          // isGenderSelected = false;
+          //isGenderSelected = false;
           // if (selectedGender != null) {
           //   // Update the selectedTypeCdId based on the saved gender
           //   selectedTypeCdId = dropdownItems.indexWhere((item) => item['desc'] == selectedGender);
@@ -741,7 +743,15 @@ class EditProfile_screenState extends State<EditProfile> {
   Future<void> validating() async {
     validateGender(selectedName);
     if (_formKey.currentState!.validate()) {
-      updateUser();
+      print(isFullNameValidate);
+      //print(isGenderValidate);
+      print(isMobileNumberValidate);
+      print(isEmailValidate);
+      print(isDobValidate);
+
+      if (isFullNameValidate && isMobileNumberValidate && isEmailValidate && isDobValidate) {
+        updateUser();
+      }
     }
   }
 
@@ -792,6 +802,16 @@ class EditProfile_screenState extends State<EditProfile> {
     return null;
   }
 
+  // void validateGender(String? value) {
+  //   if (value == null || value.isEmpty) {
+  //     isGenderSelected = true;
+  //     isGenderValidate = false;
+  //   } else {
+  //     isGenderSelected = false;
+  //     isGenderValidate = true;
+  //   }
+  //   //setState(() {});
+  // }
   void validateGender(String? value) {
     if (value == null || value.isEmpty) {
       isGenderSelected = true;
@@ -800,7 +820,7 @@ class EditProfile_screenState extends State<EditProfile> {
       isGenderSelected = false;
       isGenderValidate = true;
     }
-    setState(() {});
+    //   setState(() {});
   }
 
   String? validateEmail(String? value) {
@@ -969,9 +989,6 @@ class EditProfile_screenState extends State<EditProfile> {
         progressDialog.dismiss();
         print('Error slot: $e');
       }
-      // if (isFullNameValidate && isDobValidate && isGenderValidate && isMobileNumberValidate && isAltMobileNumberValidate && isEmailValidate) {
-      //
-      // }
     }
   }
 }
