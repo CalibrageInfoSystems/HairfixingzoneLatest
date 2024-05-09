@@ -5,6 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:hairfixingzone/BranchesModel.dart';
 import 'package:hairfixingzone/Common/common_styles.dart';
 import 'package:hairfixingzone/aboutus_screen.dart';
+import 'package:hairfixingzone/api_config.dart';
 
 import 'dart:async';
 import 'dart:convert';
@@ -66,7 +67,7 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
   }
 
   void _fetchItems() async {
-    final response = await http.get(Uri.parse('http://182.18.157.215/SaloonApp/API/GetBanner?Id=null'));
+    final response = await http.get(Uri.parse(baseUrl + getbanner));
     setState(() {
       isDataBinding = true;
     });
@@ -98,7 +99,7 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
   }
 
   Future<void> getMarqueeText() async {
-    final apiUrl = Uri.parse('http://182.18.157.215/SaloonApp/API/GetContent/true');
+    final apiUrl = Uri.parse(baseUrl + getcontent);
 
     try {
       final jsonResponse = await http.get(apiUrl);

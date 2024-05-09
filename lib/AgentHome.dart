@@ -63,7 +63,9 @@ class _AgentHomeState extends State<AgentHome> {
       },
       child: Scaffold(
         appBar: _currentIndex == 0
-            ? CommonStyles.homeAppBar(onPressed: () => logOutDialog(),)
+            ? CommonStyles.homeAppBar(
+                onPressed: () => logOutDialog(),
+              )
             : CommonStyles.remainingAppBars(
                 context,
                 title: _getAppBarTitle(_currentIndex),
@@ -179,7 +181,9 @@ class _AgentHomeState extends State<AgentHome> {
   Widget _buildScreens(int index) {
     switch (index) {
       case 0:
-        return const AgentDashBoard();
+        return AgentDashBoard(
+          agentid: widget.userId,
+        );
 
       case 1:
         return AddConsulationscreen(
@@ -192,7 +196,9 @@ class _AgentHomeState extends State<AgentHome> {
         );
 
       default:
-        return const AgentDashBoard();
+        return AgentDashBoard(
+          agentid: widget.userId,
+        );
     }
   }
 
@@ -229,9 +235,6 @@ class _AgentHomeState extends State<AgentHome> {
     prefs.remove('userId');
     prefs.remove('userRoleId');
     CommonUtils.showCustomToastMessageLong("Logout Successfully", context, 0, 3);
-
-
-
 
     Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(builder: (context) => const AgentLogin()),

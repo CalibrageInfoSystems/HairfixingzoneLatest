@@ -39,5 +39,7 @@ var validateusername = 'ValidateUserName';
 var validateusernameotp = 'ValidateOTP';
 var getbrancheselectedcity = 'GetBranchesByCityId/';
 var getcity = "GetCityById/4";
+var getbanner = 'GetBanner?Id=null';
+var getcontent = 'GetContent/true';
 //var validateusernameotp = "ValidateOTP";
 // var validateusername = "ValidateUserName";

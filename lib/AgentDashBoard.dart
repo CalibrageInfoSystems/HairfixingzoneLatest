@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:hairfixingzone/BranchModel.dart';
 import 'package:hairfixingzone/BranchesModel.dart';
 import 'package:hairfixingzone/Common/common_styles.dart';
 import 'package:hairfixingzone/Consultation.dart';
@@ -20,9 +21,8 @@ import 'Branches_screen.dart';
 import 'api_config.dart';
 
 class AgentDashBoard extends StatefulWidget {
-  const AgentDashBoard({
-    super.key,
-  });
+  final int agentid;
+  AgentDashBoard({required this.agentid});
 
   @override
   State<AgentDashBoard> createState() => _AgentDashBoardState();
@@ -34,7 +34,7 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
   late Timer _timer;
   String marqueeText = '';
   int _currentPage = 0;
-  Future<List<BranchList>>? apiData;
+  late Future<List<BranchModel>> apiData;
   String userFullName = '';
   String email = '';
   String phonenumber = '';
@@ -47,7 +47,7 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
     checkLoginAgentdata();
     _fetchItems();
     _startAutoScroll();
-    apiData = getBranchsData();
+    apiData = getBranches(widget.agentid);
     // apiData = getAgentBranches(widget.agentId);
     _pageController = PageController(initialPage: _currentPage);
   }
@@ -354,7 +354,7 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
               child: Text(snapshot.error.toString()),
             );
           } else {
-            List<BranchList>? data = snapshot.data!;
+            List<BranchModel>? data = snapshot.data!;
             return SizedBox(
               width: MediaQuery.of(context).size.width,
               // height: MediaQuery.of(context).size.height / 3.5,
@@ -374,30 +374,77 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
     );
   }
 
-  Future<List<BranchList>> getBranchsData() async {
-  //  var apiUrl = 'http://182.18.157.215/SaloonApp/API/GetBranchById/null/true';
-    var apiUrl = baseUrl + GetBranchByUserId + '$AgentId';
-    try {
-      final jsonResponse = await http.get(
-        Uri.parse(apiUrl),
-      );
+  // Future<List<BranchList>> getBranchsData() async {
+  // //  var apiUrl = 'http://182.18.157.215/SaloonApp/API/GetBranchById/null/true';
+  //   var apiUrl = baseUrl + GetBranchByUserId + '$AgentId';
+  //   try {
+  //     final jsonResponse = await http.get(
+  //       Uri.parse(apiUrl),
+  //     );
+  //
+  //     if (jsonResponse.statusCode == 200) {
+  //       Map<String, dynamic> response = jsonDecode(jsonResponse.body);
+  //       List<dynamic> branchesData = response['listResult'];
+  //       List<BranchList> result = branchesData.map((e) => BranchList.fromJson(e)).toList();
+  //       print('result: ${result[0].name}');
+  //       print('result: ${result[0].address}');
+  //       print('result: ${result[0].imageName}');
+  //       return result;
+  //     } else {
+  //       throw Exception('api failed');
+  //     }
+  //   } catch (e) {
+  //     print('errorin$e');
+  //     rethrow;
+  //   }
+  // }
+  Future<List<BranchModel>> getBranches(int userId) async {
+    String apiUrl = '$baseUrl$GetBranchByUserId$userId';
 
-      if (jsonResponse.statusCode == 200) {
-        Map<String, dynamic> response = jsonDecode(jsonResponse.body);
-        List<dynamic> branchesData = response['listResult'];
-        List<BranchList> result = branchesData.map((e) => BranchList.fromJson(e)).toList();
-        print('result: ${result[0].name}');
-        print('result: ${result[0].address}');
-        print('result: ${result[0].imageName}');
-        return result;
+    try {
+      final response = await http.get(Uri.parse(apiUrl));
+      print('apiUrl: $apiUrl');
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        List<dynamic>? listResult = data['listResult']; // Add a check for null
+        if (listResult != null) {
+          List<BranchModel> result = listResult.map((e) => BranchModel.fromJson(e)).toList();
+          return result;
+        } else {
+          print('listResult is null');
+          throw Exception('listResult is null');
+        }
       } else {
-        throw Exception('api failed');
+        print('Request failed with status: ${response.statusCode}');
+        throw Exception('Request failed with status: ${response.statusCode}');
       }
-    } catch (e) {
-      print('errorin$e');
-      rethrow;
+    } catch (error) {
+      print('Error: $error');
+      throw Exception('Error: $error');
     }
   }
+
+  // Future<List<BranchList>> getBranches(int userId) async {
+  //   String apiUrl = '$baseUrl$GetBranchByUserId$userId';
+  //
+  //   try {
+  //     final response = await http.get(Uri.parse(apiUrl));
+  //     print('apiUrl: $apiUrl');
+  //     if (response.statusCode == 200) {
+  //       final data = json.decode(response.body);
+  //       List<dynamic> listresult = data['listResult'];
+  //       print('response$listresult');
+  //       List<BranchList> result = listresult.map((e) => BranchList.fromJson(e)).toList();
+  //       return result;
+  //     } else {
+  //       print('Request failed with status: ${response.statusCode}');
+  //       throw Exception('Request failed with status: ${response.statusCode}');
+  //     }
+  //   } catch (error) {
+  //     print('Error: $error');
+  //     throw Exception('Error: $error');
+  //   }
+  // }
 
   Widget screens() {
     return Row(
@@ -532,6 +579,126 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
           ),
         ),
       ],
+    );
+  }
+}
+
+class BranchCard extends StatelessWidget {
+  final BranchModel branch;
+
+  const BranchCard({super.key, required this.branch});
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 2,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Container(
+        height: MediaQuery.of(context).size.height,
+        // width: 170,
+        width: MediaQuery.of(context).size.width / 2.5,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          // color: Colors.grey,
+          color: CommonStyles.branchBg,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Container(
+              height: MediaQuery.of(context).size.height / 8.5,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: Colors.grey,
+              ),
+              child: ClipRRect(
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(10),
+                  topRight: Radius.circular(10),
+                ),
+                child: Image.network(
+                  branch.imageName!,
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+            // Expanded(
+            //   child: ClipRRect(
+            //     borderRadius: const BorderRadius.only(
+            //       topLeft: Radius.circular(10),
+            //       topRight: Radius.circular(10),
+            //     ),
+            //     child: Image.network(
+            //       branch.imageName,
+            //       fit: BoxFit.cover,
+            //     ),
+            //   ),
+            // ),
+            // Expanded(
+            //   child: Container(
+            //     padding: const EdgeInsets.all(5),
+            //     decoration: const BoxDecoration(
+            //       borderRadius: BorderRadius.only(
+            //         topLeft: Radius.circular(10),
+            //         topRight: Radius.circular(10),
+            //       ),
+            //       color: Colors.greenAccent,
+            //     ),
+            //     child: Image.network(
+            //       // 'https://via.placeholder.com/600/92c952',
+            //       'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTH7vDN07mCqaSv-VvdFX3VYd2Ic9uFyha4kA&s',
+            //       fit: BoxFit.fill,
+            //     ),
+            //   ),
+            // ),
+            // Expanded(
+            //   child: Container(
+            //     padding: const EdgeInsets.all(10),
+            //     decoration: const BoxDecoration(
+            //       borderRadius: BorderRadius.only(
+            //         bottomLeft: Radius.circular(10),
+            //         bottomRight: Radius.circular(10),
+            //       ),
+            //       color: CommonStyles.branchBg,
+            //     ),
+            //     child: Column(
+            //       crossAxisAlignment: CrossAxisAlignment.stretch,
+            //       children: [
+            //         Text(
+            //           branch.name,
+            //           style: CommonStyles.txSty_16p_fb,
+            //         ),
+            //         Text(branch.address, style: CommonStyles.txSty_12b_f5),
+            //       ],
+            //     ),
+            //   ),
+            // ),
+            Container(
+              // height: MediaQuery.of(context).size.height,
+              padding: const EdgeInsets.all(10),
+              decoration: const BoxDecoration(
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(10),
+                  bottomRight: Radius.circular(10),
+                ),
+                color: CommonStyles.branchBg,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(
+                    branch.name,
+                    style: CommonStyles.txSty_16p_fb,
+                  ),
+                  Text(branch.address, maxLines: 3, overflow: TextOverflow.ellipsis, style: CommonStyles.txSty_12b_f5),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
