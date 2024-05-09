@@ -93,7 +93,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                             style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
                           ),
                           Text(
-                            '*',
+                            ' *',
                             style: TextStyle(color: Colors.red),
                           ),
                         ],
@@ -170,7 +170,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                             style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
                           ),
                           Text(
-                            '*',
+                            ' *',
                             style: TextStyle(color: Colors.red),
                           ),
                         ],
@@ -247,7 +247,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                             style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
                           ),
                           Text(
-                            '*',
+                            ' *',
                             style: TextStyle(color: Colors.red),
                           ),
                         ],

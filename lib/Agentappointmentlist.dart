@@ -147,7 +147,7 @@ class MyAppointments_screenState extends State<Agentappointmentlist> {
                           } else if (snapshot.hasError) {
                             return const Center(
                               child: Text(
-                                'No Appointments Found!',
+                                'No Appointments Available',
                                 style: TextStyle(
                                   fontSize: 12.0,
                                   color: Colors.black,
@@ -284,7 +284,8 @@ class MyAppointments_screenState extends State<Agentappointmentlist> {
           listResult.map((item) => Appointment.fromJson(item)).toList();
           return result;
         } else {
-          throw Exception('No Appointments Found!');
+          myAppointmentsProvider!.storeIntoProvider = [];
+          throw Exception('No Appointments Available');
         }
       } else {
         print('Request failed with status: ${jsonResponse.statusCode}');
@@ -516,7 +517,7 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
               listResult.map((item) => Appointment.fromJson(item)).toList();
         } else {
           myAppointmentsProvider!.storeIntoProvider = [];
-          throw Exception('No appointments found!');
+          throw Exception('No Appointments Available');
         }
       } else {
         myAppointmentsProvider!.storeIntoProvider = [];
@@ -1005,7 +1006,7 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
               listResult.map((item) => Appointment.fromJson(item)).toList();
         } else {
           myAppointmentsProvider!.storeIntoProvider = [];
-          throw Exception('No Appointments Found!');
+          throw Exception('No Appointments Available');
         }
       } else {
         myAppointmentsProvider!.storeIntoProvider = [];

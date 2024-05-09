@@ -709,7 +709,9 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
                                     selectedTypeCdId = value!;
                                     if (selectedTypeCdId != -1) {
                                       selectedName = dropdownItems[selectedTypeCdId]['desc'];
-                                      print("selectedName:$selectedName");
+                                      selectedValue= dropdownItems[selectedTypeCdId]['typeCdId'];
+                                      print("selectedName onchange:$selectedName");
+                                      print("selectedValue onchange:$selectedValue");
                                     }
                                     ispurposeselected = false;
                                   });
@@ -911,114 +913,7 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
     }
   }
 
-  // Future<void> bookappointment() async {
-  //   // validatislot();
-  //   validatePurpose(selectedName);
-  //   if (_formKey.currentState!.validate()) {
-  //
-  //     final url = Uri.parse(baseUrl + postApiAppointment);
-  //     print('url==>890: $url');
-  //
-  //     DateTime now = DateTime.now();
-  //
-  //     String dateTimeString = now.toString();
-  //     print('DateTime as String: $dateTimeString');
-  //     print('DateTime as String: $selecteddate');
-  //     print('_selectedTimeSlot892 $_selectedTimeSlot');
-  //     String slotdate = DateFormat('dd MMM yyyy').format(_selectedDate!);
-  //     print('slotdate $slotdate');
-  //     // print('screenFrom1213: ${widget.screenFrom}');
-  //     // print('appointmentId1214: ${widget.appointmentId}');
-  //     // CommonStyles.progressBar(context);
-  //     final request = {
-  //       "id": null,
-  //       "branchId": widget.branchId,
-  //       "date": selecteddate,
-  //       "slotTime": timeSlotParts[0],
-  //       "customerName": userFullName,
-  //       "phoneNumber": phonenumber,
-  //       "email": email,
-  //       "genderTypeId": genderttypeid, //Sharedprefs
-  //       "statusTypeId": 4,
-  //       "purposeOfVisitId": selectedValue,
-  //       "isActive": true,
-  //       "createdDate": dateTimeString,
-  //       "updatedDate": dateTimeString,
-  //       "updatedByUserId": null,
-  //       "rating": null,
-  //       "review": null,
-  //       "reviewSubmittedDate": null,
-  //       "timeofslot": '$_selectedTimeSlot24',
-  //       "customerId": Id
-  //     };
-  //
-  //     print('Object: ${json.encode(request)}');
-  //     try {
-  //       final response = await http.post(
-  //         url,
-  //         body: json.encode(request),
-  //         headers: {
-  //           'Content-Type': 'application/json',
-  //         },
-  //       );
-  //       // Check the response status code
-  //       // if (response.statusCode == 200) {
-  //       //   print('Request sent successfully');
-  //       //   showCustomToastMessageLong('Slot booked successfully', context, 0, 2);
-  //       //   Navigator.pop(context);
-  //       // } else {
-  //       //   showCustomToastMessageLong('Failed to send the request', context, 1, 2);
-  //       //   print('Failed to send the request. Status code: ${response.statusCode}');
-  //       // }
-  //
-  //       if (response.statusCode == 200) {
-  //         Map<String, dynamic> data = json.decode(response.body);
-  //         // LoadingProgress.stop(context);
-  //         // Extract the necessary information
-  //         bool isSuccess = data['isSuccess'];
-  //         if (isSuccess == true) {
-  //           onCreate('${slotdate}', '${_selectedTimeSlot}', '${widget.branchname}', '${widget.branchaddress}');
-  //           //LoadingProgress.stop(context);
-  //           print('Request sent successfully');
-  //           // showCustomToastMessageLong('Slot booked successfully', context, 0, 2);
-  //           Navigator.of(context).pushReplacement(
-  //             MaterialPageRoute(
-  //                 builder: (context) => SlotSuccessScreen(
-  //                   slotdate: slotdate,
-  //                   slottime: _selectedTimeSlot,
-  //                   Purpose: '$selectedName',
-  //                   slotbranchname: widget.branchname,
-  //                   slotbrnach_address: widget.branchaddress,
-  //                   phonenumber: widget.phonenumber,
-  //                   branchImage: widget.branchImage,
-  //                   // phonenumber: null,
-  //                 )),
-  //           );
-  //           // Success case
-  //           // Handle success scenario here
-  //         } else {
-  //           // LoadingProgress.stop(context);
-  //           // Failure case
-  //           // Handle failure scenario here
-  //           print('statusmesssage${data['statusMessage']}');
-  //           CommonUtils.showCustomToastMessageLong('${data['statusMessage']}', context, 1, 5);
-  //         }
-  //         // LoadingProgress.stop(context);
-  //         setState(() {
-  //           isButtonEnabled = true;
-  //         });
-  //       } else {
-  //         LoadingProgress.stop(context);
-  //         //showCustomToastMessageLong(
-  //         // 'Failed to send the request', context, 1, 2);
-  //         print('Failed to send the request. Status code: ${response.statusCode}');
-  //       }
-  //     } catch (e) {
-  //       LoadingProgress.stop(context);
-  //       print('Error slot: $e');
-  //     }
-  //   }
-  // }
+
 
   bool isHoliday(DateTime date) {
     return holidayList

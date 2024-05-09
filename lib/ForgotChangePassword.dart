@@ -137,7 +137,7 @@ class _ForgotChangePasswordState extends State<ForgotChangePassword> {
                                       fontWeight: FontWeight.bold),
                                 ),
                                 Text(
-                                  '*',
+                                  ' *',
                                   style: TextStyle(color: Colors.red),
                                 ),
                               ],
@@ -239,7 +239,7 @@ class _ForgotChangePasswordState extends State<ForgotChangePassword> {
                                       fontWeight: FontWeight.bold),
                                 ),
                                 Text(
-                                  '*',
+                                  ' *',
                                   style: TextStyle(color: Colors.red),
                                 ),
                               ],
