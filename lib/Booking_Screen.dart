@@ -782,17 +782,33 @@ class _BookingScreenState extends State<Bookingscreen> {
                           ],
                         ),
                       SizedBox(height: 25),
+                      // Visibility(
+                      //   visible: !isLoading, // Show the Container if isLoading is false
+                      //   child: Container(
+                      //     width: MediaQuery.of(context).size.width / 1.5,
+                      //     child: CustomButton(
+                      //       buttonText: 'Book Appointment',
+                      //       color: CommonUtils.primaryTextColor,
+                      //       onPressed: bookappointment,
+                      //     ),
+                      //   ),
+                      // )
                       Visibility(
-                        visible: !isLoading, // Show the Container if isLoading is false
+                        visible: !isLoading,
                         child: Container(
                           width: MediaQuery.of(context).size.width / 1.5,
                           child: CustomButton(
                             buttonText: 'Book Appointment',
                             color: CommonUtils.primaryTextColor,
-                            onPressed: bookappointment,
+                            onPressed: () {
+                              // Validate purpose first
+                              validatePurpose(selectedName);
+                            },
                           ),
                         ),
-                      )
+                      ),
+
+
 
                       // Container(
                       //   width: MediaQuery.of(context).size.width / 1.5,
@@ -808,31 +824,45 @@ class _BookingScreenState extends State<Bookingscreen> {
               ),
             )));
   }
-
-  void validatePurpose(String? value) {
+  Future<void> validatePurpose(String? value) async {
     if (!isSlotsAvailable) {
       showCustomToastMessageLong('No Slots Available Today', context, 1, 4);
     } else if (!slotselection) {
       showCustomToastMessageLong('Please Select A Slot', context, 1, 4);
-    }
-    // if (visablelength == disabledlength) {
-    //   // showCustomToastMessageLong('No Slots Available Today ', context, 1, 4);
-    //   // isValid = false;
-    //   // hasValidationFailed = true;
-    //  }
-    else {
-      if (value == null || value.isEmpty) {
-        ispurposeselected = true;
-      } else {
-        ispurposeselected = false;
-      }
+    } else if (value == null || value.isEmpty) {
+      // If value is empty, set ispurposeselected to true
+      ispurposeselected = true;
       setState(() {});
+    } else {
+      // If all conditions are met, proceed to book the appointment
+      bookappointment();
     }
   }
 
+
+
+ //  void bookappointment() {
+ //    // Perform your validation here
+ //    if (!isSlotsAvailable) {
+ //      showCustomToastMessageLong('No Slots Available Today', context, 1, 4);
+ //    } else if (!slotselection) {
+ //      showCustomToastMessageLong('Please Select A Slot', context, 1, 4);
+ //    }
+ //    if (!ispurposeselected) {
+ //      handleAppointmentBooking();
+ //    }
+ //
+ // else{
+ //
+ //      // If all validations pass, proceed with booking the appointment
+ //      // For example, you can call a function to handle the booking process
+ //      // Assuming you have a function called 'handleAppointmentBooking'
+ //      handleAppointmentBooking();
+ //    }
+ //  }
   Future<void> bookappointment() async {
     // validatislot();
-    validatePurpose(selectedName);
+
     if (_formKey.currentState!.validate()) {
       final url = Uri.parse(baseUrl + postApiAppointment);
       print('url==>890: $url');
@@ -899,7 +929,7 @@ class _BookingScreenState extends State<Bookingscreen> {
           // LoadingProgress.stop(context);
           // Extract the necessary information
           bool isSuccess = data['isSuccess'];
-          progressDialog.dismiss();
+         progressDialog.dismiss();
           if (isSuccess == true) {
             //CommonStyles.stopProgress(context);
             //   ProgressManager.stopProgress();

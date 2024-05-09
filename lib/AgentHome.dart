@@ -40,7 +40,7 @@ class _AgentHomeState extends State<AgentHome> {
           builder: (BuildContext context) {
             return AlertDialog(
               title: const Text('Confirm Exit'),
-              content: const Text('Are you sure you want to close the app?'),
+              content: const Text('Are you Sure You Want To Close The App?'),
               actions: <Widget>[
                 TextButton(
                   onPressed: () => Navigator.of(context).pop(false),

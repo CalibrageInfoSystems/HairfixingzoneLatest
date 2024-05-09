@@ -755,16 +755,20 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
                         ),
                       SizedBox(height: 25),
                       Visibility(
-                        visible: !isLoading, // Show the Container if isLoading is false
+                        visible: !isLoading,
                         child: Container(
                           width: MediaQuery.of(context).size.width / 1.5,
                           child: CustomButton(
                             buttonText: 'Book Appointment',
                             color: CommonUtils.primaryTextColor,
-                            onPressed: bookappointment,
+                            onPressed: () {
+                              // Validate purpose first
+                              validatePurpose(selectedName);
+                            },
                           ),
                         ),
-                      )
+                      ),
+
 
                       // Container(
                       //   width: MediaQuery.of(context).size.width / 1.5,
@@ -781,26 +785,21 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
             )));
   }
 
-  void validatePurpose(String? value) {
+  Future<void> validatePurpose(String? value) async {
     if (!isSlotsAvailable) {
       showCustomToastMessageLong('No Slots Available Today', context, 1, 4);
     } else if (!slotselection) {
       showCustomToastMessageLong('Please Select A Slot', context, 1, 4);
-    }
-    // if (visablelength == disabledlength) {
-    //   // showCustomToastMessageLong('No Slots Available Today ', context, 1, 4);
-    //   // isValid = false;
-    //   // hasValidationFailed = true;
-    //  }
-    else {
-      if (value == null || value.isEmpty) {
-        ispurposeselected = true;
-      } else {
-        ispurposeselected = false;
-      }
+    } else if (value == null || value.isEmpty) {
+      // If value is empty, set ispurposeselected to true
+      ispurposeselected = true;
       setState(() {});
+    } else {
+      // If all conditions are met, proceed to book the appointment
+      bookappointment();
     }
   }
+
 
   // if (visablelength == disabledlength) {
   // showCustomToastMessageLong('No Slots Available Today ', context, 1, 4);
@@ -808,7 +807,7 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
   // hasValidationFailed = true;
   // }
   Future<void> bookappointment() async {
-    validatePurpose(selectedName);
+
     if (_formKey.currentState!.validate()) {
       final url = Uri.parse(baseUrl + postApiAppointment);
       print('url==>890: $url');
