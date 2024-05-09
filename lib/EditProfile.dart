@@ -907,12 +907,12 @@ class EditProfile_screenState extends State<EditProfile> {
         "firstName": "${fullNameController.text}",
         "middleName": "",
         "lastName": "",
-        "contactNumber": "$contactNumber",
-        "mobileNumber": "$phonenumber",
+        "contactNumber": "${mobileNumberController.text}",
+        "mobileNumber": "${alernateMobileNumberController.text}",
         "userName": "$username",
         "password": "$password", //saved
         "confirmPassword": "$password",
-        "email": "$email",
+        "email": "${emailController.text}",
         "isActive": true,
         "createdByUserId": createdByUserId,
         "createdDate": createdDate,
@@ -920,7 +920,7 @@ class EditProfile_screenState extends State<EditProfile> {
         "updatedDate": "$now",
         "roleId": roleId,
         "gender": gendertypeid,
-        "dateofbirth": "$dob",
+        "dateofbirth": "${dobController.text}",
         "branchIds": "null"
       };
 

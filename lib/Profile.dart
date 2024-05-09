@@ -229,7 +229,7 @@ class Profile_screenState extends State<Profile> {
                                   icon: 'assets/id-card-clip-alt.svg',
                                   bgColor: CommonStyles.primaryTextColor,
                                   data: '$username',
-                                  tooltipMessage: 'Username',
+                                  tooltipMessage: 'User Name',
                                 )),
                             SizedBox(height: 15),
 
