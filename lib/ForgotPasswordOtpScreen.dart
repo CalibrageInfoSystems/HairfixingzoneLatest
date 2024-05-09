@@ -448,7 +448,7 @@ class _ForgotPasswordOtpScreenState extends State<ForgotPasswordOtpScreen> {
           print('userid: ${user['id']}');
           _otpController.clear();
           LoadingProgress.stop(context);
-          CommonUtils.showCustomToastMessageLong('Otp has Sent to Your Mail', context, 0, 3, toastPosition: MediaQuery.of(context).size.height / 2);
+          CommonUtils.showCustomToastMessageLong('OTP Has Sent To Your Email', context, 0, 3, toastPosition: MediaQuery.of(context).size.height / 2);
           restartTimer();
         } else {
           FocusScope.of(context).unfocus();

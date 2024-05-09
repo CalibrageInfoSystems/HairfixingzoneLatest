@@ -127,7 +127,7 @@ class _ForgotPasswordscreen extends State<ForgotPasswordscreen> {
                               Column(
                                 children: [
                                   CustomeFormField(
-                                    label: 'Email/User Name',
+                                    label: 'Email / User Name',
                                     validator: validateEmail,
                                     controller: username,
                                   ),
@@ -184,7 +184,7 @@ class _ForgotPasswordscreen extends State<ForgotPasswordscreen> {
 
   String? validateEmail(String? value) {
     if (value == null || value.isEmpty) {
-      return 'Please Enter Email/User Name';
+      return 'Please Enter Email / User Name';
     }
     // else if (!RegExp(
     //     r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")

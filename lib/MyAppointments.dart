@@ -1571,7 +1571,7 @@ class _OpCardState extends State<OpCard> {
                                 fontWeight: FontWeight.w300,
                               ),
                               maxLines: null,
-                              maxLength: 256,
+                              maxLength: 250,
                               // Set maxLines to null for multiline input
                               decoration: const InputDecoration(
                                 hintText: 'Comment',
@@ -1738,7 +1738,7 @@ class _OpCardState extends State<OpCard> {
           print('Request sent successfully');
           //  fetchMyAppointments(userId);
           CommonUtils.showCustomToastMessageLong(
-              'Feedback Successfully Submited', context, 0, 4);
+              'Feedback Successfully Submitted', context, 0, 4);
           // refreshTheScreen();
           // if (index >= 0.0 && index < userfeedbacklist.length) {
           //   // Ensure index is within the valid range

@@ -1250,7 +1250,7 @@ class _HomeScreenState extends State<HomeScreen> {
         "PhoneNumber": appointment.contactNumber, // Changed from appointments.phoneNumber
         "Email": appointment.email,
         "GenderTypeId": appointment.genderTypeId,
-        "StatusTypeId": appointment.statusTypeId,
+        "StatusTypeId":18,
         "PurposeOfVisitId": appointment.purposeOfVisitId,
         "PurposeOfVisit": appointment.purposeOfVisit,
         "IsActive": true,
@@ -1276,6 +1276,8 @@ class _HomeScreenState extends State<HomeScreen> {
         );
 
         if (response.statusCode == 200) {
+          CommonUtils.showCustomToastMessageLong(
+              'Feedback Successfully Submitted', context, 0, 4);
           print('Request sent successfully');
           Navigator.pop(context);
         } else {

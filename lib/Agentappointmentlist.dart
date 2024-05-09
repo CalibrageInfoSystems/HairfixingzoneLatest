@@ -2031,7 +2031,7 @@ class _OpCardState extends State<OpCard> {
                               Radius.circular(10),
                             ),
                           ),
-                          hintText: 'Enter Amount in Rs',
+                          hintText: 'Enter Amount (Rs) ',
                           counterText: "",
                           hintStyle: const TextStyle(
                               color: Colors.grey, fontWeight: FontWeight.w400),
@@ -2165,7 +2165,7 @@ class _OpCardState extends State<OpCard> {
 
   String? validateAmount(String? value) {
     if (value == null || value.isEmpty) {
-      return 'Please Enter Amount in Rs';
+      return 'Please Enter Amount (Rs)';
     }
     // else if (!RegExp(
     //     r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
