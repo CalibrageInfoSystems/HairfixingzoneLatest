@@ -17,6 +17,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'AddConsulationscreen.dart';
 import 'Add_Consultation_Screen.dart';
 import 'Branches_screen.dart';
+import 'api_config.dart';
 
 class AgentDashBoard extends StatefulWidget {
   const AgentDashBoard({
@@ -374,8 +375,8 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
   }
 
   Future<List<BranchList>> getBranchsData() async {
-    var apiUrl = 'http://182.18.157.215/SaloonApp/API/GetBranchById/null/true';
-
+  //  var apiUrl = 'http://182.18.157.215/SaloonApp/API/GetBranchById/null/true';
+    var apiUrl = baseUrl + GetBranchByUserId + '$AgentId';
     try {
       final jsonResponse = await http.get(
         Uri.parse(apiUrl),

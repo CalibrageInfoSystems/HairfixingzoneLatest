@@ -228,7 +228,7 @@ class MyProducts_screenState extends State<MyProducts> {
     const apiurl = 'http://182.18.157.215/SaloonApp/API/GetProductById';
 
     try {
-      final request = {"id": id, "categoryTypeId": categoryTypeId, "genderTypeId": genderTypeId};
+      final request = {"id": id, "categoryTypeId": categoryTypeId, "genderTypeId": genderTypeId, "isActive": true};
       final response = await http.post(
         Uri.parse(apiurl),
         body: json.encode(request),
@@ -405,7 +405,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
     const apiurl = 'http://182.18.157.215/SaloonApp/API/GetProductById';
 
     try {
-      final request = {"id": id, "categoryTypeId": categoryTypeId, "genderTypeId": genderTypeId};
+      final request = {"id": id, "categoryTypeId": categoryTypeId, "genderTypeId": genderTypeId,"isActive": true};
       final response = await http.post(
         Uri.parse(apiurl),
         body: json.encode(request),

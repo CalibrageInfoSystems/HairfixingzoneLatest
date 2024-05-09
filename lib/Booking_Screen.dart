@@ -1402,7 +1402,7 @@ class _BookingScreenState extends State<Bookingscreen> {
     await notificationService.scheduleNotification(
       1,
       _textEditingController.text,
-      "Reminder for your scheduled Appointment at ${eventTime!.format(context)} At ${branchname} branch  at ${branchaddress}",
+      "Reminder for your scheduled Appointment at ${eventTime!.format(context)} At ${branchname} branch  near  ${branchaddress}",
       eventDate!,
       eventTime!,
       jsonEncode({

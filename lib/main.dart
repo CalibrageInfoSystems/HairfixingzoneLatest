@@ -54,7 +54,7 @@ class MyApp extends StatelessWidget {
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
   late String formattedDate;
-  late final int userId;
+    int? userId;
 
   MyApp({super.key});
 
@@ -96,7 +96,7 @@ class MyApp extends StatelessWidget {
         userId = prefs.getInt('userId')!;
 
         print('User ID: $userId');
-        LocalNotificationService.initialize(context, navigatorKey, userId, formattedDate);
+        LocalNotificationService.initialize(context, navigatorKey, userId!, formattedDate);
       }
     });
 

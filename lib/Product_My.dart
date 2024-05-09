@@ -238,7 +238,8 @@ class MyProducts_screenState extends State<ProductsMy> {
       final request = {
         "id": id,
         "categoryTypeId": categoryTypeId,
-        "genderTypeId": genderTypeId
+        "genderTypeId": genderTypeId,
+        "isActive": true
       };
       final response = await http.post(
         Uri.parse(apiurl),
@@ -453,7 +454,8 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
       final request = {
         "id": id,
         "categoryTypeId": categoryTypeId,
-        "genderTypeId": genderTypeId
+        "genderTypeId": genderTypeId,
+        "isActive": true
       };
       final response = await http.post(
         Uri.parse(apiurl),
