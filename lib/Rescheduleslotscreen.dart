@@ -790,11 +790,7 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
       showCustomToastMessageLong('No Slots Available Today', context, 1, 4);
     } else if (!slotselection) {
       showCustomToastMessageLong('Please Select A Slot', context, 1, 4);
-    } else if (value == null || value.isEmpty) {
-      // If value is empty, set ispurposeselected to true
-      ispurposeselected = true;
-      setState(() {});
-    } else {
+    }  else {
       // If all conditions are met, proceed to book the appointment
       bookappointment();
     }
