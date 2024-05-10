@@ -790,15 +790,15 @@ class EditProfile_screenState extends State<EditProfile> {
     if (value.length < 2) {
       setState(() {
         _fullNameError = true;
-        _fullNameErrorMsg = 'Full Name should contains minimum 2 charactes';
+        _fullNameErrorMsg = 'Full Name Should Contains Minimum 2 Charactes';
       });
       isFullNameValidate = false;
       return null;
     }
-    if (!RegExp(r'^[a-zA-Z]+$').hasMatch(value)) {
-      return 'Full Name should only contain alphabetic characters';
+    if (!RegExp(r'[a-zA-Z\s]').hasMatch(value)) {
+      return 'Full Name Should be Contains Alphabetic Characters';
     }
-    if (!RegExp(r'^[a-zA-Z]+$').hasMatch(value)) {
+    if (!RegExp(r'[a-zA-Z\s]').hasMatch(value)) {
       setState(() {
         _fullNameError = true;
         _fullNameErrorMsg = 'Full Name Should Only Contain Alphabets';
@@ -940,6 +940,11 @@ class EditProfile_screenState extends State<EditProfile> {
       DateTime now = DateTime.now();
       ProgressDialog progressDialog = ProgressDialog(context);
 
+      String dobtoapi = dobController.text;
+      String? formattedDob;
+
+      formattedDob = DateFormat('yyyy-MM-dd').format(selectedDate);
+      print('formattedapi$formattedDob');
       // Show the progress dialog
       progressDialog.show();
       final request = {
@@ -961,7 +966,7 @@ class EditProfile_screenState extends State<EditProfile> {
         "updatedDate": "$now",
         "roleId": roleId,
         "gender": gendertypeid,
-        "dateofbirth": "${dobController.text}",
+        "dateofbirth": "${formattedDob}",
         "branchIds": "null"
       };
 
