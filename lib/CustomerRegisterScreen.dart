@@ -109,60 +109,99 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
     // DateofBirth.text = _formatDate(selectedDate);
   }
 
-  Future<void> _selectDate(BuildContext context) async {
-    final DateTime? pickedYear = await showDatePicker(
-      context: context,
-      initialDate: selectedDate,
-      firstDate: DateTime(DateTime.now().year - 100),
-      initialEntryMode: DatePickerEntryMode.calendarOnly,
-      lastDate: DateTime.now(),
-      initialDatePickerMode: DatePickerMode.year,
-    );
-    if (pickedYear != null && pickedYear != selectedDate) {
-      setState(() {
-        selectedDate = pickedYear;
-        dobController.text = DateFormat('dd-MM-yyyy').format(selectedDate);
-        _dobError = false;
-      });
-      // After year selection, open month selection dialog
-      await _selectMonth(context);
-    }
-  }
-
   String _formatDate(DateTime date) {
     // Format the date in "dd MMM yyyy" format
     return DateFormat('dd-MM-yyyy').format(date);
   }
 
-  Future<void> _selectMonth(BuildContext context) async {
-    final DateTime? pickedMonth = await showDatePicker(
-      context: context,
-      initialDate: selectedDate,
-      firstDate: DateTime(selectedDate.year),
-      initialEntryMode: DatePickerEntryMode.calendarOnly,
-      lastDate: DateTime(selectedDate.year + 1),
-      initialDatePickerMode: DatePickerMode.day, // Start with day mode to enable month view
-    );
-    if (pickedMonth != null && pickedMonth != selectedDate) {
-      setState(() {
-        selectedDate = pickedMonth;
-        dobController.text = DateFormat('dd-MM-yyyy').format(selectedDate);
-      });
-      // After month selection, open day selection dialog
-      await _selectDay(context);
-    }
-  }
+  // Future<void> _selectDate(BuildContext context) async {
+  //   final DateTime? pickedYear = await showDatePicker(
+  //     context: context,
+  //     initialDate: selectedDate,
+  //     firstDate: DateTime(DateTime.now().year - 100),
+  //     initialEntryMode: DatePickerEntryMode.calendarOnly,
+  //     lastDate: DateTime.now(),
+  //     initialDatePickerMode: DatePickerMode.year,
+  //   );
+  //   if (pickedYear != null && pickedYear != selectedDate) {
+  //     setState(() {
+  //       selectedDate = pickedYear;
+  //       dobController.text = DateFormat('dd-MM-yyyy').format(selectedDate);
+  //       _dobError = false;
+  //     });
+  //     // After year selection, open month selection dialog
+  //     await _selectDay(context);
+  //   }
+  // }
 
-  Future<void> _selectDay(BuildContext context) async {
+  // Future<void> _selectMonth(BuildContext context) async {
+  //   final DateTime? pickedMonth = await showDatePicker(
+  //     context: context,
+  //     initialDate: selectedDate,
+  //     firstDate: DateTime(selectedDate.year),
+  //     initialEntryMode: DatePickerEntryMode.calendarOnly,
+  //     lastDate: DateTime(selectedDate.year + 1),
+  //     initialDatePickerMode: DatePickerMode.day, // Start with day mode to enable month view
+  //   );
+  //   if (pickedMonth != null && pickedMonth != selectedDate) {
+  //     setState(() {
+  //       selectedDate = pickedMonth;
+  //       dobController.text = DateFormat('dd-MM-yyyy').format(selectedDate);
+  //     });
+  //     // After month selection, open day selection dialog
+  //     await _selectDay(context);
+  //   }
+  // }
+
+  // Future<void> _selectDay(BuildContext context) async {
+  //   final DateTime? pickedDay = await showDatePicker(
+  //     context: context,
+  //     initialDate: selectedDate,
+  //     initialEntryMode: DatePickerEntryMode.calendarOnly,
+  //     firstDate: DateTime(selectedDate.year, selectedDate.month),
+  //     lastDate: DateTime(selectedDate.year, selectedDate.month + 1, 0),
+  //     initialDatePickerMode: DatePickerMode.day,
+  //   );
+  //   if (pickedDay != null && pickedDay != selectedDate) {
+  //     setState(() {
+  //       selectedDate = pickedDay;
+  //       dobController.text = DateFormat('dd-MM-yyyy').format(selectedDate);
+  //     });
+  //   }
+  // }
+  // Future<void> _selectDate(BuildContext context) async {
+  //   final DateTime? pickedYear = await showDatePicker(
+  //     context: context,
+  //     initialDate: selectedDate,
+  //     firstDate: DateTime(DateTime.now().year - 100),
+  //     initialEntryMode: DatePickerEntryMode.calendarOnly,
+  //     lastDate: DateTime.now(),
+  //     initialDatePickerMode: DatePickerMode.year,
+  //   );
+  //   if (pickedYear != null && pickedYear != selectedDate) {
+  //     setState(() {
+  //       selectedDate = pickedYear;
+  //       dobController.text = DateFormat('dd-MM-yyyy').format(selectedDate);
+  //       _dobError = false;
+  //     });
+  //     // After year selection, open month selection dialog
+  //     await _selectDay(context);
+  //   }
+  // }
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime currentDate = DateTime.now();
+    final DateTime oldestDate = DateTime(currentDate.year - 100); // Example: Allow selection from 100 years ago
     final DateTime? pickedDay = await showDatePicker(
       context: context,
       initialDate: selectedDate,
       initialEntryMode: DatePickerEntryMode.calendarOnly,
-      firstDate: DateTime(selectedDate.year, selectedDate.month),
-      lastDate: DateTime(selectedDate.year, selectedDate.month + 1, 0),
+      firstDate: oldestDate, // Allow selection from oldestDate (e.g., 100 years ago)
+      lastDate: currentDate, // Restrict to current date
       initialDatePickerMode: DatePickerMode.day,
     );
-    if (pickedDay != null && pickedDay != selectedDate) {
+    if (pickedDay != null) {
+      // Check if pickedDay is not in the future
       setState(() {
         selectedDate = pickedDay;
         dobController.text = DateFormat('dd-MM-yyyy').format(selectedDate);
@@ -247,7 +286,7 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
                                   label: 'Full Name',
                                   validator: validatefullname,
                                   inputFormatters: [
-                                    FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z]')),
+                                    FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]')), // Including '\s' for space
                                   ],
                                   controller: fullNameController,
                                   keyboardType: TextInputType.name,
@@ -1409,5 +1448,58 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
     } catch (e) {
       return false;
     }
+  }
+}
+
+class CustomDatePicker extends StatelessWidget {
+  final DateTime initialDate;
+  final DateTime firstDate;
+  final DateTime lastDate;
+  final ValueChanged<DateTime?>? onDateSelected;
+
+  const CustomDatePicker({
+    Key? key,
+    required this.initialDate,
+    required this.firstDate,
+    required this.lastDate,
+    this.onDateSelected,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () async {
+        final DateTime? pickedDate = await showDatePicker(
+          context: context,
+          initialDate: initialDate,
+          firstDate: firstDate,
+          lastDate: lastDate,
+          builder: (BuildContext context, Widget? child) {
+            return Theme(
+              data: ThemeData.light().copyWith(
+                colorScheme: ColorScheme.light(
+                  primary: Colors.blue, // Change this to your desired color
+                ),
+              ),
+              child: child!,
+            );
+          },
+        );
+        if (pickedDate != null && onDateSelected != null) {
+          onDateSelected!(pickedDate);
+        }
+      },
+      child: AbsorbPointer(
+        child: TextFormField(
+          controller: TextEditingController(
+            text: initialDate.toLocal().toString().split(' ')[0],
+          ),
+          decoration: InputDecoration(
+            labelText: 'Date',
+            suffixIcon: Icon(Icons.calendar_today),
+          ),
+        ),
+      ),
+    );
   }
 }

@@ -91,7 +91,7 @@ class EditProfile_screenState extends State<EditProfile> {
           Id = prefs.getInt('profileId');
           UserId = prefs.getString('profileUserId');
           fullname = prefs.getString('profilefullname');
-          dob = prefs.getString('profiledateofbirth');
+          dob = prefs.getString('profiledateofbirth') ?? '';
           gender = prefs.getString('profilegender');
           gendertypeid = prefs.getInt('profilegenderId');
           email = prefs.getString('profileemail');
@@ -108,14 +108,26 @@ class EditProfile_screenState extends State<EditProfile> {
           // contactNumber = prefs.getString('contactNumber');
           // gender = prefs.getString('gender');
           // dob = prefs.getString('dateofbirth');
-          DateTime date = DateTime.parse(dob!);
           roleId = prefs.getInt('userRoleId');
           password = prefs.getString('password');
-          //gendertypeid = prefs.getInt('genderTypeId');
+          // DateTime date = DateTime.parse(dob!);
+          //   formattedDate = DateFormat('dd-MM-yyyy').format(date);
+          if (dob!.isNotEmpty) {
+            formattedDate = DateFormat('dd-MM-yyyy').format(DateTime.parse(dob!));
+          } else {
+            formattedDate = '';
+          }
+
+          if (!formattedDate!.isEmpty) {
+            formattedDate = DateFormat('dd-MM-yyyy').format(DateTime.parse(dob!));
+          } else {
+            formattedDate = '';
+          }
+
           print('fullname$fullname');
           print('usernameId:$Id');
           print('gender:$gender');
-          formattedDate = DateFormat('dd-MM-yyyy').format(date);
+
           fullNameController.text = '$fullname';
           dobController.text = '$formattedDate';
           emailController.text = '$email';
@@ -125,13 +137,6 @@ class EditProfile_screenState extends State<EditProfile> {
           selectedGender = gender!;
           isGenderSelected = true;
           isGenderValidate = false;
-          // selectedTypeCdId = dropdownItems.indexWhere((item) => item['desc'] == selectedGender);
-          //isGenderSelected = false;
-          // if (selectedGender != null) {
-          //   // Update the selectedTypeCdId based on the saved gender
-          //   selectedTypeCdId = dropdownItems.indexWhere((item) => item['desc'] == selectedGender);
-          //   isGenderSelected = false;
-          // }
         });
 
         // fetchMyAppointments(userId);
@@ -142,42 +147,61 @@ class EditProfile_screenState extends State<EditProfile> {
     });
   }
 
+  // Future<void> _selectDate(BuildContext context) async {
+  //   final DateTime? pickedYear = await showDatePicker(
+  //     context: context,
+  //     initialDate: selectedDate,
+  //     firstDate: DateTime(DateTime.now().year - 100),
+  //     initialEntryMode: DatePickerEntryMode.calendarOnly,
+  //     lastDate: DateTime.now(),
+  //     initialDatePickerMode: DatePickerMode.year,
+  //   );
+  //   if (pickedYear != null && pickedYear != selectedDate) {
+  //     setState(() {
+  //       selectedDate = pickedYear;
+  //       dobController.text = DateFormat('dd-MM-yyyy').format(selectedDate);
+  //       _dobError = false;
+  //     });
+  //     // After year selection, open month selection dialog
+  //     await _selectMonth(context);
+  //   }
+  // }
+  //
+  // Future<void> _selectMonth(BuildContext context) async {
+  //   final DateTime? pickedMonth = await showDatePicker(
+  //     context: context,
+  //     initialDate: selectedDate,
+  //     firstDate: DateTime(selectedDate.year),
+  //     initialEntryMode: DatePickerEntryMode.calendarOnly,
+  //     lastDate: DateTime.now(),
+  //     initialDatePickerMode: DatePickerMode.day, // Start with day mode to enable month view
+  //   );
+  //   if (pickedMonth != null && pickedMonth != selectedDate) {
+  //     setState(() {
+  //       selectedDate = pickedMonth;
+  //       dobController.text = DateFormat('dd-MM-yyyy').format(selectedDate);
+  //     });
+  //     // After month selection, open day selection dialog
+  //     await _selectDay(context);
+  //   }
+  // }
   Future<void> _selectDate(BuildContext context) async {
-    final DateTime? pickedYear = await showDatePicker(
+    final DateTime currentDate = DateTime.now();
+    final DateTime oldestDate = DateTime(currentDate.year - 100); // Example: Allow selection from 100 years ago
+    final DateTime? pickedDay = await showDatePicker(
       context: context,
       initialDate: selectedDate,
-      firstDate: DateTime(DateTime.now().year - 100),
       initialEntryMode: DatePickerEntryMode.calendarOnly,
-      lastDate: DateTime.now(),
-      initialDatePickerMode: DatePickerMode.year,
+      firstDate: oldestDate, // Allow selection from oldestDate (e.g., 100 years ago)
+      lastDate: currentDate, // Restrict to current date
+      initialDatePickerMode: DatePickerMode.day,
     );
-    if (pickedYear != null && pickedYear != selectedDate) {
+    if (pickedDay != null) {
+      // Check if pickedDay is not in the future
       setState(() {
-        selectedDate = pickedYear;
-        dobController.text = DateFormat('dd-MM-yyyy').format(selectedDate);
-        _dobError = false;
-      });
-      // After year selection, open month selection dialog
-      await _selectMonth(context);
-    }
-  }
-
-  Future<void> _selectMonth(BuildContext context) async {
-    final DateTime? pickedMonth = await showDatePicker(
-      context: context,
-      initialDate: selectedDate,
-      firstDate: DateTime(selectedDate.year),
-      initialEntryMode: DatePickerEntryMode.calendarOnly,
-      lastDate: DateTime.now(),
-      initialDatePickerMode: DatePickerMode.day, // Start with day mode to enable month view
-    );
-    if (pickedMonth != null && pickedMonth != selectedDate) {
-      setState(() {
-        selectedDate = pickedMonth;
+        selectedDate = pickedDay;
         dobController.text = DateFormat('dd-MM-yyyy').format(selectedDate);
       });
-      // After month selection, open day selection dialog
-      await _selectDay(context);
     }
   }
 
@@ -265,7 +289,7 @@ class EditProfile_screenState extends State<EditProfile> {
                             label: 'Full Name ',
                             validator: validatefullname,
                             inputFormatters: [
-                              FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z]')),
+                              FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]')), // Including '\s' for space
                             ],
                             controller: fullNameController,
                             keyboardType: TextInputType.name,
@@ -391,11 +415,8 @@ class EditProfile_screenState extends State<EditProfile> {
                                       ),
                                       onChanged: (value) {
                                         setState(() {
-                                          // selectedGender = value!;
-                                          // print('selectgender:$selectedGender');
-
                                           selectedGender = value!;
-                                          // Update the gendertypeid based on the selected gender
+
                                           gendertypeid = dropdownItems.firstWhere((item) => item['desc'] == selectedGender)['typeCdId'];
 
                                           // if (selectedTypeCdId != -1) {

@@ -128,7 +128,7 @@ class _BookingScreenState extends State<SelectCity_Branch_screen> {
                       Row(
                         children: [
                           Text(
-                            'Select City ',
+                            'City ',
                             style: TextStyle(
                               fontSize: 14,
                               fontFamily: "Calibri",
@@ -137,7 +137,7 @@ class _BookingScreenState extends State<SelectCity_Branch_screen> {
                             ),
                           ),
                           Text(
-                            '*',
+                            '',
                             style: TextStyle(color: Colors.red),
                           ),
                         ],
@@ -242,7 +242,6 @@ class _BookingScreenState extends State<SelectCity_Branch_screen> {
                                             branchaddress: branchnames.address!,
                                             phonenumber: branchnames.PhoneNumber!,
                                             branchImage: branchnames.imageName!,
-
                                           ),
                                         ),
                                       );

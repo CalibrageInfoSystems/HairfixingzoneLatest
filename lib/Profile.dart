@@ -486,29 +486,29 @@ class _UserLayoutState extends State<UserLayout> {
               ),
               title: Text(widget.data),
             ),
-            if (_isTooltipVisible)
-              LayoutBuilder(
-                builder: (context, constraints) {
-                  return Positioned(
-                    key: _tooltipKey,
-                    top: 80, // Adjust position to show below the widget
-                    left: 10, // Adjust position as needed
-                    width: constraints.maxWidth, // Adjust width based on parent width
-                    child: Container(
-                      padding: EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: Colors.grey.withOpacity(0.9),
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                      child: Text(
-                        widget.tooltipMessage,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
-                  );
-                },
-              ),
+            // if (_isTooltipVisible)
+            //   LayoutBuilder(
+            //     builder: (context, constraints) {
+            //       return Positioned(
+            //         key: _tooltipKey,
+            //         top: 80, // Adjust position to show below the widget
+            //         left: 10, // Adjust position as needed
+            //         width: constraints.maxWidth, // Adjust width based on parent width
+            //         child: Container(
+            //           padding: EdgeInsets.all(8),
+            //           decoration: BoxDecoration(
+            //             color: Colors.grey.withOpacity(0.9),
+            //             borderRadius: BorderRadius.circular(4),
+            //           ),
+            //           child: Text(
+            //             widget.tooltipMessage,
+            //             textAlign: TextAlign.center,
+            //             style: TextStyle(color: Colors.white),
+            //           ),
+            //         ),
+            //       );
+            //     },
+            //   ),
           ],
         ),
       ),

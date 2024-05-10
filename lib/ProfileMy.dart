@@ -91,15 +91,15 @@ class Profile_screenState extends State<ProfileMy> {
           String roleName = customerData['rolename'] ?? '';
 
           // Mobilenumber = customerData['MobileNumber']??'';
-          String dob = customerData['dateofbirth'];
-          if (dob!.isNotEmpty) {
-            formattedDate = DateFormat('dd-MM-yyyy').format(DateTime.parse(dob!));
+          String dob = customerData['dateofbirth'] ?? '';
+          if (dob.isNotEmpty) {
+            formattedDate = DateFormat('dd-MM-yyyy').format(DateTime.parse(dob));
           } else {
             formattedDate = '';
           }
 
-          if (!formattedDate!.isEmpty) {
-            formattedDate = DateFormat('dd-MM-yyyy').format(DateTime.parse(dob!));
+          if (!formattedDate.isEmpty) {
+            formattedDate = DateFormat('dd-MM-yyyy').format(DateTime.parse(dob));
           } else {
             formattedDate = '';
           }
@@ -298,7 +298,8 @@ class Profile_screenState extends State<ProfileMy> {
                       child: CircularProgressIndicator.adaptive(),
                     )
                   : Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      //  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Column(
                           children: [
@@ -546,29 +547,29 @@ class _UserLayoutState extends State<UserLayout> {
               ),
               title: Text(widget.data),
             ),
-            if (_isTooltipVisible)
-              LayoutBuilder(
-                builder: (context, constraints) {
-                  return Positioned(
-                    key: _tooltipKey,
-                    top: 80, // Adjust position to show below the widget
-                    left: 10, // Adjust position as needed
-                    width: constraints.maxWidth, // Adjust width based on parent width
-                    child: Container(
-                      padding: EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: Colors.grey.withOpacity(0.9),
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                      child: Text(
-                        widget.tooltipMessage,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
-                  );
-                },
-              ),
+            // if (_isTooltipVisible)
+            //   LayoutBuilder(
+            //     builder: (context, constraints) {
+            //       return Positioned(
+            //         key: _tooltipKey,
+            //         top: 80, // Adjust position to show below the widget
+            //         left: 10, // Adjust position as needed
+            //         width: constraints.maxWidth, // Adjust width based on parent width
+            //         child: Container(
+            //           padding: EdgeInsets.all(8),
+            //           decoration: BoxDecoration(
+            //             color: Colors.grey.withOpacity(0.9),
+            //             borderRadius: BorderRadius.circular(4),
+            //           ),
+            //           child: Text(
+            //             widget.tooltipMessage,
+            //             textAlign: TextAlign.center,
+            //             style: TextStyle(color: Colors.white),
+            //           ),
+            //         ),
+            //       );
+            //     },
+            //   ),
           ],
         ),
       ),
