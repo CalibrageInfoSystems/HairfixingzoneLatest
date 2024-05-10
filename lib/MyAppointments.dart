@@ -1255,7 +1255,23 @@ class _OpCardState extends State<OpCard> {
           children: [
             GestureDetector(
               onTap: () {
-                if (!isPastDate(data.date, data.slotDuration)) {
+                int timeDifference = calculateTimeDifference(data.date, data.slotDuration);
+                print('====timeDifference ${timeDifference}');// assuming you have a function to calculate time difference
+                // if (timeDifference <= 0) {
+                //   // Show error toast if time difference is 0 or negative
+                //   CommonUtils.showCustomToastMessageLong(
+                //     'The request should not be rescheduled within 1 hour before the slot',
+                //     context,
+                //     0,
+                //     2,
+                //   );
+                // } else
+                if (timeDifference <= 60) {
+                  // Show error toast if time difference is less than or equal to 60 minutes
+                  CommonUtils.showCustomToastMessageLong(
+                    'The Request Should Not Be Rescheduled With In  1 Hour Before Slot', context, 0, 2,);
+                } else {
+                  // Navigate to reschedule screen if time difference is greater than 60 minutes
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -1272,12 +1288,12 @@ class _OpCardState extends State<OpCard> {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(3),
                     border: Border.all(
-                        color: isPastDate(data.date, data.slotDuration)
-                            ? Colors.grey
-                            : CommonStyles.primaryTextColor),
+                      color: isPastDate(data.date, data.slotDuration)
+                          ? Colors.grey
+                          : CommonStyles.primaryTextColor,
+                    ),
                   ),
-                  padding:
-                  const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
+                  padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
                   child: Row(
                     children: [
                       SvgPicture.asset(
@@ -1301,6 +1317,56 @@ class _OpCardState extends State<OpCard> {
                 ),
               ),
             ),
+
+
+            // GestureDetector(
+            //   onTap: () {
+            //     if (!isPastDate(data.date, data.slotDuration)) {
+            //       Navigator.push(
+            //         context,
+            //         MaterialPageRoute(
+            //           builder: (context) => Rescheduleslotscreen(
+            //             data: data,
+            //           ),
+            //         ),
+            //       );
+            //     }
+            //   },
+            //   child: IgnorePointer(
+            //     ignoring: isPastDate(data.date, data.slotDuration),
+            //     child: Container(
+            //       decoration: BoxDecoration(
+            //         borderRadius: BorderRadius.circular(3),
+            //         border: Border.all(
+            //             color: isPastDate(data.date, data.slotDuration)
+            //                 ? Colors.grey
+            //                 : CommonStyles.primaryTextColor),
+            //       ),
+            //       padding:
+            //       const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
+            //       child: Row(
+            //         children: [
+            //           SvgPicture.asset(
+            //             'assets/calendar-_3_.svg',
+            //             width: 13,
+            //             color: isPastDate(data.date, data.slotDuration)
+            //                 ? Colors.grey
+            //                 : CommonUtils.primaryTextColor,
+            //           ),
+            //           Text(
+            //             '  Reschedule',
+            //             style: TextStyle(
+            //               fontSize: 15,
+            //               color: isPastDate(data.date, data.slotDuration)
+            //                   ? Colors.grey
+            //                   : CommonUtils.primaryTextColor,
+            //             ),
+            //           ),
+            //         ],
+            //       ),
+            //     ),
+            //   ),
+            // ),
             const SizedBox(
               width: 10,
             ),
@@ -1715,11 +1781,12 @@ class _OpCardState extends State<OpCard> {
         "IsActive": true,
         "CreatedDate": dateTimeString,
         "UpdatedDate": dateTimeString,
-        "UpdatedByUserId": appointmens.genderTypeId,
+        "UpdatedByUserId":null,
         "rating": rating_star,
         "review": _commentstexteditcontroller.text.toString(),
         "reviewSubmittedDate": dateTimeString,
-        "timeofslot": null,
+        "timeofslot": appointmens.timeofSlot,
+        // "timeofslot": null,
         "customerId": userId
       };
       print('AddUpdatefeedback object: : ${json.encode(request)}');
@@ -1970,10 +2037,10 @@ class _OpCardState extends State<OpCard> {
       "CreatedDate": dateTimeString,
       "UpdatedDate": dateTimeString,
       "UpdatedByUserId": null,
-      "rating": rating_star,
-      "review": _commentstexteditcontroller.text.toString(),
-      "reviewSubmittedDate": dateTimeString,
-      "timeofslot": null,
+      "rating": null,
+      "review": null,
+      "reviewSubmittedDate": null,
+      "timeofslot": appointmens.timeofSlot,
       "customerId": userId
     };
     print('AddUpdatefeedback object: : ${json.encode(request)}');
@@ -2005,7 +2072,7 @@ class _OpCardState extends State<OpCard> {
           // Failure case
           // Handle failure scenario here
           CommonUtils.showCustomToastMessageLong(
-              'The request should not be canceled within 30 minutes before slot',
+              'The Request Should Not Be Canceled With In  1 Hour Before Slot',
               context,
               0,
               2);
@@ -2071,4 +2138,49 @@ class _OpCardState extends State<OpCard> {
       },
     );
   }
+  int calculateTimeDifference(String selectedDate, String time) {
+    final now = DateTime.now();
+    String formattedTime = DateFormat('yyyy-MM-dd hh:mm a').format(now);
+
+    // Extract the date part (first 10 characters) from selectedDate
+    String datePart = selectedDate.substring(0, 10);
+
+    // Concatenate datePart and time
+    String selectedDateTimeString = '$datePart $time';
+
+    // Parse the concatenated string into a DateTime object
+    DateTime selectedDateTime = DateFormat('yyyy-MM-dd hh:mm a').parse(selectedDateTimeString);
+    DateTime currentDateTime = DateFormat('yyyy-MM-dd hh:mm a').parse(formattedTime);
+
+    print('Time difference in selectedDateTime: ${selectedDateTime.toString()}');
+    print('Time difference in currentDateTime: ${currentDateTime.toString()}');
+
+    Duration difference = selectedDateTime.difference(currentDateTime);
+    int differenceInMinutes = difference.inMinutes;
+
+    print('Time difference in minutes: $differenceInMinutes');
+
+    return differenceInMinutes.abs(); // Return the absolute value of the difference
+  }
+
+
+  //
+  // int calculateTimeDifference(String selectedDate, String time) {
+  //   final now = DateTime.now();
+  //   String formattedTime = DateFormat('hh:mm a').format(now);
+  //
+  //   final selectedDateTime = DateTime.parse(selectedDate);
+  //   final currentDate = DateTime(now.year, now.month, now.day);
+  //
+  //   int differenceInMinutes = 0; // Initializing the time difference variable
+  //
+  //   DateTime desiredTime = DateFormat('hh:mm a').parse(time);
+  //   DateTime currentTime = DateFormat('hh:mm a').parse(formattedTime);
+  //   Duration difference = desiredTime.difference(currentTime);
+  //   differenceInMinutes = difference.inMinutes.abs(); // Use abs() to get the absolute value
+  //   print('Time difference in minutes: $differenceInMinutes');
+  //
+  //   return differenceInMinutes;
+  // }
+
 }

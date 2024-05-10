@@ -34,7 +34,7 @@ class TwoCardPageView extends StatefulWidget {
 
 class _TwoCardPageViewState extends State<TwoCardPageView> {
   List<Item> _items = [];
-  late PageController _pageController;
+ late PageController _pageController;
   late Timer _timer;
   int _currentPage = 0;
   int? userId;
@@ -47,6 +47,9 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
 
 //  String gender ='';
   String Gender = '';
+  bool _shouldStartMarquee = true; // Variable to control Marquee scrolling
+
+ // final PageController _pageController = PageController();
 
   @override
   void initState() {
@@ -129,389 +132,737 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
   Widget build(BuildContext context) {
     return Scaffold(
       // backgroundColor: CommonStyles.primaryTextColor,
-      body: Column(
+      body:
+      Column(
         children: [
-          //MARK: Welcome Text
-          // Container(
-          //   padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-          //   height: 80,
-          //   child: Column(
-          //     crossAxisAlignment: CrossAxisAlignment.stretch,
-          //     mainAxisAlignment: MainAxisAlignment.center,
-          //     children: [
-          //       GestureDetector(
-          //         onTap: () {
-          //           // Navigator.push(
-          //           //   context,
-          //           //   MaterialPageRoute(
-          //           //       builder: (context) => const AgentDashBoard()),
-          //           // );
-          //         },
-          //         child: const Text(
-          //           'Hello!',
-          //           style: CommonStyles.txSty_16w_fb,
-          //         ),
-          //       ),
-          //       Text(
-          //         userFullName,
-          //         style: CommonStyles.txSty_18w_fb,
-          //       ),
-          //     ],
-          //   ),
-          // ),
-          //MARK: Main Card
+          // Marquee and PageView combined into one scrollable widget
 
-          SingleChildScrollView(
-            child: Container(
-              decoration: const BoxDecoration(
-                color: CommonStyles.whiteColor,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(20),
-                  topRight: Radius.circular(20),
-                ),
-              ),
+        SingleChildScrollView(
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  //MARK: Marquee
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start, // Adjust as needed
-                    children: [
-                      SizedBox(
-                        height: 30,
-                        child: FutureBuilder(
-                          future: getMarqueeText(),
-                          builder: (context, snapshot) {
-                            if (snapshot.connectionState == ConnectionState.waiting) {
-                              return const SizedBox();
-                            } else if (snapshot.hasError) {
-                              return const SizedBox();
-                            } else {
-                              return Marquee(
-                                text: marqueeText,
-                                style: const TextStyle(fontSize: 16, fontFamily: "Calibri", fontWeight: FontWeight.w600, color: Color(0xFFff0176)),
-                              );
-                            }
-                          },
-                        ),
-                      ),
-                      isDataBinding
-                          ? Center(
-                              child: CircularProgressIndicator.adaptive(),
-                            )
-                          : SizedBox(
-                              width: MediaQuery.of(context).size.width,
-                              height: 180,
-                              child: PageView.builder(
-                                controller: _pageController,
-                                itemCount: _items.length,
-                                itemBuilder: (context, index) {
-                                  final itemIndex = index % _items.length;
-                                  return SizedBox(
-                                    child: Row(
-                                      children: [
-                                        Expanded(
-                                          child: ItemBuilder(items: _items, index: itemIndex),
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                },
-                                onPageChanged: (int page) {
-                                  setState(() {
-                                    _currentPage = page;
-                                  });
-                                },
-                              ),
-                            ),
-                    ],
+                  SizedBox(
+                    height: 30,
+                    child: FutureBuilder(
+                      future: getMarqueeText(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.waiting) {
+                          return const SizedBox();
+                        } else if (snapshot.hasError) {
+                          return const SizedBox();
+                        } else {
+                          return Marquee(
+                            text: marqueeText,
+                            style: const TextStyle(fontSize: 16, fontFamily: "Calibri", fontWeight: FontWeight.w600, color: Color(0xFFff0176)),
+                            velocity: _shouldStartMarquee ? 30 : 0, // Control Marquee scrolling with velocity
+                          );
+                        }
+                      },
+                    ),
                   ),
-
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    height: 180,
+                    child: PageView.builder(
+                      controller: _pageController,
+                      itemCount: _items.length,
+                      itemBuilder: (context, index) {
+                        final itemIndex = index % _items.length;
+                        return SizedBox(
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: ItemBuilder(items: _items, index: itemIndex),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                      onPageChanged: (int page) {
+                        setState(() {
+                          _currentPage = page;
+                        });
+                      },
+                    ),
+                  ),
+                  // PageView indicator
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       for (int i = 0; i < _items.length; i++)
-                        Container(
-                          margin: const EdgeInsets.all(2),
-                          width: 10,
-                          height: 10,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(color: CommonStyles.primaryTextColor, width: 1.5),
-                            color: _currentPage == i ? Colors.grey.withOpacity(0.9) : Colors.transparent,
+                        GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              _currentPage = i;
+                            });
+                          },
+                          child: Container(
+                            margin: const EdgeInsets.all(2),
+                            width: 10,
+                            height: 10,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(color: CommonStyles.primaryTextColor, width: 1.5),
+                              color: _currentPage == i ? Colors.grey.withOpacity(0.9) : Colors.transparent,
+                            ),
                           ),
-                        )
+                        ),
                     ],
-                  ),
-                  const SizedBox(height: 8.0),
-
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                    child: Column(
-                      children: [
-                        //MARK: Book Appointment
-                        IntrinsicHeight(
-                          child: GestureDetector(
-                            onTap: () {
-                              Navigator.of(context, rootNavigator: true).pushNamed("/BookAppointment");
-                            },
-                            child: Container(
-                                width: double.infinity,
-                                height: MediaQuery.of(context).size.height / 11,
-                                //height: 60,
-                                padding: const EdgeInsets.all(5),
-                                decoration: BoxDecoration(
-                                  border: Border.all(color: CommonStyles.primaryTextColor),
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child:
-                                    // GestureDetector(
-                                    //     onTap: () {
-                                    //       Navigator.of(context, rootNavigator: true).pushNamed("/BookAppointment");
-                                    //     },
-                                    //     child:
-                                    Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    SizedBox(
-                                      width: 2,
-                                    ),
-                                    Container(
-                                      padding: const EdgeInsets.all(15),
-                                      decoration: const BoxDecoration(shape: BoxShape.circle, color: CommonStyles.primaryTextColor),
-                                      child: Center(
-                                        child: SvgPicture.asset(
-                                          'assets/noun-appointment-date-2417776.svg',
-                                          width: 30.0,
-                                          height: 30.0,
-                                          color: CommonStyles.whiteColor,
-                                        ),
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      width: 10,
-                                    ),
-                                    // Expanded(
-                                    //   child: Column(
-                                    //     crossAxisAlignment: CrossAxisAlignment.start,
-                                    //     children: [
-                                    //       Text(
-                                    //         'Click Here',
-                                    //         style: CommonStyles.txSty_16p_f5,
-                                    //       ),
-                                    //       Text(
-                                    //         'To Book an Appointment',
-                                    //         style: CommonStyles.txSty_20p_fb,
-                                    //       ),
-                                    //     ],
-                                    //   ),
-                                    // ),
-                                    SizedBox(
-                                      width: MediaQuery.of(context).size.width / 2,
-                                      child: const Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: [
-                                          Text(
-                                            'Click Here To',
-                                            style: CommonStyles.txSty_16p_f5,
-                                          ),
-                                          Text(
-                                            'Book an Appointment',
-
-                                            /// style: CommonStyles.txSty_20p_fb,
-                                            style: TextStyle(
-                                              fontSize: 14,
-                                              fontFamily: "Calibri",
-                                              fontWeight: FontWeight.bold,
-                                              color: CommonStyles.primaryTextColor,
-                                              letterSpacing: 2,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      width: 10,
-                                    ),
-                                    SvgPicture.asset(
-                                      'assets/book_op_illusion.svg',
-                                      width: 60.0,
-                                      height: 55.0,
-                                      alignment: Alignment.centerRight,
-                                    ),
-                                  ],
-                                )),
-                            // )
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        //MARK: Screens
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.of(context, rootNavigator: true).pushNamed("/Mybookings");
-                              },
-                              child: Column(
-                                children: [
-                                  Container(
-                                    width: MediaQuery.of(context).size.width / 7,
-                                    // height: MediaQuery.of(context).size.height / 5,
-                                    padding: const EdgeInsets.all(15),
-                                    decoration: const BoxDecoration(
-                                      color: Color(0xFFe656ae),
-                                      shape: BoxShape.circle,
-                                    ),
-                                    child: SvgPicture.asset(
-                                      'assets/my_bookings_icon.svg',
-                                      color: CommonStyles.whiteColor,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 5),
-                                  const Text(
-                                    'My Bookings',
-                                    style: CommonStyles.txSty_14p_f5,
-                                  ),
-                                ],
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.of(context, rootNavigator: true).pushNamed("/Products");
-                              },
-                              child: Column(
-                                children: [
-                                  Container(
-                                    width: MediaQuery.of(context).size.width / 7,
-                                    //height: 60,
-                                    padding: const EdgeInsets.all(15),
-                                    decoration: const BoxDecoration(
-                                      color: Color(0xFFe44561),
-                                      shape: BoxShape.circle,
-                                    ),
-                                    child: SvgPicture.asset(
-                                      'assets/products_icon.svg',
-                                      color: CommonStyles.whiteColor,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 5),
-                                  const Text(
-                                    'Products',
-                                    style: CommonStyles.txSty_14p_f5,
-                                  ),
-                                ],
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.of(context, rootNavigator: true).pushNamed("/about");
-                              },
-                              child: Column(
-                                children: [
-                                  Container(
-                                    width: MediaQuery.of(context).size.width / 7,
-                                    // height: 60,
-                                    padding: const EdgeInsets.all(15),
-                                    decoration: const BoxDecoration(
-                                      color: Color(0xFF662d91),
-                                      shape: BoxShape.circle,
-                                    ),
-                                    child: SvgPicture.asset(
-                                      'assets/about_us_icon.svg',
-                                      color: CommonStyles.whiteColor,
-                                      // width: 11.0,
-                                      // height: 11.0,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 5),
-                                  const Text(
-                                    'About Us',
-                                    style: CommonStyles.txSty_14p_f5,
-                                  ),
-                                ],
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.of(context, rootNavigator: true).pushNamed("/ProfileMy");
-                              },
-                              child: Column(
-                                children: [
-                                  Container(
-                                    padding: const EdgeInsets.all(15),
-                                    width: MediaQuery.of(context).size.width / 7,
-                                    //   height: 60,
-                                    decoration: const BoxDecoration(
-                                      color: Color(0xFF295f5a),
-                                      shape: BoxShape.circle,
-                                    ),
-                                    child: SvgPicture.asset(
-                                      'assets/my_profile_icon.svg',
-                                      color: CommonStyles.whiteColor,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 5),
-                                  const Text(
-                                    'My Profile',
-                                    style: CommonStyles.txSty_14p_f5,
-                                  ),
-                                ],
-                              ),
-                            )
-                          ],
-                        ),
-                        const SizedBox(height: 10),
-                        //MARK: Branches
-                        const Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Branches',
-                              style: CommonStyles.txSty_16p_fb,
-                            ),
-                          ],
-                        ),
-
-                        SizedBox(
-                          height: MediaQuery.of(context).size.height / 4,
-                          child: FutureBuilder(
-                            future: apiData,
-                            builder: (context, snapshot) {
-                              if (snapshot.connectionState == ConnectionState.waiting) {
-                                return const Center(child: CircularProgressIndicator.adaptive());
-                              } else if (snapshot.hasError) {
-                                return Center(
-                                  child: Text(snapshot.error.toString()),
-                                );
-                              } else {
-                                List<BranchList>? data = snapshot.data!;
-                                return Container(
-                                  child: ListView.builder(
-                                    scrollDirection: Axis.horizontal,
-                                    itemCount: data.length,
-                                    itemBuilder: (context, index) {
-                                      return BranchCard(
-                                        branch: data[index],
-                                      );
-                                    },
-                                  ),
-                                );
-                              }
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
                   ),
                 ],
               ),
             ),
+
+         const SizedBox(height: 8.0),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15.0),
+            child: Column(
+              children: [
+                //MARK: Book Appointment
+                IntrinsicHeight(
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.of(context, rootNavigator: true).pushNamed("/BookAppointment");
+                    },
+                    child: Container(
+                        width: double.infinity,
+                        height: MediaQuery.of(context).size.height / 11,
+                        //height: 60,
+                        padding: const EdgeInsets.all(5),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: CommonStyles.primaryTextColor),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child:
+                        // GestureDetector(
+                        //     onTap: () {
+                        //       Navigator.of(context, rootNavigator: true).pushNamed("/BookAppointment");
+                        //     },
+                        //     child:
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            SizedBox(
+                              width: 2,
+                            ),
+                            Container(
+                              padding: const EdgeInsets.all(15),
+                              decoration: const BoxDecoration(shape: BoxShape.circle, color: CommonStyles.primaryTextColor),
+                              child: Center(
+                                child: SvgPicture.asset(
+                                  'assets/noun-appointment-date-2417776.svg',
+                                  width: 30.0,
+                                  height: 30.0,
+                                  color: CommonStyles.whiteColor,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            // Expanded(
+                            //   child: Column(
+                            //     crossAxisAlignment: CrossAxisAlignment.start,
+                            //     children: [
+                            //       Text(
+                            //         'Click Here',
+                            //         style: CommonStyles.txSty_16p_f5,
+                            //       ),
+                            //       Text(
+                            //         'To Book an Appointment',
+                            //         style: CommonStyles.txSty_20p_fb,
+                            //       ),
+                            //     ],
+                            //   ),
+                            // ),
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width / 2,
+                              child: const Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    'Click Here To',
+                                    style: CommonStyles.txSty_16p_f5,
+                                  ),
+                                  Text(
+                                    'Book an Appointment',
+
+                                    /// style: CommonStyles.txSty_20p_fb,
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontFamily: "Calibri",
+                                      fontWeight: FontWeight.bold,
+                                      color: CommonStyles.primaryTextColor,
+                                      letterSpacing: 2,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            SvgPicture.asset(
+                              'assets/book_op_illusion.svg',
+                              width: 60.0,
+                              height: 55.0,
+                              alignment: Alignment.centerRight,
+                            ),
+                          ],
+                        )),
+                    // )
+                  ),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                //MARK: Screens
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.of(context, rootNavigator: true).pushNamed("/Mybookings");
+                      },
+                      child: Column(
+                        children: [
+                          Container(
+                            width: MediaQuery.of(context).size.width / 7,
+                            // height: MediaQuery.of(context).size.height / 5,
+                            padding: const EdgeInsets.all(15),
+                            decoration: const BoxDecoration(
+                              color: Color(0xFFe656ae),
+                              shape: BoxShape.circle,
+                            ),
+                            child: SvgPicture.asset(
+                              'assets/my_bookings_icon.svg',
+                              color: CommonStyles.whiteColor,
+                            ),
+                          ),
+                          const SizedBox(height: 5),
+                          const Text(
+                            'My Bookings',
+                            style: CommonStyles.txSty_14p_f5,
+                          ),
+                        ],
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.of(context, rootNavigator: true).pushNamed("/Products");
+                      },
+                      child: Column(
+                        children: [
+                          Container(
+                            width: MediaQuery.of(context).size.width / 7,
+                            //height: 60,
+                            padding: const EdgeInsets.all(15),
+                            decoration: const BoxDecoration(
+                              color: Color(0xFFe44561),
+                              shape: BoxShape.circle,
+                            ),
+                            child: SvgPicture.asset(
+                              'assets/products_icon.svg',
+                              color: CommonStyles.whiteColor,
+                            ),
+                          ),
+                          const SizedBox(height: 5),
+                          const Text(
+                            'Products',
+                            style: CommonStyles.txSty_14p_f5,
+                          ),
+                        ],
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.of(context, rootNavigator: true).pushNamed("/about");
+                      },
+                      child: Column(
+                        children: [
+                          Container(
+                            width: MediaQuery.of(context).size.width / 7,
+                            // height: 60,
+                            padding: const EdgeInsets.all(15),
+                            decoration: const BoxDecoration(
+                              color: Color(0xFF662d91),
+                              shape: BoxShape.circle,
+                            ),
+                            child: SvgPicture.asset(
+                              'assets/about_us_icon.svg',
+                              color: CommonStyles.whiteColor,
+                              // width: 11.0,
+                              // height: 11.0,
+                            ),
+                          ),
+                          const SizedBox(height: 5),
+                          const Text(
+                            'About Us',
+                            style: CommonStyles.txSty_14p_f5,
+                          ),
+                        ],
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.of(context, rootNavigator: true).pushNamed("/ProfileMy");
+                      },
+                      child: Column(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(15),
+                            width: MediaQuery.of(context).size.width / 7,
+                            //   height: 60,
+                            decoration: const BoxDecoration(
+                              color: Color(0xFF295f5a),
+                              shape: BoxShape.circle,
+                            ),
+                            child: SvgPicture.asset(
+                              'assets/my_profile_icon.svg',
+                              color: CommonStyles.whiteColor,
+                            ),
+                          ),
+                          const SizedBox(height: 5),
+                          const Text(
+                            'My Profile',
+                            style: CommonStyles.txSty_14p_f5,
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+                const SizedBox(height: 10),
+                //MARK: Branches
+                const Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Branches',
+                      style: CommonStyles.txSty_16p_fb,
+                    ),
+                  ],
+                ),
+
+                SizedBox(
+                  height: MediaQuery.of(context).size.height / 4,
+                  child: FutureBuilder(
+                    future: apiData,
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(child: CircularProgressIndicator.adaptive());
+                      } else if (snapshot.hasError) {
+                        return Center(
+                          child: Text(snapshot.error.toString()),
+                        );
+                      } else {
+                        List<BranchList>? data = snapshot.data!;
+                        return Container(
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: data.length,
+                            itemBuilder: (context, index) {
+                              return BranchCard(
+                                branch: data[index],
+                              );
+                            },
+                          ),
+                        );
+                      }
+                    },
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),
+
+      // Column(
+      //   children: [
+      //     //MARK: Welcome Text
+      //     // Container(
+      //     //   padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+      //     //   height: 80,
+      //     //   child: Column(
+      //     //     crossAxisAlignment: CrossAxisAlignment.stretch,
+      //     //     mainAxisAlignment: MainAxisAlignment.center,
+      //     //     children: [
+      //     //       GestureDetector(
+      //     //         onTap: () {
+      //     //           // Navigator.push(
+      //     //           //   context,
+      //     //           //   MaterialPageRoute(
+      //     //           //       builder: (context) => const AgentDashBoard()),
+      //     //           // );
+      //     //         },
+      //     //         child: const Text(
+      //     //           'Hello!',
+      //     //           style: CommonStyles.txSty_16w_fb,
+      //     //         ),
+      //     //       ),
+      //     //       Text(
+      //     //         userFullName,
+      //     //         style: CommonStyles.txSty_18w_fb,
+      //     //       ),
+      //     //     ],
+      //     //   ),
+      //     // ),
+      //     //MARK: Main Card
+      //
+      //     SingleChildScrollView(
+      //       child: Container(
+      //         decoration: const BoxDecoration(
+      //           color: CommonStyles.whiteColor,
+      //           borderRadius: BorderRadius.only(
+      //             topLeft: Radius.circular(20),
+      //             topRight: Radius.circular(20),
+      //           ),
+      //         ),
+      //
+      //         child: Column(
+      //           children: [
+      //             //MARK: Marquee
+      //             Column(
+      //               crossAxisAlignment: CrossAxisAlignment.start, // Adjust as needed
+      //               children: [
+      //                 SizedBox(
+      //                   height: 30,
+      //                   child: FutureBuilder(
+      //                     future: getMarqueeText(),
+      //                     builder: (context, snapshot) {
+      //                       if (snapshot.connectionState == ConnectionState.waiting) {
+      //                         return const SizedBox();
+      //                       } else if (snapshot.hasError) {
+      //                         return const SizedBox();
+      //                       } else {
+      //                         return Marquee(
+      //                           text: marqueeText,
+      //                           style: const TextStyle(fontSize: 16, fontFamily: "Calibri", fontWeight: FontWeight.w600, color: Color(0xFFff0176)),
+      //                         );
+      //                       }
+      //                     },
+      //                   ),
+      //                 ),
+      //                 isDataBinding
+      //                     ? Center(
+      //                         child: CircularProgressIndicator.adaptive(),
+      //                       )
+      //                     : SizedBox(
+      //                         width: MediaQuery.of(context).size.width,
+      //                         height: 180,
+      //                         child: PageView.builder(
+      //                           controller: _pageController,
+      //                           itemCount: _items.length,
+      //                           itemBuilder: (context, index) {
+      //                             final itemIndex = index % _items.length;
+      //                             return SizedBox(
+      //                               child: Row(
+      //                                 children: [
+      //                                   Expanded(
+      //                                     child: ItemBuilder(items: _items, index: itemIndex),
+      //                                   ),
+      //                                 ],
+      //                               ),
+      //                             );
+      //                           },
+      //                           onPageChanged: (int page) {
+      //                             setState(() {
+      //                               _currentPage = page;
+      //                             });
+      //                           },
+      //                         ),
+      //                       ),
+      //               ],
+      //             ),
+      //
+      //             Row(
+      //               mainAxisAlignment: MainAxisAlignment.center,
+      //               children: <Widget>[
+      //                 for (int i = 0; i < _items.length; i++)
+      //                   Container(
+      //                     margin: const EdgeInsets.all(2),
+      //                     width: 10,
+      //                     height: 10,
+      //                     decoration: BoxDecoration(
+      //                       borderRadius: BorderRadius.circular(10),
+      //                       border: Border.all(color: CommonStyles.primaryTextColor, width: 1.5),
+      //                       color: _currentPage == i ? Colors.grey.withOpacity(0.9) : Colors.transparent,
+      //                     ),
+      //                   )
+      //               ],
+      //             ),
+      //             const SizedBox(height: 8.0),
+      //
+      //             Padding(
+      //               padding: const EdgeInsets.symmetric(horizontal: 15.0),
+      //               child: Column(
+      //                 children: [
+      //                   //MARK: Book Appointment
+      //                   IntrinsicHeight(
+      //                     child: GestureDetector(
+      //                       onTap: () {
+      //                         Navigator.of(context, rootNavigator: true).pushNamed("/BookAppointment");
+      //                       },
+      //                       child: Container(
+      //                           width: double.infinity,
+      //                           height: MediaQuery.of(context).size.height / 11,
+      //                           //height: 60,
+      //                           padding: const EdgeInsets.all(5),
+      //                           decoration: BoxDecoration(
+      //                             border: Border.all(color: CommonStyles.primaryTextColor),
+      //                             borderRadius: BorderRadius.circular(10),
+      //                           ),
+      //                           child:
+      //                               // GestureDetector(
+      //                               //     onTap: () {
+      //                               //       Navigator.of(context, rootNavigator: true).pushNamed("/BookAppointment");
+      //                               //     },
+      //                               //     child:
+      //                               Row(
+      //                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      //                             children: [
+      //                               SizedBox(
+      //                                 width: 2,
+      //                               ),
+      //                               Container(
+      //                                 padding: const EdgeInsets.all(15),
+      //                                 decoration: const BoxDecoration(shape: BoxShape.circle, color: CommonStyles.primaryTextColor),
+      //                                 child: Center(
+      //                                   child: SvgPicture.asset(
+      //                                     'assets/noun-appointment-date-2417776.svg',
+      //                                     width: 30.0,
+      //                                     height: 30.0,
+      //                                     color: CommonStyles.whiteColor,
+      //                                   ),
+      //                                 ),
+      //                               ),
+      //                               const SizedBox(
+      //                                 width: 10,
+      //                               ),
+      //                               // Expanded(
+      //                               //   child: Column(
+      //                               //     crossAxisAlignment: CrossAxisAlignment.start,
+      //                               //     children: [
+      //                               //       Text(
+      //                               //         'Click Here',
+      //                               //         style: CommonStyles.txSty_16p_f5,
+      //                               //       ),
+      //                               //       Text(
+      //                               //         'To Book an Appointment',
+      //                               //         style: CommonStyles.txSty_20p_fb,
+      //                               //       ),
+      //                               //     ],
+      //                               //   ),
+      //                               // ),
+      //                               SizedBox(
+      //                                 width: MediaQuery.of(context).size.width / 2,
+      //                                 child: const Column(
+      //                                   crossAxisAlignment: CrossAxisAlignment.start,
+      //                                   mainAxisAlignment: MainAxisAlignment.center,
+      //                                   children: [
+      //                                     Text(
+      //                                       'Click Here To',
+      //                                       style: CommonStyles.txSty_16p_f5,
+      //                                     ),
+      //                                     Text(
+      //                                       'Book an Appointment',
+      //
+      //                                       /// style: CommonStyles.txSty_20p_fb,
+      //                                       style: TextStyle(
+      //                                         fontSize: 14,
+      //                                         fontFamily: "Calibri",
+      //                                         fontWeight: FontWeight.bold,
+      //                                         color: CommonStyles.primaryTextColor,
+      //                                         letterSpacing: 2,
+      //                                       ),
+      //                                     ),
+      //                                   ],
+      //                                 ),
+      //                               ),
+      //                               const SizedBox(
+      //                                 width: 10,
+      //                               ),
+      //                               SvgPicture.asset(
+      //                                 'assets/book_op_illusion.svg',
+      //                                 width: 60.0,
+      //                                 height: 55.0,
+      //                                 alignment: Alignment.centerRight,
+      //                               ),
+      //                             ],
+      //                           )),
+      //                       // )
+      //                     ),
+      //                   ),
+      //                   const SizedBox(
+      //                     height: 10,
+      //                   ),
+      //                   //MARK: Screens
+      //                   Row(
+      //                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      //                     children: [
+      //                       GestureDetector(
+      //                         onTap: () {
+      //                           Navigator.of(context, rootNavigator: true).pushNamed("/Mybookings");
+      //                         },
+      //                         child: Column(
+      //                           children: [
+      //                             Container(
+      //                               width: MediaQuery.of(context).size.width / 7,
+      //                               // height: MediaQuery.of(context).size.height / 5,
+      //                               padding: const EdgeInsets.all(15),
+      //                               decoration: const BoxDecoration(
+      //                                 color: Color(0xFFe656ae),
+      //                                 shape: BoxShape.circle,
+      //                               ),
+      //                               child: SvgPicture.asset(
+      //                                 'assets/my_bookings_icon.svg',
+      //                                 color: CommonStyles.whiteColor,
+      //                               ),
+      //                             ),
+      //                             const SizedBox(height: 5),
+      //                             const Text(
+      //                               'My Bookings',
+      //                               style: CommonStyles.txSty_14p_f5,
+      //                             ),
+      //                           ],
+      //                         ),
+      //                       ),
+      //                       GestureDetector(
+      //                         onTap: () {
+      //                           Navigator.of(context, rootNavigator: true).pushNamed("/Products");
+      //                         },
+      //                         child: Column(
+      //                           children: [
+      //                             Container(
+      //                               width: MediaQuery.of(context).size.width / 7,
+      //                               //height: 60,
+      //                               padding: const EdgeInsets.all(15),
+      //                               decoration: const BoxDecoration(
+      //                                 color: Color(0xFFe44561),
+      //                                 shape: BoxShape.circle,
+      //                               ),
+      //                               child: SvgPicture.asset(
+      //                                 'assets/products_icon.svg',
+      //                                 color: CommonStyles.whiteColor,
+      //                               ),
+      //                             ),
+      //                             const SizedBox(height: 5),
+      //                             const Text(
+      //                               'Products',
+      //                               style: CommonStyles.txSty_14p_f5,
+      //                             ),
+      //                           ],
+      //                         ),
+      //                       ),
+      //                       GestureDetector(
+      //                         onTap: () {
+      //                           Navigator.of(context, rootNavigator: true).pushNamed("/about");
+      //                         },
+      //                         child: Column(
+      //                           children: [
+      //                             Container(
+      //                               width: MediaQuery.of(context).size.width / 7,
+      //                               // height: 60,
+      //                               padding: const EdgeInsets.all(15),
+      //                               decoration: const BoxDecoration(
+      //                                 color: Color(0xFF662d91),
+      //                                 shape: BoxShape.circle,
+      //                               ),
+      //                               child: SvgPicture.asset(
+      //                                 'assets/about_us_icon.svg',
+      //                                 color: CommonStyles.whiteColor,
+      //                                 // width: 11.0,
+      //                                 // height: 11.0,
+      //                               ),
+      //                             ),
+      //                             const SizedBox(height: 5),
+      //                             const Text(
+      //                               'About Us',
+      //                               style: CommonStyles.txSty_14p_f5,
+      //                             ),
+      //                           ],
+      //                         ),
+      //                       ),
+      //                       GestureDetector(
+      //                         onTap: () {
+      //                           Navigator.of(context, rootNavigator: true).pushNamed("/ProfileMy");
+      //                         },
+      //                         child: Column(
+      //                           children: [
+      //                             Container(
+      //                               padding: const EdgeInsets.all(15),
+      //                               width: MediaQuery.of(context).size.width / 7,
+      //                               //   height: 60,
+      //                               decoration: const BoxDecoration(
+      //                                 color: Color(0xFF295f5a),
+      //                                 shape: BoxShape.circle,
+      //                               ),
+      //                               child: SvgPicture.asset(
+      //                                 'assets/my_profile_icon.svg',
+      //                                 color: CommonStyles.whiteColor,
+      //                               ),
+      //                             ),
+      //                             const SizedBox(height: 5),
+      //                             const Text(
+      //                               'My Profile',
+      //                               style: CommonStyles.txSty_14p_f5,
+      //                             ),
+      //                           ],
+      //                         ),
+      //                       )
+      //                     ],
+      //                   ),
+      //                   const SizedBox(height: 10),
+      //                   //MARK: Branches
+      //                   const Row(
+      //                     mainAxisAlignment: MainAxisAlignment.start,
+      //                     children: [
+      //                       Text(
+      //                         'Branches',
+      //                         style: CommonStyles.txSty_16p_fb,
+      //                       ),
+      //                     ],
+      //                   ),
+      //
+      //                   SizedBox(
+      //                     height: MediaQuery.of(context).size.height / 4,
+      //                     child: FutureBuilder(
+      //                       future: apiData,
+      //                       builder: (context, snapshot) {
+      //                         if (snapshot.connectionState == ConnectionState.waiting) {
+      //                           return const Center(child: CircularProgressIndicator.adaptive());
+      //                         } else if (snapshot.hasError) {
+      //                           return Center(
+      //                             child: Text(snapshot.error.toString()),
+      //                           );
+      //                         } else {
+      //                           List<BranchList>? data = snapshot.data!;
+      //                           return Container(
+      //                             child: ListView.builder(
+      //                               scrollDirection: Axis.horizontal,
+      //                               itemCount: data.length,
+      //                               itemBuilder: (context, index) {
+      //                                 return BranchCard(
+      //                                   branch: data[index],
+      //                                 );
+      //                               },
+      //                             ),
+      //                           );
+      //                         }
+      //                       },
+      //                     ),
+      //                   ),
+      //                 ],
+      //               ),
+      //             ),
+      //           ],
+      //         ),
+      //       ),
+      //     ),
+      //   ],
+      // ),
     );
   }
 

@@ -56,7 +56,7 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
 
     print(
         'branchid ${widget.branchid} fromdate${widget.fromdate} todate ${widget.todate}');
-    ConsultationData = getviewconsulationlist(widget.fromdate,widget.todate);
+    ConsultationData = getviewconsulationlist(DateFormat('yyyy-MM-dd').format(startDate!),  DateFormat('yyyy-MM-dd').format(endDate!));
   }
 
 // http://182.18.157.215/SaloonApp/API/api/Consultation/GetConsultationsByBranchId
@@ -68,7 +68,8 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
       "userId": widget.userid, // userId
       "branchId": widget.agent.id, //widget.branchid,
       "fromDate": fromdate, //widget.fromdate,
-      "toDate": todate, //widget.todate
+      "toDate": todate,
+      "isActive": true ,//widget.todate
     };
 
     // {

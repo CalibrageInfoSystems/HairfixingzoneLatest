@@ -62,6 +62,8 @@ class MyAppointments_screenState extends State<Agentappointmentlist> {
       if (isConnected) {
         print('The Internet Is Connected');
         checkLoginuserdata();
+        print('UserID==$userId');
+        print('UserID==${widget.userId}');
         // fetchMyAppointments(userId);
       } else {
         print('The Internet Is not  Connected');
@@ -85,7 +87,7 @@ class MyAppointments_screenState extends State<Agentappointmentlist> {
             context,
             MaterialPageRoute(
               builder: (context) => AgentHome(
-                userId: userId!,
+                userId: widget.userId!,
               ),
             ),
           );
@@ -388,7 +390,7 @@ class MyAppointments_screenState extends State<Agentappointmentlist> {
                     bottom: MediaQuery.of(context).viewInsets.bottom,
                   ),
                   child: FilterAppointmentBottomSheet(
-                      userId: userId, branchid: widget.branchid),
+                      userId: widget.userId, branchid: widget.branchid),
                 ),
               );
             },
@@ -1071,6 +1073,7 @@ class _OpCardState extends State<OpCard> {
   void initState() {
     super.initState();
     dateValues = parseDateString(widget.data.date);
+    print('userid===userId,$userId');
   }
 
   @override
@@ -1250,7 +1253,7 @@ class _OpCardState extends State<OpCard> {
                             ? MainAxisAlignment.start
                             : MainAxisAlignment.end,
                         children: [
-                          verifyStatus(widget.data, widget.userId),
+                          verifyStatus(widget.data, userId),
                         ],
                       ),
                     ],
@@ -1330,6 +1333,7 @@ class _OpCardState extends State<OpCard> {
               onTap: () {
                 if (!isPastDate(data.date, data.slotDuration)) {
                   print('Button 1 pressed for ${data.customerName}');
+
                   postAppointment(data, 5, 0, userId);
                   Get_ApprovedDeclinedSlots(data, 5);
                   print('accpteedbuttonisclicked');
@@ -1811,8 +1815,7 @@ class _OpCardState extends State<OpCard> {
       "Date": appointmens.date,
       "SlotTime": appointmens.slotTime,
       "CustomerName": appointmens.customerName,
-      "PhoneNumber":
-      appointmens.phoneNumber, // Changed from appointments.phoneNumber
+      "PhoneNumber": appointmens.phoneNumber, // Changed from appointments.phoneNumber
       "Email": appointmens.email,
       "GenderTypeId": appointmens.genderTypeId,
       "StatusTypeId": 6,
@@ -1821,12 +1824,12 @@ class _OpCardState extends State<OpCard> {
       "IsActive": true,
       "CreatedDate": dateTimeString,
       "UpdatedDate": dateTimeString,
-      "UpdatedByUserId": null,
-      "rating": rating_star,
-      "review": _commentstexteditcontroller.text.toString(),
-      "reviewSubmittedDate": dateTimeString,
-      "timeofslot": null,
-      "customerId": userId
+      "UpdatedByUserId":userId!,
+      "rating": null,
+      "review": null,
+      "reviewSubmittedDate": null,
+      "timeofslot": appointmens.timeofSlot,
+      "customerId":  appointmens.customerId
     };
     print('AddUpdatefeedback object: : ${json.encode(request)}');
 
@@ -1857,7 +1860,7 @@ class _OpCardState extends State<OpCard> {
           // Failure case
           // Handle failure scenario here
           CommonUtils.showCustomToastMessageLong(
-              'The request should not be canceled within 30 minutes before slot',
+              'The Request Should Not Be Canceled With In  1 Hour Before Slot',
               context,
               0,
               2);
@@ -1881,7 +1884,9 @@ class _OpCardState extends State<OpCard> {
     print('url==>userId: $userId');
     // final url = Uri.parse('http://182.18.157.215/SaloonApp/API/api/Appointment');
     DateTime now = DateTime.now();
-
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    userId = prefs.getInt('userId');
+    print('userId CancelAppointment: $userId');
     // Using toString() method
     String dateTimeString = now.toString();
     print('DateTime as String: $dateTimeString');
@@ -1903,7 +1908,7 @@ class _OpCardState extends State<OpCard> {
       "CreatedDate": dateTimeString,
       "UpdatedDate": dateTimeString,
       "customerId": data.customerId,
-      "UpdatedByUserId": widget.userId,
+      "UpdatedByUserId": userId,
       "timeofSlot": data.timeofSlot,
       if (i == 18) "price": Amount,
 

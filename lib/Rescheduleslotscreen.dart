@@ -842,6 +842,7 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
         "rating": null,
         "review": null,
         "reviewSubmittedDate": null,
+       // "timeofslot": widget.data.timeofSlot,
         "timeofslot": '$_selectedTimeSlot24',
         "customerId": Id
       };

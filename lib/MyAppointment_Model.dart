@@ -20,6 +20,8 @@ class MyAppointment_Model {
   final String? address;
   final DateTime? reviewSubmittedDate;
   final String slotDuration;
+  final String? timeofSlot;
+
 
   MyAppointment_Model({
     required this.id,
@@ -42,6 +44,7 @@ class MyAppointment_Model {
     required this.imagename,
     required this.rating,
     required this.reviewSubmittedDate,
+    required this.timeofSlot,
     required this.slotDuration,
   });
 
@@ -66,6 +69,7 @@ class MyAppointment_Model {
       address: json['address'],
       rating: json['rating'] != null ? json['rating'].toDouble() : null,
       reviewSubmittedDate: json['reviewSubmittedDate'] != null ? DateTime.parse(json['reviewSubmittedDate']) : null,
+      timeofSlot: json['timeofSlot'],
       slotDuration: json['slotDuration'],
       imagename: json['imageName'],
     );

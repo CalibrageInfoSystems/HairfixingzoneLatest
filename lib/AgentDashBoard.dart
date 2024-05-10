@@ -41,6 +41,8 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
   int? AgentId;
 //  String gender ='';
   String Gender = '';
+  bool _shouldStartMarquee = true; // Variable to control Marquee scrolling
+
   @override
   void initState() {
     super.initState();
@@ -136,60 +138,146 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
         body: IntrinsicHeight(
       child: Column(
         children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                height: 30,
+                child: FutureBuilder(
+                  future: getMarqueeText(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const SizedBox();
+                    } else if (snapshot.hasError) {
+                      return const SizedBox();
+                    } else {
+                      return Marquee(
+                        text: marqueeText,
+                        style: const TextStyle(fontSize: 16, fontFamily: "Calibri", fontWeight: FontWeight.w600, color: Color(0xFFff0176)),
+                        velocity: _shouldStartMarquee ? 30 : 0, // Control Marquee scrolling with velocity
+                      );
+                    }
+                  },
+                ),
+              ),
+              SizedBox(
+                width: MediaQuery.of(context).size.width,
+                height: 180,
+                child: PageView.builder(
+                  controller: _pageController,
+                  itemCount: _items.length,
+                  itemBuilder: (context, index) {
+                    final itemIndex = index % _items.length;
+                    return SizedBox(
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: ItemBuilder(items: _items, index: itemIndex),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                  onPageChanged: (int page) {
+                    setState(() {
+                      _currentPage = page;
+                    });
+                  },
+                ),
+              ),
+              // PageView indicator
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  for (int i = 0; i < _items.length; i++)
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          _currentPage = i;
+                        });
+                      },
+                      child: Container(
+                        margin: const EdgeInsets.all(2),
+                        width: 10,
+                        height: 10,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(color: CommonStyles.primaryTextColor, width: 1.5),
+                          color: _currentPage == i ? Colors.grey.withOpacity(0.9) : Colors.transparent,
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+            ],
+          ),
+          const SizedBox(
+            height: 15,
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: Column(
+              children: [
+                screens(),
+                const SizedBox(height: 10),
+                agentBranches(),
+              ],
+            ),
+          ),
           //MARK: Welcome Text
           //     welcomeText(),
           //MARK: Main Card
-          Expanded(
-            child: Container(
-              height: MediaQuery.of(context).size.height,
-              decoration: const BoxDecoration(
-                color: CommonStyles.whiteColor,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(20),
-                  topRight: Radius.circular(20),
-                ),
-              ),
-              child: Column(
-                children: [
-                  marquee(),
-                  Column(
-                    children: [
-                      carousel(),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          for (int i = 0; i < _items.length; i++)
-                            Container(
-                              margin: const EdgeInsets.all(2),
-                              width: 10,
-                              height: 10,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                border: Border.all(color: CommonStyles.primaryTextColor, width: 1.5),
-                                color: _currentPage == i ? Colors.grey.withOpacity(0.9) : Colors.transparent,
-                              ),
-                            )
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: Column(
-                          children: [
-                            screens(),
-                            const SizedBox(height: 10),
-                            agentBranches(),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          )
+          // Expanded(
+          //   child: Container(
+          //     height: MediaQuery.of(context).size.height,
+          //     decoration: const BoxDecoration(
+          //       color: CommonStyles.whiteColor,
+          //       borderRadius: BorderRadius.only(
+          //         topLeft: Radius.circular(20),
+          //         topRight: Radius.circular(20),
+          //       ),
+          //     ),
+          //     child: Column(
+          //       children: [
+          //         marquee(),
+          //         Column(
+          //           children: [
+          //             carousel(),
+          //             Row(
+          //               mainAxisAlignment: MainAxisAlignment.center,
+          //               children: <Widget>[
+          //                 for (int i = 0; i < _items.length; i++)
+          //                   Container(
+          //                     margin: const EdgeInsets.all(2),
+          //                     width: 10,
+          //                     height: 10,
+          //                     decoration: BoxDecoration(
+          //                       borderRadius: BorderRadius.circular(10),
+          //                       border: Border.all(color: CommonStyles.primaryTextColor, width: 1.5),
+          //                       color: _currentPage == i ? Colors.grey.withOpacity(0.9) : Colors.transparent,
+          //                     ),
+          //                   )
+          //               ],
+          //             ),
+          //             const SizedBox(
+          //               height: 15,
+          //             ),
+          //             Padding(
+          //               padding: const EdgeInsets.symmetric(horizontal: 20),
+          //               child: Column(
+          //                 children: [
+          //                   screens(),
+          //                   const SizedBox(height: 10),
+          //                   agentBranches(),
+          //                 ],
+          //               ),
+          //             ),
+          //           ],
+          //         ),
+          //       ],
+          //     ),
+          //   ),
+          // )
         ],
       ),
     ));
