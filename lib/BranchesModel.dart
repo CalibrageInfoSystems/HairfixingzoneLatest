@@ -1,8 +1,7 @@
 import 'package:meta/meta.dart';
 import 'dart:convert';
 
-BranchesModel branchesModelFromJson(String str) =>
-    BranchesModel.fromJson(json.decode(str));
+BranchesModel branchesModelFromJson(String str) => BranchesModel.fromJson(json.decode(str));
 
 String branchesModelToJson(BranchesModel data) => json.encode(data.toJson());
 
@@ -26,15 +25,13 @@ class BranchesModel {
   });
 
   factory BranchesModel.fromJson(Map<String, dynamic> json) => BranchesModel(
-        branchList: List<BranchList>.from(
-            json["branchList"].map((x) => BranchList.fromJson(x))),
+        branchList: List<BranchList>.from(json["branchList"].map((x) => BranchList.fromJson(x))),
         isSuccess: json["isSuccess"],
         affectedRecords: json["affectedRecords"],
         statusMessage: json["statusMessage"],
-        validationErrors:
-            List<dynamic>.from(json["validationErrors"].map((x) => x)),
-        exception: json["exception"],
-        links: json["links"],
+        validationErrors: List<dynamic>.from(json["validationErrors"].map((x) => x)),
+        exception: json["exception"] ?? '',
+        links: json["links"] ?? '',
       );
 
   Map<String, dynamic> toJson() => {

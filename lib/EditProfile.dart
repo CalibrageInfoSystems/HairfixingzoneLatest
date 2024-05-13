@@ -936,7 +936,7 @@ class EditProfile_screenState extends State<EditProfile> {
   Future<void> updateUser() async {
     validateGender(selectedName);
     if (_formKey.currentState!.validate()) {
-      final url = Uri.parse('http://182.18.157.215/SaloonApp/API/UpdateUser');
+      final url = Uri.parse(baseUrl + updateuser);
       DateTime now = DateTime.now();
       ProgressDialog progressDialog = ProgressDialog(context);
 

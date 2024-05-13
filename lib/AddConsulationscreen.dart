@@ -861,7 +861,7 @@ class AddConsulationscreen_screenState extends State<AddConsulationscreen> {
       };
       print('Object: ${json.encode(request)}');
       try {
-        final String ee = 'http://182.18.157.215/SaloonApp/API/api/Consultation/AddUpdateConsultation';
+        final String ee = baseUrl+addupdateconsulation;
         final url1 = Uri.parse(ee);
 
         // Send the POST request

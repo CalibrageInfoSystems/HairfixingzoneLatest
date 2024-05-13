@@ -182,7 +182,7 @@ class MyAppointments_screenState extends State<MyAppointments> {
 
   Future<List<MyAppointment_Model>> fetchMyAppointments(int? userId) async {
     final url = Uri.parse(
-        'http://182.18.157.215/SaloonApp/API/api/Appointment/GetAppointmentByUserid');
+        baseUrl+GetAppointmentByUserid);
 
     try {
       final request = {
@@ -412,7 +412,7 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
 
   Future<void> filterAppointments(Map<String, dynamic> requestBody) async {
     final url = Uri.parse(
-        'http://182.18.157.215/SaloonApp/API/api/Appointment/GetAppointmentByUserid');
+        baseUrl+GetAppointmentByUserid);
 
     try {
       Map<String, dynamic> request = requestBody;
@@ -945,7 +945,7 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
 
   Future<void> clearFilterAppointments(Map<String, dynamic> requestBody) async {
     final url = Uri.parse(
-        'http://182.18.157.215/SaloonApp/API/api/Appointment/GetAppointmentByUserid');
+        baseUrl+GetAppointmentByUserid);
 
     try {
       Map<String, dynamic> request = requestBody;

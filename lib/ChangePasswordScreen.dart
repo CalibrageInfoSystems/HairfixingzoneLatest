@@ -353,7 +353,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
 
       // Show the progress dialog
       progressDialog.show();
-      final String apiUrl = 'http://182.18.157.215/SaloonApp/API/ChangePassword';
+      final String apiUrl = baseUrl + changepassword;
 
       // Prepare the request body
       Map<String, dynamic> requestBody = {

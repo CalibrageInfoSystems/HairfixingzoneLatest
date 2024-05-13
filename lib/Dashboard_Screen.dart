@@ -924,7 +924,7 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
   }
 
   Future<List<BranchList>> getBranchsData() async {
-    var apiUrl = 'http://182.18.157.215/SaloonApp/API/GetBranchById/null/true';
+    var apiUrl = baseUrl+getbranchesall;
 
     try {
       final jsonResponse = await http.get(

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hairfixingzone/EditProfile.dart';
+import 'package:hairfixingzone/api_config.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart';
 import 'ChangePasswordScreen.dart';
@@ -62,7 +63,8 @@ class Profile_screenState extends State<Profile> {
   }
 
   Future<void> fetchdetailsofcustomer(int id) async {
-    String apiUrl = 'http://182.18.157.215/SaloonApp/API/GetCustomerData?id=$id';
+    //String apiUrl = 'http://182.18.157.215/SaloonApp/API/GetCustomerData?id=$id';
+    String apiUrl = baseUrl+getCustomerDatabyid+'/$id';
     setState(() {
       isloading = true;
     });

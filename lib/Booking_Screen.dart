@@ -215,7 +215,7 @@ class _BookingScreenState extends State<Bookingscreen> {
     // final url = Uri.parse(
     //     'http://182.18.157.215/SaloonApp/API/GetHolidayListByBranchId/$branchId');
     // final url = Uri.parse(baseUrl + GetHolidayListByBranchId);
-    final url = Uri.parse('http://182.18.157.215/SaloonApp/API/api/HolidayList/GetHolidayListdetails');
+    final url = Uri.parse(baseUrl+getholidayslist);
     try {
       final response = await http.post(
         url,

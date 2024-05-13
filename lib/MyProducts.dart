@@ -120,7 +120,7 @@ class MyProducts_screenState extends State<MyProducts> {
   }
 
   Future<List<ProductCategory>> fetchProductsCategory() async {
-    final response = await http.get(Uri.parse('http://182.18.157.215/SaloonApp/API/GetProduct/6'));
+    final response = await http.get(Uri.parse(baseUrl + getproductsbyid + '/6'));
     if (response.statusCode == 200) {
       final List<dynamic> responseData = json.decode(response.body)['listResult'];
       List<ProductCategory> result = responseData.map((json) => ProductCategory.fromJson(json)).toList();
@@ -225,7 +225,8 @@ class MyProducts_screenState extends State<MyProducts> {
   }
 
   Future<List<ProductList>> fetchproducts({int? id, int? categoryTypeId, int? genderTypeId}) async {
-    const apiurl = 'http://182.18.157.215/SaloonApp/API/GetProductById';
+    // final apiurl = 'http://182.18.157.215/SaloonApp/API/GetProductById';
+    final apiurl = baseUrl + getproductsbyid;
 
     try {
       final request = {"id": id, "categoryTypeId": categoryTypeId, "genderTypeId": genderTypeId, "isActive": true};
@@ -402,10 +403,10 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
   }
 
   Future<List<ProductList>> fetchproducts({int? id, int? categoryTypeId, int? genderTypeId}) async {
-    const apiurl = 'http://182.18.157.215/SaloonApp/API/GetProductById';
+    final apiurl = baseUrl + getproductsbyid;
 
     try {
-      final request = {"id": id, "categoryTypeId": categoryTypeId, "genderTypeId": genderTypeId,"isActive": true};
+      final request = {"id": id, "categoryTypeId": categoryTypeId, "genderTypeId": genderTypeId, "isActive": true};
       final response = await http.post(
         Uri.parse(apiurl),
         body: json.encode(request),
@@ -713,7 +714,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
   }
 
   Future<List<ProductCategory>> fetchProductsCategory() async {
-    final response = await http.get(Uri.parse('http://182.18.157.215/SaloonApp/API/GetProduct/6'));
+    final response = await http.get(Uri.parse(baseUrl + getproductsbyid + '/6'));
     if (response.statusCode == 200) {
       final List<dynamic> responseData = json.decode(response.body)['listResult'];
       List<ProductCategory> result = responseData.map((json) => ProductCategory.fromJson(json)).toList();

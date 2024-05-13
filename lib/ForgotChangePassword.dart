@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:hairfixingzone/Common/custom_button.dart';
 import 'package:hairfixingzone/Common/custome_form_field.dart';
 import 'package:hairfixingzone/CommonUtils.dart';
+import 'package:hairfixingzone/api_config.dart';
 import 'package:http/http.dart' as http;
 
 import 'CustomerLoginScreen.dart';
@@ -23,8 +24,7 @@ class _ForgotChangePasswordState extends State<ForgotChangePassword> {
   bool isPasswordValidate = false;
   bool isConfirmPasswordValidate = false;
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController =
-  TextEditingController();
+  final TextEditingController _confirmPasswordController = TextEditingController();
   bool _password_obscureText = true;
   bool confirmpassword_obscuretext = true;
   final String _passwordStrengthMessage = '';
@@ -77,24 +77,20 @@ class _ForgotChangePasswordState extends State<ForgotChangePassword> {
                     const SizedBox(
                       height: 20,
                     ),
-                    const Text('Reset Your Password For Recovery ',
-                        style: CommonUtils.Sub_header_Styles),
-                    const Text('And Log In to Your Account ',
-                        style: CommonUtils.Sub_header_Styles),
+                    const Text('Reset Your Password For Recovery ', style: CommonUtils.Sub_header_Styles),
+                    const Text('And Log In to Your Account ', style: CommonUtils.Sub_header_Styles),
                   ],
                 ),
               ),
             ),
             SizedBox(
-              height: MediaQuery.of(context).size.height -
-                  MediaQuery.of(context).size.height / 2,
+              height: MediaQuery.of(context).size.height - MediaQuery.of(context).size.height / 2,
               child: SingleChildScrollView(
                 physics: const AlwaysScrollableScrollPhysics(),
                 child: Form(
                   key: _formKey,
                   child: Container(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 20, horizontal: 40),
+                    padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 40),
                     decoration: const BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.only(
@@ -132,9 +128,7 @@ class _ForgotChangePasswordState extends State<ForgotChangePassword> {
                               children: [
                                 Text(
                                   'New Password',
-                                  style: TextStyle(
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.bold),
+                                  style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
                                 ),
                                 Text(
                                   ' *',
@@ -148,35 +142,30 @@ class _ForgotChangePasswordState extends State<ForgotChangePassword> {
                             TextFormField(
                               obscureText: _password_obscureText,
 
-                              controller:
-                              _passwordController, // Assigning the controller
+                              controller: _passwordController, // Assigning the controller
                               keyboardType: TextInputType.visiblePassword,
                               // obscureText: true,
                               onChanged: (value) {
                                 //   _passwordError = false;
                                 setState(() {
                                   if (value.startsWith(' ')) {
-                                    _passwordController.value =
-                                        TextEditingValue(
-                                          text: value.trimLeft(),
-                                          selection: TextSelection.collapsed(
-                                              offset: value.trimLeft().length),
-                                        );
+                                    _passwordController.value = TextEditingValue(
+                                      text: value.trimLeft(),
+                                      selection: TextSelection.collapsed(offset: value.trimLeft().length),
+                                    );
                                   }
                                   _passwordError = false;
                                 });
                               },
                               decoration: InputDecoration(
-                                contentPadding: const EdgeInsets.only(
-                                    top: 15, bottom: 10, left: 15, right: 15),
+                                contentPadding: const EdgeInsets.only(top: 15, bottom: 10, left: 15, right: 15),
                                 focusedBorder: OutlineInputBorder(
                                   borderSide: const BorderSide(
                                     color: CommonUtils.primaryTextColor,
                                   ),
                                   borderRadius: BorderRadius.circular(6.0),
                                 ),
-                                errorText:
-                                _passwordError ? _passwordErrorMsg : null,
+                                errorText: _passwordError ? _passwordErrorMsg : null,
                                 enabledBorder: OutlineInputBorder(
                                   borderSide: const BorderSide(
                                     color: CommonUtils.primaryTextColor,
@@ -192,22 +181,17 @@ class _ForgotChangePasswordState extends State<ForgotChangePassword> {
                                 counterText: "",
                                 suffixIcon: IconButton(
                                   icon: Icon(
-                                    _password_obscureText
-                                        ? Icons.visibility_off
-                                        : Icons.visibility,
+                                    _password_obscureText ? Icons.visibility_off : Icons.visibility,
                                     color: Colors.black,
                                   ),
                                   onPressed: () {
                                     // Toggle the password visibility
                                     setState(() {
-                                      _password_obscureText =
-                                      !_password_obscureText;
+                                      _password_obscureText = !_password_obscureText;
                                     });
                                   },
                                 ),
-                                hintStyle: const TextStyle(
-                                    color: Colors.grey,
-                                    fontWeight: FontWeight.w400),
+                                hintStyle: const TextStyle(color: Colors.grey, fontWeight: FontWeight.w400),
                               ),
                               validator: validatePassword,
                             ),
@@ -216,13 +200,10 @@ class _ForgotChangePasswordState extends State<ForgotChangePassword> {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   Padding(
-                                    padding:
-                                    const EdgeInsets.only(top: 5, left: 12),
+                                    padding: const EdgeInsets.only(top: 5, left: 12),
                                     child: Text(
                                       _passwordStrengthMessage,
-                                      style: TextStyle(
-                                          color: _passwordStrengthColor,
-                                          fontSize: 12),
+                                      style: TextStyle(color: _passwordStrengthColor, fontSize: 12),
                                     ),
                                   ),
                                 ],
@@ -234,9 +215,7 @@ class _ForgotChangePasswordState extends State<ForgotChangePassword> {
                               children: [
                                 Text(
                                   'Confirm Password',
-                                  style: TextStyle(
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.bold),
+                                  style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
                                 ),
                                 Text(
                                   ' *',
@@ -250,14 +229,12 @@ class _ForgotChangePasswordState extends State<ForgotChangePassword> {
                             TextFormField(
                               obscureText: confirmpassword_obscuretext,
                               maxLength: 25,
-                              controller:
-                              _confirmPasswordController, // Assigning the controller
+                              controller: _confirmPasswordController, // Assigning the controller
                               keyboardType: TextInputType.visiblePassword,
                               // obscureText: true,
                               onTap: () {},
                               decoration: InputDecoration(
-                                contentPadding: const EdgeInsets.only(
-                                    top: 15, bottom: 10, left: 15, right: 15),
+                                contentPadding: const EdgeInsets.only(top: 15, bottom: 10, left: 15, right: 15),
                                 focusedBorder: OutlineInputBorder(
                                   borderSide: const BorderSide(
                                     color: CommonUtils.primaryTextColor,
@@ -279,22 +256,17 @@ class _ForgotChangePasswordState extends State<ForgotChangePassword> {
                                 counterText: "",
                                 suffixIcon: IconButton(
                                   icon: Icon(
-                                    confirmpassword_obscuretext
-                                        ? Icons.visibility_off
-                                        : Icons.visibility,
+                                    confirmpassword_obscuretext ? Icons.visibility_off : Icons.visibility,
                                     color: Colors.black,
                                   ),
                                   onPressed: () {
                                     // Toggle the password visibility
                                     setState(() {
-                                      confirmpassword_obscuretext =
-                                      !confirmpassword_obscuretext;
+                                      confirmpassword_obscuretext = !confirmpassword_obscuretext;
                                     });
                                   },
                                 ),
-                                hintStyle: const TextStyle(
-                                    color: Colors.grey,
-                                    fontWeight: FontWeight.w400),
+                                hintStyle: const TextStyle(color: Colors.grey, fontWeight: FontWeight.w400),
                               ),
                               validator: validateConfirmPassword,
                             ),
@@ -322,8 +294,7 @@ class _ForgotChangePasswordState extends State<ForgotChangePassword> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                const Text('Back to login?',
-                                    style: CommonUtils.Mediumtext_14),
+                                const Text('Back to login?', style: CommonUtils.Mediumtext_14),
                                 GestureDetector(
                                   onTap: () {
                                     // Handle the click event for the "Click here!" text
@@ -331,8 +302,7 @@ class _ForgotChangePasswordState extends State<ForgotChangePassword> {
                                     // Add your custom logic or navigation code here
                                     Navigator.of(context).push(
                                       MaterialPageRoute(
-                                        builder: (context) =>
-                                        const CustomerLoginScreen(),
+                                        builder: (context) => const CustomerLoginScreen(),
                                       ),
                                     );
                                   },
@@ -406,19 +376,15 @@ class _ForgotChangePasswordState extends State<ForgotChangePassword> {
 
     final hasAlphabets = RegExp(r'[a-zA-Z]').hasMatch(value);
     final hasNumbers = RegExp(r'\d').hasMatch(value);
-    final hasSpecialCharacters =
-    RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(value);
+    final hasSpecialCharacters = RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(value);
     final hasCapitalLetter = RegExp(r'[A-Z]').hasMatch(value);
 
-    if (!hasAlphabets ||
-        !hasNumbers ||
-        !hasSpecialCharacters ||
-        !hasCapitalLetter) {
+    if (!hasAlphabets || !hasNumbers || !hasSpecialCharacters || !hasCapitalLetter) {
       setState(() {
         isPasswordValidate = false;
         _passwordError = true;
         _passwordErrorMsg =
-        'Password Must Include One Uppercase, One Lowercase, One Digit,One Special Character,No Spaces, And be 08-25 Characters Long';
+            'Password Must Include One Uppercase, One Lowercase, One Digit,One Special Character,No Spaces, And be 08-25 Characters Long';
       });
       return null;
     }
@@ -444,19 +410,16 @@ class _ForgotChangePasswordState extends State<ForgotChangePassword> {
   void loginUser() {
     if (_formKey.currentState!.validate()) {
       if (isPasswordValidate && isConfirmPasswordValidate) {
-        print(
-            '${_passwordController.text} and ${_confirmPasswordController.text}');
+        print('${_passwordController.text} and ${_confirmPasswordController.text}');
 
-        changePassword(
-            _passwordController.text, _confirmPasswordController.text);
+        changePassword(_passwordController.text, _confirmPasswordController.text);
       }
     }
   }
 
-  Future<void> changePassword(
-      String newPassword, String confirmPassword) async {
+  Future<void> changePassword(String newPassword, String confirmPassword) async {
     try {
-      const apiUrl = 'http://182.18.157.215/SaloonApp/API/ResetPassword';
+      final apiUrl = baseUrl + resetpassword;
 
       final Map<String, dynamic> requestObject = {
         "id": 1, //userid
@@ -508,8 +471,7 @@ class _ForgotChangePasswordState extends State<ForgotChangePassword> {
                 child: Text(
                   'Your Password Has Been Successfully Changed',
                   style: CommonUtils.txSty_18b_fb,
-                  textAlign:
-                  TextAlign.center, // Optionally, align the text center
+                  textAlign: TextAlign.center, // Optionally, align the text center
                 ),
               ),
               const SizedBox(

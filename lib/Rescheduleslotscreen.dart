@@ -205,7 +205,7 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
     // final url = Uri.parse(
     //     'http://182.18.157.215/SaloonApp/API/GetHolidayListByBranchId/$branchId');
     // final url = Uri.parse(baseUrl + GetHolidayListByBranchId);
-    final url = Uri.parse('http://182.18.157.215/SaloonApp/API/api/HolidayList/GetHolidayListdetails');
+    final url = Uri.parse(baseUrl + getholidayslist);
     try {
       final response = await http.post(
         url,
@@ -708,7 +708,7 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
                                     selectedTypeCdId = value!;
                                     if (selectedTypeCdId != -1) {
                                       selectedName = dropdownItems[selectedTypeCdId]['desc'];
-                                      selectedValue= dropdownItems[selectedTypeCdId]['typeCdId'];
+                                      selectedValue = dropdownItems[selectedTypeCdId]['typeCdId'];
                                       print("selectedName onchange:$selectedName");
                                       print("selectedValue onchange:$selectedValue");
                                     }
@@ -770,7 +770,6 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
                         ),
                       ),
 
-
                       // Container(
                       //   width: MediaQuery.of(context).size.width / 1.5,
                       //   child: CustomButton(
@@ -791,12 +790,11 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
       showCustomToastMessageLong('No Slots Available Today', context, 1, 4);
     } else if (!slotselection) {
       showCustomToastMessageLong('Please Select A Slot', context, 1, 4);
-    }  else {
+    } else {
       // If all conditions are met, proceed to book the appointment
       bookappointment();
     }
   }
-
 
   // if (visablelength == disabledlength) {
   // showCustomToastMessageLong('No Slots Available Today ', context, 1, 4);
@@ -804,7 +802,6 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
   // hasValidationFailed = true;
   // }
   Future<void> bookappointment() async {
-
     if (_formKey.currentState!.validate()) {
       final url = Uri.parse(baseUrl + postApiAppointment);
       print('url==>890: $url');
@@ -841,7 +838,7 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
         "rating": null,
         "review": null,
         "reviewSubmittedDate": null,
-       // "timeofslot": widget.data.timeofSlot,
+        // "timeofslot": widget.data.timeofSlot,
         "timeofslot": '$_selectedTimeSlot24',
         "customerId": Id
       };
@@ -912,8 +909,6 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
       }
     }
   }
-
-
 
   bool isHoliday(DateTime date) {
     return holidayList

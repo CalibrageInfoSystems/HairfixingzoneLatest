@@ -10,9 +10,9 @@ class Consultation {
   final String branchName;
   final bool isActive;
   final String remarks;
-  final int createdByUser;
+  final String createdByUser;
   final String createdDate;
-  final int updatedByUser;
+  final String updatedByUser;
   final String? updatedDate;
 
   Consultation({
