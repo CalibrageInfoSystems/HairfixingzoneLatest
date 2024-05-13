@@ -5,7 +5,8 @@ import 'package:hairfixingzone/CustomerLoginScreen.dart';
 import 'package:hairfixingzone/Dashboard_Screen.dart';
 import 'package:hairfixingzone/HomeScreen.dart';
 import 'package:hairfixingzone/MyAppointment_Model.dart';
-import 'package:hairfixingzone/services/notification_service.dart';
+import 'package:hairfixingzone/services/notifi_service.dart';
+// import 'package:hairfixingzone/services/notification_service.dart';
 import 'package:hairfixingzone/slot_success_screen.dart';
 import 'package:loading_progress/loading_progress.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -146,7 +147,7 @@ class _BookingScreenState extends State<Bookingscreen> {
   String? _selectedTimeSlot24;
   int? genderttypeid;
 
-  NotificationService notificationService = NotificationService();
+
   TextEditingController _textEditingController = TextEditingController(text: "Hair fixing Appointment");
   DateTime currentDate = DateTime.now();
   DateTime? eventDate;
@@ -880,6 +881,7 @@ class _BookingScreenState extends State<Bookingscreen> {
       print('_selectedTimeSlot892 $_selectedTimeSlot');
       String slotdate = DateFormat('dd MMM yyyy').format(_selectedDate!);
       print('slotdate $slotdate');
+      print('date _selectedDate ====$_selectedDate');
       // print('screenFrom1213: ${widget.screenFrom}');
       // print('appointmentId1214: ${widget.appointmentId}');
       // CommonStyles.progressBar(context);
@@ -931,9 +933,21 @@ class _BookingScreenState extends State<Bookingscreen> {
           bool isSuccess = data['isSuccess'];
          progressDialog.dismiss();
           if (isSuccess == true) {
-            //CommonStyles.stopProgress(context);
-            //   ProgressManager.stopProgress();
-            onCreate('${slotdate}', '${_selectedTimeSlot}', '${widget.branchname}', '${widget.branchaddress}');
+            if (_selectedDate != null) {
+              final int notificationId = UniqueKey().hashCode;
+              debugPrint('Notification Scheduled for $_selectedDate with ID: $notificationId');
+              await NotificationService().scheduleNotification(
+                title: 'Scheduled Notification',
+                body: 'Reminder for your scheduled Appointment at $_selectedTimeSlot24!.format(context)} At ${widget.branchname} branch  near  ${widget.branchaddress}',
+                scheduledNotificationDateTime: _selectedDate!,
+                id: notificationId,
+              );
+
+              // Your existing code...
+            } else {
+              print('Error: _selectedDate is null');
+              // Handle the case where _selectedDate is null
+            }
             // LoadingProgress.stop(context,rootNavigator);
             print('Request sent successfully');
             // showCustomToastMessageLong('Slot booked successfully', context, 0, 2);
@@ -1381,40 +1395,40 @@ class _BookingScreenState extends State<Bookingscreen> {
     return Future.value(false);
   }
 
-  Future<void> onCreate(String date, String time, String branchname, String branchaddress) async {
-    print('date=======$date');
-    eventDate = DateFormat("dd MMM yyyy").parse(date);
-    print('eventDate=======$eventDate');
-    print('time=======$time');
-    eventTime = convertStringToTimeOfDay(time);
-    print('eventTime=======$eventTime');
-    await notificationService.showNotification(
-      0,
-      _textEditingController.text,
-      "A new Appointment has been created.",
-      jsonEncode({
-        "title": _textEditingController.text,
-        "eventDate": DateFormat("EEEE, d MMM y").format(eventDate!),
-        "eventTime": eventTime!.format(context),
-      }),
-    );
-
-    await notificationService.scheduleNotification(
-      1,
-      _textEditingController.text,
-      "Reminder for your scheduled Appointment at ${eventTime!.format(context)} At ${branchname} branch  near  ${branchaddress}",
-      eventDate!,
-      eventTime!,
-      jsonEncode({
-        "title": _textEditingController.text,
-        "eventDate": DateFormat("EEEE, d MMM y").format(eventDate!),
-        "eventTime": eventTime!.format(context),
-      }),
-      // getDateTimeComponents(),
-    );
-
-    //  resetForm();
-  }
+  // Future<void> onCreate(String date, String time, String branchname, String branchaddress) async {
+  //   print('date=======$date');
+  //   eventDate = DateFormat("dd MMM yyyy").parse(date);
+  //   print('eventDate=======$eventDate');
+  //   print('time=======$time');
+  //   eventTime = convertStringToTimeOfDay(time);
+  //   print('eventTime=======$eventTime');
+  //   await notificationService.showNotification(
+  //     0,
+  //     _textEditingController.text,
+  //     "A new Appointment has been created.",
+  //     jsonEncode({
+  //       "title": _textEditingController.text,
+  //       "eventDate": DateFormat("EEEE, d MMM y").format(eventDate!),
+  //       "eventTime": eventTime!.format(context),
+  //     }),
+  //   );
+  //
+  //   await notificationService.scheduleNotification(
+  //     1,
+  //     _textEditingController.text,
+  //     "Reminder for your scheduled Appointment at ${eventTime!.format(context)} At ${branchname} branch  near  ${branchaddress}",
+  //     eventDate!,
+  //     eventTime!,
+  //     jsonEncode({
+  //       "title": _textEditingController.text,
+  //       "eventDate": DateFormat("EEEE, d MMM y").format(eventDate!),
+  //       "eventTime": eventTime!.format(context),
+  //     }),
+  //     // getDateTimeComponents(),
+  //   );
+  //
+  //   //  resetForm();
+  // }
 
   TimeOfDay convertStringToTimeOfDay(String timeString) {
     // Split the timeString into hour, minute, and period (AM/PM)

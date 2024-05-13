@@ -212,7 +212,7 @@ class AddConsulationscreen_screenState extends State<Add_Consulation_screen> {
                               FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]')), // Including '\s' for space
                             ],
                             controller: fullNameController,
-                            maxLength: 40,
+                            maxLength: 50,
                             keyboardType: TextInputType.name,
 
                             errorText: _fullNameError ? _fullNameErrorMsg : null,
@@ -390,7 +390,7 @@ class AddConsulationscreen_screenState extends State<Add_Consulation_screen> {
                           ),
                           TextFormField(
                             controller: emailController,
-                            maxLength: 40,
+                            maxLength: 60,
                             maxLengthEnforcement: MaxLengthEnforcement.enforced,
                             keyboardType: TextInputType.emailAddress,
                             onTap: () {

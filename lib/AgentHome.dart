@@ -41,14 +41,65 @@ class _AgentHomeState extends State<AgentHome> {
             return AlertDialog(
               title: const Text('Confirm Exit'),
               content: const Text('Are you Sure You Want To Close The App?'),
-              actions: <Widget>[
-                TextButton(
-                  onPressed: () => Navigator.of(context).pop(false),
-                  child: const Text('No'),
+              actions: [
+                Container(
+
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    style: ElevatedButton.styleFrom(
+                      textStyle: const TextStyle(
+                        color: CommonUtils.primaryTextColor,
+                      ),
+                      side: const BorderSide(
+                        color: CommonUtils.primaryTextColor,
+                      ),
+                      backgroundColor: Colors.white,
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(5),
+                        ),
+                      ),
+                    ),
+                    child: const Text(
+                      'No',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color:  CommonUtils.primaryTextColor,
+                        fontFamily: 'Calibri',
+                      ),
+                    ),
+                  ),
                 ),
-                TextButton(
-                  onPressed: () => Navigator.of(context).pop(true),
-                  child: const Text('Yes'),
+                const SizedBox(width: 10), // Add spacing between buttons
+                Container(
+
+                  child: ElevatedButton(
+                    onPressed: () => Navigator.of(context).pop(true),
+                    style: ElevatedButton.styleFrom(
+                      textStyle: const TextStyle(
+                        color: CommonUtils.primaryTextColor,
+                      ),
+                      side: const BorderSide(
+                        color: CommonUtils.primaryTextColor,
+                      ),
+                      backgroundColor: CommonUtils.primaryTextColor,
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(5),
+                        ),
+                      ),
+                    ),
+                    child: const Text(
+                      'Yes',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color:Colors.white,
+                        fontFamily: 'Calibri',
+                      ),
+                    ),
+                  ),
                 ),
               ],
             );
@@ -210,18 +261,68 @@ class _AgentHomeState extends State<AgentHome> {
           title: const Text('Logout'),
           content: const Text('Are You Sure You Want To Logout?'),
           actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text('Cancel'),
+
+            Container(
+
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                style: ElevatedButton.styleFrom(
+                  textStyle: const TextStyle(
+                    color: CommonUtils.primaryTextColor,
+                  ),
+                  side: const BorderSide(
+                    color: CommonUtils.primaryTextColor,
+                  ),
+                  backgroundColor: Colors.white,
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(5),
+                    ),
+                  ),
+                ),
+                child: const Text(
+                  'Cancel',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color:  CommonUtils.primaryTextColor,
+                    fontFamily: 'Calibri',
+                  ),
+                ),
+              ),
             ),
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-                onConfirmLogout();
-              },
-              child: const Text('Logout'),
+            const SizedBox(width: 10), // Add spacing between buttons
+            Container(
+
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  onConfirmLogout();
+                },
+                style: ElevatedButton.styleFrom(
+                  textStyle: const TextStyle(
+                    color: CommonUtils.primaryTextColor,
+                  ),
+                  side: const BorderSide(
+                    color: CommonUtils.primaryTextColor,
+                  ),
+                  backgroundColor: CommonUtils.primaryTextColor,
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(5),
+                    ),
+                  ),
+                ),
+                child: const Text(
+                  'Logout',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color:Colors.white,
+                    fontFamily: 'Calibri',
+                  ),
+                ),
+              ),
             ),
           ],
         );

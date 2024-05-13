@@ -185,6 +185,7 @@ class _AgentLoginState extends State<AgentLogin> {
                                   },
                                   validator: validateEmail,
                                   controller: _emailController,
+                                  maxLength: 60,
                                 ),
                                 const SizedBox(
                                   height: 10,
@@ -199,6 +200,7 @@ class _AgentLoginState extends State<AgentLogin> {
                                   },
                                   validator: validatePassword,
                                   controller: _passwordController,
+                                  maxLength: 25,
                                   obscureText: showPassword,
                                   suffixIcon: GestureDetector(
                                     onTap: () {

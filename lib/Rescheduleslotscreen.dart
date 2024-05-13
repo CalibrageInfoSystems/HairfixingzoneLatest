@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hairfixingzone/CustomerLoginScreen.dart';
 import 'package:hairfixingzone/MyAppointment_Model.dart';
-import 'package:hairfixingzone/services/notification_service.dart';
+
 import 'package:hairfixingzone/slot_success_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -136,7 +136,6 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
   String? _selectedTimeSlot24;
   int? genderttypeid;
 
-  NotificationService notificationService = NotificationService();
   TextEditingController _textEditingController = TextEditingController(text: "Hair fixing Appointment");
   DateTime currentDate = DateTime.now();
   DateTime? eventDate;
@@ -1330,40 +1329,40 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
     return Future.value(false);
   }
 
-  Future<void> onCreate(String date, String time, String branchname, String branchaddress) async {
-    print('date=======$date');
-    eventDate = DateFormat("dd MMM yyyy").parse(date);
-    print('eventDate=======$eventDate');
-    print('time=======$time');
-    eventTime = convertStringToTimeOfDay(time);
-    print('eventTime=======$eventTime');
-    await notificationService.showNotification(
-      0,
-      _textEditingController.text,
-      "A new Appointment has been created.",
-      jsonEncode({
-        "title": _textEditingController.text,
-        "eventDate": DateFormat("EEEE, d MMM y").format(eventDate!),
-        "eventTime": eventTime!.format(context),
-      }),
-    );
-
-    await notificationService.scheduleNotification(
-      1,
-      _textEditingController.text,
-      "Reminder for your scheduled Appointment at ${eventTime!.format(context)} At ${branchname} branch  at ${branchaddress}",
-      eventDate!,
-      eventTime!,
-      jsonEncode({
-        "title": _textEditingController.text,
-        "eventDate": DateFormat("EEEE, d MMM y").format(eventDate!),
-        "eventTime": eventTime!.format(context),
-      }),
-      // getDateTimeComponents(),
-    );
-
-    //  resetForm();
-  }
+  // Future<void> onCreate(String date, String time, String branchname, String branchaddress) async {
+  //   print('date=======$date');
+  //   eventDate = DateFormat("dd MMM yyyy").parse(date);
+  //   print('eventDate=======$eventDate');
+  //   print('time=======$time');
+  //   eventTime = convertStringToTimeOfDay(time);
+  //   print('eventTime=======$eventTime');
+  //   await notificationService.showNotification(
+  //     0,
+  //     _textEditingController.text,
+  //     "A new Appointment has been created.",
+  //     jsonEncode({
+  //       "title": _textEditingController.text,
+  //       "eventDate": DateFormat("EEEE, d MMM y").format(eventDate!),
+  //       "eventTime": eventTime!.format(context),
+  //     }),
+  //   );
+  //
+  //   await notificationService.scheduleNotification(
+  //     1,
+  //     _textEditingController.text,
+  //     "Reminder for your scheduled Appointment at ${eventTime!.format(context)} At ${branchname} branch  at ${branchaddress}",
+  //     eventDate!,
+  //     eventTime!,
+  //     jsonEncode({
+  //       "title": _textEditingController.text,
+  //       "eventDate": DateFormat("EEEE, d MMM y").format(eventDate!),
+  //       "eventTime": eventTime!.format(context),
+  //     }),
+  //     // getDateTimeComponents(),
+  //   );
+  //
+  //   //  resetForm();
+  // }
 
   TimeOfDay convertStringToTimeOfDay(String timeString) {
     // Split the timeString into hour, minute, and period (AM/PM)

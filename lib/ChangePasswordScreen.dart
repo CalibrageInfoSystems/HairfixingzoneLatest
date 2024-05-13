@@ -421,6 +421,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
     if (value == null || value.isEmpty) {
       return 'Please Enter New Password';
     }
+    if (_newController.text == _currentController.text) {
+      return 'New Password Cannot Be The Same As The Current Password';
+    }
     return null;
   }
 
@@ -433,6 +436,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
     }
     return null;
   }
+  // New Password Cannot Be The Same As The Current Password
 
   AppBar _appBar(BuildContext context) {
     return AppBar(

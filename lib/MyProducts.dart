@@ -201,7 +201,7 @@ class MyProducts_screenState extends State<MyProducts> {
                           } else {
                             return const Center(
                               child: Text(
-                                'No Products Found!',
+                                'No Products Found',
                                 style: TextStyle(
                                   fontSize: 12.0,
                                   color: Colors.black,

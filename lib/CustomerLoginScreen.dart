@@ -137,7 +137,7 @@ class _LoginPageState extends State<CustomerLoginScreen> {
                                 keyboardType: TextInputType.visiblePassword,
                                 // obscureText: true,
 
-                                maxLength: 50,
+                                maxLength: 60,
                                 decoration: InputDecoration(
                                   contentPadding: const EdgeInsets.only(top: 15, bottom: 10, left: 15, right: 15),
                                   focusedBorder: OutlineInputBorder(

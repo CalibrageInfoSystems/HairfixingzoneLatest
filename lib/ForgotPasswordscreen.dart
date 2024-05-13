@@ -130,6 +130,7 @@ class _ForgotPasswordscreen extends State<ForgotPasswordscreen> {
                                     label: 'Email / User Name',
                                     validator: validateEmail,
                                     controller: username,
+                                    maxLength: 60,
                                   ),
                                   SizedBox(
                                     height: 30,

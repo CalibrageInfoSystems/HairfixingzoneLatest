@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hairfixingzone/EditProfile.dart';
 import 'package:hairfixingzone/Product_My.dart';
 import 'package:hairfixingzone/SelectCity_Branch.dart';
@@ -8,14 +9,15 @@ import 'package:hairfixingzone/MyProductsProvider.dart';
 import 'package:hairfixingzone/Rescheduleslotscreen.dart';
 import 'package:hairfixingzone/aboutus_screen.dart';
 import 'package:hairfixingzone/services/local_notifications.dart';
-import 'package:hairfixingzone/services/notification_service.dart';
+import 'package:hairfixingzone/services/notifi_service.dart';
+// import 'package:hairfixingzone/services/notification_service.dart';
 import 'package:hairfixingzone/splash_screen.dart';
 import 'package:provider/provider.dart';
 // import 'package:hairfixingservice/services/local_notifications.dart';
 // import 'package:hairfixingservice/splash_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart';
-
+import 'package:timezone/data/latest.dart' as tz;
 import 'AgentAppointmentsProvider.dart';
 import 'GetAppointments.dart';
 import 'HomeScreen.dart';
@@ -36,10 +38,25 @@ void main() async {
   await Firebase.initializeApp();
   FirebaseMessaging.onBackgroundMessage(backgroundHandler);
 
-  NotificationService notificationService = NotificationService();
-  await notificationService.init();
-  await notificationService.requestIOSPermissions();
+  // NotificationService notificationService = NotificationService();
+  // await notificationService.init();
+  // await notificationService.requestIOSPermissions();
   // LocalNotificationService.initialize();
+  WidgetsFlutterBinding.ensureInitialized();
+  NotificationService notificationService = NotificationService();
+  await notificationService.initNotification();
+  tz.initializeTimeZones();
+  // Retrieve all scheduled notifications
+  List<PendingNotificationRequest> notifications =
+  await notificationService.getScheduledNotifications();
+
+  // Log the details of all scheduled notifications
+  for (var notification in notifications) {
+    print("Scheduled Notification: ${notification.id}");
+    print("Title: ${notification.title}");
+    print("Body: ${notification.body}");
+    // print("Scheduled Time: ${notification.scheduledDate}");
+  }
 
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (context) => MyProductProvider()),

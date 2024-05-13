@@ -2016,7 +2016,7 @@ class _OpCardState extends State<OpCard> {
                         keyboardType: TextInputType.number,
                         // obscureText: true,
 
-                        maxLength: 50,
+                        maxLength: 10,
                         decoration: InputDecoration(
                           contentPadding: const EdgeInsets.only(
                               top: 15, bottom: 10, left: 15, right: 15),
@@ -2099,17 +2099,38 @@ class _OpCardState extends State<OpCard> {
             ),
           ),
           actions: [
-            TextButton(
-              onPressed: () {
-                if (formKey.currentState!.validate()) {
-                  int? price = int.tryParse(priceController.text);
-                  postAppointment(data, 18, price!, userId);
-                  Navigator.of(context).pop();
+            // TextButton(
+              // onPressed: () {
+              //   if (formKey.currentState!.validate()) {
+              //     int? price = int.tryParse(priceController.text);
+              //     postAppointment(data, 18, price!, userId);
+              //     Navigator.of(context).pop();
+              //
+              //   }
+              // },
+              //
+              // child:
+              CustomButton(
+                buttonText: 'Submit',
+                color: CommonUtils.primaryTextColor,
+                onPressed: () {
 
-                }
-              },
-              child: const Text('Submit'),
-            ),
+                  // Refresh the screen
+                  if (formKey.currentState!.validate()) {
+                    int? price = int.tryParse(priceController.text);
+                    postAppointment(data, 18, price!, userId);
+                    Navigator.of(context).pop();
+
+                  }
+                  //    Navigator.of(context).push(
+                  //      MaterialPageRoute(
+                  //        builder: (context) =>  Agentappointmentlist(),
+                  //      ),
+                  //    );
+                },
+              ),
+
+
           ],
         );
       },

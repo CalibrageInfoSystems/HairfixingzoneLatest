@@ -1742,7 +1742,7 @@ class _OpCardState extends State<OpCard> {
     bool hasValidationFailed = false;
     int myInt = rating_star.toInt();
     print('changedintoint$myInt');
-    if (rating_star <= 0.0) {
+    if (isValid && rating_star <= 0.0) {
       FocusScope.of(context).unfocus();
       CommonUtils.showCustomToastMessageLong(
           'Please Rate Your Experience', context, 1, 4);
