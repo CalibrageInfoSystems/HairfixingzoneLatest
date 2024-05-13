@@ -1056,10 +1056,11 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
       isFullNameValidate = false;
       return null;
     }
-    if (!RegExp(r'^[a-zA-Z]+$').hasMatch(value)) {
+
+    if (!RegExp(r'[a-zA-Z\s]+$').hasMatch(value)) {
       return 'Full Name Should Only Contain Alphabetic Characters';
     }
-    if (!RegExp(r'^[a-zA-Z]+$').hasMatch(value)) {
+    if (!RegExp(r'[a-zA-Z\s]+$').hasMatch(value)) {
       setState(() {
         _fullNameError = true;
         _fullNameErrorMsg = 'Full Name Should Only Contain Alphabets';

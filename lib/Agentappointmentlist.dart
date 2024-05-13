@@ -1860,7 +1860,7 @@ class _OpCardState extends State<OpCard> {
           // Failure case
           // Handle failure scenario here
           CommonUtils.showCustomToastMessageLong(
-              'The Request Should Not Be Canceled With In  1 Hour Before Slot',
+              'The Request Should Not Be Canceled Within 1 hour Before The Slot',
               context,
               0,
               2);
@@ -1950,7 +1950,7 @@ class _OpCardState extends State<OpCard> {
           // Failure case
           // Handle failure scenario here
           CommonUtils.showCustomToastMessageLong(
-              'The request should not be canceled within 60 minutes before slot',
+              'Failed to Send The Request ',
               context,
               0,
               2);
@@ -2299,10 +2299,11 @@ Future<void> Get_ApprovedDeclinedSlots(Appointment data, int i) async {
     "CustomerName": data.customerName,
     "PhoneNumber": data.phoneNumber,
     "Email": data.email,
-    "Address": "",
-    "SlotDuration": data.slotDuration
+    "Address":  data.name,
+    "SlotDuration": data.slotDuration,
+    "branchId": data.branchId,
   };
-  print('Get_ApprovedSlotsmail: $request');
+  print('Get_ApprovedSlotsmail: ${json.encode(request)}');
   try {
     // Send the POST request
     final response = await http.post(

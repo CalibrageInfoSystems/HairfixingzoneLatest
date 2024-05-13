@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hairfixingzone/BranchModel.dart';
 import 'package:hairfixingzone/BranchesModel.dart';
@@ -22,7 +23,7 @@ import 'api_config.dart';
 
 class AgentDashBoard extends StatefulWidget {
   final int agentid;
-  AgentDashBoard({required this.agentid});
+  const AgentDashBoard({super.key, required this.agentid});
 
   @override
   State<AgentDashBoard> createState() => _AgentDashBoardState();
@@ -30,10 +31,9 @@ class AgentDashBoard extends StatefulWidget {
 
 class _AgentDashBoardState extends State<AgentDashBoard> {
   List<Item> _items = [];
-  late PageController _pageController;
   late Timer _timer;
   String marqueeText = '';
-  int _currentPage = 0;
+  final int _currentPage = 0;
   late Future<List<BranchModel>> apiData;
   String userFullName = '';
   String email = '';
@@ -41,32 +41,16 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
   int? AgentId;
 //  String gender ='';
   String Gender = '';
-  bool _shouldStartMarquee = true; // Variable to control Marquee scrolling
+  final bool _shouldStartMarquee =
+  true; // Variable to control Marquee scrolling
 
   @override
   void initState() {
     super.initState();
     checkLoginAgentdata();
     _fetchItems();
-    _startAutoScroll();
     apiData = getBranches(widget.agentid);
     // apiData = getAgentBranches(widget.agentId);
-    _pageController = PageController(initialPage: _currentPage);
-  }
-
-  void _startAutoScroll() {
-    _timer = Timer.periodic(const Duration(seconds: 5), (_) {
-      if (_currentPage < _items.length - 1) {
-        _currentPage++;
-      } else {
-        _currentPage = 0;
-      }
-      _pageController.animateToPage(
-        _currentPage,
-        duration: const Duration(milliseconds: 500),
-        curve: Curves.ease,
-      );
-    });
   }
 
   void checkLoginAgentdata() async {
@@ -96,11 +80,14 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
   }
 
   void _fetchItems() async {
-    final response = await http.get(Uri.parse('http://182.18.157.215/SaloonApp/API/GetBanner?Id=null'));
+    final response = await http.get(
+        Uri.parse('http://182.18.157.215/SaloonApp/API/GetBanner?Id=null'));
 
     if (response.statusCode == 200) {
       setState(() {
-        _items = (json.decode(response.body)['listResult'] as List).map((item) => Item.fromJson(item)).toList();
+        _items = (json.decode(response.body)['listResult'] as List)
+            .map((item) => Item.fromJson(item))
+            .toList();
       });
     } else {
       throw Exception('Failed to load items');
@@ -108,21 +95,26 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
   }
 
   Future<List<Consultation>?> getAgentBranches(int agentId) async {
-    final apiUrl = Uri.parse('http://182.18.157.215/SaloonApp/API/api/Consultation/GetConsultationsByBranchId/$agentId');
+    final apiUrl = Uri.parse(
+        'http://182.18.157.215/SaloonApp/API/api/Consultation/GetConsultationsByBranchId/$agentId');
     try {
       final response = await http.get(apiUrl);
       if (response.statusCode == 200) {
         final Map<String, dynamic> responseData = jsonDecode(response.body);
         if (responseData['listResult'] != null) {
           final List<dynamic> appointmentsData = responseData['listResult'];
-          return appointmentsData.map((appointment) => Consultation.fromJson(appointment)).toList();
+          return appointmentsData
+              .map((appointment) => Consultation.fromJson(appointment))
+              .toList();
         } else {
           print('No data found');
           return null;
         }
       } else {
-        print('Failed to fetch appointments. Status code: ${response.statusCode}');
-        throw Exception('Failed to fetch appointments. Status code: ${response.statusCode}');
+        print(
+            'Failed to fetch appointments. Status code: ${response.statusCode}');
+        throw Exception(
+            'Failed to fetch appointments. Status code: ${response.statusCode}');
       }
     } catch (error) {
       print('Failed to connect to the API: $error');
@@ -133,158 +125,179 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        //  backgroundColor: CommonStyles.primaryTextColor,
-        // appBar: _appBar(),
+      //  backgroundColor: CommonStyles.primaryTextColor,
+      // appBar: _appBar(),
         body: IntrinsicHeight(
-      child: Column(
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          child: Column(
             children: [
-              SizedBox(
-                height: 30,
-                child: FutureBuilder(
-                  future: getMarqueeText(),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const SizedBox();
-                    } else if (snapshot.hasError) {
-                      return const SizedBox();
-                    } else {
-                      return Marquee(
-                        text: marqueeText,
-                        style: const TextStyle(fontSize: 16, fontFamily: "Calibri", fontWeight: FontWeight.w600, color: Color(0xFFff0176)),
-                        velocity: _shouldStartMarquee ? 30 : 0, // Control Marquee scrolling with velocity
-                      );
-                    }
-                  },
-                ),
-              ),
-              SizedBox(
-                width: MediaQuery.of(context).size.width,
-                height: 180,
-                child: PageView.builder(
-                  controller: _pageController,
-                  itemCount: _items.length,
-                  itemBuilder: (context, index) {
-                    final itemIndex = index % _items.length;
-                    return SizedBox(
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: ItemBuilder(items: _items, index: itemIndex),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                  onPageChanged: (int page) {
-                    setState(() {
-                      _currentPage = page;
-                    });
-                  },
-                ),
-              ),
-              // PageView indicator
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  for (int i = 0; i < _items.length; i++)
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          _currentPage = i;
-                        });
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    height: 30,
+                    child: FutureBuilder(
+                      future: getMarqueeText(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.waiting) {
+                          return const SizedBox();
+                        } else if (snapshot.hasError) {
+                          return const SizedBox();
+                        } else {
+                          return Marquee(
+                            text: marqueeText,
+                            style: const TextStyle(
+                                fontSize: 16,
+                                fontFamily: "Calibri",
+                                fontWeight: FontWeight.w600,
+                                color: Color(0xFFff0176)),
+                            velocity: _shouldStartMarquee
+                                ? 30
+                                : 0, // Control Marquee scrolling with velocity
+                          );
+                        }
                       },
-                      child: Container(
-                        margin: const EdgeInsets.all(2),
-                        width: 10,
-                        height: 10,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(color: CommonStyles.primaryTextColor, width: 1.5),
-                          color: _currentPage == i ? Colors.grey.withOpacity(0.9) : Colors.transparent,
+                    ),
+                  ),
+
+                  // Carousel widget
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    height: 200,
+                    child: FlutterCarousel(
+                      options: CarouselOptions(
+                        // height: 400.0,
+                        showIndicator: true,
+                        autoPlay: true,
+                        floatingIndicator: false,
+                        autoPlayCurve: Curves.linear,
+                        // enlargeCenterPage: true,
+                        slideIndicator: const CircularSlideIndicator(
+                          indicatorBorderColor: CommonStyles.blackColor,
+                          currentIndicatorColor: CommonStyles.primaryTextColor,
                         ),
                       ),
+                      items: _items.map((item) {
+                        return Builder(
+                          builder: (BuildContext context) {
+                            return SizedBox(
+                              width: MediaQuery.of(context).size.width,
+                              // margin: const EdgeInsets.symmetric(horizontal: 5.0),
+                              // decoration: const BoxDecoration(color: Colors.grey),
+                              child: Card(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                elevation: 4,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: Image.network(
+                                    item.imageName,
+                                    height: 100,
+                                    fit: BoxFit.cover,
+                                    loadingBuilder:
+                                        (context, child, loadingProgress) {
+                                      if (loadingProgress == null) return child;
+
+                                      return const Center(
+                                          child:
+                                          CircularProgressIndicator.adaptive());
+                                    },
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                      }).toList(),
                     ),
+                  ),
                 ],
               ),
+              const SizedBox(
+                height: 15,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: Column(
+                  children: [
+                    screens(),
+                    const SizedBox(height: 15),
+                    //MARK: Branches
+                    const Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Branches',
+                          style: CommonStyles.txSty_16p_fb,
+                        ),
+                      ],
+                    ),
+                    agentBranches(),
+                  ],
+                ),
+              ),
+              //MARK: Welcome Text
+              //     welcomeText(),
+              //MARK: Main Card
+              // Expanded(
+              //   child: Container(
+              //     height: MediaQuery.of(context).size.height,
+              //     decoration: const BoxDecoration(
+              //       color: CommonStyles.whiteColor,
+              //       borderRadius: BorderRadius.only(
+              //         topLeft: Radius.circular(20),
+              //         topRight: Radius.circular(20),
+              //       ),
+              //     ),
+              //     child: Column(
+              //       children: [
+              //         marquee(),
+              //         Column(
+              //           children: [
+              //             carousel(),
+              //             Row(
+              //               mainAxisAlignment: MainAxisAlignment.center,
+              //               children: <Widget>[
+              //                 for (int i = 0; i < _items.length; i++)
+              //                   Container(
+              //                     margin: const EdgeInsets.all(2),
+              //                     width: 10,
+              //                     height: 10,
+              //                     decoration: BoxDecoration(
+              //                       borderRadius: BorderRadius.circular(10),
+              //                       border: Border.all(color: CommonStyles.primaryTextColor, width: 1.5),
+              //                       color: _currentPage == i ? Colors.grey.withOpacity(0.9) : Colors.transparent,
+              //                     ),
+              //                   )
+              //               ],
+              //             ),
+              //             const SizedBox(
+              //               height: 15,
+              //             ),
+              //             Padding(
+              //               padding: const EdgeInsets.symmetric(horizontal: 20),
+              //               child: Column(
+              //                 children: [
+              //                   screens(),
+              //                   const SizedBox(height: 10),
+              //                   agentBranches(),
+              //                 ],
+              //               ),
+              //             ),
+              //           ],
+              //         ),
+              //       ],
+              //     ),
+              //   ),
+              // )
             ],
           ),
-          const SizedBox(
-            height: 15,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: Column(
-              children: [
-                screens(),
-                const SizedBox(height: 10),
-                agentBranches(),
-              ],
-            ),
-          ),
-          //MARK: Welcome Text
-          //     welcomeText(),
-          //MARK: Main Card
-          // Expanded(
-          //   child: Container(
-          //     height: MediaQuery.of(context).size.height,
-          //     decoration: const BoxDecoration(
-          //       color: CommonStyles.whiteColor,
-          //       borderRadius: BorderRadius.only(
-          //         topLeft: Radius.circular(20),
-          //         topRight: Radius.circular(20),
-          //       ),
-          //     ),
-          //     child: Column(
-          //       children: [
-          //         marquee(),
-          //         Column(
-          //           children: [
-          //             carousel(),
-          //             Row(
-          //               mainAxisAlignment: MainAxisAlignment.center,
-          //               children: <Widget>[
-          //                 for (int i = 0; i < _items.length; i++)
-          //                   Container(
-          //                     margin: const EdgeInsets.all(2),
-          //                     width: 10,
-          //                     height: 10,
-          //                     decoration: BoxDecoration(
-          //                       borderRadius: BorderRadius.circular(10),
-          //                       border: Border.all(color: CommonStyles.primaryTextColor, width: 1.5),
-          //                       color: _currentPage == i ? Colors.grey.withOpacity(0.9) : Colors.transparent,
-          //                     ),
-          //                   )
-          //               ],
-          //             ),
-          //             const SizedBox(
-          //               height: 15,
-          //             ),
-          //             Padding(
-          //               padding: const EdgeInsets.symmetric(horizontal: 20),
-          //               child: Column(
-          //                 children: [
-          //                   screens(),
-          //                   const SizedBox(height: 10),
-          //                   agentBranches(),
-          //                 ],
-          //               ),
-          //             ),
-          //           ],
-          //         ),
-          //       ],
-          //     ),
-          //   ),
-          // )
-        ],
-      ),
-    ));
+        ));
   }
 
   getMarqueeText() async {
-    final apiUrl = Uri.parse('http://182.18.157.215/SaloonApp/API/GetContent/true');
+    final apiUrl =
+    Uri.parse('http://182.18.157.215/SaloonApp/API/GetContent/true');
 
     try {
       final jsonResponse = await http.get(apiUrl);
@@ -295,15 +308,15 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
         if (response['isSuccess']) {
           int records = response['affectedRecords'];
           for (var i = 0; i < records; i++) {
-            marqueeText = '${marqueeText + response['listResult'][i]['text']}  ';
-            // marqueeText += response['listResult'][i]['text'];
+            marqueeText += '${response['listResult'][i]['text']}  -  ';
           }
         } else {
           print('api failed');
           throw Exception('api failed');
         }
       } else {
-        throw Exception('Request failed with status: ${jsonResponse.statusCode}');
+        throw Exception(
+            'Request failed with status: ${jsonResponse.statusCode}');
       }
     } catch (error) {
       rethrow;
@@ -316,7 +329,10 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
       backgroundColor: const Color(0xFFf3e3ff),
       title: const Text(
         'Agent DashBoard',
-        style: TextStyle(color: Color(0xFF0f75bc), fontSize: 16.0, fontWeight: FontWeight.w600),
+        style: TextStyle(
+            color: Color(0xFF0f75bc),
+            fontSize: 16.0,
+            fontWeight: FontWeight.w600),
       ),
       leading: IconButton(
         icon: const Icon(
@@ -366,67 +382,17 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
             } else {
               return Marquee(
                 text: marqueeText,
-                style: const TextStyle(fontSize: 16, fontFamily: "Calibri", fontWeight: FontWeight.w600, color: Color(0xFFff0176)),
+                style: const TextStyle(
+                    fontSize: 16,
+                    fontFamily: "Calibri",
+                    fontWeight: FontWeight.w600,
+                    color: Color(0xFFff0176)),
               );
             }
           },
         ),
       ),
     );
-  }
-
-  Widget carousel() {
-    return SizedBox(
-      width: MediaQuery.of(context).size.width,
-      height: 200,
-      child: PageView.builder(
-        controller: _pageController,
-        itemCount: _items.length,
-        itemBuilder: (context, index) {
-          final itemIndex = index % _items.length;
-          return SizedBox(
-            child: Row(
-              children: [
-                Expanded(
-                  child: ItemBuilder(items: _items, index: itemIndex),
-                ),
-              ],
-            ),
-          );
-        },
-        onPageChanged: (int page) {
-          setState(() {
-            _currentPage = page;
-          });
-        },
-      ),
-    );
-    // Container(
-    //   color: Colors.grey,
-    //   width: MediaQuery.of(context).size.width,
-    //   height: 200,
-    //   child: PageView.builder(
-    //     controller: _pageController,
-    //     itemCount: _items.length,
-    //     itemBuilder: (context, index) {
-    //       final itemIndex = index % _items.length;
-    //       return SizedBox(
-    //         child: Row(
-    //           children: [
-    //             Expanded(
-    //               child: ItemBuilder(items: _items, index: itemIndex),
-    //             ),
-    //           ],
-    //         ),
-    //       );
-    //     },
-    //     onPageChanged: (int page) {
-    //       setState(() {
-    //         _currentPage = page;
-    //       });
-    //     },
-    //   ),
-    // );
   }
 
   Widget agentBranches() {
@@ -496,7 +462,8 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
         final data = json.decode(response.body);
         List<dynamic>? listResult = data['listResult']; // Add a check for null
         if (listResult != null) {
-          List<BranchModel> result = listResult.map((e) => BranchModel.fromJson(e)).toList();
+          List<BranchModel> result =
+          listResult.map((e) => BranchModel.fromJson(e)).toList();
           return result;
         } else {
           print('listResult is null');
@@ -542,7 +509,8 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
           onTap: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => Branches_screen(userId: AgentId!)),
+              MaterialPageRoute(
+                  builder: (context) => Branches_screen(userId: AgentId!)),
             );
           },
           child: Column(
@@ -585,8 +553,8 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
               context,
               MaterialPageRoute(
                   builder: (context) => Add_Consulation_screen(
-                        agentId: AgentId!,
-                      )),
+                    agentId: AgentId!,
+                  )),
             );
             // Navigator.of(context, rootNavigator: true)
             //     .pushNamed("/Products");
@@ -628,8 +596,8 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
               context,
               MaterialPageRoute(
                   builder: (context) => View_Consultation_screen(
-                        agentId: AgentId!,
-                      )),
+                    agentId: AgentId!,
+                  )),
             );
             // Navigator.of(context, rootNavigator: true)
             //     .pushNamed("/Products");
@@ -780,7 +748,10 @@ class BranchCard extends StatelessWidget {
                     branch.name,
                     style: CommonStyles.txSty_16p_fb,
                   ),
-                  Text(branch.address, maxLines: 3, overflow: TextOverflow.ellipsis, style: CommonStyles.txSty_12b_f5),
+                  Text(branch.address,
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
+                      style: CommonStyles.txSty_12b_f5),
                 ],
               ),
             ),

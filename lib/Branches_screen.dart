@@ -18,7 +18,7 @@ import 'consultation_creation_screen.dart';
 class Branches_screen extends StatefulWidget {
   final int userId;
 
-  Branches_screen({required this.userId});
+  const Branches_screen({super.key, required this.userId});
 
   @override
   _BranchesscreenState createState() => _BranchesscreenState();
@@ -44,7 +44,8 @@ class _BranchesscreenState extends State<Branches_screen> {
         // _getBranchData(widget.userId);
         fetchData();
       } else {
-        CommonUtils.showCustomToastMessageLong('Please Check Your Internet Connection', context, 1, 4);
+        CommonUtils.showCustomToastMessageLong(
+            'Please Check Your Internet Connection', context, 1, 4);
         print('Not connected to the internet'); // Not connected to the internet
       }
     });
@@ -62,7 +63,8 @@ class _BranchesscreenState extends State<Branches_screen> {
         print('Connected to the internet');
         // _getBranchData(widget.userId);
       } else {
-        CommonUtils.showCustomToastMessageLong('No Internet Connection', context, 1, 4);
+        CommonUtils.showCustomToastMessageLong(
+            'No Internet Connection', context, 1, 4);
         print('Not connected to the internet'); // Not connected to the internet
       }
     });
@@ -74,193 +76,66 @@ class _BranchesscreenState extends State<Branches_screen> {
     final desiredWidth = screenWidth;
 
     return Scaffold(
-        appBar: AppBar(
-            elevation: 0,
-            backgroundColor: const Color(0xFFf3e3ff),
-            title: const Text(
-              'Select Branch',
-              style: TextStyle(color: Color(0xFF0f75bc), fontSize: 16.0, fontFamily: "Calibri", fontWeight: FontWeight.w600),
-            ),
-            leading: IconButton(
-              icon: Icon(
-                Icons.arrow_back_ios,
-                color: CommonUtils.primaryTextColor,
-              ),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            )),
-        body:
-            // SingleChildScrollView(
-            //   child:
-            Container(
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height,
-          child: Column(
-            children: [
-              Center(
-                child: Column(
-                  children: [
-                    if (_isLoading)
-                      Container(
-                        child: Align(
-                          alignment: Alignment.center,
-                          child: Center(
-                            child: Column(
-                              children: [
-                                Text('Please Wait Loading Slow Internet Connection !'),
-                              ],
-                            ),
-                          ),
-                        ),
-                      )
-                    else if (brancheslist.isEmpty)
-                      Container(
-                        padding: EdgeInsets.all(10.0),
-                        child: Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text('Failed to fetch data. Please Check Your Internet Connection.!'),
-                              SizedBox(height: 20),
-                              ElevatedButton(
-                                onPressed: retryDataFetching,
-                                child: Text('Retry'),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                  ],
-                ),
-              ),
-
-              Padding(
-                padding: EdgeInsets.all(8.0), // Adjust the value as per your preference
-                child: ListView.builder(
-                    itemCount: brancheslist.length,
-                    shrinkWrap: true,
-                    physics: PageScrollPhysics(),
-                    itemBuilder: (context, index) {
-                      BranchModel branchnames = brancheslist[index];
-                      String? imageUrl = branchnames.imageName; // Use String? for nullable type
-
-                      // Check if imageUrl is null or empty, then assign default image URL or asset path
-                      if (imageUrl == null || imageUrl.isEmpty) {
-                        imageUrl = 'assets/top_image.png'; // Default image asset path
-                      }
-                      return Container(
-                          padding: EdgeInsets.only(bottom: 15.0),
-                          width: MediaQuery.of(context).size.width,
-                          child: GestureDetector(
-                              onTap: () {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (context) => Agentappointmentlist(
-                                      userId: widget.userId,
-                                      branchid: branchnames.id!,
-                                      branchname: branchnames.name,
-                                      filepath: branchnames.imageName != null ? branchnames.imageName! : 'assets/top_image.png',
-                                      phonenumber: branchnames.mobileNumber,
-                                      branchaddress: branchnames.address,
-                                    ),
-                                  ),
-                                );
-                              },
-                              child: Container(
-                                height: MediaQuery.of(context).size.height / 8,
-                                width: MediaQuery.of(context).size.width,
-                                // decoration: BoxDecoration(
-                                //   border: Border.all(color: Color(0xFF662e91), width: 1.0),
-                                //   borderRadius: BorderRadius.circular(10.0),
-                                // ),
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(10.0),
-                                  // borderRadius: BorderRadius.circular(30), //border corner radius
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Color(0xFF960efd).withOpacity(0.2), //color of shadow
-                                      spreadRadius: 2, //spread radius
-                                      blurRadius: 4, // blur radius
-                                      offset: Offset(0, 2), // changes position of shadow
-                                    ),
-                                  ],
-                                ),
-                                child: Row(
-                                  children: [
-                                    Padding(
-                                      padding: EdgeInsets.only(left: 15.0, top: 0.0),
-                                      child: Container(
-                                        width: MediaQuery.of(context).size.width / 3,
-                                        height: 65,
-                                        // decoration: BoxDecoration(
-                                        //   borderRadius: BorderRadius.circular(10.0),
-                                        //   border: Border.all(
-                                        //     color: Color(0xFF9FA1EE),
-                                        //     width: 3.0,
-                                        //   ),
-                                        // ),
-                                        child: ClipRRect(
-                                          borderRadius: BorderRadius.circular(0.0),
-                                          child: Image.network(
-                                            imageUrl.isNotEmpty ? imageUrl : 'https://example.com/placeholder-image.jpg',
-                                            fit: BoxFit.cover,
-                                            height: MediaQuery.of(context).size.height / 4 / 2,
-                                            width: MediaQuery.of(context).size.width / 3.2,
-                                            errorBuilder: (context, error, stackTrace) {
-                                              return Image.asset(
-                                                'assets/hairfixing_logo.png', // Path to your PNG placeholder image
-                                                fit: BoxFit.cover,
-                                                height: MediaQuery.of(context).size.height / 4 / 2,
-                                                width: MediaQuery.of(context).size.width / 3.2,
-                                              );
-                                            },
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: 5,
-                                    ),
-                                    Padding(
-                                        padding: EdgeInsets.only(left: 5.0, top: 10.0),
-                                        child: Container(
-                                          width: MediaQuery.of(context).size.width / 2.5,
-                                          //    padding: EdgeInsets.only(top: 7),
-                                          // width: MediaQuery.of(context).size.width / 4,
-                                          child: Column(
-                                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                '${branchnames.name}',
-                                                style: TextStyle(
-                                                  color: Color(0xFF0f75bc),
-                                                  fontSize: 14.0,
-                                                  fontWeight: FontWeight.w600,
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                height: 5,
-                                              ),
-                                              Text(
-                                                '${branchnames.address}',
-                                                style: TextStyle(color: Colors.black, fontSize: 12.0, fontWeight: FontWeight.w600),
-                                                maxLines: 3,
-                                                overflow: TextOverflow.ellipsis,
-                                              ),
-                                            ],
-                                          ),
-                                        ))
-                                  ],
-                                ),
-                              )));
-                    }),
-              ) //   ),
-            ],
+      appBar: AppBar(
+          elevation: 0,
+          backgroundColor: const Color(0xFFf3e3ff),
+          title: const Text(
+            'Select Branch',
+            style: TextStyle(
+                color: Color(0xFF0f75bc),
+                fontSize: 16.0,
+                fontFamily: "Calibri",
+                fontWeight: FontWeight.w600),
           ),
-        ));
+          leading: IconButton(
+            icon: const Icon(
+              Icons.arrow_back_ios,
+              color: CommonUtils.primaryTextColor,
+            ),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          )),
+      body: Column(
+        children: [
+          const SizedBox(
+            height: 10,
+          ),
+          Expanded(
+              child: ListView.builder(
+                itemCount: brancheslist.length,
+                itemBuilder: (context, index) {
+                  BranchModel branchnames = brancheslist[index];
+                  String? imageUrl = branchnames.imageName;
+                  if (imageUrl == null || imageUrl.isEmpty) {
+                    imageUrl = 'assets/top_image.png';
+                  }
+                  return BranchTemplate(
+                      branchnames: branchnames,
+                      imageUrl: imageUrl,
+                      userId: widget.userId);
+                },
+              )
+
+            //   ListView.builder(
+            //     itemCount: brancheslist.length,
+            //     // shrinkWrap: true,
+            //     // physics: const PageScrollPhysics(),
+            //     itemBuilder: (context, index) {
+            //       BranchModel branchnames = brancheslist[index];
+            //       String? imageUrl = branchnames.imageName;
+            //       if (imageUrl == null || imageUrl.isEmpty) {
+            //         imageUrl = 'assets/top_image.png';
+            //       }
+            //       return BranchTemplate(
+            //           branchnames: branchnames, imageUrl: imageUrl, userId: widget.userId);
+            //     },
+            //   ),
+            // ),
+          ),
+        ],
+      ),
+    );
   }
 
   void _handleButtonPress() {
@@ -282,7 +157,7 @@ class _BranchesscreenState extends State<Branches_screen> {
     });
 
     // Add a timeout of 8 seconds using Future.delayed
-    Future.delayed(Duration(seconds: 15), () {
+    Future.delayed(const Duration(seconds: 15), () {
       if (_isLoading) {
         setState(() {
           _isLoading = false;
@@ -299,7 +174,7 @@ class _BranchesscreenState extends State<Branches_screen> {
     //   _isLoading = true; // Set isLoading to true before making the API call
     // });
 
-    String apiUrl = baseUrl + GetBranchByUserId + '$userId';
+    String apiUrl = '$baseUrl$GetBranchByUserId$userId';
     // const maxRetries = 1; // Set maximum number of retries
     // int retries = 0;
 
@@ -378,7 +253,7 @@ class _BranchesscreenState extends State<Branches_screen> {
 
     Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(builder: (context) => UserSelectionScreen()),
-      (route) => false,
+          (route) => false,
     );
   }
 
@@ -387,4 +262,136 @@ class _BranchesscreenState extends State<Branches_screen> {
 //  setState(() {
 //    _isLoading = false;
 //  });
+}
+
+class BranchTemplate extends StatelessWidget {
+  final BranchModel branchnames;
+  final String imageUrl;
+  final int userId;
+  const BranchTemplate(
+      {super.key,
+        required this.branchnames,
+        required this.imageUrl,
+        required this.userId});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      width: MediaQuery.of(context).size.width,
+      child: GestureDetector(
+        onTap: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => Agentappointmentlist(
+                userId: userId,
+                branchid: branchnames.id!,
+                branchname: branchnames.name,
+                filepath: branchnames.imageName != null
+                    ? branchnames.imageName!
+                    : 'assets/top_image.png',
+                phonenumber: branchnames.mobileNumber,
+                branchaddress: branchnames.address,
+              ),
+            ),
+          );
+        },
+        child: Container(
+          height: MediaQuery.of(context).size.height / 8,
+          width: MediaQuery.of(context).size.width,
+          // decoration: BoxDecoration(
+          //   border: Border.all(color: Color(0xFF662e91), width: 1.0),
+          //   borderRadius: BorderRadius.circular(10.0),
+          // ),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(10.0),
+            // borderRadius: BorderRadius.circular(30), //border corner radius
+            boxShadow: [
+              BoxShadow(
+                color:
+                const Color(0xFF960efd).withOpacity(0.2), //color of shadow
+                spreadRadius: 2, //spread radius
+                blurRadius: 4, // blur radius
+                offset: const Offset(0, 2), // changes position of shadow
+              ),
+            ],
+          ),
+          child: Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 15.0, top: 0.0),
+                child: SizedBox(
+                  width: MediaQuery.of(context).size.width / 3,
+                  height: 65,
+                  // decoration: BoxDecoration(
+                  //   borderRadius: BorderRadius.circular(10.0),
+                  //   border: Border.all(
+                  //     color: Color(0xFF9FA1EE),
+                  //     width: 3.0,
+                  //   ),
+                  // ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(8.0),
+                    child: Image.network(
+                      imageUrl.isNotEmpty
+                          ? imageUrl
+                          : 'https://example.com/placeholder-image.jpg',
+                      fit: BoxFit.cover,
+                      height: MediaQuery.of(context).size.height / 4 / 2,
+                      width: MediaQuery.of(context).size.width / 3.2,
+                      errorBuilder: (context, error, stackTrace) {
+                        return Image.asset(
+                          'assets/hairfixing_logo.png', // Path to your PNG placeholder image
+                          fit: BoxFit.cover,
+                          height: MediaQuery.of(context).size.height / 4 / 2,
+                          width: MediaQuery.of(context).size.width / 3.2,
+                        );
+                      },
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(
+                width: 5,
+              ),
+              Padding(
+                  padding: const EdgeInsets.only(left: 5.0, top: 10.0),
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width / 2.5,
+                    //    padding: EdgeInsets.only(top: 7),
+                    // width: MediaQuery.of(context).size.width / 4,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          branchnames.name,
+                          style: const TextStyle(
+                            color: Color(0xFF0f75bc),
+                            fontSize: 14.0,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        Text(
+                          branchnames.address,
+                          style: const TextStyle(
+                              color: Colors.black,
+                              fontSize: 12.0,
+                              fontWeight: FontWeight.w600),
+                          maxLines: 3,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
+                    ),
+                  ))
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 }

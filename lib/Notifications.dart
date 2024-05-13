@@ -14,10 +14,15 @@ class Notifications {
   final int purposeOfVisitId;
   final String purposeOfVisit;
   final bool isActive;
-  bool isAccepted;
-  bool isRejected;
   final String address;
+  final dynamic review;
+  final dynamic reviewSubmittedDate;
+  final dynamic rating;
+  final dynamic price;
+  final int customerId;
+  final String timeOfSlot;
   final String slotDuration;
+
 
   Notifications({
     required this.id,
@@ -35,9 +40,13 @@ class Notifications {
     required this.purposeOfVisitId,
     required this.purposeOfVisit,
     required this.isActive,
-    this.isAccepted = false,
-    this.isRejected =false,
     required this.address,
+    required this.review,
+    required this.reviewSubmittedDate,
+    required this.rating,
+    required this.price,
+    required this.customerId,
+    required this.timeOfSlot,
     required this.slotDuration,
   });
 
@@ -59,6 +68,12 @@ class Notifications {
       purposeOfVisit: json['purposeOfVisit'],
       isActive: json['isActive'],
       address: json['address'],
+      review: json['review'],
+      reviewSubmittedDate: json['reviewSubmittedDate'],
+      rating: json['rating'],
+      price: json['price'],
+      customerId: json['customerId'],
+      timeOfSlot: json['timeOfSlot'],
       slotDuration: json['slotDuration'],
     );
   }

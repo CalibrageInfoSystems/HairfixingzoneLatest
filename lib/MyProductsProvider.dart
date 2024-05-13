@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hairfixingzone/Product_Model.dart';
 
+import 'Notifications.dart';
+
 class MyProductProvider extends ChangeNotifier {
   List<ProductList> proProducts = [];
   int selectedCategoryIndex = 0;
@@ -8,6 +10,14 @@ class MyProductProvider extends ChangeNotifier {
   int? _selectedGender;
   int? _selectedCategory;
   bool isFilterApplied = false;
+
+  List<Notifications> _notifyApiData = [];
+  List<Notifications> get proNotify => _notifyApiData;
+  set proNotify(List<Notifications> products) {
+    print('pro: proNotify');
+    _notifyApiData = List<Notifications>.from(products);
+    notifyListeners();
+  }
 
   bool get filterStatus => isFilterApplied;
   set filterStatus(bool newStatus) {
@@ -62,4 +72,5 @@ class MyProductProvider extends ChangeNotifier {
     filterStatus = false;
     notifyListeners();
   }
+
 }

@@ -209,7 +209,7 @@ class AddConsulationscreen_screenState extends State<AddConsulationscreen> {
                         label: 'Full Name',
                         validator: validatefullname,
                         inputFormatters: [
-                          FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z]')),
+                          FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]')), // Including '\s' for space
                         ],
                         controller: fullNameController,
                         maxLength: 40,
@@ -700,20 +700,24 @@ class AddConsulationscreen_screenState extends State<AddConsulationscreen> {
       isFullNameValidate = false;
       return null;
     }
-    if (!RegExp(r'^[a-zA-Z]+$').hasMatch(value)) {
-      return 'Full Name should only contain alphabetic characters';
-    }
-    if (!RegExp(r'^[a-zA-Z]+$').hasMatch(value)) {
-      setState(() {
-        _fullNameError = true;
-        _fullNameErrorMsg = 'Full Name Should Only Contain Alphabets';
-      });
-      isFullNameValidate = false;
-      return null;
-    }
-    isFullNameValidate = true;
-    return null;
+
+
+
+  if (!RegExp(r'[a-zA-Z\s]+$').hasMatch(value)) {
+  return 'Full Name Should Only Contain Alphabetic Characters';
   }
+  if (!RegExp(r'[a-zA-Z\s]+$').hasMatch(value)) {
+  setState(() {
+  _fullNameError = true;
+  _fullNameErrorMsg = 'Full Name Should Only Contain Alphabets';
+  });
+  isFullNameValidate = false;
+  return null;
+  }
+  isFullNameValidate = true;
+  return null;
+}
+
 
   String? validateremarks(String? value) {
     if (value!.isEmpty) {

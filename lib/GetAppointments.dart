@@ -1419,7 +1419,7 @@ class _OpCardState extends State<OpCard> {
                   if (timeDifference <= 60) {
                   // Show error toast if time difference is less than or equal to 60 minutes
                   CommonUtils.showCustomToastMessageLong(
-                   'The Request Should Not Be Rescheduled With In  1 Hour Before Slot', context, 0, 2,);
+                   'The Request Should Not be Rescheduled Within 1 hour Before The Slot', context, 0, 2,);
                 } else {
                   // Navigate to reschedule screen if time difference is greater than 60 minutes
                   Navigator.push(
@@ -2198,7 +2198,7 @@ class _OpCardState extends State<OpCard> {
           // Failure case
           // Handle failure scenario here
           CommonUtils.showCustomToastMessageLong(
-              'The Request Should Not Be Canceled With In  1 Hour Before Slot',
+              'The Request Should Not Be Canceled Within 1 hour Before The Slot',
               context,
               0,
               2);

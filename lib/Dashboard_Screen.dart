@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hairfixingzone/BranchesModel.dart';
 import 'package:hairfixingzone/Common/common_styles.dart';
@@ -34,9 +35,6 @@ class TwoCardPageView extends StatefulWidget {
 
 class _TwoCardPageViewState extends State<TwoCardPageView> {
   List<Item> _items = [];
- late PageController _pageController;
-  late Timer _timer;
-  int _currentPage = 0;
   int? userId;
   String marqueeText = '';
   Future<List<BranchList>>? apiData;
@@ -47,26 +45,18 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
 
 //  String gender ='';
   String Gender = '';
-  bool _shouldStartMarquee = true; // Variable to control Marquee scrolling
+  final bool _shouldStartMarquee =
+  true; // Variable to control Marquee scrolling
 
- // final PageController _pageController = PageController();
+  // final PageController _pageController = PageController();
 
   @override
   void initState() {
     super.initState();
     checkLoginuserdata();
-    _pageController = PageController(initialPage: _currentPage);
     _fetchItems();
-    _startAutoScroll();
     apiData = getBranchsData();
     getMarqueeText();
-  }
-
-  @override
-  void dispose() {
-    _pageController.dispose();
-    _timer.cancel();
-    super.dispose();
   }
 
   void _fetchItems() async {
@@ -76,29 +66,15 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
     });
     if (response.statusCode == 200) {
       setState(() {
-        _items = (json.decode(response.body)['listResult'] as List).map((item) => Item.fromJson(item)).toList();
+        _items = (json.decode(response.body)['listResult'] as List)
+            .map((item) => Item.fromJson(item))
+            .toList();
         isDataBinding = false;
-        ;
       });
     } else {
       isDataBinding = false;
       throw Exception('Failed to load items');
     }
-  }
-
-  void _startAutoScroll() {
-    _timer = Timer.periodic(const Duration(seconds: 5), (_) {
-      if (_currentPage < _items.length - 1) {
-        _currentPage++;
-      } else {
-        _currentPage = 0;
-      }
-      _pageController.animateToPage(
-        _currentPage,
-        duration: const Duration(milliseconds: 500),
-        curve: Curves.ease,
-      );
-    });
   }
 
   Future<void> getMarqueeText() async {
@@ -112,8 +88,9 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
 
         if (response['isSuccess']) {
           int records = response['affectedRecords'];
+          print('marquee: ${response['affectedRecords']}');
           for (var i = 0; i < records; i++) {
-            marqueeText = '${marqueeText + response['listResult'][i]['text']}  ';
+            marqueeText += '${response['listResult'][i]['text']}  -  ';
             // marqueeText += response['listResult'][i]['text'];
           }
         } else {
@@ -121,7 +98,8 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
           throw Exception('api failed');
         }
       } else {
-        throw Exception('Request failed with status: ${jsonResponse.statusCode}');
+        throw Exception(
+            'Request failed with status: ${jsonResponse.statusCode}');
       }
     } catch (error) {
       rethrow;
@@ -132,88 +110,158 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
   Widget build(BuildContext context) {
     return Scaffold(
       // backgroundColor: CommonStyles.primaryTextColor,
-      body:
-      Column(
+      body: Column(
         children: [
-          // Marquee and PageView combined into one scrollable widget
-
-        SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    height: 30,
-                    child: FutureBuilder(
-                      future: getMarqueeText(),
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState == ConnectionState.waiting) {
-                          return const SizedBox();
-                        } else if (snapshot.hasError) {
-                          return const SizedBox();
-                        } else {
-                          return Marquee(
-                            text: marqueeText,
-                            style: const TextStyle(fontSize: 16, fontFamily: "Calibri", fontWeight: FontWeight.w600, color: Color(0xFFff0176)),
-                            velocity: _shouldStartMarquee ? 30 : 0, // Control Marquee scrolling with velocity
-                          );
-                        }
-                      },
-                    ),
-                  ),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width,
-                    height: 180,
-                    child: PageView.builder(
-                      controller: _pageController,
-                      itemCount: _items.length,
-                      itemBuilder: (context, index) {
-                        final itemIndex = index % _items.length;
-                        return SizedBox(
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: ItemBuilder(items: _items, index: itemIndex),
-                              ),
-                            ],
-                          ),
+//MARK: Marquee
+          SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  height: 30,
+                  child: FutureBuilder(
+                    future: getMarqueeText(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const SizedBox();
+                      } else if (snapshot.hasError) {
+                        return const SizedBox();
+                      } else {
+                        return Marquee(
+                          text: marqueeText,
+                          style: const TextStyle(
+                              fontSize: 16,
+                              fontFamily: "Calibri",
+                              fontWeight: FontWeight.w600,
+                              color: Color(0xFFff0176)),
+                          velocity: _shouldStartMarquee
+                              ? 30
+                              : 0, // Control Marquee scrolling with velocity
                         );
-                      },
-                      onPageChanged: (int page) {
-                        setState(() {
-                          _currentPage = page;
-                        });
-                      },
+                      }
+                    },
+                  ),
+                ),
+                // Carousel widget
+                SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  height: 200,
+                  child: FlutterCarousel(
+                    options: CarouselOptions(
+                      // height: 400.0,
+                      showIndicator: true,
+                      autoPlay: true,
+                      floatingIndicator: false,
+                      autoPlayCurve: Curves.linear,
+                      // enlargeCenterPage: true,
+                      slideIndicator: const CircularSlideIndicator(
+                        indicatorBorderColor: CommonStyles.blackColor,
+                        currentIndicatorColor: CommonStyles.primaryTextColor,
+                      ),
                     ),
-                  ),
-                  // PageView indicator
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      for (int i = 0; i < _items.length; i++)
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              _currentPage = i;
-                            });
-                          },
-                          child: Container(
-                            margin: const EdgeInsets.all(2),
-                            width: 10,
-                            height: 10,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              border: Border.all(color: CommonStyles.primaryTextColor, width: 1.5),
-                              color: _currentPage == i ? Colors.grey.withOpacity(0.9) : Colors.transparent,
-                            ),
-                          ),
-                        ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
+                    items: _items.map((item) {
+                      return Builder(
+                        builder: (BuildContext context) {
+                          return SizedBox(
+                            width: MediaQuery.of(context).size.width,
+                            // margin: const EdgeInsets.symmetric(horizontal: 5.0),
+                            // decoration: const BoxDecoration(color: Colors.grey),
+                            child: Card(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              elevation: 4,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(10),
+                                child: Image.network(
+                                  item.imageName,
+                                  height: 100,
+                                  fit: BoxFit.cover,
+                                  loadingBuilder:
+                                      (context, child, loadingProgress) {
+                                    if (loadingProgress == null) return child;
 
-         const SizedBox(height: 8.0),
+                                    return const Center(
+                                        child: CircularProgressIndicator
+                                            .adaptive());
+                                  },
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    }).toList(),
+                  ),
+
+                  // PageView.builder(
+                  //   controller: _pageController,
+                  //   itemCount: _items.length,
+                  //   itemBuilder: (context, index) {
+                  //     final itemIndex = index % _items.length;
+                  //     return SizedBox(
+                  //       child: Row(
+                  //         children: [
+                  //           Expanded(
+                  //             child: ItemBuilder(
+                  //               items: _items,
+                  //               index: itemIndex,
+                  //             ),
+                  //           ),
+                  //         ],
+                  //       ),
+                  //     );
+                  //   },
+                  //   onPageChanged: (int page) {
+                  //     setState(() {
+                  //       _currentPage = page;
+                  //     });
+                  //   },
+                  // ),
+                ),
+
+                // Carousel indicator
+                // CarouselIndicator(
+                //   currentPage: _currentPage,
+                //   itemCount: _items.length,
+                //   onPageChanged: (int page) {
+                //     setState(() {
+                //       _currentPage = page;
+                //     });
+                //   },
+                // ),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.center,
+                //   children: <Widget>[
+                //     for (int i = 0; i < _items.length; i++)
+                //       GestureDetector(
+                //         onTap: () {
+                //           setState(() {
+                //             _currentPage = i;
+                //           });
+                //         },
+                //         child: Container(
+                //           margin: const EdgeInsets.all(2),
+                //           width: 10,
+                //           height: 10,
+                //           decoration: BoxDecoration(
+                //             borderRadius: BorderRadius.circular(10),
+                //             border: Border.all(
+                //                 color: CommonStyles.primaryTextColor,
+                //                 width: 1.5),
+                //             color: _currentPage == i
+                //                 ? Colors.grey.withOpacity(0.9)
+                //                 : Colors.transparent,
+                //           ),
+                //         ),
+                //       ),
+                //   ],
+                // ),
+              ],
+            ),
+          ),
+
+          const SizedBox(height: 20.0),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15.0),
             child: Column(
@@ -222,7 +270,8 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
                 IntrinsicHeight(
                   child: GestureDetector(
                     onTap: () {
-                      Navigator.of(context, rootNavigator: true).pushNamed("/BookAppointment");
+                      Navigator.of(context, rootNavigator: true)
+                          .pushNamed("/BookAppointment");
                     },
                     child: Container(
                         width: double.infinity,
@@ -230,7 +279,8 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
                         //height: 60,
                         padding: const EdgeInsets.all(5),
                         decoration: BoxDecoration(
-                          border: Border.all(color: CommonStyles.primaryTextColor),
+                          border:
+                          Border.all(color: CommonStyles.primaryTextColor),
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child:
@@ -242,12 +292,14 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            SizedBox(
+                            const SizedBox(
                               width: 2,
                             ),
                             Container(
                               padding: const EdgeInsets.all(15),
-                              decoration: const BoxDecoration(shape: BoxShape.circle, color: CommonStyles.primaryTextColor),
+                              decoration: const BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: CommonStyles.primaryTextColor),
                               child: Center(
                                 child: SvgPicture.asset(
                                   'assets/noun-appointment-date-2417776.svg',
@@ -315,7 +367,7 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
                   ),
                 ),
                 const SizedBox(
-                  height: 10,
+                  height: 15,
                 ),
                 //MARK: Screens
                 Row(
@@ -323,7 +375,8 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        Navigator.of(context, rootNavigator: true).pushNamed("/Mybookings");
+                        Navigator.of(context, rootNavigator: true)
+                            .pushNamed("/Mybookings");
                       },
                       child: Column(
                         children: [
@@ -350,7 +403,8 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        Navigator.of(context, rootNavigator: true).pushNamed("/Products");
+                        Navigator.of(context, rootNavigator: true)
+                            .pushNamed("/Products");
                       },
                       child: Column(
                         children: [
@@ -377,7 +431,8 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        Navigator.of(context, rootNavigator: true).pushNamed("/about");
+                        Navigator.of(context, rootNavigator: true)
+                            .pushNamed("/about");
                       },
                       child: Column(
                         children: [
@@ -406,7 +461,8 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        Navigator.of(context, rootNavigator: true).pushNamed("/ProfileMy");
+                        Navigator.of(context, rootNavigator: true)
+                            .pushNamed("/ProfileMy");
                       },
                       child: Column(
                         children: [
@@ -433,7 +489,7 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
                     )
                   ],
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 15),
                 //MARK: Branches
                 const Row(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -451,7 +507,8 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
                     future: apiData,
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const Center(child: CircularProgressIndicator.adaptive());
+                        return const Center(
+                            child: CircularProgressIndicator.adaptive());
                       } else if (snapshot.hasError) {
                         return Center(
                           child: Text(snapshot.error.toString()),
@@ -877,7 +934,8 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
       if (jsonResponse.statusCode == 200) {
         Map<String, dynamic> response = jsonDecode(jsonResponse.body);
         List<dynamic> branchesData = response['listResult'];
-        List<BranchList> result = branchesData.map((e) => BranchList.fromJson(e)).toList();
+        List<BranchList> result =
+        branchesData.map((e) => BranchList.fromJson(e)).toList();
         print('result: ${result[0].name}');
         print('result: ${result[0].address}');
         print('result: ${result[0].imageName}');
@@ -1027,7 +1085,10 @@ class BranchCard extends StatelessWidget {
                     branch.name,
                     style: CommonStyles.txSty_16p_fb,
                   ),
-                  Text(branch.address, maxLines: 3, overflow: TextOverflow.ellipsis, style: CommonStyles.txSty_12b_f5),
+                  Text(branch.address,
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
+                      style: CommonStyles.txSty_12b_f5),
                 ],
               ),
             ),
@@ -1088,7 +1149,8 @@ class Item {
     return Item(
       json['name'] as String,
       Colors.blue, // Default color
-      json['imageName'] as String? ?? '', // Add null check and provide a default value
+      json['imageName'] as String? ??
+          '', // Add null check and provide a default value
     );
   }
 }
