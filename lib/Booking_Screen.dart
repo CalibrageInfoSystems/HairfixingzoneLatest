@@ -661,7 +661,7 @@ class _BookingScreenState extends State<Bookingscreen> {
                                           mainAxisAlignment: MainAxisAlignment.center,
                                           children: [
                                             Text(
-                                              'No Slots Available',
+                                              'No Slots Are Available Today',
                                               style: TextStyle(
                                                 fontFamily: 'Calibri',
                                                 fontSize: 12,
@@ -827,7 +827,7 @@ class _BookingScreenState extends State<Bookingscreen> {
   }
   Future<void> validatePurpose(String? value) async {
     if (!isSlotsAvailable) {
-      showCustomToastMessageLong('No Slots Available Today', context, 1, 4);
+      showCustomToastMessageLong('No Slots Are Available Today', context, 1, 4);
     } else if (!slotselection) {
       showCustomToastMessageLong('Please Select A Slot', context, 1, 4);
     } else if (value == null || value.isEmpty) {
@@ -1098,7 +1098,7 @@ class _BookingScreenState extends State<Bookingscreen> {
       hasValidationFailed = true;
     }
     if (!isSlotsAvailable) {
-      showCustomToastMessageLong('No Slots Available Today', context, 1, 4);
+      showCustomToastMessageLong('No Slots Are Available Today', context, 1, 4);
       isValid = false;
       hasValidationFailed = true;
     } else if (!slotselection) {

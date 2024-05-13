@@ -651,7 +651,7 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
                                           mainAxisAlignment: MainAxisAlignment.center,
                                           children: [
                                             Text(
-                                              'No Slots Available',
+                                              'No Slots Are Available Today',
                                               style: TextStyle(
                                                 fontFamily: 'Calibri',
                                                 fontSize: 12,
@@ -787,7 +787,7 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
 
   Future<void> validatePurpose(String? value) async {
     if (!isSlotsAvailable) {
-      showCustomToastMessageLong('No Slots Available Today', context, 1, 4);
+      showCustomToastMessageLong('No Slots Are Available Today', context, 1, 4);
     } else if (!slotselection) {
       showCustomToastMessageLong('Please Select A Slot', context, 1, 4);
     } else {
