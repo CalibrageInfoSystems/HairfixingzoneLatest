@@ -284,6 +284,7 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
                                 //MARK: Full Name
                                 CustomeFormField(
                                   label: 'Full Name',
+                                  maxLength: 50,
                                   validator: validatefullname,
                                   inputFormatters: [
                                     FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]')), // Including '\s' for space

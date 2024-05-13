@@ -64,7 +64,8 @@ class Profile_screenState extends State<Profile> {
 
   Future<void> fetchdetailsofcustomer(int id) async {
     //String apiUrl = 'http://182.18.157.215/SaloonApp/API/GetCustomerData?id=$id';
-    String apiUrl = baseUrl+getCustomerDatabyid+'/$id';
+    String apiUrl = baseUrl + getCustomerDatabyid + '$id';
+    print('apiurl:$apiUrl');
     setState(() {
       isloading = true;
     });

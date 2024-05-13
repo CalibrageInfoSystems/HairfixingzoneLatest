@@ -404,7 +404,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
 
   Future<List<ProductList>> fetchproducts({int? id, int? categoryTypeId, int? genderTypeId}) async {
     final apiurl = baseUrl + getproductsbyid;
-
+    print('apiurl$apiurl');
     try {
       final request = {"id": id, "categoryTypeId": categoryTypeId, "genderTypeId": genderTypeId, "isActive": true};
       final response = await http.post(
@@ -714,7 +714,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
   }
 
   Future<List<ProductCategory>> fetchProductsCategory() async {
-    final response = await http.get(Uri.parse(baseUrl + getproductsbyid + '/6'));
+    final response = await http.get(Uri.parse(baseUrl + getproducts + '/6'));
     if (response.statusCode == 200) {
       final List<dynamic> responseData = json.decode(response.body)['listResult'];
       List<ProductCategory> result = responseData.map((json) => ProductCategory.fromJson(json)).toList();

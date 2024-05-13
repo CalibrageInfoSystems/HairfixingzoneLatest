@@ -141,7 +141,7 @@ class _ForgotChangePasswordState extends State<ForgotChangePassword> {
                             ),
                             TextFormField(
                               obscureText: _password_obscureText,
-
+                              maxLength: 25,
                               controller: _passwordController, // Assigning the controller
                               keyboardType: TextInputType.visiblePassword,
                               // obscureText: true,

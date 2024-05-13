@@ -287,6 +287,8 @@ class EditProfile_screenState extends State<EditProfile> {
                           CustomeFormField(
                             //MARK: Full Name
                             label: 'Full Name ',
+                            maxLength: 50,
+
                             validator: validatefullname,
                             inputFormatters: [
                               FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]')), // Including '\s' for space
