@@ -74,6 +74,9 @@ class NotificationService {
 
   // Schedule a notification
 // Schedule a notification
+
+
+  // Schedule a notification
   Future<void> scheduleNotification({
     required int id, // Pass the ID as a parameter
     String? title,
@@ -87,10 +90,13 @@ class NotificationService {
       scheduledNotificationDateTime = now.add(const Duration(minutes: 1));
     }
 
+    // Modify the body to display complete text where changes can be easily made
+  //  String completeBody = 'Reminder For Today: Your Scheduled Appointment For the ${_selectedTimeSlot24!} Slot At the ${widget.branchname} Branch, Located At ${widget.branchaddress}.';
+
     await notificationsPlugin.zonedSchedule(
       id,
       title,
-      body,
+      body, // Use the complete body text
       tz.TZDateTime.from(
         scheduledNotificationDateTime,
         tz.local,
@@ -101,6 +107,7 @@ class NotificationService {
       UILocalNotificationDateInterpretation.absoluteTime,
     );
   }
+
 
 
   // Retrieve all scheduled notifications

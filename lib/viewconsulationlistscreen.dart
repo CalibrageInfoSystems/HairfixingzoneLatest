@@ -257,7 +257,7 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
                             endDate = e;
                             startDate = s;
                             fromToDates.text =
-                                '${startDate != null ? DateFormat("dd, MMM").format(startDate!) : '-'} / ${endDate != null ? DateFormat("dd, MMM").format(endDate!) : '-'}';
+                                '${startDate != null ? DateFormat('dd-MM-yyyy').format(startDate!) : '-'} - ${endDate != null ? DateFormat("dd-MM-yyyy").format(endDate!) : '-'}';
                             ConsultationData =
                                 getviewconsulationlist(DateFormat('yyyy-MM-dd').format(startDate!), DateFormat('yyyy-MM-dd').format(endDate!));
                           });

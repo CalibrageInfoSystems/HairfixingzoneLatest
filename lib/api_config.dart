@@ -41,7 +41,7 @@ var getbrancheselectedcity = 'GetBranchesByCityId/';
 var getcity = "GetCityById/4";
 var getbanner = 'GetBanner?Id=null';
 var getcontent = 'GetContent/true';
-var addupdateconsulation = 'api/Consultation/AddUpdateConsultatio';
+var addupdateconsulation = 'api/Consultation/AddUpdateConsultation';
 var agentAppointments = 'api/Appointment/GetAppointment';
 var getconsulationbranchesbyagentid = 'api/Consultation/GetConsultationsByBranchId/';
 var changepassword = 'ChangePassword';

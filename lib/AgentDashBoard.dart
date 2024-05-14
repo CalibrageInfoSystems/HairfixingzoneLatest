@@ -121,6 +121,9 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
         body: IntrinsicHeight(
       child: Column(
         children: [
+          const SizedBox(
+            height: 5,
+          ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

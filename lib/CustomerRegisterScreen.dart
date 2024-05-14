@@ -1414,7 +1414,7 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
             bool isSuccess = data['isSuccess'];
             if (isSuccess == true) {
               print('Request sent successfully');
-              CommonUtils.showCustomToastMessageLong('User Registered Successfully', context, 0, 2);
+              CommonUtils.showCustomToastMessageLong('Customer Registered Sucessfully', context, 0, 2);
 
               /// CommonUtils.showCustomToastMessageLong('${data['statusMessage']}', context, 0, 2);
               Navigator.pop(context);

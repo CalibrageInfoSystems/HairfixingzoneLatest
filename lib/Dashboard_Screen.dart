@@ -111,12 +111,16 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
     return Scaffold(
       // backgroundColor: CommonStyles.primaryTextColor,
       body: Column(
+
         children: [
 //MARK: Marquee
           SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                const SizedBox(
+                  height: 5,
+                ),
                 SizedBox(
                   height: 30,
                   child: FutureBuilder(
@@ -145,7 +149,7 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
                 // Carousel widget
                 SizedBox(
                   width: MediaQuery.of(context).size.width,
-                  height: 200,
+                  height: 180,
                   child: FlutterCarousel(
                     options: CarouselOptions(
                       // height: 400.0,
