@@ -701,23 +701,20 @@ class AddConsulationscreen_screenState extends State<AddConsulationscreen> {
       return null;
     }
 
-
-
-  if (!RegExp(r'[a-zA-Z\s]+$').hasMatch(value)) {
-  return 'Full Name Should Only Contain Alphabetic Characters';
+    if (!RegExp(r'[a-zA-Z\s]+$').hasMatch(value)) {
+      return 'Full Name Should Only Contain Alphabetic Characters';
+    }
+    if (!RegExp(r'[a-zA-Z\s]+$').hasMatch(value)) {
+      setState(() {
+        _fullNameError = true;
+        _fullNameErrorMsg = 'Full Name Should Only Contain Alphabets';
+      });
+      isFullNameValidate = false;
+      return null;
+    }
+    isFullNameValidate = true;
+    return null;
   }
-  if (!RegExp(r'[a-zA-Z\s]+$').hasMatch(value)) {
-  setState(() {
-  _fullNameError = true;
-  _fullNameErrorMsg = 'Full Name Should Only Contain Alphabets';
-  });
-  isFullNameValidate = false;
-  return null;
-  }
-  isFullNameValidate = true;
-  return null;
-}
-
 
   String? validateremarks(String? value) {
     if (value!.isEmpty) {
@@ -861,7 +858,9 @@ class AddConsulationscreen_screenState extends State<AddConsulationscreen> {
       };
       print('Object: ${json.encode(request)}');
       try {
-        final String ee = baseUrl+addupdateconsulation;
+        // final String ee = baseUrl + addupdateconsulation;
+        final String ee = 'http://182.18.157.215/SaloonApp/API/api/Consultation/AddUpdateConsultation';
+        print(ee);
         final url1 = Uri.parse(ee);
 
         // Send the POST request

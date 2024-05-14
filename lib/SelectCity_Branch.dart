@@ -10,6 +10,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'Booking_Screen.dart';
 import 'CityData_Model.dart';
+import 'Common/common_styles.dart';
 import 'Common/custom_button.dart';
 import 'CommonUtils.dart';
 import 'CustomRadioButton.dart';
@@ -247,7 +248,7 @@ class _BookingScreenState extends State<SelectCity_Branch_screen> {
                                       );
                                     },
                                     child: Container(
-                                      height: MediaQuery.of(context).size.height / 8,
+                                      height: MediaQuery.of(context).size.height / 10,
                                       width: MediaQuery.of(context).size.width,
                                       // decoration: BoxDecoration(
                                       //   border: Border.all(color: Color(0xFF662e91), width: 1.0),
@@ -287,11 +288,13 @@ class _BookingScreenState extends State<SelectCity_Branch_screen> {
                                             ),
                                           ),
                                           Container(
+                                            // height: MediaQuery.of(context).size.height / 4 / 2,
+
                                             width: MediaQuery.of(context).size.width / 2.2,
-                                            //    padding: EdgeInsets.only(top: 7),
+                                            padding: EdgeInsets.only(top: 7),
                                             // width: MediaQuery.of(context).size.width / 4,
                                             child: Column(
-                                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                              //  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                               crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
                                                 Text(
@@ -305,11 +308,8 @@ class _BookingScreenState extends State<SelectCity_Branch_screen> {
                                                 SizedBox(
                                                   height: 5,
                                                 ),
-                                                Text(
-                                                  '${branchnames.address}',
-                                                  maxLines: 2,
-                                                  style: TextStyle(color: Colors.black, fontSize: 12.0, fontWeight: FontWeight.w600),
-                                                ),
+                                                Text('${branchnames.address}',
+                                                    maxLines: 2, overflow: TextOverflow.ellipsis, style: CommonStyles.txSty_12b_f5),
                                               ],
                                             ),
                                           )

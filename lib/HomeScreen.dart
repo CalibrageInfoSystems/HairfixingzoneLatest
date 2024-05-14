@@ -126,13 +126,9 @@ class _HomeScreenState extends State<HomeScreen> {
           builder: (BuildContext context) {
             return AlertDialog(
               title: const Text('Confirm Exit'),
-              content: const Text('Are You Sure You Want To Close The App?'),
-
-
+              content: const Text('Are You Sure You Want to Close The App?'),
               actions: [
-
                 Container(
-
                   child: ElevatedButton(
                     onPressed: () {
                       Navigator.of(context).pop();
@@ -155,7 +151,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       'No',
                       style: TextStyle(
                         fontSize: 16,
-                        color:  CommonUtils.primaryTextColor,
+                        color: CommonUtils.primaryTextColor,
                         fontFamily: 'Calibri',
                       ),
                     ),
@@ -163,7 +159,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 const SizedBox(width: 10), // Add spacing between buttons
                 Container(
-
                   child: ElevatedButton(
                     onPressed: () => Navigator.of(context).pop(true),
                     style: ElevatedButton.styleFrom(
@@ -184,14 +179,13 @@ class _HomeScreenState extends State<HomeScreen> {
                       'Yes',
                       style: TextStyle(
                         fontSize: 16,
-                        color:Colors.white,
+                        color: Colors.white,
                         fontFamily: 'Calibri',
                       ),
                     ),
                   ),
                 ),
               ],
-
             );
           },
         );
@@ -209,7 +203,9 @@ class _HomeScreenState extends State<HomeScreen> {
       //   debugShowCheckedModeBanner: false,
       child: Scaffold(
         appBar: _currentIndex == 0
-            ? CommonStyles.homeAppBar(onPressed: () => logOutDialog(),)
+            ? CommonStyles.homeAppBar(
+                onPressed: () => logOutDialog(),
+              )
             : CommonStyles.remainingAppBars(
                 context,
                 title: _getAppBarTitle(_currentIndex),
@@ -799,11 +795,9 @@ class _HomeScreenState extends State<HomeScreen> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text('Logout'),
-          content: const Text('Are You Sure You Want To Logout?'),
+          content: const Text('Are You Sure You Want to Logout?'),
           actions: [
-
             Container(
-
               child: ElevatedButton(
                 onPressed: () {
                   Navigator.of(context).pop();
@@ -826,7 +820,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   'Cancel',
                   style: TextStyle(
                     fontSize: 16,
-                    color:  CommonUtils.primaryTextColor,
+                    color: CommonUtils.primaryTextColor,
                     fontFamily: 'Calibri',
                   ),
                 ),
@@ -834,7 +828,6 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             const SizedBox(width: 10), // Add spacing between buttons
             Container(
-
               child: ElevatedButton(
                 onPressed: () {
                   Navigator.of(context).pop();
@@ -858,14 +851,13 @@ class _HomeScreenState extends State<HomeScreen> {
                   'Logout',
                   style: TextStyle(
                     fontSize: 16,
-                    color:Colors.white,
+                    color: Colors.white,
                     fontFamily: 'Calibri',
                   ),
                 ),
               ),
             ),
           ],
-
         );
       },
     );
@@ -1356,7 +1348,7 @@ class _HomeScreenState extends State<HomeScreen> {
         "PhoneNumber": appointment.contactNumber, // Changed from appointments.phoneNumber
         "Email": appointment.email,
         "GenderTypeId": appointment.genderTypeId,
-        "StatusTypeId":18,
+        "StatusTypeId": 18,
         "PurposeOfVisitId": appointment.purposeOfVisitId,
         "PurposeOfVisit": appointment.purposeOfVisit,
         "IsActive": true,
@@ -1382,8 +1374,7 @@ class _HomeScreenState extends State<HomeScreen> {
         );
 
         if (response.statusCode == 200) {
-          CommonUtils.showCustomToastMessageLong(
-              'Feedback Successfully Submitted', context, 0, 4);
+          CommonUtils.showCustomToastMessageLong('Feedback Successfully Submitted', context, 0, 4);
           print('Request sent successfully');
           Navigator.pop(context);
         } else {

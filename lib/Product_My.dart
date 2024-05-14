@@ -111,7 +111,7 @@ class MyProducts_screenState extends State<ProductsMy> {
   }
 
   Future<List<ProductCategory>> fetchProductsCategory() async {
-    final response = await http.get(Uri.parse('$baseUrl$getproductsbyid/6'));
+    final response = await http.get(Uri.parse(baseUrl + getproductsbyid + '/6'));
     if (response.statusCode == 200) {
       final List<dynamic> responseData = json.decode(response.body)['listResult'];
       List<ProductCategory> result = responseData.map((json) => ProductCategory.fromJson(json)).toList();
@@ -731,7 +731,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
   }
 
   Future<List<ProductCategory>> fetchProductsCategory() async {
-    final response = await http.get(Uri.parse('$baseUrl$getproducts/6'));
+    final response = await http.get(Uri.parse(baseUrl + getproducts + '/6'));
     if (response.statusCode == 200) {
       final List<dynamic> responseData = json.decode(response.body)['listResult'];
       List<ProductCategory> result = responseData.map((json) => ProductCategory.fromJson(json)).toList();
@@ -793,7 +793,7 @@ class ProductCard extends StatelessWidget {
                 Text(
                   '₹ ${formatNumber(product.maxPrice)}',
                   style: const TextStyle(
-                    fontSize: 24,
+                    fontSize: 22,
                     fontFamily: "Calibri",
                     fontWeight: FontWeight.w500,
                     letterSpacing: 1,

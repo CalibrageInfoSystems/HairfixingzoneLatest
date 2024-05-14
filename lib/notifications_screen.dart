@@ -711,7 +711,7 @@ class _AgentOpCardState extends State<AgentOpCard> {
               Center(
                 // Center the text
                 child: Text(
-                  'Are You Sure You Want To Cancel   ${appointments.purposeOfVisit} Slot At The ${appointments.name} Hair Fixing Zone ?',
+                  'Are You Sure You Want to Cancel   ${appointments.purposeOfVisit} Slot At The ${appointments.name} Hair Fixing Zone ?',
                   style: CommonUtils.txSty_18b_fb,
                   textAlign:
                   TextAlign.center, // Optionally, align the text center

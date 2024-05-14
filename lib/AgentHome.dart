@@ -40,10 +40,9 @@ class _AgentHomeState extends State<AgentHome> {
           builder: (BuildContext context) {
             return AlertDialog(
               title: const Text('Confirm Exit'),
-              content: const Text('Are you Sure You Want To Close The App?'),
+              content: const Text('Are you Sure You Want to Close The App?'),
               actions: [
                 Container(
-
                   child: ElevatedButton(
                     onPressed: () {
                       Navigator.of(context).pop();
@@ -66,7 +65,7 @@ class _AgentHomeState extends State<AgentHome> {
                       'No',
                       style: TextStyle(
                         fontSize: 16,
-                        color:  CommonUtils.primaryTextColor,
+                        color: CommonUtils.primaryTextColor,
                         fontFamily: 'Calibri',
                       ),
                     ),
@@ -74,7 +73,6 @@ class _AgentHomeState extends State<AgentHome> {
                 ),
                 const SizedBox(width: 10), // Add spacing between buttons
                 Container(
-
                   child: ElevatedButton(
                     onPressed: () => Navigator.of(context).pop(true),
                     style: ElevatedButton.styleFrom(
@@ -95,7 +93,7 @@ class _AgentHomeState extends State<AgentHome> {
                       'Yes',
                       style: TextStyle(
                         fontSize: 16,
-                        color:Colors.white,
+                        color: Colors.white,
                         fontFamily: 'Calibri',
                       ),
                     ),
@@ -259,11 +257,9 @@ class _AgentHomeState extends State<AgentHome> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text('Logout'),
-          content: const Text('Are You Sure You Want To Logout?'),
+          content: const Text('Are You Sure You Want to Logout?'),
           actions: [
-
             Container(
-
               child: ElevatedButton(
                 onPressed: () {
                   Navigator.of(context).pop();
@@ -286,7 +282,7 @@ class _AgentHomeState extends State<AgentHome> {
                   'Cancel',
                   style: TextStyle(
                     fontSize: 16,
-                    color:  CommonUtils.primaryTextColor,
+                    color: CommonUtils.primaryTextColor,
                     fontFamily: 'Calibri',
                   ),
                 ),
@@ -294,7 +290,6 @@ class _AgentHomeState extends State<AgentHome> {
             ),
             const SizedBox(width: 10), // Add spacing between buttons
             Container(
-
               child: ElevatedButton(
                 onPressed: () {
                   Navigator.of(context).pop();
@@ -318,7 +313,7 @@ class _AgentHomeState extends State<AgentHome> {
                   'Logout',
                   style: TextStyle(
                     fontSize: 16,
-                    color:Colors.white,
+                    color: Colors.white,
                     fontFamily: 'Calibri',
                   ),
                 ),
