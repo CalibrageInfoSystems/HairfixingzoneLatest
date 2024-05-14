@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:hairfixingzone/Common/common_styles.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'CommonUtils.dart';
@@ -19,56 +20,55 @@ class AboutUsScreen extends StatelessWidget {
               children: [
                 // banner
                 Container(
-                  padding: const EdgeInsets.only(bottom: 10, top: 5, left: 0, right: 0),
-                  // decoration: BoxDecoration(
-                  //     border: Border.all(color: Colors.grey, width: 1.5),
-                  //     gradient: const LinearGradient(
-                  //       colors: [
-                  //         Color(0xFFfee7e1),
-                  //         Color(0xFFd7defa),
-                  //       ],
-                  //       begin: Alignment.centerLeft,
-                  //       end: Alignment.centerRight,
-                  //     ),
-                  //     borderRadius: const BorderRadius.only(
-                  //       topRight: Radius.circular(30.0),
-                  //       bottomLeft: Radius.circular(30.0),
-                  //     )),
-                  child: Image.asset(
-                    'assets/top_image.png',
+                  padding: const EdgeInsets.only(
+                      bottom: 10, top: 5, left: 0, right: 0),
+                  child: ClipRRect(
+                    child: Image.asset(
+                      'assets/top_image.png',
+                    ),
                   ),
                 ),
                 // space
-                SizedBox(
-                  height: 10,
+                const SizedBox(
+                  height: 5,
                 ),
                 // about us content
-                Padding(
+                const Padding(
                   padding: EdgeInsets.all(10.0),
-                  child: Column(mainAxisAlignment: MainAxisAlignment.start, crossAxisAlignment: CrossAxisAlignment.start, children: [
-                    Text(
-                      'Welcome to Hair Fixing Zone, your premier destination for cutting-edge Hair Replacement solutions in Bangalore. Established in 2016, Hair Fixing Zone has emerged as a beacon of hope for individuals grappling with hair loss, Baldness, Hair thinning, or seeking to enhance their natural beauty. With four branches strategically located across Bangalore, we strive to provide convenient access to our specialized services, ensuring that every client receives the personalized care and attention they deserve.',
-                      style: TextStyle(wordSpacing: 3.0, letterSpacing: 1.5, color: Color(0xFF0f75bc), fontSize: 14),
-                      textAlign: TextAlign.justify,
-                    ),
-                    SizedBox(height: 15),
-                    Text('Our Journey',
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Color(0xFF662d91),
-                        )),
-                    SizedBox(height: 5),
-                    Text(
-                      'At Hair Fixing Zone, Our journey began with a simple yet profound mission: to empower individuals to embrace their unique beauty with confidence. Recognizing the transformation power of hair, we embarked on a quest to offer innovation solutions that go beyond conventional norms. Over the years, we have honed our expertise, staying at the forefront of industry advancements to deliver unparalleled results to our estmeed clientele',
-                      style: TextStyle(
-                        wordSpacing: 3.0,
-                        letterSpacing: 1.5,
-                        color: Color(0xFF0f75bc),
-                        fontSize: 14,
-                      ),
-                      textAlign: TextAlign.justify,
-                    ),
-                  ]),
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Welcome to Hair Fixing Zone, your premier destination for cutting-edge Hair Replacement solutions in Bangalore. Established in 2016, Hair Fixing Zone has emerged as a beacon of hope for individuals grappling with hair loss, Baldness, Hair thinning, or seeking to enhance their natural beauty. With four branches strategically located across Bangalore, we strive to provide convenient access to our specialized services, ensuring that every client receives the personalized care and attention they deserve.',
+                          // style: TextStyle(
+                          //     wordSpacing: 3.0,
+                          //     letterSpacing: 1.5,
+                          //     color: Color(0xFF0f75bc),
+                          //     fontSize: 14),
+                          // textAlign: TextAlign.justify,
+
+                          style: CommonStyles.txSty_16blu_f5,
+                        ),
+                        SizedBox(height: 15),
+                        Text('Our Journey',
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Color(0xFF662d91),
+                            )),
+                        SizedBox(height: 5),
+                        Text(
+                          'At Hair Fixing Zone, Our journey began with a simple yet profound mission: to empower individuals to embrace their unique beauty with confidence. Recognizing the transformation power of hair, we embarked on a quest to offer innovation solutions that go beyond conventional norms. Over the years, we have honed our expertise, staying at the forefront of industry advancements to deliver unparalleled results to our estmeed clientele',
+                          // style: TextStyle(
+                          //   wordSpacing: 3.0,
+                          //   letterSpacing: 1.5,
+                          //   color: Color(0xFF0f75bc),
+                          //   fontSize: 14,
+                          // ),
+                          // textAlign: TextAlign.justify,
+                          style: CommonStyles.txSty_16blu_f5,
+                        ),
+                      ]),
                 )
               ],
             ),
@@ -111,7 +111,7 @@ class AboutUsScreen extends StatelessWidget {
     CommonUtils.showCustomToastMessageLong("Logout Successful", context, 0, 3);
 
     Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(builder: (context) => CustomerLoginScreen()),
+      MaterialPageRoute(builder: (context) => const CustomerLoginScreen()),
       (route) => false,
     );
   }
@@ -128,7 +128,7 @@ class AboutUsScreen extends StatelessWidget {
           IconButton(
             icon: SvgPicture.asset(
               'assets/sign-out-alt.svg', // Path to your SVG asset
-              color: Color(0xFF662e91),
+              color: const Color(0xFF662e91),
               width: 24, // Adjust width as needed
               height: 24, // Adjust height as needed
             ),
@@ -140,7 +140,7 @@ class AboutUsScreen extends StatelessWidget {
         ],
         // centerTitle: true,
         leading: IconButton(
-          icon: Icon(
+          icon: const Icon(
             Icons.arrow_back_ios,
             color: CommonUtils.primaryTextColor,
           ),

@@ -7,7 +7,7 @@ class MyAppointmentsProvider extends ChangeNotifier {
   List<MyAppointment_Model> get storeIntoProvider => proAppointments;
 
 // varibles
-  String displayDate = 'Select between dates';
+  String displayDate = 'Select dates';
   String? apiFromDate;
   String? apiToDate;
   int? apiBranchId;
@@ -67,11 +67,6 @@ class MyAppointmentsProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  // void filterProviderData(List<MyAppointment_Model> items) {
-  //   proAppointments.clear();
-  //   proAppointments.addAll(items);
-  //   notifyListeners();
-  // }
   void filterProviderData(List<MyAppointment_Model> items) {
     print('xxx: filterProviderData');
     proAppointments = List<MyAppointment_Model>.from(items);
@@ -79,7 +74,7 @@ class MyAppointmentsProvider extends ChangeNotifier {
   }
 
   void clearFilter() {
-    displayDate = 'Select between dates';
+    displayDate = 'Select dates';
     selectedStatus = 0;
     selectedBranch = 0;
     filterStatus = false;

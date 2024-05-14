@@ -35,7 +35,7 @@ class MyAppointments_screenState extends State<GetAppointments> {
   String empolyeid = '';
   String todate = "";
   final TextEditingController _commentstexteditcontroller =
-  TextEditingController();
+      TextEditingController();
   double rating_star = 0.0;
 
   List<BranchModel> brancheslist = [];
@@ -217,8 +217,7 @@ class MyAppointments_screenState extends State<GetAppointments> {
   }
 
   Future<List<MyAppointment_Model>> fetchMyAppointments(int? userId) async {
-    final url = Uri.parse(
-        baseUrl+GetAppointmentByUserid);
+    final url = Uri.parse(baseUrl + GetAppointmentByUserid);
 
     try {
       final request = {
@@ -269,7 +268,7 @@ class MyAppointments_screenState extends State<GetAppointments> {
 
   void refreshTheScreen() {
     CommonUtils.checkInternetConnectivity().then(
-          (isConnected) {
+      (isConnected) {
         if (isConnected) {
           print('The Internet Is Connected');
 
@@ -307,7 +306,7 @@ class MyAppointments_screenState extends State<GetAppointments> {
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
                     borderSide:
-                    const BorderSide(color: CommonUtils.primaryTextColor),
+                        const BorderSide(color: CommonUtils.primaryTextColor),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderSide: const BorderSide(
@@ -395,9 +394,11 @@ class MyAppointments_screenState extends State<GetAppointments> {
       setState(() {
         myAppointmentsProvider!.filterProviderData(data
             .where((item) =>
-        // Uncomment and modify the condition to filter by name
-        item.purposeOfVisit.toLowerCase().contains(input.toLowerCase()) ||
-            item.branch.toLowerCase().contains(input.toLowerCase()))
+                // Uncomment and modify the condition to filter by name
+                item.purposeOfVisit
+                    .toLowerCase()
+                    .contains(input.toLowerCase()) ||
+                item.branch.toLowerCase().contains(input.toLowerCase()))
             .toList());
       });
     });
@@ -466,8 +467,7 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
   }
 
   Future<void> filterAppointments(Map<String, dynamic> requestBody) async {
-    final url = Uri.parse(
-        baseUrl+GetAppointmentByUserid);
+    final url = Uri.parse(baseUrl + GetAppointmentByUserid);
 
     try {
       Map<String, dynamic> request = requestBody;
@@ -489,7 +489,7 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
           print('listResult: ${listResult.length}');
           // Filter out records with "statusTypeId": 19
           List<dynamic> filteredList =
-          listResult.where((item) => item['statusTypeId'] != 19).toList();
+              listResult.where((item) => item['statusTypeId'] != 19).toList();
           print('filteredList: ${filteredList.length}');
           // Convert the filtered list to MyAppointment_Model objects if needed
           myAppointmentsProvider.storeIntoProvider = filteredList
@@ -577,16 +577,19 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                           endDate: endDate,
                           startDate: startDate,
                           maximumDate:
-                          DateTime.now().add(const Duration(days: 50)),
+                              DateTime.now().add(const Duration(days: 50)),
                           minimumDate:
-                          DateTime.now().subtract(const Duration(days: 50)),
+                              DateTime.now().subtract(const Duration(days: 50)),
                           onApplyClick: (s, e) {
                             setState(() {
                               //MARK: Date
                               endDate = e;
                               startDate = s;
+                              // provider.getDisplayDate =
+                              //     '${startDate != null ? DateFormat("dd, MMM").format(startDate!) : '-'} / ${endDate != null ? DateFormat("dd, MMM").format(endDate!) : '-'}';
+
                               provider.getDisplayDate =
-                              '${startDate != null ? DateFormat("dd, MMM").format(startDate!) : '-'} / ${endDate != null ? DateFormat("dd, MMM").format(endDate!) : '-'}';
+                                  '${startDate != null ? DateFormat('dd/MM/yyyy').format(startDate!) : '-'}  -  ${endDate != null ? DateFormat('dd/MM/yyyy').format(endDate!) : '-'}';
                               From_todates.text = provider.getDisplayDate;
                               provider.getApiFromDate =
                                   DateFormat('yyyy-MM-dd').format(startDate!);
@@ -627,7 +630,7 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                             Radius.circular(10),
                           ),
                         ),
-                        hintText: 'Select Between Dates',
+                        hintText: 'Select Dates',
                         counterText: "",
                         hintStyle: const TextStyle(
                             color: Colors.grey, fontWeight: FontWeight.w400),
@@ -649,7 +652,7 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                               return CircularProgressIndicator.adaptive(
                                 backgroundColor: Colors.transparent,
                                 valueColor:
-                                AlwaysStoppedAnimation<Color>(orangeColor),
+                                    AlwaysStoppedAnimation<Color>(orangeColor),
                               );
                             } else if (snapshot.hasError) {
                               return Text('Error: ${snapshot.error}');
@@ -712,17 +715,17 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                                             width: 1.0,
                                           ),
                                           borderRadius:
-                                          BorderRadius.circular(8.0),
+                                              BorderRadius.circular(8.0),
                                         ),
                                         child: IntrinsicWidth(
                                           child: Column(
                                             mainAxisAlignment:
-                                            MainAxisAlignment.center,
+                                                MainAxisAlignment.center,
                                             children: [
                                               Container(
                                                 padding:
-                                                const EdgeInsets.symmetric(
-                                                    horizontal: 10.0),
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 10.0),
                                                 child: Row(
                                                   children: [
                                                     Text(
@@ -731,7 +734,7 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                                                       style: TextStyle(
                                                         fontSize: 12.0,
                                                         fontWeight:
-                                                        FontWeight.bold,
+                                                            FontWeight.bold,
                                                         fontFamily: "Roboto",
                                                         color: isSelected
                                                             ? Colors.white
@@ -850,7 +853,7 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                               return CircularProgressIndicator.adaptive(
                                 backgroundColor: Colors.transparent,
                                 valueColor:
-                                AlwaysStoppedAnimation<Color>(orangeColor),
+                                    AlwaysStoppedAnimation<Color>(orangeColor),
                               );
                             } else if (snapshot.hasError) {
                               return Text('Error: ${snapshot.error}');
@@ -910,17 +913,17 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                                             width: 1.0,
                                           ),
                                           borderRadius:
-                                          BorderRadius.circular(8.0),
+                                              BorderRadius.circular(8.0),
                                         ),
                                         child: IntrinsicWidth(
                                           child: Column(
                                             mainAxisAlignment:
-                                            MainAxisAlignment.center,
+                                                MainAxisAlignment.center,
                                             children: [
                                               Container(
                                                 padding:
-                                                const EdgeInsets.symmetric(
-                                                    horizontal: 10.0),
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 10.0),
                                                 child: Row(
                                                   children: [
                                                     Text(
@@ -928,7 +931,7 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                                                       style: TextStyle(
                                                         fontSize: 12.0,
                                                         fontWeight:
-                                                        FontWeight.bold,
+                                                            FontWeight.bold,
                                                         fontFamily: "Roboto",
                                                         color: isSelected
                                                             ? Colors.white
@@ -998,15 +1001,15 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                                   filterAppointments({
                                     "userid": widget.userId,
                                     "branchId":
-                                    myAppointmentsProvider.getApiBranchId,
+                                        myAppointmentsProvider.getApiBranchId,
                                     "fromdate":
-                                    myAppointmentsProvider.getApiFromDate,
+                                        myAppointmentsProvider.getApiFromDate,
                                     "toDate":
-                                    myAppointmentsProvider.getApiToDate,
+                                        myAppointmentsProvider.getApiToDate,
                                     "statustypeId": myAppointmentsProvider
                                         .getApiStatusTypeId,
                                   }).whenComplete(
-                                          () => provider.filterStatus = true);
+                                      () => provider.filterStatus = true);
                                 },
                                 child: Container(
                                   // width: desiredWidth * 0.9,
@@ -1058,19 +1061,19 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
     final response = await http.get(Uri.parse(baseUrl + getstatus));
     if (response.statusCode == 200) {
       final List<dynamic> responseData =
-      json.decode(response.body)['listResult'];
+          json.decode(response.body)['listResult'];
 
       print('Before filtering: $responseData');
 
       // Filter out items with "typeCdId": 19
       final List<dynamic> filteredData =
-      responseData.where((item) => item['typeCdId'] != 19).toList();
+          responseData.where((item) => item['typeCdId'] != 19).toList();
 
       print('After filtering: $filteredData');
 
       // Map the filtered data to Statusmodel
       List<Statusmodel> result =
-      filteredData.map((json) => Statusmodel.fromJson(json)).toList();
+          filteredData.map((json) => Statusmodel.fromJson(json)).toList();
 
       print('fetch branchname: ${result[0].desc}');
       return result;
@@ -1083,9 +1086,9 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
     final response = await http.get(Uri.parse(baseUrl + getbranches));
     if (response.statusCode == 200) {
       final List<dynamic> responseData =
-      json.decode(response.body)['listResult'];
+          json.decode(response.body)['listResult'];
       List<BranchModel> result =
-      responseData.map((json) => BranchModel.fromJson(json)).toList();
+          responseData.map((json) => BranchModel.fromJson(json)).toList();
       print('fetch branchname: ${result[0].name}');
       return result;
     } else {
@@ -1096,9 +1099,8 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
   Future<void> clearFilterAppointments(Map<String, dynamic> requestBody) async {
     // final url = Uri.parse(
     //     'http://182.18.157.215/SaloonApp/API/api/Appointment/GetAppointmentByUserid');
-    final url = Uri.parse(
-        baseUrl+GetAppointmentByUserid);
-   // baseUrl+GetAppointmentByUserid
+    final url = Uri.parse(baseUrl + GetAppointmentByUserid);
+    // baseUrl+GetAppointmentByUserid
     try {
       Map<String, dynamic> request = requestBody;
       print('filterAppointments: ${json.encode(request)}');
@@ -1119,7 +1121,7 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
 
           // Filter out records with "statusTypeId": 19
           List<dynamic> filteredList =
-          listResult.where((item) => item['statusTypeId'] != 19).toList();
+              listResult.where((item) => item['statusTypeId'] != 19).toList();
 
           // Convert the filtered list to MyAppointment_Model objects if needed
           myAppointmentsProvider.storeIntoProvider = filteredList
@@ -1161,7 +1163,7 @@ class OpCard extends StatefulWidget {
 class _OpCardState extends State<OpCard> {
   late List<dynamic> dateValues;
   final TextEditingController _commentstexteditcontroller =
-  TextEditingController();
+      TextEditingController();
   double rating_star = 0.0;
   int? userId;
 
@@ -1302,7 +1304,7 @@ class _OpCardState extends State<OpCard> {
                                         Padding(
                                           padding: const EdgeInsets.only(
                                               right:
-                                              8.0), // Adjust the value as needed
+                                                  8.0), // Adjust the value as needed
                                           child: Text(
                                             '${widget.data.rating ?? ''}',
                                             style: CommonStyles.txSty_14g_f5,
@@ -1404,11 +1406,12 @@ class _OpCardState extends State<OpCard> {
       case 5: // Accepted
         return Row(
           children: [
-
             GestureDetector(
               onTap: () {
-                int timeDifference = calculateTimeDifference(data.date, data.slotDuration);
-                print('====timeDifference ${timeDifference}');// assuming you have a function to calculate time difference
+                int timeDifference =
+                    calculateTimeDifference(data.date, data.slotDuration);
+                print(
+                    '====timeDifference $timeDifference'); // assuming you have a function to calculate time difference
                 // if (timeDifference <= 0) {
                 //   // Show error toast if time difference is 0 or negative
                 //   CommonUtils.showCustomToastMessageLong(
@@ -1418,10 +1421,14 @@ class _OpCardState extends State<OpCard> {
                 //     2,
                 //   );
                 // } else
-                  if (timeDifference <= 60) {
+                if (timeDifference <= 60) {
                   // Show error toast if time difference is less than or equal to 60 minutes
                   CommonUtils.showCustomToastMessageLong(
-                   'The Request Should Not be Rescheduled Within 1 hour Before The Slot', context, 0, 2,);
+                    'The Request Should Not be Rescheduled Within 1 hour Before The Slot',
+                    context,
+                    0,
+                    2,
+                  );
                 } else {
                   // Navigate to reschedule screen if time difference is greater than 60 minutes
                   Navigator.push(
@@ -1445,7 +1452,8 @@ class _OpCardState extends State<OpCard> {
                           : CommonStyles.primaryTextColor,
                     ),
                   ),
-                  padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
                   child: Row(
                     children: [
                       SvgPicture.asset(
@@ -1469,7 +1477,6 @@ class _OpCardState extends State<OpCard> {
                 ),
               ),
             ),
-
 
             // GestureDetector(
             //   onTap: () {
@@ -1543,7 +1550,7 @@ class _OpCardState extends State<OpCard> {
                     ),
                   ),
                   padding:
-                  const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
+                      const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
                   child: Row(
                     children: [
                       SvgPicture.asset(
@@ -1582,7 +1589,7 @@ class _OpCardState extends State<OpCard> {
       //   );
 
       case 18: // Closed
-        if ( data.review == null) {
+        if (data.review == null) {
           // If status is Closed, show review or rate button
           return GestureDetector(
             onTap: () {
@@ -1614,11 +1621,10 @@ class _OpCardState extends State<OpCard> {
               ),
             ),
           );
-        }
-        else {
+        } else {
           // If status is not Closed, show the review
           return Flexible(
-            child:  Text('" ${data.review} "' ?? '',
+            child: Text('" ${data.review} "' ?? '',
                 overflow: TextOverflow.ellipsis,
                 maxLines: 2,
                 style: CommonStyles.txSty_16blu_f5),
@@ -1628,30 +1634,31 @@ class _OpCardState extends State<OpCard> {
         return const SizedBox();
       default:
         return const SizedBox();
-    //  return Container(
-    //     decoration: BoxDecoration(
-    //         borderRadius: BorderRadius.circular(3),
-    //         border: Border.all(color: CommonUtils.blackColor)),
-    //     padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
-    //     child: const Row(
-    //       children: [
-    //         Icon(
-    //           Icons.star_border_outlined,
-    //           size: 13,
-    //           color: CommonStyles.primaryTextColor,
-    //         ),
-    //         Text(
-    //           ' Rate Us',
-    //           style: TextStyle(
-    //             fontSize: 11,
-    //             color: CommonStyles.primaryTextColor,
-    //           ),
-    //         ),
-    //       ],
-    //     ),
-    //   );
+      //  return Container(
+      //     decoration: BoxDecoration(
+      //         borderRadius: BorderRadius.circular(3),
+      //         border: Border.all(color: CommonUtils.blackColor)),
+      //     padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
+      //     child: const Row(
+      //       children: [
+      //         Icon(
+      //           Icons.star_border_outlined,
+      //           size: 13,
+      //           color: CommonStyles.primaryTextColor,
+      //         ),
+      //         Text(
+      //           ' Rate Us',
+      //           style: TextStyle(
+      //             fontSize: 11,
+      //             color: CommonStyles.primaryTextColor,
+      //           ),
+      //         ),
+      //       ],
+      //     ),
+      //   );
     }
   }
+
   bool isPastDate(String? selectedDate, String time) {
     final now = DateTime.now();
     String formattedTime = DateFormat('hh:mm a').format(now);
@@ -1667,7 +1674,7 @@ class _OpCardState extends State<OpCard> {
 
     if (selectedDateTime == currentDate) {
       int comparison = currentTime.compareTo(desiredTime);
-      print('current hours: ${comparison}');
+      print('current hours: $comparison');
       if (comparison < 0) {
         isBeforeTime = false;
       } else if (comparison > 0) {
@@ -1677,8 +1684,7 @@ class _OpCardState extends State<OpCard> {
       }
     }
 
-
-    return isBeforeTime || isBeforeDate ;
+    return isBeforeTime || isBeforeDate;
   }
 
   // bool isPastDate(String? selectedDate, String time) {
@@ -1784,7 +1790,7 @@ class _OpCardState extends State<OpCard> {
                             allowHalfRating: true,
                             itemCount: 5,
                             itemPadding:
-                            const EdgeInsets.symmetric(horizontal: 1.0),
+                                const EdgeInsets.symmetric(horizontal: 1.0),
                             itemBuilder: (context, _) => const Icon(
                               Icons.star,
                               color: CommonUtils.primaryTextColor,
@@ -1798,7 +1804,7 @@ class _OpCardState extends State<OpCard> {
                           )),
                       Padding(
                         padding:
-                        const EdgeInsets.only(left: 0, top: 10.0, right: 0),
+                            const EdgeInsets.only(left: 0, top: 10.0, right: 0),
                         child: GestureDetector(
                           onTap: () async {},
                           child: Container(
@@ -1955,7 +1961,7 @@ class _OpCardState extends State<OpCard> {
         "SlotTime": appointmens.slotTime,
         "CustomerName": appointmens.customerName,
         "PhoneNumber":
-        appointmens.contactNumber, // Changed from appointments.phoneNumber
+            appointmens.contactNumber, // Changed from appointments.phoneNumber
         "Email": appointmens.email,
         "GenderTypeId": appointmens.genderTypeId,
         "StatusTypeId": 18,
@@ -1968,7 +1974,7 @@ class _OpCardState extends State<OpCard> {
         "rating": rating_star,
         "review": _commentstexteditcontroller.text.toString(),
         "reviewSubmittedDate": dateTimeString,
-        "timeofslot":  appointmens.timeofSlot,
+        "timeofslot": appointmens.timeofSlot,
         "customerId": userId
       };
       print('AddUpdatefeedback object: : ${json.encode(request)}');
@@ -2050,7 +2056,7 @@ class _OpCardState extends State<OpCard> {
                   'Are You Sure You Want To Cancel Your  ${appointments.slotDuration} Slot At The${appointments.branch} Hair Fixing Zone ?',
                   style: CommonUtils.txSty_18b_fb,
                   textAlign:
-                  TextAlign.center, // Optionally, align the text center
+                      TextAlign.center, // Optionally, align the text center
                 ),
               ),
               const SizedBox(
@@ -2067,10 +2073,7 @@ class _OpCardState extends State<OpCard> {
             ],
           ),
           actions: [
-
-
             Container(
-
               child: ElevatedButton(
                 onPressed: () {
                   Navigator.of(context).pop();
@@ -2093,7 +2096,7 @@ class _OpCardState extends State<OpCard> {
                   'No',
                   style: TextStyle(
                     fontSize: 16,
-                    color:  CommonUtils.primaryTextColor,
+                    color: CommonUtils.primaryTextColor,
                     fontFamily: 'Calibri',
                   ),
                 ),
@@ -2101,7 +2104,6 @@ class _OpCardState extends State<OpCard> {
             ),
             const SizedBox(width: 10), // Add spacing between buttons
             Container(
-
               child: ElevatedButton(
                 onPressed: () {
                   cancelAppointment(appointments);
@@ -2125,7 +2127,7 @@ class _OpCardState extends State<OpCard> {
                   'Yes',
                   style: TextStyle(
                     fontSize: 16,
-                    color:Colors.white,
+                    color: Colors.white,
                     fontFamily: 'Calibri',
                   ),
                 ),
@@ -2155,7 +2157,7 @@ class _OpCardState extends State<OpCard> {
       "SlotTime": appointmens.slotTime,
       "CustomerName": appointmens.customerName,
       "PhoneNumber":
-      appointmens.contactNumber, // Changed from appointments.phoneNumber
+          appointmens.contactNumber, // Changed from appointments.phoneNumber
       "Email": appointmens.email,
       "GenderTypeId": appointmens.genderTypeId,
       "StatusTypeId": 6,
@@ -2242,7 +2244,7 @@ class _OpCardState extends State<OpCard> {
                   'Your Appointment Has Been Cancelled Successfully ',
                   style: CommonUtils.txSty_18b_fb,
                   textAlign:
-                  TextAlign.center, // Optionally, align the text center
+                      TextAlign.center, // Optionally, align the text center
                 ),
               ),
               const SizedBox(
@@ -2267,7 +2269,6 @@ class _OpCardState extends State<OpCard> {
     );
   }
 
-
   int calculateTimeDifference(String selectedDate, String time) {
     final now = DateTime.now();
     String formattedTime = DateFormat('yyyy-MM-dd hh:mm a').format(now);
@@ -2279,10 +2280,13 @@ class _OpCardState extends State<OpCard> {
     String selectedDateTimeString = '$datePart $time';
 
     // Parse the concatenated string into a DateTime object
-    DateTime selectedDateTime = DateFormat('yyyy-MM-dd hh:mm a').parse(selectedDateTimeString);
-    DateTime currentDateTime = DateFormat('yyyy-MM-dd hh:mm a').parse(formattedTime);
+    DateTime selectedDateTime =
+        DateFormat('yyyy-MM-dd hh:mm a').parse(selectedDateTimeString);
+    DateTime currentDateTime =
+        DateFormat('yyyy-MM-dd hh:mm a').parse(formattedTime);
 
-    print('Time difference in selectedDateTime: ${selectedDateTime.toString()}');
+    print(
+        'Time difference in selectedDateTime: ${selectedDateTime.toString()}');
     print('Time difference in currentDateTime: ${currentDateTime.toString()}');
 
     Duration difference = selectedDateTime.difference(currentDateTime);
@@ -2290,9 +2294,9 @@ class _OpCardState extends State<OpCard> {
 
     print('Time difference in minutes: $differenceInMinutes');
 
-    return differenceInMinutes.abs(); // Return the absolute value of the difference
+    return differenceInMinutes
+        .abs(); // Return the absolute value of the difference
   }
-
 
 // int calculateTimeDifference(String selectedDate, String time) {
   //   final now = DateTime.now();
@@ -2316,5 +2320,4 @@ class _OpCardState extends State<OpCard> {
   //
   //   return differenceInMinutes;
   // }
-
 }
