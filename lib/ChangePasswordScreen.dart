@@ -478,7 +478,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text('Logout'),
-          content: const Text('Are you sure you want to Logout?'),
+          content: const Text('Are You Sure You Want to Logout?'),
           actions: [
             TextButton(
               onPressed: () {

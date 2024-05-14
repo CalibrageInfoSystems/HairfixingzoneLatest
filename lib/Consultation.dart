@@ -10,10 +10,10 @@ class Consultation {
   final String branchName;
   final bool isActive;
   final String remarks;
-  final String createdByUser;
+  final int createdByUser;
   final String createdDate;
-  final String updatedByUser;
-  final String? updatedDate;
+  // final String updatedByUser;
+  // final String? updatedDate;
 
   Consultation({
     required this.consultationId,
@@ -28,8 +28,8 @@ class Consultation {
     required this.remarks,
     required this.createdByUser,
     required this.createdDate,
-    required this.updatedByUser,
-    required this.updatedDate,
+    // required this.updatedByUser,
+    // required this.updatedDate,
   });
 
   factory Consultation.fromJson(Map<String, dynamic> json) {
@@ -46,8 +46,8 @@ class Consultation {
       remarks: json['remarks'],
       createdByUser: json['createdByUser'],
       createdDate: json['createdDate'],
-      updatedByUser: json['updatedByUser'] ?? 0,
-      updatedDate: json['updatedDate'] ?? '',
+      // updatedByUser: json['updatedByUser'] ?? 0,
+      // updatedDate: json['updatedDate'] ?? '',
     );
   }
 }

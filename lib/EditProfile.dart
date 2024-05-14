@@ -997,8 +997,10 @@ class EditProfile_screenState extends State<EditProfile> {
               ),
             );
             print('statusmesssage:${data['statusMessage']}');
-            CommonUtils.showCustomToastMessageLong('${data['statusMessage']}', context, 0, 5);
-            // Success case
+            //CommonUtils.showCustomToastMessageLong('${data['statusMessage']}', context, 0, 5);
+            CommonUtils.showCustomToastMessageLong('Customer Updated Sucessfully', context, 0, 5);
+
+            // Success case11.Customer Updated Sucessfully
             // Handle success scenario here
           } else {
             progressDialog.dismiss();

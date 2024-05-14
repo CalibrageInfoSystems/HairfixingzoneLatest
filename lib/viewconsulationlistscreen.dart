@@ -48,7 +48,7 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
     startDate = DateTime.now().subtract(const Duration(days: 14));
     endDate = DateTime.now();
     fromToDates.text =
-        '${startDate != null ? DateFormat("dd, MMM").format(startDate!) : '-'} / ${endDate != null ? DateFormat("dd, MMM").format(endDate!) : '-'}';
+        '${startDate != null ? DateFormat("dd-MM-yyyy").format(startDate!) : '-'} / ${endDate != null ? DateFormat("dd-MM-yyyy").format(endDate!) : '-'}';
 
     print('branchid ${widget.branchid} fromdate${widget.fromdate} todate ${widget.todate}');
     ConsultationData = getviewconsulationlist(DateFormat('yyyy-MM-dd').format(startDate!), DateFormat('yyyy-MM-dd').format(endDate!));
@@ -129,111 +129,192 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
               padding: const EdgeInsets.all(10.0),
               child: Column(
                 children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Container(
-                          height: MediaQuery.of(context).size.height / 12,
-                          //height: 60,
-                          padding: const EdgeInsets.all(5),
-                          decoration: BoxDecoration(
-                            border: Border.all(color: CommonStyles.primaryTextColor),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(8),
-                                child: Image.network(
-                                  '${widget.agent.imageName}',
-                                  fit: BoxFit.cover,
-                                  width: 100.0,
-                                  height: MediaQuery.of(context).size.height / 13,
-                                  errorBuilder: (context, error, stackTrace) {
-                                    return Image.asset(
-                                      'assets/hairfixing_logo.png',
-                                      fit: BoxFit.cover,
-                                      width: 60.0,
-                                      height: MediaQuery.of(context).size.height / 13,
-                                    );
-                                  },
-                                ),
-                              ),
-                              const SizedBox(
-                                width: 20,
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  // Text(
-                                  //   widget.agent.name,
-                                  //   style: CommonStyles.txSty_16p_f5,
-                                  // ),
-                                  SizedBox(
-                                    width: MediaQuery.of(context).size.width / 2.2,
-                                    //    padding: EdgeInsets.only(top: 7),
-                                    // width: MediaQuery.of(context).size.width / 4,
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          widget.agent.name,
-                                          style: const TextStyle(
-                                            color: Color(0xFF0f75bc),
-                                            fontSize: 14.0,
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          height: 5,
-                                        ),
-                                        Text(
-                                          widget.agent.address,
-                                          maxLines: 2,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: const TextStyle(color: Colors.black, fontSize: 12.0, fontWeight: FontWeight.w600),
-                                        ),
-                                      ],
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      // const SizedBox(
-                      //   width: 10,
+                  IntrinsicHeight(
+                    child: Container(
+                      //  height: MediaQuery.of(context).size.height / 6,
+                      width: MediaQuery.of(context).size.width,
+                      // decoration: BoxDecoration(
+                      //   border: Border.all(color: Color(0xFF662e91), width: 1.0),
+                      //   borderRadius: BorderRadius.circular(10.0),
                       // ),
-                      // Container(
-                      //   height: MediaQuery.of(context).size.height / 12,
-                      //   padding: const EdgeInsets.symmetric(
-                      //       vertical: 5, horizontal: 10),
-                      //   decoration: BoxDecoration(
-                      //     border:
-                      //         Border.all(color: CommonStyles.primaryTextColor),
-                      //     borderRadius: BorderRadius.circular(10),
-                      //   ),
-                      //   child: Container(
-                      //     padding: const EdgeInsets.all(15),
-                      //     decoration: const BoxDecoration(
-                      //         shape: BoxShape.circle,
-                      //         color: CommonStyles.primaryTextColor),
-                      //     child: Center(
-                      //       child: SvgPicture.asset(
-                      //         'assets/noun-appointment-date-2417776.svg',
-                      //         width: 30.0,
-                      //         height: 30.0,
-                      //         color: CommonStyles.whiteColor,
-                      //       ),
-                      //     ),
-                      //   ),
-                      // )
-                    ],
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10.0),
+                        // borderRadius: BorderRadius.circular(30), //border corner radius
+                        boxShadow: [
+                          BoxShadow(
+                            color: Color(0xFF960efd).withOpacity(0.2), //color of shadow
+                            spreadRadius: 2, //spread radius
+                            blurRadius: 4, // blur radius
+                            offset: Offset(0, 2), // changes position of shadow
+                          ),
+                        ],
+                      ),
+                      child: Row(
+                        children: [
+                          Container(
+                            padding: EdgeInsets.all(10),
+                            // width: MediaQuery.of(context).size.width / 4,
+                            child: ClipRRect(
+                              //  borderRadius: BorderRadius.circular(10.0),
+                              child: Image.network(
+                                widget.agent.imageName!.isNotEmpty ? widget.agent.imageName! : 'https://example.com/placeholder-image.jpg',
+                                fit: BoxFit.cover,
+                                height: MediaQuery.of(context).size.height / 5.5 / 2,
+                                width: MediaQuery.of(context).size.width / 3.2,
+                                errorBuilder: (context, error, stackTrace) {
+                                  return Image.asset(
+                                    'assets/hairfixing_logo.png', // Path to your PNG placeholder image
+                                    fit: BoxFit.cover,
+                                    height: MediaQuery.of(context).size.height / 4 / 2,
+                                    width: MediaQuery.of(context).size.width / 3.2,
+                                  );
+                                },
+                              ),
+                            ),
+                            // child: Image.asset(
+                            //   'assets/top_image.png',
+                            //   fit: BoxFit.cover,
+                            //   height: MediaQuery.of(context).size.height / 4 / 2,
+                            //   width: MediaQuery.of(context).size.width / 2.8,
+                            // )
+                          ),
+                          Container(
+                            width: MediaQuery.of(context).size.width / 2,
+                            padding: EdgeInsets.only(top: 8),
+                            // width: MediaQuery.of(context).size.width / 4,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  widget.agent.name,
+                                  style: TextStyle(
+                                    color: Color(0xFF0f75bc),
+                                    fontSize: 16.0,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Text(
+                                  widget.agent.address,
+                                  style: CommonStyles.txSty_12b_f5,
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
                   ),
+                  // Row(
+                  //   children: [
+                  //     // Expanded(
+                  //     //   child: Container(
+                  //     //     height: MediaQuery.of(context).size.height / 12,
+                  //     //     //height: 60,
+                  //     //     padding: const EdgeInsets.all(5),
+                  //     //     decoration: BoxDecoration(
+                  //     //       border: Border.all(color: CommonStyles.primaryTextColor),
+                  //     //       borderRadius: BorderRadius.circular(10),
+                  //     //     ),
+                  //     //     child: Row(
+                  //     //       mainAxisAlignment: MainAxisAlignment.start,
+                  //     //       children: [
+                  //     //         ClipRRect(
+                  //     //           borderRadius: BorderRadius.circular(8),
+                  //     //           child: Image.network(
+                  //     //             '${widget.agent.imageName}',
+                  //     //             fit: BoxFit.cover,
+                  //     //             width: 100.0,
+                  //     //             height: MediaQuery.of(context).size.height / 13,
+                  //     //             errorBuilder: (context, error, stackTrace) {
+                  //     //               return Image.asset(
+                  //     //                 'assets/hairfixing_logo.png',
+                  //     //                 fit: BoxFit.cover,
+                  //     //                 width: 60.0,
+                  //     //                 height: MediaQuery.of(context).size.height / 13,
+                  //     //               );
+                  //     //             },
+                  //     //           ),
+                  //     //         ),
+                  //     //         const SizedBox(
+                  //     //           width: 20,
+                  //     //         ),
+                  //     //         Column(
+                  //     //           crossAxisAlignment: CrossAxisAlignment.start,
+                  //     //           mainAxisAlignment: MainAxisAlignment.center,
+                  //     //           children: [
+                  //     //             // Text(
+                  //     //             //   widget.agent.name,
+                  //     //             //   style: CommonStyles.txSty_16p_f5,
+                  //     //             // ),
+                  //     //             SizedBox(
+                  //     //               width: MediaQuery.of(context).size.width / 2.2,
+                  //     //               //    padding: EdgeInsets.only(top: 7),
+                  //     //               // width: MediaQuery.of(context).size.width / 4,
+                  //     //               child: Column(
+                  //     //                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  //     //                 crossAxisAlignment: CrossAxisAlignment.start,
+                  //     //                 children: [
+                  //     //                   Text(
+                  //     //                     widget.agent.name,
+                  //     //                     style: const TextStyle(
+                  //     //                       color: Color(0xFF0f75bc),
+                  //     //                       fontSize: 14.0,
+                  //     //                       fontWeight: FontWeight.w600,
+                  //     //                     ),
+                  //     //                   ),
+                  //     //                   const SizedBox(
+                  //     //                     height: 5,
+                  //     //                   ),
+                  //     //                   Text(
+                  //     //                     widget.agent.address,
+                  //     //                     maxLines: 2,
+                  //     //                     overflow: TextOverflow.ellipsis,
+                  //     //                     style: const TextStyle(color: Colors.black, fontSize: 12.0, fontWeight: FontWeight.w600),
+                  //     //                   ),
+                  //     //                 ],
+                  //     //               ),
+                  //     //             )
+                  //     //           ],
+                  //     //         ),
+                  //     //       ],
+                  //     //     ),
+                  //     //   ),
+                  //     // ),
+                  //
+                  //     // const SizedBox(
+                  //     //   width: 10,
+                  //     // ),
+                  //     // Container(
+                  //     //   height: MediaQuery.of(context).size.height / 12,
+                  //     //   padding: const EdgeInsets.symmetric(
+                  //     //       vertical: 5, horizontal: 10),
+                  //     //   decoration: BoxDecoration(
+                  //     //     border:
+                  //     //         Border.all(color: CommonStyles.primaryTextColor),
+                  //     //     borderRadius: BorderRadius.circular(10),
+                  //     //   ),
+                  //     //   child: Container(
+                  //     //     padding: const EdgeInsets.all(15),
+                  //     //     decoration: const BoxDecoration(
+                  //     //         shape: BoxShape.circle,
+                  //     //         color: CommonStyles.primaryTextColor),
+                  //     //     child: Center(
+                  //     //       child: SvgPicture.asset(
+                  //     //         'assets/noun-appointment-date-2417776.svg',
+                  //     //         width: 30.0,
+                  //     //         height: 30.0,
+                  //     //         color: CommonStyles.whiteColor,
+                  //     //       ),
+                  //     //     ),
+                  //     //   ),
+                  //     // )
+                  //   ],
+                  // ),
 
                   const SizedBox(
                     height: 10,
@@ -257,7 +338,7 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
                             endDate = e;
                             startDate = s;
                             fromToDates.text =
-                                '${startDate != null ? DateFormat("dd, MMM").format(startDate!) : '-'} / ${endDate != null ? DateFormat("dd, MMM").format(endDate!) : '-'}';
+                                '${startDate != null ? DateFormat("dd-MM-yyyy").format(startDate!) : '-'} / ${endDate != null ? DateFormat("dd-MM-yyyy").format(endDate!) : '-'}';
                             ConsultationData =
                                 getviewconsulationlist(DateFormat('yyyy-MM-dd').format(startDate!), DateFormat('yyyy-MM-dd').format(endDate!));
                           });
@@ -315,11 +396,10 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
                 } else {
                   List<Consultation> data = snapshot.data!;
                   if (data.isEmpty) {
-                    return SizedBox(
-                        height: MediaQuery.of(context).size.height,
-                        width: MediaQuery.of(context).size.height,
-                        child: const Center(
-                          child: Text('No  Consultation Found'),
+                    return Container(
+                        height: MediaQuery.of(context).size.height / 2,
+                        child: Center(
+                          child: Text('No Consultation Found'),
                         ));
                   } else {
                     return Expanded(

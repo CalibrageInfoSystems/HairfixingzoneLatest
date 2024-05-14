@@ -6,6 +6,7 @@ import 'package:hairfixingzone/Dashboard_Screen.dart';
 import 'package:hairfixingzone/HomeScreen.dart';
 import 'package:hairfixingzone/MyAppointment_Model.dart';
 import 'package:hairfixingzone/services/notifi_service.dart';
+
 // import 'package:hairfixingzone/services/notification_service.dart';
 import 'package:hairfixingzone/slot_success_screen.dart';
 import 'package:loading_progress/loading_progress.dart';
@@ -28,6 +29,7 @@ class Bookingscreen extends StatefulWidget {
   final String branchaddress;
   final String phonenumber;
   final String branchImage;
+
   //final MyAppointment_Model data;
   // final int appointmentId; // New field
   // final String screenFrom; // New field
@@ -112,6 +114,7 @@ class _BookingScreenState extends State<Bookingscreen> {
   TextEditingController _purposeController4 = TextEditingController();
   bool isBackButtonActivated = false;
   DateTime? slotSelectedDateTime;
+
 //  TextEditingController textController4 = TextEditingController(text: 'Initial value 4');
   List<Slot> slots = [];
 
@@ -142,11 +145,11 @@ class _BookingScreenState extends State<Bookingscreen> {
   String? contactNumber;
   bool showConfirmationDialog = false;
   int? Id;
+
   //String? genderbyid;
   bool ispurposeselected = false;
   String? _selectedTimeSlot24;
   int? genderttypeid;
-
 
   TextEditingController _textEditingController = TextEditingController(text: "Hair fixing Appointment");
   DateTime currentDate = DateTime.now();
@@ -154,6 +157,7 @@ class _BookingScreenState extends State<Bookingscreen> {
 
   TimeOfDay currentTime = TimeOfDay.now();
   TimeOfDay? eventTime;
+
   @override
   void dispose() {
     _dateController.dispose();
@@ -215,7 +219,7 @@ class _BookingScreenState extends State<Bookingscreen> {
     // final url = Uri.parse(
     //     'http://182.18.157.215/SaloonApp/API/GetHolidayListByBranchId/$branchId');
     // final url = Uri.parse(baseUrl + GetHolidayListByBranchId);
-    final url = Uri.parse(baseUrl+getholidayslist);
+    final url = Uri.parse(baseUrl + getholidayslist);
     try {
       final response = await http.post(
         url,
@@ -418,84 +422,87 @@ class _BookingScreenState extends State<Bookingscreen> {
                   padding: EdgeInsets.only(top: 10, left: 15, right: 15),
                   child: Column(
                     children: [
-                      Container(
-                        height: MediaQuery.of(context).size.height / 6,
-                        width: MediaQuery.of(context).size.width,
-                        // decoration: BoxDecoration(
-                        //   border: Border.all(color: Color(0xFF662e91), width: 1.0),
-                        //   borderRadius: BorderRadius.circular(10.0),
-                        // ),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(10.0),
-                          // borderRadius: BorderRadius.circular(30), //border corner radius
-                          boxShadow: [
-                            BoxShadow(
-                              color: Color(0xFF960efd).withOpacity(0.2), //color of shadow
-                              spreadRadius: 2, //spread radius
-                              blurRadius: 4, // blur radius
-                              offset: Offset(0, 2), // changes position of shadow
-                            ),
-                          ],
-                        ),
-                        child: Row(
-                          children: [
-                            Container(
-                              padding: EdgeInsets.all(10),
-                              // width: MediaQuery.of(context).size.width / 4,
-                              child: ClipRRect(
-                                //  borderRadius: BorderRadius.circular(10.0),
-                                child: Image.network(
-                                  widget.branchImage.isNotEmpty ? widget.branchImage : 'https://example.com/placeholder-image.jpg',
-                                  fit: BoxFit.cover,
-                                  height: MediaQuery.of(context).size.height / 4 / 2,
-                                  width: MediaQuery.of(context).size.width / 3.2,
-                                  errorBuilder: (context, error, stackTrace) {
-                                    return Image.asset(
-                                      'assets/hairfixing_logo.png', // Path to your PNG placeholder image
-                                      fit: BoxFit.cover,
-                                      height: MediaQuery.of(context).size.height / 4 / 2,
-                                      width: MediaQuery.of(context).size.width / 3.2,
-                                    );
-                                  },
+                      IntrinsicHeight(
+                        child: Container(
+                          //  height: MediaQuery.of(context).size.height / 6,
+                          width: MediaQuery.of(context).size.width,
+                          // decoration: BoxDecoration(
+                          //   border: Border.all(color: Color(0xFF662e91), width: 1.0),
+                          //   borderRadius: BorderRadius.circular(10.0),
+                          // ),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(10.0),
+                            // borderRadius: BorderRadius.circular(30), //border corner radius
+                            boxShadow: [
+                              BoxShadow(
+                                color: Color(0xFF960efd).withOpacity(0.2), //color of shadow
+                                spreadRadius: 2, //spread radius
+                                blurRadius: 4, // blur radius
+                                offset: Offset(0, 2), // changes position of shadow
+                              ),
+                            ],
+                          ),
+                          child: Row(
+                            children: [
+                              Container(
+                                padding: EdgeInsets.all(10),
+                                // width: MediaQuery.of(context).size.width / 4,
+                                child: ClipRRect(
+                                  //  borderRadius: BorderRadius.circular(10.0),
+                                  child: Image.network(
+                                    widget.branchImage.isNotEmpty ? widget.branchImage : 'https://example.com/placeholder-image.jpg',
+                                    fit: BoxFit.cover,
+                                    height: MediaQuery.of(context).size.height / 5.5 / 2,
+                                    width: MediaQuery.of(context).size.width / 3.2,
+                                    errorBuilder: (context, error, stackTrace) {
+                                      return Image.asset(
+                                        'assets/hairfixing_logo.png', // Path to your PNG placeholder image
+                                        fit: BoxFit.cover,
+                                        height: MediaQuery.of(context).size.height / 4 / 2,
+                                        width: MediaQuery.of(context).size.width / 3.2,
+                                      );
+                                    },
+                                  ),
                                 ),
+                                // child: Image.asset(
+                                //   'assets/top_image.png',
+                                //   fit: BoxFit.cover,
+                                //   height: MediaQuery.of(context).size.height / 4 / 2,
+                                //   width: MediaQuery.of(context).size.width / 2.8,
+                                // )
                               ),
-                              // child: Image.asset(
-                              //   'assets/top_image.png',
-                              //   fit: BoxFit.cover,
-                              //   height: MediaQuery.of(context).size.height / 4 / 2,
-                              //   width: MediaQuery.of(context).size.width / 2.8,
-                              // )
-                            ),
-                            Container(
-                              width: MediaQuery.of(context).size.width / 2.2,
-                              padding: EdgeInsets.only(top: 15),
-                              // width: MediaQuery.of(context).size.width / 4,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    '${widget.branchname}',
-                                    style: TextStyle(
-                                      color: Color(0xFF0f75bc),
-                                      fontSize: 16.0,
-                                      fontWeight: FontWeight.w600,
+                              Container(
+                                width: MediaQuery.of(context).size.width / 2,
+                                padding: EdgeInsets.only(top: 8),
+                                // width: MediaQuery.of(context).size.width / 4,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      '${widget.branchname}',
+                                      style: TextStyle(
+                                        color: Color(0xFF0f75bc),
+                                        fontSize: 16.0,
+                                        fontWeight: FontWeight.w600,
+                                      ),
                                     ),
-                                  ),
-                                  SizedBox(
-                                    height: 15,
-                                  ),
-                                  Text(
-                                    '${widget.branchaddress}',
-                                    style: TextStyle(color: Color(0xFF0f75bc), fontSize: 12.0, fontWeight: FontWeight.w600),
-                                  ),
-                                ],
-                              ),
-                            )
-                          ],
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    Text(
+                                      '${widget.branchaddress}',
+                                      style: CommonStyles.txSty_12b_f5,
+                                    ),
+                                  ],
+                                ),
+                              )
+                            ],
+                          ),
                         ),
                       ),
+
                       SizedBox(
                         height: 25,
                       ),
@@ -611,11 +618,11 @@ class _BookingScreenState extends State<Bookingscreen> {
                                                     DateTime slotSelected_DateTime = DateFormat('yyyy-MM-dd HH:mm').parse(selectedDateTimeString);
                                                     print('SlotselectedDateTime: $slotSelected_DateTime');
 // Assuming slotSelectedDateTime is your DateTime object
-                                                    slotSelectedDateTime   = slotSelected_DateTime!.subtract(Duration(hours: 1));
+                                                    slotSelectedDateTime = slotSelected_DateTime!.subtract(Duration(hours: 1));
                                                     print('-1 hour Modified DateTime: $slotSelectedDateTime');
 
                                                     // Parse the concatenated string into a DateTime object
-                                                  //  DateTime SlotselectedDateTime = DateFormat('yyyy-MM-dd hh:mm a').parse(selectedDateTimeString);
+                                                    //  DateTime SlotselectedDateTime = DateFormat('yyyy-MM-dd hh:mm a').parse(selectedDateTimeString);
                                                     print('SlotselectedDateTime==613==$selectedDateTimeString');
                                                     print('==234==$_selectedTimeSlot');
                                                     print('==234==$_selectedTimeSlot');
@@ -826,8 +833,6 @@ class _BookingScreenState extends State<Bookingscreen> {
                         ),
                       ),
 
-
-
                       // Container(
                       //   width: MediaQuery.of(context).size.width / 1.5,
                       //   child: CustomButton(
@@ -842,6 +847,7 @@ class _BookingScreenState extends State<Bookingscreen> {
               ),
             )));
   }
+
   Future<void> validatePurpose(String? value) async {
     if (!isSlotsAvailable) {
       showCustomToastMessageLong('No Slots Are Available Today', context, 1, 4);
@@ -857,27 +863,25 @@ class _BookingScreenState extends State<Bookingscreen> {
     }
   }
 
-
-
- //  void bookappointment() {
- //    // Perform your validation here
- //    if (!isSlotsAvailable) {
- //      showCustomToastMessageLong('No Slots Available Today', context, 1, 4);
- //    } else if (!slotselection) {
- //      showCustomToastMessageLong('Please Select A Slot', context, 1, 4);
- //    }
- //    if (!ispurposeselected) {
- //      handleAppointmentBooking();
- //    }
- //
- // else{
- //
- //      // If all validations pass, proceed with booking the appointment
- //      // For example, you can call a function to handle the booking process
- //      // Assuming you have a function called 'handleAppointmentBooking'
- //      handleAppointmentBooking();
- //    }
- //  }
+  //  void bookappointment() {
+  //    // Perform your validation here
+  //    if (!isSlotsAvailable) {
+  //      showCustomToastMessageLong('No Slots Available Today', context, 1, 4);
+  //    } else if (!slotselection) {
+  //      showCustomToastMessageLong('Please Select A Slot', context, 1, 4);
+  //    }
+  //    if (!ispurposeselected) {
+  //      handleAppointmentBooking();
+  //    }
+  //
+  // else{
+  //
+  //      // If all validations pass, proceed with booking the appointment
+  //      // For example, you can call a function to handle the booking process
+  //      // Assuming you have a function called 'handleAppointmentBooking'
+  //      handleAppointmentBooking();
+  //    }
+  //  }
   Future<void> bookappointment() async {
     // validatislot();
 
@@ -899,7 +903,7 @@ class _BookingScreenState extends State<Bookingscreen> {
       String slotdate = DateFormat('dd MMM yyyy').format(_selectedDate!);
       print('slotdate $slotdate');
       print('date _selectedDate ====$_selectedDate');
-     print('slotSelectedDateTime:897 ${slotSelectedDateTime}');
+      print('slotSelectedDateTime:897 ${slotSelectedDateTime}');
       // print('appointmentId1214: ${widget.appointmentId}');
       // CommonStyles.progressBar(context);
       final request = {
@@ -948,15 +952,16 @@ class _BookingScreenState extends State<Bookingscreen> {
           // LoadingProgress.stop(context);
           // Extract the necessary information
           bool isSuccess = data['isSuccess'];
-         progressDialog.dismiss();
+          progressDialog.dismiss();
           if (isSuccess == true) {
             if (_selectedDate != null) {
               final int notificationId = UniqueKey().hashCode;
               debugPrint('Notification Scheduled for $slotSelectedDateTime with ID: $notificationId');
               await NotificationService().scheduleNotification(
                 title: 'Reminder Notification',
-                body:'Reminder For Today: Your Scheduled Appointment For The ${_selectedTimeSlot24!} Slot At The  ${widget.branchname} Branch, Located At ${widget.branchaddress}.',
-              //  body: 'Reminder for your scheduled Appointment at ${_selectedTimeSlot24!} At ${widget.branchname} branch  near ${widget.branchaddress}',
+                body:
+                    'Reminder For Today: Your Scheduled Appointment For The ${_selectedTimeSlot24!} Slot At The  ${widget.branchname} Branch, Located At ${widget.branchaddress}.',
+                //  body: 'Reminder for your scheduled Appointment at ${_selectedTimeSlot24!} At ${widget.branchname} branch  near ${widget.branchaddress}',
                 scheduledNotificationDateTime: slotSelectedDateTime!,
                 id: notificationId,
               );
@@ -1040,8 +1045,6 @@ class _BookingScreenState extends State<Bookingscreen> {
     // Return false if any of the conditions are met
     return !isPastDate && !isHolidayDate && !isPreviousYear && date.year >= DateTime.now().year;
   }
-
-
 
   List<Slot> getVisibleSlots(List<Slot> slots, bool isTodayHoliday) {
     print('isTodayHoliday====$isTodayHoliday');

@@ -48,8 +48,7 @@ class _ViewConsultationState extends State<ViewConsultation> {
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
         List<dynamic> listresult = data['listResult'];
-        List<BranchModel> result =
-        listresult.map((e) => BranchModel.fromJson(e)).toList();
+        List<BranchModel> result = listresult.map((e) => BranchModel.fromJson(e)).toList();
         return result;
       } else {
         print('Request failed with status: ${response.statusCode}');
@@ -238,12 +237,7 @@ class ViewConsulatationBranchTemplate extends StatelessWidget {
   final DateTime? endDate;
 
   const ViewConsulatationBranchTemplate(
-      {super.key,
-        required this.agent,
-        required this.imageUrl,
-        required this.agentId,
-        this.startDate,
-        this.endDate});
+      {super.key, required this.agent, required this.imageUrl, required this.agentId, this.startDate, this.endDate});
 
   @override
   Widget build(BuildContext context) {
@@ -251,50 +245,52 @@ class ViewConsulatationBranchTemplate extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       width: MediaQuery.of(context).size.width,
       child: GestureDetector(
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => viewconsulationlistscreen(
-                  branchid: agent.id!,
-                  fromdate: '$startDate',
-                  todate: '$endDate',
-                  agent: agent,
-                  userid: agentId,
-                )),
-          );
-        },
-        child: Container(
-          height: MediaQuery.of(context).size.height / 8,
-          width: MediaQuery.of(context).size.width,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(10.0),
-            boxShadow: [
-              BoxShadow(
-                color: const Color(0xFF960efd).withOpacity(0.2),
-                spreadRadius: 2,
-                blurRadius: 4,
-                offset: const Offset(0, 2),
-              ),
-            ],
-          ),
-          child: Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(10),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(8),
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => viewconsulationlistscreen(
+                        branchid: agent.id!,
+                        fromdate: '$startDate',
+                        todate: '$endDate',
+                        agent: agent,
+                        userid: agentId,
+                      )),
+            );
+          },
+          child: Container(
+            height: MediaQuery.of(context).size.height / 10,
+            width: MediaQuery.of(context).size.width,
+            // decoration: BoxDecoration(
+            //   border: Border.all(color: Color(0xFF662e91), width: 1.0),
+            //   borderRadius: BorderRadius.circular(10.0),
+            // ),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(10.0),
+              // borderRadius: BorderRadius.circular(30), //border corner radius
+              boxShadow: [
+                BoxShadow(
+                  color: Color(0xFF960efd).withOpacity(0.2), //color of shadow
+                  spreadRadius: 2, //spread radius
+                  blurRadius: 4, // blur radius
+                  offset: Offset(0, 2), // changes position of shadow
+                ),
+              ],
+            ),
+            child: Row(
+              children: [
+                Container(
+                  padding: EdgeInsets.all(10),
+                  // width: MediaQuery.of(context).size.width / 4,
                   child: Image.network(
-                    imageUrl.isNotEmpty
-                        ? imageUrl
-                        : 'https://example.com/placeholder-image.jpg',
+                    imageUrl.isNotEmpty ? imageUrl : 'https://example.com/placeholder-image.jpg',
                     fit: BoxFit.cover,
                     height: MediaQuery.of(context).size.height / 4 / 2,
                     width: MediaQuery.of(context).size.width / 3.2,
                     errorBuilder: (context, error, stackTrace) {
                       return Image.asset(
-                        'assets/hairfixing_logo.png',
+                        'assets/hairfixing_logo.png', // Path to your PNG placeholder image
                         fit: BoxFit.cover,
                         height: MediaQuery.of(context).size.height / 4 / 2,
                         width: MediaQuery.of(context).size.width / 3.2,
@@ -302,40 +298,34 @@ class ViewConsulatationBranchTemplate extends StatelessWidget {
                     },
                   ),
                 ),
-              ),
-              SizedBox(
-                width: MediaQuery.of(context).size.width / 2.2,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      agent.name,
-                      style: const TextStyle(
-                        color: Color(0xFF0f75bc),
-                        fontSize: 14.0,
-                        fontWeight: FontWeight.w600,
+                Container(
+                  // height: MediaQuery.of(context).size.height / 4 / 2,
+
+                  width: MediaQuery.of(context).size.width / 2.2,
+                  padding: EdgeInsets.only(top: 7),
+                  // width: MediaQuery.of(context).size.width / 4,
+                  child: Column(
+                    //  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        agent.name,
+                        style: TextStyle(
+                          color: Color(0xFF0f75bc),
+                          fontSize: 14.0,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
-                    ),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    Text(
-                      agent.address,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                          color: Colors.black,
-                          fontSize: 12.0,
-                          fontWeight: FontWeight.w600),
-                    ),
-                  ],
-                ),
-              )
-            ],
-          ),
-        ),
-      ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Text(agent.address, maxLines: 2, overflow: TextOverflow.ellipsis, style: CommonStyles.txSty_12b_f5),
+                    ],
+                  ),
+                )
+              ],
+            ),
+          )),
     );
   }
 }

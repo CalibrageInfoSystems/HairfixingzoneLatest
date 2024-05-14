@@ -1872,7 +1872,7 @@ class _OpCardState extends State<OpCard> {
               Center(
                 // Center the text
                 child: Text(
-                  'Are You Sure You Want To Cancel Your  ${appointments.slotDuration} Slot At The${appointments.branch} Hair Fixing Zone ?',
+                  'Are You Sure You Want to Cancel Your  ${appointments.slotDuration} Slot At The${appointments.branch} Hair Fixing Zone ?',
                   style: CommonUtils.txSty_18b_fb,
                   textAlign:
                       TextAlign.center, // Optionally, align the text center
