@@ -42,7 +42,7 @@ void main() async {
   // await notificationService.init();
   // await notificationService.requestIOSPermissions();
   // LocalNotificationService.initialize();
-  WidgetsFlutterBinding.ensureInitialized();
+  // WidgetsFlutterBinding.ensureInitialized();
   NotificationService notificationService = NotificationService();
   await notificationService.initNotification();
   tz.initializeTimeZones();

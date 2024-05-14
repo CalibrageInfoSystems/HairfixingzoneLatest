@@ -18,7 +18,7 @@ class LocalNotificationService {
       BuildContext context, GlobalKey<NavigatorState> navigatorKey, int user_Id, String formatted_Date) {
     final InitializationSettings initializationSettings =
     InitializationSettings(
-      android: AndroidInitializationSettings("@drawable/hair_fixing_2"),
+      android: AndroidInitializationSettings("@drawable/applogo"),
     );
     _notificationsPlugin.initialize(initializationSettings,
         onSelectNotification: (String? payload) {

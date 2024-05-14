@@ -13,26 +13,43 @@ class NotificationService {
     // Initialization settings for Android
 
     final AndroidInitializationSettings initializationSettingsAndroid =
-    const AndroidInitializationSettings('flutter_logo');
-    var initializationSettings = InitializationSettings(
-        android: initializationSettingsAndroid);
-    //
-    // // Initialization settings for iOS
-    // var initializationSettingsIOS = DarwinInitializationSettings(
-    //     requestAlertPermission: true,
-    //     requestBadgePermission: true,
-    //     requestSoundPermission: true,
-    //     onDidReceiveLocalNotification:
-    //         (int id, String? title, String? body, String? payload) async {});
-
-    // Combine Android and iOS initialization settings
+    const AndroidInitializationSettings('applogo');
     // var initializationSettings = InitializationSettings(
-    //     android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
+    //     android: initializationSettingsAndroid);
+    //
+    // Initialization settings for iOS
+    var initializationSettingsIOS = IOSInitializationSettings (
+        requestAlertPermission: true,
+        requestBadgePermission: true,
+        requestSoundPermission: true,
+        onDidReceiveLocalNotification:
+            (int id, String? title, String? body, String? payload) async {});
 
-    // Initialize notifications plugin
-    // await notificationsPlugin.initialize(initializationSettings,
-    //     onDidReceiveNotificationResponse:
-    //         (NotificationResponse notificationResponse) async {});
+  //  Combine Android and iOS initialization settings
+    var initializationSettings = InitializationSettings(
+        android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
+
+   //Initialize notifications plugin
+   //  await notificationsPlugin.initialize(initializationSettings,
+   //      onDidReceiveNotificationResponse:
+   //          (NotificationResponse notificationResponse) async {});
+
+
+    await notificationsPlugin.initialize(initializationSettings,
+        onSelectNotification: (String? payload) {
+          if (payload != null) {
+            // Handle the tap action here.
+            print("Notification tapped with payload: $payload");
+
+            // Example: Navigate to a specific screen based on the payload.
+            // navigatorKey.currentState?.push(MaterialPageRoute(
+            //   builder: (context) => notifications_screen(
+            //     userId: user_Id,
+            //     formattedDate: formatted_Date,
+            //   ),
+            // ));
+          }
+        });
   }
 
   // Notification details

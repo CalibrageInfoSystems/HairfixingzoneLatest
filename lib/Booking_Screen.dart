@@ -111,7 +111,7 @@ class _BookingScreenState extends State<Bookingscreen> {
   TextEditingController _emailController3 = TextEditingController();
   TextEditingController _purposeController4 = TextEditingController();
   bool isBackButtonActivated = false;
-
+  DateTime? slotSelectedDateTime;
 //  TextEditingController textController4 = TextEditingController(text: 'Initial value 4');
   List<Slot> slots = [];
 
@@ -601,6 +601,23 @@ class _BookingScreenState extends State<Bookingscreen> {
                                                     print('===12===$timeSlotParts[1]');
                                                     _selectedTimeSlot24 = DateFormat('HH:mm').format(DateFormat('h:mm a').parse(_selectedTimeSlot));
                                                     print('_selectedTimeSlot24 $_selectedTimeSlot24');
+                                                    String formattedDate = DateFormat("yyyy-MM-dd").format(_selectedDate);
+                                                    String datePart = formattedDate.substring(0, 10);
+
+// Concatenate datePart and time
+                                                    String selectedDateTimeString = '$datePart $_selectedTimeSlot24';
+
+// Parse the concatenated string into a DateTime object
+                                                    DateTime slotSelected_DateTime = DateFormat('yyyy-MM-dd HH:mm').parse(selectedDateTimeString);
+                                                    print('SlotselectedDateTime: $slotSelected_DateTime');
+// Assuming slotSelectedDateTime is your DateTime object
+                                                    slotSelectedDateTime   = slotSelected_DateTime!.subtract(Duration(hours: 1));
+                                                    print('-1 hour Modified DateTime: $slotSelectedDateTime');
+
+                                                    // Parse the concatenated string into a DateTime object
+                                                  //  DateTime SlotselectedDateTime = DateFormat('yyyy-MM-dd hh:mm a').parse(selectedDateTimeString);
+                                                    print('SlotselectedDateTime==613==$selectedDateTimeString');
+                                                    print('==234==$_selectedTimeSlot');
                                                     print('==234==$_selectedTimeSlot');
                                                     print('===567==$_selectedSlot');
                                                     print('==900==$AvailableSlots');
@@ -882,7 +899,7 @@ class _BookingScreenState extends State<Bookingscreen> {
       String slotdate = DateFormat('dd MMM yyyy').format(_selectedDate!);
       print('slotdate $slotdate');
       print('date _selectedDate ====$_selectedDate');
-      // print('screenFrom1213: ${widget.screenFrom}');
+     print('slotSelectedDateTime:897 ${slotSelectedDateTime}');
       // print('appointmentId1214: ${widget.appointmentId}');
       // CommonStyles.progressBar(context);
       final request = {
@@ -935,11 +952,12 @@ class _BookingScreenState extends State<Bookingscreen> {
           if (isSuccess == true) {
             if (_selectedDate != null) {
               final int notificationId = UniqueKey().hashCode;
-              debugPrint('Notification Scheduled for $_selectedDate with ID: $notificationId');
+              debugPrint('Notification Scheduled for $slotSelectedDateTime with ID: $notificationId');
               await NotificationService().scheduleNotification(
-                title: 'Scheduled Notification',
-                body: 'Reminder for your scheduled Appointment at $_selectedTimeSlot24!.format(context)} At ${widget.branchname} branch  near  ${widget.branchaddress}',
-                scheduledNotificationDateTime: _selectedDate!,
+                title: 'Reminder Notification',
+                body:'Reminder For Today: Your Scheduled Appointment For The ${_selectedTimeSlot24!} Slot At The  ${widget.branchname} Branch, Located At ${widget.branchaddress}.',
+              //  body: 'Reminder for your scheduled Appointment at ${_selectedTimeSlot24!} At ${widget.branchname} branch  near ${widget.branchaddress}',
+                scheduledNotificationDateTime: slotSelectedDateTime!,
                 id: notificationId,
               );
 
@@ -1023,142 +1041,7 @@ class _BookingScreenState extends State<Bookingscreen> {
     return !isPastDate && !isHolidayDate && !isPreviousYear && date.year >= DateTime.now().year;
   }
 
-  //Original Code commented by Arun on Jan25th
-  // Future<void> _openDatePicker(bool isTodayHoliday) async {
-  //   setState(() {
-  //     _isTodayHoliday = isTodayHoliday;
-  //   });
-  //
-  //   DateTime initialDate = _selectedDate;
-  //
-  //   // Adjust the initial date if it doesn't satisfy the selectableDayPredicate
-  //   if (_isTodayHoliday && initialDate.isBefore(DateTime.now())) {
-  //     initialDate = DateTime.now().add(const Duration(days: 1));
-  //   }
-  //
-  //   final DateTime? pickedDate = await showDatePicker(
-  //     context: context,
-  //     initialEntryMode: DatePickerEntryMode.calendarOnly,
-  //     initialDate: initialDate,
-  //     firstDate: DateTime.now().subtract(Duration(days: 0)),
-  //     lastDate: DateTime(2125),
-  //     // Assuming you have a variable '_isTodayHoliday' indicating whether today is a holiday or not.
-  //
-  //     selectableDayPredicate: (DateTime date) {
-  //       final isPastDate = date.isBefore(DateTime.now().subtract(Duration(days: 1)));
-  //    //   final isSunday = date.weekday == DateTime.tuesday; // Change to DateTime.sunday
-  //       final isHoliday = holidayList.any((holiday) =>
-  //       date.year == holiday.holidayDate.year &&
-  //           date.month == holiday.holidayDate.month &&
-  //           date.day == holiday.holidayDate.day);
-  //
-  //       // If today is a holiday and the selected date is a past date, allow selecting the holiday date
-  //       if (_isTodayHoliday && isHoliday && isPastDate) {
-  //         return true;
-  //       }
-  //
-  //       final isPreviousYear = date.year < DateTime.now().year;
-  //
-  //       // Return false if any of the conditions are met
-  //       return !isPastDate  && !isHoliday && !isPreviousYear && date.year >= DateTime.now().year;
-  //     },
-  //
-  //   );
-  //
-  //   if (pickedDate != null) {
-  //     setState(() {
-  //       _selectedDate = pickedDate;
-  //       onDateSelected(pickedDate);
-  //     });
-  //
-  //   }
-  // }
 
-  void disableButton() {
-    setState(() {
-      isButtonEnabled = false;
-    });
-  }
-
-  Future<void> validatedata() async {
-    int disabledlength = disabledSlots.length;
-    print('====887$disabledlength');
-    int visablelength = visableSlots.length;
-    print('==889$visablelength');
-    bool isValid = true;
-    bool hasValidationFailed = false;
-
-    if (selectedTypeCdId == -1) {
-      selectedName = "Select";
-    }
-
-    if (_dateController.text.isEmpty) {
-      showCustomToastMessageLong('Please Select Date', context, 1, 4);
-      isValid = false;
-      hasValidationFailed = true;
-    }
-    if (!isSlotsAvailable) {
-      showCustomToastMessageLong('No Slots Are Available Today', context, 1, 4);
-      isValid = false;
-      hasValidationFailed = true;
-    } else if (!slotselection) {
-      showCustomToastMessageLong('Please Select slot', context, 1, 4);
-      isValid = false;
-      hasValidationFailed = true;
-    }
-    if (visablelength == disabledlength) {
-      showCustomToastMessageLong('No Slots Available Today ', context, 1, 4);
-      isValid = false;
-      hasValidationFailed = true;
-    }
-
-    if (_selectedSlot == null) {
-      showCustomToastMessageLong('Please Select Time Slot', context, 1, 4);
-      isValid = false;
-      hasValidationFailed = true;
-    }
-    if (isValid && _fullnameController1.text.isEmpty) {
-      showCustomToastMessageLong('Please Enter Your Full Name', context, 1, 4);
-      isValid = false;
-      hasValidationFailed = true;
-    }
-    if (isValid && _phonenumberController2.text.isEmpty) {
-      showCustomToastMessageLong('Please Enter Your Phone Number', context, 1, 4);
-      isValid = false;
-      hasValidationFailed = true;
-    } else {
-      String value = _phonenumberController2.text;
-      int? number = int.tryParse(value);
-      if (isValid && number != null && number.toString().length < 10) {
-        showCustomToastMessageLong('Please Enter Your Valid Mobile Number', context, 1, 2);
-        isValid = false;
-        hasValidationFailed = true;
-      }
-    }
-
-    if (isValid && _emailController3.text.isEmpty) {
-      showCustomToastMessageLong('Please Enter Your Email', context, 1, 4);
-      isValid = false;
-      hasValidationFailed = true;
-    }
-    if (isValid && !validateEmailFormat(_emailController3.text)) {
-      showCustomToastMessageLong('Please Enter Valid Email', context, 1, 4);
-      isValid = false;
-      hasValidationFailed = true;
-    }
-
-    if (isValid && !isGenderSelected) {
-      showCustomToastMessageLong('Please Select Gender', context, 1, 4);
-      isValid = false;
-      hasValidationFailed = true;
-    }
-
-    if (isValid && selectedTypeCdId == -1) {
-      showCustomToastMessageLong('Please Select Purpose of Visit', context, 1, 4);
-      isValid = false;
-      hasValidationFailed = true;
-    }
-  }
 
   List<Slot> getVisibleSlots(List<Slot> slots, bool isTodayHoliday) {
     print('isTodayHoliday====$isTodayHoliday');
