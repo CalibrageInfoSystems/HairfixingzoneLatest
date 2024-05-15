@@ -40,7 +40,7 @@ class _ViewConsultationState extends State<ViewConsultation> {
   }
 
   Future<List<BranchModel>> getBranches(int userId) async {
-    String apiUrl = '$baseUrl$GetBranchByUserId$userId';
+    String apiUrl = '$baseUrl$GetBranchByUserId$userId/null';
 
     try {
       final response = await http.get(Uri.parse(apiUrl));

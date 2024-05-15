@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hairfixingzone/CustomerLoginScreen.dart';
 import 'package:hairfixingzone/MyAppointment_Model.dart';
+import 'package:hairfixingzone/services/notifi_service.dart';
 
 import 'package:hairfixingzone/slot_success_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -98,7 +99,9 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
   TextEditingController _emailController3 = TextEditingController();
   TextEditingController _purposeController4 = TextEditingController();
   bool isBackButtonActivated = false;
-
+  DateTime? slotSelectedDateTime;
+  DateTime? slotSelected_DateTime;
+  DateTime? newDateTime;
 //  TextEditingController textController4 = TextEditingController(text: 'Initial value 4');
   List<Slot> slots = [];
 
@@ -581,20 +584,51 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
                                           onPressed: slot.availableSlots <= 0
                                               ? null
                                               : () {
-                                                  setState(() {
-                                                    _selectedTimeSlot = slot.SlotTimeSpan;
-                                                    _selectedSlot = slot.slot;
-                                                    AvailableSlots = slot.availableSlots.toString();
-                                                    timeSlotParts = _selectedSlot.split(' - ');
-                                                    slotselection = true;
-                                                    print('===123==$timeSlotParts[0]');
-                                                    print('===12===$timeSlotParts[1]');
-                                                    _selectedTimeSlot24 = DateFormat('HH:mm').format(DateFormat('h:mm a').parse(_selectedTimeSlot));
-                                                    print('_selectedTimeSlot24 $_selectedTimeSlot24');
-                                                    print('==234==$_selectedTimeSlot');
-                                                    print('===567==$_selectedSlot');
-                                                    print('==900==$AvailableSlots');
-                                                  });
+                                            setState(() {
+                                              _selectedTimeSlot = slot.SlotTimeSpan;
+                                              _selectedSlot = slot.slot;
+                                              AvailableSlots = slot.availableSlots.toString();
+                                              timeSlotParts = _selectedSlot.split(' - ');
+                                              slotselection = true;
+                                              print('===123==$timeSlotParts[0]');
+                                              print('===12===$timeSlotParts[1]');
+                                              _selectedTimeSlot24 = DateFormat('HH:mm').format(DateFormat('h:mm a').parse(_selectedTimeSlot));
+                                              print('_selectedTimeSlot24 $_selectedTimeSlot24');
+                                              String formattedDate = DateFormat("yyyy-MM-dd").format(_selectedDate);
+                                              String datePart = formattedDate.substring(0, 10);
+// Concatenate datePart and time
+                                              String selectedDateTimeString = '$datePart $_selectedTimeSlot24';
+
+// Parse the concatenated string into a DateTime object
+                                              slotSelected_DateTime = DateFormat('yyyy-MM-dd HH:mm').parse(selectedDateTimeString);
+                                              print('SlotselectedDateTime: $slotSelected_DateTime');
+// Assuming slotSelectedDateTime is your DateTime object
+                                              slotSelectedDateTime = slotSelected_DateTime!.subtract(Duration(hours: 1));
+                                              print('-1 hour Modified DateTime: $slotSelectedDateTime');
+                                              newDateTime = slotSelected_DateTime!.add(Duration(days: 20));
+                                              print('New DateTime after adding 20 days: $newDateTime');
+                                              // Parse the concatenated string into a DateTime object
+                                              //  DateTime SlotselectedDateTime = DateFormat('yyyy-MM-dd hh:mm a').parse(selectedDateTimeString);
+                                              print('SlotselectedDateTime==613==$selectedDateTimeString');
+                                              print('==234==$_selectedTimeSlot');
+                                              print('==234==$_selectedTimeSlot');
+                                              print('===567==$_selectedSlot');
+                                              print('==900==$AvailableSlots');
+                                            });
+                                                  // setState(() {
+                                                  //   _selectedTimeSlot = slot.SlotTimeSpan;
+                                                  //   _selectedSlot = slot.slot;
+                                                  //   AvailableSlots = slot.availableSlots.toString();
+                                                  //   timeSlotParts = _selectedSlot.split(' - ');
+                                                  //   slotselection = true;
+                                                  //   print('===123==$timeSlotParts[0]');
+                                                  //   print('===12===$timeSlotParts[1]');
+                                                  //   _selectedTimeSlot24 = DateFormat('HH:mm').format(DateFormat('h:mm a').parse(_selectedTimeSlot));
+                                                  //   print('_selectedTimeSlot24 $_selectedTimeSlot24');
+                                                  //   print('==234==$_selectedTimeSlot');
+                                                  //   print('===567==$_selectedSlot');
+                                                  //   print('==900==$AvailableSlots');
+                                                  // });
                                                 },
                                           style: ElevatedButton.styleFrom(
                                             padding: EdgeInsets.symmetric(vertical: 1.0, horizontal: 1.0),
@@ -868,6 +902,38 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
           // Extract the necessary information
           bool isSuccess = data['isSuccess'];
           if (isSuccess == true) {
+            DateTime testdate = DateTime.now();
+            print(' testdate ====$testdate');
+            if (_selectedDate != null) {
+              final int notificationId1 = UniqueKey().hashCode;
+              // debugPrint('Notification Scheduled for $testdate with ID: $notificationId1');
+              debugPrint('Notification Scheduled for $slotSelectedDateTime with ID: $notificationId1');
+              await NotificationService().scheduleNotification(
+                title: 'Reminder Notification',
+                body: 'Hey $userFullName, Today Your Appointment is Scheduled for The ${_selectedTimeSlot24!} Slot At The  ${widget.data.branch} Branch, Located At ${widget.data.address}.',
+                // scheduledNotificationDateTime: testdate!,
+               scheduledNotificationDateTime: slotSelectedDateTime!,
+                id: notificationId1,
+              );
+
+              if (selectedValue == 10) {
+                final int notificationId2 = UniqueKey().hashCode;
+                debugPrint('Notification Scheduled for $newDateTime with ID: $notificationId2');
+                //  debugPrint('Notification Scheduled for $testdate with ID: $notificationId2');
+                await NotificationService().scheduleNotification(
+                  title: 'Reminder Notification',
+                  body: 'Hey $userFullName, It Has Been 20 Days Since Your New Patch Was Done. Please Revisit The Hairfixing Zone At The ${widget.data.branch}',
+                 // scheduledNotificationDateTime: testdate!,
+                 scheduledNotificationDateTime: newDateTime!,
+                  id: notificationId2,
+                );
+              }
+
+              // Your existing code...
+            } else {
+              print('Error: _selectedDate is null');
+              // Handle the case where _selectedDate is null
+            }
             progressDialog.dismiss();
             print('Request sent successfully');
             Navigator.of(context).pushReplacement(

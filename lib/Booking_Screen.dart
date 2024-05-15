@@ -114,7 +114,8 @@ class _BookingScreenState extends State<Bookingscreen> {
   TextEditingController _purposeController4 = TextEditingController();
   bool isBackButtonActivated = false;
   DateTime? slotSelectedDateTime;
-
+  DateTime? slotSelected_DateTime;
+  DateTime? newDateTime;
 //  TextEditingController textController4 = TextEditingController(text: 'Initial value 4');
   List<Slot> slots = [];
 
@@ -610,17 +611,17 @@ class _BookingScreenState extends State<Bookingscreen> {
                                                     print('_selectedTimeSlot24 $_selectedTimeSlot24');
                                                     String formattedDate = DateFormat("yyyy-MM-dd").format(_selectedDate);
                                                     String datePart = formattedDate.substring(0, 10);
-
 // Concatenate datePart and time
                                                     String selectedDateTimeString = '$datePart $_selectedTimeSlot24';
 
 // Parse the concatenated string into a DateTime object
-                                                    DateTime slotSelected_DateTime = DateFormat('yyyy-MM-dd HH:mm').parse(selectedDateTimeString);
+                                                     slotSelected_DateTime = DateFormat('yyyy-MM-dd HH:mm').parse(selectedDateTimeString);
                                                     print('SlotselectedDateTime: $slotSelected_DateTime');
 // Assuming slotSelectedDateTime is your DateTime object
                                                     slotSelectedDateTime = slotSelected_DateTime!.subtract(Duration(hours: 1));
                                                     print('-1 hour Modified DateTime: $slotSelectedDateTime');
-
+                                                     newDateTime = slotSelected_DateTime!.add(Duration(days: 20));
+                                                    print('New DateTime after adding 20 days: $newDateTime');
                                                     // Parse the concatenated string into a DateTime object
                                                     //  DateTime SlotselectedDateTime = DateFormat('yyyy-MM-dd hh:mm a').parse(selectedDateTimeString);
                                                     print('SlotselectedDateTime==613==$selectedDateTimeString');
@@ -953,18 +954,33 @@ class _BookingScreenState extends State<Bookingscreen> {
           // Extract the necessary information
           bool isSuccess = data['isSuccess'];
           progressDialog.dismiss();
+          DateTime testdate = DateTime.now();
+          print(' testdate ====$testdate');
           if (isSuccess == true) {
             if (_selectedDate != null) {
-              final int notificationId = UniqueKey().hashCode;
-              debugPrint('Notification Scheduled for $slotSelectedDateTime with ID: $notificationId');
+              final int notificationId1 = UniqueKey().hashCode;
+             // debugPrint('Notification Scheduled for $testdate with ID: $notificationId1');
+              debugPrint('Notification Scheduled for $slotSelectedDateTime with ID: $notificationId1');
               await NotificationService().scheduleNotification(
                 title: 'Reminder Notification',
-                body:
-                    'Reminder For Today: Your Scheduled Appointment For The ${_selectedTimeSlot24!} Slot At The  ${widget.branchname} Branch, Located At ${widget.branchaddress}.',
-                //  body: 'Reminder for your scheduled Appointment at ${_selectedTimeSlot24!} At ${widget.branchname} branch  near ${widget.branchaddress}',
-                scheduledNotificationDateTime: slotSelectedDateTime!,
-                id: notificationId,
+                body: 'Hey $userFullName, Today Your Appointment is Scheduled for The ${_selectedTimeSlot24!} Slot At The  ${widget.branchname} Branch, Located At ${widget.branchaddress}.',
+      //   scheduledNotificationDateTime: testdate!,
+              scheduledNotificationDateTime: slotSelectedDateTime!,
+                id: notificationId1,
               );
+
+              if (selectedValue == 10) {
+                final int notificationId2 = UniqueKey().hashCode;
+                debugPrint('Notification Scheduled for $newDateTime with ID: $notificationId2');
+              //  debugPrint('Notification Scheduled for $testdate with ID: $notificationId2');
+                await NotificationService().scheduleNotification(
+                  title: 'Reminder Notification',
+                  body: 'Hey $userFullName, It Has Been 20 Days Since Your New Patch Was Done. Please Revisit The Hairfixing Zone At The ${widget.branchname}',
+      // scheduledNotificationDateTime: testdate!,
+            scheduledNotificationDateTime: newDateTime!,
+                  id: notificationId2,
+                );
+              }
 
               // Your existing code...
             } else {
@@ -973,32 +989,86 @@ class _BookingScreenState extends State<Bookingscreen> {
             }
             // LoadingProgress.stop(context,rootNavigator);
             print('Request sent successfully');
-            // showCustomToastMessageLong('Slot booked successfully', context, 0, 2);
             Navigator.of(context).pushReplacement(
               MaterialPageRoute(
-                  builder: (context) => SlotSuccessScreen(
-                        slotdate: slotdate,
-                        slottime: _selectedTimeSlot,
-                        Purpose: '$selectedName',
-                        slotbranchname: widget.branchname,
-                        slotbrnach_address: widget.branchaddress,
-                        phonenumber: widget.phonenumber,
-                        branchImage: widget.branchImage,
-                        // phonenumber: null,
-                      )),
+                builder: (context) => SlotSuccessScreen(
+                  slotdate: slotdate,
+                  slottime: _selectedTimeSlot,
+                  Purpose: '$selectedName',
+                  slotbranchname: widget.branchname,
+                  slotbrnach_address: widget.branchaddress,
+                  phonenumber: widget.phonenumber,
+                  branchImage: widget.branchImage,
+                  // phonenumber: null,
+                ),
+              ),
             );
-            // Success case
-            // Handle success scenario here
           } else {
             progressDialog.dismiss();
-            // LoadingProgress.stop(context);
-            // Failure case
-            // Handle failure scenario here
-            //   ProgressManager.stopProgress();
             print('statusmesssage${data['statusMessage']}');
             CommonUtils.showCustomToastMessageLong('${data['statusMessage']}', context, 1, 5);
           }
-          // LoadingProgress.stop(context);
+
+          // if (isSuccess == true) {
+          //   if (_selectedDate != null) {
+          //     final int notificationId1 = UniqueKey().hashCode;
+          //   debugPrint('Notification Scheduled for $testdate with ID: $notificationId1');
+          //   // debugPrint('Notification Scheduled for $slotSelectedDateTime with ID: $notificationId');
+          //     await NotificationService().scheduleNotification(
+          //       title: 'Reminder Notification',
+          //       body:'Reminder For Today: Your Scheduled Appointment For The ${_selectedTimeSlot24!} Slot At The  ${widget.branchname} Branch, Located At ${widget.branchaddress}.',
+          //       scheduledNotificationDateTime: testdate!,
+          //      // scheduledNotificationDateTime: slotSelectedDateTime!,
+          //       id: notificationId1,
+          //     );
+          //     if(selectedValue == 10)
+          //       final int notificationId2 = UniqueKey().hashCode;
+          //   //  debugPrint('Notification Scheduled for $newDateTime with ID: $notificationId');
+          //     debugPrint('Notification Scheduled for $testdate with ID: $notificationId2');
+          //     await NotificationService().scheduleNotification(
+          //       title: 'Reminder Notification',
+          //       body:'It has been 20 days since your new patch was done. Please Revisit the Hairfixing Zone at the ${widget.branchname} Branch.',
+          //       //  body: 'Reminder for your scheduled Appointment at ${_selectedTimeSlot24!} At ${widget.branchname} branch  near ${widget.branchaddress}',
+          //    //   scheduledNotificationDateTime: newDateTime!,
+          //       scheduledNotificationDateTime: testdate!,
+          //       id: notificationId2,
+          //     );
+          //
+          //
+          //     // Your existing code...
+          //   }
+          //   else {
+          //     print('Error: _selectedDate is null');
+          //     // Handle the case where _selectedDate is null
+          //   }
+          //   // LoadingProgress.stop(context,rootNavigator);
+          //   print('Request sent successfully');
+          //   // showCustomToastMessageLong('Slot booked successfully', context, 0, 2);
+          //   Navigator.of(context).pushReplacement(
+          //     MaterialPageRoute(
+          //         builder: (context) => SlotSuccessScreen(
+          //               slotdate: slotdate,
+          //               slottime: _selectedTimeSlot,
+          //               Purpose: '$selectedName',
+          //               slotbranchname: widget.branchname,
+          //               slotbrnach_address: widget.branchaddress,
+          //               phonenumber: widget.phonenumber,
+          //               branchImage: widget.branchImage,
+          //               // phonenumber: null,
+          //             )),
+          //   );
+          //   // Success case
+          //   // Handle success scenario here
+          // } else {
+          //   progressDialog.dismiss();
+          //   // LoadingProgress.stop(context);
+          //   // Failure case
+          //   // Handle failure scenario here
+          //   //   ProgressManager.stopProgress();
+          //   print('statusmesssage${data['statusMessage']}');
+          //   CommonUtils.showCustomToastMessageLong('${data['statusMessage']}', context, 1, 5);
+          // }
+          // // LoadingProgress.stop(context);
           //  ProgressManager.stopProgress();
           setState(() {
             isButtonEnabled = true;
@@ -1037,6 +1107,7 @@ class _BookingScreenState extends State<Bookingscreen> {
     final isHolidayDate = isHoliday(date);
     final isPreviousYear = date.year < DateTime.now().year;
 
+    // If today is a holiday and the selected date is a past date, allow selecting the next non-holiday date
     // If today is a holiday and the selected date is a past date, allow selecting the next non-holiday date
     if (_isTodayHoliday && isHolidayDate && isPastDate) {
       return true;

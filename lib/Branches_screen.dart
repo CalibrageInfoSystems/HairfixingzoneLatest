@@ -166,7 +166,7 @@ class _BranchesscreenState extends State<Branches_screen> {
     //   _isLoading = true; // Set isLoading to true before making the API call
     // });
 
-    String apiUrl = '$baseUrl$GetBranchByUserId$userId';
+    String apiUrl = '$baseUrl$GetBranchByUserId$userId/null';
     // const maxRetries = 1; // Set maximum number of retries
     // int retries = 0;
 

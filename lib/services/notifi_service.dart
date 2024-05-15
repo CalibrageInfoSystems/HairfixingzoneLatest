@@ -53,12 +53,24 @@ class NotificationService {
   }
 
   // Notification details
-  notificationDetails() {
-    return const NotificationDetails(
-        android: AndroidNotificationDetails('channelId', 'channelName',
-            importance: Importance.max),
-        // iOS: DarwinNotificationDetails()
+  // notificationDetails() {
+  //   return const NotificationDetails(
+  //       android: AndroidNotificationDetails('channelId', 'channelName',
+  //           importance: Importance.max),
+  //       // iOS: DarwinNotificationDetails()
+  //   );
+  // }
+  notificationDetails({String? bigText}) {
+    var androidDetails = AndroidNotificationDetails(
+      'channelId',
+      'channelName',
+      importance: Importance.max,
+      // Set the bigText property if provided
+      styleInformation: bigText != null ? BigTextStyleInformation(bigText) : null,
     );
+
+    var platformChannelSpecifics = NotificationDetails(android: androidDetails);
+    return platformChannelSpecifics;
   }
 
   // Show a single notification
@@ -77,8 +89,37 @@ class NotificationService {
 
 
   // Schedule a notification
+  // Future<void> scheduleNotification({
+  //   required int id, // Pass the ID as a parameter
+  //   String? title,
+  //   String? body,
+  //   String? payload,
+  //   required DateTime scheduledNotificationDateTime,
+  // }) async {
+  //   DateTime now = DateTime.now();
+  //   if (scheduledNotificationDateTime.isBefore(now)) {
+  //     // Adjust the scheduledNotificationDateTime to be in the future, e.g., 1 minute from now
+  //     scheduledNotificationDateTime = now.add(const Duration(minutes: 1));
+  //   }
+  //
+  //
+  //   await notificationsPlugin.zonedSchedule(
+  //     id,
+  //     title,
+  //     body, // Use the complete body text
+  //     tz.TZDateTime.from(
+  //       scheduledNotificationDateTime,
+  //       tz.local,
+  //     ),
+  //     await notificationDetails(),
+  //     androidAllowWhileIdle: true,
+  //     uiLocalNotificationDateInterpretation:
+  //     UILocalNotificationDateInterpretation.absoluteTime,
+  //   );
+  // }
+
   Future<void> scheduleNotification({
-    required int id, // Pass the ID as a parameter
+    required int id,
     String? title,
     String? body,
     String? payload,
@@ -86,29 +127,27 @@ class NotificationService {
   }) async {
     DateTime now = DateTime.now();
     if (scheduledNotificationDateTime.isBefore(now)) {
-      // Adjust the scheduledNotificationDateTime to be in the future, e.g., 1 minute from now
       scheduledNotificationDateTime = now.add(const Duration(minutes: 1));
     }
 
-    // Modify the body to display complete text where changes can be easily made
-  //  String completeBody = 'Reminder For Today: Your Scheduled Appointment For the ${_selectedTimeSlot24!} Slot At the ${widget.branchname} Branch, Located At ${widget.branchaddress}.';
+    // Use the complete body text as bigText
+    String bigText = body ?? '';
 
     await notificationsPlugin.zonedSchedule(
       id,
       title,
-      body, // Use the complete body text
+      body,
       tz.TZDateTime.from(
         scheduledNotificationDateTime,
         tz.local,
       ),
-      await notificationDetails(),
+      await notificationDetails(
+        bigText: bigText, // Pass the complete body text as bigText
+      ),
       androidAllowWhileIdle: true,
-      uiLocalNotificationDateInterpretation:
-      UILocalNotificationDateInterpretation.absoluteTime,
+      uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
     );
   }
-
-
 
   // Retrieve all scheduled notifications
   Future<List<PendingNotificationRequest>> getScheduledNotifications() async {

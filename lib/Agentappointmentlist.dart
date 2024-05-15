@@ -912,7 +912,7 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
   }
 
   Future<List<BranchModel>> fetchbranches(userId) async {
-    final response = await http.get(Uri.parse('$baseUrl$GetBranchByUserId$userId'));
+    final response = await http.get(Uri.parse('$baseUrl$GetBranchByUserId$userId/null'));
     if (response.statusCode == 200) {
       final List<dynamic> responseData = json.decode(response.body)['listResult'];
       List<BranchModel> result = responseData.map((json) => BranchModel.fromJson(json)).toList();

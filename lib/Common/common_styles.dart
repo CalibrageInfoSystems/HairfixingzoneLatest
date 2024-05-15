@@ -92,6 +92,8 @@ class CommonStyles {
     fontFamily: "Calibri",
     fontWeight: FontWeight.bold,
     color: whiteColor,
+    letterSpacing :1
+
   );
   static const TextStyle txSty_16p_f5 = TextStyle(
     fontSize: 16,
