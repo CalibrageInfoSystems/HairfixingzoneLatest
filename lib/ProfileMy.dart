@@ -210,20 +210,20 @@ class Profile_screenState extends State<ProfileMy> {
             'My Profile',
             style: TextStyle(color: Color(0xFF0f75bc), fontSize: 16.0),
           ),
-          actions: [
-            IconButton(
-              icon: SvgPicture.asset(
-                'assets/sign-out-alt.svg', // Path to your SVG asset
-                color: Color(0xFF662e91),
-                width: 24, // Adjust width as needed
-                height: 24, // Adjust height as needed
-              ),
-              onPressed: () {
-                logOutDialog(context);
-                // Add logout functionality here
-              },
-            ),
-          ],
+          // actions: [
+          //   IconButton(
+          //     icon: SvgPicture.asset(
+          //       'assets/sign-out-alt.svg', // Path to your SVG asset
+          //       color: Color(0xFF662e91),
+          //       width: 24, // Adjust width as needed
+          //       height: 24, // Adjust height as needed
+          //     ),
+          //     onPressed: () {
+          //       logOutDialog(context);
+          //       // Add logout functionality here
+          //     },
+          //   ),
+          // ],
           // centerTitle: true,
           leading: IconButton(
             icon: Icon(

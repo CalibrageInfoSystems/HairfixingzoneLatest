@@ -227,22 +227,23 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
         elevation: 0, // No shadow
       ),
       body: SingleChildScrollView(
-        physics: const NeverScrollableScrollPhysics(),
+        physics: NeverScrollableScrollPhysics(),
         child: Column(
           mainAxisSize: MainAxisSize.max,
           children: [
             Container(
-              height: MediaQuery.of(context).size.height / 3.7,
+              height: MediaQuery.of(context).size.height / 5.7,
               decoration: const BoxDecoration(),
               child: Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     SizedBox(
-                      width: MediaQuery.of(context).size.height / 3.5,
+                      // height: MediaQuery.of(context).size.height / 5.7,
+                      width: MediaQuery.of(context).size.height / 3.9,
                       child: Image.asset('assets/hfz_logo.png'),
                     ),
-                    const Text(
+                    Text(
                       'Customer Registration',
                       style: TextStyle(
                         fontSize: 24,
@@ -272,7 +273,8 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     SizedBox(
-                        height: MediaQuery.of(context).size.height - MediaQuery.of(context).size.height / 1.9,
+                        height: MediaQuery.of(context).size.height - MediaQuery.of(context).size.height / 2.5,
+                        //      height: MediaQuery.of(context).size.height,
                         child: SingleChildScrollView(
                             controller: _scrollController,
                             physics: const AlwaysScrollableScrollPhysics(),
