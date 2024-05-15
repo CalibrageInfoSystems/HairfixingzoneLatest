@@ -618,7 +618,7 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                             Radius.circular(10),
                           ),
                         ),
-                        hintText: 'Select Between Dates',
+                     hintText: 'Select Dates',
                         counterText: "",
                         hintStyle: const TextStyle(color: Colors.grey, fontWeight: FontWeight.w400),
                         prefixIcon: const Icon(Icons.calendar_today),
@@ -1479,14 +1479,14 @@ class _OpCardState extends State<OpCard> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text(
-            'Confirmation',
-            style: TextStyle(
-              fontSize: 16,
-              color: CommonUtils.blueColor,
-              fontFamily: 'Calibri',
-            ),
-          ),
+          // title: const Text(
+          //   'Confirmation',
+          //   style: TextStyle(
+          //     fontSize: 16,
+          //     color: CommonUtils.blueColor,
+          //     fontFamily: 'Calibri',
+          //   ),
+          // ),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -1500,7 +1500,7 @@ class _OpCardState extends State<OpCard> {
               Center(
                 // Center the text
                 child: Text(
-                  'Are You Sure You Want to Cancel   ${appointments.purposeOfVisit} Slot At The ${appointments.name} Hair Fixing Zone ?',
+                  'Are You Sure You Want to Cancel The appointment at ${appointments.name} Branch for ${appointments.purposeOfVisit}?',
                   style: CommonUtils.txSty_18b_fb,
                   textAlign: TextAlign.center, // Optionally, align the text center
                 ),

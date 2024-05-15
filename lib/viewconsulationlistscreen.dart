@@ -48,7 +48,7 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
     startDate = DateTime.now().subtract(const Duration(days: 14));
     endDate = DateTime.now();
     fromToDates.text =
-        '${startDate != null ? DateFormat("dd-MM-yyyy").format(startDate!) : '-'} / ${endDate != null ? DateFormat("dd-MM-yyyy").format(endDate!) : '-'}';
+        '${startDate != null ? DateFormat("dd/MM/yyyy").format(startDate!) : '-'} - ${endDate != null ? DateFormat("dd/MM/yyyy").format(endDate!) : '-'}';
 
     print('branchid ${widget.branchid} fromdate${widget.fromdate} todate ${widget.todate}');
     ConsultationData = getviewconsulationlist(DateFormat('yyyy-MM-dd').format(startDate!), DateFormat('yyyy-MM-dd').format(endDate!));
@@ -338,7 +338,7 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
                             endDate = e;
                             startDate = s;
                             fromToDates.text =
-                                '${startDate != null ? DateFormat("dd-MM-yyyy").format(startDate!) : '-'} / ${endDate != null ? DateFormat("dd-MM-yyyy").format(endDate!) : '-'}';
+                                '${startDate != null ? DateFormat("dd/MM/yyyy").format(startDate!) : '-'} / ${endDate != null ? DateFormat("dd/MM/yyyy").format(endDate!) : '-'}';
                             ConsultationData =
                                 getviewconsulationlist(DateFormat('yyyy-MM-dd').format(startDate!), DateFormat('yyyy-MM-dd').format(endDate!));
                           });

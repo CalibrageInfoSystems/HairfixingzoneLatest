@@ -1851,14 +1851,14 @@ class _OpCardState extends State<OpCard> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text(
-            'Confirmation',
-            style: TextStyle(
-              fontSize: 16,
-              color: CommonUtils.blueColor,
-              fontFamily: 'Calibri',
-            ),
-          ),
+          // title: const Text(
+          //   'Confirmation',
+          //   style: TextStyle(
+          //     fontSize: 16,
+          //     color: CommonUtils.blueColor,
+          //     fontFamily: 'Calibri',
+          //   ),
+          // ),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -1872,7 +1872,7 @@ class _OpCardState extends State<OpCard> {
               Center(
                 // Center the text
                 child: Text(
-                  'Are You Sure You Want to Cancel Your  ${appointments.slotDuration} Slot At The${appointments.branch} Hair Fixing Zone ?',
+                  'Are You Sure You Want to Cancel The appointment at ${appointments.branch} Branch for ${appointments.purposeOfVisit}?',
                   style: CommonUtils.txSty_18b_fb,
                   textAlign:
                       TextAlign.center, // Optionally, align the text center

@@ -7,7 +7,7 @@ class AgentAppointmentsProvider extends ChangeNotifier {
   int selectedCategoryIndex = 0;
   int? _selectedCategory;
 // varibles
-  String displayDate = 'Select between dates';
+  String displayDate = 'Select Dates';
   String? apiFromDate;
   String? apiToDate;
   int? apiBranchId;

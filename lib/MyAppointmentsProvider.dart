@@ -7,7 +7,7 @@ class MyAppointmentsProvider extends ChangeNotifier {
   List<MyAppointment_Model> get storeIntoProvider => proAppointments;
 
 // varibles
-  String displayDate = 'Select dates';
+  String displayDate = 'Select Dates';
   String? apiFromDate;
   String? apiToDate;
   int? apiBranchId;
