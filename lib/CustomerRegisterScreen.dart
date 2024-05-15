@@ -240,16 +240,16 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
                   children: [
                     SizedBox(
                       // height: MediaQuery.of(context).size.height / 5.7,
-                      width: MediaQuery.of(context).size.height / 3.9,
+                      width: MediaQuery.of(context).size.height / 4.2,
                       child: Image.asset('assets/hfz_logo.png'),
                     ),
                     Text(
                       'Customer Registration',
                       style: TextStyle(
-                        fontSize: 24,
+                        fontSize: 22,
                         fontFamily: "Calibri",
                         fontWeight: FontWeight.w700,
-                        letterSpacing: 0.8,
+                        // letterSpacing: 0.8,
                         color: Color(0xFF662d91),
                       ),
                     ),

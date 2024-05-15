@@ -618,7 +618,7 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                             Radius.circular(10),
                           ),
                         ),
-                     hintText: 'Select Dates',
+                        hintText: 'Select Dates',
                         counterText: "",
                         hintStyle: const TextStyle(color: Colors.grey, fontWeight: FontWeight.w400),
                         prefixIcon: const Icon(Icons.calendar_today),
@@ -1400,7 +1400,22 @@ class _OpCardState extends State<OpCard> {
         } else {
           // If status is not Closed, show the review
           return Flexible(
-            child: Text('" ${data.review} "' ?? '', overflow: TextOverflow.ellipsis, maxLines: 2, style: CommonStyles.txSty_16blu_f5),
+            child: RichText(
+              text: TextSpan(
+                text: 'Review :',
+                style: CommonStyles.txSty_16blu_f5,
+                children: <TextSpan>[
+                  TextSpan(
+                    text: '${data.review} ' ?? '',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                      fontFamily: "Calibri",
+                      color: Color(0xFF5f5f5f),
+                    ),
+                  ),
+                ],
+              ),
+            ),
           );
         }
       // case 19: // Reschuduled
