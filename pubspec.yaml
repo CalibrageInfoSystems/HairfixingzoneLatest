@@ -165,6 +165,7 @@ flutter:
     - assets/rejected.png
     - assets/check.png
     - assets/applogo.png
+    - assets/feedbackbanner.svg
 
 
 

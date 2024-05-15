@@ -1,19 +1,33 @@
+// Define a Model_branch class to represent a branch
 class Model_branch {
-  int? Id;
-  String? branchName;
-  String? address;
-  String? imageName;
-  String? PhoneNumber;
+  final int id;
+  final String branchName;
+  final String address;
+  final String mobileNumber;
+  final String imageName;
+  final double? latitude;
+  final double? longitude;
 
-  Model_branch({required this.Id, required this.branchName, required this.address, required this.imageName, required this.PhoneNumber});
+  Model_branch({
+    required this.id,
+    required this.branchName,
+    required this.address,
+    required this.mobileNumber,
+    required this.imageName,
+    this.latitude,
+    this.longitude,
+  });
 
+  // Factory method to create a Model_branch object from JSON
   factory Model_branch.fromJson(Map<String, dynamic> json) {
     return Model_branch(
-      Id: json['id'] ?? 0,
-      branchName: json['branchName'] ?? '',
-      address: json['address'] ?? '',
-      imageName: json['imageName'] ?? '',
-      PhoneNumber: json['mobileNumber'],
+      id: json['id'],
+      branchName: json['branchName'],
+      address: json['address'],
+      mobileNumber: json['mobileNumber'],
+      imageName: json['imageName'],
+      latitude: json['latitude'],
+      longitude: json['longitude'],
     );
   }
 }

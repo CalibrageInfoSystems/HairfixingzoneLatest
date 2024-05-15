@@ -761,25 +761,26 @@ class _HomeScreenState extends State<HomeScreen> {
               activeColor: Colors.blue,
               textAlign: TextAlign.center,
             ),
-            BottomNavyBarItem(
-              icon: SvgPicture.asset(
-                'assets/my_profile_icon.svg',
-                width: 24,
-                height: 24,
-                color: _currentIndex == 2 ? CommonUtils.primaryTextColor : Colors.grey, // Change color based on selection
-              ),
-              title: const Text('My Profile'),
-              activeColor: Colors.blue,
-              textAlign: TextAlign.center,
-            ),
+
             BottomNavyBarItem(
               icon: SvgPicture.asset(
                 'assets/bin-bottles.svg',
                 width: 24,
                 height: 24,
-                color: _currentIndex == 3 ? CommonUtils.primaryTextColor : Colors.grey, // Change color based on selection
+                color: _currentIndex == 2 ? CommonUtils.primaryTextColor : Colors.grey, // Change color based on selection
               ),
               title: const Text('Products'),
+              activeColor: Colors.blue,
+              textAlign: TextAlign.center,
+            ),
+            BottomNavyBarItem(
+              icon: SvgPicture.asset(
+                'assets/my_profile_icon.svg',
+                width: 24,
+                height: 24,
+                color: _currentIndex == 3 ? CommonUtils.primaryTextColor : Colors.grey, // Change color based on selection
+              ),
+              title: const Text('My Profile'),
               activeColor: Colors.blue,
               textAlign: TextAlign.center,
             ),
@@ -1397,10 +1398,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
       case 2:
         // Return the settings screen widget
-        return Profile();
-      case 3:
-        // Return the settings screen widget
         return const MyProducts();
+      case 3:
+      // Return the settings screen widget
+        return Profile();
 
       default:
         return const Dashboard_Screen();

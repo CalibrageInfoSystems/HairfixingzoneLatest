@@ -31,7 +31,7 @@ class Rescheduleslotscreen extends StatefulWidget {
   //   required this.data,
   //  // New field
   // });
-  Rescheduleslotscreen({required this.data});
+  const Rescheduleslotscreen({super.key, required this.data});
   @override
   _BookingScreenState createState() => _BookingScreenState();
 }
@@ -88,16 +88,16 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
   bool isGenderSelected = false;
   bool slotselection = false;
 
-  bool _isPhoneIconFocused = false;
+  final bool _isPhoneIconFocused = false;
   TextEditingController dateinput = TextEditingController();
   DateTime _selectedDate = DateTime.now();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  TextEditingController _dateController = TextEditingController();
-  TextEditingController _fullnameController1 = TextEditingController();
-  TextEditingController _phonenumberController2 = TextEditingController();
-  TextEditingController _emailController3 = TextEditingController();
-  TextEditingController _purposeController4 = TextEditingController();
+  final TextEditingController _dateController = TextEditingController();
+  final TextEditingController _fullnameController1 = TextEditingController();
+  final TextEditingController _phonenumberController2 = TextEditingController();
+  final TextEditingController _emailController3 = TextEditingController();
+  final TextEditingController _purposeController4 = TextEditingController();
   bool isBackButtonActivated = false;
   DateTime? slotSelectedDateTime;
   DateTime? slotSelected_DateTime;
@@ -139,7 +139,8 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
   String? _selectedTimeSlot24;
   int? genderttypeid;
 
-  TextEditingController _textEditingController = TextEditingController(text: "Hair fixing Appointment");
+  final TextEditingController _textEditingController =
+  TextEditingController(text: "Hair fixing Appointment");
   DateTime currentDate = DateTime.now();
   DateTime? eventDate;
 
@@ -176,7 +177,8 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
         } catch (e) {
           print('Error: $e');
         }
-        fetchTimeSlots(DateTime.parse(selecteddate), widget.data.branchId).then((value) {
+        fetchTimeSlots(DateTime.parse(selecteddate), widget.data.branchId)
+            .then((value) {
           setState(() {
             slots = value;
           });
@@ -186,7 +188,8 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
         //   fetchRadioButtonOptions();
         fetchData();
       } else {
-        CommonUtils.showCustomToastMessageLong('Not connected to the internet', context, 1, 4);
+        CommonUtils.showCustomToastMessageLong(
+            'Not connected to the internet', context, 1, 4);
         print('Not connected to the internet');
       }
     });
@@ -215,7 +218,12 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
-        body: jsonEncode(<String, dynamic>{'id': widget.data.branchId, 'isActive': true, "fromdate": null, "todate": null}),
+        body: jsonEncode(<String, dynamic>{
+          'id': widget.data.branchId,
+          'isActive': true,
+          "fromdate": null,
+          "todate": null
+        }),
       );
 
       if (response.statusCode == 200) {
@@ -254,8 +262,8 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
     CommonUtils.showCustomToastMessageLong("Logout Successful", context, 0, 3);
 
     Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(builder: (context) => CustomerLoginScreen()),
-      (route) => false,
+      MaterialPageRoute(builder: (context) => const CustomerLoginScreen()),
+          (route) => false,
     );
   }
 
@@ -295,19 +303,20 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
 
     // Adjust the initial date if it doesn't satisfy the selectableDayPredicate
     if (_isTodayHoliday && initialDate.isBefore(DateTime.now())) {
-      initialDate = getNextNonHoliday(DateTime.now()); // Use getNextNonHoliday to get the next available non-holiday day
+      initialDate = getNextNonHoliday(DateTime
+          .now()); // Use getNextNonHoliday to get the next available non-holiday day
     }
 
     // Ensure that the initialDate satisfies the selectableDayPredicate
-    while (initialDate != null && !selectableDayPredicate(initialDate)) {
-      initialDate = initialDate.add(Duration(days: 1));
+    while (!selectableDayPredicate(initialDate)) {
+      initialDate = initialDate.add(const Duration(days: 1));
     }
 
     final DateTime? pickedDate = await showDatePicker(
       context: context,
       initialEntryMode: DatePickerEntryMode.calendarOnly,
       initialDate: initialDate ?? DateTime.now(),
-      firstDate: DateTime.now().subtract(Duration(days: 0)),
+      firstDate: DateTime.now().subtract(const Duration(days: 0)),
       lastDate: DateTime(2125),
       selectableDayPredicate: selectableDayPredicate,
     );
@@ -324,8 +333,8 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
     setState(() {
       isTodayHoliday = false;
       _selectedDate = selectedDate;
-      _dateController.text = DateFormat('dd-MM-yyyy').format(_selectedDate!);
-      selecteddate = DateFormat('yyyy-MM-dd').format(_selectedDate!);
+      _dateController.text = DateFormat('dd-MM-yyyy').format(_selectedDate);
+      selecteddate = DateFormat('yyyy-MM-dd').format(_selectedDate);
       _selectedTimeSlot = '';
     });
 
@@ -349,7 +358,8 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
         print('Error fetching time slots: $error');
       });
     } else {
-      CommonUtils.showCustomToastMessageLong('Please Check Your Internet Connection', context, 1, 4);
+      CommonUtils.showCustomToastMessageLong(
+          'Please Check Your Internet Connection', context, 1, 4);
       print('Not connected to the internet');
     }
   }
@@ -377,7 +387,10 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
                 backgroundColor: const Color(0xFFf3e3ff),
                 title: const Text(
                   'Book Appointment',
-                  style: TextStyle(color: Color(0xFF0f75bc), fontSize: 16.0, fontWeight: FontWeight.w600),
+                  style: TextStyle(
+                      color: Color(0xFF0f75bc),
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.w600),
                 ),
                 // actions: [
                 //   IconButton(
@@ -395,7 +408,7 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
                 // ],
                 // centerTitle: true,
                 leading: IconButton(
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.arrow_back_ios,
                     color: CommonUtils.primaryTextColor,
                   ),
@@ -408,7 +421,7 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
               child: Form(
                 key: _formKey,
                 child: Container(
-                  padding: EdgeInsets.only(top: 10, left: 15, right: 15),
+                  padding: const EdgeInsets.only(top: 10, left: 15, right: 15),
                   child: Column(
                     children: [
                       Container(
@@ -424,31 +437,42 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
                           // borderRadius: BorderRadius.circular(30), //border corner radius
                           boxShadow: [
                             BoxShadow(
-                              color: Color(0xFF960efd).withOpacity(0.2), //color of shadow
+                              color: const Color(0xFF960efd)
+                                  .withOpacity(0.2), //color of shadow
                               spreadRadius: 2, //spread radius
                               blurRadius: 4, // blur radius
-                              offset: Offset(0, 2), // changes position of shadow
+                              offset: const Offset(
+                                  0, 2), // changes position of shadow
                             ),
                           ],
                         ),
                         child: Row(
                           children: [
                             Container(
-                              padding: EdgeInsets.all(10),
+                              padding: const EdgeInsets.all(10),
                               // width: MediaQuery.of(context).size.width / 4,
                               child: ClipRRect(
                                 //  borderRadius: BorderRadius.circular(10.0),
                                 child: Image.network(
-                                  widget.data.imagename.isNotEmpty ? widget.data.imagename : 'https://example.com/placeholder-image.jpg',
+                                  widget.data.imageName.isNotEmpty
+                                      ? widget.data.imageName
+                                      : 'https://example.com/placeholder-image.jpg',
                                   fit: BoxFit.cover,
-                                  height: MediaQuery.of(context).size.height / 4 / 2,
-                                  width: MediaQuery.of(context).size.width / 3.2,
+                                  height: MediaQuery.of(context).size.height /
+                                      4 /
+                                      2,
+                                  width:
+                                  MediaQuery.of(context).size.width / 3.2,
                                   errorBuilder: (context, error, stackTrace) {
                                     return Image.asset(
                                       'assets/hairfixing_logo.png', // Path to your PNG placeholder image
                                       fit: BoxFit.cover,
-                                      height: MediaQuery.of(context).size.height / 4 / 2,
-                                      width: MediaQuery.of(context).size.width / 3.2,
+                                      height:
+                                      MediaQuery.of(context).size.height /
+                                          4 /
+                                          2,
+                                      width: MediaQuery.of(context).size.width /
+                                          3.2,
                                     );
                                   },
                                 ),
@@ -462,26 +486,29 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
                             ),
                             Container(
                               width: MediaQuery.of(context).size.width / 2.2,
-                              padding: EdgeInsets.only(top: 15),
+                              padding: const EdgeInsets.only(top: 15),
                               // width: MediaQuery.of(context).size.width / 4,
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    '${widget.data.branch}',
-                                    style: TextStyle(
+                                    widget.data.branch,
+                                    style: const TextStyle(
                                       color: Color(0xFF0f75bc),
                                       fontSize: 16.0,
                                       fontWeight: FontWeight.w600,
                                     ),
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 15,
                                   ),
                                   Text(
-                                    '${widget.data.address}',
-                                    style: TextStyle(color: Color(0xFF0f75bc), fontSize: 12.0, fontWeight: FontWeight.w600),
+                                    widget.data.address ?? 'null',
+                                    style: const TextStyle(
+                                        color: Color(0xFF0f75bc),
+                                        fontSize: 12.0,
+                                        fontWeight: FontWeight.w600),
                                   ),
                                 ],
                               ),
@@ -489,10 +516,10 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
                           ],
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 25,
                       ),
-                      Row(
+                      const Row(
                         children: [
                           Text(
                             'Date ',
@@ -509,7 +536,7 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
                           ),
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 5,
                       ),
                       TextFormField(
@@ -521,185 +548,250 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
                         // focusNode: DateofBirthdFocus,
                         readOnly: true,
                         validator: (value) {
-                          if (value!.isEmpty || value.length < 1) {
+                          if (value!.isEmpty || value.isEmpty) {
                             return 'Choose Date to Check Slots';
                           }
+                          return null;
                         },
                         decoration: InputDecoration(
-                          contentPadding: const EdgeInsets.only(top: 15, bottom: 10, left: 15, right: 15),
+                          contentPadding: const EdgeInsets.only(
+                              top: 15, bottom: 10, left: 15, right: 15),
                           focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
+                            borderSide: const BorderSide(
                               color: Color(0xFF662e91),
                             ),
                             borderRadius: BorderRadius.circular(6.0),
                           ),
                           enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
+                            borderSide: const BorderSide(
                               color: CommonUtils.primaryTextColor,
                             ),
                             borderRadius: BorderRadius.circular(6.0),
                           ),
-                          border: OutlineInputBorder(
+                          border: const OutlineInputBorder(
                             borderRadius: BorderRadius.all(
                               Radius.circular(10),
                             ),
                           ),
                           hintText: 'Date',
                           counterText: "",
-                          hintStyle: TextStyle(color: Colors.grey, fontWeight: FontWeight.w400),
-                          suffixIcon: Icon(
+                          hintStyle: const TextStyle(
+                              color: Colors.grey, fontWeight: FontWeight.w400),
+                          suffixIcon: const Icon(
                             Icons.calendar_today,
                             color: Color(0xFF662e91),
                           ),
                         ),
                         //          validator: validateDate,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 15,
                       ),
                       Scrollbar(
                         child: isLoading
-                            ? Center(
-                                child: CircularProgressIndicator(),
-                              )
+                            ? const Center(
+                          child: CircularProgressIndicator(),
+                        )
                             : isSlotsAvailable
-                                ? GridView.builder(
-                                    shrinkWrap: true,
-                                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 3,
-                                      childAspectRatio: 2.5,
-                                    ),
-                                    itemCount: getVisibleSlots(slots, isTodayHoliday).length,
-                                    itemBuilder: (BuildContext context, int i) {
-                                      final visibleSlots = getVisibleSlots(slots, isTodayHoliday);
-                                      if (i >= visibleSlots.length) {
-                                        return SizedBox.shrink();
-                                      }
+                            ? GridView.builder(
+                          shrinkWrap: true,
+                          gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 3,
+                            childAspectRatio: 2.5,
+                          ),
+                          itemCount:
+                          getVisibleSlots(slots, isTodayHoliday)
+                              .length,
+                          itemBuilder: (BuildContext context, int i) {
+                            final visibleSlots = getVisibleSlots(
+                                slots, isTodayHoliday);
+                            if (i >= visibleSlots.length) {
+                              return const SizedBox.shrink();
+                            }
 
-                                      final slot = visibleSlots[i];
+                            final slot = visibleSlots[i];
 
-                                      return Container(
-                                        margin: EdgeInsets.symmetric(vertical: 2, horizontal: 2),
-                                        child: ElevatedButton(
-                                          onPressed: slot.availableSlots <= 0
-                                              ? null
-                                              : () {
-                                            setState(() {
-                                              _selectedTimeSlot = slot.SlotTimeSpan;
-                                              _selectedSlot = slot.slot;
-                                              AvailableSlots = slot.availableSlots.toString();
-                                              timeSlotParts = _selectedSlot.split(' - ');
-                                              slotselection = true;
-                                              print('===123==$timeSlotParts[0]');
-                                              print('===12===$timeSlotParts[1]');
-                                              _selectedTimeSlot24 = DateFormat('HH:mm').format(DateFormat('h:mm a').parse(_selectedTimeSlot));
-                                              print('_selectedTimeSlot24 $_selectedTimeSlot24');
-                                              String formattedDate = DateFormat("yyyy-MM-dd").format(_selectedDate);
-                                              String datePart = formattedDate.substring(0, 10);
+                            return Container(
+                              margin: const EdgeInsets.symmetric(
+                                  vertical: 2, horizontal: 2),
+                              child: ElevatedButton(
+                                onPressed: slot.availableSlots <= 0
+                                    ? null
+                                    : () {
+                                  setState(() {
+                                    _selectedTimeSlot =
+                                        slot.SlotTimeSpan;
+                                    _selectedSlot = slot.slot;
+                                    AvailableSlots = slot
+                                        .availableSlots
+                                        .toString();
+                                    timeSlotParts =
+                                        _selectedSlot
+                                            .split(' - ');
+                                    slotselection = true;
+                                    print(
+                                        '===123==$timeSlotParts[0]');
+                                    print(
+                                        '===12===$timeSlotParts[1]');
+                                    _selectedTimeSlot24 =
+                                        DateFormat('HH:mm')
+                                            .format(DateFormat(
+                                            'h:mm a')
+                                            .parse(
+                                            _selectedTimeSlot));
+                                    print(
+                                        '_selectedTimeSlot24 $_selectedTimeSlot24');
+                                    String formattedDate =
+                                    DateFormat("yyyy-MM-dd")
+                                        .format(
+                                        _selectedDate);
+                                    String datePart =
+                                    formattedDate.substring(
+                                        0, 10);
 // Concatenate datePart and time
-                                              String selectedDateTimeString = '$datePart $_selectedTimeSlot24';
+                                    String
+                                    selectedDateTimeString =
+                                        '$datePart $_selectedTimeSlot24';
 
 // Parse the concatenated string into a DateTime object
-                                              slotSelected_DateTime = DateFormat('yyyy-MM-dd HH:mm').parse(selectedDateTimeString);
-                                              print('SlotselectedDateTime: $slotSelected_DateTime');
+                                    slotSelected_DateTime = DateFormat(
+                                        'yyyy-MM-dd HH:mm')
+                                        .parse(
+                                        selectedDateTimeString);
+                                    print(
+                                        'SlotselectedDateTime: $slotSelected_DateTime');
 // Assuming slotSelectedDateTime is your DateTime object
-                                              slotSelectedDateTime = slotSelected_DateTime!.subtract(Duration(hours: 1));
-                                              print('-1 hour Modified DateTime: $slotSelectedDateTime');
-                                              newDateTime = slotSelected_DateTime!.add(Duration(days: 20));
-                                              print('New DateTime after adding 20 days: $newDateTime');
-                                              // Parse the concatenated string into a DateTime object
-                                              //  DateTime SlotselectedDateTime = DateFormat('yyyy-MM-dd hh:mm a').parse(selectedDateTimeString);
-                                              print('SlotselectedDateTime==613==$selectedDateTimeString');
-                                              print('==234==$_selectedTimeSlot');
-                                              print('==234==$_selectedTimeSlot');
-                                              print('===567==$_selectedSlot');
-                                              print('==900==$AvailableSlots');
-                                            });
-                                                  // setState(() {
-                                                  //   _selectedTimeSlot = slot.SlotTimeSpan;
-                                                  //   _selectedSlot = slot.slot;
-                                                  //   AvailableSlots = slot.availableSlots.toString();
-                                                  //   timeSlotParts = _selectedSlot.split(' - ');
-                                                  //   slotselection = true;
-                                                  //   print('===123==$timeSlotParts[0]');
-                                                  //   print('===12===$timeSlotParts[1]');
-                                                  //   _selectedTimeSlot24 = DateFormat('HH:mm').format(DateFormat('h:mm a').parse(_selectedTimeSlot));
-                                                  //   print('_selectedTimeSlot24 $_selectedTimeSlot24');
-                                                  //   print('==234==$_selectedTimeSlot');
-                                                  //   print('===567==$_selectedSlot');
-                                                  //   print('==900==$AvailableSlots');
-                                                  // });
-                                                },
-                                          style: ElevatedButton.styleFrom(
-                                            padding: EdgeInsets.symmetric(vertical: 1.0, horizontal: 1.0),
-                                            primary: _selectedTimeSlot == slot.SlotTimeSpan
-                                                ? CommonUtils.primaryTextColor
-                                                : (slot.availableSlots <= 0 ? Colors.grey : Colors.white),
-                                            side: BorderSide(
-                                              color: _selectedTimeSlot == slot.SlotTimeSpan
-                                                  ? CommonUtils.primaryTextColor
-                                                  : (slot.availableSlots <= 0 ? Colors.transparent : CommonUtils.primaryTextColor),
-                                              width: 1.0,
-                                            ),
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.circular(5.0),
-                                            ),
-                                            textStyle: TextStyle(
-                                              color: _selectedTimeSlot == slot.SlotTimeSpan ? Colors.white : Colors.black,
-                                            ),
-                                          ),
-                                          child: Text(
-                                            slot.SlotTimeSpan,
-                                            style: TextStyle(
-                                              color: _selectedTimeSlot == slot.SlotTimeSpan
-                                                  ? Colors.white
-                                                  : (slot.availableSlots <= 0 ? Colors.white : Colors.black),
-                                              fontFamily: 'Calibri',
-                                              fontSize: 12,
-                                            ),
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                  )
-                                : isTodayHoliday
-                                    ? Center(
-                                        child: Column(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          children: [
-                                            Text(
-                                              'Today is a Holiday',
-                                              style: TextStyle(
-                                                fontFamily: 'Calibri',
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      )
-                                    // Show your regular widget when today is not a holiday
+                                    slotSelectedDateTime =
+                                        slotSelected_DateTime!
+                                            .subtract(
+                                            const Duration(
+                                                hours: 1));
+                                    print(
+                                        '-1 hour Modified DateTime: $slotSelectedDateTime');
+                                    newDateTime =
+                                        slotSelected_DateTime!
+                                            .add(const Duration(
+                                            days: 20));
+                                    print(
+                                        'New DateTime after adding 20 days: $newDateTime');
+                                    // Parse the concatenated string into a DateTime object
+                                    //  DateTime SlotselectedDateTime = DateFormat('yyyy-MM-dd hh:mm a').parse(selectedDateTimeString);
+                                    print(
+                                        'SlotselectedDateTime==613==$selectedDateTimeString');
+                                    print(
+                                        '==234==$_selectedTimeSlot');
+                                    print(
+                                        '==234==$_selectedTimeSlot');
+                                    print(
+                                        '===567==$_selectedSlot');
+                                    print(
+                                        '==900==$AvailableSlots');
+                                  });
+                                  // setState(() {
+                                  //   _selectedTimeSlot = slot.SlotTimeSpan;
+                                  //   _selectedSlot = slot.slot;
+                                  //   AvailableSlots = slot.availableSlots.toString();
+                                  //   timeSlotParts = _selectedSlot.split(' - ');
+                                  //   slotselection = true;
+                                  //   print('===123==$timeSlotParts[0]');
+                                  //   print('===12===$timeSlotParts[1]');
+                                  //   _selectedTimeSlot24 = DateFormat('HH:mm').format(DateFormat('h:mm a').parse(_selectedTimeSlot));
+                                  //   print('_selectedTimeSlot24 $_selectedTimeSlot24');
+                                  //   print('==234==$_selectedTimeSlot');
+                                  //   print('===567==$_selectedSlot');
+                                  //   print('==900==$AvailableSlots');
+                                  // });
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 1.0, horizontal: 1.0),
+                                  backgroundColor:
+                                  _selectedTimeSlot ==
+                                      slot.SlotTimeSpan
+                                      ? CommonUtils
+                                      .primaryTextColor
+                                      : (slot.availableSlots <= 0
+                                      ? Colors.grey
+                                      : Colors.white),
+                                  side: BorderSide(
+                                    color: _selectedTimeSlot ==
+                                        slot.SlotTimeSpan
+                                        ? CommonUtils.primaryTextColor
+                                        : (slot.availableSlots <= 0
+                                        ? Colors.transparent
+                                        : CommonUtils
+                                        .primaryTextColor),
+                                    width: 1.0,
+                                  ),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius:
+                                    BorderRadius.circular(5.0),
+                                  ),
+                                  textStyle: TextStyle(
+                                    color: _selectedTimeSlot ==
+                                        slot.SlotTimeSpan
+                                        ? Colors.white
+                                        : Colors.black,
+                                  ),
+                                ),
+                                child: Text(
+                                  slot.SlotTimeSpan,
+                                  style: TextStyle(
+                                    color: _selectedTimeSlot ==
+                                        slot.SlotTimeSpan
+                                        ? Colors.white
+                                        : (slot.availableSlots <= 0
+                                        ? Colors.white
+                                        : Colors.black),
+                                    fontFamily: 'Calibri',
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        )
+                            : isTodayHoliday
+                            ? const Center(
+                          child: Column(
+                            mainAxisAlignment:
+                            MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                'Today is a Holiday',
+                                style: TextStyle(
+                                  fontFamily: 'Calibri',
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                        // Show your regular widget when today is not a holiday
 
-                                    : Center(
-                                        child: Column(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          children: [
-                                            Text(
-                                              'No Slots Are Available Today',
-                                              style: TextStyle(
-                                                fontFamily: 'Calibri',
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
+                            : const Center(
+                          child: Column(
+                            mainAxisAlignment:
+                            MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                'No Slots Are Available Today',
+                                style: TextStyle(
+                                  fontFamily: 'Calibri',
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 15,
                       ),
-                      Row(
+                      const Row(
                         children: [
                           Text(
                             'Purpose of Visit ',
@@ -716,16 +808,19 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
                           ),
                         ],
                       ),
-                      SizedBox(height: 5),
+                      const SizedBox(height: 5),
 
                       Padding(
-                        padding: EdgeInsets.only(left: 0, top: .0, right: 0),
+                        padding:
+                        const EdgeInsets.only(left: 0, top: .0, right: 0),
                         child: Container(
                           width: double.infinity,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10.0),
                             border: Border.all(
-                              color: ispurposeselected ? const Color.fromARGB(255, 175, 15, 4) : CommonUtils.primaryTextColor,
+                              color: ispurposeselected
+                                  ? const Color.fromARGB(255, 175, 15, 4)
+                                  : CommonUtils.primaryTextColor,
                             ),
                           ),
                           child: DropdownButtonHideUnderline(
@@ -734,27 +829,35 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
                               child: DropdownButton<int>(
                                 value: selectedTypeCdId,
                                 iconSize: 30,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   color: Colors.black,
                                 ),
                                 onChanged: (value) {
                                   setState(() {
                                     selectedTypeCdId = value!;
                                     if (selectedTypeCdId != -1) {
-                                      selectedName = dropdownItems[selectedTypeCdId]['desc'];
-                                      selectedValue = dropdownItems[selectedTypeCdId]['typeCdId'];
-                                      print("selectedName onchange:$selectedName");
-                                      print("selectedValue onchange:$selectedValue");
+                                      selectedName =
+                                      dropdownItems[selectedTypeCdId]
+                                      ['desc'];
+                                      selectedValue =
+                                      dropdownItems[selectedTypeCdId]
+                                      ['typeCdId'];
+                                      print(
+                                          "selectedName onchange:$selectedName");
+                                      print(
+                                          "selectedValue onchange:$selectedValue");
                                     }
                                     ispurposeselected = false;
                                   });
                                 },
                                 items: [
-                                  DropdownMenuItem<int>(
+                                  const DropdownMenuItem<int>(
                                     value: -1,
                                     child: Text(
                                       ' Purpose of Visit',
-                                      style: TextStyle(color: Colors.grey, fontWeight: FontWeight.w500),
+                                      style: TextStyle(
+                                          color: Colors.grey,
+                                          fontWeight: FontWeight.w500),
                                     ),
                                   ),
                                   ...dropdownItems.asMap().entries.map((entry) {
@@ -777,7 +880,8 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 5),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 16, vertical: 5),
                               child: Text(
                                 'Please Select Purpose of Visit',
                                 style: TextStyle(
@@ -788,10 +892,10 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
                             ),
                           ],
                         ),
-                      SizedBox(height: 25),
+                      const SizedBox(height: 25),
                       Visibility(
                         visible: !isLoading,
-                        child: Container(
+                        child: SizedBox(
                           width: MediaQuery.of(context).size.width / 1.5,
                           child: CustomButton(
                             buttonText: 'Book Appointment',
@@ -849,7 +953,7 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
       print('DateTime as String: $dateTimeString');
       print('DateTime as String: $selecteddate');
       print('_selectedTimeSlot892 $_selectedTimeSlot');
-      String slotdate = DateFormat('dd MMM yyyy').format(_selectedDate!);
+      String slotdate = DateFormat('dd MMM yyyy').format(_selectedDate);
       print('slotdate $slotdate');
       // print('screenFrom1213: ${widget.screenFrom}');
       // print('appointmentId1214: ${widget.appointmentId}');
@@ -904,50 +1008,50 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
           if (isSuccess == true) {
             DateTime testdate = DateTime.now();
             print(' testdate ====$testdate');
-            if (_selectedDate != null) {
-              final int notificationId1 = UniqueKey().hashCode;
-              // debugPrint('Notification Scheduled for $testdate with ID: $notificationId1');
-              debugPrint('Notification Scheduled for $slotSelectedDateTime with ID: $notificationId1');
+            final int notificationId1 = UniqueKey().hashCode;
+            // debugPrint('Notification Scheduled for $testdate with ID: $notificationId1');
+            debugPrint(
+                'Notification Scheduled for $slotSelectedDateTime with ID: $notificationId1');
+            await NotificationService().scheduleNotification(
+              title: 'Reminder Notification',
+              body:
+              'Hey $userFullName, Today Your Appointment is Scheduled for The ${_selectedTimeSlot24!} Slot At The  ${widget.data.branch} Branch, Located At ${widget.data.address}.',
+              // scheduledNotificationDateTime: testdate!,
+              scheduledNotificationDateTime: slotSelectedDateTime!,
+              id: notificationId1,
+            );
+
+            if (selectedValue == 10) {
+              final int notificationId2 = UniqueKey().hashCode;
+              debugPrint(
+                  'Notification Scheduled for $newDateTime with ID: $notificationId2');
+              //  debugPrint('Notification Scheduled for $testdate with ID: $notificationId2');
               await NotificationService().scheduleNotification(
                 title: 'Reminder Notification',
-                body: 'Hey $userFullName, Today Your Appointment is Scheduled for The ${_selectedTimeSlot24!} Slot At The  ${widget.data.branch} Branch, Located At ${widget.data.address}.',
+                body:
+                'Hey $userFullName, It Has Been 20 Days Since Your New Patch Was Done. Please Revisit The Hairfixing Zone At The ${widget.data.branch}',
                 // scheduledNotificationDateTime: testdate!,
-               scheduledNotificationDateTime: slotSelectedDateTime!,
-                id: notificationId1,
+                scheduledNotificationDateTime: newDateTime!,
+                id: notificationId2,
               );
-
-              if (selectedValue == 10) {
-                final int notificationId2 = UniqueKey().hashCode;
-                debugPrint('Notification Scheduled for $newDateTime with ID: $notificationId2');
-                //  debugPrint('Notification Scheduled for $testdate with ID: $notificationId2');
-                await NotificationService().scheduleNotification(
-                  title: 'Reminder Notification',
-                  body: 'Hey $userFullName, It Has Been 20 Days Since Your New Patch Was Done. Please Revisit The Hairfixing Zone At The ${widget.data.branch}',
-                 // scheduledNotificationDateTime: testdate!,
-                 scheduledNotificationDateTime: newDateTime!,
-                  id: notificationId2,
-                );
-              }
-
-              // Your existing code...
-            } else {
-              print('Error: _selectedDate is null');
-              // Handle the case where _selectedDate is null
             }
+
+            // Your existing code...
             progressDialog.dismiss();
             print('Request sent successfully');
             Navigator.of(context).pushReplacement(
               MaterialPageRoute(
                   builder: (context) => SlotSuccessScreen(
-                        slotdate: slotdate,
-                        slottime: _selectedTimeSlot,
-                        Purpose: '$selectedName',
-                        slotbranchname: widget.data.branch,
-                        slotbrnach_address: widget.data.address!,
-                        phonenumber: widget.data.contactNumber,
-                        branchImage: widget.data.imagename,
-                        // phonenumber: null,
-                      )),
+                    slotdate: slotdate,
+                    slottime: _selectedTimeSlot,
+                    Purpose: selectedName,
+                    slotbranchname: widget.data.branch,
+                    slotbrnach_address: widget.data.address!,
+                    phonenumber: widget.data.contactNumber,
+                    branchImage: widget.data.imageName,
+                    latitude: widget.data.latitude!,
+                    longitude: widget.data.longitude!,
+                  )),
             );
             // showCustomToastMessageLong('Slot booked successfully', context, 0, 2);
             // Navigator.pop(context);
@@ -957,7 +1061,8 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
             progressDialog.dismiss();
             // Failure case
             // Handle failure scenario here
-            CommonUtils.showCustomToastMessageLong('${data['statusMessage']}', context, 0, 2);
+            CommonUtils.showCustomToastMessageLong(
+                '${data['statusMessage']}', context, 0, 2);
           }
           setState(() {
             isButtonEnabled = true;
@@ -967,7 +1072,8 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
           progressDialog.dismiss();
           //showCustomToastMessageLong(
           // 'Failed to send the request', context, 1, 2);
-          print('Failed to send the request. Status code: ${response.statusCode}');
+          print(
+              'Failed to send the request. Status code: ${response.statusCode}');
         }
       } catch (e) {
         progressDialog.dismiss();
@@ -977,8 +1083,10 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
   }
 
   bool isHoliday(DateTime date) {
-    return holidayList
-        .any((holiday) => date.year == holiday.holidayDate.year && date.month == holiday.holidayDate.month && date.day == holiday.holidayDate.day);
+    return holidayList.any((holiday) =>
+    date.year == holiday.holidayDate.year &&
+        date.month == holiday.holidayDate.month &&
+        date.day == holiday.holidayDate.day);
   }
 
   DateTime getNextNonHoliday(DateTime currentDate) {
@@ -990,7 +1098,8 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
   }
 
   bool selectableDayPredicate(DateTime date) {
-    final isPastDate = date.isBefore(DateTime.now().subtract(Duration(days: 1)));
+    final isPastDate =
+    date.isBefore(DateTime.now().subtract(const Duration(days: 1)));
     final isHolidayDate = isHoliday(date);
     final isPreviousYear = date.year < DateTime.now().year;
 
@@ -1000,7 +1109,10 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
     }
 
     // Return false if any of the conditions are met
-    return !isPastDate && !isHolidayDate && !isPreviousYear && date.year >= DateTime.now().year;
+    return !isPastDate &&
+        !isHolidayDate &&
+        !isPreviousYear &&
+        date.year >= DateTime.now().year;
   }
 
   //Original Code commented by Arun on Jan25th
@@ -1152,10 +1264,12 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
     DateTime currentDate = DateTime.now();
 
     // Combine the current date and formatted time
-    String combinedDateTimeString = DateFormat('yyyy-MM-dd').format(currentDate) + ' ' + formattedTime;
+    String combinedDateTimeString =
+        '${DateFormat('yyyy-MM-dd').format(currentDate)} $formattedTime';
 
     // Parse the combined date and time string into a DateTime object
-    DateTime combinedDateTime = DateFormat('yyyy-MM-dd hh:mm a').parse(combinedDateTimeString);
+    DateTime combinedDateTime =
+    DateFormat('yyyy-MM-dd hh:mm a').parse(combinedDateTimeString);
 
     if (isTodayHoliday) {
       // Today is a holiday, return an empty list
@@ -1170,7 +1284,8 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
     return slots.where((slot) {
       String timespan = slot.SlotTimeSpan;
       // Combine the current date and formatted time
-      String SlotDateTimeString = DateFormat('yyyy-MM-dd').format(currentDate) + ' ' + timespan;
+      String SlotDateTimeString =
+          '${DateFormat('yyyy-MM-dd').format(currentDate)} $timespan';
 
       DateFormat dateformat = DateFormat('yyyy-MM-dd');
       String currentdate = dateformat.format(DateTime.now());
@@ -1186,13 +1301,16 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
         String timespan = slot.SlotTimeSpan;
 
         // Combine the current date and time span
-        String SlotDateTimeString = DateFormat('yyyy-MM-dd').format(currentDate) + ' ' + timespan;
+        String SlotDateTimeString =
+            '${DateFormat('yyyy-MM-dd').format(currentDate)} $timespan';
 
         // Parse the combined date and time string into a DateTime object
-        slotDateTime = DateFormat('yyyy-MM-dd hh:mm a').parse(SlotDateTimeString);
+        slotDateTime =
+            DateFormat('yyyy-MM-dd hh:mm a').parse(SlotDateTimeString);
       } else {
         // If the slot is for a different date, use the slot's date and time
-        slotDateTime = DateFormat('yyyy-MM-dd HH:mm').parse('${formattedapiDate} ${timespan}');
+        slotDateTime =
+            DateFormat('yyyy-MM-dd HH:mm').parse('$formattedapiDate $timespan');
       }
 
       return !slotDateTime.isBefore(combinedDateTime);
@@ -1210,15 +1328,19 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
     DateTime currentDate = DateTime.now();
 
     // Combine the current date and formatted time
-    String combinedDateTimeString = DateFormat('yyyy-MM-dd').format(currentDate) + ' ' + formattedTime;
+    String combinedDateTimeString =
+        '${DateFormat('yyyy-MM-dd').format(currentDate)} $formattedTime';
 
     // Parse the combined date and time string into a DateTime object
-    DateTime combinedDateTime = DateFormat('yyyy-MM-dd hh:mm a').parse(combinedDateTimeString);
+    DateTime combinedDateTime =
+    DateFormat('yyyy-MM-dd hh:mm a').parse(combinedDateTimeString);
 
     // Filter the slots based on visibility criteria
     List<Slot> disabledSlots = slots.where((slot) {
-      DateTime slotDateTime = DateFormat('yyyy-MM-dd HH:mm').parse('${slot.date} ${slot.date}');
-      return !slotDateTime.isBefore(combinedDateTime) && slot.availableSlots <= 0;
+      DateTime slotDateTime =
+      DateFormat('yyyy-MM-dd HH:mm').parse('${slot.date} ${slot.date}');
+      return !slotDateTime.isBefore(combinedDateTime) &&
+          slot.availableSlots <= 0;
     }).toList();
 
     return disabledSlots;
@@ -1260,7 +1382,8 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
     });
 
     final formattedDate = DateFormat('yyyy-MM-dd').format(selectedDate);
-    final url = Uri.parse(baseUrl + GetSlotsByDateAndBranch + "$formattedDate/$branchId");
+    final url =
+    Uri.parse("$baseUrl$GetSlotsByDateAndBranch$formattedDate/$branchId");
     print('url==>969: $url');
 
     try {
@@ -1269,7 +1392,8 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
         final jsonResult = json.decode(response.body);
         final List<dynamic> slotData = jsonResult['listResult'];
 
-        List<Slot> slots = slotData.map((slotJson) => Slot.fromJson(slotJson)).toList();
+        List<Slot> slots =
+        slotData.map((slotJson) => Slot.fromJson(slotJson)).toList();
 
         setState(() {
           isLoading = false; // Set isLoading to false after data is fetched
@@ -1289,11 +1413,11 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
   }
 
   void showCustomToastMessageLong(
-    String message,
-    BuildContext context,
-    int backgroundColorType,
-    int length,
-  ) {
+      String message,
+      BuildContext context,
+      int backgroundColorType,
+      int length,
+      ) {
     final double screenWidth = MediaQuery.of(context).size.width;
     final double textWidth = screenWidth / 1.5; // Adjust multiplier as needed
 
@@ -1318,11 +1442,12 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
               borderRadius: BorderRadius.circular(8.0),
             ),
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
+              padding:
+              const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
               child: Center(
                 child: Text(
                   message,
-                  style: TextStyle(fontSize: 16.0, color: Colors.black),
+                  style: const TextStyle(fontSize: 16.0, color: Colors.black),
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -1339,7 +1464,7 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
   }
 
   bool validateEmailFormat(String email) {
-    final pattern = r'^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$';
+    const pattern = r'^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$';
     final regex = RegExp(pattern);
 
     if (email.isEmpty) {
@@ -1364,16 +1489,18 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
         dropdownItems = data['listResult'];
         print("widget.data.purposeOfVisitId: ${widget.data.purposeOfVisitId}");
         print("Dropdown items:");
-        dropdownItems.forEach((item) {
+        for (var item in dropdownItems) {
           print("Item: $item");
-        });
+        }
 
         // Assuming widget.data.purposeOfVisitId is the value you want to match
-        selectedTypeCdId = dropdownItems.indexWhere((item) => item['typeCdId'] == widget.data.purposeOfVisitId);
+        selectedTypeCdId = dropdownItems.indexWhere(
+                (item) => item['typeCdId'] == widget.data.purposeOfVisitId);
         print("selectedTypeCdId: $selectedTypeCdId"); // Print selectedTypeCdId
         if (selectedTypeCdId != -1) {
           selectedName = widget.data.purposeOfVisit;
-          selectedValue = widget.data.purposeOfVisitId; // Prepopulate selectedName
+          selectedValue =
+              widget.data.purposeOfVisitId; // Prepopulate selectedName
         }
         print('BranchId:$BranchId');
         print('selectedName:$selectedName');
@@ -1511,7 +1638,8 @@ class HolidayResponse {
   HolidayResponse({required this.listResult});
 
   factory HolidayResponse.fromJson(List<dynamic> json) {
-    List<Holiday> holidays = json.map((holidayJson) => Holiday.fromJson(holidayJson)).toList();
+    List<Holiday> holidays =
+    json.map((holidayJson) => Holiday.fromJson(holidayJson)).toList();
     return HolidayResponse(listResult: holidays);
   }
 }

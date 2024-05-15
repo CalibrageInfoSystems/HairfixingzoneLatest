@@ -1,8 +1,10 @@
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hairfixingzone/Common/common_styles.dart';
+import 'package:hairfixingzone/CommonUtils.dart';
 import 'package:hairfixingzone/HomeScreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -15,21 +17,26 @@ class SlotSuccessScreen extends StatefulWidget {
   final String slotbrnach_address;
   final String phonenumber;
   final String branchImage;
+  final double? latitude;
+  final double? longitude;
 
   const SlotSuccessScreen(
       {super.key,
-      required this.slotdate,
-      required this.slottime,
-      required this.Purpose,
-      required this.slotbranchname,
-      required this.slotbrnach_address,
-      required this.phonenumber,
-      required this.branchImage});
+        required this.slotdate,
+        required this.slottime,
+        required this.Purpose,
+        required this.slotbranchname,
+        required this.slotbrnach_address,
+        required this.phonenumber,
+        required this.branchImage,
+        required this.latitude,
+        required this.longitude});
   @override
   State<SlotSuccessScreen> createState() => _SlotSuccessScreenState();
 }
 
-class _SlotSuccessScreenState extends State<SlotSuccessScreen> with TickerProviderStateMixin {
+class _SlotSuccessScreenState extends State<SlotSuccessScreen>
+    with TickerProviderStateMixin {
   late AnimationController _controller;
   late AnimationController _controller2;
   static const textStyle = TextStyle(
@@ -81,19 +88,13 @@ class _SlotSuccessScreenState extends State<SlotSuccessScreen> with TickerProvid
             backgroundColor: const Color(0xFFf3e3ff),
             title: const Text(
               'Booked Successfully',
-              style: TextStyle(color: Color(0xFF0f75bc), fontSize: 16.0, fontWeight: FontWeight.w600),
+              style: TextStyle(
+                  color: Color(0xFF0f75bc),
+                  fontSize: 16.0,
+                  fontWeight: FontWeight.w600),
             ),
             centerTitle: true,
             automaticallyImplyLeading: false,
-            // leading: IconButton(
-            //   icon: Icon(
-            //     Icons.arrow_back_ios,
-            //     color: CommonUtils.primaryTextColor,
-            //   ),
-            //   onPressed: () {
-            //     Navigator.of(context).pop();
-            //   },
-            // )
           ),
           body: Container(
             padding: const EdgeInsets.all(20),
@@ -115,7 +116,8 @@ class _SlotSuccessScreenState extends State<SlotSuccessScreen> with TickerProvid
                             children: [
                               Center(
                                 child: RotationTransition(
-                                  turns: Tween(begin: 0.0, end: 1.0).animate(_controller),
+                                  turns: Tween(begin: 0.0, end: 1.0)
+                                      .animate(_controller),
                                   child: DottedBorder(
                                     borderType: BorderType.Circle,
                                     strokeWidth: 3,
@@ -133,7 +135,8 @@ class _SlotSuccessScreenState extends State<SlotSuccessScreen> with TickerProvid
                                 ),
                               ),
                               RotationTransition(
-                                turns: Tween(begin: 0.0, end: 1.0).animate(_controller2),
+                                turns: Tween(begin: 0.0, end: 1.0)
+                                    .animate(_controller2),
                                 child: SvgPicture.asset(
                                   'assets/check.svg',
                                   width: 70,
@@ -239,10 +242,12 @@ class _SlotSuccessScreenState extends State<SlotSuccessScreen> with TickerProvid
                             // borderRadius: BorderRadius.circular(30), //border corner radius
                             boxShadow: [
                               BoxShadow(
-                                color: Color(0xFF960efd).withOpacity(0.2), //color of shadow
+                                color: const Color(0xFF960efd)
+                                    .withOpacity(0.2), //color of shadow
                                 spreadRadius: 2, //spread radius
                                 blurRadius: 4, // blur radius
-                                offset: Offset(0, 2), // changes position of shadow
+                                offset: const Offset(
+                                    0, 2), // changes position of shadow
                               ),
                             ],
                           ),
@@ -251,7 +256,8 @@ class _SlotSuccessScreenState extends State<SlotSuccessScreen> with TickerProvid
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                MainAxisAlignment.spaceBetween,
                                 children: [
                                   ClipRRect(
                                     borderRadius: BorderRadius.circular(10),
@@ -270,15 +276,18 @@ class _SlotSuccessScreenState extends State<SlotSuccessScreen> with TickerProvid
                                   Row(
                                     children: [
                                       GestureDetector(
-                                        onTap: () {
-                                          String phoneNumber = widget.phonenumber;
-                                          launch("tel:$phoneNumber");
-                                        },
+                                        // onTap: () {
+                                        //   String phoneNumber =
+                                        //       widget.phonenumber;
+                                        //   launch("tel:$phoneNumber");
+                                        // },
+                                        onTap: openPhone,
                                         child: Container(
                                           padding: const EdgeInsets.all(10),
                                           decoration: BoxDecoration(
                                               border: Border.all(
-                                                color: CommonStyles.statusGreenText,
+                                                color: CommonStyles
+                                                    .statusGreenText,
                                               ),
                                               shape: BoxShape.circle),
                                           child: SvgPicture.asset(
@@ -292,14 +301,22 @@ class _SlotSuccessScreenState extends State<SlotSuccessScreen> with TickerProvid
                                       const SizedBox(
                                         width: 20,
                                       ),
-                                      Container(
-                                        padding: const EdgeInsets.all(10),
-                                        decoration: BoxDecoration(border: Border.all(color: CommonStyles.primaryTextColor), shape: BoxShape.circle),
-                                        child: SvgPicture.asset(
-                                          'assets/map_marker.svg',
-                                          width: 30,
-                                          height: 30,
-                                          color: CommonStyles.primaryTextColor,
+                                      GestureDetector(
+                                        onTap: openMap,
+                                        child: Container(
+                                          padding: const EdgeInsets.all(10),
+                                          decoration: BoxDecoration(
+                                              border: Border.all(
+                                                  color: CommonStyles
+                                                      .primaryTextColor),
+                                              shape: BoxShape.circle),
+                                          child: SvgPicture.asset(
+                                            'assets/map_marker.svg',
+                                            width: 30,
+                                            height: 30,
+                                            color:
+                                            CommonStyles.primaryTextColor,
+                                          ),
                                         ),
                                       ),
                                     ],
@@ -331,7 +348,8 @@ class _SlotSuccessScreenState extends State<SlotSuccessScreen> with TickerProvid
                                 // sharedprefsdelete();
                                 Navigator.push(
                                   context,
-                                  MaterialPageRoute(builder: (context) => const HomeScreen()),
+                                  MaterialPageRoute(
+                                      builder: (context) => const HomeScreen()),
                                 );
                               },
                               child: Container(
@@ -340,7 +358,8 @@ class _SlotSuccessScreenState extends State<SlotSuccessScreen> with TickerProvid
                                   borderRadius: BorderRadius.circular(5),
                                   border: Border.all(color: primaryTextColor),
                                 ),
-                                child: const Center(child: Text('Back to Home')),
+                                child:
+                                const Center(child: Text('Back to Home')),
                               ),
                             ),
                           ),
@@ -351,7 +370,8 @@ class _SlotSuccessScreenState extends State<SlotSuccessScreen> with TickerProvid
                             child: InkWell(
                               onTap: () {
                                 print('My Appointments btn clicked');
-                                Navigator.of(context, rootNavigator: true).pushNamed("/Mybookings");
+                                Navigator.of(context, rootNavigator: true)
+                                    .pushNamed("/Mybookings");
                               },
                               child: Container(
                                 padding: const EdgeInsets.all(5),
@@ -380,11 +400,36 @@ class _SlotSuccessScreenState extends State<SlotSuccessScreen> with TickerProvid
         ));
   }
 
-  Future<void> _makePhoneCall(String phoneNumber) async {
-    if (await canLaunch(phoneNumber)) {
-      await launch(phoneNumber);
+  // Future<void> _makePhoneCall(String phoneNumber) async {
+  //   if (await canLaunch(phoneNumber)) {
+  //     await launch(phoneNumber);
+  //   } else {
+  //     throw 'Could not launch $phoneNumber';
+  //   }
+  // }
+
+  Future<void> openPhone() async {
+    final url = 'tel:${widget.phonenumber}';
+    try {
+      await launchUrl(Uri.parse(url));
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> openMap() async {
+    if (widget.latitude != null && widget.longitude != null) {
+      final String url =
+          'https://www.google.com/maps?q=${widget.latitude},${widget.longitude}';
+      print('getbrancheslist: $url');
+      try {
+        await launchUrl(Uri.parse(url));
+      } catch (e) {
+        print(e);
+      }
     } else {
-      throw 'Could not launch $phoneNumber';
+      CommonUtils.showCustomToastMessageLong(
+          'Location not found', context, 1, 3);
     }
   }
 

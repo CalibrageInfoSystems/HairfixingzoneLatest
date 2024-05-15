@@ -19,6 +19,8 @@ import 'Room.dart';
 import 'api_config.dart';
 
 class SelectCity_Branch_screen extends StatefulWidget {
+  const SelectCity_Branch_screen({super.key});
+
   @override
   _BookingScreenState createState() => _BookingScreenState();
 }
@@ -91,7 +93,10 @@ class _BookingScreenState extends State<SelectCity_Branch_screen> {
                 backgroundColor: const Color(0xFFf3e3ff),
                 title: const Text(
                   'Select City and Branch',
-                  style: TextStyle(color: Color(0xFF0f75bc), fontSize: 16.0, fontWeight: FontWeight.w600),
+                  style: TextStyle(
+                      color: Color(0xFF0f75bc),
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.w600),
                 ),
                 // actions: [
                 //   IconButton(
@@ -109,7 +114,7 @@ class _BookingScreenState extends State<SelectCity_Branch_screen> {
                 // ],
                 // centerTitle: true,
                 leading: IconButton(
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.arrow_back_ios,
                     color: CommonUtils.primaryTextColor,
                   ),
@@ -123,10 +128,10 @@ class _BookingScreenState extends State<SelectCity_Branch_screen> {
               child: Form(
                 key: _formKey,
                 child: Container(
-                  padding: EdgeInsets.only(top: 15, left: 15, right: 15),
+                  padding: const EdgeInsets.only(top: 15, left: 15, right: 15),
                   child: Column(
                     children: [
-                      Row(
+                      const Row(
                         children: [
                           Text(
                             'City ',
@@ -144,7 +149,8 @@ class _BookingScreenState extends State<SelectCity_Branch_screen> {
                         ],
                       ),
                       Padding(
-                        padding: EdgeInsets.only(left: 0, top: 5.0, right: 0),
+                        padding:
+                        const EdgeInsets.only(left: 0, top: 5.0, right: 0),
                         child: Container(
                           width: double.infinity,
                           decoration: BoxDecoration(
@@ -164,21 +170,27 @@ class _BookingScreenState extends State<SelectCity_Branch_screen> {
                                     if (value == -1) {
                                       return 'Select a City';
                                     }
+                                    return null;
                                   },
                                   icon: null,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     color: Colors.black,
                                   ),
-                                  decoration: InputDecoration(
+                                  decoration: const InputDecoration(
                                     contentPadding: EdgeInsets.zero,
-                                    border: InputBorder.none, // Hide the underline here
+                                    border: InputBorder
+                                        .none, // Hide the underline here
                                   ),
                                   onChanged: (value) {
                                     setState(() {
                                       selectedTypeCdId = value!;
                                       if (selectedTypeCdId != -1) {
-                                        selectedValue = dropdownItems[selectedTypeCdId]['typecdid'];
-                                        selectedName = dropdownItems[selectedTypeCdId]['desc'];
+                                        selectedValue =
+                                        dropdownItems[selectedTypeCdId]
+                                        ['typecdid'];
+                                        selectedName =
+                                        dropdownItems[selectedTypeCdId]
+                                        ['desc'];
                                         getbrancheslist(selectedValue);
                                         print("selectedValue:$selectedValue");
                                         print("selectedName:$selectedName");
@@ -193,15 +205,20 @@ class _BookingScreenState extends State<SelectCity_Branch_screen> {
                                     });
                                   },
                                   items: [
-                                    DropdownMenuItem<int>(
+                                    const DropdownMenuItem<int>(
                                       value: -1,
                                       child: Text(
                                         'Select City',
-                                        style: TextStyle(color: Colors.grey, fontWeight: FontWeight.w500),
+                                        style: TextStyle(
+                                            color: Colors.grey,
+                                            fontWeight: FontWeight.w500),
                                       ),
                                       // Static text
                                     ),
-                                    ...dropdownItems.asMap().entries.map((entry) {
+                                    ...dropdownItems
+                                        .asMap()
+                                        .entries
+                                        .map((entry) {
                                       final index = entry.key;
                                       final item = entry.value;
                                       return DropdownMenuItem<int>(
@@ -214,23 +231,24 @@ class _BookingScreenState extends State<SelectCity_Branch_screen> {
                           ),
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 15.0,
                       ),
                       ListView.builder(
                           itemCount: model_branches.length,
                           shrinkWrap: true,
-                          physics: PageScrollPhysics(),
+                          physics: const PageScrollPhysics(),
                           itemBuilder: (context, index) {
                             Model_branch branchnames = model_branches[index];
-                            String? imageUrl = branchnames.imageName; // Use String? for nullable type
+                            String? imageUrl = branchnames.imageName;
 
                             // Check if imageUrl is null or empty, then assign default image URL or asset path
-                            if (imageUrl == null || imageUrl.isEmpty) {
-                              imageUrl = 'assets/top_image.png'; // Default image asset path
+                            if (imageUrl!.isEmpty) {
+                              imageUrl =
+                              'assets/top_image.png'; // Default image asset path
                             }
                             return Container(
-                                padding: EdgeInsets.only(bottom: 15.0),
+                                padding: const EdgeInsets.only(bottom: 15.0),
                                 width: MediaQuery.of(context).size.width,
                                 child: GestureDetector(
                                     onTap: () {
@@ -238,17 +256,21 @@ class _BookingScreenState extends State<SelectCity_Branch_screen> {
                                         context,
                                         MaterialPageRoute(
                                           builder: (context) => Bookingscreen(
-                                            branchId: branchnames.Id!,
+                                            branchId: branchnames.id!,
                                             branchname: branchnames.branchName!,
                                             branchaddress: branchnames.address!,
-                                            phonenumber: branchnames.PhoneNumber!,
+                                            phonenumber: branchnames.mobileNumber!,
                                             branchImage: branchnames.imageName!,
+                                            latitude: branchnames.latitude,
+                                            longitude: branchnames.longitude,
                                           ),
                                         ),
                                       );
                                     },
                                     child: Container(
-                                      height: MediaQuery.of(context).size.height / 10,
+                                      height:
+                                      MediaQuery.of(context).size.height /
+                                          10,
                                       width: MediaQuery.of(context).size.width,
                                       // decoration: BoxDecoration(
                                       //   border: Border.all(color: Color(0xFF662e91), width: 1.0),
@@ -256,33 +278,54 @@ class _BookingScreenState extends State<SelectCity_Branch_screen> {
                                       // ),
                                       decoration: BoxDecoration(
                                         color: Colors.white,
-                                        borderRadius: BorderRadius.circular(10.0),
+                                        borderRadius:
+                                        BorderRadius.circular(10.0),
                                         // borderRadius: BorderRadius.circular(30), //border corner radius
                                         boxShadow: [
                                           BoxShadow(
-                                            color: Color(0xFF960efd).withOpacity(0.2), //color of shadow
+                                            color: const Color(0xFF960efd)
+                                                .withOpacity(
+                                                0.2), //color of shadow
                                             spreadRadius: 2, //spread radius
                                             blurRadius: 4, // blur radius
-                                            offset: Offset(0, 2), // changes position of shadow
+                                            offset: const Offset(0,
+                                                2), // changes position of shadow
                                           ),
                                         ],
                                       ),
                                       child: Row(
                                         children: [
                                           Container(
-                                            padding: EdgeInsets.all(10),
+                                            padding: const EdgeInsets.all(10),
                                             // width: MediaQuery.of(context).size.width / 4,
                                             child: Image.network(
-                                              imageUrl.isNotEmpty ? imageUrl : 'https://example.com/placeholder-image.jpg',
+                                              imageUrl.isNotEmpty
+                                                  ? imageUrl
+                                                  : 'https://example.com/placeholder-image.jpg',
                                               fit: BoxFit.cover,
-                                              height: MediaQuery.of(context).size.height / 4 / 2,
-                                              width: MediaQuery.of(context).size.width / 3.2,
-                                              errorBuilder: (context, error, stackTrace) {
+                                              height: MediaQuery.of(context)
+                                                  .size
+                                                  .height /
+                                                  4 /
+                                                  2,
+                                              width: MediaQuery.of(context)
+                                                  .size
+                                                  .width /
+                                                  3.2,
+                                              errorBuilder:
+                                                  (context, error, stackTrace) {
                                                 return Image.asset(
                                                   'assets/hairfixing_logo.png', // Path to your PNG placeholder image
                                                   fit: BoxFit.cover,
-                                                  height: MediaQuery.of(context).size.height / 4 / 2,
-                                                  width: MediaQuery.of(context).size.width / 3.2,
+                                                  height: MediaQuery.of(context)
+                                                      .size
+                                                      .height /
+                                                      4 /
+                                                      2,
+                                                  width: MediaQuery.of(context)
+                                                      .size
+                                                      .width /
+                                                      3.2,
                                                 );
                                               },
                                             ),
@@ -290,26 +333,35 @@ class _BookingScreenState extends State<SelectCity_Branch_screen> {
                                           Container(
                                             // height: MediaQuery.of(context).size.height / 4 / 2,
 
-                                            width: MediaQuery.of(context).size.width / 2.2,
-                                            padding: EdgeInsets.only(top: 7),
+                                            width: MediaQuery.of(context)
+                                                .size
+                                                .width /
+                                                2.2,
+                                            padding:
+                                            const EdgeInsets.only(top: 7),
                                             // width: MediaQuery.of(context).size.width / 4,
                                             child: Column(
                                               //  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                               children: [
                                                 Text(
-                                                  '${branchnames.branchName}',
-                                                  style: TextStyle(
+                                                  branchnames.branchName!,
+                                                  style: const TextStyle(
                                                     color: Color(0xFF0f75bc),
                                                     fontSize: 14.0,
                                                     fontWeight: FontWeight.w600,
                                                   ),
                                                 ),
-                                                SizedBox(
+                                                const SizedBox(
                                                   height: 5,
                                                 ),
-                                                Text('${branchnames.address}',
-                                                    maxLines: 2, overflow: TextOverflow.ellipsis, style: CommonStyles.txSty_12b_f5),
+                                                Text(branchnames.address!,
+                                                    maxLines: 2,
+                                                    overflow:
+                                                    TextOverflow.ellipsis,
+                                                    style: CommonStyles
+                                                        .txSty_12b_f5),
                                               ],
                                             ),
                                           )
@@ -359,11 +411,12 @@ class _BookingScreenState extends State<SelectCity_Branch_screen> {
   }
 
   void getbrancheslist(int? cityid) async {
-    //  model_branches.clear();
     final url = Uri.parse(baseUrl + getbrancheselectedcity + cityid.toString());
-    print('getbrancheselectedcityApi:$url');
+    print('getbrancheslist: $url');
     try {
       final http.Response response = await http.get(url);
+
+      print('Response body: ${response.body}'); // Print response body for debugging
 
       if (response.statusCode == 200) {
         final dynamic jsonData = json.decode(response.body);
@@ -375,15 +428,12 @@ class _BookingScreenState extends State<SelectCity_Branch_screen> {
             print('id: ${item['id']}, branchName: ${item['branchName']}');
           }
 
-// To print the entire listResult JSON data
-          print('listResult JSON data: ${jsonData['listResult']}');
+          setState(() {
+            model_branches = brancheslist;
+          });
         } else {
           print('Error: listResult is null or not a List');
         }
-
-        setState(() {
-          model_branches = brancheslist;
-        });
       } else {
         print('Request failed with status: ${response.statusCode}');
       }
@@ -391,13 +441,12 @@ class _BookingScreenState extends State<SelectCity_Branch_screen> {
       print('Error fetching data from API: $error');
     }
   }
-
   void showCustomToastMessageLong(
-    String message,
-    BuildContext context,
-    int backgroundColorType,
-    int length,
-  ) {
+      String message,
+      BuildContext context,
+      int backgroundColorType,
+      int length,
+      ) {
     final double screenWidth = MediaQuery.of(context).size.width;
     final double textWidth = screenWidth / 1.5; // Adjust multiplier as needed
 
@@ -422,11 +471,12 @@ class _BookingScreenState extends State<SelectCity_Branch_screen> {
               borderRadius: BorderRadius.circular(8.0),
             ),
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
+              padding:
+              const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
               child: Center(
                 child: Text(
                   message,
-                  style: TextStyle(fontSize: 16.0, color: Colors.black),
+                  style: const TextStyle(fontSize: 16.0, color: Colors.black),
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -443,7 +493,7 @@ class _BookingScreenState extends State<SelectCity_Branch_screen> {
   }
 
   bool validateEmailFormat(String email) {
-    final pattern = r'^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$';
+    const pattern = r'^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$';
     final regex = RegExp(pattern);
 
     if (email.isEmpty) {

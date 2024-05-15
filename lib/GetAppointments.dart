@@ -1635,11 +1635,18 @@ class _OpCardState extends State<OpCard> {
           builder: (context, setState) {
             return AlertDialog(
               backgroundColor: Colors.transparent,
-              surfaceTintColor: Colors.transparent,
-              title: SingleChildScrollView(
+              insetPadding: EdgeInsets.zero, // Ensure no default padding
+              contentPadding: EdgeInsets.zero, // Ensure no default padding
+              titlePadding: EdgeInsets.zero, // Ensure no default padding
+              content: SingleChildScrollView(
                 child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  padding: const EdgeInsets.only(top: 15.0, left: 15.0, right: 15.0, bottom: 20.0),
+                  width: MediaQuery.of(context).size.width * 0.8, // Reduced width
+                  padding: const EdgeInsets.only(
+                    top: 15.0,
+                    left: 15.0,
+                    right: 15.0,
+                    bottom: 20.0,
+                  ),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10.0),
                     gradient: const LinearGradient(
@@ -1652,59 +1659,83 @@ class _OpCardState extends State<OpCard> {
                     ),
                   ),
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      const Text(
-                        'Feedback',
-                        style: TextStyle(
-                          fontSize: 24,
-                          color: CommonUtils.primaryTextColor,
-                          fontFamily: 'Calibri',
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 15.0,
-                      ),
-                      Text(
-                        'Please Rate Your Experience For The ${appointments.slotDuration} Slot At The ${appointments.branch} Hair Fixing Zone',
-                        style: const TextStyle(
-                          fontSize: 16,
-                          color: CommonUtils.primaryTextColor,
-                          fontFamily: 'Calibri',
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 15.0,
-                      ),
-                      SizedBox(
-                          width: MediaQuery.of(context).size.width,
-                          child: RatingBar.builder(
-                            initialRating: 0,
-                            minRating: 0,
-                            direction: Axis.horizontal,
-                            allowHalfRating: true,
-                            itemCount: 5,
-                            itemPadding: const EdgeInsets.symmetric(horizontal: 1.0),
-                            itemBuilder: (context, _) => const Icon(
-                              Icons.star,
-                              color: CommonUtils.primaryTextColor,
-                            ),
-                            onRatingUpdate: (rating) {
-                              setState(() {
-                                rating_star = rating;
-                                print('rating_star$rating_star');
-                              });
+                      Stack(
+                        alignment: Alignment.topRight, // Align icon to the top right corner
+                        children: [
+                          // Close Icon in the top right corner
+                          IconButton(
+                            icon: Icon(Icons.close),
+                            onPressed: () {
+                              Navigator.of(context).pop();
                             },
-                          )),
+                          ),
+                          // SVG Image at the center
+                          Center(
+                            child: SvgPicture.asset(
+                              'assets/feedbackbanner.svg', // Provide the path to your SVG image
+                              width: MediaQuery.of(context).size.width , // Adjusted width
+                              height: 150, // Adjust as needed
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 10.0,
+                      ),
+                      Center(
+                        child: Text(
+                          'Please Rate Your Experience For The ${appointments.slotDuration} Slot At The ${appointments.branch} Hair Fixing Zone',
+                          style: const TextStyle(
+                            fontSize: 16,
+                            color: CommonUtils.primaryTextColor,
+                            fontFamily: 'Calibri',
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 10.0,
+                      ),
+                      Center(
+                        child: SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.8, // Adjusted width
+                          child: Center(
+                            child: RatingBar.builder(
+                              initialRating: 0,
+                              minRating: 0,
+                              direction: Axis.horizontal,
+                              allowHalfRating: true,
+                              itemCount: 5,
+                              itemPadding: const EdgeInsets.symmetric(horizontal: 1.0),
+                              itemBuilder: (context, _) => Icon(
+                                Icons.star,
+                                color: CommonUtils.primaryTextColor,
+                              ),
+                              onRatingUpdate: (rating) {
+                                setState(() {
+                                  rating_star = rating;
+                                  print('rating_star$rating_star');
+                                });
+                              },
+                            ),
+                          ),
+                        ),
+                      ),
+
                       Padding(
-                        padding: const EdgeInsets.only(left: 0, top: 10.0, right: 0),
+                        padding: const EdgeInsets.only(left: 0, top: 15.0, right: 0),
                         child: GestureDetector(
                           onTap: () async {},
                           child: Container(
                             height: 80,
-                            width: MediaQuery.of(context).size.width,
+                            width: MediaQuery.of(context).size.width * 0.8, // Adjusted width
                             decoration: BoxDecoration(
-                              border: Border.all(color: CommonUtils.primaryTextColor, width: 1.5),
+                              border: Border.all(
+                                color: CommonUtils.primaryTextColor,
+                                width: 1.5,
+                              ),
                               borderRadius: BorderRadius.circular(5.0),
                               color: Colors.white,
                             ),
@@ -1736,39 +1767,42 @@ class _OpCardState extends State<OpCard> {
                           ),
                         ),
                       ),
+                      const SizedBox(
+                        height: 10.0,
+                      ),
                       Row(
                         children: [
-                          Expanded(
-                            child: ElevatedButton(
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                              style: ElevatedButton.styleFrom(
-                                textStyle: const TextStyle(
-                                  color: CommonUtils.primaryTextColor,
-                                ),
-                                side: const BorderSide(
-                                  color: CommonUtils.primaryTextColor,
-                                ),
-                                backgroundColor: Colors.white,
-                                shape: const RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(10),
-                                  ),
-                                ),
-                              ),
-                              child: const Text(
-                                'Close',
-                                style: TextStyle(
-                                  fontFamily: 'Calibri',
-                                  fontSize: 14,
-                                  color: CommonUtils.primaryTextColor,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 20),
+                          // Expanded(
+                          //   child: ElevatedButton(
+                          //     onPressed: () {
+                          //       Navigator.of(context).pop();
+                          //     },
+                          //     style: ElevatedButton.styleFrom(
+                          //       textStyle: const TextStyle(
+                          //         color: CommonUtils.primaryTextColor,
+                          //       ),
+                          //       side: const BorderSide(
+                          //         color: CommonUtils.primaryTextColor,
+                          //       ),
+                          //       backgroundColor: Colors.white,
+                          //       shape: const RoundedRectangleBorder(
+                          //         borderRadius: BorderRadius.all(
+                          //           Radius.circular(10),
+                          //         ),
+                          //       ),
+                          //     ),
+                          //     child: const Text(
+                          //       'Close',
+                          //       style: TextStyle(
+                          //         fontFamily: 'Calibri',
+                          //         fontSize: 14,
+                          //         color: CommonUtils.primaryTextColor,
+                          //         fontWeight: FontWeight.bold,
+                          //       ),
+                          //     ),
+                          //   ),
+                          // ),
+                          // const SizedBox(width: 20),
                           Expanded(
                             child: SizedBox(
                               child: Center(
@@ -1785,7 +1819,7 @@ class _OpCardState extends State<OpCard> {
                                     ),
                                     child: const Center(
                                       child: Text(
-                                        'Submit',
+                                        'Rate Now',
                                         style: TextStyle(
                                           fontFamily: 'Calibri',
                                           fontSize: 14,
@@ -1811,6 +1845,7 @@ class _OpCardState extends State<OpCard> {
       },
     );
   }
+
 
   Future<void> validateRating(MyAppointment_Model appointmens) async {
     //  print('indexinvalidating$index');
