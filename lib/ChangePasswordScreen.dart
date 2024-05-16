@@ -185,6 +185,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                         maxLength: 25,
                         maxLengthEnforcement: MaxLengthEnforcement.enforced,
                         decoration: InputDecoration(
+                          errorMaxLines: 5,
                           //errorText: _passwordError ? _passwordErrorMsg : null,
                           suffixIcon: GestureDetector(
                             onTap: () {
@@ -417,6 +418,15 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
     return null;
   }
 
+  // String? validateNewPassword(String? value) {
+  //   if (value == null || value.isEmpty) {
+  //     return 'Please Enter New Password';
+  //   }
+  //   if (_newController.text == _currentController.text) {
+  //     return 'New Password Cannot Be The Same As The Current Password';
+  //   }
+  //   return null;
+  // }
   String? validateNewPassword(String? value) {
     if (value == null || value.isEmpty) {
       return 'Please Enter New Password';
@@ -424,7 +434,15 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
     if (_newController.text == _currentController.text) {
       return 'New Password Cannot Be The Same As The Current Password';
     }
-    return null;
+
+    final passwordRegex = RegExp(r'^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>])(?=.*[A-Z]).{8,}$');
+    if (!passwordRegex.hasMatch(value)) {
+      return 'Password Must Include One Uppercase, One Lowercase, One Digit, One Special Character, No Spaces, And be 08-25 Characters Long';
+    }
+
+    // Additional custom validations can be added here
+
+    return null; // Password is valid
   }
 
   String? validateConfirmNewPassword(String? value) {
@@ -484,14 +502,14 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: const Text('Cancel'),
+              child: const Text('No'),
             ),
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
                 onConfirmLogout(context);
               },
-              child: const Text('Logout'),
+              child: const Text('Yes'),
             ),
           ],
         );

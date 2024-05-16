@@ -34,26 +34,24 @@ class AboutUsScreen extends StatelessWidget {
                 // about us content
                 const Padding(
                   padding: EdgeInsets.all(5.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start, crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Welcome to Hair Fixing Zone, your  destination for cutting-edge Hair Replacement solutions in Bangalore. Established in 2016, Hair Fixing Zone has emerged as a beacon of hope for individuals grappling with hair loss, Baldness, Hair thinning, or seeking to enhance their natural beauty. With four branches strategically located across Bangalore, we strive to provide convenient access to our specialized services, ensuring that every client receives the personalized care and attention they deserve.',
-                          textAlign: TextAlign.justify,
-                          style: CommonStyles.txSty_16black_f5,
-                        ),
-                        SizedBox(height: 15),
-                        Text('Our Journey',
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Color(0xFF662d91),
-                            )),
-                        SizedBox(height: 5),
-                        Text(
-                          'At Hair Fixing Zone, Our journey began with a simple yet profound mission: to empower individuals to embrace their unique beauty with confidence. Recognizing the transformation power of hair, we embarked on a quest to offer innovation solutions that go beyond conventional norms. Over the years, we have honed our expertise, staying at the forefront of industry advancements to deliver unparalleled results to our estmeed clientele',
-                          textAlign: TextAlign.justify,
-                          style: CommonStyles.txSty_16black_f5,
-                        ),
+                  child: Column(mainAxisAlignment: MainAxisAlignment.start, crossAxisAlignment: CrossAxisAlignment.start, children: [
+                    Text(
+                      'Welcome to Hair Fixing Zone, your  destination for cutting-edge Hair Replacement solutions in Bangalore. Established in 2016, Hair Fixing Zone has emerged as a beacon of hope for individuals grappling with hair loss, Baldness, Hair thinning, or seeking to enhance their natural beauty. With four branches strategically located across Bangalore, we strive to provide convenient access to our specialized services, ensuring that every client receives the personalized care and attention they deserve.',
+                      textAlign: TextAlign.justify,
+                      style: CommonStyles.txSty_16black_f5,
+                    ),
+                    SizedBox(height: 15),
+                    Text('Our Journey',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Color(0xFF662d91),
+                        )),
+                    SizedBox(height: 5),
+                    Text(
+                      'At Hair Fixing Zone, Our journey began with a simple yet profound mission: to empower individuals to embrace their unique beauty with confidence. Recognizing the transformation power of hair, we embarked on a quest to offer innovation solutions that go beyond conventional norms. Over the years, we have honed our expertise, staying at the forefront of industry advancements to deliver unparalleled results to our estmeed clientele',
+                      textAlign: TextAlign.justify,
+                      style: CommonStyles.txSty_16black_f5,
+                    ),
                   ]),
                 )
               ],
@@ -74,14 +72,14 @@ class AboutUsScreen extends StatelessWidget {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: const Text('Cancel'),
+              child: const Text('No'),
             ),
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
                 onConfirmLogout(context);
               },
-              child: const Text('Logout'),
+              child: const Text('Yes'),
             ),
           ],
         );

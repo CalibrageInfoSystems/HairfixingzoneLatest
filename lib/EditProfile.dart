@@ -130,7 +130,6 @@ class EditProfile_screenState extends State<EditProfile> {
           print('gender:$gender');
         });
 
-
         // fetchMyAppointments(userId);
       } else {
         CommonUtils.showCustomToastMessageLong('Please Check Your Internet Connection', context, 1, 4);
@@ -715,6 +714,9 @@ class EditProfile_screenState extends State<EditProfile> {
                                   hintStyle: const TextStyle(color: Colors.grey, fontWeight: FontWeight.w400),
                                 ),
                                 maxLength: 10,
+                                inputFormatters: [
+                                  FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                                ],
                                 validator: validateAlterMobilenum,
                                 onChanged: (value) {
                                   setState(() {
@@ -755,22 +757,42 @@ class EditProfile_screenState extends State<EditProfile> {
             )));
   }
 
+  // Future<void> validating() async {
+  //   validateGender(selectedName);
+  //   if (_formKey.currentState!.validate()) {
+  //     print(isFullNameValidate);
+  //
+  //     print(isMobileNumberValidate);
+  //     print(isEmailValidate);
+  //     print(isDobValidate);
+  //     print(alernateMobileNumberController.text);
+  //
+  //     if (isFullNameValidate && isMobileNumberValidate && isEmailValidate && isDobValidate) {
+  //       if (alernateMobileNumberController.text != null) {
+  //         if (isAltMobileNumberValidate) {
+  //           updateUser();
+  //         }
+  //       } else {
+  //         updateUser();
+  //       }
+  //     }
+  //   }
+  // }
   Future<void> validating() async {
     validateGender(selectedName);
     if (_formKey.currentState!.validate()) {
       print(isFullNameValidate);
-      //print(isGenderValidate);
       print(isMobileNumberValidate);
       print(isEmailValidate);
       print(isDobValidate);
       print(alernateMobileNumberController.text);
 
       if (isFullNameValidate && isMobileNumberValidate && isEmailValidate && isDobValidate) {
-        if(alernateMobileNumberController.text != null) {
-          if (isAltMobileNumberValidate)
-            updateUser();
-        }
-        else{
+        String? alternateMobile = alernateMobileNumberController.text.isNotEmpty ? alernateMobileNumberController.text : null;
+
+        if (alternateMobile != null && isAltMobileNumberValidate) {
+          updateUser();
+        } else if (alternateMobile == null) {
           updateUser();
         }
       }
@@ -791,7 +813,7 @@ class EditProfile_screenState extends State<EditProfile> {
     if (value.length < 2) {
       setState(() {
         _fullNameError = true;
-        _fullNameErrorMsg = 'Full Name Should Contains Minimum 2 Charactes';
+        _fullNameErrorMsg = 'Full Name Should Contains Minimum 2 Characters';
       });
       isFullNameValidate = false;
       return null;
@@ -856,7 +878,7 @@ class EditProfile_screenState extends State<EditProfile> {
     } else if (!RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(value)) {
       setState(() {
         _emailError = true;
-        _emailErrorMsg = 'Please Enter a Valid Email';
+        _emailErrorMsg = 'Please Enter Valid Email';
       });
       isEmailValidate = false;
       return null;
@@ -909,7 +931,7 @@ class EditProfile_screenState extends State<EditProfile> {
     if (value.startsWith(RegExp('[1-4]'))) {
       setState(() {
         _altNumberError = true;
-        _altNumberErrorMsg = 'Alternate Number Should Not Start with 1-4';
+        _altNumberErrorMsg = 'Alternate Mobile Number Should Not Start with 1-4';
       });
       isAltMobileNumberValidate = false;
       return null;
@@ -917,7 +939,7 @@ class EditProfile_screenState extends State<EditProfile> {
     if (value.contains(RegExp(r'[a-zA-Z]'))) {
       setState(() {
         _altNumberError = true;
-        _altNumberErrorMsg = 'Alternate Number Should Contain Only Digits';
+        _altNumberErrorMsg = 'Alternate Mobile Number Should Contain Only Digits';
       });
       isAltMobileNumberValidate = false;
       return null;

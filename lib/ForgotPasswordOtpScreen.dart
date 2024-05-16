@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:flutter/material.dart';
@@ -116,8 +117,9 @@ class _ForgotPasswordOtpScreenState extends State<ForgotPasswordOtpScreen> {
                       const SizedBox(
                         height: 20,
                       ),
-                      const Text('Please Check Your Email to ', style: CommonUtils.Sub_header_Styles),
-                      const Text('Take 6 Digit Code for Continue', style: CommonUtils.Sub_header_Styles),
+                      const Text('Please Enter 6 Digits OTP sent',
+                          style: CommonUtils.Sub_header_Styles), //Please enter 6 digits OTP sent to your email to continue
+                      const Text('to Your Email to Continue ', style: CommonUtils.Sub_header_Styles),
                     ],
                   ),
                 ),
@@ -168,7 +170,7 @@ class _ForgotPasswordOtpScreenState extends State<ForgotPasswordOtpScreen> {
                                     //     .blue.shade50, // Set background color
                                     enableActiveFill: true,
                                     controller: _otpController,
-
+                                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                                     keyboardType: TextInputType.number,
                                     validator: validateotp,
                                     onCompleted: (v) {
@@ -222,7 +224,7 @@ class _ForgotPasswordOtpScreenState extends State<ForgotPasswordOtpScreen> {
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Text('Didn\'t receive code? ',
+                                      Text('Didn\'t receive OTP? ',
                                           style: TextStyle(
                                             fontSize: 20,
                                             fontFamily: "Calibri",
@@ -237,7 +239,7 @@ class _ForgotPasswordOtpScreenState extends State<ForgotPasswordOtpScreen> {
                                           // Add your custom logic or navigation code here
                                           Resendotpmethod();
                                         },
-                                        child: Text('Resend code',
+                                        child: Text('Resend OTP',
                                             style: TextStyle(
                                                 fontSize: 20, fontFamily: "Calibri", fontWeight: FontWeight.w700, color: Color(0xFF662e91))),
                                       )
@@ -270,7 +272,7 @@ class _ForgotPasswordOtpScreenState extends State<ForgotPasswordOtpScreen> {
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Text('Back to login?', style: CommonUtils.Mediumtext_14),
+                                      Text('Back to Login?', style: CommonUtils.Mediumtext_14),
                                       GestureDetector(
                                         onTap: () {
                                           // Handle the click event for the "Click here!" text
@@ -282,7 +284,7 @@ class _ForgotPasswordOtpScreenState extends State<ForgotPasswordOtpScreen> {
                                             ),
                                           );
                                         },
-                                        child: Text(' Click here!',
+                                        child: Text(' Click Here!',
                                             style: TextStyle(
                                               fontSize: 20,
                                               fontFamily: "Calibri",

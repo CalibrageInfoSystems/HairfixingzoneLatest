@@ -221,14 +221,14 @@ class _BranchesscreenState extends State<Branches_screen> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: const Text('Cancel'),
+              child: const Text('No'),
             ),
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
                 onConfirmLogout();
               },
-              child: const Text('Logout'),
+              child: const Text('Yes'),
             ),
           ],
         );

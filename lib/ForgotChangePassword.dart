@@ -77,8 +77,9 @@ class _ForgotChangePasswordState extends State<ForgotChangePassword> {
                     const SizedBox(
                       height: 20,
                     ),
-                    const Text('Reset Your Password for Recovery ', style: CommonUtils.Sub_header_Styles),
-                    const Text('And Log In to Your Account ', style: CommonUtils.Sub_header_Styles),
+                    const Text('Reset Your Password for Recovery ',
+                        style: CommonUtils.Sub_header_Styles), // Reset your password for recovery and login to your account
+                    const Text('And Login to Your Account ', style: CommonUtils.Sub_header_Styles),
                   ],
                 ),
               ),
@@ -158,6 +159,7 @@ class _ForgotChangePasswordState extends State<ForgotChangePassword> {
                                 });
                               },
                               decoration: InputDecoration(
+                                errorMaxLines: 5,
                                 contentPadding: const EdgeInsets.only(top: 15, bottom: 10, left: 15, right: 15),
                                 focusedBorder: OutlineInputBorder(
                                   borderSide: const BorderSide(
@@ -294,7 +296,7 @@ class _ForgotChangePasswordState extends State<ForgotChangePassword> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                const Text('Back to login?', style: CommonUtils.Mediumtext_14),
+                                const Text('Back to Login?', style: CommonUtils.Mediumtext_14),
                                 GestureDetector(
                                   onTap: () {
                                     // Handle the click event for the "Click here!" text
@@ -306,7 +308,7 @@ class _ForgotChangePasswordState extends State<ForgotChangePassword> {
                                       ),
                                     );
                                   },
-                                  child: const Text(' Click here!',
+                                  child: const Text(' Click Here!',
                                       style: TextStyle(
                                         fontSize: 20,
                                         fontFamily: "Calibri",
@@ -361,18 +363,19 @@ class _ForgotChangePasswordState extends State<ForgotChangePassword> {
       setState(() {
         isPasswordValidate = false;
         _passwordError = true;
-        _passwordErrorMsg = 'Password must be 8 to 25 Characters Only';
+        _passwordErrorMsg = 'Password Must be 8 Characters or Above';
       });
-      return null;
-    } else if (value.length > 30) {
-      setState(() {
-        isPasswordValidate = false;
-        _passwordError = true;
-        _passwordErrorMsg = 'Password must be below 25 characters';
-      });
-      isPasswordValidate = true;
       return null;
     }
+    // else if (value.length > 30) {
+    //   setState(() {
+    //     isPasswordValidate = false;
+    //     _passwordError = true;
+    //     _passwordErrorMsg = 'Password must be below 25 characters';
+    //   });
+    //   isPasswordValidate = true;
+    //   return null;
+    // }
 
     final hasAlphabets = RegExp(r'[a-zA-Z]').hasMatch(value);
     final hasNumbers = RegExp(r'\d').hasMatch(value);

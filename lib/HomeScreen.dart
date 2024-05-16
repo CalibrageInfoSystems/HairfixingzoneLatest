@@ -761,7 +761,6 @@ class _HomeScreenState extends State<HomeScreen> {
               activeColor: Colors.blue,
               textAlign: TextAlign.center,
             ),
-
             BottomNavyBarItem(
               icon: SvgPicture.asset(
                 'assets/bin-bottles.svg',
@@ -818,7 +817,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
                 child: const Text(
-                  'Cancel',
+                  'No',
                   style: TextStyle(
                     fontSize: 16,
                     color: CommonUtils.primaryTextColor,
@@ -849,7 +848,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
                 child: const Text(
-                  'Logout',
+                  'Yes',
                   style: TextStyle(
                     fontSize: 16,
                     color: Colors.white,
@@ -1400,7 +1399,7 @@ class _HomeScreenState extends State<HomeScreen> {
         // Return the settings screen widget
         return const MyProducts();
       case 3:
-      // Return the settings screen widget
+        // Return the settings screen widget
         return Profile();
 
       default:

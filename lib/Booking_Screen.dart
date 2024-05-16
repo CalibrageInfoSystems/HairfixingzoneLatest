@@ -287,14 +287,14 @@ class _BookingScreenState extends State<Bookingscreen> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: const Text('Cancel'),
+              child: const Text('No'),
             ),
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
                 onConfirmLogout(context);
               },
-              child: const Text('Logout'),
+              child: const Text('Yes'),
             ),
           ],
         );

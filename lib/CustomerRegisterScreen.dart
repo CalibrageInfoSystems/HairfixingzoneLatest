@@ -563,6 +563,9 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
                                         hintStyle: const TextStyle(color: Colors.grey, fontWeight: FontWeight.w400),
                                       ),
                                       maxLength: 10,
+                                      inputFormatters: [
+                                        FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                                      ],
                                       validator: validateAlterMobilenum,
                                       onChanged: (value) {
                                         setState(() {
@@ -799,6 +802,7 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
                                           },
                                           focusNode: PasswordFocus,
                                           decoration: InputDecoration(
+                                            errorMaxLines: 5,
                                             errorText: _passwordError ? _passwordErrorMsg : null,
                                             suffixIcon: GestureDetector(
                                               onTap: () {
@@ -1000,7 +1004,7 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
                             Navigator.pop(context);
                           },
                           child: const Text(
-                            ' Click Here',
+                            ' Click Here!',
                             style: TextStyle(
                               fontSize: 15,
                               color: CommonUtils.primaryTextColor,
@@ -1143,7 +1147,7 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
     if (value.startsWith(RegExp('[1-4]'))) {
       setState(() {
         _altNumberError = true;
-        _altNumberErrorMsg = 'Alternate Number Should Not Start with 1-4';
+        _altNumberErrorMsg = 'Alternate Mobile Number Should Not Start with 1-4';
       });
       isAltMobileNumberValidate = false;
       return null;
@@ -1151,7 +1155,7 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
     if (value.contains(RegExp(r'[a-zA-Z]'))) {
       setState(() {
         _altNumberError = true;
-        _altNumberErrorMsg = 'Alternate Number Should Contain Only Digits';
+        _altNumberErrorMsg = 'Alternate Mobile Number Should Contain Only Digits';
       });
       isAltMobileNumberValidate = false;
       return null;
@@ -1159,13 +1163,47 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
     if (value.length != 10) {
       setState(() {
         _altNumberError = true;
-        _altNumberErrorMsg = 'Alternate Number Must Have 10 Digits';
+        _altNumberErrorMsg = 'Alternate Mobile Number Must Have 10 Digits';
       });
       isAltMobileNumberValidate = false;
       return null;
     }
     isAltMobileNumberValidate = true;
     return null;
+    // if (value!.isEmpty) {
+    //   setState(() {
+    //     _altNumberError = true;
+    //     _altNumberErrorMsg = 'Please Enter Mobile Number';
+    //   });
+    //   isAltMobileNumberValidate = false;
+    //   return null;
+    // }
+    // if (value.startsWith(RegExp('[1-4]'))) {
+    //   setState(() {
+    //     _mobileNumberError = true;
+    //     _mobileNumberErrorMsg = 'Mobile Number Should Not Start with 1-4';
+    //   });
+    //   isMobileNumberValidate = false;
+    //   return null;
+    // }
+    // if (value.contains(RegExp(r'[a-zA-Z]'))) {
+    //   setState(() {
+    //     _mobileNumberError = true;
+    //     _mobileNumberErrorMsg = 'Mobile Number Should Contain Only Digits';
+    //   });
+    //   isMobileNumberValidate = false;
+    //   return null;
+    // }
+    // if (value.length != 10) {
+    //   setState(() {
+    //     _mobileNumberError = true;
+    //     _mobileNumberErrorMsg = 'Mobile Number Must Have 10 Digits';
+    //   });
+    //   isMobileNumberValidate = false;
+    //   return null;
+    // }
+    // isMobileNumberValidate = true;
+    // return null;
   }
 
   String? validateEmail(String? value) {
@@ -1179,7 +1217,7 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
     } else if (!RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(value)) {
       setState(() {
         _emailError = true;
-        _emailErrorMsg = 'Please Enter a Valid Email';
+        _emailErrorMsg = 'Please Enter Valid Email';
       });
       isEmailValidate = false;
       return null;
@@ -1201,7 +1239,7 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
     if (value.length < 2) {
       setState(() {
         _userNameError = true;
-        _userNameErrorMsg = 'User Name Should Contains Minimum 2 Charactes';
+        _userNameErrorMsg = 'User Name Should Contains Minimum 2 Characters';
       });
       print('xxx: 2');
       isUserNameValidate = false;
@@ -1238,15 +1276,6 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
       isPswdValidate = false;
       return null;
     }
-    // else if (value.length > 30) {
-    //   setState(() {
-    //     isPasswordValidate = false;
-    //     _passwordError = true;
-    //     _passwordErrorMsg = 'Password must be below 30 characters';
-    //   });
-    //   isPswdValidate = false;
-    //   return null;
-    // }
 
     final hasAlphabets = RegExp(r'[a-zA-Z]').hasMatch(value);
     final hasNumbers = RegExp(r'\d').hasMatch(value);
@@ -1258,7 +1287,7 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
         isPasswordValidate = false;
         _passwordError = true;
         _passwordErrorMsg =
-            'Password Must Include One Uppercase, One Lowercase, One Digit,One Special Character,No Spaces, And be 08-25 Characters Long';
+            'Password Must Include One Uppercase, One Lowercase, One Digit, One Special Character, No Spaces, And be 08-25 Characters Long';
       });
       isPswdValidate = false;
       return null;

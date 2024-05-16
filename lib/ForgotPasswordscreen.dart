@@ -161,7 +161,7 @@ class _ForgotPasswordscreen extends State<ForgotPasswordscreen> {
                                             ),
                                           );
                                         },
-                                        child: Text(' Click here!',
+                                        child: Text(' Click Here!',
                                             style: TextStyle(
                                               fontSize: 20,
                                               fontFamily: "Calibri",

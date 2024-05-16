@@ -279,7 +279,7 @@ class _AgentHomeState extends State<AgentHome> {
                   ),
                 ),
                 child: const Text(
-                  'Cancel',
+                  'No',
                   style: TextStyle(
                     fontSize: 16,
                     color: CommonUtils.primaryTextColor,
@@ -310,7 +310,7 @@ class _AgentHomeState extends State<AgentHome> {
                   ),
                 ),
                 child: const Text(
-                  'Logout',
+                  'Yes',
                   style: TextStyle(
                     fontSize: 16,
                     color: Colors.white,
