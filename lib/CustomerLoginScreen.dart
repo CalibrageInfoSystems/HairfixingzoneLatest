@@ -67,7 +67,7 @@ class _LoginPageState extends State<CustomerLoginScreen> {
                   ),
                   const Text('Login Your Account',
                       style: CommonUtils.Sub_header_Styles),
-                  const Text('To Access All The Services',
+                  const Text('to Access All the Services',
                       style: CommonUtils.Sub_header_Styles),
                 ],
               ),

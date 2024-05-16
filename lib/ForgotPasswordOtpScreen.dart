@@ -116,8 +116,8 @@ class _ForgotPasswordOtpScreenState extends State<ForgotPasswordOtpScreen> {
                       const SizedBox(
                         height: 20,
                       ),
-                      const Text('Please Check Your Email To ', style: CommonUtils.Sub_header_Styles),
-                      const Text('Take 6 Digit Code For Continue', style: CommonUtils.Sub_header_Styles),
+                      const Text('Please Check Your Email to ', style: CommonUtils.Sub_header_Styles),
+                      const Text('Take 6 Digit Code for Continue', style: CommonUtils.Sub_header_Styles),
                     ],
                   ),
                 ),

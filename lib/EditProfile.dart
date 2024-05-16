@@ -86,8 +86,10 @@ class EditProfile_screenState extends State<EditProfile> {
         print('The Internet Is Connected');
         fetchRadioButtonOptions();
         setState(() async {
-          prefs = await SharedPreferences.getInstance();
+          // Wait for SharedPreferences.getInstance() to complete
+          SharedPreferences prefs = await SharedPreferences.getInstance();
 
+          // Now you can retrieve values from SharedPreferences
           Id = prefs.getInt('profileId');
           UserId = prefs.getString('profileUserId');
           fullname = prefs.getString('profilefullname');
@@ -97,47 +99,37 @@ class EditProfile_screenState extends State<EditProfile> {
           email = prefs.getString('profileemail');
           contactNumber = prefs.getString('profilecontactNumber');
           phonenumber = prefs.getString('profilealternatenumber');
-          //  createdByUserId = prefs.getInt('profilecreatedId');
           createdDate = prefs.getString('profilecreateddate');
 
-          // Id = prefs.getInt('userId');
-          // fullname = prefs.getString('userFullName');
-          // phonenumber = prefs.getString('contactNumber');
           username = prefs.getString('username');
-          // email = prefs.getString('email');
-          // contactNumber = prefs.getString('contactNumber');
-          // gender = prefs.getString('gender');
-          // dob = prefs.getString('dateofbirth');
           roleId = prefs.getInt('userRoleId');
           password = prefs.getString('password');
-          // DateTime date = DateTime.parse(dob!);
-          //   formattedDate = DateFormat('dd-MM-yyyy').format(date);
+
+          // Format date if dob is not empty
           if (dob!.isNotEmpty) {
             formattedDate = DateFormat('dd-MM-yyyy').format(DateTime.parse(dob!));
           } else {
             formattedDate = '';
           }
 
-          if (!formattedDate!.isEmpty) {
-            formattedDate = DateFormat('dd-MM-yyyy').format(DateTime.parse(dob!));
-          } else {
-            formattedDate = '';
-          }
+          // Set the state using retrieved values
+          setState(() {
+            fullNameController.text = '$fullname';
+            dobController.text = '$formattedDate';
+            emailController.text = '$email';
+            mobileNumberController.text = '$contactNumber';
+            alernateMobileNumberController.text = '$phonenumber';
+            selectedGender = gender!;
+            isGenderSelected = true;
+            isGenderValidate = false;
+          });
 
+          // Print for debugging
           print('fullname$fullname');
           print('usernameId:$Id');
           print('gender:$gender');
-
-          fullNameController.text = '$fullname';
-          dobController.text = '$formattedDate';
-          emailController.text = '$email';
-          mobileNumberController.text = '$contactNumber';
-          alernateMobileNumberController.text = '$phonenumber';
-          //  gender = '$selectedName';
-          selectedGender = gender!;
-          isGenderSelected = true;
-          isGenderValidate = false;
         });
+
 
         // fetchMyAppointments(userId);
       } else {
@@ -771,9 +763,16 @@ class EditProfile_screenState extends State<EditProfile> {
       print(isMobileNumberValidate);
       print(isEmailValidate);
       print(isDobValidate);
+      print(alernateMobileNumberController.text);
 
       if (isFullNameValidate && isMobileNumberValidate && isEmailValidate && isDobValidate) {
-        updateUser();
+        if(alernateMobileNumberController.text != null) {
+          if (isAltMobileNumberValidate)
+            updateUser();
+        }
+        else{
+          updateUser();
+        }
       }
     }
   }
@@ -857,7 +856,7 @@ class EditProfile_screenState extends State<EditProfile> {
     } else if (!RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(value)) {
       setState(() {
         _emailError = true;
-        _emailErrorMsg = 'Please Enter a Valid Email Address';
+        _emailErrorMsg = 'Please Enter a Valid Email';
       });
       isEmailValidate = false;
       return null;
@@ -926,7 +925,7 @@ class EditProfile_screenState extends State<EditProfile> {
     if (value.length != 10) {
       setState(() {
         _altNumberError = true;
-        _altNumberErrorMsg = 'Alternate Number Must Have 10 Digits';
+        _altNumberErrorMsg = 'Alternate Mobile Number Must Have 10 Digits';
       });
       isAltMobileNumberValidate = false;
       return null;
@@ -998,7 +997,7 @@ class EditProfile_screenState extends State<EditProfile> {
             );
             print('statusmesssage:${data['statusMessage']}');
             //CommonUtils.showCustomToastMessageLong('${data['statusMessage']}', context, 0, 5);
-            CommonUtils.showCustomToastMessageLong('Customer Updated Sucessfully', context, 0, 5);
+            CommonUtils.showCustomToastMessageLong('Customer Updated Successfully', context, 0, 5);
 
             // Success case11.Customer Updated Sucessfully
             // Handle success scenario here

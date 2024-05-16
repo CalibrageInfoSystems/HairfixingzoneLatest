@@ -1015,7 +1015,8 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
             await NotificationService().scheduleNotification(
               title: 'Reminder Notification',
               body:
-              'Hey $userFullName, Today Your Appointment is Scheduled for The ${_selectedTimeSlot24!} Slot At The  ${widget.data.branch} Branch, Located At ${widget.data.address}.',
+              // Hey $userFullName, Today Your Appointment is Scheduled for  ${_selectedTimeSlot24!} at the ${widget.branchname} Branch, Located At ${widget.branchaddress}.
+              'Hey $userFullName, Today Your Appointment is Scheduled for  ${_selectedTimeSlot24!} at the  ${widget.data.branch} Branch, Located At ${widget.data.address}.',
               // scheduledNotificationDateTime: testdate!,
               scheduledNotificationDateTime: slotSelectedDateTime!,
               id: notificationId1,

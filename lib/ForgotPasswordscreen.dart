@@ -82,7 +82,7 @@ class _ForgotPasswordscreen extends State<ForgotPasswordscreen> {
                         height: 20,
                       ),
                       Text('Enter Your Email / User Name', style: CommonUtils.Sub_header_Styles),
-                      Text('We Will Send You a Code', style: CommonUtils.Sub_header_Styles),
+                      Text('to Get an OTP on Your Email', style: CommonUtils.Sub_header_Styles),
                     ],
                   ),
                 ),
@@ -149,7 +149,7 @@ class _ForgotPasswordscreen extends State<ForgotPasswordscreen> {
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Text('Back to login?', style: CommonUtils.Mediumtext_14),
+                                      Text('Back to Login?', style: CommonUtils.Mediumtext_14),
                                       GestureDetector(
                                         onTap: () {
                                           // Handle the click event for the "Click here!" text

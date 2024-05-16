@@ -31,7 +31,13 @@ class _startingscreenState extends State<startingscreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return WillPopScope(
+        onWillPop: () async {
+    // Return true to close the app when the back button is pressed
+          SystemNavigator.pop();
+    return true;
+    },
+    child:Scaffold(
       backgroundColor: Color(0xFFefdbfe), // Background color
       body: Column(
         mainAxisSize: MainAxisSize.min,
@@ -74,7 +80,7 @@ class _startingscreenState extends State<startingscreen> {
                       alignment: Alignment.topCenter,
                       child: Padding(
                         padding: const EdgeInsets.only(top: 20.0, left: 12.0, right: 12.0),
-                        child: Text('Helping You To Take Good ', style: CommonUtils.header_Styles),
+                        child: Text('Helping You to Take Good ', style: CommonUtils.header_Styles),
                       ),
                     ),
 
@@ -82,7 +88,7 @@ class _startingscreenState extends State<startingscreen> {
                       alignment: Alignment.topCenter,
                       child: Padding(
                         padding: const EdgeInsets.only(top: 5.0, left: 12.0, right: 12.0),
-                        child: Text(' Care Of Your Hair!', style: CommonUtils.header_Styles),
+                        child: Text(' Care of Your Hair!', style: CommonUtils.header_Styles),
                       ),
                     ),
                     SizedBox(height: 20), // Space between text and buttons
@@ -92,7 +98,7 @@ class _startingscreenState extends State<startingscreen> {
                       children: [
                         ElevatedButton(
                           onPressed: () {
-                            Navigator.of(context).push(
+                            Navigator.of(context).pushReplacement(
                               MaterialPageRoute(builder: (context) => CustomerLoginScreen()),
                             );
                           },
@@ -123,7 +129,7 @@ class _startingscreenState extends State<startingscreen> {
                         SizedBox(width: 20),
                         ElevatedButton(
                           onPressed: () {
-                            Navigator.of(context).push(
+                            Navigator.of(context).pushReplacement(
                               MaterialPageRoute(builder: (context) => CustomerRegisterScreen()),
                             );
 
@@ -171,7 +177,7 @@ class _startingscreenState extends State<startingscreen> {
                                 // Handle the click event for the "Click here!" text
                                 print('Click here! clicked');
                                 // Add your custom logic or navigation code here
-                                Navigator.of(context).push(
+                                Navigator.of(context).pushReplacement(
                                   MaterialPageRoute(
                                     builder: (context) => AgentLogin(),
                                   ),
@@ -190,6 +196,6 @@ class _startingscreenState extends State<startingscreen> {
           ),
         ],
       ),
-    );
+    ));
   }
 }

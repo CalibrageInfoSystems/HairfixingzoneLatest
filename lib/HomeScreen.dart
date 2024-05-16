@@ -871,9 +871,9 @@ class _HomeScreenState extends State<HomeScreen> {
       case 1:
         return 'My Bookings';
       case 2:
-        return 'My Profile';
-      case 3:
         return 'My Products';
+      case 3:
+        return 'My Profile';
 
       default:
         return 'Home';

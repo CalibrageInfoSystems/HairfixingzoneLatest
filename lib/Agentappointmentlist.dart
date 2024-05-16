@@ -2100,7 +2100,7 @@ class _OpCardState extends State<OpCard> {
                                       Radius.circular(10),
                                     ),
                                   ),
-                                  hintText: 'Enter Amount (Rs) ',
+                                  hintText: 'Enter Billing Amount (Rs)',
                                   counterText: "",
                                   hintStyle: const TextStyle(
                                       color: Colors.grey,
@@ -2121,7 +2121,16 @@ class _OpCardState extends State<OpCard> {
                             child: SizedBox(
                               child: Center(
                                 child: GestureDetector(
-                                  onTap: () {},
+                                  onTap: () {
+                                    if (_formKey.currentState!
+                                        .validate()) {
+                                      int? price = int.tryParse(
+                                          _priceController.text);
+                                      postAppointment(
+                                          data, 18, price!, userId);
+                                      Navigator.of(context).pop();
+                                    }
+                                  },
                                   child: Container(
                                     height: 40.0,
                                     decoration: BoxDecoration(
@@ -2226,7 +2235,7 @@ class _OpCardState extends State<OpCard> {
   String? validateAmount(String? value) {
     print('validate 3333');
     if (value == null || value.isEmpty) {
-      return 'Please Enter Amount (Rs)';
+      return 'Please Enter Billing Amount (Rs)';
     }
     return null;
   }

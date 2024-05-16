@@ -371,7 +371,7 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
                           Radius.circular(10),
                         ),
                       ),
-                      hintText: 'Select Between Dates',
+                      hintText: 'Select Dates',
                       counterText: "",
                       hintStyle: const TextStyle(color: Colors.grey, fontWeight: FontWeight.w400),
                       prefixIcon: const Icon(Icons.calendar_today),

@@ -86,7 +86,7 @@ class AgentAppointmentsProvider extends ChangeNotifier {
   //   notifyListeners();
   // }
   void clearFilter() {
-    displayDate = 'Select between dates';
+    displayDate = 'Select Dates';
     selectedStatus = 0;
     selectedBranch = 0;
     apiFromDate = null;

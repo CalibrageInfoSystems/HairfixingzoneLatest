@@ -77,7 +77,7 @@ class _ForgotChangePasswordState extends State<ForgotChangePassword> {
                     const SizedBox(
                       height: 20,
                     ),
-                    const Text('Reset Your Password For Recovery ', style: CommonUtils.Sub_header_Styles),
+                    const Text('Reset Your Password for Recovery ', style: CommonUtils.Sub_header_Styles),
                     const Text('And Log In to Your Account ', style: CommonUtils.Sub_header_Styles),
                   ],
                 ),

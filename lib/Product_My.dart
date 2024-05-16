@@ -793,7 +793,7 @@ class ProductCard extends StatelessWidget {
                 Text(
                   '₹ ${formatNumber(product.maxPrice)}',
                   style: const TextStyle(
-                    fontSize: 22,
+                    fontSize: 18,
                     fontFamily: "Calibri",
                     fontWeight: FontWeight.w500,
                     letterSpacing: 1,
