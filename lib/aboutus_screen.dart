@@ -44,7 +44,7 @@ class AboutUsScreen extends StatelessWidget {
                       //     fontSize: 14),
                       // textAlign: TextAlign.justify,
 
-                      style: CommonStyles.txSty_16blu_f5,
+                      style: CommonStyles.txSty_16black_f5,
                     ),
                     SizedBox(height: 15),
                     Text('Our Journey',
@@ -62,7 +62,7 @@ class AboutUsScreen extends StatelessWidget {
                       //   fontSize: 14,
                       // ),
                       // textAlign: TextAlign.justify,
-                      style: CommonStyles.txSty_16blu_f5,
+                      style: CommonStyles.txSty_16black_f5,
                     ),
                   ]),
                 )
