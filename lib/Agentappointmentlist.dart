@@ -1337,7 +1337,7 @@ class _OpCardState extends State<OpCard> {
                 if (!isPastDate(data.date, data.slotDuration)) {
                   print('Button 1 pressed for ${data.customerName}');
 
-                  postAppointment(data, 5, 0, userId);
+                  postAppointment(data, 5, 0.0, userId);
                   Get_ApprovedDeclinedSlots(data, 5);
                   print('accpteedbuttonisclicked');
                   // Navigator.push(
@@ -1885,7 +1885,7 @@ class _OpCardState extends State<OpCard> {
   }
 
   Future<void> postAppointment(
-      Appointment data, int i, int Amount, int? userId) async {
+      Appointment data, int i, double? Amount, int? userId) async {
     print('22222');
     final url = Uri.parse(baseUrl + postApiAppointment);
     print('url==>890: $url');
@@ -2124,7 +2124,7 @@ class _OpCardState extends State<OpCard> {
                                   onTap: () {
                                     if (_formKey.currentState!
                                         .validate()) {
-                                      int? price = int.tryParse(
+                                      double? price = double.tryParse(
                                           _priceController.text);
                                       postAppointment(
                                           data, 18, price!, userId);
@@ -2153,7 +2153,7 @@ class _OpCardState extends State<OpCard> {
                                           // }
                                           if (_formKey.currentState!
                                               .validate()) {
-                                            int? price = int.tryParse(
+                                            double? price = double.tryParse(
                                                 _priceController.text);
                                             postAppointment(
                                                 data, 18, price!, userId);

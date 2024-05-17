@@ -380,7 +380,7 @@ class _ForgotPasswordOtpScreenState extends State<ForgotPasswordOtpScreen> {
           } else {
             LoadingProgress.stop(context);
             FocusScope.of(context).unfocus();
-            CommonUtils.showCustomToastMessageLong('${data["statusMessage"]} ', context, 1, 3, toastPosition: MediaQuery.of(context).size.height / 2);
+            CommonUtils.showCustomToastMessageLong('${data["statusMessage"]}', context, 1, 3, toastPosition: MediaQuery.of(context).size.height / 2);
           }
           // LoadingProgress.stop(context);
         } else {
