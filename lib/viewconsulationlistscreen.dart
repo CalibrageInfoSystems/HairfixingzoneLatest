@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:custom_date_range_picker/custom_date_range_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +8,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hairfixingzone/BranchModel.dart';
 import 'package:hairfixingzone/Common/common_styles.dart';
 import 'package:hairfixingzone/CommonUtils.dart';
+import 'package:hairfixingzone/CustomCalendarDialog.dart';
 import 'package:hairfixingzone/MyAppointment_Model.dart';
 
 import 'package:hairfixingzone/api_config.dart';
@@ -25,7 +27,12 @@ class viewconsulationlistscreen extends StatefulWidget {
   final BranchModel agent;
   final int userid;
   const viewconsulationlistscreen(
-      {super.key, required this.branchid, required this.fromdate, required this.todate, required this.agent, required this.userid});
+      {super.key,
+        required this.branchid,
+        required this.fromdate,
+        required this.todate,
+        required this.agent,
+        required this.userid});
 
   @override
   State<viewconsulationlistscreen> createState() => _ViewConsultationState();
@@ -34,10 +41,10 @@ class viewconsulationlistscreen extends StatefulWidget {
 class _ViewConsultationState extends State<viewconsulationlistscreen> {
   List<Consultation> consultationslist = [];
 
-  TextEditingController fromToDates = TextEditingController();
+  final TextEditingController _fromToDatesController = TextEditingController();
   DateTime? startDate;
   DateTime? endDate;
-
+  List<String>? selectedDate;
   String? month;
   String? date;
   String? year;
@@ -47,15 +54,19 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
     super.initState();
     startDate = DateTime.now().subtract(const Duration(days: 14));
     endDate = DateTime.now();
-    fromToDates.text =
-        '${startDate != null ? DateFormat("dd/MM/yyyy").format(startDate!) : '-'} - ${endDate != null ? DateFormat("dd/MM/yyyy").format(endDate!) : '-'}';
+    _fromToDatesController.text =
+    '${startDate != null ? DateFormat("dd/MM/yyyy").format(startDate!) : '-'} - ${endDate != null ? DateFormat("dd/MM/yyyy").format(endDate!) : '-'}';
 
-    print('branchid ${widget.branchid} fromdate${widget.fromdate} todate ${widget.todate}');
-    ConsultationData = getviewconsulationlist(DateFormat('yyyy-MM-dd').format(startDate!), DateFormat('yyyy-MM-dd').format(endDate!));
+    print(
+        'branchid ${widget.branchid} fromdate${widget.fromdate} todate ${widget.todate}');
+    ConsultationData = getviewconsulationlist(
+        DateFormat('yyyy-MM-dd').format(startDate!),
+        DateFormat('yyyy-MM-dd').format(endDate!));
   }
 
 // http://182.18.157.215/SaloonApp/API/api/Consultation/GetConsultationsByBranchId
-  Future<List<Consultation>> getviewconsulationlist(String fromdate, String todate) async {
+  Future<List<Consultation>> getviewconsulationlist(
+      String fromdate, String todate) async {
     // const String apiUrl =
     //     'http://182.18.157.215/SaloonApp/API/api/Consultation/GetConsultationsByBranchId';
     String apiUrl = baseUrl + getconsulationbyranchid;
@@ -90,7 +101,8 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
           List<dynamic> jsonList = responseData["listResult"];
           final dynamic listResult = responseData["listResult"];
           if (listResult != null && listResult is List<dynamic>) {
-            List<Consultation> consultations = jsonList.map((e) => Consultation.fromJson(e)).toList();
+            List<Consultation> consultations =
+            jsonList.map((e) => Consultation.fromJson(e)).toList();
             // for (var consultation in consultations) {
             //   DateTime createdDateTime = DateTime.parse(consultation.createdDate);
             //   month = DateFormat('MMM').format(createdDateTime);
@@ -116,6 +128,52 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
     }
     return [];
   }
+
+  String formateDate(String date) {
+    try {
+      DateFormat inputFormat = DateFormat('dd/MM/yyyy');
+
+      DateTime dateTime = inputFormat.parse(date);
+
+      DateFormat outputFormat = DateFormat('yyyy-MM-dd');
+
+      String formattedDateStr = outputFormat.format(dateTime);
+      return formattedDateStr;
+    } catch (e) {
+      print('Error parsing date: $e');
+      rethrow;
+    }
+  }
+
+  final config = CalendarDatePicker2WithActionButtonsConfig(
+    firstDate: DateTime(2012),
+    lastDate: DateTime(2030),
+    dayTextStyle: CommonStyles.dayTextStyle,
+    calendarType: CalendarDatePicker2Type.range,
+    selectedDayHighlightColor: Colors.purple[800],
+    closeDialogOnCancelTapped: true,
+    firstDayOfWeek: 1,
+    weekdayLabelTextStyle: const TextStyle(
+      color: Colors.black87,
+      fontWeight: FontWeight.bold,
+    ),
+    controlsTextStyle: const TextStyle(
+      color: Color.fromARGB(255, 224, 18, 18),
+      fontSize: 15,
+      fontWeight: FontWeight.bold,
+    ),
+    centerAlignModePicker: true,
+    customModePickerIcon: const SizedBox(), // ensure SizedBox is constant
+    selectedDayTextStyle:
+    CommonStyles.dayTextStyle.copyWith(color: Colors.white),
+    // dayTextStylePredicate: ({required DateTime date}) {
+    //   TextStyle? textStyle;
+    //   if (DateUtils.isSameDay(date, DateTime(2021, 1, 25))) {
+    //     textStyle = anniversaryTextStyle;
+    //   }
+    //   return textStyle;
+    // },
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -143,31 +201,40 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
                         // borderRadius: BorderRadius.circular(30), //border corner radius
                         boxShadow: [
                           BoxShadow(
-                            color: Color(0xFF960efd).withOpacity(0.2), //color of shadow
+                            color: const Color(0xFF960efd)
+                                .withOpacity(0.2), //color of shadow
                             spreadRadius: 2, //spread radius
                             blurRadius: 4, // blur radius
-                            offset: Offset(0, 2), // changes position of shadow
+                            offset: const Offset(
+                                0, 2), // changes position of shadow
                           ),
                         ],
                       ),
                       child: Row(
                         children: [
                           Container(
-                            padding: EdgeInsets.all(10),
+                            padding: const EdgeInsets.all(10),
                             // width: MediaQuery.of(context).size.width / 4,
                             child: ClipRRect(
                               //  borderRadius: BorderRadius.circular(10.0),
                               child: Image.network(
-                                widget.agent.imageName!.isNotEmpty ? widget.agent.imageName! : 'https://example.com/placeholder-image.jpg',
+                                widget.agent.imageName!.isNotEmpty
+                                    ? widget.agent.imageName!
+                                    : 'https://example.com/placeholder-image.jpg',
                                 fit: BoxFit.cover,
-                                height: MediaQuery.of(context).size.height / 5.5 / 2,
+                                height: MediaQuery.of(context).size.height /
+                                    5.5 /
+                                    2,
                                 width: MediaQuery.of(context).size.width / 3.2,
                                 errorBuilder: (context, error, stackTrace) {
                                   return Image.asset(
                                     'assets/hairfixing_logo.png', // Path to your PNG placeholder image
                                     fit: BoxFit.cover,
-                                    height: MediaQuery.of(context).size.height / 4 / 2,
-                                    width: MediaQuery.of(context).size.width / 3.2,
+                                    height: MediaQuery.of(context).size.height /
+                                        4 /
+                                        2,
+                                    width:
+                                    MediaQuery.of(context).size.width / 3.2,
                                   );
                                 },
                               ),
@@ -181,7 +248,7 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
                           ),
                           Container(
                             width: MediaQuery.of(context).size.width / 2,
-                            padding: EdgeInsets.only(top: 8),
+                            padding: const EdgeInsets.only(top: 8),
                             // width: MediaQuery.of(context).size.width / 4,
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.start,
@@ -189,13 +256,13 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
                               children: [
                                 Text(
                                   widget.agent.name,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     color: Color(0xFF0f75bc),
                                     fontSize: 16.0,
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 10,
                                 ),
                                 Text(
@@ -320,40 +387,102 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
                     height: 10,
                   ),
 
-                  //MARK: FromToDates
+                  //MARK: _fromToDatesController
+
+                  // TextFormField(
+                  //   controller: _fromToDatesController,
+                  //   keyboardType: TextInputType.visiblePassword,
+                  //   onTap: () {
+                  //     showCustomDateRangePicker(
+                  //       context,
+                  //       dismissible: true,
+                  //       endDate: endDate,
+                  //       startDate: startDate,
+                  //       maximumDate: DateTime.now().add(const Duration(days: 50)),
+                  //       minimumDate: DateTime.now().subtract(const Duration(days: 50)),
+                  //       onApplyClick: (s, e) {
+                  //         setState(() {
+                  //           //MARK: Date
+                  //           endDate = e;
+                  //           startDate = s;
+                  //           _fromToDatesController.text =
+                  //               '${startDate != null ? DateFormat("dd/MM/yyyy").format(startDate!) : '-'} / ${endDate != null ? DateFormat("dd/MM/yyyy").format(endDate!) : '-'}';
+                  //           ConsultationData =
+                  //               getviewconsulationlist(DateFormat('yyyy-MM-dd').format(startDate!), DateFormat('yyyy-MM-dd').format(endDate!));
+                  //         });
+                  //       },
+                  //       onCancelClick: () {
+                  //         setState(() {
+                  //           endDate = null;
+                  //           startDate = null;
+                  //         });
+                  //       },
+                  //     );
+                  //   },
+                  //   readOnly: true,
+                  //   decoration: InputDecoration(
+                  //     contentPadding: const EdgeInsets.only(top: 15, bottom: 10, left: 15, right: 15),
+                  //     focusedBorder: OutlineInputBorder(
+                  //       borderSide: const BorderSide(
+                  //         color: Color(0xFF0f75bc),
+                  //       ),
+                  //       borderRadius: BorderRadius.circular(6.0),
+                  //     ),
+                  //     enabledBorder: OutlineInputBorder(
+                  //       borderSide: const BorderSide(
+                  //         color: CommonUtils.primaryTextColor,
+                  //       ),
+                  //       borderRadius: BorderRadius.circular(6.0),
+                  //     ),
+                  //     border: const OutlineInputBorder(
+                  //       borderRadius: BorderRadius.all(
+                  //         Radius.circular(10),
+                  //       ),
+                  //     ),
+                  //     hintText: 'Select Dates',
+                  //     counterText: "",
+                  //     hintStyle: const TextStyle(color: Colors.grey, fontWeight: FontWeight.w400),
+                  //     prefixIcon: const Icon(Icons.calendar_today),
+                  //   ),
+                  //   //  validator: validatePassword,
+                  // ),
+
                   TextFormField(
-                    controller: fromToDates,
+                    controller: _fromToDatesController,
                     keyboardType: TextInputType.visiblePassword,
-                    onTap: () {
-                      showCustomDateRangePicker(
-                        context,
-                        dismissible: true,
-                        endDate: endDate,
-                        startDate: startDate,
-                        maximumDate: DateTime.now().add(const Duration(days: 50)),
-                        minimumDate: DateTime.now().subtract(const Duration(days: 50)),
-                        onApplyClick: (s, e) {
-                          setState(() {
-                            //MARK: Date
-                            endDate = e;
-                            startDate = s;
-                            fromToDates.text =
-                                '${startDate != null ? DateFormat("dd/MM/yyyy").format(startDate!) : '-'} / ${endDate != null ? DateFormat("dd/MM/yyyy").format(endDate!) : '-'}';
-                            ConsultationData =
-                                getviewconsulationlist(DateFormat('yyyy-MM-dd').format(startDate!), DateFormat('yyyy-MM-dd').format(endDate!));
-                          });
-                        },
-                        onCancelClick: () {
-                          setState(() {
-                            endDate = null;
-                            startDate = null;
-                          });
-                        },
-                      );
+                    onTap: () async {
+                      FocusScope.of(context).requestFocus(
+                          FocusNode()); // to prevent the keyboard from appearing
+                      final values =
+                      await showCustomCalendarDialog(context, config);
+                      if (values != null) {
+                        setState(() {
+                          //           startDate = s;
+                          //           endDate = e;
+                          //           _fromToDatesController.text =
+                          //               '${startDate != null ? DateFormat("dd/MM/yyyy").format(startDate!) : '-'} / ${endDate != null ? DateFormat("dd/MM/yyyy").format(endDate!) : '-'}';
+                          //           ConsultationData =
+                          //               getviewconsulationlist(DateFormat('yyyy-MM-dd').format(startDate!), DateFormat('yyyy-MM-dd').format(endDate!));
+
+                          selectedDate =
+                              _getValueText(config.calendarType, values);
+                          _fromToDatesController.text =
+                          '${selectedDate![0]} - ${selectedDate![1]}';
+                          String apiFromDate = formateDate(selectedDate![0]);
+                          String apiToDate = formateDate(selectedDate![1]);
+                          ConsultationData =
+                              getviewconsulationlist(apiFromDate, apiToDate);
+                          // provider.getDisplayDate =
+                          //     '${selectedDate![0]}  to  ${selectedDate![1]}';
+                          // provider.getApiFromDate = selectedDate![0];
+                          // provider.getApiToDate = selectedDate![1];
+                        });
+                      }
                     },
                     readOnly: true,
                     decoration: InputDecoration(
-                      contentPadding: const EdgeInsets.only(top: 15, bottom: 10, left: 15, right: 15),
+                      contentPadding: const EdgeInsets.only(
+                          top: 15, bottom: 10, left: 15, right: 15),
                       focusedBorder: OutlineInputBorder(
                         borderSide: const BorderSide(
                           color: Color(0xFF0f75bc),
@@ -373,7 +502,8 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
                       ),
                       hintText: 'Select Dates',
                       counterText: "",
-                      hintStyle: const TextStyle(color: Colors.grey, fontWeight: FontWeight.w400),
+                      hintStyle: const TextStyle(
+                          color: Colors.grey, fontWeight: FontWeight.w400),
                       prefixIcon: const Icon(Icons.calendar_today),
                     ),
                     //  validator: validatePassword,
@@ -396,16 +526,18 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
                 } else {
                   List<Consultation> data = snapshot.data!;
                   if (data.isEmpty) {
-                    return Container(
+                    return SizedBox(
                         height: MediaQuery.of(context).size.height / 2,
-                        child: Center(
+                        child: const Center(
                           child: Text('No Consultation Found'),
                         ));
                   } else {
                     return Expanded(
                       child: ListView.builder(
-                          // shrinkWrap: true,
-                          itemCount: consultationslist.isEmpty ? 1 : consultationslist.length,
+                        // shrinkWrap: true,
+                          itemCount: consultationslist.isEmpty
+                              ? 1
+                              : consultationslist.length,
                           itemBuilder: (context, index) {
                             DateTime createdDateTime = DateTime.parse(
                               consultationslist[index].createdDate,
@@ -416,154 +548,197 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
                             print('month: $month, Date: $date, Year: $year');
                             // if (consultationslist.length > 0) {
                             return Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 8, vertical: 3),
                               child: Card(
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10)),
                                 elevation: 5,
                                 child: IntrinsicHeight(
                                     child: Container(
-                                  //   height: MediaQuery.of(context).size.height / 5,
-                                  padding: const EdgeInsets.all(10),
-                                  // decoration: BoxDecoration(
-                                  //   borderRadius: BorderRadius.circular(10.0),
-                                  //   color: Colors.white,
-                                  //
-                                  // ),
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(10.0),
-                                    // borderRadius: BorderRadius.circular(30), //border corner radius
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: const Color(0xFF960efd).withOpacity(0.2), //color of shadow
-                                        spreadRadius: 2, //spread radius
-                                        blurRadius: 4, // blur radius
-                                        offset: const Offset(0, 2), // changes position of shadow
+                                      //   height: MediaQuery.of(context).size.height / 5,
+                                      padding: const EdgeInsets.all(10),
+                                      // decoration: BoxDecoration(
+                                      //   borderRadius: BorderRadius.circular(10.0),
+                                      //   color: Colors.white,
+                                      //
+                                      // ),
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(10.0),
+                                        // borderRadius: BorderRadius.circular(30), //border corner radius
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: const Color(0xFF960efd)
+                                                .withOpacity(0.2), //color of shadow
+                                            spreadRadius: 2, //spread radius
+                                            blurRadius: 4, // blur radius
+                                            offset: const Offset(
+                                                0, 2), // changes position of shadow
+                                          ),
+                                        ],
                                       ),
-                                    ],
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      Container(
-                                        //  height: MediaQuery.of(context).size.height,
-                                        //  width: MediaQuery.of(context).size.height / 16,
-                                        child: Column(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          crossAxisAlignment: CrossAxisAlignment.center,
-                                          children: [
-                                            Text(
-                                              '$month',
-                                              style: CommonUtils.txSty_18p_f7,
-                                            ),
-                                            Text(
-                                              '$date',
-                                              style: const TextStyle(
-                                                fontSize: 22,
-                                                fontFamily: "Calibri",
-                                                // letterSpacing: 1.5,
-                                                fontWeight: FontWeight.w700,
-                                                color: Color(0xFF0f75bc),
-                                              ),
-                                            ),
-                                            Text(
-                                              '$year',
-                                              style: const TextStyle(
-                                                fontSize: 14,
-                                                fontFamily: "Calibri",
-                                                fontWeight: FontWeight.w700,
-                                                color: Color(0xFF0f75bc),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      const VerticalDivider(
-                                        color: CommonUtils.primaryTextColor,
-                                      ),
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Expanded(
-                                              child: Row(
-                                                children: [
-                                                  Expanded(
-                                                    child: Container(
-                                                      child: Column(
-                                                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                                        children: [
-                                                          Text(
-                                                            consultationslist[index].consultationName,
-                                                            style: const TextStyle(
-                                                              fontSize: 14,
-                                                              fontFamily: "Calibri",
-                                                              fontWeight: FontWeight.w700,
-                                                              color: Color(0xFF0f75bc),
-                                                            ),
-                                                          ),
-                                                          Text(
-                                                            consultationslist[index].email,
-                                                            style: const TextStyle(
-                                                              fontSize: 14,
-                                                              fontFamily: "Calibri",
-                                                              fontWeight: FontWeight.w500,
-                                                              color: Color(0xFF5f5f5f),
-                                                            ),
-                                                          )
-                                                        ],
-                                                      ),
-                                                    ),
+                                      child: Row(
+                                        children: [
+                                          Container(
+                                            //  height: MediaQuery.of(context).size.height,
+                                            //  width: MediaQuery.of(context).size.height / 16,
+                                            child: Column(
+                                              mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                              crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                              children: [
+                                                Text(
+                                                  '$month',
+                                                  style: CommonUtils.txSty_18p_f7,
+                                                ),
+                                                Text(
+                                                  '$date',
+                                                  style: const TextStyle(
+                                                    fontSize: 22,
+                                                    fontFamily: "Calibri",
+                                                    // letterSpacing: 1.5,
+                                                    fontWeight: FontWeight.w700,
+                                                    color: Color(0xFF0f75bc),
                                                   ),
-                                                  Expanded(
-                                                    child: Container(
-                                                      child: Column(
-                                                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                                        children: [
-                                                          Text(
-                                                            consultationslist[index].gender,
-                                                            style: const TextStyle(
-                                                              fontSize: 14,
-                                                              fontFamily: "Calibri",
-                                                              fontWeight: FontWeight.w500,
-                                                              color: Color(0xFF5f5f5f),
-                                                            ),
-                                                          ),
-                                                          Text(
-                                                            consultationslist[index].phoneNumber,
-                                                            style: const TextStyle(
-                                                              fontSize: 14,
-                                                              fontFamily: "Calibri",
-                                                              fontWeight: FontWeight.w500,
-                                                              color: Color(0xFF5f5f5f),
-                                                            ),
-                                                          ),
-                                                          //Text('', style: CommonStyles.txSty_16black_f5),
-                                                          // Text(consultationslist[index].gender, style: CommonStyles.txSty_16black_f5),
-                                                        ],
-                                                      ),
-                                                    ),
+                                                ),
+                                                Text(
+                                                  '$year',
+                                                  style: const TextStyle(
+                                                    fontSize: 14,
+                                                    fontFamily: "Calibri",
+                                                    fontWeight: FontWeight.w700,
+                                                    color: Color(0xFF0f75bc),
                                                   ),
-                                                ],
-                                              ),
+                                                ),
+                                              ],
                                             ),
-                                            Text(
-                                              consultationslist[index].remarks,
-                                              style: const TextStyle(
-                                                fontSize: 14,
-                                                fontFamily: "Calibri",
-                                                fontWeight: FontWeight.w500,
-                                                color: Color(0xFF5f5f5f),
-                                              ),
+                                          ),
+                                          const VerticalDivider(
+                                            color: CommonUtils.primaryTextColor,
+                                          ),
+                                          Expanded(
+                                            child: Column(
+                                              crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                              children: [
+                                                Expanded(
+                                                  child: Row(
+                                                    children: [
+                                                      Expanded(
+                                                        child: Container(
+                                                          child: Column(
+                                                            mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceAround,
+                                                            crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                            children: [
+                                                              Text(
+                                                                consultationslist[
+                                                                index]
+                                                                    .consultationName,
+                                                                style:
+                                                                const TextStyle(
+                                                                  fontSize: 14,
+                                                                  fontFamily:
+                                                                  "Calibri",
+                                                                  fontWeight:
+                                                                  FontWeight
+                                                                      .w700,
+                                                                  color: Color(
+                                                                      0xFF0f75bc),
+                                                                ),
+                                                              ),
+                                                              Text(
+                                                                consultationslist[
+                                                                index]
+                                                                    .email,
+                                                                style:
+                                                                const TextStyle(
+                                                                  fontSize: 14,
+                                                                  fontFamily:
+                                                                  "Calibri",
+                                                                  fontWeight:
+                                                                  FontWeight
+                                                                      .w500,
+                                                                  color: Color(
+                                                                      0xFF5f5f5f),
+                                                                ),
+                                                              )
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Expanded(
+                                                        child: Container(
+                                                          child: Column(
+                                                            mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceAround,
+                                                            crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                            children: [
+                                                              Text(
+                                                                consultationslist[
+                                                                index]
+                                                                    .gender,
+                                                                style:
+                                                                const TextStyle(
+                                                                  fontSize: 14,
+                                                                  fontFamily:
+                                                                  "Calibri",
+                                                                  fontWeight:
+                                                                  FontWeight
+                                                                      .w500,
+                                                                  color: Color(
+                                                                      0xFF5f5f5f),
+                                                                ),
+                                                              ),
+                                                              Text(
+                                                                consultationslist[
+                                                                index]
+                                                                    .phoneNumber,
+                                                                style:
+                                                                const TextStyle(
+                                                                  fontSize: 14,
+                                                                  fontFamily:
+                                                                  "Calibri",
+                                                                  fontWeight:
+                                                                  FontWeight
+                                                                      .w500,
+                                                                  color: Color(
+                                                                      0xFF5f5f5f),
+                                                                ),
+                                                              ),
+                                                              //Text('', style: CommonStyles.txSty_16black_f5),
+                                                              // Text(consultationslist[index].gender, style: CommonStyles.txSty_16black_f5),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                                Text(
+                                                  consultationslist[index].remarks,
+                                                  style: const TextStyle(
+                                                    fontSize: 14,
+                                                    fontFamily: "Calibri",
+                                                    fontWeight: FontWeight.w500,
+                                                    color: Color(0xFF5f5f5f),
+                                                  ),
+                                                ),
+                                                // based on status hide this row
+                                              ],
                                             ),
-                                            // based on status hide this row
-                                          ],
-                                        ),
+                                          ),
+                                        ],
                                       ),
-                                    ],
-                                  ),
-                                )),
+                                    )),
                               ),
                             );
                             //  }
@@ -609,5 +784,22 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
             Navigator.of(context).pop();
           },
         ));
+  }
+
+  List<String>? _getValueText(
+      CalendarDatePicker2Type datePickerType, List<DateTime?> values) {
+    values =
+        values.map((e) => e != null ? DateUtils.dateOnly(e) : null).toList();
+
+    DateTime? startDate;
+    DateTime? endDate;
+
+    startDate = values[0];
+    endDate = values.length > 1 ? values[1] : null;
+    String? formattedStartDate = DateFormat('dd/MM/yyyy').format(startDate!);
+    String? formattedEndDate =
+    endDate != null ? DateFormat('dd/MM/yyyy').format(endDate) : 'null';
+
+    return [formattedStartDate, formattedEndDate];
   }
 }

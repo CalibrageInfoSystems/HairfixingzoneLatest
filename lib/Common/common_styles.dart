@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:loading_progress/loading_progress.dart';
@@ -88,13 +89,11 @@ class CommonStyles {
     color: whiteColor,
   );
   static const TextStyle txSty_18w_fb = TextStyle(
-    fontSize: 22,
-    fontFamily: "Calibri",
-    fontWeight: FontWeight.bold,
-    color: whiteColor,
-    letterSpacing :1
-
-  );
+      fontSize: 22,
+      fontFamily: "Calibri",
+      fontWeight: FontWeight.bold,
+      color: whiteColor,
+      letterSpacing: 1);
   static const TextStyle txSty_16p_f5 = TextStyle(
     fontSize: 16,
     fontFamily: "Calibri",
@@ -120,6 +119,9 @@ class CommonStyles {
     fontWeight: FontWeight.bold,
     color: blueColor,
   );
+
+  static TextStyle dayTextStyle =
+  const TextStyle(color: Colors.black, fontWeight: FontWeight.w700);
 
   static void progressBar(BuildContext context) {
     LoadingProgress.start(
@@ -155,6 +157,30 @@ class CommonStyles {
       },
     );
   }
+
+  static CalendarDatePicker2WithActionButtonsConfig config =
+  CalendarDatePicker2WithActionButtonsConfig(
+    firstDate: DateTime(2012),
+    lastDate: DateTime(2030),
+    dayTextStyle: CommonStyles.dayTextStyle,
+    calendarType: CalendarDatePicker2Type.range,
+    selectedDayHighlightColor: Colors.purple[800],
+    closeDialogOnCancelTapped: true,
+    firstDayOfWeek: 1,
+    weekdayLabelTextStyle: const TextStyle(
+      color: Colors.black87,
+      fontWeight: FontWeight.bold,
+    ),
+    controlsTextStyle: const TextStyle(
+      color: Color.fromARGB(255, 224, 18, 18),
+      fontSize: 15,
+      fontWeight: FontWeight.bold,
+    ),
+    centerAlignModePicker: true,
+    customModePickerIcon: const SizedBox(),
+    selectedDayTextStyle:
+    CommonStyles.dayTextStyle.copyWith(color: Colors.white),
+  );
 
   static void stopProgress(BuildContext context) {
     Navigator.of(context).pop();
@@ -212,7 +238,8 @@ class CommonStyles {
     );
   }
 
-  static AppBar remainingAppBars(BuildContext context, {required String title, required void Function()? onPressed}) {
+  static AppBar remainingAppBars(BuildContext context,
+      {required String title, required void Function()? onPressed}) {
     return AppBar(
       backgroundColor: const Color(0xFFf3e3ff),
       automaticallyImplyLeading: false,
@@ -274,7 +301,8 @@ class ProgressDialog {
                   child: const CircularProgressIndicator.adaptive()));
         },
       );
-      _isShowing = false; // Set _isShowing back to false after dialog is dismissed
+      _isShowing =
+      false; // Set _isShowing back to false after dialog is dismissed
     }
   }
 

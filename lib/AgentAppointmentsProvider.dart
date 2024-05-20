@@ -1,5 +1,5 @@
-import 'package:flutter/cupertino.dart';
-
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'Appointment.dart';
 
 class AgentAppointmentsProvider extends ChangeNotifier {
@@ -20,15 +20,14 @@ class AgentAppointmentsProvider extends ChangeNotifier {
     filteredAppointments = data;
     notifyListeners(); // Ensure listeners are notified when filtered data changes
   }
+
   List<Appointment> get storeIntoProvider => proAppointments;
   set storeIntoProvider(List<Appointment> products) {
-    print('xxx: storeIntoProvider');
     proAppointments = List<Appointment>.from(products);
     notifyListeners();
   }
 
   void filterProviderData(List<Appointment> items) {
-    print('xxx: filterProviderData');
     proAppointments = List<Appointment>.from(items);
     notifyListeners();
   }
@@ -36,7 +35,6 @@ class AgentAppointmentsProvider extends ChangeNotifier {
   bool get filterStatus => isFilterApplied;
   set filterStatus(bool newStatus) {
     isFilterApplied = newStatus;
-    print('xxx: isFilterApplied: $isFilterApplied');
     notifyListeners();
   }
 
@@ -47,14 +45,56 @@ class AgentAppointmentsProvider extends ChangeNotifier {
   }
 
   String? get getApiFromDate => apiFromDate;
+  // set getApiFromDate(String? newCode) {
+  //   DateTime dateTime = DateTime.parse('2022-08-22');
+  //   DateFormat('yyyy-MM-dd').format(dateTime);
+  //   apiFromDate = newCode;
+  //   notifyListeners();
+  // }
   set getApiFromDate(String? newCode) {
-    apiFromDate = newCode;
+    if (newCode != null) {
+      try {
+        DateFormat inputFormat = DateFormat('dd/MM/yyyy');
+
+        DateTime dateTime = inputFormat.parse(newCode);
+
+        DateFormat outputFormat = DateFormat('yyyy-MM-dd');
+
+        String formattedDateStr = outputFormat.format(dateTime);
+
+        apiFromDate = formattedDateStr;
+      } catch (e) {
+        print('Error parsing date: $e');
+        apiFromDate = null;
+      }
+    } else {
+      apiFromDate = null;
+    }
+
     notifyListeners();
   }
 
   String? get getApiToDate => apiToDate;
   set getApiToDate(String? newCode) {
-    apiToDate = newCode;
+    if (newCode != null) {
+      try {
+        DateFormat inputFormat = DateFormat('dd/MM/yyyy');
+
+        DateTime dateTime = inputFormat.parse(newCode);
+
+        DateFormat outputFormat = DateFormat('yyyy-MM-dd');
+
+        String formattedDateStr = outputFormat.format(dateTime);
+
+        apiToDate = formattedDateStr;
+      } catch (e) {
+        print('Error parsing date: $e');
+        apiToDate = null;
+      }
+    } else {
+      apiToDate = null;
+    }
+
     notifyListeners();
   }
 
