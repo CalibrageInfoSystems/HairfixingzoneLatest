@@ -32,6 +32,7 @@ class Profile_screenState extends State<Profile> {
   String username = '';
   String mobileNumber = '';
   String? dob;
+  String? password = '';
   String? Mobilenumber;
   String formattedDate = '';
   DateTime? createdDate;
@@ -92,7 +93,7 @@ class Profile_screenState extends State<Profile> {
           gender = customerData['gender'] ?? '';
           String roleName = customerData['rolename'] ?? '';
           // Mobilenumber = customerData['MobileNumber']??'';
-
+          password = customerData['password'] ?? '';
           String dob = customerData['dateofbirth'] ?? '';
           //  formattedDate = DateFormat('dd-MM-yyyy').format(DateTime.parse(dob));
           // if (dob != null) {
@@ -284,7 +285,7 @@ class Profile_screenState extends State<Profile> {
                                   icon: 'assets/mobile-notch.svg',
                                   bgColor: CommonStyles.statusYellowText,
                                   data: '+91 ${contactNumber}',
-                                  tooltipMessage: 'Contact Number',
+                                  tooltipMessage: 'Mobile Number',
                                 )),
                             SizedBox(height: 15),
                             Container(
@@ -318,6 +319,7 @@ class Profile_screenState extends State<Profile> {
                                         MaterialPageRoute(
                                           builder: (context) => ChangePasswordScreen(
                                             id: Id,
+                                            password: password!,
                                           ),
                                         ),
                                       );

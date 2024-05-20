@@ -16,8 +16,9 @@ import 'api_config.dart';
 
 class ChangePasswordScreen extends StatefulWidget {
   final int id;
+  final String password;
 
-  ChangePasswordScreen({required this.id});
+  ChangePasswordScreen({required this.id, required this.password});
 
   @override
   State<ChangePasswordScreen> createState() => _ChangePasswordScreenState();
@@ -411,9 +412,18 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
     }
   }
 
+  // String? validateCurrentPassword(String? value) {
+  //   if (value == null || value.isEmpty) {
+  //     return 'Please Enter Current Password';
+  //   }
+  //   return null;
+  // }
   String? validateCurrentPassword(String? value) {
     if (value == null || value.isEmpty) {
       return 'Please Enter Current Password';
+    }
+    if (value != widget.password) {
+      return 'Invalid Current Password';
     }
     return null;
   }
