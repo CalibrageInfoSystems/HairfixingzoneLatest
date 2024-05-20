@@ -709,7 +709,7 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
                                           },
                                         );
                                       },
-                                      focusNode: usernameFocus,
+                                      //     focusNode: usernameFocus,
                                       decoration: InputDecoration(
                                         contentPadding: const EdgeInsets.only(top: 15, bottom: 10, left: 15, right: 15),
                                         focusedBorder: OutlineInputBorder(
@@ -1362,6 +1362,7 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
   }
 
   Future<void> validating() async {
+    FocusScope.of(context).unfocus();
     print('xxx: 1');
     print('isFullNameValidate $isFullNameValidate');
     print('isDobValidate $isDobValidate');
@@ -1382,6 +1383,7 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
           isUserNameValidate &&
           isPswdValidate &&
           isConfirmPswdValidate) {
+        FocusScope.of(context).unfocus();
         print('xxx: api called');
         CommonStyles.startProgress(context);
         String? fullName = fullNameController.text;
@@ -1440,24 +1442,27 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
           CommonStyles.stopProgress(context);
           if (response.statusCode == 200) {
             Map<String, dynamic> data = json.decode(response.body);
-
+            FocusScope.of(context).unfocus();
             // Extract the necessary information
             bool isSuccess = data['isSuccess'];
             if (isSuccess == true) {
               print('Request sent successfully');
-              CommonUtils.showCustomToastMessageLong('Customer Registered Sucessfully', context, 0, 2);
+              CommonUtils.showCustomToastMessageLong('Customer Registered Sucessfully', context, 0, 5);
+              FocusScope.of(context).unfocus();
 
               /// CommonUtils.showCustomToastMessageLong('${data['statusMessage']}', context, 0, 2);
               Navigator.pop(context);
             } else {
+              FocusScope.of(context).unfocus();
               // CommonStyles.stopProgress(context);
               print('Request sent failed');
-              CommonUtils.showCustomToastMessageLong('${data['statusMessage']}', context, 1, 2);
+              CommonUtils.showCustomToastMessageLong('${data['statusMessage']}', context, 1, 5);
               invalidCredentials = data['statusMessage'];
               endUserMessageFromApi(data['statusMessage']);
             }
           } else {
-            CommonUtils.showCustomToastMessageLong('Something went wrong', context, 0, 2);
+            FocusScope.of(context).unfocus();
+            CommonUtils.showCustomToastMessageLong('Something went wrong', context, 0, 5);
             print('Failed to send the request. Status code: ${response.statusCode}');
           }
         } catch (e) {

@@ -30,6 +30,7 @@ class Profile_screenState extends State<ProfileMy> {
   String? email;
   String? contactNumber;
   String gender = '';
+  String? password = '';
   int Id = 0;
   String username = '';
   String mobileNumber = '';
@@ -92,7 +93,7 @@ class Profile_screenState extends State<ProfileMy> {
           email = customerData['email'] ?? '';
           gender = customerData['gender'] ?? '';
           String roleName = customerData['rolename'] ?? '';
-
+          password = customerData['password'] ?? '';
           // Mobilenumber = customerData['MobileNumber']??'';
           String dob = customerData['dateofbirth'] ?? '';
           if (dob.isNotEmpty) {
@@ -345,7 +346,7 @@ class Profile_screenState extends State<ProfileMy> {
                                   icon: 'assets/mobile-notch.svg',
                                   bgColor: CommonStyles.statusYellowText,
                                   data: '+91 ${contactNumber}',
-                                  tooltipMessage: 'Contact Number',
+                                  tooltipMessage: 'Mobile Number',
                                 )),
                             SizedBox(height: 15),
                             Container(
@@ -379,6 +380,7 @@ class Profile_screenState extends State<ProfileMy> {
                                         MaterialPageRoute(
                                           builder: (context) => ChangePasswordScreen(
                                             id: Id,
+                                            password: password!,
                                           ),
                                         ),
                                       );
