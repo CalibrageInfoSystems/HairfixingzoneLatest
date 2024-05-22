@@ -365,3 +365,23 @@ class ProgressDialog {
 //     }
 //   }
 // }
+class TooltipOverlay extends StatelessWidget {
+  final String message;
+
+  TooltipOverlay({required this.message});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: Colors.black,
+        borderRadius: BorderRadius.circular(4),
+      ),
+      child: Text(
+        message,
+        style: TextStyle(color: Colors.white, fontSize: 12),
+      ),
+    );
+  }
+}

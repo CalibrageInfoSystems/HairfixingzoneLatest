@@ -2455,6 +2455,8 @@ class MyAppointments_screenState extends State<Agentappointmentlist> {
     });
   }
 
+
+
   AgentAppointmentsProvider? myAppointmentsProvider;
   @override
   void didChangeDependencies() {
@@ -3358,7 +3360,9 @@ class _OpCardState extends State<OpCard> {
 
   double rating_star = 0.0;
   int? userId;
-
+  final GlobalKey _toolTipKey = GlobalKey();
+  final GlobalKey _fullnameTipKey = GlobalKey();
+  final GlobalKey _emailtoolTipKey = GlobalKey();
   @override
   void initState() {
     super.initState();
@@ -3380,6 +3384,7 @@ class _OpCardState extends State<OpCard> {
     //         int ,       String ,                           int
     return [dateTime.day, DateFormat.MMM().format(dateTime), dateTime.year];
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -3471,10 +3476,57 @@ class _OpCardState extends State<OpCard> {
                                         color: Color(0xFF0f75bc),
                                       ),
                                     ),
-                                    Text(widget.data.customerName,
-                                        style: CommonStyles.txSty_16black_f5),
-                                    Text(widget.data.email ?? '',
-                                        style: CommonStyles.txSty_16black_f5),
+                                    // Text(widget.data.customerName,
+                                    //     style: CommonStyles.txSty_16black_f5),
+                                    // Text(widget.data.email ?? '',
+                                    //     style: CommonStyles.txSty_16black_f5),
+                                    Row(children: [
+                                      Text(widget.data.customerName, style: CommonStyles.txSty_16black_f5),
+                                      // GestureDetector(
+                                      //   child: const Padding(
+                                      //     padding: EdgeInsets.fromLTRB(8, 0, 0, 0),
+                                      //     child: Icon(
+                                      //       Icons.copy,
+                                      //       size: 16,
+                                      //     ),
+                                      //   ),
+                                      //   onTap: () {
+                                      //     Clipboard.setData(ClipboardData(text: widget.data.customerName));
+                                      //     // showSnackBarMessage(message: "Customer Name has been Copied", context: context);
+                                      //   },
+                                      // ),
+                                      GestureDetector(
+                                        key: _fullnameTipKey,
+                                        child: Padding(
+                                          padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
+                                          child: Icon(
+                                            Icons.copy,
+                                            size: 16,
+                                          ),
+                                        ),
+                                        onTap: () {
+                                          Clipboard.setData(ClipboardData(text: widget.data.customerName!));
+                                          showTooltip(context, "Copied", _fullnameTipKey);
+                                        },
+                                      ),
+                                    ]),
+                                    Row(children: [
+                                      Text(widget.data.email ?? '', style: CommonStyles.txSty_16black_f5),
+                                      GestureDetector(
+                                        key: _emailtoolTipKey,
+                                        child: const Padding(
+                                          padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                          child: Icon(
+                                            Icons.copy,
+                                            size: 16,
+                                          ),
+                                        ),
+                                        onTap: () {
+                                          Clipboard.setData(ClipboardData(text: widget.data.email!));
+                                          showTooltip(context, "Copied", _emailtoolTipKey);
+                                        },
+                                      ),
+                                    ]),
                                     Text(widget.data.purposeOfVisit,
                                         style: CommonStyles.txSty_16black_f5),
                                     Text(widget.data.name,
@@ -3493,8 +3545,27 @@ class _OpCardState extends State<OpCard> {
                                     height: 2.0,
                                   ),
 
-                                  Text(widget.data.phoneNumber ?? '',
-                                      style: CommonStyles.txSty_16black_f5),
+                                  // Text(widget.data.phoneNumber ?? '',
+                                  //     style: CommonStyles.txSty_16black_f5),
+                                  Row(
+                                    children: [
+                                      Text(widget.data.phoneNumber ?? '', style: CommonStyles.txSty_16black_f5),
+                                      GestureDetector(
+                                        key: _toolTipKey,
+                                        child: const Padding(
+                                          padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
+                                          child: Icon(
+                                            Icons.copy,
+                                            size: 16,
+                                          ),
+                                        ),
+                                        onTap: () {
+                                          Clipboard.setData(ClipboardData(text: widget.data.phoneNumber!));
+                                          showTooltip(context, "Copied", _toolTipKey);
+                                        },
+                                      ),
+                                    ],
+                                  ),
                                   const SizedBox(
                                     height: 3.0,
                                   ),
@@ -3555,7 +3626,29 @@ class _OpCardState extends State<OpCard> {
           ),
         ));
   }
+  void showTooltip(BuildContext context, String message, GlobalKey toolTipKey) {
+    final renderBox = toolTipKey.currentContext!.findRenderObject() as RenderBox;
+    final overlay = Overlay.of(context).context.findRenderObject() as RenderBox;
 
+    final target = renderBox.localToGlobal(renderBox.size.bottomLeft(Offset.zero), ancestor: overlay) + Offset(-10, 0);
+
+    final entry = OverlayEntry(
+      builder: (context) => Positioned(
+        left: target.dx,
+        top: target.dy,
+        child: Material(
+          color: Colors.transparent,
+          child: TooltipOverlay(message: message),
+        ),
+      ),
+    );
+
+    Overlay.of(context).insert(entry);
+
+    Future.delayed(Duration(seconds: 2), () {
+      entry.remove();
+    });
+  }
   Widget statusBasedBgById(int statusTypeId, String status) {
     final Color statusColor;
     final Color statusBgColor;
@@ -3580,7 +3673,7 @@ class _OpCardState extends State<OpCard> {
         statusColor = const Color.fromARGB(255, 33, 129, 70);
         statusBgColor = CommonStyles.statusYellowBg;
         break;
-      case 18: // Closed
+      case 17: // Closed
         statusColor = CommonStyles.statusYellowText;
         statusBgColor = CommonStyles.statusYellowBg;
         break;
@@ -3729,7 +3822,7 @@ class _OpCardState extends State<OpCard> {
           children: [
             GestureDetector(
               onTap: () {
-                closePopUp(data, 18, userId);
+                closePopUp(data, 17, userId);
               },
               child: IgnorePointer(
                 ignoring: isPastDate(data.date, data.slotDuration),
@@ -3781,7 +3874,7 @@ class _OpCardState extends State<OpCard> {
     //         style: CommonStyles.txSty_16blu_f5),
     //   );
 
-      case 18: // Closed
+      case 17: // Closed
 
         if (data.review == null) {
           // If status is Closed, show review or rate button
@@ -3807,8 +3900,8 @@ class _OpCardState extends State<OpCard> {
             ),
           );
         }
-    // case 19: // Reschuduled
-    //   return const SizedBox();
+    case 18: // Reschuduled
+      return const SizedBox();
       default:
         return const SizedBox();
     //  return Container(
@@ -3904,7 +3997,7 @@ class _OpCardState extends State<OpCard> {
               Center(
                 // Center the text
                 child: Text(
-                  'Are You Sure You Want to Cancel The appointment at ${appointments.name} Branch for ${appointments.purposeOfVisit}?',
+                  'Are You Sure You Want to Cancel the Appointment at ${appointments.name} Branch for ${appointments.purposeOfVisit}?',
                   style: CommonUtils.txSty_18b_fb,
                   textAlign:
                   TextAlign.center, // Optionally, align the text center
@@ -4155,7 +4248,7 @@ class _OpCardState extends State<OpCard> {
           // Failure case
           // Handle failure scenario here
           CommonUtils.showCustomToastMessageLong(
-              'The Request Should Not Be Canceled Within 1 hour Before The Slot',
+              'The Request Should Not be Cancelled Within 1 hour Before the Slot',
               context,
               0,
               2);
@@ -4206,7 +4299,7 @@ class _OpCardState extends State<OpCard> {
       "customerId": data.customerId,
       "UpdatedByUserId": userId,
       "timeofSlot": data.timeofSlot,
-      if (i == 18) "price": Amount,
+      if (i == 17) "price": Amount,
 
       // "rating": null,
       // "review": null,
@@ -4236,7 +4329,7 @@ class _OpCardState extends State<OpCard> {
           print('Request sent successfully');
           if (i == 5) {
             openDialogaccept();
-          } else if (i == 18) {
+          } else if (i == 17) {
             openDialogclosed();
           }
           // Success case
@@ -4257,6 +4350,7 @@ class _OpCardState extends State<OpCard> {
       print('Error: $e');
     }
   }
+
 
   void closePopUp(Appointment data, int i, int? userId) {
     showDialog(
@@ -4344,13 +4438,109 @@ class _OpCardState extends State<OpCard> {
                               const SizedBox(
                                 height: 10,
                               ),
+                              Row(
+                                children: [
+                                  const Expanded(
+                                    flex: 4,
+                                    child: Text(
+                                      'Customer Name',
+                                      style: TextStyle(color: Colors.black,fontSize: 14,
+                                        fontFamily: "Calibri",
+                                        fontWeight: FontWeight.w500,),
+
+                                    ),
+                                  ),
+                                  Expanded(
+                                    flex: 6,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                      MainAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          ': ${data.customerName}',
+                                          style: const TextStyle(
+                                              color: CommonStyles
+                                                  .primaryTextColor,fontSize: 14,
+                                            fontFamily: "Calibri",
+                                            fontWeight: FontWeight.w500,),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 5,
+                              ),
+                              Row(
+                                children: [
+                                  const Expanded(
+                                    flex: 4,
+                                    child: Text(
+                                      'Slot Time',
+                                      style: TextStyle(color: Colors.black),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    flex: 6,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                      MainAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          ': ${formatCancelDialogDate(data.date)}, ${data.slotDuration}',
+                                          style: const TextStyle(
+                                              color: CommonStyles
+                                                  .primaryTextColor,fontSize: 14,
+                                            fontFamily: "Calibri",
+                                            fontWeight: FontWeight.w500,),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 5,
+                              ),
+                              Row(
+                                children: [
+                                  const Expanded(
+                                    flex: 4,
+                                    child: Text(
+                                      'Purpose',
+                                      style: TextStyle(color: Colors.black,fontSize: 14,
+                                        fontFamily: "Calibri",
+                                        fontWeight: FontWeight.w500,),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    flex: 6,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                      MainAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          ': ${data.purposeOfVisit}',
+                                          style: const TextStyle(
+                                              color: CommonStyles
+                                                  .primaryTextColor),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 20,
+                              ),
                               const Row(
                                 children: [
                                   Text(
                                     'Billing Amount (Rs)',
                                     style: TextStyle(
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.bold),
+                                      // fontSize: 12,
+                                    ),
                                   ),
                                   Text(
                                     ' *',
@@ -4410,7 +4600,7 @@ class _OpCardState extends State<OpCard> {
                                     if (_formKey.currentState!.validate()) {
                                       double? price = double.tryParse(
                                           _priceController.text);
-                                      postAppointment(data, 18, price!, userId);
+                                      postAppointment(data, 17, price!, userId);
                                       Navigator.of(context).pop();
                                     }
                                   },
@@ -4439,7 +4629,7 @@ class _OpCardState extends State<OpCard> {
                                             double? price = double.tryParse(
                                                 _priceController.text);
                                             postAppointment(
-                                                data, 18, price!, userId);
+                                                data, 17, price!, userId);
                                             Navigator.of(context).pop();
                                           }
                                         },
@@ -4462,6 +4652,7 @@ class _OpCardState extends State<OpCard> {
       },
     );
   }
+
 
   void openDialogreject() async {
     await showDialog(
@@ -4545,7 +4736,7 @@ class _OpCardState extends State<OpCard> {
               const Center(
                 // Center the text
                 child: Text(
-                  'Your Appointment Has Been Accepted Successfully ',
+                  'Your Appointment Has Been Accepted Successfully. ',
                   style: CommonUtils.txSty_18b_fb,
                   textAlign:
                   TextAlign.center, // Optionally, align the text center
@@ -4624,6 +4815,12 @@ class _OpCardState extends State<OpCard> {
       },
     );
   }
+
+  String formatCancelDialogDate(String dateString) {
+    DateTime dateTime = DateTime.parse(dateString);
+    String formattedDate = DateFormat('dd/MM/yyyy').format(dateTime);
+    return formattedDate;
+  }
 }
 
 Future<void> Get_ApprovedDeclinedSlots(Appointment data, int i) async {
@@ -4663,4 +4860,5 @@ Future<void> Get_ApprovedDeclinedSlots(Appointment data, int i) async {
   } catch (e) {
     print('Error: $e');
   }
+
 }

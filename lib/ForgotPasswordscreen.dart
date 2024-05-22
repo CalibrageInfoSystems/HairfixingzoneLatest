@@ -243,12 +243,25 @@ class _ForgotPasswordscreen extends State<ForgotPasswordscreen> {
             List<dynamic> listResult = data['listResult'];
             Map<String, dynamic> user = listResult.first;
             print('userid: ${user['id']}');
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => ForgotPasswordOtpScreen(id: user['id'], userName: user['userName'])),
-            );
-            CommonUtils.showCustomToastMessageLong('OTP Has Sent To Your Email', context, 0, 3,
-                toastPosition: MediaQuery.of(context).size.height / 2);
+            print('roleID: ${user['roleID']}');
+
+            if (user['roleID'] == 2) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => ForgotPasswordOtpScreen(id: user['id'], userName: user['userName'])),
+              );
+              CommonUtils.showCustomToastMessageLong('OTP Has Sent To Your Email', context, 0, 3,
+                  toastPosition: MediaQuery.of(context).size.height / 2);
+            } else {
+              // Show toast for invalid user
+              FocusScope.of(context).unfocus();
+              CommonUtils.showCustomToastMessageLong(
+                  "Invalid User", context, 1, 3,
+                  toastPosition: MediaQuery.of(context).size.height / 2);
+              // showToast('Invalid user');
+            }
+
+
           } else {
             FocusScope.of(context).unfocus();
             CommonUtils.showCustomToastMessageLong('Invalid User ', context, 1, 3, toastPosition: MediaQuery.of(context).size.height / 2);

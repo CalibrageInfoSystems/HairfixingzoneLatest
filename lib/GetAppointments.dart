@@ -246,7 +246,7 @@ class MyAppointments_screenState extends State<GetAppointments> {
 
           // Filter out records with "statusTypeId": 19
           listResult =
-              listResult.where((item) => item['statusTypeId'] != 19).toList();
+              listResult.where((item) => item['statusTypeId'] != 18).toList();
 
           List<MyAppointment_Model> result = listResult
               .map((item) => MyAppointment_Model.fromJson(item))
@@ -488,7 +488,7 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
           print('listResult: ${listResult.length}');
           // Filter out records with "statusTypeId": 19
           List<dynamic> filteredList =
-          listResult.where((item) => item['statusTypeId'] != 19).toList();
+          listResult.where((item) => item['statusTypeId'] != 18).toList();
           print('filteredList: ${filteredList.length}');
           // Convert the filtered list to MyAppointment_Model objects if needed
           myAppointmentsProvider.storeIntoProvider = filteredList
@@ -931,7 +931,7 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
 
                               // Filter out items with "typeCdId": 19
                               data = data
-                                  .where((item) => item.typeCdId != 19)
+                                  .where((item) => item.typeCdId != 18)
                                   .toList();
 
                               return SizedBox(
@@ -1134,9 +1134,9 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
 
       print('Before filtering: $responseData');
 
-      // Filter out items with "typeCdId": 19
+      // Filter out items with "typeCdId": 18
       final List<dynamic> filteredData =
-      responseData.where((item) => item['typeCdId'] != 19).toList();
+      responseData.where((item) => item['typeCdId'] != 18).toList();
 
       print('After filtering: $filteredData');
 
@@ -1189,7 +1189,7 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
 
           // Filter out records with "statusTypeId": 19
           List<dynamic> filteredList =
-          listResult.where((item) => item['statusTypeId'] != 19).toList();
+          listResult.where((item) => item['statusTypeId'] != 18).toList();
 
           // Convert the filtered list to MyAppointment_Model objects if needed
           myAppointmentsProvider.storeIntoProvider = filteredList
@@ -1465,7 +1465,7 @@ class _OpCardState extends State<OpCard> {
         statusColor = const Color.fromARGB(255, 33, 129, 70);
         statusBgColor = CommonStyles.statusYellowBg;
         break;
-      case 18: // Closed
+      case 17: // Closed
         statusColor = CommonStyles.statusYellowText;
         statusBgColor = CommonStyles.statusYellowBg;
         break;
@@ -1688,7 +1688,7 @@ class _OpCardState extends State<OpCard> {
     //         style: CommonStyles.txSty_16blu_f5),
     //   );
 
-      case 18: // Closed
+      case 17: // Closed
         if (data.review == null) {
           // If status is Closed, show review or rate button
           return GestureDetector(
@@ -1742,7 +1742,7 @@ class _OpCardState extends State<OpCard> {
             ),
           );
         }
-      case 19: // Reschuduled
+      case 18: // Reschuduled
         return const SizedBox();
       default:
         return const SizedBox();
@@ -1875,17 +1875,41 @@ class _OpCardState extends State<OpCard> {
                     ),
                     child: Column(
                       children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            IconButton(
-                              icon: const Icon(Icons.close),
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                            ),
-                          ],
+                        Padding(
+                          padding: const EdgeInsets.all(4.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: const CircleAvatar(
+                                  backgroundColor: CommonStyles.primaryColor,
+                                  radius: 12,
+                                  child: Center(
+                                    child: Icon(
+                                      Icons.close,
+                                      color: CommonStyles.primaryTextColor,
+                                      size: 15,
+                                    ),
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
                         ),
+                        // Row(
+                        //   mainAxisAlignment: MainAxisAlignment.end,
+                        //   children: [
+                        //     IconButton(
+                        //       icon: const Icon(Icons.close),
+                        //       onPressed: () {
+                        //         Navigator.of(context).pop();
+                        //       },
+                        //     ),
+                        //   ],
+                        // ),
                         Container(
                           width: MediaQuery.of(context).size.width *
                               0.8, // Reduced width
@@ -1936,7 +1960,7 @@ class _OpCardState extends State<OpCard> {
                               ),
                               Center(
                                 child: Text(
-                                  'Please Rate Your Experience For The ${appointments.slotDuration} Slot At The ${appointments.branch} Hair Fixing Zone',
+                                  'Please Rate Your Experience for the ${appointments.slotDuration} Slot at the ${appointments.branch} Hair Fixing Zone.',
                                   style: const TextStyle(
                                     fontSize: 16,
                                     color: CommonUtils.primaryTextColor,
@@ -2101,6 +2125,8 @@ class _OpCardState extends State<OpCard> {
       },
     );
   }
+
+
   // void showDialogForRating(MyAppointment_Model appointments) {
   //   _commentstexteditcontroller.clear();
   //   showDialog(
@@ -2365,7 +2391,7 @@ class _OpCardState extends State<OpCard> {
         appointmens.contactNumber, // Changed from appointments.phoneNumber
         "Email": appointmens.email,
         "GenderTypeId": appointmens.genderTypeId,
-        "StatusTypeId": 18,
+        "StatusTypeId": 17,
         "PurposeOfVisitId": appointmens.purposeOfVisitId,
         "PurposeOfVisit": appointmens.purposeOfVisit,
         "IsActive": true,
@@ -2454,7 +2480,7 @@ class _OpCardState extends State<OpCard> {
               Center(
                 // Center the text
                 child: Text(
-                  'Are You Sure You Want to Cancel The appointment at ${appointments.branch} Branch for ${appointments.purposeOfVisit}?',
+                  'Are You Sure You Want to Cancel the Appointment at ${appointments.branch} Branch for ${appointments.purposeOfVisit}?',
                   style: CommonUtils.txSty_18b_fb,
                   textAlign:
                   TextAlign.center, // Optionally, align the text center
@@ -2604,7 +2630,7 @@ class _OpCardState extends State<OpCard> {
           // Failure case
           // Handle failure scenario here
           CommonUtils.showCustomToastMessageLong(
-              'The Request Should Not Be Canceled Within 1 hour Before The Slot',
+              'The Request Should Not be Cancelled Within 30 minutes Before the Slot',
               context,
               0,
               2);

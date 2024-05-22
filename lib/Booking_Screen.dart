@@ -1063,7 +1063,7 @@ class _BookingScreenState extends State<Bookingscreen> {
             await NotificationService().scheduleNotification(
               title: 'Reminder Notification',
               body:
-              'Hey $userFullName, Today Your Appointment is Scheduled for  ${_selectedTimeSlot24!} at the ${widget.branchname} Branch, Located At ${widget.branchaddress}.',
+              'Hey $userFullName, Today Your Appointment is Scheduled for  ${_selectedTimeSlot!} at the ${widget.branchname} Branch, Located at ${widget.branchaddress}.',
               //   scheduledNotificationDateTime: testdate!,
               scheduledNotificationDateTime: slotSelectedDateTime!,
               id: notificationId1,
@@ -1077,7 +1077,7 @@ class _BookingScreenState extends State<Bookingscreen> {
               await NotificationService().scheduleNotification(
                 title: 'Reminder Notification',
                 body:
-                'Hey $userFullName, It Has Been 20 Days Since Your New Patch Was Done. Please Revisit The Hairfixing Zone At The ${widget.branchname}',
+                'Hey $userFullName, It Has Been 20 Days Since Your New Patch Was Done. Please Revisit the Hairfixing Zone at The ${widget.branchname}',
                 // scheduledNotificationDateTime: testdate!,
                 scheduledNotificationDateTime: newDateTime!,
                 id: notificationId2,
@@ -1223,11 +1223,10 @@ class _BookingScreenState extends State<Bookingscreen> {
         !isPreviousYear &&
         date.year >= DateTime.now().year;
   }
-
   List<Slot> getVisibleSlots(List<Slot> slots, bool isTodayHoliday) {
     print('isTodayHoliday====$isTodayHoliday');
-    // Get the current time
-    DateTime now = DateTime.now();
+    // Get the current time and add 30 minutes
+    DateTime now = DateTime.now().add(Duration(minutes: 30));
 
     // Format the time in 12-hour format
     String formattedTime = DateFormat('hh:mm a').format(now);
@@ -1236,12 +1235,10 @@ class _BookingScreenState extends State<Bookingscreen> {
     DateTime currentDate = DateTime.now();
 
     // Combine the current date and formatted time
-    String combinedDateTimeString =
-        '${DateFormat('yyyy-MM-dd').format(currentDate)} $formattedTime';
+    String combinedDateTimeString = '${DateFormat('yyyy-MM-dd').format(currentDate)} $formattedTime';
 
     // Parse the combined date and time string into a DateTime object
-    DateTime combinedDateTime =
-    DateFormat('yyyy-MM-dd hh:mm a').parse(combinedDateTimeString);
+    DateTime combinedDateTime = DateFormat('yyyy-MM-dd hh:mm a').parse(combinedDateTimeString);
 
     if (isTodayHoliday) {
       // Today is a holiday, return an empty list
@@ -1249,23 +1246,18 @@ class _BookingScreenState extends State<Bookingscreen> {
     }
 
     if (slots.isEmpty) {
-      // Return a list with a single Slot object containing the message
-      // return 'Slots not available';
+      // Return an empty list if there are no slots
+      return [];
     }
 
     return slots.where((slot) {
       String timespan = slot.SlotTimeSpan;
       // Combine the current date and formatted time
-      String SlotDateTimeString =
-          '${DateFormat('yyyy-MM-dd').format(currentDate)} $timespan';
+      String SlotDateTimeString = '${DateFormat('yyyy-MM-dd').format(currentDate)} $timespan';
 
       DateFormat dateformat = DateFormat('yyyy-MM-dd');
       String currentdate = dateformat.format(DateTime.now());
       String formattedapiDate = dateformat.format(slot.date);
-
-      // // Parse the combined date and time string into a DateTime object
-      // DateTime SlotDateTime =
-      // DateFormat('yyyy-MM-dd hh:mm a').parse(SlotDateTimeString);
 
       DateTime slotDateTime;
       if (currentdate == formattedapiDate) {
@@ -1273,46 +1265,134 @@ class _BookingScreenState extends State<Bookingscreen> {
         String timespan = slot.SlotTimeSpan;
 
         // Combine the current date and time span
-        String SlotDateTimeString =
-            '${DateFormat('yyyy-MM-dd').format(currentDate)} $timespan';
+        String SlotDateTimeString = '${DateFormat('yyyy-MM-dd').format(currentDate)} $timespan';
 
         // Parse the combined date and time string into a DateTime object
-        slotDateTime =
-            DateFormat('yyyy-MM-dd hh:mm a').parse(SlotDateTimeString);
+        slotDateTime = DateFormat('yyyy-MM-dd hh:mm a').parse(SlotDateTimeString);
       } else {
         // If the slot is for a different date, use the slot's date and time
-        slotDateTime =
-            DateFormat('yyyy-MM-dd HH:mm').parse('$formattedapiDate $timespan');
+        slotDateTime = DateFormat('yyyy-MM-dd HH:mm').parse('$formattedapiDate $timespan');
       }
 
       return !slotDateTime.isBefore(combinedDateTime);
     }).toList();
   }
+  // List<Slot> getVisibleSlots(List<Slot> slots, bool isTodayHoliday) {
+  //   print('isTodayHoliday====$isTodayHoliday');
+  //   // Get the current time
+  //   DateTime now = DateTime.now();
+  //
+  //   // Format the time in 12-hour format
+  //   String formattedTime = DateFormat('hh:mm a').format(now);
+  //
+  //   // Get the current date
+  //   DateTime currentDate = DateTime.now();
+  //
+  //   // Combine the current date and formatted time
+  //   String combinedDateTimeString =
+  //       '${DateFormat('yyyy-MM-dd').format(currentDate)} $formattedTime';
+  //
+  //   // Parse the combined date and time string into a DateTime object
+  //   DateTime combinedDateTime =
+  //   DateFormat('yyyy-MM-dd hh:mm a').parse(combinedDateTimeString);
+  //
+  //   if (isTodayHoliday) {
+  //     // Today is a holiday, return an empty list
+  //     return [];
+  //   }
+  //
+  //   if (slots.isEmpty) {
+  //     // Return a list with a single Slot object containing the message
+  //     // return 'Slots not available';
+  //   }
+  //
+  //   return slots.where((slot) {
+  //     String timespan = slot.SlotTimeSpan;
+  //     // Combine the current date and formatted time
+  //     String SlotDateTimeString =
+  //         '${DateFormat('yyyy-MM-dd').format(currentDate)} $timespan';
+  //
+  //     DateFormat dateformat = DateFormat('yyyy-MM-dd');
+  //     String currentdate = dateformat.format(DateTime.now());
+  //     String formattedapiDate = dateformat.format(slot.date);
+  //
+  //     // // Parse the combined date and time string into a DateTime object
+  //     // DateTime SlotDateTime =
+  //     // DateFormat('yyyy-MM-dd hh:mm a').parse(SlotDateTimeString);
+  //
+  //     DateTime slotDateTime;
+  //     if (currentdate == formattedapiDate) {
+  //       // If the slot is for the current date, use the slot's time
+  //       String timespan = slot.SlotTimeSpan;
+  //
+  //       // Combine the current date and time span
+  //       String SlotDateTimeString =
+  //           '${DateFormat('yyyy-MM-dd').format(currentDate)} $timespan';
+  //
+  //       // Parse the combined date and time string into a DateTime object
+  //       slotDateTime =
+  //           DateFormat('yyyy-MM-dd hh:mm a').parse(SlotDateTimeString);
+  //     } else {
+  //       // If the slot is for a different date, use the slot's date and time
+  //       slotDateTime =
+  //           DateFormat('yyyy-MM-dd HH:mm').parse('$formattedapiDate $timespan');
+  //     }
+  //
+  //     return !slotDateTime.isBefore(combinedDateTime);
+  //   }).toList();
+  // }
 
+  // List<Slot> getDisabledSlots(List<Slot> slots) {
+  //   // Get the current time
+  //   DateTime now = DateTime.now();
+  //
+  //   // Format the time in 12-hour format
+  //   String formattedTime = DateFormat('hh:mm a').format(now);
+  //
+  //   // Get the current date
+  //   DateTime currentDate = DateTime.now();
+  //
+  //   // Combine the current date and formatted time
+  //   String combinedDateTimeString =
+  //       '${DateFormat('yyyy-MM-dd').format(currentDate)} $formattedTime';
+  //
+  //   // Parse the combined date and time string into a DateTime object
+  //   DateTime combinedDateTime =
+  //   DateFormat('yyyy-MM-dd hh:mm a').parse(combinedDateTimeString);
+  //
+  //   // Filter the slots based on visibility criteria
+  //   List<Slot> disabledSlots = slots.where((slot) {
+  //     DateTime slotDateTime =
+  //     DateFormat('yyyy-MM-dd HH:mm').parse('${slot.date} ${slot.date}');
+  //     return !slotDateTime.isBefore(combinedDateTime) &&
+  //         slot.availableSlots <= 0;
+  //   }).toList();
+  //
+  //   return disabledSlots;
+  // }
   List<Slot> getDisabledSlots(List<Slot> slots) {
     // Get the current time
     DateTime now = DateTime.now();
 
-    // Format the time in 12-hour format
-    String formattedTime = DateFormat('hh:mm a').format(now);
+    // Add 30 minutes to the current time
+    DateTime futureTime = now.subtract(Duration(minutes: 30));
 
+    // Format the time in 12-hour format
+    String formattedTime = DateFormat('hh:mm a').format(futureTime);
+    print("formattedTime$formattedTime");
     // Get the current date
     DateTime currentDate = DateTime.now();
 
     // Combine the current date and formatted time
-    String combinedDateTimeString =
-        '${DateFormat('yyyy-MM-dd').format(currentDate)} $formattedTime';
+    String combinedDateTimeString = '${DateFormat('yyyy-MM-dd').format(currentDate)} $formattedTime';
 
     // Parse the combined date and time string into a DateTime object
-    DateTime combinedDateTime =
-    DateFormat('yyyy-MM-dd hh:mm a').parse(combinedDateTimeString);
+    DateTime combinedDateTime = DateFormat('yyyy-MM-dd hh:mm a').parse(combinedDateTimeString);
 
     // Filter the slots based on visibility criteria
     List<Slot> disabledSlots = slots.where((slot) {
-      DateTime slotDateTime =
-      DateFormat('yyyy-MM-dd HH:mm').parse('${slot.date} ${slot.date}');
-      return !slotDateTime.isBefore(combinedDateTime) &&
-          slot.availableSlots <= 0;
+      DateTime slotDateTime = DateFormat('yyyy-MM-dd HH:mm').parse('${slot.date} ${slot.date}');
+      return !slotDateTime.isBefore(combinedDateTime) && slot.availableSlots <= 0;
     }).toList();
 
     return disabledSlots;

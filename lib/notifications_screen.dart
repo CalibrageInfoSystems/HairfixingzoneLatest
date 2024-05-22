@@ -616,72 +616,172 @@ class _AgentOpCardState extends State<AgentOpCard> {
   }
 
   Widget cancelSlot(Notifications data) {
-    return GestureDetector(
+    return  GestureDetector(
       onTap: () {
-        conformation(context, data);
+        if (!isPastDate(data.date, data.slotDuration)) {
+          conformation(context, data);
+          // Add your logic here for when the 'Cancel' container is tapped
+        }
       },
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(3),
-          border: Border.all(
-            color: CommonStyles.statusRedText,
+      child: IgnorePointer(
+        ignoring: isPastDate(data.date, data.slotDuration),
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(3),
+            border: Border.all(
+              color: isPastDate(data.date, data.slotDuration)
+                  ? Colors.grey
+                  : CommonStyles.statusRedText,
+            ),
           ),
-        ),
-        padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
-        child: Row(
-          children: [
-            SvgPicture.asset(
-              'assets/calendar-xmark.svg',
-              width: 12,
-              color: CommonStyles.statusRedText,
-            ),
-            const Text(
-              '  Cancel',
-              style: TextStyle(
-                fontSize: 16,
-                fontFamily: "Calibri",
-                fontWeight: FontWeight.w500,
-                color: CommonStyles.statusRedText,
+          padding:
+          const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
+          child: Row(
+            children: [
+              SvgPicture.asset(
+                'assets/calendar-xmark.svg',
+                width: 12,
+                color: isPastDate(data.date, data.slotDuration)
+                    ? Colors.grey
+                    : CommonStyles.statusRedText,
               ),
-            ),
-          ],
+              Text(
+                '  Cancel',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontFamily: "Calibri",
+                  fontWeight: FontWeight.w500,
+                  color: isPastDate(data.date, data.slotDuration)
+                      ? Colors.grey
+                      : CommonStyles.statusRedText,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
+
+    //   GestureDetector(
+    //   onTap: () {
+    //     conformation(context, data);
+    //   },
+    //   child: Container(
+    //     decoration: BoxDecoration(
+    //       borderRadius: BorderRadius.circular(3),
+    //       border: Border.all(
+    //         color: CommonStyles.statusRedText,
+    //       ),
+    //     ),
+    //     padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
+    //     child: Row(
+    //       children: [
+    //         SvgPicture.asset(
+    //           'assets/calendar-xmark.svg',
+    //           width: 12,
+    //           color: CommonStyles.statusRedText,
+    //         ),
+    //         const Text(
+    //           '  Cancel',
+    //           style: TextStyle(
+    //             fontSize: 16,
+    //             fontFamily: "Calibri",
+    //             fontWeight: FontWeight.w500,
+    //             color: CommonStyles.statusRedText,
+    //           ),
+    //         ),
+    //       ],
+    //     ),
+    //   ),
+    // );
   }
 
   Widget acceptSlot(Notifications data) {
-    return GestureDetector(
-      onTap: () {
-        acceptAppointment(data, 5, 0, widget.userId); //MARK: ?????????????
-        Get_ApprovedDeclinedSlots(data, 5);
-      },
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(3),
-          border: Border.all(
-            color: CommonUtils.primaryTextColor,
+    return
+      GestureDetector(
+        onTap: () {
+          if (!isPastDate(data.date, data.slotDuration)) {
+            print('Button 1 pressed for ${data.customerName}');
+
+            acceptAppointment(data, 5, 0, widget.userId);
+            Get_ApprovedDeclinedSlots(data, 5);
+            print('accpteedbuttonisclicked');
+            // Navigator.push(
+            //   context,
+            //   MaterialPageRoute(
+            //     builder: (context) => Rescheduleslotscreen(
+            //       data: data,
+            //     ),
+            //   ),
+            // );
+          }
+        },
+        child: IgnorePointer(
+          ignoring: isPastDate(data.date, data.slotDuration),
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(3),
+              border: Border.all(
+                  color: isPastDate(data.date, data.slotDuration)
+                      ? Colors.grey
+                      : CommonStyles.primaryTextColor),
+            ),
+            padding:
+            const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
+            child: Row(
+              children: [
+                SvgPicture.asset(
+                  'assets/calendar-_3_.svg',
+                  width: 13,
+                  color: isPastDate(data.date, data.slotDuration)
+                      ? Colors.grey
+                      : CommonUtils.primaryTextColor,
+                ),
+                Text(
+                  '  Accept',
+                  style: TextStyle(
+                    fontSize: 15,
+                    color: isPastDate(data.date, data.slotDuration)
+                        ? Colors.grey
+                        : CommonUtils.primaryTextColor,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
-        padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
-        child: Row(
-          children: [
-            SvgPicture.asset(
-              'assets/calendar-_3_.svg',
-              width: 13,
-              color: CommonUtils.primaryTextColor,
-            ),
-            const Text(
-              '  Accept',
-              style: TextStyle(
-                fontSize: 15,
-                color: CommonUtils.primaryTextColor,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
+      );
+    //   GestureDetector(
+    //   onTap: () {
+    //     acceptAppointment(data, 5, 0, widget.userId); //MARK: ?????????????
+    //     Get_ApprovedDeclinedSlots(data, 5);
+    //   },
+    //   child: Container(
+    //     decoration: BoxDecoration(
+    //       borderRadius: BorderRadius.circular(3),
+    //       border: Border.all(
+    //         color: CommonUtils.primaryTextColor,
+    //       ),
+    //     ),
+    //     padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
+    //     child: Row(
+    //       children: [
+    //         SvgPicture.asset(
+    //           'assets/calendar-_3_.svg',
+    //           width: 13,
+    //           color: CommonUtils.primaryTextColor,
+    //         ),
+    //         const Text(
+    //           '  Accept',
+    //           style: TextStyle(
+    //             fontSize: 15,
+    //             color: CommonUtils.primaryTextColor,
+    //           ),
+    //         ),
+    //       ],
+    //     ),
+    //   ),
+    // );
   }
 
   //MARK: Dialogs
@@ -690,14 +790,14 @@ class _AgentOpCardState extends State<AgentOpCard> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text(
-            'Confirmation',
-            style: TextStyle(
-              fontSize: 16,
-              color: CommonUtils.blueColor,
-              fontFamily: 'Calibri',
-            ),
-          ),
+          // title: const Text(
+          //   'Confirmation',
+          //   style: TextStyle(
+          //     fontSize: 16,
+          //     color: CommonUtils.blueColor,
+          //     fontFamily: 'Calibri',
+          //   ),
+          // ),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -711,7 +811,7 @@ class _AgentOpCardState extends State<AgentOpCard> {
               Center(
                 // Center the text
                 child: Text(
-                  'Are You Sure You Want to Cancel   ${appointments.purposeOfVisit} Slot At The ${appointments.name} Hair Fixing Zone ?',
+                  'Are You Sure You Want to Cancel the Appointment at  ${appointments.purposeOfVisit} Branch for ${appointments.name}?',
                   style: CommonUtils.txSty_18b_fb,
                   textAlign:
                   TextAlign.center, // Optionally, align the text center
@@ -844,7 +944,7 @@ class _AgentOpCardState extends State<AgentOpCard> {
           // Failure case
           // Handle failure scenario here
           CommonUtils.showCustomToastMessageLong(
-              'The Request Should Not Be Canceled Within 1 hour Before The Slot',
+              'The Request Should Not be Cancelled Within 1 hour Before the Slot',
               context,
               0,
               2);
@@ -1274,7 +1374,7 @@ class _AgentOpCardState extends State<AgentOpCard> {
               const Center(
                 // Center the text
                 child: Text(
-                  'Your Appointment Has Been Accepted Successfully ',
+                  'Your Appointment Has Been Accepted Successfully.',
                   style: CommonUtils.txSty_18b_fb,
                   textAlign:
                   TextAlign.center, // Optionally, align the text center
