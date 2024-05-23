@@ -1348,7 +1348,7 @@ class _HomeScreenState extends State<HomeScreen> {
         "PhoneNumber": appointment.contactNumber, // Changed from appointments.phoneNumber
         "Email": appointment.email,
         "GenderTypeId": appointment.genderTypeId,
-        "StatusTypeId": 18,
+        "StatusTypeId": 17,
         "PurposeOfVisitId": appointment.purposeOfVisitId,
         "PurposeOfVisit": appointment.purposeOfVisit,
         "IsActive": true,
@@ -1359,7 +1359,8 @@ class _HomeScreenState extends State<HomeScreen> {
         "review": _commentstexteditcontroller.text.toString(),
         "reviewSubmittedDate": dateTimeString,
         "timeofslot": null,
-        "customerId": userId
+        "customerId": userId,
+        "paymentTypeId": null
       };
       print('AddUpdatefeedback object: : ${json.encode(request)}');
 

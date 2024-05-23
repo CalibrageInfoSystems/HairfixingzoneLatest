@@ -23,6 +23,9 @@ class MyAppointment_Model {
   final String? timeofSlot;
   final double? latitude;
   final double? longitude;
+  final double? price;
+  final int? paymentTypeId;
+  final String? paymentType;
 
   MyAppointment_Model({
     required this.id,
@@ -49,6 +52,9 @@ class MyAppointment_Model {
     required this.slotDuration,
     required this.latitude,
     required this.longitude,
+    required this.price,
+    required this.paymentTypeId,
+    required this.paymentType,
   });
 
   factory MyAppointment_Model.fromJson(Map<String, dynamic> json) {
@@ -79,6 +85,9 @@ class MyAppointment_Model {
       imageName: json['imageName'],
       latitude: json['latitude'],
       longitude: json['longitude'],
+      price: json['price'],
+      paymentTypeId: json['paymentTypeId'],
+      paymentType: json['paymentType'],
     );
   }
 }

@@ -19,7 +19,7 @@ var getbranchesbyuserid = "api/Branch/";
 
 var ValidateUser = "ValidateUser";
 var ValidateUserData = "ValidateUserData";
-var GetAppointment = "api/Appointment/GetAppointment/";
+var GetAppointment = "api/Appointment/GetAppointment";
 var GetAppointmentByUserid = "api/Appointment/GetAppointmentByUserid";
 
 var GetHolidayListByBranchId = "api/Appointment/GetHolidayListByBranchId/";
@@ -35,6 +35,7 @@ var GetApprovedDeclinedSlots = "api/Appointment/GetApprovedDeclinedSlots";
 var Getnotificatons = "api/Appointment/GetNotificationsByUserId/";
 var customeregisration = 'Register';
 var getstatus = "api/TypeCdDmt/2";
+var getPaymentMode = "api/TypeCdDmt/7";
 var validateusername = 'ValidateUserName';
 var validateusernameotp = 'ValidateOTP';
 var getbrancheselectedcity = 'GetBranchesByCityId/';

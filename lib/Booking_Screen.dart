@@ -678,9 +678,7 @@ class _BookingScreenState extends State<Bookingscreen> {
                                                 hours: 1));
                                     print(
                                         '-1 hour Modified DateTime: $slotSelectedDateTime');
-                                    newDateTime =
-                                        slotSelected_DateTime!
-                                            .add(const Duration(
+                                    newDateTime = slotSelected_DateTime!.add(const Duration(
                                             days: 20));
                                     print(
                                         'New DateTime after adding 20 days: $newDateTime');
@@ -1025,7 +1023,9 @@ class _BookingScreenState extends State<Bookingscreen> {
         "review": null,
         "reviewSubmittedDate": null,
         "timeofslot": '$_selectedTimeSlot24',
-        "customerId": Id
+        "customerId": Id,
+        "paymentTypeId": null
+
       };
 
       print('Object: ${json.encode(request)}');
@@ -1068,21 +1068,84 @@ class _BookingScreenState extends State<Bookingscreen> {
               scheduledNotificationDateTime: slotSelectedDateTime!,
               id: notificationId1,
             );
+            if (selectedValue == 8 || selectedValue == 9 || selectedValue == 10 || selectedValue == 11) {
+              DateTime testdate = DateTime.now();
+              print(' testdate ====1072$testdate');
+              // Handle each case separately
+              switch (selectedValue) {
 
-            if (selectedValue == 10) {
-              final int notificationId2 = UniqueKey().hashCode;
-              debugPrint(
-                  'Notification Scheduled for $newDateTime with ID: $notificationId2');
-              //  debugPrint('Notification Scheduled for $testdate with ID: $notificationId2');
-              await NotificationService().scheduleNotification(
-                title: 'Reminder Notification',
-                body:
-                'Hey $userFullName, It Has Been 20 Days Since Your New Patch Was Done. Please Revisit the Hairfixing Zone at The ${widget.branchname}',
-                // scheduledNotificationDateTime: testdate!,
-                scheduledNotificationDateTime: newDateTime!,
-                id: notificationId2,
-              );
+                case 8:
+                  final int notificationId2 = UniqueKey().hashCode;
+                  debugPrint(
+                      'Notification Scheduled for $newDateTime with ID: $notificationId2');
+                  await NotificationService().scheduleNotification(
+                    title: 'Reminder Notification',
+                    body: 'Hey $userFullName, It Has Been 20 Days Since Your  ${selectedName!} Was Done. Please Revisit the Hairfixing Zone at The ${widget.branchname}',
+                  //  scheduledNotificationDateTime: newDateTime!,
+                    scheduledNotificationDateTime: testdate!,
+                    id: notificationId2,
+                  );
+                // Handle value 8
+                  break;
+                case 9:
+                  final int notificationId2 = UniqueKey().hashCode;
+                  debugPrint(
+                      'Notification Scheduled for $newDateTime with ID: $notificationId2');
+                  await NotificationService().scheduleNotification(
+                    title: 'Reminder Notification',
+                    body: 'Hey $userFullName, It Has Been 20 Days Since Your  ${selectedName!} Was Done. Please Revisit the Hairfixing Zone at The ${widget.branchname}',
+                  //  scheduledNotificationDateTime: newDateTime!,
+                    scheduledNotificationDateTime: testdate!,
+                    id: notificationId2,
+                  );
+                // Handle value 9
+                  break;
+                case 10:
+                // Handle value 10
+                  final int notificationId2 = UniqueKey().hashCode;
+                  debugPrint(
+                      'Notification Scheduled for $newDateTime with ID: $notificationId2');
+                  await NotificationService().scheduleNotification(
+                    title: 'Reminder Notification',
+                    body: 'Hey $userFullName, It Has Been 20 Days Since Your  ${selectedName!} Was Done. Please Revisit the Hairfixing Zone at The ${widget.branchname}',
+                  //  scheduledNotificationDateTime: newDateTime!,
+                    scheduledNotificationDateTime: testdate!,
+                    id: notificationId2,
+                  );
+                  break;
+                case 11:
+                  final int notificationId2 = UniqueKey().hashCode;
+                  debugPrint(
+                      'Notification Scheduled for $newDateTime with ID: $notificationId2');
+                  await NotificationService().scheduleNotification(
+                    title: 'Reminder Notification',
+                    body: 'Hey $userFullName, It Has Been 20 Days Since Your  ${selectedName!} Was Done. Please Revisit the Hairfixing Zone at The ${widget.branchname}',
+                  //  scheduledNotificationDateTime: newDateTime!,
+                    scheduledNotificationDateTime: testdate!,
+                    id: notificationId2,
+                  );
+                // Handle value 11
+                  break;
+                default:
+                // Handle other cases if needed
+                  break;
+              }
             }
+
+            // if (selectedValue == 10) {
+            //   final int notificationId2 = UniqueKey().hashCode;
+            //   debugPrint(
+            //       'Notification Scheduled for $newDateTime with ID: $notificationId2');
+            //   //  debugPrint('Notification Scheduled for $testdate with ID: $notificationId2');
+            //   await NotificationService().scheduleNotification(
+            //     title: 'Reminder Notification',
+            //     body:
+            //     'Hey $userFullName, It Has Been 20 Days Since Your New Patch Was Done. Please Revisit the Hairfixing Zone at The ${widget.branchname}',
+            //     // scheduledNotificationDateTime: testdate!,
+            //     scheduledNotificationDateTime: newDateTime!,
+            //     id: notificationId2,
+            //   );
+            // }
 
             // Your existing code...
             // LoadingProgress.stop(context,rootNavigator);

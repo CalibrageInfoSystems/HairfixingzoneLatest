@@ -536,7 +536,8 @@ class AddConsulationscreen_screenState extends State<Add_Consulation_screen> {
                                 borderRadius: BorderRadius.circular(5.0),
                                 color: Colors.white,
                               ),
-                              child: DropdownButtonHideUnderline(
+                              child:
+                              DropdownButtonHideUnderline(
                                 child: ButtonTheme(
                                   alignedDropdown: true,
                                   child: DropdownButton<int>(
