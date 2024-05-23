@@ -1373,6 +1373,11 @@ class _OpCardState extends State<OpCard> {
                                           style: CommonStyles.txSty_16black_f5),
                                       Text(widget.data.branch,
                                           style: CommonStyles.txSty_16black_f5),
+
+                                      if (widget.data.paymentType != null)
+                                        Text(widget.data.paymentType ?? ' ',
+                                            style: CommonStyles.txSty_16black_f5),
+
                                     ],
                                   ),
                                 ),
@@ -1387,6 +1392,12 @@ class _OpCardState extends State<OpCard> {
                                     const SizedBox(
                                       height: 10.0,
                                     ),
+
+                                    if (widget.data.price != null)
+                                      Text(
+                                        '₹${formatNumber(widget.data.price ?? 0)}',
+                                        style: CommonStyles.txSty_16black_f5,
+                                      ),
                                     if (widget.data.rating != null)
                                       Row(
                                         mainAxisAlignment:
@@ -2402,7 +2413,9 @@ class _OpCardState extends State<OpCard> {
         "review": _commentstexteditcontroller.text.toString(),
         "reviewSubmittedDate": dateTimeString,
         "timeofslot": appointmens.timeofSlot,
-        "customerId": userId
+        "customerId": userId,
+        "price": appointmens.price,
+        "paymentTypeId":appointmens.paymentTypeId,
       };
       print('AddUpdatefeedback object: : ${json.encode(request)}');
 
@@ -2599,7 +2612,8 @@ class _OpCardState extends State<OpCard> {
       "review": null,
       "reviewSubmittedDate": null,
       "timeofslot": appointmens.timeofSlot,
-      "customerId": userId
+      "customerId": userId,
+      "paymentTypeId": null
     };
     print('AddUpdatefeedback object: : ${json.encode(request)}');
 
@@ -2724,6 +2738,11 @@ class _OpCardState extends State<OpCard> {
 
     return differenceInMinutes
         .abs(); // Return the absolute value of the difference
+  }
+
+  String formatNumber(double number) {
+    NumberFormat formatter = NumberFormat("#,##,##,##,##,##,##0.00", "en_US");
+    return formatter.format(number);
   }
 
 // int calculateTimeDifference(String selectedDate, String time) {

@@ -918,6 +918,7 @@ class _AgentOpCardState extends State<AgentOpCard> {
       "reviewSubmittedDate": null,
       "timeofslot": appointmens.timeOfSlot,
       "customerId":appointmens.customerId,
+      "paymentTypeId": null
     };
     print('AddUpdatefeedback object: : ${json.encode(request)}');
 
@@ -989,7 +990,8 @@ class _AgentOpCardState extends State<AgentOpCard> {
       "customerId": data.customerId,
       "UpdatedByUserId": widget.userId,
       "timeofSlot": data.timeOfSlot,
-      if (i == 18) "price": Amount,
+      if (i == 17) "price": Amount,
+      "paymentTypeId": null
 
       // "rating": null,
       // "review": null,

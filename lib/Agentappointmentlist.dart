@@ -2660,7 +2660,7 @@ class MyAppointments_screenState extends State<Agentappointmentlist> {
           'Content-Type': 'application/json',
         },
       );
-
+      print("GetAppointment requestBody: ${jsonEncode(request)}");
       if (jsonResponse.statusCode == 200) {
         final response = json.decode(jsonResponse.body);
 
@@ -3363,11 +3363,21 @@ class _OpCardState extends State<OpCard> {
   final GlobalKey _toolTipKey = GlobalKey();
   final GlobalKey _fullnameTipKey = GlobalKey();
   final GlobalKey _emailtoolTipKey = GlobalKey();
+  late Future<List<Statusmodel>> apiPaymentOptions;
+ // late List<Statusmodel> paymentOptions;
+  List<dynamic> paymentOptions = [];
+  int selectedPaymentOption = -1;
+  int? apiPaymentMode;
+  bool isPaymentValidate = false;
+  bool isPaymentModeSelected = false;
+  String? selectedPaymentMode;
+
   @override
   void initState() {
     super.initState();
     dateValues = parseDateString(widget.data.date);
     print('userid===userId,$userId');
+fetchPaymentOptions();
   }
 
   @override
@@ -3531,6 +3541,9 @@ class _OpCardState extends State<OpCard> {
                                         style: CommonStyles.txSty_16black_f5),
                                     Text(widget.data.name,
                                         style: CommonStyles.txSty_16black_f5),
+                                    if (widget.data.paymentType != null)
+                                      Text(widget.data.paymentType ?? ' ',
+                                          style: CommonStyles.txSty_16black_f5),
                                   ],
                                 ),
                               ),
@@ -3576,7 +3589,17 @@ class _OpCardState extends State<OpCard> {
                                   const SizedBox(
                                     height: 5.0,
                                   ),
+                                  if (widget.data.price != null)
+                                  Text(
+                                    '₹${formatNumber(widget.data.price ?? 0)}',
+                                    style: CommonStyles.txSty_16black_f5,
+                                  ),
 
+
+                                  //    Text(widget.data.gender!, style: CommonStyles.txSty_16black_f5),
+                                  const SizedBox(
+                                    height: 5.0,
+                                  ),
                                   if (widget.data.rating != null)
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.end,
@@ -3817,53 +3840,49 @@ class _OpCardState extends State<OpCard> {
           ],
         );
       case 5: // Accepted
-      //  return const SizedBox();
+
+      // if (isSlotTimeReached(data.date, data.slotDuration)) {
         return Row(
           children: [
             GestureDetector(
               onTap: () {
-                closePopUp(data, 17, userId);
+                closePopUp(context, data, 17, userId
+                    );
               },
-              child: IgnorePointer(
-                ignoring: isPastDate(data.date, data.slotDuration),
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(3),
-                    border: Border.all(
-                      color: isPastDate(data.date, data.slotDuration)
-                          ? Colors.grey
-                          : CommonStyles.statusRedText,
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(3),
+                  border: Border.all(
+                    color: CommonStyles.statusRedText,
+                  ),
+                ),
+                padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
+                child: Row(
+                  children: [
+                    SvgPicture.asset(
+                      'assets/calendar-xmark.svg',
+                      width: 12,
+                      color: CommonStyles.statusRedText,
                     ),
-                  ),
-                  padding:
-                  const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
-                  child: Row(
-                    children: [
-                      SvgPicture.asset(
-                        'assets/calendar-xmark.svg',
-                        width: 12,
-                        color: isPastDate(data.date, data.slotDuration)
-                            ? Colors.grey
-                            : CommonStyles.statusRedText,
+                    const Text(
+                      '  Close',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontFamily: "Calibri",
+                        fontWeight: FontWeight.w500,
+                        color: CommonStyles.statusRedText,
                       ),
-                      Text(
-                        '  Close',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontFamily: "Calibri",
-                          fontWeight: FontWeight.w500,
-                          color: isPastDate(data.date, data.slotDuration)
-                              ? Colors.grey
-                              : CommonStyles.statusRedText,
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
             ),
           ],
         );
+    // } else {
+    //   return const SizedBox();
+    // }
+
       case 6: // Declined
         return const SizedBox();
     // case 11: // FeedBack
@@ -4112,78 +4131,7 @@ class _OpCardState extends State<OpCard> {
     );
   }
 
-  // void conformation(Appointment appointments) {
-  //   showDialog(
-  //     context: context,
-  //     builder: (BuildContext context) {
-  //       return AlertDialog(
-  //         title: const Text(
-  //           'Confirmation',
-  //           style: TextStyle(
-  //             fontSize: 16,
-  //             color: CommonUtils.blueColor,
-  //             fontFamily: 'Calibri',
-  //           ),
-  //         ),
-  //          SizedBox(
-  //           height: 10,
-  //         ),
-  //         SizedBox(
-  //           width: 150,
-  //           child: Image.asset('assets/rejected.png'),
-  //         ),
-  //         const SizedBox(
-  //           height: 10,
-  //         ),
-  //         const Center(
-  //           // Center the text
-  //           child: Text(
-  //             'Your Appointment Has Been Cancelled Successfully ',
-  //             style: CommonUtils.txSty_18b_fb,
-  //             textAlign: TextAlign.center, // Optionally, align the text center
-  //           ),
-  //         ),
-  //         content: Text(
-  //           'Are You Sure You Want To Cancel   ${appointments.purposeOfVisit} Slot At The${appointments.name} Hair Fixing Zone',
-  //           style: const TextStyle(
-  //             fontSize: 16,
-  //             color: CommonUtils.primaryTextColor,
-  //             fontFamily: 'Calibri',
-  //           ),
-  //         ),
-  //         actions: [
-  //           TextButton(
-  //             onPressed: () {
-  //               Navigator.of(context).pop();
-  //             },
-  //             child: const Text(
-  //               'No',
-  //               style: TextStyle(
-  //                 fontSize: 16,
-  //                 color: CommonUtils.blueColor,
-  //                 fontFamily: 'Calibri',
-  //               ),
-  //             ),
-  //           ),
-  //           TextButton(
-  //             onPressed: () {
-  //               cancelAppointment(appointments);
-  //               Navigator.of(context).pop();
-  //             },
-  //             child: const Text(
-  //               'Yes',
-  //               style: TextStyle(
-  //                 fontSize: 16,
-  //                 color: CommonUtils.blueColor,
-  //                 fontFamily: 'Calibri',
-  //               ),
-  //             ),
-  //           ),
-  //         ],
-  //       );
-  //     },
-  //   );
-  // }
+
 
   Future<void> cancelAppointment(Appointment appointmens) async {
     final url = Uri.parse(baseUrl + postApiAppointment);
@@ -4217,7 +4165,8 @@ class _OpCardState extends State<OpCard> {
       "review": null,
       "reviewSubmittedDate": null,
       "timeofslot": appointmens.timeofSlot,
-      "customerId": appointmens.customerId
+      "customerId": appointmens.customerId,
+      "paymentTypeId": null
     };
     print('AddUpdatefeedback object: : ${json.encode(request)}');
 
@@ -4300,6 +4249,7 @@ class _OpCardState extends State<OpCard> {
       "UpdatedByUserId": userId,
       "timeofSlot": data.timeofSlot,
       if (i == 17) "price": Amount,
+      "paymentTypeId": null
 
       // "rating": null,
       // "review": null,
@@ -4352,7 +4302,7 @@ class _OpCardState extends State<OpCard> {
   }
 
 
-  void closePopUp(Appointment data, int i, int? userId) {
+  void closePopUp(BuildContext context, Appointment data, int i, int? userId) {
     showDialog(
       barrierDismissible: true,
       context: context,
@@ -4362,296 +4312,354 @@ class _OpCardState extends State<OpCard> {
           insetPadding: EdgeInsets.zero,
           contentPadding: EdgeInsets.zero,
           titlePadding: EdgeInsets.zero,
-          // title: const Text(
-          //   'Billing Amount',
-          // ),
           content: Container(
             width: MediaQuery.of(context).size.width * 0.8,
             padding: const EdgeInsets.all(0),
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10.0),
-                color: const Color(0xffffffff)),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: Row(
-                    mainAxisAlignment:
-                    MainAxisAlignment.end, // Center alignment
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: const CircleAvatar(
-                          backgroundColor: CommonStyles.primaryColor,
-                          radius: 12,
-                          child: Center(
-                            child: Icon(
-                              Icons.close,
-                              color: CommonStyles.primaryTextColor,
-                              size: 15,
-                            ),
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-                // Padding(
-                //   padding: const EdgeInsets.all(0.0),
-                //   child: Row(
-                //     mainAxisAlignment: MainAxisAlignment.center, // Center alignment
-                //     children: [
-                //       Padding(
-                //         padding: const EdgeInsets.all(0.0),
-                //         child: Center(
-                //           child: Text(
-                //             'Billing Amount',
-                //             style: TextStyle(
-                //               fontSize: 18,
-                //               color: CommonStyles.primaryTextColor,
-                //               fontWeight: FontWeight.bold,
-                //             ),
-                //           ),
-                //         ),
-                //       ),
-                //
-                //     ],
-                //   ),
-                // ),
-                Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      //MARK: Content
-                      Form(
-                        key: _formKey,
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 5),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              Row(
-                                children: [
-                                  const Expanded(
-                                    flex: 4,
-                                    child: Text(
-                                      'Customer Name',
-                                      style: TextStyle(color: Colors.black,fontSize: 14,
-                                        fontFamily: "Calibri",
-                                        fontWeight: FontWeight.w500,),
-
-                                    ),
-                                  ),
-                                  Expanded(
-                                    flex: 6,
-                                    child: Row(
-                                      mainAxisAlignment:
-                                      MainAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          ': ${data.customerName}',
-                                          style: const TextStyle(
-                                              color: CommonStyles
-                                                  .primaryTextColor,fontSize: 14,
-                                            fontFamily: "Calibri",
-                                            fontWeight: FontWeight.w500,),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(
-                                height: 5,
-                              ),
-                              Row(
-                                children: [
-                                  const Expanded(
-                                    flex: 4,
-                                    child: Text(
-                                      'Slot Time',
-                                      style: TextStyle(color: Colors.black),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    flex: 6,
-                                    child: Row(
-                                      mainAxisAlignment:
-                                      MainAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          ': ${formatCancelDialogDate(data.date)}, ${data.slotDuration}',
-                                          style: const TextStyle(
-                                              color: CommonStyles
-                                                  .primaryTextColor,fontSize: 14,
-                                            fontFamily: "Calibri",
-                                            fontWeight: FontWeight.w500,),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(
-                                height: 5,
-                              ),
-                              Row(
-                                children: [
-                                  const Expanded(
-                                    flex: 4,
-                                    child: Text(
-                                      'Purpose',
-                                      style: TextStyle(color: Colors.black,fontSize: 14,
-                                        fontFamily: "Calibri",
-                                        fontWeight: FontWeight.w500,),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    flex: 6,
-                                    child: Row(
-                                      mainAxisAlignment:
-                                      MainAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          ': ${data.purposeOfVisit}',
-                                          style: const TextStyle(
-                                              color: CommonStyles
-                                                  .primaryTextColor),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(
-                                height: 20,
-                              ),
-                              const Row(
-                                children: [
-                                  Text(
-                                    'Billing Amount (Rs)',
-                                    style: TextStyle(
-                                      // fontSize: 12,
-                                    ),
-                                  ),
-                                  Text(
-                                    ' *',
-                                    style: TextStyle(color: Colors.red),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(
-                                height: 5.0,
-                              ),
-                              TextFormField(
-                                controller: _priceController,
-                                keyboardType: TextInputType.number,
-                                maxLength: 10,
-                                decoration: InputDecoration(
-                                  contentPadding: const EdgeInsets.only(
-                                      top: 15, bottom: 10, left: 15, right: 15),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: const BorderSide(
-                                      color: CommonUtils.primaryTextColor,
-                                    ),
-                                    borderRadius: BorderRadius.circular(6.0),
-                                  ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide: const BorderSide(
-                                      color: CommonUtils.primaryTextColor,
-                                    ),
-                                    borderRadius: BorderRadius.circular(6.0),
-                                  ),
-                                  border: const OutlineInputBorder(
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(10),
-                                    ),
-                                  ),
-                                  hintText: 'Enter Billing Amount (Rs)',
-                                  counterText: "",
-                                  hintStyle: const TextStyle(
-                                      color: Colors.grey,
-                                      fontWeight: FontWeight.w400),
-                                ),
-                                validator: validateAmount,
-                              ),
-                              const SizedBox(
-                                height: 20,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      Row(
+              borderRadius: BorderRadius.circular(10.0),
+              color: const Color(0xffffffff),
+            ),
+            child: StatefulBuilder(
+              builder: (BuildContext context, StateSetter setState) {
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          Expanded(
-                            child: SizedBox(
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: const CircleAvatar(
+                              backgroundColor: CommonStyles.primaryColor,
+                              radius: 12,
                               child: Center(
-                                child: GestureDetector(
-                                  onTap: () {
-                                    if (_formKey.currentState!.validate()) {
-                                      double? price = double.tryParse(
-                                          _priceController.text);
-                                      postAppointment(data, 17, price!, userId);
-                                      Navigator.of(context).pop();
-                                    }
-                                  },
-                                  child: Container(
-                                    height: 40.0,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10.0),
-                                      color: CommonUtils.primaryTextColor,
-                                    ),
-                                    child: Center(
-                                      child: CustomButton(
-                                        buttonText: 'Submit',
-                                        color: CommonUtils.primaryTextColor,
-                                        onPressed: () {
-                                          // if (formKey.currentState!
-                                          //     .validate()) {
-                                          //   print('11111');
-                                          //   int? price = int.tryParse(
-                                          //       priceController.text);
-                                          //   postAppointment(
-                                          //       data, 18, price!, userId);
-                                          //   Navigator.of(context).pop();
-                                          // }
-                                          if (_formKey.currentState!
-                                              .validate()) {
-                                            double? price = double.tryParse(
-                                                _priceController.text);
-                                            postAppointment(
-                                                data, 17, price!, userId);
-                                            Navigator.of(context).pop();
-                                          }
-                                        },
-                                      ),
-                                    ),
-                                  ),
+                                child: Icon(
+                                  Icons.close,
+                                  color: CommonStyles.primaryTextColor,
+                                  size: 15,
                                 ),
                               ),
                             ),
                           ),
                         ],
                       ),
-                    ],
-                  ),
-                ),
-              ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Form(
+                            key: _formKey,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 5),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  const SizedBox(height: 10),
+                                  Row(
+                                    children: [
+                                      const Expanded(
+                                        flex: 4,
+                                        child: Text(
+                                          'Customer Name',
+                                          style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 14,
+                                            fontFamily: "Calibri",
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                      ),
+                                      Expanded(
+                                        flex: 6,
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              ': ${data.customerName}',
+                                              style: const TextStyle(
+                                                color: CommonStyles.primaryTextColor,
+                                                fontSize: 14,
+                                                fontFamily: "Calibri",
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 5),
+                                  Row(
+                                    children: [
+                                      const Expanded(
+                                        flex: 4,
+                                        child: Text(
+                                          'Slot Time',
+                                          style: TextStyle(color: Colors.black),
+                                        ),
+                                      ),
+                                      Expanded(
+                                        flex: 6,
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              ': ${DateFormat('dd-MM-yyyy').format(DateTime.parse(data.date))}, ${data.slotDuration}',
+                                              style: const TextStyle(
+                                                color: CommonStyles.primaryTextColor,
+                                                fontSize: 14,
+                                                fontFamily: "Calibri",
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 5),
+                                  Row(
+                                    children: [
+                                      const Expanded(
+                                        flex: 4,
+                                        child: Text(
+                                          'Purpose',
+                                          style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 14,
+                                            fontFamily: "Calibri",
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                      ),
+                                      Expanded(
+                                        flex: 6,
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              ': ${data.purposeOfVisit}',
+                                              style: const TextStyle(
+                                                color: CommonStyles.primaryTextColor,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 20),
+                                  const Row(
+                                    children: [
+                                      Text(
+                                        'Payment Mode ',
+                                        style: TextStyle(
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      Text(
+                                        '*',
+                                        style: TextStyle(color: Colors.red),
+                                      ),
+                                    ],
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 0, top: 5.0, right: 0),
+                                    child: Container(
+                                      width: MediaQuery.of(context).size.width,
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                          color: isPaymentModeSelected
+                                              ? const Color.fromARGB(255, 175, 15, 4)
+                                              : CommonUtils.primaryTextColor,
+                                        ),
+                                        borderRadius: BorderRadius.circular(5.0),
+                                        color: Colors.white,
+                                      ),
+                                      child: DropdownButtonHideUnderline(
+                                        child: ButtonTheme(
+                                          alignedDropdown: true,
+                                          child: DropdownButton<int>(
+                                            value: selectedPaymentOption,
+                                            iconSize: 30,
+                                            icon: null,
+                                            style: const TextStyle(
+                                              color: Colors.black,
+                                            ),
+                                            onChanged: (value) {
+                                              setState(() {
+                                                if (value != null) {
+                                                  selectedPaymentOption = value;
+                                                  print("==========4572 $selectedPaymentOption");
+
+                                                  if (selectedPaymentOption != -1) {
+                                                    print("==========4575 $selectedPaymentOption");
+
+                                                    apiPaymentMode = paymentOptions[selectedPaymentOption]['typeCdId'];
+                                                    selectedPaymentMode = paymentOptions[selectedPaymentOption]['desc'];
+                                                    print("========== $apiPaymentMode $selectedPaymentMode");
+
+                                                  }
+                                                  isPaymentModeSelected = false;
+                                                }
+                                              });
+                                            },
+                                            items: [
+                                              const DropdownMenuItem<int>(
+                                                value: -1,
+                                                child: Text(
+                                                  'Select Payment Mode',
+                                                  style: TextStyle(
+                                                      color: Colors.grey,
+                                                      fontWeight: FontWeight.w500),
+                                                ),
+                                              ),
+                                              ...paymentOptions
+                                                  .asMap()
+                                                  .entries
+                                                  .map((entry) {
+                                                final index = entry.key;
+                                                final item = entry.value;
+                                                return DropdownMenuItem<int>(
+                                                  value: index,
+                                                  child: Text(item['desc']),
+                                                );
+                                              }).toList(),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  if (isPaymentModeSelected)
+                                    const Row(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      children: [
+                                        Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 16, vertical: 5),
+                                          child: Text(
+                                            'Please Select Payment Mode',
+                                            style: TextStyle(
+                                              color: Color.fromARGB(255, 175, 15, 4),
+                                              fontSize: 12,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  const SizedBox(height: 10.0),
+                                  const Row(
+                                    children: [
+                                      Text(
+                                        'Billing Amount (Rs)',
+                                        style: TextStyle(
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      Text(
+                                        '*',
+                                        style: TextStyle(color: Colors.red),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 5.0),
+                                  TextFormField(
+                                    controller: _priceController,
+                                    keyboardType: TextInputType.number,
+                                    maxLength: 10,
+                                    decoration: InputDecoration(
+                                      contentPadding: const EdgeInsets.only(
+                                          top: 15, bottom: 10, left: 15, right: 15),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: const BorderSide(
+                                          color: CommonUtils.primaryTextColor,
+                                        ),
+                                        borderRadius: BorderRadius.circular(6.0),
+                                      ),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: const BorderSide(
+                                          color: CommonUtils.primaryTextColor,
+                                        ),
+                                        borderRadius: BorderRadius.circular(6.0),
+                                      ),
+                                      errorBorder: OutlineInputBorder(
+                                        borderSide: const BorderSide(
+                                          color: Color.fromARGB(255, 175, 15, 4),
+                                        ),
+                                        borderRadius: BorderRadius.circular(6.0),
+                                      ),
+                                      border: const OutlineInputBorder(
+                                        borderRadius: BorderRadius.all(
+                                          Radius.circular(10),
+                                        ),
+                                      ),
+                                      hintText: 'Enter Billing Amount (Rs)',
+                                      counterText: "",
+                                      hintStyle: const TextStyle(
+                                          color: Colors.grey,
+                                          fontWeight: FontWeight.w400),
+                                    ),
+                                    validator: validateAmount,
+                                  ),
+                                  const SizedBox(height: 20),
+                                ],
+                              ),
+                            ),
+                          ),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: SizedBox(
+                                  child: Center(
+                                    child: Container(
+                                      height: 40.0,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10.0),
+                                        color: CommonUtils.primaryTextColor,
+                                      ),
+                                      child: Center(
+                                        child: CustomButton(
+                                          buttonText: 'Submit',
+                                          color: CommonUtils.primaryTextColor,
+                                          onPressed: () {
+                                            validatePaymentMode(selectedPaymentMode);
+                                            if (_formKey.currentState!.validate()) {
+                                              if (isPaymentValidate) {
+                                                double? price = double.tryParse(_priceController.text);
+                                                postCloseAppointment(data, 17, price!, apiPaymentMode, userId);
+                                                Navigator.of(context).pop();
+                                              }
+                                            }
+                                          },
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                );
+              },
             ),
           ),
         );
       },
     );
   }
+
 
 
   void openDialogreject() async {
@@ -4821,7 +4829,166 @@ class _OpCardState extends State<OpCard> {
     String formattedDate = DateFormat('dd/MM/yyyy').format(dateTime);
     return formattedDate;
   }
+
+  bool displayCloseBtn(String slotDateValue, String slotTimeValue) {
+
+    DateTime now = DateTime.now();
+    DateFormat timeFormat = DateFormat.jm();
+    DateTime parsedSlotTime = timeFormat.parse(slotTimeValue);
+
+    DateTime slotDate = DateTime.parse(slotDateValue);
+
+    DateTime slotDateTime = DateTime(slotDate.year, slotDate.month,
+        slotDate.day, parsedSlotTime.hour, parsedSlotTime.minute);
+
+    if (slotDateTime.isAtSameMomentAs(now) || slotDateTime.isAfter(now)) {
+      print("Slot is equal to or after current date and time");
+      return false;
+    } else {
+      print("Slot is before current date and time");
+      return false;
+    }
+  }
+
+  String formatNumber(double number) {
+    NumberFormat formatter = NumberFormat("#,##,##,##,##,##,##0.00", "en_US");
+    return formatter.format(number);
+  }
+  Future<void> fetchPaymentOptions() async {
+
+    try {
+      final response = await http.get(Uri.parse(baseUrl + getPaymentMode));
+      print('apiUrl: $response');
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        setState(() {
+          paymentOptions = data['listResult'];
+          print('paymentOptions: ${paymentOptions.length}');
+        });
+        return;
+      } else {
+        print('Request failed with status: ${response.statusCode}');
+      }
+    } catch (error) {
+      print('Error: $error');
+    }
+  }
+
+  // Future<List<Statusmodel>> fetchPaymentOptions() async {
+  //   final response = await http.get(Uri.parse(baseUrl + getPaymentMode));
+  //   try {
+  //     if (response.statusCode == 200) {
+  //       final data = json.decode(response.body);
+  //       setState(() {
+  //         cityDropdownItems = data['listResult'];
+  //       });
+  //       return;
+  //     } else {
+  //       print('Request failed with status: ${response.statusCode}');
+  //     }
+  //   } catch (e) {
+  //     rethrow;
+  //   }
+  // }
+
+  void validatePaymentMode(String? value) {
+    print('www: $value');
+    if (value == null || value.isEmpty) {
+      isPaymentModeSelected = true;
+      isPaymentValidate = false;
+    } else {
+      isPaymentModeSelected = false;
+      isPaymentValidate = true;
+    }
+    setState(() {});
+  }
+
+  Future<void> postCloseAppointment(Appointment data, int i,
+      double? billingAmount, int? paymentTypeId, int? userId) async {
+
+    final url = Uri.parse(baseUrl + postApiAppointment);
+
+    // final url = Uri.parse('http://182.18.157.215/SaloonApp/API/api/Appointment');
+    DateTime now = DateTime.now();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    userId = prefs.getInt('userId');
+    // Using toString() method
+    String dateTimeString = now.toString();
+
+    // Create the request object
+    final request = {
+      "Id": data.id,
+      "BranchId": data.branchId,
+      "Date": data.date,
+      "SlotTime": data.slotTime,
+      "CustomerName": data.customerName,
+      "PhoneNumber": data.phoneNumber,
+      "Email": data.email,
+      "GenderTypeId": data.genderTypeId,
+      "StatusTypeId": i,
+      "PurposeOfVisitId": data.purposeOfVisitId,
+      "PurposeOfVisit": data.purposeOfVisit,
+      "IsActive": true,
+      "CreatedDate": dateTimeString,
+      "UpdatedDate": dateTimeString,
+      "customerId": data.customerId,
+      "UpdatedByUserId": userId,
+      "timeofSlot": data.timeofSlot,
+      if (i == 17) "price": billingAmount,
+      "paymentTypeId": paymentTypeId
+
+      // "rating": null,
+      // "review": null,
+      // "reviewSubmittedDate": null,
+      // "timeofslot": null,
+      // "customerId":  data.c
+    };
+    print('postAppointment: : ${json.encode(request)}');
+    print('postAppointment: $url');
+    try {
+      // Send the POST request
+      final response = await http.post(
+        url,
+        body: json.encode(request),
+        headers: {
+          'Content-Type': 'application/json', // Set the content type header
+        },
+      );
+      print('postAppointment: ${response.body}');
+      // Check the response status code
+      if (response.statusCode == 200) {
+        Map<String, dynamic> data = json.decode(response.body);
+
+        // Extract the necessary information
+        bool isSuccess = data['isSuccess'];
+        if (isSuccess == true) {
+          print('Request sent successfully');
+          if (i == 5) {
+            openDialogaccept();
+          } else if (i == 17) {
+            openDialogclosed();
+          }
+          // Success case
+          // Handle success scenario here
+        } else {
+          // Failure case
+          // Handle failure scenario here
+          CommonUtils.showCustomToastMessageLong(
+              'Failed to Send The Request ', context, 0, 2);
+        }
+      } else {
+        //showCustomToastMessageLong(
+        // 'Failed to send the request', context, 1, 2);
+        print(
+            'Failed to send the request. Status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error: $e');
+    }
+  }
+
 }
+
 
 Future<void> Get_ApprovedDeclinedSlots(Appointment data, int i) async {
   final url = Uri.parse(baseUrl + GetApprovedDeclinedSlots);

@@ -1243,7 +1243,8 @@ class _BookingScreenState extends State<slotbookingscreen>  {
         "review": null,
         "reviewSubmittedDate": null,
         "timeofslot": null,
-        "customerId": userId
+        "customerId": userId,
+        "paymentTypeId": null
       };
 
       print('Object: ${json.encode(request)}');

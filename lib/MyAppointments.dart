@@ -1224,6 +1224,9 @@ class _OpCardState extends State<OpCard> {
                                           style: CommonStyles.txSty_16black_f5),
                                       Text(widget.data.branch,
                                           style: CommonStyles.txSty_16black_f5),
+                                      if (widget.data.paymentType != null)
+                                        Text(widget.data.paymentType ?? ' ',
+                                            style: CommonStyles.txSty_16black_f5),
                                     ],
                                   ),
                                 ),
@@ -2036,7 +2039,9 @@ class _OpCardState extends State<OpCard> {
         "reviewSubmittedDate": dateTimeString,
         "timeofslot": appointmens.timeofSlot,
         // "timeofslot": null,
-        "customerId": userId
+        "customerId": userId,
+        "price": appointmens.price,
+        "paymentTypeId":appointmens.paymentTypeId,
       };
       print('AddUpdatefeedback object: : ${json.encode(request)}');
 
@@ -2287,7 +2292,8 @@ class _OpCardState extends State<OpCard> {
       "review": null,
       "reviewSubmittedDate": null,
       "timeofslot": appointmens.timeofSlot,
-      "customerId": userId
+      "customerId": userId,
+      "paymentTypeId": null
     };
     print('AddUpdatefeedback object: : ${json.encode(request)}');
 

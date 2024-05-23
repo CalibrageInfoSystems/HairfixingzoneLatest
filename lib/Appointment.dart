@@ -21,6 +21,8 @@ class Appointment {
   final int customerId;
   final String? timeofSlot;
   final String slotDuration;
+  final int? paymentTypeId;
+  final String? paymentType;
 
   Appointment({
     required this.id,
@@ -45,6 +47,8 @@ class Appointment {
     required this.customerId,
     required this.timeofSlot,
     required this.slotDuration,
+    required this.paymentTypeId,
+    required this.paymentType,
   });
 
   factory Appointment.fromJson(Map<String, dynamic> json) {
@@ -71,6 +75,8 @@ class Appointment {
       customerId: json['customerId'],
       timeofSlot: json['timeofSlot'],
       slotDuration: json['slotDuration'],
+      paymentTypeId: json['paymentTypeId'],
+      paymentType: json['paymentType'],
     );
   }
 }
