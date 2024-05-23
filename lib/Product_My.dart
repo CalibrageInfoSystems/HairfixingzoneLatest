@@ -775,9 +775,16 @@ class ProductCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Text(
-                  "${product.name} (${product.code}) ",
-                  style: CommonUtils.txSty_18p_f7,
+                // Text(
+                //   "${product.name} (${product.code}) ",
+                //   style: CommonUtils.txSty_18p_f7,
+                // ),
+                Container(
+                  width: MediaQuery.of(context).size.width / 2,
+                  child: Text(
+                    "${product.name} (${product.code}) ",
+                    style: CommonUtils.txSty_18p_f7,
+                  ),
                 ),
                 const SizedBox(height: 8), // Add space here
                 Text(

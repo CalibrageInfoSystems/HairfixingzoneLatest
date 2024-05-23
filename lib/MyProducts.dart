@@ -733,76 +733,168 @@ class ProductCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 5,
-      shadowColor: CommonUtils.primaryColor, // Set the shadow color here
-      child: Container(
-        padding: const EdgeInsets.all(10),
-        // decoration: BoxDecoration(
-        //     color: Colors.white, borderRadius: BorderRadius.circular(10)),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(10.0),
-          // borderRadius: BorderRadius.circular(30), //border corner radius
-          boxShadow: [
-            BoxShadow(
-              color: const Color(0xFF960efd).withOpacity(0.2), //color of shadow
-              spreadRadius: 2, //spread radius
-              blurRadius: 4, // blur radius
-              offset: const Offset(0, 2), // changes position of shadow
-            ),
-          ],
-        ),
-        child: Row(
-          children: [
-            // product image
-            Container(
-              width: MediaQuery.of(context).size.width / 3,
-              height: 100,
-              padding: const EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                color: CommonUtils.primaryColor,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Image.network(product.imageName),
-            ),
-            const SizedBox(
-              width: 10,
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Text(
-                  "${product.name} (${product.code}) ",
-                  style: CommonUtils.txSty_18p_f7,
-                ),
-                const SizedBox(height: 8), // Add space here
-                Text(
-                  product.categoryName,
-                  style: CommonUtils.txSty_12bs_fb,
-                ),
-                const SizedBox(height: 8), // Add space here
-                Text(
-                  product.gender ?? ' ',
-                  style: CommonUtils.txSty_12bs_fb,
-                ),
-                const SizedBox(height: 8), // Add space here
-                Text(
-                  '₹ ${formatNumber(product.maxPrice)}',
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontFamily: "Calibri",
-                    fontWeight: FontWeight.w500,
-                    letterSpacing: 1,
-                    color: Color(0xFF662d91),
-                  ),
+        elevation: 5,
+        shadowColor: CommonUtils.primaryColor, // Set the shadow color here
+        child: IntrinsicHeight(
+          child: Container(
+            padding: const EdgeInsets.all(10),
+            // decoration: BoxDecoration(
+            //     color: Colors.white, borderRadius: BorderRadius.circular(10)),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(10.0),
+              // borderRadius: BorderRadius.circular(30), //border corner radius
+              boxShadow: [
+                BoxShadow(
+                  color: const Color(0xFF960efd).withOpacity(0.2), //color of shadow
+                  spreadRadius: 2, //spread radius
+                  blurRadius: 4, // blur radius
+                  offset: const Offset(0, 2), // changes position of shadow
                 ),
               ],
-            )
-          ],
-        ),
-      ),
-    );
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                // product image
+                // Container(
+                //   width: MediaQuery.of(context).size.width / 3,
+                //   //    height: 100,
+                //   height: MediaQuery.of(context).size.height / 10,
+                //
+                //   padding: const EdgeInsets.all(10),
+                //   decoration: BoxDecoration(
+                //     color: CommonUtils.primaryColor,
+                //     borderRadius: BorderRadius.circular(10),
+                //   ),
+                //   child: Image.network(product.imageName),
+                // ),
+                Stack(
+                  children: [
+                    Container(
+                      width: MediaQuery.of(context).size.width / 3,
+                      height: MediaQuery.of(context).size.height / 10,
+                      padding: EdgeInsets.only(top: 10, left: 10, right: 10, bottom: 10),
+                      decoration: BoxDecoration(
+                        //   color: Colors.purple,
+                        color: CommonUtils.primaryColor,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Image.network(product.imageName),
+                    ),
+                    if (product.bestseller == true) ...{
+                      Positioned(
+                        top: -8,
+                        left: -10,
+                        child: SvgPicture.asset(
+                          'assets/bs_v1.svg',
+                          width: 80.0,
+                          height: 35.0,
+                          // color: Color(0xFF0f75bc),
+                        ),
+                      ),
+                    } else
+                      ...{}
+                  ],
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Container(
+                      width: MediaQuery.of(context).size.width / 2,
+                      child: Text(
+                        "${product.name} (${product.code}) ",
+                        style: CommonUtils.txSty_18p_f7,
+                      ),
+                    ),
+                    Row(
+                      children: [
+                        // Flexible(
+                        //   child: Text(
+                        //     "${product.name} (${product.code}) ",
+                        //     style: CommonUtils.txSty_18p_f7,
+                        //   ),
+                        // )
+                        // Shimmer.fromColors(
+                        //   baseColor: Colors.yellow[700]!,
+                        //   highlightColor: Colors.yellow[500]!,
+                        //   child: Container(
+                        //     //  padding: EdgeInsets.all(16.0),
+                        //     decoration: BoxDecoration(
+                        //       color: Colors.yellow[700],
+                        //       borderRadius: BorderRadius.circular(8.0),
+                        //     ),
+                        //     child: Text(
+                        //       'BEST SELLER',
+                        //       style: TextStyle(
+                        //         fontWeight: FontWeight.bold,
+                        //         //  fontSize: 16.0,
+                        //         color: Colors.white,
+                        //       ),
+                        //     ),
+                        //   ),
+                        // ),
+                        // Container(
+                        //   //  padding: EdgeInsets.all(16.0),
+                        //   decoration: BoxDecoration(
+                        //       //    color: Colors.black,
+                        //       // borderRadius: BorderRadius.circular(8.0),
+                        //       ),
+                        //   child: Shimmer.fromColors(
+                        //     baseColor: Colors.yellow[700]!,
+                        //     highlightColor: Colors.yellow[500]!,
+                        //     child: Container(
+                        //       //  padding: EdgeInsets.all(16.0),
+                        //       decoration: BoxDecoration(
+                        //         //   color: Colors.yellow[700],
+                        //         borderRadius: BorderRadius.circular(8.0),
+                        //       ),
+                        //       child: Text(
+                        //         'BEST SELLER',
+                        //         style: TextStyle(
+                        //           fontWeight: FontWeight.bold,
+                        //           //  fontSize: 16.0,
+                        //           color: Colors.white,
+                        //         ),
+                        //       ),
+                        //     ),
+                        //   ),
+                        // ),
+                      ],
+                    ),
+
+                    const SizedBox(height: 8), // Add space here
+                    Text(
+                      product.categoryName,
+                      style: CommonUtils.txSty_12bs_fb,
+                    ),
+                    const SizedBox(height: 8), // Add space here
+                    Text(
+                      product.gender ?? ' ',
+                      style: CommonUtils.txSty_12bs_fb,
+                    ),
+                    const SizedBox(height: 8), // Add space here
+                    Text(
+                      '₹ ${formatNumber(product.maxPrice)}',
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontFamily: "Calibri",
+                        fontWeight: FontWeight.w500,
+                        letterSpacing: 1,
+                        color: Color(0xFF662d91),
+                      ),
+                    ),
+                  ],
+                )
+              ],
+            ),
+          ),
+        ));
   }
 
   String formatNumber(double number) {

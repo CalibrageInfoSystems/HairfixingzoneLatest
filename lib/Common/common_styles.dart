@@ -88,12 +88,8 @@ class CommonStyles {
     fontWeight: FontWeight.bold,
     color: whiteColor,
   );
-  static const TextStyle txSty_18w_fb = TextStyle(
-      fontSize: 22,
-      fontFamily: "Calibri",
-      fontWeight: FontWeight.bold,
-      color: whiteColor,
-      letterSpacing: 1);
+  static const TextStyle txSty_18w_fb =
+      TextStyle(fontSize: 22, fontFamily: "Calibri", fontWeight: FontWeight.bold, color: whiteColor, letterSpacing: 1);
   static const TextStyle txSty_16p_f5 = TextStyle(
     fontSize: 16,
     fontFamily: "Calibri",
@@ -120,8 +116,7 @@ class CommonStyles {
     color: blueColor,
   );
 
-  static TextStyle dayTextStyle =
-  const TextStyle(color: Colors.black, fontWeight: FontWeight.w700);
+  static TextStyle dayTextStyle = const TextStyle(color: Colors.black, fontWeight: FontWeight.w700);
 
   static void progressBar(BuildContext context) {
     LoadingProgress.start(
@@ -158,8 +153,7 @@ class CommonStyles {
     );
   }
 
-  static CalendarDatePicker2WithActionButtonsConfig config =
-  CalendarDatePicker2WithActionButtonsConfig(
+  static CalendarDatePicker2WithActionButtonsConfig config = CalendarDatePicker2WithActionButtonsConfig(
     firstDate: DateTime(2012),
     lastDate: DateTime(2030),
     dayTextStyle: CommonStyles.dayTextStyle,
@@ -178,8 +172,7 @@ class CommonStyles {
     ),
     centerAlignModePicker: true,
     customModePickerIcon: const SizedBox(),
-    selectedDayTextStyle:
-    CommonStyles.dayTextStyle.copyWith(color: Colors.white),
+    selectedDayTextStyle: CommonStyles.dayTextStyle.copyWith(color: Colors.white),
   );
 
   static void stopProgress(BuildContext context) {
@@ -238,8 +231,7 @@ class CommonStyles {
     );
   }
 
-  static AppBar remainingAppBars(BuildContext context,
-      {required String title, required void Function()? onPressed}) {
+  static AppBar remainingAppBars(BuildContext context, {required String title, required void Function()? onPressed}) {
     return AppBar(
       backgroundColor: const Color(0xFFf3e3ff),
       automaticallyImplyLeading: false,
@@ -301,8 +293,7 @@ class ProgressDialog {
                   child: const CircularProgressIndicator.adaptive()));
         },
       );
-      _isShowing =
-      false; // Set _isShowing back to false after dialog is dismissed
+      _isShowing = false; // Set _isShowing back to false after dialog is dismissed
     }
   }
 
@@ -311,6 +302,42 @@ class ProgressDialog {
       _isShowing = false;
       Navigator.of(context).pop();
     }
+  }
+}
+
+void showSnackBarMessage({required String message, Widget? icon, Color messageColor = Colors.white, required BuildContext context}) {
+  ScaffoldMessenger.of(context).removeCurrentSnackBar();
+
+  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      margin: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+      behavior: SnackBarBehavior.floating,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      content: Row(
+        children: [
+          if (icon != null) icon,
+          if (icon != null) const HorizontalSpacer(),
+          Flexible(
+            child: Text(
+              message,
+              style: TextStyle(
+                color: messageColor,
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+              ),
+              overflow: TextOverflow.fade,
+            ),
+          )
+        ],
+      )));
+}
+
+class HorizontalSpacer extends StatelessWidget {
+  final double width;
+  const HorizontalSpacer([this.width = 8.0, Key? key]) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(width: width);
   }
 }
 
