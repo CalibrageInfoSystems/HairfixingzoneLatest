@@ -37,7 +37,7 @@ class MyAppointments_screenState extends State<GetAppointments> {
   String empolyeid = '';
   String todate = "";
   final TextEditingController _commentstexteditcontroller =
-  TextEditingController();
+      TextEditingController();
   double rating_star = 0.0;
 
   List<BranchModel> brancheslist = [];
@@ -269,7 +269,7 @@ class MyAppointments_screenState extends State<GetAppointments> {
 
   void refreshTheScreen() {
     CommonUtils.checkInternetConnectivity().then(
-          (isConnected) {
+      (isConnected) {
         if (isConnected) {
           print('The Internet Is Connected');
 
@@ -307,7 +307,7 @@ class MyAppointments_screenState extends State<GetAppointments> {
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
                     borderSide:
-                    const BorderSide(color: CommonUtils.primaryTextColor),
+                        const BorderSide(color: CommonUtils.primaryTextColor),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderSide: const BorderSide(
@@ -394,11 +394,11 @@ class MyAppointments_screenState extends State<GetAppointments> {
       setState(() {
         myAppointmentsProvider!.filterProviderData(data
             .where((item) =>
-        // Uncomment and modify the condition to filter by name
-        item.purposeOfVisit
-            .toLowerCase()
-            .contains(input.toLowerCase()) ||
-            item.branch.toLowerCase().contains(input.toLowerCase()))
+                // Uncomment and modify the condition to filter by name
+                item.purposeOfVisit
+                    .toLowerCase()
+                    .contains(input.toLowerCase()) ||
+                item.branch.toLowerCase().contains(input.toLowerCase()))
             .toList());
       });
     });
@@ -488,7 +488,7 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
           print('listResult: ${listResult.length}');
           // Filter out records with "statusTypeId": 19
           List<dynamic> filteredList =
-          listResult.where((item) => item['statusTypeId'] != 18).toList();
+              listResult.where((item) => item['statusTypeId'] != 18).toList();
           print('filteredList: ${filteredList.length}');
           // Convert the filtered list to MyAppointment_Model objects if needed
           myAppointmentsProvider.storeIntoProvider = filteredList
@@ -666,7 +666,7 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                             selectedDate = _getValueText(
                                 CommonStyles.config.calendarType, values);
                             provider.getDisplayDate =
-                            '${selectedDate![0]}  -  ${selectedDate![1]}';
+                                '${selectedDate![0]}  -  ${selectedDate![1]}';
                             provider.getApiFromDate = selectedDate![0];
                             provider.getApiToDate = selectedDate![1];
 
@@ -721,7 +721,7 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                               return CircularProgressIndicator.adaptive(
                                 backgroundColor: Colors.transparent,
                                 valueColor:
-                                AlwaysStoppedAnimation<Color>(orangeColor),
+                                    AlwaysStoppedAnimation<Color>(orangeColor),
                               );
                             } else if (snapshot.hasError) {
                               return Text('Error: ${snapshot.error}');
@@ -784,17 +784,17 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                                             width: 1.0,
                                           ),
                                           borderRadius:
-                                          BorderRadius.circular(8.0),
+                                              BorderRadius.circular(8.0),
                                         ),
                                         child: IntrinsicWidth(
                                           child: Column(
                                             mainAxisAlignment:
-                                            MainAxisAlignment.center,
+                                                MainAxisAlignment.center,
                                             children: [
                                               Container(
                                                 padding:
-                                                const EdgeInsets.symmetric(
-                                                    horizontal: 10.0),
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 10.0),
                                                 child: Row(
                                                   children: [
                                                     Text(
@@ -803,7 +803,7 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                                                       style: TextStyle(
                                                         fontSize: 12.0,
                                                         fontWeight:
-                                                        FontWeight.bold,
+                                                            FontWeight.bold,
                                                         fontFamily: "Roboto",
                                                         color: isSelected
                                                             ? Colors.white
@@ -922,7 +922,7 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                               return CircularProgressIndicator.adaptive(
                                 backgroundColor: Colors.transparent,
                                 valueColor:
-                                AlwaysStoppedAnimation<Color>(orangeColor),
+                                    AlwaysStoppedAnimation<Color>(orangeColor),
                               );
                             } else if (snapshot.hasError) {
                               return Text('Error: ${snapshot.error}');
@@ -982,17 +982,17 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                                             width: 1.0,
                                           ),
                                           borderRadius:
-                                          BorderRadius.circular(8.0),
+                                              BorderRadius.circular(8.0),
                                         ),
                                         child: IntrinsicWidth(
                                           child: Column(
                                             mainAxisAlignment:
-                                            MainAxisAlignment.center,
+                                                MainAxisAlignment.center,
                                             children: [
                                               Container(
                                                 padding:
-                                                const EdgeInsets.symmetric(
-                                                    horizontal: 10.0),
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 10.0),
                                                 child: Row(
                                                   children: [
                                                     Text(
@@ -1000,7 +1000,7 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                                                       style: TextStyle(
                                                         fontSize: 12.0,
                                                         fontWeight:
-                                                        FontWeight.bold,
+                                                            FontWeight.bold,
                                                         fontFamily: "Roboto",
                                                         color: isSelected
                                                             ? Colors.white
@@ -1070,15 +1070,15 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                                   filterAppointments({
                                     "userid": widget.userId,
                                     "branchId":
-                                    myAppointmentsProvider.getApiBranchId,
+                                        myAppointmentsProvider.getApiBranchId,
                                     "fromdate":
-                                    myAppointmentsProvider.getApiFromDate,
+                                        myAppointmentsProvider.getApiFromDate,
                                     "toDate":
-                                    myAppointmentsProvider.getApiToDate,
+                                        myAppointmentsProvider.getApiToDate,
                                     "statustypeId": myAppointmentsProvider
                                         .getApiStatusTypeId,
                                   }).whenComplete(
-                                          () => provider.filterStatus = true);
+                                      () => provider.filterStatus = true);
                                 },
                                 child: Container(
                                   // width: desiredWidth * 0.9,
@@ -1130,19 +1130,19 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
     final response = await http.get(Uri.parse(baseUrl + getstatus));
     if (response.statusCode == 200) {
       final List<dynamic> responseData =
-      json.decode(response.body)['listResult'];
+          json.decode(response.body)['listResult'];
 
       print('Before filtering: $responseData');
 
       // Filter out items with "typeCdId": 18
       final List<dynamic> filteredData =
-      responseData.where((item) => item['typeCdId'] != 18).toList();
+          responseData.where((item) => item['typeCdId'] != 18).toList();
 
       print('After filtering: $filteredData');
 
       // Map the filtered data to Statusmodel
       List<Statusmodel> result =
-      filteredData.map((json) => Statusmodel.fromJson(json)).toList();
+          filteredData.map((json) => Statusmodel.fromJson(json)).toList();
 
       print('fetch branchname: ${result[0].desc}');
       return result;
@@ -1155,9 +1155,9 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
     final response = await http.get(Uri.parse(baseUrl + getbranches));
     if (response.statusCode == 200) {
       final List<dynamic> responseData =
-      json.decode(response.body)['listResult'];
+          json.decode(response.body)['listResult'];
       List<BranchModel> result =
-      responseData.map((json) => BranchModel.fromJson(json)).toList();
+          responseData.map((json) => BranchModel.fromJson(json)).toList();
       print('fetch branchname: ${result[0].name}');
       return result;
     } else {
@@ -1189,7 +1189,7 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
 
           // Filter out records with "statusTypeId": 19
           List<dynamic> filteredList =
-          listResult.where((item) => item['statusTypeId'] != 18).toList();
+              listResult.where((item) => item['statusTypeId'] != 18).toList();
 
           // Convert the filtered list to MyAppointment_Model objects if needed
           myAppointmentsProvider.storeIntoProvider = filteredList
@@ -1224,7 +1224,7 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
     endDate = values.length > 1 ? values[1] : null;
     String? formattedStartDate = DateFormat('dd/MM/yyyy').format(startDate!);
     String? formattedEndDate =
-    endDate != null ? DateFormat('dd/MM/yyyy').format(endDate) : 'null';
+        endDate != null ? DateFormat('dd/MM/yyyy').format(endDate) : 'null';
 
     return [formattedStartDate, formattedEndDate];
   }
@@ -1255,7 +1255,7 @@ class OpCard extends StatefulWidget {
 class _OpCardState extends State<OpCard> {
   late List<dynamic> dateValues;
   final TextEditingController _commentstexteditcontroller =
-  TextEditingController();
+      TextEditingController();
   double rating_star = 0.0;
   int? userId;
 
@@ -1286,7 +1286,7 @@ class _OpCardState extends State<OpCard> {
           width: MediaQuery.of(context).size.width,
           child: Card(
             shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
             elevation: 5,
             child: Container(
               // height: widget.data.statusTypeId == 4 || widget.data.statusTypeId == 6 ? 90 : 120,
@@ -1356,9 +1356,9 @@ class _OpCardState extends State<OpCard> {
                                 child: Container(
                                   child: Column(
                                     mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
+                                        MainAxisAlignment.spaceAround,
                                     crossAxisAlignment:
-                                    CrossAxisAlignment.start,
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         widget.data.slotDuration,
@@ -1373,11 +1373,10 @@ class _OpCardState extends State<OpCard> {
                                           style: CommonStyles.txSty_16black_f5),
                                       Text(widget.data.branch,
                                           style: CommonStyles.txSty_16black_f5),
-
                                       if (widget.data.paymentType != null)
                                         Text(widget.data.paymentType ?? ' ',
-                                            style: CommonStyles.txSty_16black_f5),
-
+                                            style:
+                                                CommonStyles.txSty_16black_f5),
                                     ],
                                   ),
                                 ),
@@ -1401,7 +1400,7 @@ class _OpCardState extends State<OpCard> {
                                     if (widget.data.rating != null)
                                       Row(
                                         mainAxisAlignment:
-                                        MainAxisAlignment.end,
+                                            MainAxisAlignment.end,
                                         children: [
                                           Row(
                                             children: [
@@ -1413,11 +1412,11 @@ class _OpCardState extends State<OpCard> {
                                               Padding(
                                                 padding: const EdgeInsets.only(
                                                     right:
-                                                    0.0), // Adjust the value as needed
+                                                        0.0), // Adjust the value as needed
                                                 child: Text(
                                                   '${widget.data.rating ?? ''}',
                                                   style:
-                                                  CommonStyles.txSty_14g_f5,
+                                                      CommonStyles.txSty_14g_f5,
                                                 ),
                                               ),
                                             ],
@@ -1520,7 +1519,7 @@ class _OpCardState extends State<OpCard> {
             GestureDetector(
               onTap: () {
                 int timeDifference =
-                calculateTimeDifference(data.date, data.slotDuration);
+                    calculateTimeDifference(data.date, data.slotDuration);
                 print(
                     '====timeDifference $timeDifference'); // assuming you have a function to calculate time difference
                 // if (timeDifference <= 0) {
@@ -1535,7 +1534,7 @@ class _OpCardState extends State<OpCard> {
                 if (timeDifference <= 60) {
                   // Show error toast if time difference is less than or equal to 60 minutes
                   CommonUtils.showCustomToastMessageLong(
-                    'The Request Should Not be Rescheduled Within 1 hour Before The Slot',
+                    'The Request Should Not be Rescheduled Within 1 hour Before the Slot',
                     context,
                     0,
                     2,
@@ -1564,7 +1563,7 @@ class _OpCardState extends State<OpCard> {
                     ),
                   ),
                   padding:
-                  const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
+                      const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
                   child: Row(
                     children: [
                       SvgPicture.asset(
@@ -1661,7 +1660,7 @@ class _OpCardState extends State<OpCard> {
                     ),
                   ),
                   padding:
-                  const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
+                      const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
                   child: Row(
                     children: [
                       SvgPicture.asset(
@@ -1691,13 +1690,13 @@ class _OpCardState extends State<OpCard> {
         );
       case 6: // Declined
         return const SizedBox();
-    // case 11: // FeedBack
-    //   return Flexible(
-    //     child: Text('" ${data.review} "' ?? '',
-    //         overflow: TextOverflow.ellipsis,
-    //         maxLines: 2,
-    //         style: CommonStyles.txSty_16blu_f5),
-    //   );
+      // case 11: // FeedBack
+      //   return Flexible(
+      //     child: Text('" ${data.review} "' ?? '',
+      //         overflow: TextOverflow.ellipsis,
+      //         maxLines: 2,
+      //         style: CommonStyles.txSty_16blu_f5),
+      //   );
 
       case 17: // Closed
         if (data.review == null) {
@@ -1757,28 +1756,28 @@ class _OpCardState extends State<OpCard> {
         return const SizedBox();
       default:
         return const SizedBox();
-    //  return Container(
-    //     decoration: BoxDecoration(
-    //         borderRadius: BorderRadius.circular(3),
-    //         border: Border.all(color: CommonUtils.blackColor)),
-    //     padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
-    //     child: const Row(
-    //       children: [
-    //         Icon(
-    //           Icons.star_border_outlined,
-    //           size: 13,
-    //           color: CommonStyles.primaryTextColor,
-    //         ),
-    //         Text(
-    //           ' Rate Us',
-    //           style: TextStyle(
-    //             fontSize: 11,
-    //             color: CommonStyles.primaryTextColor,
-    //           ),
-    //         ),
-    //       ],
-    //     ),
-    //   );
+      //  return Container(
+      //     decoration: BoxDecoration(
+      //         borderRadius: BorderRadius.circular(3),
+      //         border: Border.all(color: CommonUtils.blackColor)),
+      //     padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
+      //     child: const Row(
+      //       children: [
+      //         Icon(
+      //           Icons.star_border_outlined,
+      //           size: 13,
+      //           color: CommonStyles.primaryTextColor,
+      //         ),
+      //         Text(
+      //           ' Rate Us',
+      //           style: TextStyle(
+      //             fontSize: 11,
+      //             color: CommonStyles.primaryTextColor,
+      //           ),
+      //         ),
+      //       ],
+      //     ),
+      //   );
     }
   }
 
@@ -1854,7 +1853,7 @@ class _OpCardState extends State<OpCard> {
   void showDialogForRating(MyAppointment_Model appointments) {
     _commentstexteditcontroller.clear();
     showDialog(
-      barrierDismissible: true,
+      barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
         return StatefulBuilder(
@@ -1866,277 +1865,276 @@ class _OpCardState extends State<OpCard> {
               titlePadding: EdgeInsets.zero, // Ensure no default padding
               content: SingleChildScrollView(
                   child: Container(
-                    width: MediaQuery.of(context).size.width * 0.8, // Reduced width
-                    padding: const EdgeInsets.only(
-                      top: 5.0,
-                      //    left: 15.0,
-                      //  right: 15.0,
-                      //  bottom: 20.0,
-                    ),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10.0),
-                      gradient: const LinearGradient(
-                        colors: [
-                          Color(0xffffffff),
-                          Color(0xffffffff),
+                width: MediaQuery.of(context).size.width * 0.8, // Reduced width
+                padding: const EdgeInsets.only(
+                  top: 5.0,
+                  //    left: 15.0,
+                  //  right: 15.0,
+                  //  bottom: 20.0,
+                ),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10.0),
+                  gradient: const LinearGradient(
+                    colors: [
+                      Color(0xffffffff),
+                      Color(0xffffffff),
+                    ],
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                  ),
+                ),
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: const CircleAvatar(
+                              backgroundColor: CommonStyles.primaryColor,
+                              radius: 12,
+                              child: Center(
+                                child: Icon(
+                                  Icons.close,
+                                  color: CommonStyles.primaryTextColor,
+                                  size: 15,
+                                ),
+                              ),
+                            ),
+                          )
                         ],
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
                       ),
                     ),
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(4.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              GestureDetector(
-                                onTap: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: const CircleAvatar(
-                                  backgroundColor: CommonStyles.primaryColor,
-                                  radius: 12,
-                                  child: Center(
-                                    child: Icon(
-                                      Icons.close,
-                                      color: CommonStyles.primaryTextColor,
-                                      size: 15,
-                                    ),
-                                  ),
-                                ),
-                              )
-                            ],
-                          ),
+                    // Row(
+                    //   mainAxisAlignment: MainAxisAlignment.end,
+                    //   children: [
+                    //     IconButton(
+                    //       icon: const Icon(Icons.close),
+                    //       onPressed: () {
+                    //         Navigator.of(context).pop();
+                    //       },
+                    //     ),
+                    //   ],
+                    // ),
+                    Container(
+                      width: MediaQuery.of(context).size.width *
+                          0.8, // Reduced width
+                      padding: const EdgeInsets.only(
+                        // top: 15.0,
+                        left: 15.0,
+                        right: 15.0,
+                        bottom: 20.0,
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10.0),
+                        gradient: const LinearGradient(
+                          colors: [
+                            Color(0xffffffff),
+                            Color(0xffffffff),
+                          ],
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
                         ),
-                        // Row(
-                        //   mainAxisAlignment: MainAxisAlignment.end,
-                        //   children: [
-                        //     IconButton(
-                        //       icon: const Icon(Icons.close),
-                        //       onPressed: () {
-                        //         Navigator.of(context).pop();
-                        //       },
-                        //     ),
-                        //   ],
-                        // ),
-                        Container(
-                          width: MediaQuery.of(context).size.width *
-                              0.8, // Reduced width
-                          padding: const EdgeInsets.only(
-                            // top: 15.0,
-                            left: 15.0,
-                            right: 15.0,
-                            bottom: 20.0,
-                          ),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10.0),
-                            gradient: const LinearGradient(
-                              colors: [
-                                Color(0xffffffff),
-                                Color(0xffffffff),
-                              ],
-                              begin: Alignment.topCenter,
-                              end: Alignment.bottomCenter,
-                            ),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Stack(
+                            alignment: Alignment
+                                .topRight, // Align icon to the top right corner
                             children: [
-                              Stack(
-                                alignment: Alignment
-                                    .topRight, // Align icon to the top right corner
-                                children: [
-                                  // Close Icon in the top right corner
-                                  // IconButton(
-                                  //   icon: Icon(Icons.close),
-                                  //   onPressed: () {
-                                  //     Navigator.of(context).pop();
-                                  //   },
-                                  // ),
-                                  // SVG Image at the center
-                                  Center(
-                                    child: SvgPicture.asset(
-                                      'assets/feedbackbanner.svg', // Provide the path to your SVG image
-                                      width: MediaQuery.of(context).size.width *
-                                          0.8, // Adjusted width
-                                      height: 150, // Adjust as needed
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(
-                                height: 15.0,
-                              ),
+                              // Close Icon in the top right corner
+                              // IconButton(
+                              //   icon: Icon(Icons.close),
+                              //   onPressed: () {
+                              //     Navigator.of(context).pop();
+                              //   },
+                              // ),
+                              // SVG Image at the center
                               Center(
-                                child: Text(
-                                  'Please Rate Your Experience for the ${appointments.slotDuration} Slot at the ${appointments.branch} Hair Fixing Zone.',
-                                  style: const TextStyle(
-                                    fontSize: 16,
-                                    color: CommonUtils.primaryTextColor,
-                                    fontFamily: 'Calibri',
-                                  ),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 15.0,
-                              ),
-                              Center(
-                                child: SizedBox(
+                                child: SvgPicture.asset(
+                                  'assets/feedbackbanner.svg', // Provide the path to your SVG image
                                   width: MediaQuery.of(context).size.width *
                                       0.8, // Adjusted width
+                                  height: 150, // Adjust as needed
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 15.0,
+                          ),
+                          Center(
+                            child: Text(
+                              'Please Rate Your Experience for the ${appointments.slotDuration} Slot at the ${appointments.branch} Hair Fixing Zone.',
+                              style: const TextStyle(
+                                fontSize: 16,
+                                color: CommonUtils.primaryTextColor,
+                                fontFamily: 'Calibri',
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 15.0,
+                          ),
+                          Center(
+                            child: SizedBox(
+                              width: MediaQuery.of(context).size.width *
+                                  0.8, // Adjusted width
+                              child: Center(
+                                child: RatingBar.builder(
+                                  initialRating: 0,
+                                  minRating: 0,
+                                  direction: Axis.horizontal,
+                                  allowHalfRating: true,
+                                  itemCount: 5,
+                                  itemPadding: const EdgeInsets.symmetric(
+                                      horizontal: 1.0),
+                                  itemBuilder: (context, _) => const Icon(
+                                    Icons.star,
+                                    color: CommonUtils.primaryTextColor,
+                                  ),
+                                  onRatingUpdate: (rating) {
+                                    setState(() {
+                                      rating_star = rating;
+                                      print('rating_star$rating_star');
+                                    });
+                                  },
+                                ),
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                left: 0, top: 15.0, right: 0),
+                            child: GestureDetector(
+                              onTap: () async {},
+                              child: Container(
+                                height: 80,
+                                width: MediaQuery.of(context).size.width *
+                                    0.8, // Adjusted width
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: CommonUtils.primaryTextColor,
+                                    width: 1.5,
+                                  ),
+                                  borderRadius: BorderRadius.circular(5.0),
+                                  color: Colors.white,
+                                ),
+                                child: TextFormField(
+                                  controller: _commentstexteditcontroller,
+                                  style: const TextStyle(
+                                    fontFamily: 'Calibri',
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w300,
+                                  ),
+                                  maxLines: null,
+                                  maxLength: 250,
+                                  // Set maxLines to null for multiline input
+                                  decoration: const InputDecoration(
+                                    hintText: 'Comment',
+                                    hintStyle: TextStyle(
+                                      color: Colors.black54,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: 'Calibri',
+                                    ),
+                                    contentPadding: EdgeInsets.symmetric(
+                                      horizontal: 16.0,
+                                      vertical: 12.0,
+                                    ),
+                                    border: InputBorder.none,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 15.0,
+                          ),
+                          Row(
+                            children: [
+                              // Expanded(
+                              //   child: ElevatedButton(
+                              //     onPressed: () {
+                              //       Navigator.of(context).pop();
+                              //     },
+                              //     style: ElevatedButton.styleFrom(
+                              //       textStyle: const TextStyle(
+                              //         color: CommonUtils.primaryTextColor,
+                              //       ),
+                              //       side: const BorderSide(
+                              //         color: CommonUtils.primaryTextColor,
+                              //       ),
+                              //       backgroundColor: Colors.white,
+                              //       shape: const RoundedRectangleBorder(
+                              //         borderRadius: BorderRadius.all(
+                              //           Radius.circular(10),
+                              //         ),
+                              //       ),
+                              //     ),
+                              //     child: const Text(
+                              //       'Close',
+                              //       style: TextStyle(
+                              //         fontFamily: 'Calibri',
+                              //         fontSize: 14,
+                              //         color: CommonUtils.primaryTextColor,
+                              //         fontWeight: FontWeight.bold,
+                              //       ),
+                              //     ),
+                              //   ),
+                              // ),
+                              // const SizedBox(width: 20),
+                              Expanded(
+                                child: SizedBox(
                                   child: Center(
-                                    child: RatingBar.builder(
-                                      initialRating: 0,
-                                      minRating: 0,
-                                      direction: Axis.horizontal,
-                                      allowHalfRating: true,
-                                      itemCount: 5,
-                                      itemPadding: const EdgeInsets.symmetric(
-                                          horizontal: 1.0),
-                                      itemBuilder: (context, _) => const Icon(
-                                        Icons.star,
-                                        color: CommonUtils.primaryTextColor,
-                                      ),
-                                      onRatingUpdate: (rating) {
-                                        setState(() {
-                                          rating_star = rating;
-                                          print('rating_star$rating_star');
-                                        });
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        validateRating(appointments);
                                       },
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                    left: 0, top: 15.0, right: 0),
-                                child: GestureDetector(
-                                  onTap: () async {},
-                                  child: Container(
-                                    height: 80,
-                                    width: MediaQuery.of(context).size.width *
-                                        0.8, // Adjusted width
-                                    decoration: BoxDecoration(
-                                      border: Border.all(
-                                        color: CommonUtils.primaryTextColor,
-                                        width: 1.5,
-                                      ),
-                                      borderRadius: BorderRadius.circular(5.0),
-                                      color: Colors.white,
-                                    ),
-                                    child: TextFormField(
-                                      controller: _commentstexteditcontroller,
-                                      style: const TextStyle(
-                                        fontFamily: 'Calibri',
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w300,
-                                      ),
-                                      maxLines: null,
-                                      maxLength: 250,
-                                      // Set maxLines to null for multiline input
-                                      decoration: const InputDecoration(
-                                        hintText: 'Comment',
-                                        hintStyle: TextStyle(
-                                          color: Colors.black54,
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.bold,
-                                          fontFamily: 'Calibri',
-                                        ),
-                                        contentPadding: EdgeInsets.symmetric(
-                                          horizontal: 16.0,
-                                          vertical: 12.0,
-                                        ),
-                                        border: InputBorder.none,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 15.0,
-                              ),
-                              Row(
-                                children: [
-                                  // Expanded(
-                                  //   child: ElevatedButton(
-                                  //     onPressed: () {
-                                  //       Navigator.of(context).pop();
-                                  //     },
-                                  //     style: ElevatedButton.styleFrom(
-                                  //       textStyle: const TextStyle(
-                                  //         color: CommonUtils.primaryTextColor,
-                                  //       ),
-                                  //       side: const BorderSide(
-                                  //         color: CommonUtils.primaryTextColor,
-                                  //       ),
-                                  //       backgroundColor: Colors.white,
-                                  //       shape: const RoundedRectangleBorder(
-                                  //         borderRadius: BorderRadius.all(
-                                  //           Radius.circular(10),
-                                  //         ),
-                                  //       ),
-                                  //     ),
-                                  //     child: const Text(
-                                  //       'Close',
-                                  //       style: TextStyle(
-                                  //         fontFamily: 'Calibri',
-                                  //         fontSize: 14,
-                                  //         color: CommonUtils.primaryTextColor,
-                                  //         fontWeight: FontWeight.bold,
-                                  //       ),
-                                  //     ),
-                                  //   ),
-                                  // ),
-                                  // const SizedBox(width: 20),
-                                  Expanded(
-                                    child: SizedBox(
-                                      child: Center(
-                                        child: GestureDetector(
-                                          onTap: () {
-                                            validateRating(appointments);
-                                          },
-                                          child: Container(
-                                            // width: desiredWidth * 0.9,
-                                            height: 40.0,
-                                            decoration: BoxDecoration(
-                                              borderRadius:
+                                      child: Container(
+                                        // width: desiredWidth * 0.9,
+                                        height: 40.0,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
                                               BorderRadius.circular(15.0),
-                                              color: CommonUtils.primaryTextColor,
-                                            ),
-                                            child: const Center(
-                                              child: Text(
-                                                'Rate Now',
-                                                style: TextStyle(
-                                                  fontFamily: 'Calibri',
-                                                  fontSize: 14,
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
+                                          color: CommonUtils.primaryTextColor,
+                                        ),
+                                        child: const Center(
+                                          child: Text(
+                                            'Rate Now',
+                                            style: TextStyle(
+                                              fontFamily: 'Calibri',
+                                              fontSize: 14,
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold,
                                             ),
                                           ),
                                         ),
                                       ),
                                     ),
                                   ),
-                                ],
+                                ),
                               ),
                             ],
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  )),
+                  ],
+                ),
+              )),
             );
           },
         );
       },
     );
   }
-
 
   // void showDialogForRating(MyAppointment_Model appointments) {
   //   _commentstexteditcontroller.clear();
@@ -2399,7 +2397,7 @@ class _OpCardState extends State<OpCard> {
         "SlotTime": appointmens.slotTime,
         "CustomerName": appointmens.customerName,
         "PhoneNumber":
-        appointmens.contactNumber, // Changed from appointments.phoneNumber
+            appointmens.contactNumber, // Changed from appointments.phoneNumber
         "Email": appointmens.email,
         "GenderTypeId": appointmens.genderTypeId,
         "StatusTypeId": 17,
@@ -2415,7 +2413,7 @@ class _OpCardState extends State<OpCard> {
         "timeofslot": appointmens.timeofSlot,
         "customerId": userId,
         "price": appointmens.price,
-        "paymentTypeId":appointmens.paymentTypeId,
+        "paymentTypeId": appointmens.paymentTypeId,
       };
       print('AddUpdatefeedback object: : ${json.encode(request)}');
 
@@ -2496,7 +2494,7 @@ class _OpCardState extends State<OpCard> {
                   'Are You Sure You Want to Cancel the Appointment at ${appointments.branch} Branch for ${appointments.purposeOfVisit}?',
                   style: CommonUtils.txSty_18b_fb,
                   textAlign:
-                  TextAlign.center, // Optionally, align the text center
+                      TextAlign.center, // Optionally, align the text center
                 ),
               ),
               const SizedBox(
@@ -2598,7 +2596,7 @@ class _OpCardState extends State<OpCard> {
       "SlotTime": appointmens.slotTime,
       "CustomerName": appointmens.customerName,
       "PhoneNumber":
-      appointmens.contactNumber, // Changed from appointments.phoneNumber
+          appointmens.contactNumber, // Changed from appointments.phoneNumber
       "Email": appointmens.email,
       "GenderTypeId": appointmens.genderTypeId,
       "StatusTypeId": 6,
@@ -2686,7 +2684,7 @@ class _OpCardState extends State<OpCard> {
                   'Your Appointment Has Been Cancelled Successfully ',
                   style: CommonUtils.txSty_18b_fb,
                   textAlign:
-                  TextAlign.center, // Optionally, align the text center
+                      TextAlign.center, // Optionally, align the text center
                 ),
               ),
               const SizedBox(
@@ -2723,9 +2721,9 @@ class _OpCardState extends State<OpCard> {
 
     // Parse the concatenated string into a DateTime object
     DateTime selectedDateTime =
-    DateFormat('yyyy-MM-dd hh:mm a').parse(selectedDateTimeString);
+        DateFormat('yyyy-MM-dd hh:mm a').parse(selectedDateTimeString);
     DateTime currentDateTime =
-    DateFormat('yyyy-MM-dd hh:mm a').parse(formattedTime);
+        DateFormat('yyyy-MM-dd hh:mm a').parse(formattedTime);
 
     print(
         'Time difference in selectedDateTime: ${selectedDateTime.toString()}');
