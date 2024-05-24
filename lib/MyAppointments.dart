@@ -1241,6 +1241,11 @@ class _OpCardState extends State<OpCard> {
                                     const SizedBox(
                                       height: 10.0,
                                     ),
+                                    if (widget.data.price != null)
+                                      Text(
+                                        '₹${formatNumber(widget.data.price ?? 0)}',
+                                        style: CommonStyles.txSty_16black_f5,
+                                      ),
                                     if (widget.data.rating != null)
                                       Row(
                                         mainAxisAlignment:
@@ -1256,7 +1261,7 @@ class _OpCardState extends State<OpCard> {
                                               Padding(
                                                 padding: const EdgeInsets.only(
                                                     right:
-                                                    8.0), // Adjust the value as needed
+                                                    0.0), // Adjust the value as needed
                                                 child: Text(
                                                   '${widget.data.rating ?? ''}',
                                                   style:
@@ -1432,54 +1437,7 @@ class _OpCardState extends State<OpCard> {
               ),
             ),
 
-            // GestureDetector(
-            //   onTap: () {
-            //     if (!isPastDate(data.date, data.slotDuration)) {
-            //       Navigator.push(
-            //         context,
-            //         MaterialPageRoute(
-            //           builder: (context) => Rescheduleslotscreen(
-            //             data: data,
-            //           ),
-            //         ),
-            //       );
-            //     }
-            //   },
-            //   child: IgnorePointer(
-            //     ignoring: isPastDate(data.date, data.slotDuration),
-            //     child: Container(
-            //       decoration: BoxDecoration(
-            //         borderRadius: BorderRadius.circular(3),
-            //         border: Border.all(
-            //             color: isPastDate(data.date, data.slotDuration)
-            //                 ? Colors.grey
-            //                 : CommonStyles.primaryTextColor),
-            //       ),
-            //       padding:
-            //       const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
-            //       child: Row(
-            //         children: [
-            //           SvgPicture.asset(
-            //             'assets/calendar-_3_.svg',
-            //             width: 13,
-            //             color: isPastDate(data.date, data.slotDuration)
-            //                 ? Colors.grey
-            //                 : CommonUtils.primaryTextColor,
-            //           ),
-            //           Text(
-            //             '  Reschedule',
-            //             style: TextStyle(
-            //               fontSize: 15,
-            //               color: isPastDate(data.date, data.slotDuration)
-            //                   ? Colors.grey
-            //                   : CommonUtils.primaryTextColor,
-            //             ),
-            //           ),
-            //         ],
-            //       ),
-            //     ),
-            //   ),
-            // ),
+
             const SizedBox(
               width: 10,
             ),
@@ -1908,37 +1866,7 @@ class _OpCardState extends State<OpCard> {
                               ),
                               Row(
                                 children: [
-                                  // Expanded(
-                                  //   child: ElevatedButton(
-                                  //     onPressed: () {
-                                  //       Navigator.of(context).pop();
-                                  //     },
-                                  //     style: ElevatedButton.styleFrom(
-                                  //       textStyle: const TextStyle(
-                                  //         color: CommonUtils.primaryTextColor,
-                                  //       ),
-                                  //       side: const BorderSide(
-                                  //         color: CommonUtils.primaryTextColor,
-                                  //       ),
-                                  //       backgroundColor: Colors.white,
-                                  //       shape: const RoundedRectangleBorder(
-                                  //         borderRadius: BorderRadius.all(
-                                  //           Radius.circular(10),
-                                  //         ),
-                                  //       ),
-                                  //     ),
-                                  //     child: const Text(
-                                  //       'Close',
-                                  //       style: TextStyle(
-                                  //         fontFamily: 'Calibri',
-                                  //         fontSize: 14,
-                                  //         color: CommonUtils.primaryTextColor,
-                                  //         fontWeight: FontWeight.bold,
-                                  //       ),
-                                  //     ),
-                                  //   ),
-                                  // ),
-                                  // const SizedBox(width: 20),
+
                                   Expanded(
                                     child: SizedBox(
                                       child: Center(
@@ -2418,6 +2346,11 @@ class _OpCardState extends State<OpCard> {
 
     return differenceInMinutes
         .abs(); // Return the absolute value of the difference
+  }
+
+  String formatNumber(double number) {
+    NumberFormat formatter = NumberFormat("#,##,##,##,##,##,##0.00", "en_US");
+    return formatter.format(number);
   }
 
 //

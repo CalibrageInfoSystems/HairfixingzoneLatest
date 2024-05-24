@@ -133,7 +133,7 @@ class MyProducts_screenState extends State<MyProducts> {
 
   void refreshTheScreen() {
     CommonUtils.checkInternetConnectivity().then(
-      (isConnected) {
+          (isConnected) {
         if (isConnected) {
           try {
             initializeData();

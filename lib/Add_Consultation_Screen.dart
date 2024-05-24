@@ -890,7 +890,7 @@ class AddConsulationscreen_screenState extends State<Add_Consulation_screen> {
     if (value.length < 2) {
       setState(() {
         _fullNameError = true;
-        _fullNameErrorMsg = 'Full Name should contains minimum 2 charactes';
+        _fullNameErrorMsg = 'Full Name Should Contains Minimum 2 Charactes';
       });
       isFullNameValidate = false;
       return null;

@@ -1413,7 +1413,7 @@ class _OpCardState extends State<OpCard> {
                                               Padding(
                                                 padding: const EdgeInsets.only(
                                                     right:
-                                                    8.0), // Adjust the value as needed
+                                                    0.0), // Adjust the value as needed
                                                 child: Text(
                                                   '${widget.data.rating ?? ''}',
                                                   style:
