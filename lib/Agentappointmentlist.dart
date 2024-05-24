@@ -4977,10 +4977,29 @@ class _OpCardState extends State<OpCard> {
                                   const SizedBox(height: 5.0),
                                   TextFormField(
                                     controller: _priceController,
-                                    keyboardType: TextInputType.number,
+                                    // keyboardType: TextInputType.number,
                                     // readOnly: isFreeService,
                                     enabled: isFreeService,
-
+                                    keyboardType:
+                                        const TextInputType.numberWithOptions(
+                                            decimal: true),
+                                    inputFormatters: [
+                                      FilteringTextInputFormatter.allow(
+                                          RegExp(r'^\d*\.?\d*')),
+                                    ],
+                                    onChanged: (value) {
+                                      setState(() {
+                                        if (value.startsWith(' ')) {
+                                          _priceController.value =
+                                              TextEditingValue(
+                                            text: value.trimLeft(),
+                                            selection: TextSelection.collapsed(
+                                                offset:
+                                                    value.trimLeft().length),
+                                          );
+                                        }
+                                      });
+                                    },
                                     maxLength: 10,
                                     decoration: InputDecoration(
                                       contentPadding: const EdgeInsets.only(
