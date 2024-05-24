@@ -788,7 +788,7 @@ class ProductCard extends StatelessWidget {
                         top: -8,
                         left: -10,
                         child: SvgPicture.asset(
-                          'assets/bs_v1.svg',
+                          'assets/bs_v2.svg',
                           width: 80.0,
                           height: 35.0,
                           // color: Color(0xFF0f75bc),

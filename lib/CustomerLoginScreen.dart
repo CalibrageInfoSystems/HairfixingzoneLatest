@@ -407,6 +407,7 @@ class _LoginPageState extends State<CustomerLoginScreen> {
             print('User ID: ${user['id']}');
             print('Full Name: ${user['firstName']}');
             print('Role ID: ${user['roleID']}');
+            AddCustomer_Notification(user['id']);
             await saveUserDataToSharedPreferences(user);
             // Extract other user information as needed
 
@@ -510,4 +511,77 @@ class _LoginPageState extends State<CustomerLoginScreen> {
       elevation: 0, // No shadow
     );
   }
+
+
+  Future<void> AddCustomer_Notification(int userId) async {
+
+
+    final String apiUrl = baseUrl + AddCustomerNotification;
+
+    // Prepare the request body
+    // Map<String,int> requestBody = {
+    //     "id": 0,
+    //     "userId": 2,
+    //     "roleId": 3,
+    //     "deviceToken": "sample string 4"
+    //
+    // }
+
+    // Make the POST request
+    // final response = await http.post(
+    //   Uri.parse(apiUrl),
+    //   body: requestBody,
+    // );
+      // if (response.statusCode == 200) {
+      //   final Map<String, dynamic> responseJson = jsonDecode(addSlotResponse.body);
+      //
+      //   if (responseJson["isSuccess"]) {
+      //     // setState(() {
+      //     //   _isLoading = false;
+      //
+      //     // });
+      //     print("Agent slots information added successfully.");
+      //     SharedPreferences prefs = await SharedPreferences.getInstance();
+      //     prefs.setBool('isLoggedIn', true);
+      //     int userId = agentId; // Replace with the actual user ID
+      //     print('userId==$userId');
+      //     prefs.setInt('userId', userId); // Save the user ID
+      //
+      //     Navigator.push(
+      //         context,
+      //         MaterialPageRoute(
+      //           builder: (context) => AgentHome(userId: agentId),
+      //         ));
+      //   } else {
+      //     print("Error: ${responseJson["statusMessage"]}");
+      //     // setState(() {
+      //     //   _isLoading = false;
+      //
+      //     // });
+      //     if (responseJson["statusMessage"] == "This token is already used") {
+      //       SharedPreferences prefs = await SharedPreferences.getInstance();
+      //       prefs.setBool('isLoggedIn', true);
+      //       int userId = agentId; // Replace with the actual user ID
+      //       print('userId==$userId');
+      //       prefs.setInt('userId', userId);
+      //       Navigator.push(
+      //           context,
+      //           MaterialPageRoute(
+      //             builder: (context) => AgentHome(userId: agentId),
+      //           ));
+      //     } else {
+      //       // setState(() {
+      //       //   _isLoading = false;
+      //
+      //       // });
+      //       FocusScope.of(context).unfocus();
+      //       CommonUtils.showCustomToastMessageLong("${responseJson["statusMessage"]}", context, 1, 4);
+      //     }
+      //   }
+      // } else {
+      //   print("Error: ${response.statusCode}");
+      // }
+
+  }
+
 }

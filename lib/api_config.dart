@@ -55,4 +55,4 @@ var getCustomerDatabyid = 'GetCustomerData?id=';
 var getholidayslist = 'api/HolidayList/GetHolidayListdetails';
 var getconsulationbyranchid = 'api/Consultation/GetConsultationsByBranchId';
 //var validateusernameotp = "ValidateOTP";
-// var validateusername = "ValidateUserName";
+ var AddCustomerNotification = "AddCustomerNotification";

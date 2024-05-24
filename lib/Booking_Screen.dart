@@ -1080,7 +1080,7 @@ class _BookingScreenState extends State<Bookingscreen> {
                       'Notification Scheduled for $newDateTime with ID: $notificationId2');
                   await NotificationService().scheduleNotification(
                     title: 'Reminder Notification',
-                    body: 'Hey $userFullName, It Has Been 20 Days Since Your  ${selectedName!} Was Done. Please Revisit the Hairfixing Zone at The ${widget.branchname}',
+                    body: 'Hey $userFullName, It Has Been 20 Days Since Your  ${selectedName!} Was Done. Please Revisit the Hairfixing Zone at The ${widget.branchname} Branch',
                   //  scheduledNotificationDateTime: newDateTime!,
                     scheduledNotificationDateTime: testdate!,
                     id: notificationId2,
@@ -1093,7 +1093,7 @@ class _BookingScreenState extends State<Bookingscreen> {
                       'Notification Scheduled for $newDateTime with ID: $notificationId2');
                   await NotificationService().scheduleNotification(
                     title: 'Reminder Notification',
-                    body: 'Hey $userFullName, It Has Been 20 Days Since Your  ${selectedName!} Was Done. Please Revisit the Hairfixing Zone at The ${widget.branchname}',
+                    body: 'Hey $userFullName, It Has Been 20 Days Since Your  ${selectedName!} Was Done. Please Revisit the Hairfixing Zone at The ${widget.branchname} Branch',
                   //  scheduledNotificationDateTime: newDateTime!,
                     scheduledNotificationDateTime: testdate!,
                     id: notificationId2,
@@ -1107,7 +1107,7 @@ class _BookingScreenState extends State<Bookingscreen> {
                       'Notification Scheduled for $newDateTime with ID: $notificationId2');
                   await NotificationService().scheduleNotification(
                     title: 'Reminder Notification',
-                    body: 'Hey $userFullName, It Has Been 20 Days Since Your  ${selectedName!} Was Done. Please Revisit the Hairfixing Zone at The ${widget.branchname}',
+                    body: 'Hey $userFullName, It Has Been 20 Days Since Your  ${selectedName!} Was Done. Please Revisit the Hairfixing Zone at The ${widget.branchname} Branch',
                   //  scheduledNotificationDateTime: newDateTime!,
                     scheduledNotificationDateTime: testdate!,
                     id: notificationId2,
@@ -1119,7 +1119,7 @@ class _BookingScreenState extends State<Bookingscreen> {
                       'Notification Scheduled for $newDateTime with ID: $notificationId2');
                   await NotificationService().scheduleNotification(
                     title: 'Reminder Notification',
-                    body: 'Hey $userFullName, It Has Been 20 Days Since Your  ${selectedName!} Was Done. Please Revisit the Hairfixing Zone at The ${widget.branchname}',
+                    body: 'Hey $userFullName, It Has Been 20 Days Since Your  ${selectedName!} Was Done. Please Revisit the Hairfixing Zone at The ${widget.branchname} Branch',
                   //  scheduledNotificationDateTime: newDateTime!,
                     scheduledNotificationDateTime: testdate!,
                     id: notificationId2,

@@ -168,6 +168,11 @@ flutter:
     - assets/applogo.png
     - assets/feedbackbanner.svg
     - assets/about_us.jpg
+    - assets/bs_v1.svg
+    - assets/bs_v2.svg
+    - assets/bs_v3.svg
+
+
 
 
 
