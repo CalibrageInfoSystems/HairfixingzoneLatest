@@ -2418,12 +2418,12 @@ class Agentappointmentlist extends StatefulWidget {
   final String branchaddress;
   const Agentappointmentlist(
       {super.key,
-        required this.userId,
-        required this.branchid,
-        required this.branchname,
-        required this.filepath,
-        required this.phonenumber,
-        required this.branchaddress});
+      required this.userId,
+      required this.branchid,
+      required this.branchname,
+      required this.filepath,
+      required this.phonenumber,
+      required this.branchaddress});
   @override
   MyAppointments_screenState createState() => MyAppointments_screenState();
 }
@@ -2454,8 +2454,6 @@ class MyAppointments_screenState extends State<Agentappointmentlist> {
       }
     });
   }
-
-
 
   AgentAppointmentsProvider? myAppointmentsProvider;
   @override
@@ -2667,7 +2665,7 @@ class MyAppointments_screenState extends State<Agentappointmentlist> {
         if (response['listResult'] != null) {
           List<dynamic> listResult = response['listResult'];
           List<Appointment> result =
-          listResult.map((item) => Appointment.fromJson(item)).toList();
+              listResult.map((item) => Appointment.fromJson(item)).toList();
           return result;
         } else {
           myAppointmentsProvider!.storeIntoProvider = [];
@@ -2686,7 +2684,7 @@ class MyAppointments_screenState extends State<Agentappointmentlist> {
 
   void refreshTheScreen() {
     CommonUtils.checkInternetConnectivity().then(
-          (isConnected) {
+      (isConnected) {
         if (isConnected) {
           print('The Internet Is Connected');
 
@@ -2723,7 +2721,7 @@ class MyAppointments_screenState extends State<Agentappointmentlist> {
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
                   borderSide:
-                  const BorderSide(color: CommonUtils.primaryTextColor),
+                      const BorderSide(color: CommonUtils.primaryTextColor),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderSide: const BorderSide(
@@ -3000,7 +2998,7 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                             selectedDate = _getValueText(
                                 CommonStyles.config.calendarType, values);
                             provider.getDisplayDate =
-                            '${selectedDate![0]}  -  ${selectedDate![1]}';
+                                '${selectedDate![0]}  -  ${selectedDate![1]}';
                             provider.getApiFromDate = selectedDate![0];
                             provider.getApiToDate = selectedDate![1];
                           });
@@ -3051,7 +3049,7 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                               return CircularProgressIndicator.adaptive(
                                 backgroundColor: Colors.transparent,
                                 valueColor:
-                                AlwaysStoppedAnimation<Color>(orangeColor),
+                                    AlwaysStoppedAnimation<Color>(orangeColor),
                               );
                             } else if (snapshot.hasError) {
                               return Text('Error: ${snapshot.error}');
@@ -3105,17 +3103,17 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                                             width: 1.0,
                                           ),
                                           borderRadius:
-                                          BorderRadius.circular(8.0),
+                                              BorderRadius.circular(8.0),
                                         ),
                                         child: IntrinsicWidth(
                                           child: Column(
                                             mainAxisAlignment:
-                                            MainAxisAlignment.center,
+                                                MainAxisAlignment.center,
                                             children: [
                                               Container(
                                                 padding:
-                                                const EdgeInsets.symmetric(
-                                                    horizontal: 10.0),
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 10.0),
                                                 child: Row(
                                                   children: [
                                                     Text(
@@ -3123,7 +3121,7 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                                                       style: TextStyle(
                                                         fontSize: 12.0,
                                                         fontWeight:
-                                                        FontWeight.bold,
+                                                            FontWeight.bold,
                                                         fontFamily: "Roboto",
                                                         color: isSelected
                                                             ? Colors.white
@@ -3195,13 +3193,13 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                                     // "branchId":
                                     //     myAppointmentsProvider?.getApiBranchId,
                                     "fromdate":
-                                    myAppointmentsProvider?.getApiFromDate,
+                                        myAppointmentsProvider?.getApiFromDate,
                                     "toDate":
-                                    myAppointmentsProvider?.getApiToDate,
+                                        myAppointmentsProvider?.getApiToDate,
                                     "statustypeId": myAppointmentsProvider
                                         ?.getApiStatusTypeId,
                                   }).whenComplete(
-                                          () => provider.filterStatus = true);
+                                      () => provider.filterStatus = true);
                                 },
                                 child: Container(
                                   // width: desiredWidth * 0.9,
@@ -3242,9 +3240,9 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
     final response = await http.get(Uri.parse(baseUrl + getstatus));
     if (response.statusCode == 200) {
       final List<dynamic> responseData =
-      json.decode(response.body)['listResult'];
+          json.decode(response.body)['listResult'];
       List<Statusmodel> result =
-      responseData.map((json) => Statusmodel.fromJson(json)).toList();
+          responseData.map((json) => Statusmodel.fromJson(json)).toList();
       print('fetch branchname: ${result[0].desc}');
       return result;
     } else {
@@ -3254,12 +3252,12 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
 
   Future<List<BranchModel>> fetchbranches(userId) async {
     final response =
-    await http.get(Uri.parse('$baseUrl$GetBranchByUserId$userId/null'));
+        await http.get(Uri.parse('$baseUrl$GetBranchByUserId$userId/null'));
     if (response.statusCode == 200) {
       final List<dynamic> responseData =
-      json.decode(response.body)['listResult'];
+          json.decode(response.body)['listResult'];
       List<BranchModel> result =
-      responseData.map((json) => BranchModel.fromJson(json)).toList();
+          responseData.map((json) => BranchModel.fromJson(json)).toList();
       print('fetch branchname: ${result[0].name}');
       return result;
     } else {
@@ -3317,7 +3315,7 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
     endDate = values.length > 1 ? values[1] : null;
     String? formattedStartDate = DateFormat('dd/MM/yyyy').format(startDate!);
     String? formattedEndDate =
-    endDate != null ? DateFormat('dd/MM/yyyy').format(endDate) : 'null';
+        endDate != null ? DateFormat('dd/MM/yyyy').format(endDate) : 'null';
 
     return [formattedStartDate, formattedEndDate];
   }
@@ -3353,7 +3351,7 @@ class OpCard extends StatefulWidget {
 class _OpCardState extends State<OpCard> {
   late List<dynamic> dateValues;
   final TextEditingController _commentstexteditcontroller =
-  TextEditingController();
+      TextEditingController();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _priceController = TextEditingController();
@@ -3364,12 +3362,13 @@ class _OpCardState extends State<OpCard> {
   final GlobalKey _fullnameTipKey = GlobalKey();
   final GlobalKey _emailtoolTipKey = GlobalKey();
   late Future<List<Statusmodel>> apiPaymentOptions;
- // late List<Statusmodel> paymentOptions;
+  // late List<Statusmodel> paymentOptions;
   List<dynamic> paymentOptions = [];
   int selectedPaymentOption = -1;
   int? apiPaymentMode;
   bool isPaymentValidate = false;
   bool isPaymentModeSelected = false;
+  bool isFreeService = true;
   String? selectedPaymentMode;
 
   @override
@@ -3377,7 +3376,7 @@ class _OpCardState extends State<OpCard> {
     super.initState();
     dateValues = parseDateString(widget.data.date);
     print('userid===userId,$userId');
-fetchPaymentOptions();
+    fetchPaymentOptions();
   }
 
   @override
@@ -3394,7 +3393,6 @@ fetchPaymentOptions();
     //         int ,       String ,                           int
     return [dateTime.day, DateFormat.MMM().format(dateTime), dateTime.year];
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -3474,7 +3472,7 @@ fetchPaymentOptions();
                               child: Container(
                                 child: Column(
                                   mainAxisAlignment:
-                                  MainAxisAlignment.spaceAround,
+                                      MainAxisAlignment.spaceAround,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
@@ -3491,7 +3489,8 @@ fetchPaymentOptions();
                                     // Text(widget.data.email ?? '',
                                     //     style: CommonStyles.txSty_16black_f5),
                                     Row(children: [
-                                      Text(widget.data.customerName, style: CommonStyles.txSty_16black_f5),
+                                      Text(widget.data.customerName,
+                                          style: CommonStyles.txSty_16black_f5),
                                       // GestureDetector(
                                       //   child: const Padding(
                                       //     padding: EdgeInsets.fromLTRB(8, 0, 0, 0),
@@ -3507,33 +3506,40 @@ fetchPaymentOptions();
                                       // ),
                                       GestureDetector(
                                         key: _fullnameTipKey,
-                                        child: Padding(
-                                          padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
+                                        child: const Padding(
+                                          padding:
+                                              EdgeInsets.fromLTRB(5, 0, 5, 0),
                                           child: Icon(
                                             Icons.copy,
                                             size: 16,
                                           ),
                                         ),
                                         onTap: () {
-                                          Clipboard.setData(ClipboardData(text: widget.data.customerName!));
-                                          showTooltip(context, "Copied", _fullnameTipKey);
+                                          Clipboard.setData(ClipboardData(
+                                              text: widget.data.customerName));
+                                          showTooltip(context, "Copied",
+                                              _fullnameTipKey);
                                         },
                                       ),
                                     ]),
                                     Row(children: [
-                                      Text(widget.data.email ?? '', style: CommonStyles.txSty_16black_f5),
+                                      Text(widget.data.email ?? '',
+                                          style: CommonStyles.txSty_16black_f5),
                                       GestureDetector(
                                         key: _emailtoolTipKey,
                                         child: const Padding(
-                                          padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                          padding:
+                                              EdgeInsets.fromLTRB(0, 0, 0, 0),
                                           child: Icon(
                                             Icons.copy,
                                             size: 16,
                                           ),
                                         ),
                                         onTap: () {
-                                          Clipboard.setData(ClipboardData(text: widget.data.email!));
-                                          showTooltip(context, "Copied", _emailtoolTipKey);
+                                          Clipboard.setData(ClipboardData(
+                                              text: widget.data.email!));
+                                          showTooltip(context, "Copied",
+                                              _emailtoolTipKey);
                                         },
                                       ),
                                     ]),
@@ -3562,19 +3568,23 @@ fetchPaymentOptions();
                                   //     style: CommonStyles.txSty_16black_f5),
                                   Row(
                                     children: [
-                                      Text(widget.data.phoneNumber ?? '', style: CommonStyles.txSty_16black_f5),
+                                      Text(widget.data.phoneNumber ?? '',
+                                          style: CommonStyles.txSty_16black_f5),
                                       GestureDetector(
                                         key: _toolTipKey,
                                         child: const Padding(
-                                          padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
+                                          padding:
+                                              EdgeInsets.fromLTRB(5, 0, 5, 0),
                                           child: Icon(
                                             Icons.copy,
                                             size: 16,
                                           ),
                                         ),
                                         onTap: () {
-                                          Clipboard.setData(ClipboardData(text: widget.data.phoneNumber!));
-                                          showTooltip(context, "Copied", _toolTipKey);
+                                          Clipboard.setData(ClipboardData(
+                                              text: widget.data.phoneNumber!));
+                                          showTooltip(
+                                              context, "Copied", _toolTipKey);
                                         },
                                       ),
                                     ],
@@ -3590,11 +3600,10 @@ fetchPaymentOptions();
                                     height: 5.0,
                                   ),
                                   if (widget.data.price != null)
-                                  Text(
-                                    '₹${formatNumber(widget.data.price ?? 0)}',
-                                    style: CommonStyles.txSty_16black_f5,
-                                  ),
-
+                                    Text(
+                                      '₹${formatNumber(widget.data.price ?? 0)}',
+                                      style: CommonStyles.txSty_16black_f5,
+                                    ),
 
                                   //    Text(widget.data.gender!, style: CommonStyles.txSty_16black_f5),
                                   const SizedBox(
@@ -3614,11 +3623,11 @@ fetchPaymentOptions();
                                             Padding(
                                               padding: const EdgeInsets.only(
                                                   right:
-                                                  8.0), // Adjust the value as needed
+                                                      8.0), // Adjust the value as needed
                                               child: Text(
                                                 '${widget.data.rating ?? ''}',
                                                 style:
-                                                CommonStyles.txSty_14g_f5,
+                                                    CommonStyles.txSty_14g_f5,
                                               ),
                                             ),
                                           ],
@@ -3649,11 +3658,16 @@ fetchPaymentOptions();
           ),
         ));
   }
+
   void showTooltip(BuildContext context, String message, GlobalKey toolTipKey) {
-    final renderBox = toolTipKey.currentContext!.findRenderObject() as RenderBox;
+    final renderBox =
+        toolTipKey.currentContext!.findRenderObject() as RenderBox;
     final overlay = Overlay.of(context).context.findRenderObject() as RenderBox;
 
-    final target = renderBox.localToGlobal(renderBox.size.bottomLeft(Offset.zero), ancestor: overlay) + Offset(-10, 0);
+    final target = renderBox.localToGlobal(
+            renderBox.size.bottomLeft(Offset.zero),
+            ancestor: overlay) +
+        const Offset(-10, 0);
 
     final entry = OverlayEntry(
       builder: (context) => Positioned(
@@ -3668,10 +3682,11 @@ fetchPaymentOptions();
 
     Overlay.of(context).insert(entry);
 
-    Future.delayed(Duration(seconds: 2), () {
+    Future.delayed(const Duration(seconds: 2), () {
       entry.remove();
     });
   }
+
   Widget statusBasedBgById(int statusTypeId, String status) {
     final Color statusColor;
     final Color statusBgColor;
@@ -3733,7 +3748,7 @@ fetchPaymentOptions();
   Widget verifyStatus(Appointment data, int? userId) {
     switch (data.statusTypeId) {
       case 4: // Submited
-      //   return const SizedBox();
+        //   return const SizedBox();
         return Row(
           children: [
             GestureDetector(
@@ -3765,7 +3780,7 @@ fetchPaymentOptions();
                             : CommonStyles.primaryTextColor),
                   ),
                   padding:
-                  const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
+                      const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
                   child: Row(
                     children: [
                       SvgPicture.asset(
@@ -3811,7 +3826,7 @@ fetchPaymentOptions();
                     ),
                   ),
                   padding:
-                  const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
+                      const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
                   child: Row(
                     children: [
                       SvgPicture.asset(
@@ -3841,13 +3856,12 @@ fetchPaymentOptions();
         );
       case 5: // Accepted
 
-      // if (isSlotTimeReached(data.date, data.slotDuration)) {
+        // if (isSlotTimeReached(data.date, data.slotDuration)) {
         return Row(
           children: [
             GestureDetector(
               onTap: () {
-                closePopUp(context, data, 17, userId
-                    );
+                closePopUp(context, data, 17, userId);
               },
               child: Container(
                 decoration: BoxDecoration(
@@ -3879,19 +3893,19 @@ fetchPaymentOptions();
             ),
           ],
         );
-    // } else {
-    //   return const SizedBox();
-    // }
+      // } else {
+      //   return const SizedBox();
+      // }
 
       case 6: // Declined
         return const SizedBox();
-    // case 11: // FeedBack
-    //   return Flexible(
-    //     child: Text('" ${data.review} "' ?? '',
-    //         overflow: TextOverflow.ellipsis,
-    //         maxLines: 2,
-    //         style: CommonStyles.txSty_16blu_f5),
-    //   );
+      // case 11: // FeedBack
+      //   return Flexible(
+      //     child: Text('" ${data.review} "' ?? '',
+      //         overflow: TextOverflow.ellipsis,
+      //         maxLines: 2,
+      //         style: CommonStyles.txSty_16blu_f5),
+      //   );
 
       case 17: // Closed
 
@@ -3919,32 +3933,32 @@ fetchPaymentOptions();
             ),
           );
         }
-    case 18: // Reschuduled
-      return const SizedBox();
+      case 18: // Reschuduled
+        return const SizedBox();
       default:
         return const SizedBox();
-    //  return Container(
-    //     decoration: BoxDecoration(
-    //         borderRadius: BorderRadius.circular(3),
-    //         border: Border.all(color: CommonUtils.blackColor)),
-    //     padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
-    //     child: const Row(
-    //       children: [
-    //         Icon(
-    //           Icons.star_border_outlined,
-    //           size: 13,
-    //           color: CommonStyles.primaryTextColor,
-    //         ),
-    //         Text(
-    //           ' Rate Us',
-    //           style: TextStyle(
-    //             fontSize: 11,
-    //             color: CommonStyles.primaryTextColor,
-    //           ),
-    //         ),
-    //       ],
-    //     ),
-    //   );
+      //  return Container(
+      //     decoration: BoxDecoration(
+      //         borderRadius: BorderRadius.circular(3),
+      //         border: Border.all(color: CommonUtils.blackColor)),
+      //     padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
+      //     child: const Row(
+      //       children: [
+      //         Icon(
+      //           Icons.star_border_outlined,
+      //           size: 13,
+      //           color: CommonStyles.primaryTextColor,
+      //         ),
+      //         Text(
+      //           ' Rate Us',
+      //           style: TextStyle(
+      //             fontSize: 11,
+      //             color: CommonStyles.primaryTextColor,
+      //           ),
+      //         ),
+      //       ],
+      //     ),
+      //   );
     }
   }
 
@@ -4019,7 +4033,7 @@ fetchPaymentOptions();
                   'Are You Sure You Want to Cancel the Appointment at ${appointments.name} Branch for ${appointments.purposeOfVisit}?',
                   style: CommonUtils.txSty_18b_fb,
                   textAlign:
-                  TextAlign.center, // Optionally, align the text center
+                      TextAlign.center, // Optionally, align the text center
                 ),
               ),
               const SizedBox(
@@ -4131,8 +4145,6 @@ fetchPaymentOptions();
     );
   }
 
-
-
   Future<void> cancelAppointment(Appointment appointmens) async {
     final url = Uri.parse(baseUrl + postApiAppointment);
     print('url==>890: $url');
@@ -4151,7 +4163,7 @@ fetchPaymentOptions();
       "SlotTime": appointmens.slotTime,
       "CustomerName": appointmens.customerName,
       "PhoneNumber":
-      appointmens.phoneNumber, // Changed from appointments.phoneNumber
+          appointmens.phoneNumber, // Changed from appointments.phoneNumber
       "Email": appointmens.email,
       "GenderTypeId": appointmens.genderTypeId,
       "StatusTypeId": 6,
@@ -4300,7 +4312,6 @@ fetchPaymentOptions();
       print('Error: $e');
     }
   }
-
 
   // void closePopUp(BuildContext context, Appointment data, int i, int? userId) {
   //   showDialog(
@@ -4687,6 +4698,10 @@ fetchPaymentOptions();
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
+                          const Expanded(
+                              child: Center(
+                            child: Text('This is title'),
+                          )),
                           GestureDetector(
                             onTap: () {
                               selectedPaymentOption = -1;
@@ -4716,7 +4731,8 @@ fetchPaymentOptions();
                           Form(
                             key: _formKey,
                             child: Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 5),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 5),
                               child: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -4739,12 +4755,14 @@ fetchPaymentOptions();
                                       Expanded(
                                         flex: 6,
                                         child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
                                           children: [
                                             Text(
                                               ': ${data.customerName}',
                                               style: const TextStyle(
-                                                color: CommonStyles.primaryTextColor,
+                                                color: CommonStyles
+                                                    .primaryTextColor,
                                                 fontSize: 14,
                                                 fontFamily: "Calibri",
                                                 fontWeight: FontWeight.w500,
@@ -4762,7 +4780,7 @@ fetchPaymentOptions();
                                         flex: 4,
                                         child: Text(
                                           'Slot Time',
-                                          style:  TextStyle(
+                                          style: TextStyle(
                                             color: Colors.black,
                                             fontSize: 14,
                                             fontFamily: "Calibri",
@@ -4773,12 +4791,14 @@ fetchPaymentOptions();
                                       Expanded(
                                         flex: 6,
                                         child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
                                           children: [
                                             Text(
                                               ': ${DateFormat('dd-MM-yyyy').format(DateTime.parse(data.date))}, ${data.slotDuration}',
                                               style: const TextStyle(
-                                                color: CommonStyles.primaryTextColor,
+                                                color: CommonStyles
+                                                    .primaryTextColor,
                                                 fontSize: 14,
                                                 fontFamily: "Calibri",
                                                 fontWeight: FontWeight.w500,
@@ -4795,7 +4815,7 @@ fetchPaymentOptions();
                                       const Expanded(
                                         flex: 4,
                                         child: Text(
-                                          'Purpose',
+                                          'Purpose of Visit',
                                           style: TextStyle(
                                             color: Colors.black,
                                             fontSize: 14,
@@ -4807,16 +4827,18 @@ fetchPaymentOptions();
                                       Expanded(
                                         flex: 6,
                                         child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
                                           children: [
                                             Text(
                                               ': ${data.purposeOfVisit}',
-                                              style: TextStyle(
-                                                color: CommonStyles.primaryTextColor,
-                fontSize: 14,
-                fontFamily: "Calibri",
-                fontWeight: FontWeight.w500,
-                ),
+                                              style: const TextStyle(
+                                                color: CommonStyles
+                                                    .primaryTextColor,
+                                                fontSize: 14,
+                                                fontFamily: "Calibri",
+                                                fontWeight: FontWeight.w500,
+                                              ),
                                             ),
                                           ],
                                         ),
@@ -4839,16 +4861,19 @@ fetchPaymentOptions();
                                     ],
                                   ),
                                   Padding(
-                                    padding: const EdgeInsets.only(left: 0, top: 5.0, right: 0),
+                                    padding: const EdgeInsets.only(
+                                        left: 0, top: 5.0, right: 0),
                                     child: Container(
                                       width: MediaQuery.of(context).size.width,
                                       decoration: BoxDecoration(
                                         border: Border.all(
                                           color: isPaymentModeSelected
-                                              ? const Color.fromARGB(255, 175, 15, 4)
+                                              ? const Color.fromARGB(
+                                                  255, 175, 15, 4)
                                               : CommonUtils.primaryTextColor,
                                         ),
-                                        borderRadius: BorderRadius.circular(5.0),
+                                        borderRadius:
+                                            BorderRadius.circular(5.0),
                                         color: Colors.white,
                                       ),
                                       child: DropdownButtonHideUnderline(
@@ -4863,26 +4888,29 @@ fetchPaymentOptions();
                                             ),
                                             onChanged: (value) {
                                               setState(() {
+                                                if (value != null) {
+                                                  selectedPaymentOption = value;
+                                                  if (paymentOptions[value]
+                                                          ['typeCdId'] ==
+                                                      23) {
+                                                    isFreeService = false;
+                                                    _priceController.text =
+                                                        '0.0';
+                                                  } else {
+                                                    _priceController.clear();
+                                                    isFreeService = true;
+                                                  }
 
-                if (value != null){
-
-                selectedPaymentOption = value;
-                if (paymentOptions[value]['typeCdId'] == 23) {
-                _priceController.text = '0.0';
-                }
-                else {
-                _priceController.clear();
-                }
-
-                apiPaymentMode = paymentOptions[selectedPaymentOption!]['typeCdId'];
-                selectedPaymentMode = paymentOptions[selectedPaymentOption!]['desc'];
-                }
-                isPaymentModeSelected = false;
-
-
-
-                });
-
+                                                  apiPaymentMode = paymentOptions[
+                                                          selectedPaymentOption]
+                                                      ['typeCdId'];
+                                                  selectedPaymentMode =
+                                                      paymentOptions[
+                                                              selectedPaymentOption]
+                                                          ['desc'];
+                                                }
+                                                isPaymentModeSelected = false;
+                                              });
                                             },
                                             items: [
                                               const DropdownMenuItem<int>(
@@ -4891,7 +4919,8 @@ fetchPaymentOptions();
                                                   'Select Payment Mode',
                                                   style: TextStyle(
                                                       color: Colors.grey,
-                                                      fontWeight: FontWeight.w500),
+                                                      fontWeight:
+                                                          FontWeight.w500),
                                                 ),
                                               ),
                                               ...paymentOptions
@@ -4913,14 +4942,17 @@ fetchPaymentOptions();
                                   ),
                                   if (isPaymentModeSelected)
                                     const Row(
-                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
                                       children: [
                                         Padding(
-                                          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 5),
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 16, vertical: 5),
                                           child: Text(
                                             'Please Select Payment Mode',
                                             style: TextStyle(
-                                              color: Color.fromARGB(255, 175, 15, 4),
+                                              color: Color.fromARGB(
+                                                  255, 175, 15, 4),
                                               fontSize: 12,
                                             ),
                                           ),
@@ -4931,7 +4963,7 @@ fetchPaymentOptions();
                                   const Row(
                                     children: [
                                       Text(
-                                        'Billing Amount (Rs)',
+                                        'Billing Amount (Rs) ',
                                         style: TextStyle(
                                             fontSize: 12,
                                             fontWeight: FontWeight.bold),
@@ -4946,27 +4978,37 @@ fetchPaymentOptions();
                                   TextFormField(
                                     controller: _priceController,
                                     keyboardType: TextInputType.number,
+                                    // readOnly: isFreeService,
+                                    enabled: isFreeService,
+
                                     maxLength: 10,
                                     decoration: InputDecoration(
                                       contentPadding: const EdgeInsets.only(
-                                          top: 15, bottom: 10, left: 15, right: 15),
+                                          top: 15,
+                                          bottom: 10,
+                                          left: 15,
+                                          right: 15),
                                       focusedBorder: OutlineInputBorder(
                                         borderSide: const BorderSide(
                                           color: CommonUtils.primaryTextColor,
                                         ),
-                                        borderRadius: BorderRadius.circular(6.0),
+                                        borderRadius:
+                                            BorderRadius.circular(6.0),
                                       ),
                                       enabledBorder: OutlineInputBorder(
                                         borderSide: const BorderSide(
                                           color: CommonUtils.primaryTextColor,
                                         ),
-                                        borderRadius: BorderRadius.circular(6.0),
+                                        borderRadius:
+                                            BorderRadius.circular(6.0),
                                       ),
                                       errorBorder: OutlineInputBorder(
                                         borderSide: const BorderSide(
-                                          color: Color.fromARGB(255, 175, 15, 4),
+                                          color:
+                                              Color.fromARGB(255, 175, 15, 4),
                                         ),
-                                        borderRadius: BorderRadius.circular(6.0),
+                                        borderRadius:
+                                            BorderRadius.circular(6.0),
                                       ),
                                       border: const OutlineInputBorder(
                                         borderRadius: BorderRadius.all(
@@ -4986,41 +5028,75 @@ fetchPaymentOptions();
                               ),
                             ),
                           ),
+
                           Row(
                             children: [
                               Expanded(
-                                child: SizedBox(
-                                  child: Center(
-                                    child: Container(
-                                      height: 40.0,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10.0),
-                                        color: CommonUtils.primaryTextColor,
-                                      ),
-                                      child: Center(
-                                        child: CustomButton(
-                                          buttonText: 'Submit',
-                                          color: CommonUtils.primaryTextColor,
-                                          onPressed: () {
-                                            setState(() {
-                                              validatePaymentMode();
-                                            });
-                                            if (_formKey.currentState!.validate()) {
-                                              if (isPaymentValidate) {
-                                                double? price = double.tryParse(_priceController.text);
-                                                postCloseAppointment(data, 17, price!, apiPaymentMode, userId);
-                                                Navigator.of(context).pop();
-                                              }
-                                            }
-                                          },
-                                        ),
-                                      ),
-                                    ),
-                                  ),
+                                child: CustomButton(
+                                  buttonText: 'Submit',
+                                  color: CommonUtils.primaryTextColor,
+                                  onPressed: () {
+                                    setState(() {
+                                      validatePaymentMode();
+                                    });
+                                    if (_formKey.currentState!.validate()) {
+                                      if (isPaymentValidate) {
+                                        double? price = double.tryParse(
+                                            _priceController.text);
+                                        postCloseAppointment(data, 17, price!,
+                                            apiPaymentMode, userId);
+                                        Navigator.of(context).pop();
+                                      }
+                                    }
+                                  },
                                 ),
                               ),
                             ],
                           ),
+
+                          // Row(
+                          //   children: [
+                          //     Expanded(
+                          //       child: SizedBox(
+                          //         child: Center(
+                          //           child: Container(
+                          //             height: 40.0,
+                          //             decoration: BoxDecoration(
+                          //               borderRadius:
+                          //                   BorderRadius.circular(10.0),
+                          //               color: CommonUtils.primaryTextColor,
+                          //             ),
+                          //             child: Center(
+                          //               child: CustomButton(
+                          //                 buttonText: 'Submit',
+                          //                 color: CommonUtils.primaryTextColor,
+                          //                 onPressed: () {
+                          //                   setState(() {
+                          //                     validatePaymentMode();
+                          //                   });
+                          //                   if (_formKey.currentState!
+                          //                       .validate()) {
+                          //                     if (isPaymentValidate) {
+                          //                       double? price = double.tryParse(
+                          //                           _priceController.text);
+                          //                       postCloseAppointment(
+                          //                           data,
+                          //                           17,
+                          //                           price!,
+                          //                           apiPaymentMode,
+                          //                           userId);
+                          //                       Navigator.of(context).pop();
+                          //                     }
+                          //                   }
+                          //                 },
+                          //               ),
+                          //             ),
+                          //           ),
+                          //         ),
+                          //       ),
+                          //     ),
+                          //   ],
+                          // ),
                         ],
                       ),
                     ),
@@ -5033,7 +5109,6 @@ fetchPaymentOptions();
       },
     );
   }
-
 
   void openDialogreject() async {
     await showDialog(
@@ -5060,7 +5135,7 @@ fetchPaymentOptions();
                   'Your Appointment Has Been Cancelled Successfully ',
                   style: CommonUtils.txSty_18b_fb,
                   textAlign:
-                  TextAlign.center, // Optionally, align the text center
+                      TextAlign.center, // Optionally, align the text center
                 ),
               ),
               const SizedBox(
@@ -5120,7 +5195,7 @@ fetchPaymentOptions();
                   'Your Appointment Has Been Accepted Successfully. ',
                   style: CommonUtils.txSty_18b_fb,
                   textAlign:
-                  TextAlign.center, // Optionally, align the text center
+                      TextAlign.center, // Optionally, align the text center
                 ),
               ),
               const SizedBox(
@@ -5171,7 +5246,7 @@ fetchPaymentOptions();
                   'Your Appointment Has Been Closed Successfully ',
                   style: CommonUtils.txSty_18b_fb,
                   textAlign:
-                  TextAlign.center, // Optionally, align the text center
+                      TextAlign.center, // Optionally, align the text center
                 ),
               ),
               const SizedBox(
@@ -5204,7 +5279,6 @@ fetchPaymentOptions();
   }
 
   bool displayCloseBtn(String slotDateValue, String slotTimeValue) {
-
     DateTime now = DateTime.now();
     DateFormat timeFormat = DateFormat.jm();
     DateTime parsedSlotTime = timeFormat.parse(slotTimeValue);
@@ -5227,8 +5301,8 @@ fetchPaymentOptions();
     NumberFormat formatter = NumberFormat("#,##,##,##,##,##,##0.00", "en_US");
     return formatter.format(number);
   }
-  Future<void> fetchPaymentOptions() async {
 
+  Future<void> fetchPaymentOptions() async {
     try {
       final response = await http.get(Uri.parse(baseUrl + getPaymentMode));
       print('apiUrl: $response');
@@ -5264,11 +5338,8 @@ fetchPaymentOptions();
   //   }
   // }
 
-
-
   Future<void> postCloseAppointment(Appointment data, int i,
       double? billingAmount, int? paymentTypeId, int? userId) async {
-
     final url = Uri.parse(baseUrl + postApiAppointment);
 
     // final url = Uri.parse('http://182.18.157.215/SaloonApp/API/api/Appointment');
@@ -5352,7 +5423,7 @@ fetchPaymentOptions();
 
   void validatePaymentMode() {
     print('www: $selectedPaymentOption');
-    if (selectedPaymentOption == null || selectedPaymentOption == -1) {
+    if (selectedPaymentOption == -1) {
       setState(() {
         isPaymentModeSelected = true;
         isPaymentValidate = false;
@@ -5364,9 +5435,7 @@ fetchPaymentOptions();
       });
     }
   }
-
 }
-
 
 Future<void> Get_ApprovedDeclinedSlots(Appointment data, int i) async {
   final url = Uri.parse(baseUrl + GetApprovedDeclinedSlots);
@@ -5405,5 +5474,4 @@ Future<void> Get_ApprovedDeclinedSlots(Appointment data, int i) async {
   } catch (e) {
     print('Error: $e');
   }
-
 }
