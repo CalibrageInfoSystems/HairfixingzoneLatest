@@ -252,7 +252,7 @@ class AddConsulationscreen_screenState extends State<Add_Consulation_screen> {
                             keyboardType: TextInputType.name,
 
                             errorText:
-                            _fullNameError ? _fullNameErrorMsg : null,
+                                _fullNameError ? _fullNameErrorMsg : null,
                             onChanged: (value) {
                               //MARK: Space restrict
                               setState(() {
@@ -328,11 +328,11 @@ class AddConsulationscreen_screenState extends State<Add_Consulation_screen> {
                                           selectedTypeCdId = value!;
                                           if (selectedTypeCdId != -1) {
                                             selectedValue =
-                                            dropdownItems[selectedTypeCdId]
-                                            ['typeCdId'];
+                                                dropdownItems[selectedTypeCdId]
+                                                    ['typeCdId'];
                                             selectedName =
-                                            dropdownItems[selectedTypeCdId]
-                                            ['desc'];
+                                                dropdownItems[selectedTypeCdId]
+                                                    ['desc'];
 
                                             print(
                                                 "selectedValue:$selectedValue");
@@ -419,10 +419,10 @@ class AddConsulationscreen_screenState extends State<Add_Consulation_screen> {
                                 if (value.startsWith(' ')) {
                                   mobileNumberController.value =
                                       TextEditingValue(
-                                        text: value.trimLeft(),
-                                        selection: TextSelection.collapsed(
-                                            offset: value.trimLeft().length),
-                                      );
+                                    text: value.trimLeft(),
+                                    selection: TextSelection.collapsed(
+                                        offset: value.trimLeft().length),
+                                  );
                                 }
                                 _mobileNumberError = false;
                               });
@@ -536,8 +536,7 @@ class AddConsulationscreen_screenState extends State<Add_Consulation_screen> {
                                 borderRadius: BorderRadius.circular(5.0),
                                 color: Colors.white,
                               ),
-                              child:
-                              DropdownButtonHideUnderline(
+                              child: DropdownButtonHideUnderline(
                                 child: ButtonTheme(
                                   alignedDropdown: true,
                                   child: DropdownButton<int>(
@@ -551,16 +550,21 @@ class AddConsulationscreen_screenState extends State<Add_Consulation_screen> {
                                         setState(() {
                                           citySelectedTypeCdId = value!;
                                           if (citySelectedTypeCdId != -1) {
-                                            cityValue = cityDropdownItems[citySelectedTypeCdId]['typecdid'];
+                                            cityValue = cityDropdownItems[
+                                                    citySelectedTypeCdId]
+                                                ['typecdid'];
                                             cityName = cityDropdownItems[
-                                            citySelectedTypeCdId]['desc'];
-                                            print("==========$cityValue$cityName");
-                                            _getBranchData(widget.agentId, cityValue!);
+                                                citySelectedTypeCdId]['desc'];
+                                            print(
+                                                "==========$cityValue$cityName");
+                                            _getBranchData(
+                                                widget.agentId, cityValue!);
                                           } else {
                                             print("==========");
                                             print(cityValue);
                                             print(cityName);
-                                            _getBranchData(widget.agentId, cityValue!);
+                                            _getBranchData(
+                                                widget.agentId, cityValue!);
                                           }
                                           // isDropdownValid = selectedTypeCdId != -1;
                                           isCitySelected = false;
@@ -657,9 +661,9 @@ class AddConsulationscreen_screenState extends State<Add_Consulation_screen> {
                                           branchselectedTypeCdId = value!;
                                           if (branchselectedTypeCdId != -1) {
                                             branchValue = BranchesdropdownItems[
-                                            branchselectedTypeCdId]['id'];
+                                                branchselectedTypeCdId]['id'];
                                             branchName = BranchesdropdownItems[
-                                            branchselectedTypeCdId]['name'];
+                                                branchselectedTypeCdId]['name'];
 
                                             print("branchValue:$branchValue");
                                             print("branchName:$branchName");
@@ -759,7 +763,7 @@ class AddConsulationscreen_screenState extends State<Add_Consulation_screen> {
                             },
                             decoration: InputDecoration(
                               errorText:
-                              _remarksError ? _remarksErrorMsg : null,
+                                  _remarksError ? _remarksErrorMsg : null,
                               contentPadding: const EdgeInsets.only(
                                   top: 15, bottom: 10, left: 15, right: 15),
                               focusedBorder: OutlineInputBorder(
@@ -890,7 +894,7 @@ class AddConsulationscreen_screenState extends State<Add_Consulation_screen> {
     if (value.length < 2) {
       setState(() {
         _fullNameError = true;
-        _fullNameErrorMsg = 'Full Name Should Contains Minimum 2 Charactes';
+        _fullNameErrorMsg = 'Full Name Should Contains Minimum 2 Characters';
       });
       isFullNameValidate = false;
       return null;
@@ -984,7 +988,7 @@ class AddConsulationscreen_screenState extends State<Add_Consulation_screen> {
       isEmailValidate = false;
       return null;
     } else if (!RegExp(
-        r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+            r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
         .hasMatch(value)) {
       setState(() {
         _emailError = true;
