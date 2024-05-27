@@ -477,17 +477,17 @@ class _ForgotChangePasswordState extends State<ForgotChangePassword> {
       final apiUrl = baseUrl + resetpassword;
 
       final Map<String, dynamic> requestObject = {
-        "id": 1, //userid
+        "id": widget.id, //userid
         "newPassword": newPassword,
         "confirmPassword": confirmPassword,
       };
-
+print('==object ${jsonEncode(requestObject)}');
       final jsonResponse = await http.post(
         Uri.parse(apiUrl),
         headers: {"Content-Type": "application/json"},
         body: jsonEncode(requestObject),
       );
-
+     // {"id":140,"newPassword":"Likky@123","confirmPassword":"Likky@123"}
       if (jsonResponse.statusCode == 200) {
         final Map<String, dynamic> response = jsonDecode(jsonResponse.body);
         if (response['isSuccess']) {
