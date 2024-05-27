@@ -1000,26 +1000,76 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
               title: 'Reminder Notification',
               body:
               // Hey $userFullName, Today Your Appointment is Scheduled for  ${_selectedTimeSlot24!} at the ${widget.branchname} Branch, Located At ${widget.branchaddress}.
-              'Hey $userFullName, Today Your Appointment is Scheduled for  ${_selectedTimeSlot!} at the  ${widget.data.branch} Branch, Located At ${widget.data.address}.',
+              'Hey $userFullName, Today Your Appointment is Scheduled for  ${_selectedTimeSlot!} at the  ${widget.data.branch} Branch, Located at ${widget.data.address}.',
               // scheduledNotificationDateTime: testdate!,
               scheduledNotificationDateTime: slotSelectedDateTime!,
               id: notificationId1,
             );
 
-            if (selectedValue == 10) {
-              final int notificationId2 = UniqueKey().hashCode;
-              debugPrint(
-                  'Notification Scheduled for $newDateTime with ID: $notificationId2');
-              //  debugPrint('Notification Scheduled for $testdate with ID: $notificationId2');
-              await NotificationService().scheduleNotification(
-                title: 'Reminder Notification',
-                body:
-                'Hey $userFullName, It Has Been 20 Days Since Your New Patch Was Done. Please Revisit The Hairfixing Zone At The ${widget.data.branch}',
-                // scheduledNotificationDateTime: testdate!,
-                scheduledNotificationDateTime: newDateTime!,
-                id: notificationId2,
-              );
+            if (selectedValue == 8 || selectedValue == 9 || selectedValue == 10 || selectedValue == 11) {
+              DateTime testdate = DateTime.now();
+              print(' testdate ====1072$testdate');
+              // Handle each case separately
+              switch (selectedValue) {
+
+                case 8:
+                  final int notificationId2 = UniqueKey().hashCode;
+                  debugPrint(
+                      'Notification Scheduled for $newDateTime with ID: $notificationId2');
+                  await NotificationService().scheduleNotification(
+                    title: 'Reminder Notification',
+                    body: 'Hey $userFullName, It Has Been 20 Days Since Your  ${selectedName!} Was Done. Please Revisit the Hairfixing Zone at the ${widget.data.branch} Branch',
+                   scheduledNotificationDateTime: newDateTime!,
+                 //   scheduledNotificationDateTime: testdate!,
+                    id: notificationId2,
+                  );
+                  // Handle value 8
+                  break;
+                case 9:
+                  final int notificationId2 = UniqueKey().hashCode;
+                  debugPrint(
+                      'Notification Scheduled for $newDateTime with ID: $notificationId2');
+                  await NotificationService().scheduleNotification(
+                    title: 'Reminder Notification',
+                    body: 'Hey $userFullName, It Has Been 20 Days Since Your  ${selectedName!} Was Done. Please Revisit the Hairfixing Zone at the ${widget.data.branch} Branch',
+                 scheduledNotificationDateTime: newDateTime!,
+                  //  scheduledNotificationDateTime: testdate!,
+                    id: notificationId2,
+                  );
+                  // Handle value 9
+                  break;
+                case 10:
+                // Handle value 10
+                  final int notificationId2 = UniqueKey().hashCode;
+                  debugPrint(
+                      'Notification Scheduled for $newDateTime with ID: $notificationId2');
+                  await NotificationService().scheduleNotification(
+                    title: 'Reminder Notification',
+                    body: 'Hey $userFullName, It Has Been 20 Days Since Your  ${selectedName!} Was Done. Please Revisit the Hairfixing Zone at the ${widget.data.branch} Branch',
+                  scheduledNotificationDateTime: newDateTime!,
+                 //   scheduledNotificationDateTime: testdate!,
+                    id: notificationId2,
+                  );
+                  break;
+                case 11:
+                  final int notificationId2 = UniqueKey().hashCode;
+                  debugPrint(
+                      'Notification Scheduled for $newDateTime with ID: $notificationId2');
+                  await NotificationService().scheduleNotification(
+                    title: 'Reminder Notification',
+                    body: 'Hey $userFullName, It Has Been 20 Days Since Your  ${selectedName!} Was Done. Please Revisit the Hairfixing Zone at the ${widget.data.branch} Branch',
+                    scheduledNotificationDateTime: newDateTime!,
+                   // scheduledNotificationDateTime: testdate!,
+                    id: notificationId2,
+                  );
+                  // Handle value 11
+                  break;
+                default:
+                // Handle other cases if needed
+                  break;
+              }
             }
+
 
             // Your existing code...
             progressDialog.dismiss();
