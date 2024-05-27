@@ -27,12 +27,7 @@ class viewconsulationlistscreen extends StatefulWidget {
   final BranchModel agent;
   final int userid;
   const viewconsulationlistscreen(
-      {super.key,
-        required this.branchid,
-        required this.fromdate,
-        required this.todate,
-        required this.agent,
-        required this.userid});
+      {super.key, required this.branchid, required this.fromdate, required this.todate, required this.agent, required this.userid});
 
   @override
   State<viewconsulationlistscreen> createState() => _ViewConsultationState();
@@ -55,18 +50,14 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
     startDate = DateTime.now().subtract(const Duration(days: 14));
     endDate = DateTime.now();
     _fromToDatesController.text =
-    '${startDate != null ? DateFormat("dd/MM/yyyy").format(startDate!) : '-'} - ${endDate != null ? DateFormat("dd/MM/yyyy").format(endDate!) : '-'}';
+        '${startDate != null ? DateFormat("dd/MM/yyyy").format(startDate!) : '-'} - ${endDate != null ? DateFormat("dd/MM/yyyy").format(endDate!) : '-'}';
 
-    print(
-        'branchid ${widget.branchid} fromdate${widget.fromdate} todate ${widget.todate}');
-    ConsultationData = getviewconsulationlist(
-        DateFormat('yyyy-MM-dd').format(startDate!),
-        DateFormat('yyyy-MM-dd').format(endDate!));
+    print('branchid ${widget.branchid} fromdate${widget.fromdate} todate ${widget.todate}');
+    ConsultationData = getviewconsulationlist(DateFormat('yyyy-MM-dd').format(startDate!), DateFormat('yyyy-MM-dd').format(endDate!));
   }
 
 // http://182.18.157.215/SaloonApp/API/api/Consultation/GetConsultationsByBranchId
-  Future<List<Consultation>> getviewconsulationlist(
-      String fromdate, String todate) async {
+  Future<List<Consultation>> getviewconsulationlist(String fromdate, String todate) async {
     // const String apiUrl =
     //     'http://182.18.157.215/SaloonApp/API/api/Consultation/GetConsultationsByBranchId';
     String apiUrl = baseUrl + getconsulationbyranchid;
@@ -101,8 +92,7 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
           List<dynamic> jsonList = responseData["listResult"];
           final dynamic listResult = responseData["listResult"];
           if (listResult != null && listResult is List<dynamic>) {
-            List<Consultation> consultations =
-            jsonList.map((e) => Consultation.fromJson(e)).toList();
+            List<Consultation> consultations = jsonList.map((e) => Consultation.fromJson(e)).toList();
             // for (var consultation in consultations) {
             //   DateTime createdDateTime = DateTime.parse(consultation.createdDate);
             //   month = DateFormat('MMM').format(createdDateTime);
@@ -164,8 +154,7 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
     ),
     centerAlignModePicker: true,
     customModePickerIcon: const SizedBox(), // ensure SizedBox is constant
-    selectedDayTextStyle:
-    CommonStyles.dayTextStyle.copyWith(color: Colors.white),
+    selectedDayTextStyle: CommonStyles.dayTextStyle.copyWith(color: Colors.white),
     // dayTextStylePredicate: ({required DateTime date}) {
     //   TextStyle? textStyle;
     //   if (DateUtils.isSameDay(date, DateTime(2021, 1, 25))) {
@@ -201,12 +190,10 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
                         // borderRadius: BorderRadius.circular(30), //border corner radius
                         boxShadow: [
                           BoxShadow(
-                            color: const Color(0xFF960efd)
-                                .withOpacity(0.2), //color of shadow
+                            color: const Color(0xFF960efd).withOpacity(0.2), //color of shadow
                             spreadRadius: 2, //spread radius
                             blurRadius: 4, // blur radius
-                            offset: const Offset(
-                                0, 2), // changes position of shadow
+                            offset: const Offset(0, 2), // changes position of shadow
                           ),
                         ],
                       ),
@@ -218,23 +205,16 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
                             child: ClipRRect(
                               //  borderRadius: BorderRadius.circular(10.0),
                               child: Image.network(
-                                widget.agent.imageName!.isNotEmpty
-                                    ? widget.agent.imageName!
-                                    : 'https://example.com/placeholder-image.jpg',
+                                widget.agent.imageName!.isNotEmpty ? widget.agent.imageName! : 'https://example.com/placeholder-image.jpg',
                                 fit: BoxFit.cover,
-                                height: MediaQuery.of(context).size.height /
-                                    5.5 /
-                                    2,
+                                height: MediaQuery.of(context).size.height / 5.5 / 2,
                                 width: MediaQuery.of(context).size.width / 3.2,
                                 errorBuilder: (context, error, stackTrace) {
                                   return Image.asset(
                                     'assets/hairfixing_logo.png', // Path to your PNG placeholder image
                                     fit: BoxFit.cover,
-                                    height: MediaQuery.of(context).size.height /
-                                        4 /
-                                        2,
-                                    width:
-                                    MediaQuery.of(context).size.width / 3.2,
+                                    height: MediaQuery.of(context).size.height / 4 / 2,
+                                    width: MediaQuery.of(context).size.width / 3.2,
                                   );
                                 },
                               ),
@@ -451,10 +431,8 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
                     controller: _fromToDatesController,
                     keyboardType: TextInputType.visiblePassword,
                     onTap: () async {
-                      FocusScope.of(context).requestFocus(
-                          FocusNode()); // to prevent the keyboard from appearing
-                      final values =
-                      await showCustomCalendarDialog(context, config);
+                      FocusScope.of(context).requestFocus(FocusNode()); // to prevent the keyboard from appearing
+                      final values = await showCustomCalendarDialog(context, config);
                       if (values != null) {
                         setState(() {
                           //           startDate = s;
@@ -464,14 +442,11 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
                           //           ConsultationData =
                           //               getviewconsulationlist(DateFormat('yyyy-MM-dd').format(startDate!), DateFormat('yyyy-MM-dd').format(endDate!));
 
-                          selectedDate =
-                              _getValueText(config.calendarType, values);
-                          _fromToDatesController.text =
-                          '${selectedDate![0]} - ${selectedDate![1]}';
+                          selectedDate = _getValueText(config.calendarType, values);
+                          _fromToDatesController.text = '${selectedDate![0]} - ${selectedDate![1]}';
                           String apiFromDate = formateDate(selectedDate![0]);
                           String apiToDate = formateDate(selectedDate![1]);
-                          ConsultationData =
-                              getviewconsulationlist(apiFromDate, apiToDate);
+                          ConsultationData = getviewconsulationlist(apiFromDate, apiToDate);
                           // provider.getDisplayDate =
                           //     '${selectedDate![0]}  to  ${selectedDate![1]}';
                           // provider.getApiFromDate = selectedDate![0];
@@ -481,8 +456,7 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
                     },
                     readOnly: true,
                     decoration: InputDecoration(
-                      contentPadding: const EdgeInsets.only(
-                          top: 15, bottom: 10, left: 15, right: 15),
+                      contentPadding: const EdgeInsets.only(top: 15, bottom: 10, left: 15, right: 15),
                       focusedBorder: OutlineInputBorder(
                         borderSide: const BorderSide(
                           color: Color(0xFF0f75bc),
@@ -502,8 +476,7 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
                       ),
                       hintText: 'Select Dates',
                       counterText: "",
-                      hintStyle: const TextStyle(
-                          color: Colors.grey, fontWeight: FontWeight.w400),
+                      hintStyle: const TextStyle(color: Colors.grey, fontWeight: FontWeight.w400),
                       prefixIcon: const Icon(Icons.calendar_today),
                     ),
                     //  validator: validatePassword,
@@ -534,10 +507,8 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
                   } else {
                     return Expanded(
                       child: ListView.builder(
-                        // shrinkWrap: true,
-                          itemCount: consultationslist.isEmpty
-                              ? 1
-                              : consultationslist.length,
+                          // shrinkWrap: true,
+                          itemCount: consultationslist.isEmpty ? 1 : consultationslist.length,
                           itemBuilder: (context, index) {
                             DateTime createdDateTime = DateTime.parse(
                               consultationslist[index].createdDate,
@@ -548,197 +519,173 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
                             print('month: $month, Date: $date, Year: $year');
                             // if (consultationslist.length > 0) {
                             return Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 8, vertical: 3),
+                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                               child: Card(
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10)),
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                                 elevation: 5,
                                 child: IntrinsicHeight(
                                     child: Container(
-                                      //   height: MediaQuery.of(context).size.height / 5,
-                                      padding: const EdgeInsets.all(10),
-                                      // decoration: BoxDecoration(
-                                      //   borderRadius: BorderRadius.circular(10.0),
-                                      //   color: Colors.white,
-                                      //
-                                      // ),
-                                      decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius: BorderRadius.circular(10.0),
-                                        // borderRadius: BorderRadius.circular(30), //border corner radius
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: const Color(0xFF960efd)
-                                                .withOpacity(0.2), //color of shadow
-                                            spreadRadius: 2, //spread radius
-                                            blurRadius: 4, // blur radius
-                                            offset: const Offset(
-                                                0, 2), // changes position of shadow
-                                          ),
-                                        ],
+                                  //   height: MediaQuery.of(context).size.height / 5,
+                                  padding: const EdgeInsets.all(10),
+                                  // decoration: BoxDecoration(
+                                  //   borderRadius: BorderRadius.circular(10.0),
+                                  //   color: Colors.white,
+                                  //
+                                  // ),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(10.0),
+                                    // borderRadius: BorderRadius.circular(30), //border corner radius
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: const Color(0xFF960efd).withOpacity(0.2), //color of shadow
+                                        spreadRadius: 2, //spread radius
+                                        blurRadius: 4, // blur radius
+                                        offset: const Offset(0, 2), // changes position of shadow
                                       ),
-                                      child: Row(
-                                        children: [
-                                          Container(
-                                            //  height: MediaQuery.of(context).size.height,
-                                            //  width: MediaQuery.of(context).size.height / 16,
-                                            child: Column(
-                                              mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                              crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                              children: [
-                                                Text(
-                                                  '$month',
-                                                  style: CommonUtils.txSty_18p_f7,
-                                                ),
-                                                Text(
-                                                  '$date',
-                                                  style: const TextStyle(
-                                                    fontSize: 22,
-                                                    fontFamily: "Calibri",
-                                                    // letterSpacing: 1.5,
-                                                    fontWeight: FontWeight.w700,
-                                                    color: Color(0xFF0f75bc),
-                                                  ),
-                                                ),
-                                                Text(
-                                                  '$year',
-                                                  style: const TextStyle(
-                                                    fontSize: 14,
-                                                    fontFamily: "Calibri",
-                                                    fontWeight: FontWeight.w700,
-                                                    color: Color(0xFF0f75bc),
-                                                  ),
-                                                ),
-                                              ],
+                                    ],
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Container(
+                                        //  height: MediaQuery.of(context).size.height,
+                                        //  width: MediaQuery.of(context).size.height / 16,
+                                        child: Column(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              '$month',
+                                              style: CommonUtils.txSty_18p_f7,
                                             ),
-                                          ),
-                                          const VerticalDivider(
-                                            color: CommonUtils.primaryTextColor,
-                                          ),
-                                          Expanded(
-                                            child: Column(
-                                              crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                              children: [
-                                                Expanded(
-                                                  child: Row(
-                                                    children: [
-                                                      Expanded(
-                                                        child: Container(
-                                                          child: Column(
-                                                            mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .spaceAround,
-                                                            crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
-                                                            children: [
-                                                              Text(
-                                                                consultationslist[
-                                                                index]
-                                                                    .consultationName,
-                                                                style:
-                                                                const TextStyle(
-                                                                  fontSize: 14,
-                                                                  fontFamily:
-                                                                  "Calibri",
-                                                                  fontWeight:
-                                                                  FontWeight
-                                                                      .w700,
-                                                                  color: Color(
-                                                                      0xFF0f75bc),
-                                                                ),
-                                                              ),
-                                                              Text(
-                                                                consultationslist[
-                                                                index]
-                                                                    .email,
-                                                                style:
-                                                                const TextStyle(
-                                                                  fontSize: 14,
-                                                                  fontFamily:
-                                                                  "Calibri",
-                                                                  fontWeight:
-                                                                  FontWeight
-                                                                      .w500,
-                                                                  color: Color(
-                                                                      0xFF5f5f5f),
-                                                                ),
-                                                              )
-                                                            ],
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      Expanded(
-                                                        child: Container(
-                                                          child: Column(
-                                                            mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .spaceAround,
-                                                            crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
-                                                            children: [
-                                                              Text(
-                                                                consultationslist[
-                                                                index]
-                                                                    .gender,
-                                                                style:
-                                                                const TextStyle(
-                                                                  fontSize: 14,
-                                                                  fontFamily:
-                                                                  "Calibri",
-                                                                  fontWeight:
-                                                                  FontWeight
-                                                                      .w500,
-                                                                  color: Color(
-                                                                      0xFF5f5f5f),
-                                                                ),
-                                                              ),
-                                                              Text(
-                                                                consultationslist[
-                                                                index]
-                                                                    .phoneNumber,
-                                                                style:
-                                                                const TextStyle(
-                                                                  fontSize: 14,
-                                                                  fontFamily:
-                                                                  "Calibri",
-                                                                  fontWeight:
-                                                                  FontWeight
-                                                                      .w500,
-                                                                  color: Color(
-                                                                      0xFF5f5f5f),
-                                                                ),
-                                                              ),
-                                                              //Text('', style: CommonStyles.txSty_16black_f5),
-                                                              // Text(consultationslist[index].gender, style: CommonStyles.txSty_16black_f5),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                                Text(
-                                                  consultationslist[index].remarks,
-                                                  style: const TextStyle(
-                                                    fontSize: 14,
-                                                    fontFamily: "Calibri",
-                                                    fontWeight: FontWeight.w500,
-                                                    color: Color(0xFF5f5f5f),
-                                                  ),
-                                                ),
-                                                // based on status hide this row
-                                              ],
+                                            Text(
+                                              '$date',
+                                              style: const TextStyle(
+                                                fontSize: 22,
+                                                fontFamily: "Calibri",
+                                                // letterSpacing: 1.5,
+                                                fontWeight: FontWeight.w700,
+                                                color: Color(0xFF0f75bc),
+                                              ),
                                             ),
-                                          ),
-                                        ],
+                                            Text(
+                                              '$year',
+                                              style: const TextStyle(
+                                                fontSize: 14,
+                                                fontFamily: "Calibri",
+                                                fontWeight: FontWeight.w700,
+                                                color: Color(0xFF0f75bc),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                       ),
-                                    )),
+                                      const VerticalDivider(
+                                        color: CommonUtils.primaryTextColor,
+                                      ),
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Expanded(
+                                              child: Row(
+                                                children: [
+                                                  Expanded(
+                                                    child: Container(
+                                                      child: Column(
+                                                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                        children: [
+                                                          Text(
+                                                            consultationslist[index].consultationName,
+                                                            style: const TextStyle(
+                                                              fontSize: 14,
+                                                              fontFamily: "Calibri",
+                                                              fontWeight: FontWeight.w700,
+                                                              color: Color(0xFF0f75bc),
+                                                            ),
+                                                          ),
+                                                          Text(
+                                                            consultationslist[index].email,
+                                                            style: const TextStyle(
+                                                              fontSize: 14,
+                                                              fontFamily: "Calibri",
+                                                              fontWeight: FontWeight.w500,
+                                                              color: Color(0xFF5f5f5f),
+                                                            ),
+                                                          )
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Expanded(
+                                                    child: Container(
+                                                      child: Column(
+                                                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                        children: [
+                                                          Text(
+                                                            consultationslist[index].gender,
+                                                            style: const TextStyle(
+                                                              fontSize: 14,
+                                                              fontFamily: "Calibri",
+                                                              fontWeight: FontWeight.w500,
+                                                              color: Color(0xFF5f5f5f),
+                                                            ),
+                                                          ),
+                                                          Text(
+                                                            consultationslist[index].phoneNumber,
+                                                            style: const TextStyle(
+                                                              fontSize: 14,
+                                                              fontFamily: "Calibri",
+                                                              fontWeight: FontWeight.w500,
+                                                              color: Color(0xFF5f5f5f),
+                                                            ),
+                                                          ),
+                                                          //Text('', style: CommonStyles.txSty_16black_f5),
+                                                          // Text(consultationslist[index].gender, style: CommonStyles.txSty_16black_f5),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            // Text(
+                                            //   consultationslist[index].remarks,
+                                            //   style: const TextStyle(
+                                            //     fontSize: 14,
+                                            //     fontFamily: "Calibri",
+                                            //     fontWeight: FontWeight.w500,
+                                            //     color: Color(0xFF5f5f5f),
+                                            //   ),
+                                            // ),
+                                            Flexible(
+                                              child: RichText(
+                                                text: TextSpan(
+                                                  text: 'Remark : ',
+                                                  style: CommonStyles.txSty_14blu_f5,
+                                                  children: <TextSpan>[
+                                                    TextSpan(
+                                                      text: consultationslist[index].remarks,
+                                                      style: TextStyle(
+                                                        color: Color(0xFF5f5f5f),
+                                                        fontSize: 14,
+                                                        fontWeight: FontWeight.w500,
+                                                        fontFamily: 'Calibri',
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            )
+                                            // based on status hide this row
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                )),
                               ),
                             );
                             //  }
@@ -786,10 +733,8 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
         ));
   }
 
-  List<String>? _getValueText(
-      CalendarDatePicker2Type datePickerType, List<DateTime?> values) {
-    values =
-        values.map((e) => e != null ? DateUtils.dateOnly(e) : null).toList();
+  List<String>? _getValueText(CalendarDatePicker2Type datePickerType, List<DateTime?> values) {
+    values = values.map((e) => e != null ? DateUtils.dateOnly(e) : null).toList();
 
     DateTime? startDate;
     DateTime? endDate;
@@ -797,8 +742,7 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
     startDate = values[0];
     endDate = values.length > 1 ? values[1] : null;
     String? formattedStartDate = DateFormat('dd/MM/yyyy').format(startDate!);
-    String? formattedEndDate =
-    endDate != null ? DateFormat('dd/MM/yyyy').format(endDate) : 'null';
+    String? formattedEndDate = endDate != null ? DateFormat('dd/MM/yyyy').format(endDate) : 'null';
 
     return [formattedStartDate, formattedEndDate];
   }
