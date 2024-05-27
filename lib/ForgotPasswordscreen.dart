@@ -21,7 +21,7 @@ class ForgotPasswordscreen extends StatefulWidget {
 }
 
 class _ForgotPasswordscreen extends State<ForgotPasswordscreen> {
-  final TextEditingController username = new TextEditingController();
+  final TextEditingController username = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _isloading = false;
   @override
@@ -30,7 +30,7 @@ class _ForgotPasswordscreen extends State<ForgotPasswordscreen> {
       backgroundColor: CommonUtils.primaryColor,
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(
+          icon: const Icon(
             Icons.arrow_back_ios,
             color: CommonUtils.primaryTextColor,
           ),
@@ -70,7 +70,7 @@ class _ForgotPasswordscreen extends State<ForgotPasswordscreen> {
                         width: MediaQuery.of(context).size.height / 4.5,
                         child: Image.asset('assets/hfz_logo.png'),
                       ),
-                      Text('Forgot Password',
+                      const Text('Forgot Password',
                           style: TextStyle(
                             fontSize: 24,
                             fontFamily: "Calibri",
@@ -78,11 +78,13 @@ class _ForgotPasswordscreen extends State<ForgotPasswordscreen> {
                             letterSpacing: 2,
                             color: Color(0xFF662d91),
                           )),
-                      SizedBox(
+                      const SizedBox(
                         height: 20,
                       ),
-                      Text('Enter Your Email / User Name', style: CommonUtils.Sub_header_Styles),
-                      Text('to Get an OTP on Your Email', style: CommonUtils.Sub_header_Styles),
+                      const Text('Enter Your Email / User Name',
+                          style: CommonUtils.Sub_header_Styles),
+                      const Text('to Get an OTP on Your Email',
+                          style: CommonUtils.Sub_header_Styles),
                     ],
                   ),
                 ),
@@ -100,13 +102,16 @@ class _ForgotPasswordscreen extends State<ForgotPasswordscreen> {
               //       )
               //     :
               SizedBox(
-                  height: MediaQuery.of(context).size.height - MediaQuery.of(context).size.height / 2, // Adjust the height here
+                  height: MediaQuery.of(context).size.height -
+                      MediaQuery.of(context).size.height /
+                          2, // Adjust the height here
                   child: SingleChildScrollView(
-                    physics: AlwaysScrollableScrollPhysics(),
+                    physics: const AlwaysScrollableScrollPhysics(),
                     child: Form(
                         key: _formKey,
                         child: Container(
-                          padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 40),
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 20, horizontal: 40),
                           decoration: const BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.only(
@@ -132,24 +137,25 @@ class _ForgotPasswordscreen extends State<ForgotPasswordscreen> {
                                     controller: username,
                                     maxLength: 60,
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 30,
                                   ),
-                                  Container(
+                                  SizedBox(
                                     width: MediaQuery.of(context).size.width,
                                     child: CustomButton(
                                       buttonText: 'Send OTP',
                                       color: CommonUtils.primaryTextColor,
-                                      onPressed: forgotUser,
+                                      onPressed: checkInternetConnection,
                                     ),
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 10,
                                   ),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Text('Back to Login?', style: CommonUtils.Mediumtext_14),
+                                      const Text('Back to Login?',
+                                          style: CommonUtils.Mediumtext_14),
                                       GestureDetector(
                                         onTap: () {
                                           // Handle the click event for the "Click here!" text
@@ -157,11 +163,12 @@ class _ForgotPasswordscreen extends State<ForgotPasswordscreen> {
                                           // Add your custom logic or navigation code here
                                           Navigator.of(context).push(
                                             MaterialPageRoute(
-                                              builder: (context) => CustomerLoginScreen(),
+                                              builder: (context) =>
+                                                  const CustomerLoginScreen(),
                                             ),
                                           );
                                         },
-                                        child: Text(' Click Here!',
+                                        child: const Text(' Click Here!',
                                             style: TextStyle(
                                               fontSize: 20,
                                               fontFamily: "Calibri",
@@ -195,14 +202,28 @@ class _ForgotPasswordscreen extends State<ForgotPasswordscreen> {
     return null;
   }
 
+  void checkInternetConnection() {
+    FocusManager.instance.primaryFocus?.unfocus();
+    CommonUtils.checkInternetConnectivity().then((isConnected) {
+      if (isConnected) {
+        forgotUser();
+        print('The Internet Is Connected');
+      } else {
+        CommonUtils.showCustomToastMessageLong(
+            'Please Check Your Internet Connection', context, 1, 4);
+        print('The Internet Is not Connected');
+      }
+    });
+  }
+
   Future<void> forgotUser() async {
     if (_formKey.currentState!.validate()) {
       print('login: Login success!');
-      String? _username = username.text.toString();
+      String? userName = username.text.toString();
 
       // Print the username and password
       //  print('Username: $email');
-      print('Password: $_username');
+      print('Password: $userName');
       setState(() {
         _isloading = true; //Enable loading before getQuestions
       });
@@ -210,7 +231,7 @@ class _ForgotPasswordscreen extends State<ForgotPasswordscreen> {
       CommonStyles.progressBar(context);
       // Prepare the request body
       Map<String, String> requestBody = {
-        'userName': _username,
+        'userName': userName,
       };
 
       // Make the POST request
@@ -248,9 +269,12 @@ class _ForgotPasswordscreen extends State<ForgotPasswordscreen> {
             if (user['roleID'] == 2) {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => ForgotPasswordOtpScreen(id: user['id'], userName: user['userName'])),
+                MaterialPageRoute(
+                    builder: (context) => ForgotPasswordOtpScreen(
+                        id: user['id'], userName: user['userName'])),
               );
-              CommonUtils.showCustomToastMessageLong('OTP Has Sent To Your Email', context, 0, 3,
+              CommonUtils.showCustomToastMessageLong(
+                  'OTP Has Sent To Your Email', context, 0, 3,
                   toastPosition: MediaQuery.of(context).size.height / 2);
             } else {
               // Show toast for invalid user
@@ -260,16 +284,18 @@ class _ForgotPasswordscreen extends State<ForgotPasswordscreen> {
                   toastPosition: MediaQuery.of(context).size.height / 2);
               // showToast('Invalid user');
             }
-
-
           } else {
             FocusScope.of(context).unfocus();
-            CommonUtils.showCustomToastMessageLong('Invalid User ', context, 1, 3, toastPosition: MediaQuery.of(context).size.height / 2);
+            CommonUtils.showCustomToastMessageLong(
+                'Invalid User ', context, 1, 3,
+                toastPosition: MediaQuery.of(context).size.height / 2);
           }
         } else {
           FocusScope.of(context).unfocus();
           LoadingProgress.stop(context);
-          CommonUtils.showCustomToastMessageLong("${data["statusMessage"]}", context, 1, 3, toastPosition: MediaQuery.of(context).size.height / 2);
+          CommonUtils.showCustomToastMessageLong(
+              "${data["statusMessage"]}", context, 1, 3,
+              toastPosition: MediaQuery.of(context).size.height / 2);
           // Handle the case where the user is not valid
           setState(() {
             _isloading = false; //Enable loading before getQuestions
@@ -285,7 +311,8 @@ class _ForgotPasswordscreen extends State<ForgotPasswordscreen> {
           _isloading = false; //Enable loading before getQuestions
         });
         // Handle any error cases here
-        print('Failed to connect to the API. Status code: ${response.statusCode}');
+        print(
+            'Failed to connect to the API. Status code: ${response.statusCode}');
       }
     }
   }
