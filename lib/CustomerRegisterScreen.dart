@@ -1151,7 +1151,7 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
                             //MARK: Here
                             buttonText: 'Register',
                             color: CommonUtils.primaryTextColor,
-                            onPressed: validating,
+                            onPressed: checkInternetConnection,
                           ),
                         ),
                       ],
@@ -1542,9 +1542,22 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
     print('xxx: 4');
   }
 
+  void checkInternetConnection() {
+    FocusManager.instance.primaryFocus?.unfocus();
+    CommonUtils.checkInternetConnectivity().then((isConnected) {
+      if (isConnected) {
+        validating();
+        print('The Internet Is Connected');
+      } else {
+        CommonUtils.showCustomToastMessageLong(
+            'Please Check Your Internet Connection', context, 1, 4);
+        print('The Internet Is not Connected');
+      }
+    });
+  }
+
   Future<void> validating() async {
     FocusScope.of(context).unfocus();
-    print('xxx: 1');
     print('isFullNameValidate $isFullNameValidate');
     print('isDobValidate $isDobValidate');
     print('isGenderValidate $isGenderValidate');
