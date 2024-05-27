@@ -41,11 +41,13 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
   int? AgentId;
 //  String gender ='';
   String Gender = '';
-  final bool _shouldStartMarquee = true; // Variable to control Marquee scrolling
+  final bool _shouldStartMarquee =
+      true; // Variable to control Marquee scrolling
 
   @override
   void initState() {
     super.initState();
+
     checkLoginAgentdata();
     _fetchItems();
     apiData = getBranches(widget.agentid);
@@ -83,7 +85,9 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
 
     if (response.statusCode == 200) {
       setState(() {
-        _items = (json.decode(response.body)['listResult'] as List).map((item) => Item.fromJson(item)).toList();
+        _items = (json.decode(response.body)['listResult'] as List)
+            .map((item) => Item.fromJson(item))
+            .toList();
       });
     } else {
       throw Exception('Failed to load items');
@@ -91,21 +95,26 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
   }
 
   Future<List<Consultation>?> getAgentBranches(int agentId) async {
-    final apiUrl = Uri.parse(baseUrl + getconsulationbranchesbyagentid + agentId.toString());
+    final apiUrl = Uri.parse(
+        baseUrl + getconsulationbranchesbyagentid + agentId.toString());
     try {
       final response = await http.get(apiUrl);
       if (response.statusCode == 200) {
         final Map<String, dynamic> responseData = jsonDecode(response.body);
         if (responseData['listResult'] != null) {
           final List<dynamic> appointmentsData = responseData['listResult'];
-          return appointmentsData.map((appointment) => Consultation.fromJson(appointment)).toList();
+          return appointmentsData
+              .map((appointment) => Consultation.fromJson(appointment))
+              .toList();
         } else {
           print('No data found');
           return null;
         }
       } else {
-        print('Failed to fetch appointments. Status code: ${response.statusCode}');
-        throw Exception('Failed to fetch appointments. Status code: ${response.statusCode}');
+        print(
+            'Failed to fetch appointments. Status code: ${response.statusCode}');
+        throw Exception(
+            'Failed to fetch appointments. Status code: ${response.statusCode}');
       }
     } catch (error) {
       print('Failed to connect to the API: $error');
@@ -139,8 +148,14 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
                     } else {
                       return Marquee(
                         text: marqueeText,
-                        style: const TextStyle(fontSize: 16, fontFamily: "Calibri", fontWeight: FontWeight.w600, color: Color(0xFFff0176)),
-                        velocity: _shouldStartMarquee ? 30 : 0, // Control Marquee scrolling with velocity
+                        style: const TextStyle(
+                            fontSize: 16,
+                            fontFamily: "Calibri",
+                            fontWeight: FontWeight.w600,
+                            color: Color(0xFFff0176)),
+                        velocity: _shouldStartMarquee
+                            ? 30
+                            : 0, // Control Marquee scrolling with velocity
                       );
                     }
                   },
@@ -182,10 +197,13 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
                                 item.imageName,
                                 height: 100,
                                 fit: BoxFit.cover,
-                                loadingBuilder: (context, child, loadingProgress) {
+                                loadingBuilder:
+                                    (context, child, loadingProgress) {
                                   if (loadingProgress == null) return child;
 
-                                  return const Center(child: CircularProgressIndicator.adaptive());
+                                  return const Center(
+                                      child:
+                                          CircularProgressIndicator.adaptive());
                                 },
                               ),
                             ),
@@ -299,7 +317,8 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
           throw Exception('api failed');
         }
       } else {
-        throw Exception('Request failed with status: ${jsonResponse.statusCode}');
+        throw Exception(
+            'Request failed with status: ${jsonResponse.statusCode}');
       }
     } catch (error) {
       rethrow;
@@ -312,7 +331,10 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
       backgroundColor: const Color(0xFFf3e3ff),
       title: const Text(
         'Agent DashBoard',
-        style: TextStyle(color: Color(0xFF0f75bc), fontSize: 16.0, fontWeight: FontWeight.w600),
+        style: TextStyle(
+            color: Color(0xFF0f75bc),
+            fontSize: 16.0,
+            fontWeight: FontWeight.w600),
       ),
       leading: IconButton(
         icon: const Icon(
@@ -362,7 +384,11 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
             } else {
               return Marquee(
                 text: marqueeText,
-                style: const TextStyle(fontSize: 16, fontFamily: "Calibri", fontWeight: FontWeight.w600, color: Color(0xFFff0176)),
+                style: const TextStyle(
+                    fontSize: 16,
+                    fontFamily: "Calibri",
+                    fontWeight: FontWeight.w600,
+                    color: Color(0xFFff0176)),
               );
             }
           },
@@ -438,7 +464,8 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
         final data = json.decode(response.body);
         List<dynamic>? listResult = data['listResult']; // Add a check for null
         if (listResult != null) {
-          List<BranchModel> result = listResult.map((e) => BranchModel.fromJson(e)).toList();
+          List<BranchModel> result =
+              listResult.map((e) => BranchModel.fromJson(e)).toList();
           return result;
         } else {
           print('listResult is null');
@@ -450,7 +477,8 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
       }
     } catch (error) {
       print('Error: $error');
-      throw Exception('Error: $error');
+      // throw Exception('Error: $error');
+      rethrow;
     }
   }
 
@@ -484,7 +512,8 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
           onTap: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => Branches_screen(userId: AgentId!)),
+              MaterialPageRoute(
+                  builder: (context) => Branches_screen(userId: AgentId!)),
             );
           },
           child: Column(
@@ -722,7 +751,10 @@ class BranchCard extends StatelessWidget {
                     branch.name,
                     style: CommonStyles.txSty_16p_fb,
                   ),
-                  Text(branch.address, maxLines: 3, overflow: TextOverflow.ellipsis, style: CommonStyles.txSty_12b_f5),
+                  Text(branch.address,
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
+                      style: CommonStyles.txSty_12b_f5),
                 ],
               ),
             ),
