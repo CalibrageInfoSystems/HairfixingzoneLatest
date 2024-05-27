@@ -48,7 +48,8 @@ class _ViewConsultationState extends State<ViewConsultation> {
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
         List<dynamic> listresult = data['listResult'];
-        List<BranchModel> result = listresult.map((e) => BranchModel.fromJson(e)).toList();
+        List<BranchModel> result =
+            listresult.map((e) => BranchModel.fromJson(e)).toList();
         return result;
       } else {
         print('Request failed with status: ${response.statusCode}');
@@ -56,7 +57,8 @@ class _ViewConsultationState extends State<ViewConsultation> {
       }
     } catch (error) {
       print('Error: $error');
-      throw Exception('Error: $error');
+      // throw Exception('Error: $error');
+      rethrow;
     }
   }
 
@@ -65,132 +67,64 @@ class _ViewConsultationState extends State<ViewConsultation> {
     return SafeArea(
       child: Scaffold(
         //    appBar: _appBar(context),
-        body: Column(
-          children: [
-            //MARK: FromToDates
-            // TextFormField(
-            //   controller: fromToDates,
-            //   keyboardType: TextInputType.visiblePassword,
-            //   onTap: () {
-            //     showCustomDateRangePicker(
-            //       context,
-            //       dismissible: true,
-            //       endDate: endDate,
-            //       startDate: startDate,
-            //       maximumDate:
-            //           DateTime.now().add(const Duration(days: 50)),
-            //       minimumDate:
-            //           DateTime.now().subtract(const Duration(days: 50)),
-            //       onApplyClick: (s, e) {
-            //         setState(() {
-            //           //MARK: Date
-            //           endDate = e;
-            //           startDate = s;
-            //           fromToDates.text =
-            //               '${startDate != null ? DateFormat("dd, MMM").format(startDate!) : '-'} / ${endDate != null ? DateFormat("dd, MMM").format(endDate!) : '-'}';
-            //         });
-            //       },
-            //       onCancelClick: () {
-            //         setState(() {
-            //           endDate = null;
-            //           startDate = null;
-            //         });
-            //       },
-            //     );
-            //   },
-            //   readOnly: true,
-            //   decoration: InputDecoration(
-            //     contentPadding: const EdgeInsets.only(
-            //         top: 15, bottom: 10, left: 15, right: 15),
-            //     focusedBorder: OutlineInputBorder(
-            //       borderSide: const BorderSide(
-            //         color: Color(0xFF0f75bc),
-            //       ),
-            //       borderRadius: BorderRadius.circular(6.0),
-            //     ),
-            //     enabledBorder: OutlineInputBorder(
-            //       borderSide: const BorderSide(
-            //         color: CommonUtils.primaryTextColor,
-            //       ),
-            //       borderRadius: BorderRadius.circular(6.0),
-            //     ),
-            //     border: const OutlineInputBorder(
-            //       borderRadius: BorderRadius.all(
-            //         Radius.circular(10),
-            //       ),
-            //     ),
-            //     hintText: 'Select Between Dates',
-            //     counterText: "",
-            //     hintStyle: const TextStyle(
-            //         color: Colors.grey, fontWeight: FontWeight.w400),
-            //     prefixIcon: const Icon(Icons.calendar_today),
-            //   ),
-            //   //  validator: validatePassword,
-            // ),
+        body: FutureBuilder(
+          future: agentData,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(
+                child: CircularProgressIndicator.adaptive(),
+              );
+            } else if (snapshot.hasError) {
+              return Center(
+                child: Text(snapshot.error.toString()),
+              );
+            } else {
+              List<BranchModel> data = snapshot.data!;
+              if (data.isEmpty) {
+                return const Center(
+                  child: Text('No Branches are Found!'),
+                );
+              } else {
+                return Expanded(
+                  child: ListView.builder(
+                    itemCount: data.length,
+                    itemBuilder: (context, index) {
+                      BranchModel agent = data[index];
+                      String? imageUrl = agent.imageName;
+                      if (imageUrl == null || imageUrl.isEmpty) {
+                        imageUrl = 'assets/top_image.png';
+                      }
+                      return ViewConsulatationBranchTemplate(
+                        startDate: startDate,
+                        endDate: endDate,
+                        agent: agent,
+                        imageUrl: imageUrl,
+                        agentId: widget.agentId,
+                      );
+                    },
+                  ),
+                );
 
-            const SizedBox(
-              height: 10.0,
-            ),
-            FutureBuilder(
-              future: agentData,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(
-                    child: CircularProgressIndicator.adaptive(),
-                  );
-                } else if (snapshot.hasError) {
-                  return Center(
-                    child: Text(snapshot.error.toString()),
-                  );
-                } else {
-                  List<BranchModel> data = snapshot.data!;
-                  if (data.isEmpty) {
-                    return const Center(
-                      child: Text('No Branches are Found!'),
-                    );
-                  } else {
-                    return Expanded(
-                      child: ListView.builder(
-                        itemCount: data.length,
-                        itemBuilder: (context, index) {
-                          BranchModel agent = data[index];
-                          String? imageUrl = agent.imageName;
-                          if (imageUrl == null || imageUrl.isEmpty) {
-                            imageUrl = 'assets/top_image.png';
-                          }
-                          return ViewConsulatationBranchTemplate(
-                            startDate: startDate,
-                            endDate: endDate,
-                            agent: agent,
-                            imageUrl: imageUrl,
-                            agentId: widget.agentId,
-                          );
-                        },
-                      ),
-                    );
-
-                    // ListView.builder(
-                    //   itemCount: data.length,
-                    //   itemBuilder: (context, index) {
-                    //     BranchModel agent = data[index];
-                    //     String? imageUrl = agent.imageName;
-                    //     if (imageUrl == null || imageUrl.isEmpty) {
-                    //       imageUrl = 'assets/top_image.png';
-                    //     }
-                    //     return ViewConsulatationBranchTemplate(
-                    //       startDate: startDate,
-                    //       endDate: endDate,
-                    //       agent: agent,
-                    //       imageUrl: imageUrl,
-                    //       agentId: widget.agentId,
-                    //     );
-                    //   },
-                    // );
-                  }
-                }
-              },
-            ),
-          ],
+                // ListView.builder(
+                //   itemCount: data.length,
+                //   itemBuilder: (context, index) {
+                //     BranchModel agent = data[index];
+                //     String? imageUrl = agent.imageName;
+                //     if (imageUrl == null || imageUrl.isEmpty) {
+                //       imageUrl = 'assets/top_image.png';
+                //     }
+                //     return ViewConsulatationBranchTemplate(
+                //       startDate: startDate,
+                //       endDate: endDate,
+                //       agent: agent,
+                //       imageUrl: imageUrl,
+                //       agentId: widget.agentId,
+                //     );
+                //   },
+                // );
+              }
+            }
+          },
         ),
       ),
     );
@@ -237,7 +171,12 @@ class ViewConsulatationBranchTemplate extends StatelessWidget {
   final DateTime? endDate;
 
   const ViewConsulatationBranchTemplate(
-      {super.key, required this.agent, required this.imageUrl, required this.agentId, this.startDate, this.endDate});
+      {super.key,
+      required this.agent,
+      required this.imageUrl,
+      required this.agentId,
+      this.startDate,
+      this.endDate});
 
   @override
   Widget build(BuildContext context) {
@@ -271,20 +210,23 @@ class ViewConsulatationBranchTemplate extends StatelessWidget {
               // borderRadius: BorderRadius.circular(30), //border corner radius
               boxShadow: [
                 BoxShadow(
-                  color: Color(0xFF960efd).withOpacity(0.2), //color of shadow
+                  color: const Color(0xFF960efd)
+                      .withOpacity(0.2), //color of shadow
                   spreadRadius: 2, //spread radius
                   blurRadius: 4, // blur radius
-                  offset: Offset(0, 2), // changes position of shadow
+                  offset: const Offset(0, 2), // changes position of shadow
                 ),
               ],
             ),
             child: Row(
               children: [
                 Container(
-                  padding: EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(10),
                   // width: MediaQuery.of(context).size.width / 4,
                   child: Image.network(
-                    imageUrl.isNotEmpty ? imageUrl : 'https://example.com/placeholder-image.jpg',
+                    imageUrl.isNotEmpty
+                        ? imageUrl
+                        : 'https://example.com/placeholder-image.jpg',
                     fit: BoxFit.cover,
                     height: MediaQuery.of(context).size.height / 4 / 2,
                     width: MediaQuery.of(context).size.width / 3.2,
@@ -302,7 +244,7 @@ class ViewConsulatationBranchTemplate extends StatelessWidget {
                   // height: MediaQuery.of(context).size.height / 4 / 2,
 
                   width: MediaQuery.of(context).size.width / 2.2,
-                  padding: EdgeInsets.only(top: 7),
+                  padding: const EdgeInsets.only(top: 7),
                   // width: MediaQuery.of(context).size.width / 4,
                   child: Column(
                     //  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -310,16 +252,19 @@ class ViewConsulatationBranchTemplate extends StatelessWidget {
                     children: [
                       Text(
                         agent.name,
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Color(0xFF0f75bc),
                           fontSize: 14.0,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 5,
                       ),
-                      Text(agent.address, maxLines: 2, overflow: TextOverflow.ellipsis, style: CommonStyles.txSty_12b_f5),
+                      Text(agent.address,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: CommonStyles.txSty_12b_f5),
                     ],
                   ),
                 )
