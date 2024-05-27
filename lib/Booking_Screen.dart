@@ -1080,12 +1080,12 @@ class _BookingScreenState extends State<Bookingscreen> {
                       'Notification Scheduled for $newDateTime with ID: $notificationId2');
                   await NotificationService().scheduleNotification(
                     title: 'Reminder Notification',
-                    body: 'Hey $userFullName, It Has Been 20 Days Since Your  ${selectedName!} Was Done. Please Revisit the Hairfixing Zone at The ${widget.branchname} Branch',
-                  //  scheduledNotificationDateTime: newDateTime!,
-                    scheduledNotificationDateTime: testdate!,
+                    body: 'Hey $userFullName, It Has Been 20 Days Since Your  ${selectedName!} Was Done. Please Revisit the Hairfixing Zone at the ${widget.branchname} Branch',
+                    scheduledNotificationDateTime: newDateTime!,
+                    //   scheduledNotificationDateTime: testdate!,
                     id: notificationId2,
                   );
-                // Handle value 8
+                  // Handle value 8
                   break;
                 case 9:
                   final int notificationId2 = UniqueKey().hashCode;
@@ -1093,12 +1093,12 @@ class _BookingScreenState extends State<Bookingscreen> {
                       'Notification Scheduled for $newDateTime with ID: $notificationId2');
                   await NotificationService().scheduleNotification(
                     title: 'Reminder Notification',
-                    body: 'Hey $userFullName, It Has Been 20 Days Since Your  ${selectedName!} Was Done. Please Revisit the Hairfixing Zone at The ${widget.branchname} Branch',
-                  //  scheduledNotificationDateTime: newDateTime!,
-                    scheduledNotificationDateTime: testdate!,
+                    body: 'Hey $userFullName, It Has Been 20 Days Since Your  ${selectedName!} Was Done. Please Revisit the Hairfixing Zone at the ${widget.branchname} Branch',
+                    scheduledNotificationDateTime: newDateTime!,
+                    //  scheduledNotificationDateTime: testdate!,
                     id: notificationId2,
                   );
-                // Handle value 9
+                  // Handle value 9
                   break;
                 case 10:
                 // Handle value 10
@@ -1107,9 +1107,9 @@ class _BookingScreenState extends State<Bookingscreen> {
                       'Notification Scheduled for $newDateTime with ID: $notificationId2');
                   await NotificationService().scheduleNotification(
                     title: 'Reminder Notification',
-                    body: 'Hey $userFullName, It Has Been 20 Days Since Your  ${selectedName!} Was Done. Please Revisit the Hairfixing Zone at The ${widget.branchname} Branch',
-                  //  scheduledNotificationDateTime: newDateTime!,
-                    scheduledNotificationDateTime: testdate!,
+                    body: 'Hey $userFullName, It Has Been 20 Days Since Your  ${selectedName!} Was Done. Please Revisit the Hairfixing Zone at the ${widget.branchname} Branch',
+                    scheduledNotificationDateTime: newDateTime!,
+                    //   scheduledNotificationDateTime: testdate!,
                     id: notificationId2,
                   );
                   break;
@@ -1119,12 +1119,12 @@ class _BookingScreenState extends State<Bookingscreen> {
                       'Notification Scheduled for $newDateTime with ID: $notificationId2');
                   await NotificationService().scheduleNotification(
                     title: 'Reminder Notification',
-                    body: 'Hey $userFullName, It Has Been 20 Days Since Your  ${selectedName!} Was Done. Please Revisit the Hairfixing Zone at The ${widget.branchname} Branch',
-                  //  scheduledNotificationDateTime: newDateTime!,
-                    scheduledNotificationDateTime: testdate!,
+                    body: 'Hey $userFullName, It Has Been 20 Days Since Your  ${selectedName!} Was Done. Please Revisit the Hairfixing Zone at the ${widget.branchname} Branch',
+                    scheduledNotificationDateTime: newDateTime!,
+                    // scheduledNotificationDateTime: testdate!,
                     id: notificationId2,
                   );
-                // Handle value 11
+                  // Handle value 11
                   break;
                 default:
                 // Handle other cases if needed
