@@ -18,10 +18,12 @@ class ForgotPasswordOtpScreen extends StatefulWidget {
   final int id;
   final String userName;
 
-  ForgotPasswordOtpScreen({required this.id, required this.userName});
+  const ForgotPasswordOtpScreen(
+      {super.key, required this.id, required this.userName});
 
   @override
-  State<ForgotPasswordOtpScreen> createState() => _ForgotPasswordOtpScreenState();
+  State<ForgotPasswordOtpScreen> createState() =>
+      _ForgotPasswordOtpScreenState();
 }
 
 class _ForgotPasswordOtpScreenState extends State<ForgotPasswordOtpScreen> {
@@ -43,7 +45,7 @@ class _ForgotPasswordOtpScreenState extends State<ForgotPasswordOtpScreen> {
   // }
 
   void startTimer() {
-    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       setState(() {
         if (_secondsRemaining > 0) {
           _secondsRemaining--;
@@ -118,20 +120,25 @@ class _ForgotPasswordOtpScreenState extends State<ForgotPasswordOtpScreen> {
                         height: 20,
                       ),
                       const Text('Please Enter 6 Digits OTP sent',
-                          style: CommonUtils.Sub_header_Styles), //Please enter 6 digits OTP sent to your email to continue
-                      const Text('to Your Email to Continue ', style: CommonUtils.Sub_header_Styles),
+                          style: CommonUtils
+                              .Sub_header_Styles), //Please enter 6 digits OTP sent to your email to continue
+                      const Text('to Your Email to Continue ',
+                          style: CommonUtils.Sub_header_Styles),
                     ],
                   ),
                 ),
               ),
               SizedBox(
-                  height: MediaQuery.of(context).size.height - MediaQuery.of(context).size.height / 2, // Adjust the height here
+                  height: MediaQuery.of(context).size.height -
+                      MediaQuery.of(context).size.height /
+                          2, // Adjust the height here
                   child: SingleChildScrollView(
                       physics: const AlwaysScrollableScrollPhysics(),
                       child: Form(
                         key: _formKey,
                         child: Container(
-                          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 40),
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 10, horizontal: 40),
                           decoration: const BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.only(
@@ -158,19 +165,25 @@ class _ForgotPasswordOtpScreenState extends State<ForgotPasswordOtpScreen> {
                                       borderRadius: BorderRadius.circular(10),
                                       fieldHeight: 50,
                                       fieldWidth: 45,
-                                      activeColor: const Color.fromARGB(255, 63, 3, 109),
-                                      selectedColor: const Color.fromARGB(255, 63, 3, 109),
+                                      activeColor:
+                                          const Color.fromARGB(255, 63, 3, 109),
+                                      selectedColor:
+                                          const Color.fromARGB(255, 63, 3, 109),
                                       selectedFillColor: Colors.white,
                                       activeFillColor: Colors.white,
                                       inactiveFillColor: Colors.white,
-                                      inactiveColor: CommonUtils.primaryTextColor,
+                                      inactiveColor:
+                                          CommonUtils.primaryTextColor,
                                     ),
-                                    animationDuration: const Duration(milliseconds: 300),
+                                    animationDuration:
+                                        const Duration(milliseconds: 300),
                                     // backgroundColor: Colors
                                     //     .blue.shade50, // Set background color
                                     enableActiveFill: true,
                                     controller: _otpController,
-                                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                                    inputFormatters: [
+                                      FilteringTextInputFormatter.digitsOnly
+                                    ],
                                     keyboardType: TextInputType.number,
                                     validator: validateotp,
                                     onCompleted: (v) {
@@ -206,25 +219,25 @@ class _ForgotPasswordOtpScreenState extends State<ForgotPasswordOtpScreen> {
                                   //     print("Completed: ");
                                   //   },
                                   // ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 20,
                                   ),
                                   Text(
                                     'OTP Validate For ${(_secondsRemaining ~/ 60).toString().padLeft(2, '0')}:${(_secondsRemaining % 60).toString().padLeft(2, '0')} Minutes',
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       fontSize: 20,
                                       fontFamily: "Calibri",
                                       fontWeight: FontWeight.w700,
                                       color: Colors.black,
                                     ),
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 20,
                                   ),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Text('Didn\'t receive OTP? ',
+                                      const Text('Didn\'t receive OTP? ',
                                           style: TextStyle(
                                             fontSize: 20,
                                             fontFamily: "Calibri",
@@ -239,9 +252,12 @@ class _ForgotPasswordOtpScreenState extends State<ForgotPasswordOtpScreen> {
                                           // Add your custom logic or navigation code here
                                           Resendotpmethod();
                                         },
-                                        child: Text('Resend OTP',
+                                        child: const Text('Resend OTP',
                                             style: TextStyle(
-                                                fontSize: 20, fontFamily: "Calibri", fontWeight: FontWeight.w700, color: Color(0xFF662e91))),
+                                                fontSize: 20,
+                                                fontFamily: "Calibri",
+                                                fontWeight: FontWeight.w700,
+                                                color: Color(0xFF662e91))),
                                       )
                                       // Text(
                                       //   ' Resend code',
@@ -254,15 +270,15 @@ class _ForgotPasswordOtpScreenState extends State<ForgotPasswordOtpScreen> {
                                       // ),
                                     ],
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 20,
                                   ),
-                                  Container(
+                                  SizedBox(
                                     width: MediaQuery.of(context).size.width,
                                     child: CustomButton(
                                       buttonText: 'Validate OTP',
                                       color: CommonUtils.primaryTextColor,
-                                      onPressed: validateOtp,
+                                      onPressed: checkInternetConnection,
                                     ),
                                   ),
 
@@ -272,7 +288,8 @@ class _ForgotPasswordOtpScreenState extends State<ForgotPasswordOtpScreen> {
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Text('Back to Login?', style: CommonUtils.Mediumtext_14),
+                                      const Text('Back to Login?',
+                                          style: CommonUtils.Mediumtext_14),
                                       GestureDetector(
                                         onTap: () {
                                           // Handle the click event for the "Click here!" text
@@ -280,11 +297,12 @@ class _ForgotPasswordOtpScreenState extends State<ForgotPasswordOtpScreen> {
                                           // Add your custom logic or navigation code here
                                           Navigator.of(context).push(
                                             MaterialPageRoute(
-                                              builder: (context) => CustomerLoginScreen(),
+                                              builder: (context) =>
+                                                  const CustomerLoginScreen(),
                                             ),
                                           );
                                         },
-                                        child: Text(' Click Here!',
+                                        child: const Text(' Click Here!',
                                             style: TextStyle(
                                               fontSize: 20,
                                               fontFamily: "Calibri",
@@ -296,7 +314,7 @@ class _ForgotPasswordOtpScreenState extends State<ForgotPasswordOtpScreen> {
                                   ),
                                 ],
                               ),
-                              Row(
+                              const Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
@@ -334,13 +352,30 @@ class _ForgotPasswordOtpScreenState extends State<ForgotPasswordOtpScreen> {
     return null;
   }
 
+  void checkInternetConnection() {
+    FocusManager.instance.primaryFocus?.unfocus();
+    CommonUtils.checkInternetConnectivity().then((isConnected) {
+      if (isConnected) {
+        validateOtp();
+        print('The Internet Is Connected');
+      } else {
+        CommonUtils.showCustomToastMessageLong(
+            'Please Check Your Internet Connection', context, 1, 4);
+        print('The Internet Is not Connected');
+      }
+    });
+  }
+
   Future<void> validateOtp() async {
     print('OTP: ${_otpController.text}');
     if (_formKey.currentState!.validate()) {
       String otpentered = _otpController.text;
       print('otpentered: $otpentered');
 
-      Map<String, String> requestBody = {"id": widget.id.toString(), "otp": "$otpentered"};
+      Map<String, String> requestBody = {
+        "id": widget.id.toString(),
+        "otp": otpentered
+      };
       CommonStyles.progressBar(context);
       final String apiUrl = baseUrl + validateusernameotp;
       final response = await http.post(
@@ -376,17 +411,23 @@ class _ForgotPasswordOtpScreenState extends State<ForgotPasswordOtpScreen> {
               ),
             );
             // LoadingProgress.stop(context);
-            CommonUtils.showCustomToastMessageLong('${data["statusMessage"]}', context, 0, 3, toastPosition: MediaQuery.of(context).size.height / 2);
+            CommonUtils.showCustomToastMessageLong(
+                '${data["statusMessage"]}', context, 0, 3,
+                toastPosition: MediaQuery.of(context).size.height / 2);
           } else {
             LoadingProgress.stop(context);
             FocusScope.of(context).unfocus();
-            CommonUtils.showCustomToastMessageLong('${data["statusMessage"]}', context, 1, 3, toastPosition: MediaQuery.of(context).size.height / 2);
+            CommonUtils.showCustomToastMessageLong(
+                '${data["statusMessage"]}', context, 1, 3,
+                toastPosition: MediaQuery.of(context).size.height / 2);
           }
           // LoadingProgress.stop(context);
         } else {
           LoadingProgress.stop(context);
           FocusScope.of(context).unfocus();
-          CommonUtils.showCustomToastMessageLong("${data["statusMessage"]}", context, 1, 3, toastPosition: MediaQuery.of(context).size.height / 2);
+          CommonUtils.showCustomToastMessageLong(
+              "${data["statusMessage"]}", context, 1, 3,
+              toastPosition: MediaQuery.of(context).size.height / 2);
           // Handle the case where the user is not valid
           List<dynamic> validationErrors = data['validationErrors'];
           if (validationErrors.isNotEmpty) {
@@ -395,7 +436,8 @@ class _ForgotPasswordOtpScreenState extends State<ForgotPasswordOtpScreen> {
         }
       } else {
         // Handle any error cases here
-        print('Failed to connect to the API. Status code: ${response.statusCode}');
+        print(
+            'Failed to connect to the API. Status code: ${response.statusCode}');
       }
     }
     // Navigator.of(context).push(
@@ -416,7 +458,7 @@ class _ForgotPasswordOtpScreenState extends State<ForgotPasswordOtpScreen> {
     CommonStyles.progressBar(context);
     // Prepare the request body
     Map<String, String> requestBody = {
-      'userName': '${widget.userName}',
+      'userName': widget.userName,
     };
 
     // Make the POST request
@@ -450,17 +492,22 @@ class _ForgotPasswordOtpScreenState extends State<ForgotPasswordOtpScreen> {
           print('userid: ${user['id']}');
           _otpController.clear();
           LoadingProgress.stop(context);
-          CommonUtils.showCustomToastMessageLong('OTP Has Sent To Your Email', context, 0, 3, toastPosition: MediaQuery.of(context).size.height / 2);
+          CommonUtils.showCustomToastMessageLong(
+              'OTP Has Sent To Your Email', context, 0, 3,
+              toastPosition: MediaQuery.of(context).size.height / 2);
           restartTimer();
         } else {
           FocusScope.of(context).unfocus();
           LoadingProgress.stop(context);
-          CommonUtils.showCustomToastMessageLong('Invalid User ', context, 1, 3, toastPosition: MediaQuery.of(context).size.height / 2);
+          CommonUtils.showCustomToastMessageLong('Invalid User ', context, 1, 3,
+              toastPosition: MediaQuery.of(context).size.height / 2);
         }
       } else {
         LoadingProgress.stop(context);
         FocusScope.of(context).unfocus();
-        CommonUtils.showCustomToastMessageLong("${data["statusMessage"]}", context, 1, 3, toastPosition: MediaQuery.of(context).size.height / 2);
+        CommonUtils.showCustomToastMessageLong(
+            "${data["statusMessage"]}", context, 1, 3,
+            toastPosition: MediaQuery.of(context).size.height / 2);
         // Handle the case where the user is not valid
         setState(() {
           _isloading = false; //Enable loading before getQuestions
@@ -476,7 +523,8 @@ class _ForgotPasswordOtpScreenState extends State<ForgotPasswordOtpScreen> {
       });
       LoadingProgress.stop(context);
       // Handle any error cases here
-      print('Failed to connect to the API. Status code: ${response.statusCode}');
+      print(
+          'Failed to connect to the API. Status code: ${response.statusCode}');
     }
   }
 }
