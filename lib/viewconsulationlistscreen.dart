@@ -587,70 +587,129 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
                                         child: Column(
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
-                                            Expanded(
-                                              child: Row(
-                                                children: [
-                                                  Expanded(
-                                                    child: Container(
-                                                      child: Column(
-                                                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                                        children: [
-                                                          Text(
-                                                            consultationslist[index].consultationName,
-                                                            style: const TextStyle(
-                                                              fontSize: 14,
-                                                              fontFamily: "Calibri",
-                                                              fontWeight: FontWeight.w700,
-                                                              color: Color(0xFF0f75bc),
-                                                            ),
-                                                          ),
-                                                          Text(
-                                                            consultationslist[index].email,
-                                                            style: const TextStyle(
-                                                              fontSize: 14,
-                                                              fontFamily: "Calibri",
-                                                              fontWeight: FontWeight.w500,
-                                                              color: Color(0xFF5f5f5f),
-                                                            ),
-                                                          )
-                                                        ],
+                                            Row(
+                                              children: [
+                                                // Expanded(
+                                                //   child: Container(
+                                                //     child: Column(
+                                                //       mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                                //       crossAxisAlignment: CrossAxisAlignment.start,
+                                                //       children: [
+                                                //         Text(
+                                                //           consultationslist[index].consultationName,
+                                                //           style: const TextStyle(
+                                                //             fontSize: 14,
+                                                //             fontFamily: "Calibri",
+                                                //             fontWeight: FontWeight.w700,
+                                                //             color: Color(0xFF0f75bc),
+                                                //           ),
+                                                //         ),
+                                                //         Text(
+                                                //           consultationslist[index].email,
+                                                //           style: const TextStyle(
+                                                //             fontSize: 14,
+                                                //             fontFamily: "Calibri",
+                                                //             fontWeight: FontWeight.w500,
+                                                //             color: Color(0xFF5f5f5f),
+                                                //           ),
+                                                //         )
+                                                //       ],
+                                                //     ),
+                                                //   ),
+                                                // ),
+                                                Container(
+                                                  width: MediaQuery.of(context).size.width / 2.1,
+                                                  child: Column(
+                                                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children: [
+                                                      Text(
+                                                        consultationslist[index].consultationName,
+                                                        style: const TextStyle(
+                                                          fontSize: 14,
+                                                          fontFamily: "Calibri",
+                                                          fontWeight: FontWeight.w700,
+                                                          color: Color(0xFF0f75bc),
+                                                        ),
                                                       ),
-                                                    ),
+                                                      Text(
+                                                        consultationslist[index].email,
+                                                        style: const TextStyle(
+                                                          fontSize: 14,
+                                                          fontFamily: "Calibri",
+                                                          fontWeight: FontWeight.w500,
+                                                          color: Color(0xFF5f5f5f),
+                                                        ),
+                                                      )
+                                                    ],
                                                   ),
-                                                  Expanded(
-                                                    child: Container(
-                                                      child: Column(
-                                                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                                        children: [
-                                                          Text(
-                                                            consultationslist[index].gender,
-                                                            style: const TextStyle(
-                                                              fontSize: 14,
-                                                              fontFamily: "Calibri",
-                                                              fontWeight: FontWeight.w500,
-                                                              color: Color(0xFF5f5f5f),
-                                                            ),
-                                                          ),
-                                                          Text(
-                                                            consultationslist[index].phoneNumber,
-                                                            style: const TextStyle(
-                                                              fontSize: 14,
-                                                              fontFamily: "Calibri",
-                                                              fontWeight: FontWeight.w500,
-                                                              color: Color(0xFF5f5f5f),
-                                                            ),
-                                                          ),
-                                                          //Text('', style: CommonStyles.txSty_16black_f5),
-                                                          // Text(consultationslist[index].gender, style: CommonStyles.txSty_16black_f5),
-                                                        ],
+                                                ),
+                                                SizedBox(
+                                                  height: 5.0,
+                                                ),
+                                                // Expanded(
+                                                //   child: Container(
+                                                //     child: Column(
+                                                //       mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                                //       crossAxisAlignment: CrossAxisAlignment.start,
+                                                //       children: [
+                                                //         Text(
+                                                //           consultationslist[index].gender,
+                                                //           style: const TextStyle(
+                                                //             fontSize: 14,
+                                                //             fontFamily: "Calibri",
+                                                //             fontWeight: FontWeight.w500,
+                                                //             color: Color(0xFF5f5f5f),
+                                                //           ),
+                                                //         ),
+                                                //         Text(
+                                                //           consultationslist[index].phoneNumber,
+                                                //           style: const TextStyle(
+                                                //             fontSize: 14,
+                                                //             fontFamily: "Calibri",
+                                                //             fontWeight: FontWeight.w500,
+                                                //             color: Color(0xFF5f5f5f),
+                                                //           ),
+                                                //         ),
+                                                //         //Text('', style: CommonStyles.txSty_16black_f5),
+                                                //         // Text(consultationslist[index].gender, style: CommonStyles.txSty_16black_f5),
+                                                //       ],
+                                                //     ),
+                                                //   ),
+                                                // ),
+                                                Container(
+                                                  child: Column(
+                                                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children: [
+                                                      Text(
+                                                        consultationslist[index].gender,
+                                                        style: const TextStyle(
+                                                          fontSize: 14,
+                                                          fontFamily: "Calibri",
+                                                          fontWeight: FontWeight.w500,
+                                                          color: Color(0xFF5f5f5f),
+                                                        ),
                                                       ),
-                                                    ),
+                                                      Text(
+                                                        consultationslist[index].phoneNumber,
+                                                        style: const TextStyle(
+                                                          fontSize: 14,
+                                                          fontFamily: "Calibri",
+                                                          fontWeight: FontWeight.w500,
+                                                          color: Color(0xFF5f5f5f),
+                                                        ),
+                                                      ),
+                                                      //Text('', style: CommonStyles.txSty_16black_f5),
+                                                      // Text(consultationslist[index].gender, style: CommonStyles.txSty_16black_f5),
+                                                    ],
                                                   ),
-                                                ],
-                                              ),
+                                                ),
+                                              ],
                                             ),
+                                            // SizedBox(
+                                            //   height: 5.0,
+                                            // ),
                                             // Text(
                                             //   consultationslist[index].remarks,
                                             //   style: const TextStyle(
@@ -660,6 +719,7 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
                                             //     color: Color(0xFF5f5f5f),
                                             //   ),
                                             // ),
+
                                             Flexible(
                                               child: RichText(
                                                 text: TextSpan(
