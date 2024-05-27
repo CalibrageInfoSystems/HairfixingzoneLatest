@@ -787,7 +787,7 @@ class EditProfile_screenState extends State<EditProfile> {
       print(isDobValidate);
       print(alernateMobileNumberController.text);
 
-      if (isFullNameValidate && isMobileNumberValidate && isEmailValidate && isDobValidate) {
+      if (isFullNameValidate && isMobileNumberValidate && isEmailValidate) {
         String? alternateMobile = alernateMobileNumberController.text.isNotEmpty ? alernateMobileNumberController.text : null;
 
         if (alternateMobile != null && isAltMobileNumberValidate) {
@@ -962,26 +962,32 @@ class EditProfile_screenState extends State<EditProfile> {
       final url = Uri.parse(baseUrl + updateuser);
       DateTime now = DateTime.now();
       ProgressDialog progressDialog = ProgressDialog(context);
-
+      print('url$url');
       String dobtoapi = dobController.text;
       String? formattedDob;
 
       formattedDob = DateFormat('yyyy-MM-dd').format(selectedDate);
       print('formattedapi$formattedDob');
+
+      String emailtext = emailController.text;
+      String contacttext = mobileNumberController.text;
+      String alernatetext = mobileNumberController.text;
+      String fullnametext = fullNameController.text;
+
       // Show the progress dialog
       progressDialog.show();
       final request = {
         "id": Id,
         "userId": UserId, //null
-        "firstName": "${fullNameController.text}",
+        "firstName": "${fullnametext}",
         "middleName": "",
         "lastName": "",
-        "contactNumber": "${mobileNumberController.text}",
-        "mobileNumber": "${alernateMobileNumberController.text}",
+        "contactNumber": "${contacttext}",
+        "mobileNumber": "${alernatetext}",
         "userName": "$username",
         "password": "$password", //saved
         "confirmPassword": "$password",
-        "email": "${emailController.text}",
+        "email": "${emailtext}",
         "isActive": true,
         "createdByUserId": createdByUserId,
         "createdDate": createdDate,
