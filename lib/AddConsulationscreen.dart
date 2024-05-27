@@ -105,7 +105,7 @@ class AddConsulationscreen_screenState extends State<AddConsulationscreen> {
         setState(() async {
           fetchRadioButtonOptions();
           getCities(widget.agentId);
-          _getBranchData(widget.agentId, 0);
+         // _getBranchData(widget.agentId, 0);
         });
 
         // fetchMyAppointments(userId);
@@ -475,7 +475,6 @@ class AddConsulationscreen_screenState extends State<AddConsulationscreen> {
                           });
                         },
                       ),
-
                       const SizedBox(
                         height: 10,
                       ),
@@ -483,8 +482,7 @@ class AddConsulationscreen_screenState extends State<AddConsulationscreen> {
                         children: [
                           Text(
                             'City ',
-                            style: TextStyle(
-                                fontSize: 12, fontWeight: FontWeight.bold),
+                            style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
                           ),
                           Text(
                             '*',
@@ -493,15 +491,12 @@ class AddConsulationscreen_screenState extends State<AddConsulationscreen> {
                         ],
                       ),
                       Padding(
-                        padding:
-                            const EdgeInsets.only(left: 0, top: 5.0, right: 0),
+                        padding: const EdgeInsets.only(left: 0, top: 5.0, right: 0),
                         child: Container(
                           width: MediaQuery.of(context).size.width,
                           decoration: BoxDecoration(
                             border: Border.all(
-                              color: isBranchSelected
-                                  ? const Color.fromARGB(255, 175, 15, 4)
-                                  : CommonUtils.primaryTextColor,
+                              color: isCitySelected ? const Color.fromARGB(255, 175, 15, 4) : CommonUtils.primaryTextColor,
                             ),
                             borderRadius: BorderRadius.circular(5.0),
                             color: Colors.white,
@@ -510,80 +505,71 @@ class AddConsulationscreen_screenState extends State<AddConsulationscreen> {
                             child: ButtonTheme(
                               alignedDropdown: true,
                               child: DropdownButton<int>(
-                                  value: citySelectedTypeCdId,
-                                  iconSize: 30,
-                                  icon: null,
-                                  style: const TextStyle(
-                                    color: Colors.black,
-                                  ),
-                                  onChanged: (value) {
-                                    setState(() {
-                                      citySelectedTypeCdId = value!;
-                                      if (citySelectedTypeCdId != -1) {
-                                        cityValue = cityDropdownItems[
-                                            citySelectedTypeCdId]['typecdid'];
-                                        cityName = cityDropdownItems[
-                                            citySelectedTypeCdId]['desc'];
-                                        print("==========$cityValue$cityName");
-                                        _getBranchData(
-                                            widget.agentId, cityValue!);
-                                      } else {
-                                        print("==========");
-                                        print(cityValue);
-                                        print(cityName);
-                                        _getBranchData(
-                                            widget.agentId, cityValue!);
-                                      }
-                                      // isDropdownValid = selectedTypeCdId != -1;
-                                      isCitySelected = false;
-                                    });
-                                  },
-                                  items: [
-                                    const DropdownMenuItem<int>(
-                                      value: -1,
-                                      child: Text(
-                                        'Select City',
-                                        style: TextStyle(
-                                            color: Colors.grey,
-                                            fontWeight: FontWeight.w500),
-                                      ),
+                                value: citySelectedTypeCdId,
+                                iconSize: 30,
+                                icon: null,
+                                style: const TextStyle(color: Colors.black),
+                                onChanged: (value) async {
+                                  setState(() {
+                                    citySelectedTypeCdId = value!;
+                                    branchselectedTypeCdId = -1; // Reset selected branch
+                                    branchValue = null;
+                                    branchName = null;
+                                    BranchesdropdownItems = []; // Clear branches list
+                                  });
+
+                                  if (citySelectedTypeCdId != -1) {
+                                    cityValue = cityDropdownItems[citySelectedTypeCdId]['typecdid'];
+                                    cityName = cityDropdownItems[citySelectedTypeCdId]['desc'];
+                                    print("==========$cityValue$cityName");
+
+                                    await _getBranchData(widget.agentId, cityValue!);
+                                    // The BranchesdropdownItems is updated within _getBranchData
+
+                                  } else {
+                                    print("==========");
+                                    print(cityValue);
+                                    print(cityName);
+                                  }
+                                  setState(() {
+                                    isCitySelected = false;
+                                  });
+                                },
+                                items: [
+                                  const DropdownMenuItem<int>(
+                                    value: -1,
+                                    child: Text(
+                                      'Select City',
+                                      style: TextStyle(color: Colors.grey, fontWeight: FontWeight.w500),
                                     ),
-                                    ...cityDropdownItems
-                                        .asMap()
-                                        .entries
-                                        .map((entry) {
-                                      final index = entry.key;
-                                      final item = entry.value;
-                                      return DropdownMenuItem<int>(
-                                        value: index,
-                                        child: Text(item['desc']),
-                                      );
-                                    }).toList(),
-                                  ]),
+                                  ),
+                                  ...cityDropdownItems.asMap().entries.map((entry) {
+                                    final index = entry.key;
+                                    final item = entry.value;
+                                    return DropdownMenuItem<int>(
+                                      value: index,
+                                      child: Text(item['desc']),
+                                    );
+                                  }).toList(),
+                                ],
+                              ),
                             ),
                           ),
                         ),
                       ),
-                      //MARK: Gender condition
                       if (isCitySelected)
                         const Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Padding(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 16, vertical: 5),
+                              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 5),
                               child: Text(
                                 'Please Select City',
-                                style: TextStyle(
-                                  color: Color.fromARGB(255, 175, 15, 4),
-                                  fontSize: 12,
-                                ),
+                                style: TextStyle(color: Color.fromARGB(255, 175, 15, 4), fontSize: 12),
                               ),
                             ),
                           ],
                         ),
-
-//MARK: Branch
                       const SizedBox(
                         height: 10,
                       ),
@@ -591,8 +577,7 @@ class AddConsulationscreen_screenState extends State<AddConsulationscreen> {
                         children: [
                           Text(
                             'Branch ',
-                            style: TextStyle(
-                                fontSize: 12, fontWeight: FontWeight.bold),
+                            style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
                           ),
                           Text(
                             '*',
@@ -601,15 +586,12 @@ class AddConsulationscreen_screenState extends State<AddConsulationscreen> {
                         ],
                       ),
                       Padding(
-                        padding:
-                            const EdgeInsets.only(left: 0, top: 5.0, right: 0),
+                        padding: const EdgeInsets.only(left: 0, top: 5.0, right: 0),
                         child: Container(
                           width: MediaQuery.of(context).size.width,
                           decoration: BoxDecoration(
                             border: Border.all(
-                              color: isBranchSelected
-                                  ? const Color.fromARGB(255, 175, 15, 4)
-                                  : CommonUtils.primaryTextColor,
+                              color: isBranchSelected ? const Color.fromARGB(255, 175, 15, 4) : CommonUtils.primaryTextColor,
                             ),
                             borderRadius: BorderRadius.circular(5.0),
                             color: Colors.white,
@@ -618,75 +600,274 @@ class AddConsulationscreen_screenState extends State<AddConsulationscreen> {
                             child: ButtonTheme(
                               alignedDropdown: true,
                               child: DropdownButton<int>(
-                                  value: branchselectedTypeCdId,
-                                  iconSize: 30,
-                                  icon: null,
-                                  style: const TextStyle(
-                                    color: Colors.black,
-                                  ),
-                                  onChanged: (value) {
-                                    setState(() {
-                                      branchselectedTypeCdId = value!;
-                                      if (branchselectedTypeCdId != -1) {
-                                        branchValue = BranchesdropdownItems[
-                                            branchselectedTypeCdId]['id'];
-                                        branchName = BranchesdropdownItems[
-                                            branchselectedTypeCdId]['name'];
+                                value: branchselectedTypeCdId,
+                                iconSize: 30,
+                                icon: null,
+                                style: const TextStyle(color: Colors.black),
+                                onChanged: (value) {
+                                  setState(() {
+                                    branchselectedTypeCdId = value!;
+                                    if (branchselectedTypeCdId != -1) {
+                                      branchValue = BranchesdropdownItems[branchselectedTypeCdId]['id'];
+                                      branchName = BranchesdropdownItems[branchselectedTypeCdId]['name'];
 
-                                        print("branchValue:$branchValue");
-                                        print("branchName:$branchName");
-                                      } else {
-                                        print("==========");
-                                        print(branchValue);
-                                        print(branchName);
-                                      }
-                                      // isDropdownValid = selectedTypeCdId != -1;
-                                      isBranchSelected = false;
-                                    });
-                                  },
-                                  items: [
-                                    const DropdownMenuItem<int>(
-                                      value: -1,
-                                      child: Text(
-                                        'Select Branch',
-                                        style: TextStyle(
-                                            color: Colors.grey,
-                                            fontWeight: FontWeight.w500),
-                                      ),
+                                      print("branchValue:$branchValue");
+                                      print("branchName:$branchName");
+                                    } else {
+                                      print("==========");
+                                      print(branchValue);
+                                      print(branchName);
+                                    }
+                                    isBranchSelected = false;
+                                  });
+                                },
+                                items: [
+                                  const DropdownMenuItem<int>(
+                                    value: -1,
+                                    child: Text(
+                                      'Select Branch',
+                                      style: TextStyle(color: Colors.grey, fontWeight: FontWeight.w500),
                                     ),
-                                    ...BranchesdropdownItems.asMap()
-                                        .entries
-                                        .map((entry) {
-                                      final index = entry.key;
-                                      final item = entry.value;
-                                      return DropdownMenuItem<int>(
-                                        value: index,
-                                        child: Text(item['name']),
-                                      );
-                                    }).toList(),
-                                  ]),
+                                  ),
+                                  ...BranchesdropdownItems.asMap().entries.map((entry) {
+                                    final index = entry.key;
+                                    final item = entry.value;
+                                    return DropdownMenuItem<int>(
+                                      value: index,
+                                      child: Text(item['name']),
+                                    );
+                                  }).toList(),
+                                ],
+                              ),
                             ),
                           ),
                         ),
                       ),
-                      //MARK: Gender condition
                       if (isBranchSelected)
                         const Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Padding(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 16, vertical: 5),
+                              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 5),
                               child: Text(
                                 'Please Select Branch',
-                                style: TextStyle(
-                                  color: Color.fromARGB(255, 175, 15, 4),
-                                  fontSize: 12,
-                                ),
+                                style: TextStyle(color: Color.fromARGB(255, 175, 15, 4), fontSize: 12),
                               ),
                             ),
                           ],
                         ),
+
+//                       const SizedBox(
+//                         height: 10,
+//                       ),
+//                       const Row(
+//                         children: [
+//                           Text(
+//                             'City ',
+//                             style: TextStyle(
+//                                 fontSize: 12, fontWeight: FontWeight.bold),
+//                           ),
+//                           Text(
+//                             '*',
+//                             style: TextStyle(color: Colors.red),
+//                           ),
+//                         ],
+//                       ),
+//                       Padding(
+//                         padding:
+//                             const EdgeInsets.only(left: 0, top: 5.0, right: 0),
+//                         child: Container(
+//                           width: MediaQuery.of(context).size.width,
+//                           decoration: BoxDecoration(
+//                             border: Border.all(
+//                               color: isBranchSelected
+//                                   ? const Color.fromARGB(255, 175, 15, 4)
+//                                   : CommonUtils.primaryTextColor,
+//                             ),
+//                             borderRadius: BorderRadius.circular(5.0),
+//                             color: Colors.white,
+//                           ),
+//                           child: DropdownButtonHideUnderline(
+//                             child: ButtonTheme(
+//                               alignedDropdown: true,
+//                               child: DropdownButton<int>(
+//                                   value: citySelectedTypeCdId,
+//                                   iconSize: 30,
+//                                   icon: null,
+//                                   style: const TextStyle(
+//                                     color: Colors.black,
+//                                   ),
+//                                   onChanged: (value) {
+//                                     setState(() {
+//                                       citySelectedTypeCdId = value!;
+//                                       if (citySelectedTypeCdId != -1) {
+//                                         cityValue = cityDropdownItems[
+//                                             citySelectedTypeCdId]['typecdid'];
+//                                         cityName = cityDropdownItems[
+//                                             citySelectedTypeCdId]['desc'];
+//                                         print("==========$cityValue$cityName");
+//                                         _getBranchData(
+//                                             widget.agentId, cityValue!);
+//                                       } else {
+//                                         print("==========");
+//                                         print(cityValue);
+//                                         print(cityName);
+//                                         _getBranchData(
+//                                             widget.agentId, cityValue!);
+//                                       }
+//                                       // isDropdownValid = selectedTypeCdId != -1;
+//                                       isCitySelected = false;
+//                                     });
+//                                   },
+//                                   items: [
+//                                     const DropdownMenuItem<int>(
+//                                       value: -1,
+//                                       child: Text(
+//                                         'Select City',
+//                                         style: TextStyle(
+//                                             color: Colors.grey,
+//                                             fontWeight: FontWeight.w500),
+//                                       ),
+//                                     ),
+//                                     ...cityDropdownItems
+//                                         .asMap()
+//                                         .entries
+//                                         .map((entry) {
+//                                       final index = entry.key;
+//                                       final item = entry.value;
+//                                       return DropdownMenuItem<int>(
+//                                         value: index,
+//                                         child: Text(item['desc']),
+//                                       );
+//                                     }).toList(),
+//                                   ]),
+//                             ),
+//                           ),
+//                         ),
+//                       ),
+//                       //MARK: Gender condition
+//                       if (isCitySelected)
+//                         const Row(
+//                           mainAxisAlignment: MainAxisAlignment.start,
+//                           children: [
+//                             Padding(
+//                               padding: EdgeInsets.symmetric(
+//                                   horizontal: 16, vertical: 5),
+//                               child: Text(
+//                                 'Please Select City',
+//                                 style: TextStyle(
+//                                   color: Color.fromARGB(255, 175, 15, 4),
+//                                   fontSize: 12,
+//                                 ),
+//                               ),
+//                             ),
+//                           ],
+//                         ),
+//
+// //MARK: Branch
+//                       const SizedBox(
+//                         height: 10,
+//                       ),
+//                       const Row(
+//                         children: [
+//                           Text(
+//                             'Branch ',
+//                             style: TextStyle(
+//                                 fontSize: 12, fontWeight: FontWeight.bold),
+//                           ),
+//                           Text(
+//                             '*',
+//                             style: TextStyle(color: Colors.red),
+//                           ),
+//                         ],
+//                       ),
+//                       Padding(
+//                         padding:
+//                             const EdgeInsets.only(left: 0, top: 5.0, right: 0),
+//                         child: Container(
+//                           width: MediaQuery.of(context).size.width,
+//                           decoration: BoxDecoration(
+//                             border: Border.all(
+//                               color: isBranchSelected
+//                                   ? const Color.fromARGB(255, 175, 15, 4)
+//                                   : CommonUtils.primaryTextColor,
+//                             ),
+//                             borderRadius: BorderRadius.circular(5.0),
+//                             color: Colors.white,
+//                           ),
+//                           child: DropdownButtonHideUnderline(
+//                             child: ButtonTheme(
+//                               alignedDropdown: true,
+//                               child: DropdownButton<int>(
+//                                   value: branchselectedTypeCdId,
+//                                   iconSize: 30,
+//                                   icon: null,
+//                                   style: const TextStyle(
+//                                     color: Colors.black,
+//                                   ),
+//                                   onChanged: (value) {
+//                                     setState(() {
+//                                       branchselectedTypeCdId = value!;
+//                                       if (branchselectedTypeCdId != -1) {
+//                                         branchValue = BranchesdropdownItems[
+//                                             branchselectedTypeCdId]['id'];
+//                                         branchName = BranchesdropdownItems[
+//                                             branchselectedTypeCdId]['name'];
+//
+//                                         print("branchValue:$branchValue");
+//                                         print("branchName:$branchName");
+//                                       } else {
+//                                         print("==========");
+//                                         print(branchValue);
+//                                         print(branchName);
+//                                       }
+//                                       // isDropdownValid = selectedTypeCdId != -1;
+//                                       isBranchSelected = false;
+//                                     });
+//                                   },
+//                                   items: [
+//                                     const DropdownMenuItem<int>(
+//                                       value: -1,
+//                                       child: Text(
+//                                         'Select Branch',
+//                                         style: TextStyle(
+//                                             color: Colors.grey,
+//                                             fontWeight: FontWeight.w500),
+//                                       ),
+//                                     ),
+//                                     ...BranchesdropdownItems.asMap()
+//                                         .entries
+//                                         .map((entry) {
+//                                       final index = entry.key;
+//                                       final item = entry.value;
+//                                       return DropdownMenuItem<int>(
+//                                         value: index,
+//                                         child: Text(item['name']),
+//                                       );
+//                                     }).toList(),
+//                                   ]),
+//                             ),
+//                           ),
+//                         ),
+//                       ),
+//                       //MARK: Gender condition
+//                       if (isBranchSelected)
+//                         const Row(
+//                           mainAxisAlignment: MainAxisAlignment.start,
+//                           children: [
+//                             Padding(
+//                               padding: EdgeInsets.symmetric(
+//                                   horizontal: 16, vertical: 5),
+//                               child: Text(
+//                                 'Please Select Branch',
+//                                 style: TextStyle(
+//                                   color: Color.fromARGB(255, 175, 15, 4),
+//                                   fontSize: 12,
+//                                 ),
+//                               ),
+//                             ),
+//                           ],
+//                         ),
 
                       const SizedBox(
                         height: 10,
