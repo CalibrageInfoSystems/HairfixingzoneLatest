@@ -4209,7 +4209,7 @@ class _OpCardState extends State<OpCard> {
           // Failure case
           // Handle failure scenario here
           CommonUtils.showCustomToastMessageLong(
-              'The Request Should Not be Cancelled Within 1 hour Before the Slot',
+              'The Request Should Not be Cancelled Within 30 minutes Before the Slot',
               context,
               0,
               2);
@@ -4699,8 +4699,15 @@ class _OpCardState extends State<OpCard> {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           const Expanded(
-                              child: Center(
-                            child: Text('This is title'),
+                              child: Center(    
+                            child: Text('Billing Details',
+                                  style: TextStyle(
+                                color: CommonStyles
+                                    .primaryTextColor,
+                                fontSize: 14,
+                                fontFamily: "Calibri",
+                                fontWeight: FontWeight.w600,
+                              ),),
                           )),
                           GestureDetector(
                             onTap: () {

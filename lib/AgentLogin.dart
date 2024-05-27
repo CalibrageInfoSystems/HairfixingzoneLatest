@@ -423,11 +423,11 @@ class _AgentLoginState extends State<AgentLogin> {
           print('Full Name: ${user['firstName']}');
           print('Role ID: ${user['roleID']}');
 
-          await saveUserDataToSharedPreferences(user);
+
           LoadingProgress.stop(context);
           if (listResult != null && listResult.isNotEmpty && listResult[0]['roleID'] == 3) {
             agentId = listResult[0]["id"];
-
+            await saveUserDataToSharedPreferences(user);
             final Map<String, dynamic> agentSlotsDetailsMap = {
               "AgentSlotsdetails": [],
             };
@@ -461,7 +461,7 @@ class _AgentLoginState extends State<AgentLogin> {
             LoadingProgress.stop(context);
             FocusScope.of(context).unfocus();
             CommonUtils.showCustomToastMessageLong('Invalid user ', context, 1, 4);
-            LoadingProgress.stop(context);
+          //  LoadingProgress.stop(context);
             print("ListResult is null");
           }
         } else {

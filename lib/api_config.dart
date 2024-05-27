@@ -49,7 +49,7 @@ var changepassword = 'ChangePassword';
 var getbranchesall = 'GetBranchById/null/true';
 var updateuser = 'UpdateUser';
 var resetpassword = 'ResetPassword';
-var getproductsbyid = 'GetProductById';
+var getproductsbyid = 'GetProductByStatus';
 var getproducts = 'GetProduct';
 var getCustomerDatabyid = 'GetCustomerData?id=';
 var getholidayslist = 'api/HolidayList/GetHolidayListdetails';

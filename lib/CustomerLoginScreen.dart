@@ -1,5 +1,7 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:hairfixingzone/CommonUtils.dart';
+import 'package:hairfixingzone/services/local_notifications.dart';
 import 'package:hairfixingzone/startingscreen.dart';
 import 'package:loading_progress/loading_progress.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -30,7 +32,46 @@ class _LoginPageState extends State<CustomerLoginScreen> {
   bool _isLoading = false;
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  String firebaseToken = "";
 
+  String notificationMsg = "Waiting for notifications";
+  @override
+  void initState() {
+    super.initState();
+
+    // LocalNotificationService.initialize();
+
+    // Terminated State
+    FirebaseMessaging.instance.getInitialMessage().then((event) {
+      if (event != null) {
+        setState(() {
+          notificationMsg = "${event.notification!.title} ${event.notification!.body} I am coming from terminated state";
+        });
+      }
+    });
+
+    // Foregrand State
+    FirebaseMessaging.onMessage.listen((event) {
+      LocalNotificationService.showNotificationOnForeground(context, event);
+      setState(() {
+        notificationMsg = "${event.notification!.title} ${event.notification!.body} I am coming from foreground";
+      });
+    });
+
+    // background State
+    FirebaseMessaging.onMessageOpenedApp.listen((event) {
+      setState(() {
+        notificationMsg = "${event.notification!.title} ${event.notification!.body} I am coming from background";
+      });
+    });
+    // Get Firebase Token
+    FirebaseMessaging.instance.getToken().then((token) {
+      setState(() {
+        firebaseToken = token ?? "";
+        print('firebaseToken==>70===>   $firebaseToken');
+      });
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -407,15 +448,18 @@ class _LoginPageState extends State<CustomerLoginScreen> {
             print('User ID: ${user['id']}');
             print('Full Name: ${user['firstName']}');
             print('Role ID: ${user['roleID']}');
-            AddCustomer_Notification(user['id']);
-            await saveUserDataToSharedPreferences(user);
+
             // Extract other user information as needed
 
             if (user['roleID'] == 2) {
+
+              await saveUserDataToSharedPreferences(user);
+              AddCustomer_Notification(user['id'],user['roleID']);
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => const HomeScreen()),
               );
+
             } else {
               // Show toast for invalid user
               FocusScope.of(context).unfocus();
@@ -513,74 +557,51 @@ class _LoginPageState extends State<CustomerLoginScreen> {
   }
 
 
-  Future<void> AddCustomer_Notification(int userId) async {
+  Future<void> AddCustomer_Notification(int userId, int roleid) async {
+
+    final url = Uri.parse(baseUrl + AddCustomerNotification);
+
+    final request = {
+      "id": null,
+      "userId": userId,
+      "roleId": roleid,
+      "deviceToken": firebaseToken
+
+    };
+
+    print('Object: ${json.encode(request)}');
+    try {
+      final response = await http.post(
+        url,
+        body: json.encode(request),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      );
+          if (response.statusCode == 200) {
+        Map<String, dynamic> data = json.decode(response.body);
+        // LoadingProgress.stop(context);
+        // Extract the necessary information
+        bool isSuccess = data['isSuccess'];
+        if(isSuccess){
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const HomeScreen()),
+          );
+        }
 
 
-    final String apiUrl = baseUrl + AddCustomerNotification;
+        } else {
 
-    // Prepare the request body
-    // Map<String,int> requestBody = {
-    //     "id": 0,
-    //     "userId": 2,
-    //     "roleId": 3,
-    //     "deviceToken": "sample string 4"
-    //
-    // }
+        }
 
-    // Make the POST request
-    // final response = await http.post(
-    //   Uri.parse(apiUrl),
-    //   body: requestBody,
-    // );
-      // if (response.statusCode == 200) {
-      //   final Map<String, dynamic> responseJson = jsonDecode(addSlotResponse.body);
-      //
-      //   if (responseJson["isSuccess"]) {
-      //     // setState(() {
-      //     //   _isLoading = false;
-      //
-      //     // });
-      //     print("Agent slots information added successfully.");
-      //     SharedPreferences prefs = await SharedPreferences.getInstance();
-      //     prefs.setBool('isLoggedIn', true);
-      //     int userId = agentId; // Replace with the actual user ID
-      //     print('userId==$userId');
-      //     prefs.setInt('userId', userId); // Save the user ID
-      //
-      //     Navigator.push(
-      //         context,
-      //         MaterialPageRoute(
-      //           builder: (context) => AgentHome(userId: agentId),
-      //         ));
-      //   } else {
-      //     print("Error: ${responseJson["statusMessage"]}");
-      //     // setState(() {
-      //     //   _isLoading = false;
-      //
-      //     // });
-      //     if (responseJson["statusMessage"] == "This token is already used") {
-      //       SharedPreferences prefs = await SharedPreferences.getInstance();
-      //       prefs.setBool('isLoggedIn', true);
-      //       int userId = agentId; // Replace with the actual user ID
-      //       print('userId==$userId');
-      //       prefs.setInt('userId', userId);
-      //       Navigator.push(
-      //           context,
-      //           MaterialPageRoute(
-      //             builder: (context) => AgentHome(userId: agentId),
-      //           ));
-      //     } else {
-      //       // setState(() {
-      //       //   _isLoading = false;
-      //
-      //       // });
-      //       FocusScope.of(context).unfocus();
-      //       CommonUtils.showCustomToastMessageLong("${responseJson["statusMessage"]}", context, 1, 4);
-      //     }
-      //   }
-      // } else {
-      //   print("Error: ${response.statusCode}");
-      // }
+
+    } catch (e) {
+
+    // ProgressManager.stopProgress();
+    print('Error slot: $e');
+    }
+
 
   }
 

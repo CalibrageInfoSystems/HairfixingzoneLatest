@@ -945,7 +945,7 @@ class _AgentOpCardState extends State<AgentOpCard> {
           // Failure case
           // Handle failure scenario here
           CommonUtils.showCustomToastMessageLong(
-              'The Request Should Not be Cancelled Within 1 hour Before the Slot',
+              'The Request Should Not be Cancelled Within 30 minutes Before the Slot',
               context,
               0,
               2);
