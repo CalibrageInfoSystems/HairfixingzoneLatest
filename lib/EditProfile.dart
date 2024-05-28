@@ -70,7 +70,7 @@ class EditProfile_screenState extends State<EditProfile> {
   int? roleId;
   String? password;
   String? fullname;
-  DateTime selectedDate = DateTime.now();
+  DateTime? selectedDate;
   late SharedPreferences prefs;
   int? gendertypeid;
   @override
@@ -191,7 +191,7 @@ class EditProfile_screenState extends State<EditProfile> {
       // Check if pickedDay is not in the future
       setState(() {
         selectedDate = pickedDay;
-        dobController.text = DateFormat('dd-MM-yyyy').format(selectedDate);
+        dobController.text = DateFormat('dd-MM-yyyy').format(selectedDate!);
       });
     }
   }
@@ -201,14 +201,14 @@ class EditProfile_screenState extends State<EditProfile> {
       context: context,
       initialDate: selectedDate,
       initialEntryMode: DatePickerEntryMode.calendarOnly,
-      firstDate: DateTime(selectedDate.year, selectedDate.month),
-      lastDate: DateTime(selectedDate.year, selectedDate.month + 1, 0),
+      firstDate: DateTime(selectedDate!.year, selectedDate!.month),
+      lastDate: DateTime(selectedDate!.year, selectedDate!.month + 1, 0),
       initialDatePickerMode: DatePickerMode.day,
     );
     if (pickedDay != null && pickedDay != selectedDate) {
       setState(() {
         selectedDate = pickedDay;
-        dobController.text = DateFormat('dd-MM-yyyy').format(selectedDate);
+        dobController.text = DateFormat('dd-MM-yyyy').format(selectedDate!);
       });
     }
   }
@@ -787,7 +787,7 @@ class EditProfile_screenState extends State<EditProfile> {
       print(isDobValidate);
       print(alernateMobileNumberController.text);
 
-      if (isFullNameValidate && isMobileNumberValidate && isEmailValidate) {
+      if (isFullNameValidate && isMobileNumberValidate && isEmailValidate && isDobValidate) {
         String? alternateMobile = alernateMobileNumberController.text.isNotEmpty ? alernateMobileNumberController.text : null;
 
         if (alternateMobile != null && isAltMobileNumberValidate) {
@@ -965,13 +965,13 @@ class EditProfile_screenState extends State<EditProfile> {
       print('url$url');
       String dobtoapi = dobController.text;
       String? formattedDob;
-
-      formattedDob = DateFormat('yyyy-MM-dd').format(selectedDate);
+      //'$formattedDate';
+      if (selectedDate != null) formattedDate = DateFormat('yyyy-MM-dd').format(selectedDate!);
       print('formattedapi$formattedDob');
 
       String emailtext = emailController.text;
       String contacttext = mobileNumberController.text;
-      String alernatetext = mobileNumberController.text;
+      String alernatetext = alernateMobileNumberController.text;
       String fullnametext = fullNameController.text;
 
       // Show the progress dialog
@@ -995,7 +995,7 @@ class EditProfile_screenState extends State<EditProfile> {
         "updatedDate": "$now",
         "roleId": roleId,
         "gender": gendertypeid,
-        "dateofbirth": "${formattedDob}",
+        "dateofbirth": "${formattedDate}",
         "branchIds": "null"
       };
 
