@@ -238,6 +238,10 @@ class MyAppointments_screenState extends State<GetAppointments> {
         },
       );
 
+      print('fetchMyAppointments: $url');
+      print('fetchMyAppointments: ${json.encode(request)}');
+      print('fetchMyAppointments: ${jsonResponse.body}');
+
       if (jsonResponse.statusCode == 200) {
         final response = json.decode(jsonResponse.body);
 
@@ -566,6 +570,76 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                     const SizedBox(
                       height: 10,
                     ),
+//MARK: Date Picker
+                    // TextFormField(
+                    //   controller: _fromToDatesController,
+                    //   keyboardType: TextInputType.visiblePassword,
+                    //   onTap: () {
+                    //     showCustomDateRangePicker(
+                    //       context,
+                    //       dismissible: true,
+                    //       endDate: endDate,
+                    //       startDate: startDate,
+                    //       maximumDate:
+                    //           DateTime.now().add(const Duration(days: 50)),
+                    //       minimumDate:
+                    //           DateTime.now().subtract(const Duration(days: 50)),
+                    //       onApplyClick: (s, e) {
+                    //         setState(() {
+                    //           //MARK: Date
+                    //           endDate = e;
+                    //           startDate = s;
+                    //           // provider.getDisplayDate =
+                    //           //     '${startDate != null ? DateFormat("dd, MMM").format(startDate!) : '-'} / ${endDate != null ? DateFormat("dd, MMM").format(endDate!) : '-'}';
+                    //           provider.getDisplayDate =
+                    //               '${startDate != null ? DateFormat('dd/MM/yyyy').format(startDate!) : '-'}  -  ${endDate != null ? DateFormat('dd/MM/yyyy').format(endDate!) : '-'}';
+                    //           _fromToDatesController.text = provider.getDisplayDate;
+                    //           provider.getApiFromDate =
+                    //               DateFormat('yyyy-MM-dd').format(startDate!);
+                    //           provider.getApiToDate =
+                    //               DateFormat('yyyy-MM-dd').format(endDate!);
+                    //           print('Filter apiFromDate: $apiFromDate');
+                    //           print('Filter apiToDate: $apiToDate');
+                    //         });
+                    //       },
+                    //       onCancelClick: () {
+                    //         setState(() {
+                    //           endDate = null;
+                    //           startDate = null;
+                    //         });
+                    //       },
+                    //     );
+                    //   },
+                    //   focusNode: DateofBirthdFocus,
+                    //   readOnly: true,
+                    //   decoration: InputDecoration(
+                    //     contentPadding: const EdgeInsets.only(
+                    //         top: 15, bottom: 10, left: 15, right: 15),
+                    //     focusedBorder: OutlineInputBorder(
+                    //       borderSide: const BorderSide(
+                    //         color: Color(0xFF0f75bc),
+                    //       ),
+                    //       borderRadius: BorderRadius.circular(6.0),
+                    //     ),
+                    //     enabledBorder: OutlineInputBorder(
+                    //       borderSide: const BorderSide(
+                    //         color: CommonUtils.primaryTextColor,
+                    //       ),
+                    //       borderRadius: BorderRadius.circular(6.0),
+                    //     ),
+                    //     border: const OutlineInputBorder(
+                    //       borderRadius: BorderRadius.all(
+                    //         Radius.circular(10),
+                    //       ),
+                    //     ),
+                    //     hintText: 'Select Dates',
+                    //     counterText: "",
+                    //     hintStyle: const TextStyle(
+                    //         color: Colors.grey, fontWeight: FontWeight.w400),
+                    //     prefixIcon: const Icon(Icons.calendar_today),
+                    //   ),
+                    //   //  validator: validatePassword,
+                    // ),
 
                     TextFormField(
                       controller: _fromToDatesController,
@@ -577,6 +651,21 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                             context, CommonStyles.config);
                         if (values != null) {
                           setState(() {
+                            //           startDate = s;
+                            //           endDate = e;
+                            //           _fromToDatesController.text =
+                            //               '${startDate != null ? DateFormat("dd/MM/yyyy").format(startDate!) : '-'} / ${endDate != null ? DateFormat("dd/MM/yyyy").format(endDate!) : '-'}';
+                            //           ConsultationData =
+                            //               getviewconsulationlist(DateFormat('yyyy-MM-dd').format(startDate!), DateFormat('yyyy-MM-dd').format(endDate!));
+
+                            // selectedDate =
+                            //     _getValueText(config.calendarType, values);
+                            // _fromToDatesController.text =
+                            //     '${selectedDate![0]} To ${selectedDate![1]}';
+                            // String apiFromDate = formateDate(selectedDate![0]);
+                            // String apiToDate = formateDate(selectedDate![1]);
+                            // ConsultationData =
+                            //     getviewconsulationlist(apiFromDate, apiToDate);
 
                             selectedDate = _getValueText(
                                 CommonStyles.config.calendarType, values);
@@ -1178,6 +1267,7 @@ class _OpCardState extends State<OpCard> {
   void initState() {
     super.initState();
     dateValues = parseDateString(widget.data.date);
+    print('technicianName: ${widget.data.technicianName}');
   }
 
   @override
@@ -1288,6 +1378,20 @@ class _OpCardState extends State<OpCard> {
                                           style: CommonStyles.txSty_16black_f5),
                                       Text(widget.data.branch,
                                           style: CommonStyles.txSty_16black_f5),
+                                      //MARK: technician
+                                      if (widget.data.technicianName != null)
+                                        Row(
+                                          children: [
+                                            const Text(
+                                              'Technician: ',
+                                              style:
+                                                  CommonStyles.txSty_16blu_f5,
+                                            ),
+                                            Text(widget.data.technicianName!,
+                                                style: CommonStyles
+                                                    .txSty_16black_f5),
+                                          ],
+                                        ),
                                       if (widget.data.paymentType != null)
                                         Text(widget.data.paymentType ?? ' ',
                                             style:
@@ -1614,7 +1718,7 @@ class _OpCardState extends State<OpCard> {
       //   );
 
       case 17: // Closed
-        if (data.rating == null) {
+        if (data.review == null) {
           // If status is Closed, show review or rate button
           return GestureDetector(
             onTap: () {
@@ -1646,17 +1750,16 @@ class _OpCardState extends State<OpCard> {
               ),
             ),
           );
-        }
-        else if (data.review != null  && data.review != "" ) {
-          // If status is not Closed and review is not null or empty, show the review
+        } else {
+          // If status is not Closed, show the review
           return Flexible(
             child: RichText(
               text: TextSpan(
-                text: 'Review : ',
+                text: 'Review :',
                 style: CommonStyles.txSty_16blu_f5,
                 children: <TextSpan>[
                   TextSpan(
-                    text: data.review,
+                    text: '${data.review} ' ?? '',
                     style: const TextStyle(
                       fontWeight: FontWeight.w500,
                       fontFamily: "Calibri",
@@ -1667,9 +1770,6 @@ class _OpCardState extends State<OpCard> {
               ),
             ),
           );
-        } else {
-          // If no review, return an empty Container or any other widget you deem fit
-          return Container();
         }
       case 18: // Reschuduled
         return const SizedBox();
@@ -2293,13 +2393,13 @@ class _OpCardState extends State<OpCard> {
       hasValidationFailed = true;
     }
 
-    // if (isValid && _commentstexteditcontroller.text.trim().isEmpty) {
-    //   FocusScope.of(context).unfocus();
-    //   CommonUtils.showCustomToastMessageLong(
-    //       'Please Enter Comment', context, 1, 4);
-    //   isValid = false;
-    //   hasValidationFailed = true;
-    // }
+    if (isValid && _commentstexteditcontroller.text.trim().isEmpty) {
+      FocusScope.of(context).unfocus();
+      CommonUtils.showCustomToastMessageLong(
+          'Please Enter Comment', context, 1, 4);
+      isValid = false;
+      hasValidationFailed = true;
+    }
     if (isValid) {
       final url = Uri.parse(baseUrl + postApiAppointment);
       print('url==>890: $url');

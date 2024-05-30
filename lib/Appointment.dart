@@ -23,6 +23,7 @@ class Appointment {
   final String slotDuration;
   final int? paymentTypeId;
   final String? paymentType;
+  final String? technicianName;
 
   Appointment({
     required this.id,
@@ -49,6 +50,7 @@ class Appointment {
     required this.slotDuration,
     required this.paymentTypeId,
     required this.paymentType,
+    required this.technicianName,
   });
 
   factory Appointment.fromJson(Map<String, dynamic> json) {
@@ -77,6 +79,7 @@ class Appointment {
       slotDuration: json['slotDuration'],
       paymentTypeId: json['paymentTypeId'],
       paymentType: json['paymentType'],
+      technicianName: json['technicianName'],
     );
   }
 }

@@ -1225,6 +1225,19 @@ class _OpCardState extends State<OpCard> {
                                           style: CommonStyles.txSty_16black_f5),
                                       Text(widget.data.branch,
                                           style: CommonStyles.txSty_16black_f5),
+                                      if (widget.data.technicianName != null)
+                                        Row(
+                                          children: [
+                                            const Text(
+                                              'Technician: ',
+                                              style:
+                                                  CommonStyles.txSty_16blu_f5,
+                                            ),
+                                            Text(widget.data.technicianName!,
+                                                style: CommonStyles
+                                                    .txSty_16black_f5),
+                                          ],
+                                        ),
                                       if (widget.data.paymentType != null)
                                         Text(widget.data.paymentType ?? ' ',
                                             style:
@@ -1520,8 +1533,7 @@ class _OpCardState extends State<OpCard> {
               ),
             ),
           );
-        }
-        else if (data.review != null  && data.review != "" ) {
+        } else if (data.review != null && data.review != "") {
           // If status is not Closed and review is not null or empty, show the review
           return Flexible(
             child: RichText(

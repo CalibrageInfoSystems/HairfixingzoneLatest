@@ -2467,12 +2467,19 @@ class MyAppointments_screenState extends State<Agentappointmentlist> {
     });
   }
 
-  Future<List<Appointment>> fetchagentAppointments(int? userId, int branchid) async {
+  Future<List<Appointment>> fetchagentAppointments(
+      int? userId, int branchid) async {
     final url = Uri.parse(baseUrl + GetAppointment);
     // {"userId":8,"branchId":2,"fromDate":"2024-05-01","toDate":"2024-05-17","statusTypeId":null}
 
     try {
-      final request = {"userId": userId, "branchId": branchid, "fromdate": null, "toDate": null, "statustypeId": null};
+      final request = {
+        "userId": userId,
+        "branchId": branchid,
+        "fromdate": null,
+        "toDate": null,
+        "statustypeId": null
+      };
       //   final request = {"userId": userId, "branchId": branchid, "fromdate":"2024-05-01", "toDate": "2024-05-17", "statustypeId": null};
 
       final jsonResponse = await http.post(
@@ -2488,7 +2495,8 @@ class MyAppointments_screenState extends State<Agentappointmentlist> {
 
         if (response['listResult'] != null) {
           List<dynamic> listResult = response['listResult'];
-          List<Appointment> result = listResult.map((item) => Appointment.fromJson(item)).toList();
+          List<Appointment> result =
+              listResult.map((item) => Appointment.fromJson(item)).toList();
           return result;
         } else {
           myAppointmentsProvider!.storeIntoProvider = [];
@@ -2496,7 +2504,8 @@ class MyAppointments_screenState extends State<Agentappointmentlist> {
         }
       } else {
         print('Request failed with status: ${jsonResponse.statusCode}');
-        throw Exception('Request failed with status: ${jsonResponse.statusCode}');
+        throw Exception(
+            'Request failed with status: ${jsonResponse.statusCode}');
       }
     } catch (error) {
       print('catch: $error');
@@ -2509,8 +2518,6 @@ class MyAppointments_screenState extends State<Agentappointmentlist> {
       apiData = fetchagentAppointments(userId, widget.branchid);
     });
   }
-
-
 
   AgentAppointmentsProvider? myAppointmentsProvider;
   @override
@@ -2574,15 +2581,18 @@ class MyAppointments_screenState extends State<Agentappointmentlist> {
                   children: [
                     // search and filter
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10).copyWith(top: 10),
+                      padding: const EdgeInsets.symmetric(horizontal: 10)
+                          .copyWith(top: 10),
                       child: _searchBarAndFilter(),
                     ),
                     // Appointments list
                     Expanded(
                       child: FutureBuilder<List<Appointment>>(
-                        future: apiData, // Ensure this is a Future<List<Appointment>>
+                        future:
+                            apiData, // Ensure this is a Future<List<Appointment>>
                         builder: (context, snapshot) {
-                          if (snapshot.connectionState == ConnectionState.waiting) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
                             return const Center(
                               child: CircularProgressIndicator.adaptive(),
                             );
@@ -2598,7 +2608,8 @@ class MyAppointments_screenState extends State<Agentappointmentlist> {
                                 ),
                               ),
                             );
-                          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                          } else if (!snapshot.hasData ||
+                              snapshot.data!.isEmpty) {
                             return const Center(
                               child: Text(
                                 'No Appointments Available',
@@ -2673,7 +2684,6 @@ class MyAppointments_screenState extends State<Agentappointmentlist> {
   //   });
   // }
 
-
   // void refreshTheScreen() {
   //   CommonUtils.checkInternetConnectivity().then(
   //     (isConnected) {
@@ -2711,7 +2721,8 @@ class MyAppointments_screenState extends State<Agentappointmentlist> {
                 hintText: 'Search Appointment',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
-                  borderSide: const BorderSide(color: CommonUtils.primaryTextColor),
+                  borderSide:
+                      const BorderSide(color: CommonUtils.primaryTextColor),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderSide: const BorderSide(
@@ -2736,7 +2747,9 @@ class MyAppointments_screenState extends State<Agentappointmentlist> {
           height: 45,
           width: 45,
           decoration: BoxDecoration(
-            color: myAppointmentsProvider!.filterStatus ? const Color.fromARGB(255, 220, 186, 243) : Colors.white,
+            color: myAppointmentsProvider!.filterStatus
+                ? const Color.fromARGB(255, 220, 186, 243)
+                : Colors.white,
             borderRadius: BorderRadius.circular(10),
             border: Border.all(
               color: CommonUtils.primaryTextColor,
@@ -2745,7 +2758,9 @@ class MyAppointments_screenState extends State<Agentappointmentlist> {
           child: IconButton(
             icon: SvgPicture.asset(
               'assets/filter.svg',
-              color: myAppointmentsProvider!.filterStatus ? Colors.black : CommonUtils.primaryTextColor,
+              color: myAppointmentsProvider!.filterStatus
+                  ? Colors.black
+                  : CommonUtils.primaryTextColor,
               width: 24,
               height: 24,
             ),
@@ -2757,7 +2772,8 @@ class MyAppointments_screenState extends State<Agentappointmentlist> {
                   padding: EdgeInsets.only(
                     bottom: MediaQuery.of(context).viewInsets.bottom,
                   ),
-                  child: FilterAppointmentBottomSheet(userId: widget.userId, branchid: widget.branchid),
+                  child: FilterAppointmentBottomSheet(
+                      userId: widget.userId, branchid: widget.branchid),
                 ),
               );
             },
@@ -2769,9 +2785,11 @@ class MyAppointments_screenState extends State<Agentappointmentlist> {
 
   int parseDayFromDate(String dateString) {
     DateTime dateTime = DateTime.parse(dateString);
-    print('dateFormate: ${dateTime.day} - ${DateFormat.MMM().format(dateTime)} - ${dateTime.year}');
+    print(
+        'dateFormate: ${dateTime.day} - ${DateFormat.MMM().format(dateTime)} - ${dateTime.year}');
     // int ,       String ,                           int
-    return dateTime.day; //[dateTime.day, DateFormat.MMM().format(dateTime), dateTime.year];
+    return dateTime
+        .day; //[dateTime.day, DateFormat.MMM().format(dateTime), dateTime.year];
   }
 
   void filterAppointment(String input) {
@@ -2783,16 +2801,18 @@ class MyAppointments_screenState extends State<Agentappointmentlist> {
       // item.email!.toLowerCase().contains(input.toLowerCase());
     }).toList());
   }
-
 }
 
 class FilterAppointmentBottomSheet extends StatefulWidget {
   final int? userId;
   final int? branchid;
-  const FilterAppointmentBottomSheet({Key? key, required this.userId, required this.branchid}) : super(key: key);
+  const FilterAppointmentBottomSheet(
+      {Key? key, required this.userId, required this.branchid})
+      : super(key: key);
 
   @override
-  State<FilterAppointmentBottomSheet> createState() => _FilterBottomSheetState();
+  State<FilterAppointmentBottomSheet> createState() =>
+      _FilterBottomSheetState();
 }
 
 class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
@@ -2863,7 +2883,8 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
 
         if (response['listResult'] != null) {
           List<dynamic> listResult = response['listResult'];
-          myAppointmentsProvider!.storeIntoProvider = listResult.map((item) => Appointment.fromJson(item)).toList();
+          myAppointmentsProvider!.storeIntoProvider =
+              listResult.map((item) => Appointment.fromJson(item)).toList();
         } else {
           myAppointmentsProvider!.storeIntoProvider = [];
           throw Exception('No Appointments Available');
@@ -2871,7 +2892,8 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
       } else {
         myAppointmentsProvider!.storeIntoProvider = [];
         print('Request failed with status: ${jsonResponse.statusCode}');
-        throw Exception('Request failed with status: ${jsonResponse.statusCode}');
+        throw Exception(
+            'Request failed with status: ${jsonResponse.statusCode}');
       }
     } catch (error) {
       print('catch: $error');
@@ -2939,12 +2961,16 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                       controller: _fromToDatesController,
                       keyboardType: TextInputType.visiblePassword,
                       onTap: () async {
-                        FocusScope.of(context).requestFocus(FocusNode()); // to prevent the keyboard from appearing
-                        final values = await showCustomCalendarDialog(context, CommonStyles.config);
+                        FocusScope.of(context).requestFocus(
+                            FocusNode()); // to prevent the keyboard from appearing
+                        final values = await showCustomCalendarDialog(
+                            context, CommonStyles.config);
                         if (values != null) {
                           setState(() {
-                            selectedDate = _getValueText(CommonStyles.config.calendarType, values);
-                            provider.getDisplayDate = '${selectedDate![0]}  -  ${selectedDate![1]}';
+                            selectedDate = _getValueText(
+                                CommonStyles.config.calendarType, values);
+                            provider.getDisplayDate =
+                                '${selectedDate![0]}  -  ${selectedDate![1]}';
                             provider.getApiFromDate = selectedDate![0];
                             provider.getApiToDate = selectedDate![1];
                           });
@@ -2953,7 +2979,8 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                       focusNode: DateofBirthdFocus,
                       readOnly: true,
                       decoration: InputDecoration(
-                        contentPadding: const EdgeInsets.only(top: 15, bottom: 10, left: 15, right: 15),
+                        contentPadding: const EdgeInsets.only(
+                            top: 15, bottom: 10, left: 15, right: 15),
                         focusedBorder: OutlineInputBorder(
                           borderSide: const BorderSide(
                             color: Color(0xFF0f75bc),
@@ -2973,7 +3000,8 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                         ),
                         hintText: 'Select Dates',
                         counterText: "",
-                        hintStyle: const TextStyle(color: Colors.grey, fontWeight: FontWeight.w400),
+                        hintStyle: const TextStyle(
+                            color: Colors.grey, fontWeight: FontWeight.w400),
                         prefixIcon: const Icon(Icons.calendar_today),
                       ),
                       //  validator: validatePassword,
@@ -2988,10 +3016,12 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                       child: FutureBuilder(
                           future: prostatus,
                           builder: (context, snapshot) {
-                            if (snapshot.connectionState == ConnectionState.waiting) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
                               return CircularProgressIndicator.adaptive(
                                 backgroundColor: Colors.transparent,
-                                valueColor: AlwaysStoppedAnimation<Color>(orangeColor),
+                                valueColor:
+                                    AlwaysStoppedAnimation<Color>(orangeColor),
                               );
                             } else if (snapshot.hasError) {
                               return Text('Error: ${snapshot.error}');
@@ -3003,8 +3033,10 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                                   scrollDirection: Axis.horizontal,
                                   shrinkWrap: true,
                                   itemCount: data.length + 1,
-                                  itemBuilder: (BuildContext context, int index) {
-                                    bool isSelected = index == provider.selectedstatus;
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    bool isSelected =
+                                        index == provider.selectedstatus;
                                     Statusmodel status;
 
                                     if (index == 0) {
@@ -3021,36 +3053,51 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                                           provider.selectedStatus = index;
 
                                           // provider.getStatus = status.typeCdId;
-                                          provider.getApiStatusTypeId = status.typeCdId;
-                                          print('filter: ${provider.getStatus}');
-                                          print('Filter status.typeCdId: ${status.typeCdId}');
+                                          provider.getApiStatusTypeId =
+                                              status.typeCdId;
+                                          print(
+                                              'filter: ${provider.getStatus}');
+                                          print(
+                                              'Filter status.typeCdId: ${status.typeCdId}');
                                         });
                                       },
                                       child: Container(
-                                        margin: const EdgeInsets.symmetric(horizontal: 4.0),
+                                        margin: const EdgeInsets.symmetric(
+                                            horizontal: 4.0),
                                         decoration: BoxDecoration(
-                                          color: isSelected ? orangeColor : orangeColor.withOpacity(0.1),
+                                          color: isSelected
+                                              ? orangeColor
+                                              : orangeColor.withOpacity(0.1),
                                           border: Border.all(
-                                            color: isSelected ? orangeColor : orangeColor,
+                                            color: isSelected
+                                                ? orangeColor
+                                                : orangeColor,
                                             width: 1.0,
                                           ),
-                                          borderRadius: BorderRadius.circular(8.0),
+                                          borderRadius:
+                                              BorderRadius.circular(8.0),
                                         ),
                                         child: IntrinsicWidth(
                                           child: Column(
-                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
                                             children: [
                                               Container(
-                                                padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 10.0),
                                                 child: Row(
                                                   children: [
                                                     Text(
                                                       status.desc.toString(),
                                                       style: TextStyle(
                                                         fontSize: 12.0,
-                                                        fontWeight: FontWeight.bold,
+                                                        fontWeight:
+                                                            FontWeight.bold,
                                                         fontFamily: "Roboto",
-                                                        color: isSelected ? Colors.white : Colors.black,
+                                                        color: isSelected
+                                                            ? Colors.white
+                                                            : Colors.black,
                                                       ),
                                                     ),
                                                   ],
@@ -3117,10 +3164,14 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                                     "branchId": widget.branchid,
                                     // "branchId":
                                     //     myAppointmentsProvider?.getApiBranchId,
-                                    "fromdate": myAppointmentsProvider?.getApiFromDate,
-                                    "toDate": myAppointmentsProvider?.getApiToDate,
-                                    "statustypeId": myAppointmentsProvider?.getApiStatusTypeId,
-                                  }).whenComplete(() => provider.filterStatus = true);
+                                    "fromdate":
+                                        myAppointmentsProvider?.getApiFromDate,
+                                    "toDate":
+                                        myAppointmentsProvider?.getApiToDate,
+                                    "statustypeId": myAppointmentsProvider
+                                        ?.getApiStatusTypeId,
+                                  }).whenComplete(
+                                      () => provider.filterStatus = true);
                                 },
                                 child: Container(
                                   // width: desiredWidth * 0.9,
@@ -3160,8 +3211,10 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
   Future<List<Statusmodel>> fetchstatus() async {
     final response = await http.get(Uri.parse(baseUrl + getstatus));
     if (response.statusCode == 200) {
-      final List<dynamic> responseData = json.decode(response.body)['listResult'];
-      List<Statusmodel> result = responseData.map((json) => Statusmodel.fromJson(json)).toList();
+      final List<dynamic> responseData =
+          json.decode(response.body)['listResult'];
+      List<Statusmodel> result =
+          responseData.map((json) => Statusmodel.fromJson(json)).toList();
       print('fetch branchname: ${result[0].desc}');
       return result;
     } else {
@@ -3170,10 +3223,13 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
   }
 
   Future<List<BranchModel>> fetchbranches(userId) async {
-    final response = await http.get(Uri.parse('$baseUrl$GetBranchByUserId$userId/null'));
+    final response =
+        await http.get(Uri.parse('$baseUrl$GetBranchByUserId$userId/null'));
     if (response.statusCode == 200) {
-      final List<dynamic> responseData = json.decode(response.body)['listResult'];
-      List<BranchModel> result = responseData.map((json) => BranchModel.fromJson(json)).toList();
+      final List<dynamic> responseData =
+          json.decode(response.body)['listResult'];
+      List<BranchModel> result =
+          responseData.map((json) => BranchModel.fromJson(json)).toList();
       print('fetch branchname: ${result[0].name}');
       return result;
     } else {
@@ -3200,7 +3256,8 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
 
         if (response['listResult'] != null) {
           List<dynamic> listResult = response['listResult'];
-          myAppointmentsProvider!.storeIntoProvider = listResult.map((item) => Appointment.fromJson(item)).toList();
+          myAppointmentsProvider!.storeIntoProvider =
+              listResult.map((item) => Appointment.fromJson(item)).toList();
         } else {
           myAppointmentsProvider!.storeIntoProvider = [];
           throw Exception('No Appointments Available');
@@ -3208,7 +3265,8 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
       } else {
         myAppointmentsProvider!.storeIntoProvider = [];
         print('Request failed with status: ${jsonResponse.statusCode}');
-        throw Exception('Request failed with status: ${jsonResponse.statusCode}');
+        throw Exception(
+            'Request failed with status: ${jsonResponse.statusCode}');
       }
     } catch (error) {
       print('catch: $error');
@@ -3217,8 +3275,10 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
     myAppointmentsProvider!.clearFilter();
   }
 
-  List<String>? _getValueText(CalendarDatePicker2Type datePickerType, List<DateTime?> values) {
-    values = values.map((e) => e != null ? DateUtils.dateOnly(e) : null).toList();
+  List<String>? _getValueText(
+      CalendarDatePicker2Type datePickerType, List<DateTime?> values) {
+    values =
+        values.map((e) => e != null ? DateUtils.dateOnly(e) : null).toList();
 
     DateTime? startDate;
     DateTime? endDate;
@@ -3226,7 +3286,8 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
     startDate = values[0];
     endDate = values.length > 1 ? values[1] : null;
     String? formattedStartDate = DateFormat('dd/MM/yyyy').format(startDate!);
-    String? formattedEndDate = endDate != null ? DateFormat('dd/MM/yyyy').format(endDate) : 'null';
+    String? formattedEndDate =
+        endDate != null ? DateFormat('dd/MM/yyyy').format(endDate) : 'null';
 
     return [formattedStartDate, formattedEndDate];
   }
@@ -3261,7 +3322,8 @@ class OpCard extends StatefulWidget {
 
 class _OpCardState extends State<OpCard> {
   late List<dynamic> dateValues;
-  final TextEditingController _commentstexteditcontroller = TextEditingController();
+  final TextEditingController _commentstexteditcontroller =
+      TextEditingController();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _priceController = TextEditingController();
@@ -3298,7 +3360,8 @@ class _OpCardState extends State<OpCard> {
 
   List<dynamic> parseDateString(String dateString) {
     DateTime dateTime = DateTime.parse(dateString);
-    print('dateFormate: ${dateTime.day} - ${DateFormat.MMM().format(dateTime)} - ${dateTime.year}');
+    print(
+        'dateFormate: ${dateTime.day} - ${DateFormat.MMM().format(dateTime)} - ${dateTime.year}');
     //         int ,       String ,                           int
     return [dateTime.day, DateFormat.MMM().format(dateTime), dateTime.year];
   }
@@ -3324,7 +3387,8 @@ class _OpCardState extends State<OpCard> {
               // borderRadius: BorderRadius.circular(30), //border corner radius
               boxShadow: [
                 BoxShadow(
-                  color: const Color(0xFF960efd).withOpacity(0.2), //color of shadow
+                  color: const Color(0xFF960efd)
+                      .withOpacity(0.2), //color of shadow
                   spreadRadius: 2, //spread radius
                   blurRadius: 4, // blur radius
                   offset: const Offset(0, 2), // changes position of shadow
@@ -3379,7 +3443,8 @@ class _OpCardState extends State<OpCard> {
                             Expanded(
                               child: Container(
                                 child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
@@ -3396,20 +3461,23 @@ class _OpCardState extends State<OpCard> {
                                     // Text(widget.data.email ?? '',
                                     //     style: CommonStyles.txSty_16black_f5),
                                     Row(children: [
-                                      Text(widget.data.customerName, style: CommonStyles.txSty_16black_f5),
-
+                                      Text(widget.data.customerName,
+                                          style: CommonStyles.txSty_16black_f5),
                                       GestureDetector(
                                         key: _fullnameTipKey,
                                         child: const Padding(
-                                          padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
+                                          padding:
+                                              EdgeInsets.fromLTRB(5, 0, 5, 0),
                                           child: Icon(
                                             Icons.copy,
                                             size: 16,
                                           ),
                                         ),
                                         onTap: () {
-                                          Clipboard.setData(ClipboardData(text: widget.data.customerName));
-                                          showTooltip(context, "Copied", _fullnameTipKey);
+                                          Clipboard.setData(ClipboardData(
+                                              text: widget.data.customerName));
+                                          showTooltip(context, "Copied",
+                                              _fullnameTipKey);
                                         },
                                       ),
                                     ]),
@@ -3424,31 +3492,52 @@ class _OpCardState extends State<OpCard> {
                                           child: RichText(
                                             text: TextSpan(
                                               text: widget.data.email ?? '',
-                                              style: CommonStyles.txSty_16black_f5,
-                                              children: <TextSpan>[],
+                                              style:
+                                                  CommonStyles.txSty_16black_f5,
+                                              children: const <TextSpan>[],
                                             ),
                                           ),
                                         ),
                                         GestureDetector(
                                           key: _emailtoolTipKey,
                                           child: const Padding(
-                                            padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                            padding:
+                                                EdgeInsets.fromLTRB(0, 0, 0, 0),
                                             child: Icon(
                                               Icons.copy,
                                               size: 16,
                                             ),
                                           ),
                                           onTap: () {
-                                            Clipboard.setData(ClipboardData(text: widget.data.email!));
-                                            showTooltip(context, "Copied", _emailtoolTipKey);
+                                            Clipboard.setData(ClipboardData(
+                                                text: widget.data.email!));
+                                            showTooltip(context, "Copied",
+                                                _emailtoolTipKey);
                                           },
                                         ),
                                       ]),
                                     ),
 
-                                    Text(widget.data.purposeOfVisit, style: CommonStyles.txSty_16black_f5),
-                                    Text(widget.data.name, style: CommonStyles.txSty_16black_f5),
-                                    if (widget.data.paymentType != null) Text(widget.data.paymentType ?? ' ', style: CommonStyles.txSty_16black_f5),
+                                    Text(widget.data.purposeOfVisit,
+                                        style: CommonStyles.txSty_16black_f5),
+                                    Text(widget.data.name,
+                                        style: CommonStyles.txSty_16black_f5),
+                                    //MARK: technician
+                                    if (widget.data.technicianName != null)
+                                      Row(
+                                        children: [
+                                          const Text(
+                                            'Technician: ',
+                                            style: CommonStyles.txSty_16blu_f5,
+                                          ),
+                                          Text(widget.data.technicianName!,
+                                              style: CommonStyles
+                                                  .txSty_16black_f5),
+                                        ],
+                                      ),
+                                    if (widget.data.paymentType != null)
+                                      Text(widget.data.paymentType ?? ' ',
+                                          style: CommonStyles.txSty_16black_f5),
                                   ],
                                 ),
                               ),
@@ -3457,26 +3546,31 @@ class _OpCardState extends State<OpCard> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
-                                  statusBasedBgById(widget.data.statusTypeId, widget.data.status),
-                                  SizedBox(height: 2.0),
+                                  statusBasedBgById(widget.data.statusTypeId,
+                                      widget.data.status),
+                                  const SizedBox(height: 2.0),
 
                                   // Text(widget.data.phoneNumber ?? '',
                                   //     style: CommonStyles.txSty_16black_f5),
                                   Row(
                                     children: [
-                                      Text(widget.data.phoneNumber ?? '', style: CommonStyles.txSty_16black_f5),
+                                      Text(widget.data.phoneNumber ?? '',
+                                          style: CommonStyles.txSty_16black_f5),
                                       GestureDetector(
                                         key: _toolTipKey,
                                         child: const Padding(
-                                          padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
+                                          padding:
+                                              EdgeInsets.fromLTRB(5, 0, 0, 0),
                                           child: Icon(
                                             Icons.copy,
                                             size: 16,
                                           ),
                                         ),
                                         onTap: () {
-                                          Clipboard.setData(ClipboardData(text: widget.data.phoneNumber!));
-                                          showTooltip(context, "Copied", _toolTipKey);
+                                          Clipboard.setData(ClipboardData(
+                                              text: widget.data.phoneNumber!));
+                                          showTooltip(
+                                              context, "Copied", _toolTipKey);
                                         },
                                       ),
                                     ],
@@ -3485,7 +3579,8 @@ class _OpCardState extends State<OpCard> {
                                     height: 3.0,
                                   ),
 
-                                  Text(widget.data.gender ?? ' ', style: CommonStyles.txSty_16black_f5),
+                                  Text(widget.data.gender ?? ' ',
+                                      style: CommonStyles.txSty_16black_f5),
 
                                   //    Text(widget.data.gender!, style: CommonStyles.txSty_16black_f5),
                                   const SizedBox(
@@ -3514,10 +3609,13 @@ class _OpCardState extends State<OpCard> {
                                               color: CommonStyles.greenColor,
                                             ),
                                             Padding(
-                                              padding: const EdgeInsets.only(right: 8.0), // Adjust the value as needed
+                                              padding: const EdgeInsets.only(
+                                                  right:
+                                                      8.0), // Adjust the value as needed
                                               child: Text(
                                                 '${widget.data.rating ?? ''}',
-                                                style: CommonStyles.txSty_14g_f5,
+                                                style:
+                                                    CommonStyles.txSty_14g_f5,
                                               ),
                                             ),
                                           ],
@@ -3533,7 +3631,9 @@ class _OpCardState extends State<OpCard> {
 
                       // based on status hide this row
                       Row(
-                        mainAxisAlignment: widget.data.rating != null ? MainAxisAlignment.start : MainAxisAlignment.end,
+                        mainAxisAlignment: widget.data.rating != null
+                            ? MainAxisAlignment.start
+                            : MainAxisAlignment.end,
                         children: [
                           verifyStatus(widget.data, userId),
                         ],
@@ -3548,10 +3648,14 @@ class _OpCardState extends State<OpCard> {
   }
 
   void showTooltip(BuildContext context, String message, GlobalKey toolTipKey) {
-    final renderBox = toolTipKey.currentContext!.findRenderObject() as RenderBox;
+    final renderBox =
+        toolTipKey.currentContext!.findRenderObject() as RenderBox;
     final overlay = Overlay.of(context).context.findRenderObject() as RenderBox;
 
-    final target = renderBox.localToGlobal(renderBox.size.bottomLeft(Offset.zero), ancestor: overlay) + const Offset(-10, 0);
+    final target = renderBox.localToGlobal(
+            renderBox.size.bottomLeft(Offset.zero),
+            ancestor: overlay) +
+        const Offset(-10, 0);
 
     final entry = OverlayEntry(
       builder: (context) => Positioned(
@@ -3609,7 +3713,8 @@ class _OpCardState extends State<OpCard> {
         break;
     }
     return Container(
-      decoration: BoxDecoration(borderRadius: BorderRadius.circular(15), color: statusBgColor),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(15), color: statusBgColor),
       padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 15),
       child: Row(
         children: [
@@ -3642,7 +3747,6 @@ class _OpCardState extends State<OpCard> {
                   postAppointment(data, 5, 0.0, userId);
                   Get_ApprovedDeclinedSlots(data, 5);
                   print('accpteedbuttonisclicked');
-
                 }
               },
               child: IgnorePointer(
@@ -3650,21 +3754,29 @@ class _OpCardState extends State<OpCard> {
                 child: Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(3),
-                    border: Border.all(color: isPastDate(data.date, data.slotDuration) ? Colors.grey : CommonStyles.primaryTextColor),
+                    border: Border.all(
+                        color: isPastDate(data.date, data.slotDuration)
+                            ? Colors.grey
+                            : CommonStyles.primaryTextColor),
                   ),
-                  padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
                   child: Row(
                     children: [
                       SvgPicture.asset(
                         'assets/calendar-_3_.svg',
                         width: 13,
-                        color: isPastDate(data.date, data.slotDuration) ? Colors.grey : CommonUtils.primaryTextColor,
+                        color: isPastDate(data.date, data.slotDuration)
+                            ? Colors.grey
+                            : CommonUtils.primaryTextColor,
                       ),
                       Text(
                         '  Accept',
                         style: TextStyle(
                           fontSize: 15,
-                          color: isPastDate(data.date, data.slotDuration) ? Colors.grey : CommonUtils.primaryTextColor,
+                          color: isPastDate(data.date, data.slotDuration)
+                              ? Colors.grey
+                              : CommonUtils.primaryTextColor,
                         ),
                       ),
                     ],
@@ -3688,16 +3800,21 @@ class _OpCardState extends State<OpCard> {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(3),
                     border: Border.all(
-                      color: isPastDate(data.date, data.slotDuration) ? Colors.grey : CommonStyles.statusRedText,
+                      color: isPastDate(data.date, data.slotDuration)
+                          ? Colors.grey
+                          : CommonStyles.statusRedText,
                     ),
                   ),
-                  padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
                   child: Row(
                     children: [
                       SvgPicture.asset(
                         'assets/calendar-xmark.svg',
                         width: 12,
-                        color: isPastDate(data.date, data.slotDuration) ? Colors.grey : CommonStyles.statusRedText,
+                        color: isPastDate(data.date, data.slotDuration)
+                            ? Colors.grey
+                            : CommonStyles.statusRedText,
                       ),
                       Text(
                         '  Cancel',
@@ -3705,7 +3822,9 @@ class _OpCardState extends State<OpCard> {
                           fontSize: 16,
                           fontFamily: "Calibri",
                           fontWeight: FontWeight.w500,
-                          color: isPastDate(data.date, data.slotDuration) ? Colors.grey : CommonStyles.statusRedText,
+                          color: isPastDate(data.date, data.slotDuration)
+                              ? Colors.grey
+                              : CommonStyles.statusRedText,
                         ),
                       ),
                     ],
@@ -3798,7 +3917,6 @@ class _OpCardState extends State<OpCard> {
         return const SizedBox();
       default:
         return const SizedBox();
-
     }
   }
 
@@ -3849,7 +3967,6 @@ class _OpCardState extends State<OpCard> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -3865,13 +3982,13 @@ class _OpCardState extends State<OpCard> {
                 child: Text(
                   'Are You Sure You Want to Cancel the Appointment at ${appointments.name} Branch for ${appointments.purposeOfVisit}?',
                   style: CommonUtils.txSty_18b_fb,
-                  textAlign: TextAlign.center, // Optionally, align the text center
+                  textAlign:
+                      TextAlign.center, // Optionally, align the text center
                 ),
               ),
               const SizedBox(
                 height: 10,
               ),
-
             ],
           ),
           actions: [
@@ -3936,7 +4053,6 @@ class _OpCardState extends State<OpCard> {
               ),
             ),
           ],
-
         );
       },
     );
@@ -3959,7 +4075,8 @@ class _OpCardState extends State<OpCard> {
       "Date": appointmens.date,
       "SlotTime": appointmens.slotTime,
       "CustomerName": appointmens.customerName,
-      "PhoneNumber": appointmens.phoneNumber, // Changed from appointments.phoneNumber
+      "PhoneNumber":
+          appointmens.phoneNumber, // Changed from appointments.phoneNumber
       "Email": appointmens.email,
       "GenderTypeId": appointmens.genderTypeId,
       "StatusTypeId": 6,
@@ -4004,12 +4121,17 @@ class _OpCardState extends State<OpCard> {
         } else {
           // Failure case
           // Handle failure scenario here
-          CommonUtils.showCustomToastMessageLong('The Request Should Not be Cancelled Within 30 minutes Before the Slot', context, 0, 2);
+          CommonUtils.showCustomToastMessageLong(
+              'The Request Should Not be Cancelled Within 30 minutes Before the Slot',
+              context,
+              0,
+              2);
         }
       } else {
         //showCustomToastMessageLong(
         // 'Failed to send the request', context, 1, 2);
-        print('Failed to send the request. Status code: ${response.statusCode}');
+        print(
+            'Failed to send the request. Status code: ${response.statusCode}');
       }
     } catch (e) {
       print('Error while sending : $e');
@@ -4017,7 +4139,8 @@ class _OpCardState extends State<OpCard> {
     //  }
   }
 
-  Future<void> postAppointment(Appointment data, int i, double? Amount, int? userId) async {
+  Future<void> postAppointment(
+      Appointment data, int i, double? Amount, int? userId) async {
     print('22222');
     final url = Uri.parse(baseUrl + postApiAppointment);
     print('url==>890: $url');
@@ -4089,19 +4212,19 @@ class _OpCardState extends State<OpCard> {
         } else {
           // Failure case
           // Handle failure scenario here
-          CommonUtils.showCustomToastMessageLong('Failed to Send The Request ', context, 0, 2);
+          CommonUtils.showCustomToastMessageLong(
+              'Failed to Send The Request ', context, 0, 2);
         }
       } else {
         //showCustomToastMessageLong(
         // 'Failed to send the request', context, 1, 2);
-        print('Failed to send the request. Status code: ${response.statusCode}');
+        print(
+            'Failed to send the request. Status code: ${response.statusCode}');
       }
     } catch (e) {
       print('Error: $e');
     }
   }
-
-
 
   void closePopUp(BuildContext context, Appointment data, int i, int? userId) {
     showDialog(
@@ -4171,7 +4294,8 @@ class _OpCardState extends State<OpCard> {
                           Form(
                             key: _formKey,
                             child: Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 5),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 5),
                               child: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -4194,12 +4318,14 @@ class _OpCardState extends State<OpCard> {
                                       Expanded(
                                         flex: 6,
                                         child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
                                           children: [
                                             Text(
                                               ': ${data.customerName}',
                                               style: const TextStyle(
-                                                color: CommonStyles.primaryTextColor,
+                                                color: CommonStyles
+                                                    .primaryTextColor,
                                                 fontSize: 14,
                                                 fontFamily: "Calibri",
                                                 fontWeight: FontWeight.w500,
@@ -4228,12 +4354,14 @@ class _OpCardState extends State<OpCard> {
                                       Expanded(
                                         flex: 6,
                                         child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
                                           children: [
                                             Text(
                                               ': ${DateFormat('dd-MM-yyyy').format(DateTime.parse(data.date))}, ${data.slotDuration}',
                                               style: const TextStyle(
-                                                color: CommonStyles.primaryTextColor,
+                                                color: CommonStyles
+                                                    .primaryTextColor,
                                                 fontSize: 14,
                                                 fontFamily: "Calibri",
                                                 fontWeight: FontWeight.w500,
@@ -4262,12 +4390,14 @@ class _OpCardState extends State<OpCard> {
                                       Expanded(
                                         flex: 6,
                                         child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
                                           children: [
                                             Text(
                                               ': ${data.purposeOfVisit}',
                                               style: const TextStyle(
-                                                color: CommonStyles.primaryTextColor,
+                                                color: CommonStyles
+                                                    .primaryTextColor,
                                                 fontSize: 14,
                                                 fontFamily: "Calibri",
                                                 fontWeight: FontWeight.w500,
@@ -4283,7 +4413,9 @@ class _OpCardState extends State<OpCard> {
                                     children: [
                                       Text(
                                         'Payment Mode ',
-                                        style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                                        style: TextStyle(
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.bold),
                                       ),
                                       Text(
                                         '*',
@@ -4292,14 +4424,19 @@ class _OpCardState extends State<OpCard> {
                                     ],
                                   ),
                                   Padding(
-                                    padding: const EdgeInsets.only(left: 0, top: 5.0, right: 0),
+                                    padding: const EdgeInsets.only(
+                                        left: 0, top: 5.0, right: 0),
                                     child: Container(
                                       width: MediaQuery.of(context).size.width,
                                       decoration: BoxDecoration(
                                         border: Border.all(
-                                          color: isPaymentModeSelected ? const Color.fromARGB(255, 175, 15, 4) : CommonUtils.primaryTextColor,
+                                          color: isPaymentModeSelected
+                                              ? const Color.fromARGB(
+                                                  255, 175, 15, 4)
+                                              : CommonUtils.primaryTextColor,
                                         ),
-                                        borderRadius: BorderRadius.circular(5.0),
+                                        borderRadius:
+                                            BorderRadius.circular(5.0),
                                         color: Colors.white,
                                       ),
                                       child: DropdownButtonHideUnderline(
@@ -4316,16 +4453,24 @@ class _OpCardState extends State<OpCard> {
                                               setState(() {
                                                 if (value != null) {
                                                   selectedPaymentOption = value;
-                                                  if (paymentOptions[value]['typeCdId'] == 23) {
+                                                  if (paymentOptions[value]
+                                                          ['typeCdId'] ==
+                                                      23) {
                                                     isFreeService = false;
-                                                    _priceController.text = '0.0';
+                                                    _priceController.text =
+                                                        '0.0';
                                                   } else {
                                                     _priceController.clear();
                                                     isFreeService = true;
                                                   }
 
-                                                  apiPaymentMode = paymentOptions[selectedPaymentOption]['typeCdId'];
-                                                  selectedPaymentMode = paymentOptions[selectedPaymentOption]['desc'];
+                                                  apiPaymentMode = paymentOptions[
+                                                          selectedPaymentOption]
+                                                      ['typeCdId'];
+                                                  selectedPaymentMode =
+                                                      paymentOptions[
+                                                              selectedPaymentOption]
+                                                          ['desc'];
                                                 }
                                                 isPaymentModeSelected = false;
                                               });
@@ -4335,10 +4480,16 @@ class _OpCardState extends State<OpCard> {
                                                 value: -1,
                                                 child: Text(
                                                   'Select Payment Mode',
-                                                  style: TextStyle(color: Colors.grey, fontWeight: FontWeight.w500),
+                                                  style: TextStyle(
+                                                      color: Colors.grey,
+                                                      fontWeight:
+                                                          FontWeight.w500),
                                                 ),
                                               ),
-                                              ...paymentOptions.asMap().entries.map((entry) {
+                                              ...paymentOptions
+                                                  .asMap()
+                                                  .entries
+                                                  .map((entry) {
                                                 final index = entry.key;
                                                 final item = entry.value;
                                                 return DropdownMenuItem<int>(
@@ -4354,14 +4505,17 @@ class _OpCardState extends State<OpCard> {
                                   ),
                                   if (isPaymentModeSelected)
                                     const Row(
-                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
                                       children: [
                                         Padding(
-                                          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 5),
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 16, vertical: 5),
                                           child: Text(
                                             'Please Select Payment Mode',
                                             style: TextStyle(
-                                              color: Color.fromARGB(255, 175, 15, 4),
+                                              color: Color.fromARGB(
+                                                  255, 175, 15, 4),
                                               fontSize: 12,
                                             ),
                                           ),
@@ -4373,7 +4527,9 @@ class _OpCardState extends State<OpCard> {
                                     children: [
                                       Text(
                                         'Billing Amount (Rs) ',
-                                        style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                                        style: TextStyle(
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.bold),
                                       ),
                                       Text(
                                         '*',
@@ -4387,40 +4543,54 @@ class _OpCardState extends State<OpCard> {
                                     // keyboardType: TextInputType.number,
                                     // readOnly: isFreeService,
                                     enabled: isFreeService,
-                                    keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                                    keyboardType:
+                                        const TextInputType.numberWithOptions(
+                                            decimal: true),
                                     inputFormatters: [
-                                      FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*')),
+                                      FilteringTextInputFormatter.allow(
+                                          RegExp(r'^\d*\.?\d*')),
                                     ],
                                     onChanged: (value) {
                                       setState(() {
                                         if (value.startsWith(' ')) {
-                                          _priceController.value = TextEditingValue(
+                                          _priceController.value =
+                                              TextEditingValue(
                                             text: value.trimLeft(),
-                                            selection: TextSelection.collapsed(offset: value.trimLeft().length),
+                                            selection: TextSelection.collapsed(
+                                                offset:
+                                                    value.trimLeft().length),
                                           );
                                         }
                                       });
                                     },
                                     maxLength: 10,
                                     decoration: InputDecoration(
-                                      contentPadding: const EdgeInsets.only(top: 15, bottom: 10, left: 15, right: 15),
+                                      contentPadding: const EdgeInsets.only(
+                                          top: 15,
+                                          bottom: 10,
+                                          left: 15,
+                                          right: 15),
                                       focusedBorder: OutlineInputBorder(
                                         borderSide: const BorderSide(
                                           color: CommonUtils.primaryTextColor,
                                         ),
-                                        borderRadius: BorderRadius.circular(6.0),
+                                        borderRadius:
+                                            BorderRadius.circular(6.0),
                                       ),
                                       enabledBorder: OutlineInputBorder(
                                         borderSide: const BorderSide(
                                           color: CommonUtils.primaryTextColor,
                                         ),
-                                        borderRadius: BorderRadius.circular(6.0),
+                                        borderRadius:
+                                            BorderRadius.circular(6.0),
                                       ),
                                       errorBorder: OutlineInputBorder(
                                         borderSide: const BorderSide(
-                                          color: Color.fromARGB(255, 175, 15, 4),
+                                          color:
+                                              Color.fromARGB(255, 175, 15, 4),
                                         ),
-                                        borderRadius: BorderRadius.circular(6.0),
+                                        borderRadius:
+                                            BorderRadius.circular(6.0),
                                       ),
                                       border: const OutlineInputBorder(
                                         borderRadius: BorderRadius.all(
@@ -4429,7 +4599,9 @@ class _OpCardState extends State<OpCard> {
                                       ),
                                       hintText: 'Enter Billing Amount (Rs)',
                                       counterText: "",
-                                      hintStyle: const TextStyle(color: Colors.grey, fontWeight: FontWeight.w400),
+                                      hintStyle: const TextStyle(
+                                          color: Colors.grey,
+                                          fontWeight: FontWeight.w400),
                                     ),
                                     validator: validateAmount,
                                   ),
@@ -4451,8 +4623,10 @@ class _OpCardState extends State<OpCard> {
                                     });
                                     if (_formKey.currentState!.validate()) {
                                       if (isPaymentValidate) {
-                                        double? price = double.tryParse(_priceController.text);
-                                        postCloseAppointment(data, 17, price!, apiPaymentMode, userId);
+                                        double? price = double.tryParse(
+                                            _priceController.text);
+                                        postCloseAppointment(data, 17, price!,
+                                            apiPaymentMode, userId);
                                         Navigator.of(context).pop();
                                       }
                                     }
@@ -4542,7 +4716,8 @@ class _OpCardState extends State<OpCard> {
                 child: Text(
                   'Your Appointment Has Been Cancelled Successfully ',
                   style: CommonUtils.txSty_18b_fb,
-                  textAlign: TextAlign.center, // Optionally, align the text center
+                  textAlign:
+                      TextAlign.center, // Optionally, align the text center
                 ),
               ),
               const SizedBox(
@@ -4601,7 +4776,8 @@ class _OpCardState extends State<OpCard> {
                 child: Text(
                   'Your Appointment Has Been Accepted Successfully. ',
                   style: CommonUtils.txSty_18b_fb,
-                  textAlign: TextAlign.center, // Optionally, align the text center
+                  textAlign:
+                      TextAlign.center, // Optionally, align the text center
                 ),
               ),
               const SizedBox(
@@ -4651,7 +4827,8 @@ class _OpCardState extends State<OpCard> {
                 child: Text(
                   'Your Appointment Has Been Closed Successfully ',
                   style: CommonUtils.txSty_18b_fb,
-                  textAlign: TextAlign.center, // Optionally, align the text center
+                  textAlign:
+                      TextAlign.center, // Optionally, align the text center
                 ),
               ),
               const SizedBox(
@@ -4690,7 +4867,8 @@ class _OpCardState extends State<OpCard> {
 
     DateTime slotDate = DateTime.parse(slotDateValue);
 
-    DateTime slotDateTime = DateTime(slotDate.year, slotDate.month, slotDate.day, parsedSlotTime.hour, parsedSlotTime.minute);
+    DateTime slotDateTime = DateTime(slotDate.year, slotDate.month,
+        slotDate.day, parsedSlotTime.hour, parsedSlotTime.minute);
 
     if (slotDateTime.isAtSameMomentAs(now) || slotDateTime.isAfter(now)) {
       print("Slot is equal to or after current date and time");
@@ -4725,9 +4903,8 @@ class _OpCardState extends State<OpCard> {
     }
   }
 
-
-
-  Future<void> postCloseAppointment(Appointment data, int i, double? billingAmount, int? paymentTypeId, int? userId) async {
+  Future<void> postCloseAppointment(Appointment data, int i,
+      double? billingAmount, int? paymentTypeId, int? userId) async {
     final url = Uri.parse(baseUrl + postApiAppointment);
 
     // final url = Uri.parse('http://182.18.157.215/SaloonApp/API/api/Appointment');
@@ -4795,12 +4972,14 @@ class _OpCardState extends State<OpCard> {
         } else {
           // Failure case
           // Handle failure scenario here
-          CommonUtils.showCustomToastMessageLong('Failed to Send The Request ', context, 0, 2);
+          CommonUtils.showCustomToastMessageLong(
+              'Failed to Send The Request ', context, 0, 2);
         }
       } else {
         //showCustomToastMessageLong(
         // 'Failed to send the request', context, 1, 2);
-        print('Failed to send the request. Status code: ${response.statusCode}');
+        print(
+            'Failed to send the request. Status code: ${response.statusCode}');
       }
     } catch (e) {
       print('Error: $e');
