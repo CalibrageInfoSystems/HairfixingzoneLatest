@@ -13,6 +13,7 @@ var GetSlotsByDateAndBranch = "api/Appointment/GetSlotsByDateAndBranch/";
 
 var getgender = "api/TypeCdDmt/1";
 var getdropdown = "api/TypeCdDmt/3";
+var GetTechnicians = "/api/Appointment/GetTechnicians";
 var postApiAppointment = "api/Appointment/AddUpdateAppointment";
 
 var getbranchesbyuserid = "api/Branch/";
@@ -27,7 +28,6 @@ var GetHolidayListByBranchId = "api/Appointment/GetHolidayListByBranchId/";
 var SendFirebaseNotifications = "SendFirebaseNotifications";
 
 var imagesflierepo = 'http://182.18.157.215/SaloonApp/Saloon_Repo/'; //test
-//var imagesflierepo= 'http://182.18.157.215/SaloonApp_Live/Saloon_Repo/';
 
 var AddAgentSlotInformation = "AddAgentSlotInformation";
 
@@ -44,7 +44,8 @@ var getbanner = 'GetBanner?Id=null';
 var getcontent = 'GetContent/true';
 var addupdateconsulation = 'api/Consultation/AddUpdateConsultation';
 var agentAppointments = 'api/Appointment/GetAppointment';
-var getconsulationbranchesbyagentid = 'api/Consultation/GetConsultationsByBranchId/';
+var getconsulationbranchesbyagentid =
+    'api/Consultation/GetConsultationsByBranchId/';
 var changepassword = 'ChangePassword';
 var getbranchesall = 'GetBranchById/null/true';
 var updateuser = 'UpdateUser';
@@ -55,4 +56,4 @@ var getCustomerDatabyid = 'GetCustomerData?id=';
 var getholidayslist = 'api/HolidayList/GetHolidayListdetails';
 var getconsulationbyranchid = 'api/Consultation/GetConsultationsByBranchId';
 //var validateusernameotp = "ValidateOTP";
- var AddCustomerNotification = "AddCustomerNotification";
+var AddCustomerNotification = "AddCustomerNotification";
