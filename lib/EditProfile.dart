@@ -67,6 +67,7 @@ class EditProfile_screenState extends State<EditProfile> {
   String? gender;
   String? dob;
   String? formattedDate;
+  String? APIDate;
   int? roleId;
   String? password;
   String? fullname;
@@ -80,12 +81,13 @@ class EditProfile_screenState extends State<EditProfile> {
       DeviceOrientation.portraitDown,
       DeviceOrientation.portraitUp,
     ]);
+    selectedDate = DateTime.now(); // Initialize selectedDate with a non-null value, if needed
 
     CommonUtils.checkInternetConnectivity().then((isConnected) async {
       if (isConnected) {
         print('The Internet Is Connected');
         fetchRadioButtonOptions();
-        setState(() async {
+         setState(() async {
           // Wait for SharedPreferences.getInstance() to complete
           SharedPreferences prefs = await SharedPreferences.getInstance();
 
@@ -104,18 +106,17 @@ class EditProfile_screenState extends State<EditProfile> {
           username = prefs.getString('username');
           roleId = prefs.getInt('userRoleId');
           password = prefs.getString('password');
-
+          print('Date of birth:$dob');
           // Format date if dob is not empty
           if (dob!.isNotEmpty) {
-            formattedDate = DateFormat('dd-MM-yyyy').format(DateTime.parse(dob!));
-          } else {
-            formattedDate = '';
+            formattedDate = DateFormat('yyyy-MM-dd').format(DateTime.parse(dob!));
+            APIDate = DateFormat('dd-MM-yyyy').format(DateTime.parse(dob!));
           }
-
+          print('APIDate:117$dob==$APIDate  =$formattedDate');
           // Set the state using retrieved values
           setState(() {
             fullNameController.text = '$fullname';
-            dobController.text = '$formattedDate';
+            dobController.text = '$APIDate';
             emailController.text = '$email';
             mobileNumberController.text = '$contactNumber';
             alernateMobileNumberController.text = '$phonenumber';
@@ -138,57 +139,42 @@ class EditProfile_screenState extends State<EditProfile> {
     });
   }
 
+
   // Future<void> _selectDate(BuildContext context) async {
-  //   final DateTime? pickedYear = await showDatePicker(
+  //   final DateTime currentDate = DateTime.now();
+  //   final DateTime oldestDate = DateTime(currentDate.year - 100); // Example: Allow selection from 100 years ago
+  //   final DateTime? pickedDay = await showDatePicker(
   //     context: context,
-  //     initialDate: selectedDate,
-  //     firstDate: DateTime(DateTime.now().year - 100),
+  //     initialDate: selectedDate!,
   //     initialEntryMode: DatePickerEntryMode.calendarOnly,
-  //     lastDate: DateTime.now(),
-  //     initialDatePickerMode: DatePickerMode.year,
+  //     firstDate: oldestDate, // Allow selection from oldestDate (e.g., 100 years ago)
+  //     lastDate: currentDate, // Restrict to current date
+  //     initialDatePickerMode: DatePickerMode.day,
   //   );
-  //   if (pickedYear != null && pickedYear != selectedDate) {
+  //   if (pickedDay != null) {
+  //     // Check if pickedDay is not in the future
   //     setState(() {
-  //       selectedDate = pickedYear;
-  //       dobController.text = DateFormat('dd-MM-yyyy').format(selectedDate);
-  //       _dobError = false;
+  //       selectedDate = pickedDay;
+  //       dobController.text = DateFormat('dd-MM-yyyy').format(selectedDate!);
   //     });
-  //     // After year selection, open month selection dialog
-  //     await _selectMonth(context);
   //   }
   // }
-  //
-  // Future<void> _selectMonth(BuildContext context) async {
-  //   final DateTime? pickedMonth = await showDatePicker(
-  //     context: context,
-  //     initialDate: selectedDate,
-  //     firstDate: DateTime(selectedDate.year),
-  //     initialEntryMode: DatePickerEntryMode.calendarOnly,
-  //     lastDate: DateTime.now(),
-  //     initialDatePickerMode: DatePickerMode.day, // Start with day mode to enable month view
-  //   );
-  //   if (pickedMonth != null && pickedMonth != selectedDate) {
-  //     setState(() {
-  //       selectedDate = pickedMonth;
-  //       dobController.text = DateFormat('dd-MM-yyyy').format(selectedDate);
-  //     });
-  //     // After month selection, open day selection dialog
-  //     await _selectDay(context);
-  //   }
-  // }
+
   Future<void> _selectDate(BuildContext context) async {
     final DateTime currentDate = DateTime.now();
-    final DateTime oldestDate = DateTime(currentDate.year - 100); // Example: Allow selection from 100 years ago
+    final DateTime oldestDate = DateTime(currentDate.year - 100); // Allow selection from 100 years ago
+    final DateTime initialDate = selectedDate ?? currentDate; // Use currentDate if selectedDate is null
+
     final DateTime? pickedDay = await showDatePicker(
       context: context,
-      initialDate: selectedDate,
+      initialDate: initialDate,
       initialEntryMode: DatePickerEntryMode.calendarOnly,
-      firstDate: oldestDate, // Allow selection from oldestDate (e.g., 100 years ago)
-      lastDate: currentDate, // Restrict to current date
+      firstDate: oldestDate,
+      lastDate: currentDate,
       initialDatePickerMode: DatePickerMode.day,
     );
+
     if (pickedDay != null) {
-      // Check if pickedDay is not in the future
       setState(() {
         selectedDate = pickedDay;
         dobController.text = DateFormat('dd-MM-yyyy').format(selectedDate!);
@@ -196,22 +182,6 @@ class EditProfile_screenState extends State<EditProfile> {
     }
   }
 
-  Future<void> _selectDay(BuildContext context) async {
-    final DateTime? pickedDay = await showDatePicker(
-      context: context,
-      initialDate: selectedDate,
-      initialEntryMode: DatePickerEntryMode.calendarOnly,
-      firstDate: DateTime(selectedDate!.year, selectedDate!.month),
-      lastDate: DateTime(selectedDate!.year, selectedDate!.month + 1, 0),
-      initialDatePickerMode: DatePickerMode.day,
-    );
-    if (pickedDay != null && pickedDay != selectedDate) {
-      setState(() {
-        selectedDate = pickedDay;
-        dobController.text = DateFormat('dd-MM-yyyy').format(selectedDate!);
-      });
-    }
-  }
 
   Future<void> fetchRadioButtonOptions() async {
     final url = Uri.parse(baseUrl + getgender);
@@ -963,17 +933,30 @@ class EditProfile_screenState extends State<EditProfile> {
       DateTime now = DateTime.now();
       ProgressDialog progressDialog = ProgressDialog(context);
       print('url$url');
-      String dobtoapi = dobController.text;
+
       String? formattedDob;
       //'$formattedDate';
-      if (selectedDate != null) formattedDate = DateFormat('yyyy-MM-dd').format(selectedDate!);
+
       print('formattedapi$formattedDob');
 
       String emailtext = emailController.text;
       String contacttext = mobileNumberController.text;
       String alernatetext = alernateMobileNumberController.text;
       String fullnametext = fullNameController.text;
+      String dobtoapi = dobController.text;
+      print('dobController=====$dobtoapi ');
+      // Format the date of birth
+      DateTime? dob;
+      try {
+        dob = DateFormat('dd-MM-yyyy').parse(dobController.text);
+      } catch (e) {
+        print('Error parsing date of birth: $e');
+        // Handle the error, e.g., show an error message to the user
+        return;
+      }
 
+      String DOBobject = DateFormat('yyyy-MM-dd').format(dob);
+      print('DOBobject: $DOBobject');
       // Show the progress dialog
       progressDialog.show();
       final request = {
@@ -995,7 +978,7 @@ class EditProfile_screenState extends State<EditProfile> {
         "updatedDate": "$now",
         "roleId": roleId,
         "gender": gendertypeid,
-        "dateofbirth": "${formattedDate}",
+        "dateofbirth": "${DOBobject}",
         "branchIds": "null"
       };
 

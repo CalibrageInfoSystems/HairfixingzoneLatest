@@ -1,7 +1,9 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hairfixingzone/Common/common_styles.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'CommonUtils.dart';
 import 'CustomerLoginScreen.dart';
@@ -32,26 +34,61 @@ class AboutUsScreen extends StatelessWidget {
                   height: 5,
                 ),
                 // about us content
-                const Padding(
+                 Padding(
                   padding: EdgeInsets.all(5.0),
                   child: Column(mainAxisAlignment: MainAxisAlignment.start, crossAxisAlignment: CrossAxisAlignment.start, children: [
+                    // Text('Meta Description',
+                    //     style: TextStyle(
+                    //       fontSize: 16,
+                    //       color: Color(0xFF662d91),
+                    //     )),
                     Text(
-                      'Welcome to Hair Fixing Zone, your  destination for cutting-edge Hair Replacement solutions in Bangalore. Established in 2016, Hair Fixing Zone has emerged as a beacon of hope for individuals grappling with hair loss, Baldness, Hair thinning, or seeking to enhance their natural beauty. With four branches strategically located across Bangalore, we strive to provide convenient access to our specialized services, ensuring that every client receives the personalized care and attention they deserve.',
+                      'Discover exceptional hair replacement solutions at Hair Fixing Zone Bangalore. Offering customized treatments for hair loss, we provide innovative, non-surgical options tailored to your needs. Visit us for the best in hair restoration services.',
                       textAlign: TextAlign.justify,
                       style: CommonStyles.txSty_16black_f5,
                     ),
                     SizedBox(height: 15),
-                    Text('Our Journey',
+                    Text('About Us',
                         style: TextStyle(
                           fontSize: 16,
                           color: Color(0xFF662d91),
                         )),
                     SizedBox(height: 5),
-                    Text(
-                      'At Hair Fixing Zone, Our journey began with a simple yet profound mission: to empower individuals to embrace their unique beauty with confidence. Recognizing the transformation power of hair, we embarked on a quest to offer innovation solutions that go beyond conventional norms. Over the years, we have honed our expertise, staying at the forefront of industry advancements to deliver unparalleled results to our estmeed clientele',
+                  Padding(
+                    padding: const EdgeInsets.all(0.0),
+                    child: RichText(
                       textAlign: TextAlign.justify,
-                      style: CommonStyles.txSty_16black_f5,
+                      text: TextSpan(
+                        style: CommonStyles.txSty_16black_f5,
+                        children: [
+                          TextSpan(
+                            text: 'Welcome to Hair Fixing Zone Bangalore, your ultimate destination for premier hair replacement services For Men and Women. Established with a commitment to excellence, we specialize in providing innovative and non-surgical solutions to address hair loss and baldness. Our team of experienced professionals offers a comprehensive range of treatments, including Hair weaving, Hair bonding, customized hair systems, Hair Toppers For women, clip in hair extensions, Hair wigs for women, Hair Wigs for Men and Chemotherapy wigs ensuring that each client receives a personalized approach to meet their unique needs.\n\n',
+                          ),
+                          TextSpan(
+                            text: 'Located in the bustling areas of Marathahalli, Indiranagar, Kadugodi and Sarjapur Road our state-of-the-art clinics are equipped with the latest technology and adhere to the highest standards of hygiene and customer care. Whether you are looking for a quick, same-day solution or a more extensive hair restoration plan, Hair Fixing Zone Bangalore is dedicated to helping you regain your confidence with natural-looking, long-lasting results.\n\n',
+                          ),
+                          TextSpan(
+                            text: 'Choose Hair Fixing Zone for the best in hair Fixing and transformation. Experience the difference with our expert services and join the countless satisfied clients who have made us their preferred choice for hair replacement in Bangalore. For more information about our services, view our gallery, and read our Google reviews, please visit our website at ',
+                          ),
+                          TextSpan(
+                            text: 'hairfixingzone.com',
+                            style: TextStyle(
+                              color: Colors.blue, // Color for the clickable text
+                              decoration: TextDecoration.underline, // Underline the clickable text
+                            ),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                _launchURL('https://hairfixingzone.com');
+                              },
+                          ),
+                          TextSpan(
+                            text: '.',
+                          ),
+                        ],
+                      ),
                     ),
+                  ),
+             
                   ]),
                 )
               ],
@@ -132,5 +169,13 @@ class AboutUsScreen extends StatelessWidget {
             Navigator.of(context).pop();
           },
         ));
+  }
+
+  void _launchURL(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 }

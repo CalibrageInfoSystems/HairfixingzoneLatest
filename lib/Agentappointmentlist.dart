@@ -2448,189 +2448,22 @@ class MyAppointments_screenState extends State<Agentappointmentlist> {
         checkLoginuserdata();
         print('UserID==$userId');
         print('UserID==${widget.userId}');
-        // fetchMyAppointments(userId);
       } else {
-        print('The Internet Is not  Connected');
+        print('The Internet Is not Connected');
       }
     });
-  }
-
-  AgentAppointmentsProvider? myAppointmentsProvider;
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-
-    myAppointmentsProvider = Provider.of<AgentAppointmentsProvider>(context);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return WillPopScope(
-        onWillPop: () async {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => AgentHome(
-                userId: widget.userId,
-              ),
-            ),
-          );
-          myAppointmentsProvider!.clearFilter();
-          return true;
-        },
-        child: RefreshIndicator(
-          onRefresh: () async {
-            refreshTheScreen();
-          },
-          child: Scaffold(
-            appBar: AppBar(
-                backgroundColor: const Color(0xFFf3e3ff),
-                title: const Text(
-                  'Appointments',
-                  style: TextStyle(
-                    color: Color(0xFF0f75bc),
-                    fontSize: 16.0,
-                    fontFamily: "Calibri",
-                    fontWeight: FontWeight.w600,
-                  ),
-                  textAlign: TextAlign.start,
-                ),
-                leading: IconButton(
-                  icon: const Icon(
-                    Icons.arrow_back_ios,
-                    color: CommonUtils.primaryTextColor,
-                  ),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                    myAppointmentsProvider!.clearFilter();
-                  },
-                )),
-            body: Consumer<AgentAppointmentsProvider>(
-              builder: (context, provider, _) => WillPopScope(
-                onWillPop: () async {
-                  provider.clearFilter();
-                  return true;
-                },
-                child: Column(
-                  children: [
-                    // search and filter
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10).copyWith(top: 10),
-                      child: _searchBarAndFilter(),
-                    ),
-
-                    //MARK: Appointment
-                    Expanded(
-                      child: FutureBuilder(
-                        future: apiData,
-                        builder: (context, snapshot) {
-                          if (snapshot.connectionState == ConnectionState.waiting) {
-                            return const Center(
-                              child: CircularProgressIndicator.adaptive(),
-                            );
-                          } else if (snapshot.hasError) {
-                            return const Center(
-                              child: Text(
-                                'No Appointments Available',
-                                style: TextStyle(
-                                  fontSize: 12.0,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: "Roboto",
-                                ),
-                              ),
-                            );
-                          } else {
-                            List<Appointment> data = provider.proAppointments;
-                            if (data.isNotEmpty) {
-                              return Padding(
-                                padding: const EdgeInsets.all(10.0),
-                                child: ListView.builder(
-                                  itemCount: data.length,
-                                  itemBuilder: (context, index) {
-                                    return Column(
-                                      children: [
-                                        OpCard(
-                                          data: data[index],
-                                          userId: widget.userId,
-                                          branchid: widget.branchid,
-                                          branchaddress: widget.branchaddress,
-                                          onRefresh: () {
-                                            // Implement the refresh logic here
-                                            setState(() {
-                                              // Refresh logic
-                                              refreshTheScreen();
-
-                                              // Navigator.of(context).push(
-                                              //   MaterialPageRoute(
-                                              //     builder: (context) => Agentappointmentlist(
-                                              //       userId: widget.userId,
-                                              //       branchid: widget.branchid,
-                                              //       branchname: widget.branchname,
-                                              //       filepath:widget.filepath != null ? widget.filepath! : 'assets/top_image.png',
-                                              //       phonenumber: widget.phonenumber,
-                                              //       branchaddress: widget.branchaddress,
-                                              //     ),
-                                              //   ),
-                                              // );
-                                            });
-                                          },
-                                        ),
-
-                                        // OpCard(
-                                        //     data: data[index], userId: widget.userId, branchid: widget.branchid, branchaddress: widget.branchaddress),
-                                        const SizedBox(
-                                          height: 5,
-                                        ),
-                                      ],
-                                    );
-                                    // return AppointmentCard(
-                                    //     data: data[index],
-                                    //     day: parseDayFromDate(data[index].date),);
-                                  },
-                                ),
-                              );
-                            } else {
-                              return const Center(
-                                child: Text(
-                                  'No Appointments Available',
-                                  style: TextStyle(
-                                    fontSize: 12.0,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: "Roboto",
-                                  ),
-                                ),
-                              );
-                            }
-                          }
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ));
   }
 
   void checkLoginuserdata() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     userId = prefs.getInt('userId');
     print('userId: : $userId');
-    // apiData = fetchMyAppointments(userId);
-    // apiData.then((value) => myAppointmentsProvider.storeIntoProvider = value);
     initializeData(userId);
   }
 
   void initializeData(int? userId) {
-    apiData = fetchagentAppointments(userId, widget.branchid);
-    apiData!.then((value) {
-      myAppointmentsProvider!.storeIntoProvider = value;
-      temp.addAll(value);
-    }).catchError((error) {
-      print('catchError: Error occurred.');
+    setState(() {
+      apiData = fetchagentAppointments(userId, widget.branchid);
     });
   }
 
@@ -2672,26 +2505,196 @@ class MyAppointments_screenState extends State<Agentappointmentlist> {
   }
 
   void refreshTheScreen() {
-    CommonUtils.checkInternetConnectivity().then(
-      (isConnected) {
-        if (isConnected) {
-          print('The Internet Is Connected');
+    setState(() {
+      apiData = fetchagentAppointments(userId, widget.branchid);
+    });
+  }
 
-          try {
-            // reload the data
-            checkLoginuserdata();
-            setState(() {});
-          } catch (error) {
-            print('catch: $error');
-            rethrow;
-          }
-        } else {
-          CommonUtils.showCustomToastMessageLong('Please check your internet  connection', context, 1, 4);
-          print('The Internet Is not  Connected');
-        }
+
+
+  AgentAppointmentsProvider? myAppointmentsProvider;
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    myAppointmentsProvider = Provider.of<AgentAppointmentsProvider>(context);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return WillPopScope(
+      onWillPop: () async {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => AgentHome(
+              userId: widget.userId,
+            ),
+          ),
+        );
+        myAppointmentsProvider!.clearFilter();
+        return true;
       },
+      child: RefreshIndicator(
+        onRefresh: () async {
+          refreshTheScreen();
+        },
+        child: Scaffold(
+          appBar: AppBar(
+            backgroundColor: const Color(0xFFf3e3ff),
+            title: const Text(
+              'Appointments',
+              style: TextStyle(
+                color: Color(0xFF0f75bc),
+                fontSize: 16.0,
+                fontFamily: "Calibri",
+                fontWeight: FontWeight.w600,
+              ),
+              textAlign: TextAlign.start,
+            ),
+            leading: IconButton(
+              icon: const Icon(
+                Icons.arrow_back_ios,
+                color: CommonUtils.primaryTextColor,
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+                myAppointmentsProvider!.clearFilter();
+              },
+            ),
+          ),
+          body: Consumer<AgentAppointmentsProvider>(
+            builder: (context, provider, _) {
+              return WillPopScope(
+                onWillPop: () async {
+                  provider.clearFilter();
+                  return true;
+                },
+                child: Column(
+                  children: [
+                    // search and filter
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10).copyWith(top: 10),
+                      child: _searchBarAndFilter(),
+                    ),
+                    // Appointments list
+                    Expanded(
+                      child: FutureBuilder<List<Appointment>>(
+                        future: apiData, // Ensure this is a Future<List<Appointment>>
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState == ConnectionState.waiting) {
+                            return const Center(
+                              child: CircularProgressIndicator.adaptive(),
+                            );
+                          } else if (snapshot.hasError) {
+                            return const Center(
+                              child: Text(
+                                'No Appointments Available',
+                                style: TextStyle(
+                                  fontSize: 12.0,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: "Roboto",
+                                ),
+                              ),
+                            );
+                          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                            return const Center(
+                              child: Text(
+                                'No Appointments Available',
+                                style: TextStyle(
+                                  fontSize: 12.0,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: "Roboto",
+                                ),
+                              ),
+                            );
+                          } else {
+                            List<Appointment> data = snapshot.data!;
+                            return Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: ListView.builder(
+                                itemCount: data.length,
+                                itemBuilder: (context, index) {
+                                  return Column(
+                                    children: [
+                                      OpCard(
+                                        data: data[index],
+                                        userId: widget.userId,
+                                        branchid: widget.branchid,
+                                        branchaddress: widget.branchaddress,
+                                        onRefresh: () {
+                                          // Implement the refresh logic here
+                                          setState(() {
+                                            // Refresh logic
+                                            refreshTheScreen();
+                                          });
+                                        },
+                                      ),
+                                      const SizedBox(
+                                        height: 5,
+                                      ),
+                                    ],
+                                  );
+                                },
+                              ),
+                            );
+                          }
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+        ),
+      ),
     );
   }
+
+  // void checkLoginuserdata() async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   userId = prefs.getInt('userId');
+  //   print('userId: : $userId');
+  //   // apiData = fetchMyAppointments(userId);
+  //   // apiData.then((value) => myAppointmentsProvider.storeIntoProvider = value);
+  //   initializeData(userId);
+  // }
+  //
+  // void initializeData(int? userId) {
+  //   apiData = fetchagentAppointments(userId, widget.branchid);
+  //   apiData!.then((value) {
+  //     myAppointmentsProvider!.storeIntoProvider = value;
+  //     temp.addAll(value);
+  //   }).catchError((error) {
+  //     print('catchError: Error occurred.');
+  //   });
+  // }
+
+
+  // void refreshTheScreen() {
+  //   CommonUtils.checkInternetConnectivity().then(
+  //     (isConnected) {
+  //       if (isConnected) {
+  //         print('The Internet Is Connected');
+  //
+  //         try {
+  //           // reload the data
+  //           checkLoginuserdata();
+  //           setState(() {});
+  //         } catch (error) {
+  //           print('catch: $error');
+  //           rethrow;
+  //         }
+  //       } else {
+  //         CommonUtils.showCustomToastMessageLong('Please check your internet  connection', context, 1, 4);
+  //         print('The Internet Is not  Connected');
+  //       }
+  //     },
+  //   );
+  // }
 
   Widget _searchBarAndFilter() {
     return Row(
@@ -2780,35 +2783,7 @@ class MyAppointments_screenState extends State<Agentappointmentlist> {
       // item.email!.toLowerCase().contains(input.toLowerCase());
     }).toList());
   }
-// void fetchAppointments(int userId, int branchid, {required status, required date}) async {
-//   appointments.clear();
-//   final url = Uri.parse(baseUrl + GetAppointment + '$userId/$branchid/$status/$date');
-//   print('url==842===$url');
-//   try {
-//     final response = await http.get(url);
-//     if (response.statusCode == 200) {
-//       final Map<String, dynamic> responseData = jsonDecode(response.body);
-//       if (responseData['listResult'] != null) {
-//         final List<dynamic> appointmentsData = responseData['listResult'];
-//         setState(() {
-//           appointments = appointmentsData.map((appointment) => Appointment.fromJson(appointment)).toList();
-//           isLoading = false;
-//         });
-//       } else {
-//         setState(() {
-//           isLoading = false;
-//         });
-//         //  textFieldController.text = 'No Slots Available';
-//         print('No Slots Available');
-//       }
-//     } else {
-//       throw Exception('Failed to fetch appointments');
-//     }
-//   } catch (error) {
-//     print('errorinappointmrent$error');
-//     throw Exception('Failed to connect to the API');
-//   }
-// }
+
 }
 
 class FilterAppointmentBottomSheet extends StatefulWidget {
@@ -3422,19 +3397,7 @@ class _OpCardState extends State<OpCard> {
                                     //     style: CommonStyles.txSty_16black_f5),
                                     Row(children: [
                                       Text(widget.data.customerName, style: CommonStyles.txSty_16black_f5),
-                                      // GestureDetector(
-                                      //   child: const Padding(
-                                      //     padding: EdgeInsets.fromLTRB(8, 0, 0, 0),
-                                      //     child: Icon(
-                                      //       Icons.copy,
-                                      //       size: 16,
-                                      //     ),
-                                      //   ),
-                                      //   onTap: () {
-                                      //     Clipboard.setData(ClipboardData(text: widget.data.customerName));
-                                      //     // showSnackBarMessage(message: "Customer Name has been Copied", context: context);
-                                      //   },
-                                      // ),
+
                                       GestureDetector(
                                         key: _fullnameTipKey,
                                         child: const Padding(
@@ -3679,14 +3642,7 @@ class _OpCardState extends State<OpCard> {
                   postAppointment(data, 5, 0.0, userId);
                   Get_ApprovedDeclinedSlots(data, 5);
                   print('accpteedbuttonisclicked');
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(
-                  //     builder: (context) => Rescheduleslotscreen(
-                  //       data: data,
-                  //     ),
-                  //   ),
-                  // );
+
                 }
               },
               child: IgnorePointer(
@@ -3842,28 +3798,7 @@ class _OpCardState extends State<OpCard> {
         return const SizedBox();
       default:
         return const SizedBox();
-      //  return Container(
-      //     decoration: BoxDecoration(
-      //         borderRadius: BorderRadius.circular(3),
-      //         border: Border.all(color: CommonUtils.blackColor)),
-      //     padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
-      //     child: const Row(
-      //       children: [
-      //         Icon(
-      //           Icons.star_border_outlined,
-      //           size: 13,
-      //           color: CommonStyles.primaryTextColor,
-      //         ),
-      //         Text(
-      //           ' Rate Us',
-      //           style: TextStyle(
-      //             fontSize: 11,
-      //             color: CommonStyles.primaryTextColor,
-      //           ),
-      //         ),
-      //       ],
-      //     ),
-      //   );
+
     }
   }
 
@@ -3914,14 +3849,7 @@ class _OpCardState extends State<OpCard> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          // title: const Text(
-          //   'Confirmation',
-          //   style: TextStyle(
-          //     fontSize: 16,
-          //     color: CommonUtils.blueColor,
-          //     fontFamily: 'Calibri',
-          //   ),
-          // ),
+
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -3943,14 +3871,7 @@ class _OpCardState extends State<OpCard> {
               const SizedBox(
                 height: 10,
               ),
-              // Text(
-              //   'Are You Sure You Want To Cancel   ${appointments.purposeOfVisit} Slot At The ${appointments.name} Hair Fixing Zone',
-              //   style: const TextStyle(
-              //     fontSize: 16,
-              //     color: CommonUtils.primaryTextColor,
-              //     fontFamily: 'Calibri',
-              //   ),
-              // ),
+
             ],
           ),
           actions: [
@@ -4015,35 +3936,7 @@ class _OpCardState extends State<OpCard> {
               ),
             ),
           ],
-          // actions: [
-          //   TextButton(
-          //     onPressed: () {
-          //       Navigator.of(context).pop();
-          //     },
-          //     child: const Text(
-          //       'No',
-          //       style: TextStyle(
-          //         fontSize: 16,
-          //         color: CommonUtils.blueColor,
-          //         fontFamily: 'Calibri',
-          //       ),
-          //     ),
-          //   ),
-          //   TextButton(
-          //     onPressed: () {
-          //       cancelAppointment(appointments);
-          //       Navigator.of(context).pop();
-          //     },
-          //     child: const Text(
-          //       'Yes',
-          //       style: TextStyle(
-          //         fontSize: 16,
-          //         color: CommonUtils.blueColor,
-          //         fontFamily: 'Calibri',
-          //       ),
-          //     ),
-          //   ),
-          // ],
+
         );
       },
     );
@@ -4208,363 +4101,7 @@ class _OpCardState extends State<OpCard> {
     }
   }
 
-  // void closePopUp(BuildContext context, Appointment data, int i, int? userId) {
-  //   showDialog(
-  //     barrierDismissible: true,
-  //     context: context,
-  //     builder: (BuildContext context) {
-  //       return AlertDialog(
-  //         backgroundColor: Colors.transparent,
-  //         insetPadding: EdgeInsets.zero,
-  //         contentPadding: EdgeInsets.zero,
-  //         titlePadding: EdgeInsets.zero,
-  //         content: Container(
-  //           width: MediaQuery.of(context).size.width * 0.8,
-  //           padding: const EdgeInsets.all(0),
-  //           decoration: BoxDecoration(
-  //             borderRadius: BorderRadius.circular(10.0),
-  //             color: const Color(0xffffffff),
-  //           ),
-  //           child: StatefulBuilder(
-  //             builder: (BuildContext context, StateSetter setState) {
-  //               return Column(
-  //                 mainAxisSize: MainAxisSize.min,
-  //                 children: [
-  //                   Padding(
-  //                     padding: const EdgeInsets.all(4.0),
-  //                     child: Row(
-  //                       mainAxisAlignment: MainAxisAlignment.end,
-  //                       children: [
-  //                         GestureDetector(
-  //                           onTap: () {
-  //                             Navigator.of(context).pop();
-  //                           },
-  //                           child: const CircleAvatar(
-  //                             backgroundColor: CommonStyles.primaryColor,
-  //                             radius: 12,
-  //                             child: Center(
-  //                               child: Icon(
-  //                                 Icons.close,
-  //                                 color: CommonStyles.primaryTextColor,
-  //                                 size: 15,
-  //                               ),
-  //                             ),
-  //                           ),
-  //                         ),
-  //                       ],
-  //                     ),
-  //                   ),
-  //                   Padding(
-  //                     padding: const EdgeInsets.all(10.0),
-  //                     child: Column(
-  //                       crossAxisAlignment: CrossAxisAlignment.center,
-  //                       children: [
-  //                         Form(
-  //                           key: _formKey,
-  //                           child: Container(
-  //                             padding: const EdgeInsets.symmetric(horizontal: 5),
-  //                             child: Column(
-  //                               mainAxisSize: MainAxisSize.min,
-  //                               crossAxisAlignment: CrossAxisAlignment.center,
-  //                               children: [
-  //                                 const SizedBox(height: 10),
-  //                                 Row(
-  //                                   children: [
-  //                                     const Expanded(
-  //                                       flex: 4,
-  //                                       child: Text(
-  //                                         'Customer Name',
-  //                                         style: TextStyle(
-  //                                           color: Colors.black,
-  //                                           fontSize: 14,
-  //                                           fontFamily: "Calibri",
-  //                                           fontWeight: FontWeight.w500,
-  //                                         ),
-  //                                       ),
-  //                                     ),
-  //                                     Expanded(
-  //                                       flex: 6,
-  //                                       child: Row(
-  //                                         mainAxisAlignment: MainAxisAlignment.start,
-  //                                         children: [
-  //                                           Text(
-  //                                             ': ${data.customerName}',
-  //                                             style: const TextStyle(
-  //                                               color: CommonStyles.primaryTextColor,
-  //                                               fontSize: 14,
-  //                                               fontFamily: "Calibri",
-  //                                               fontWeight: FontWeight.w500,
-  //                                             ),
-  //                                           ),
-  //                                         ],
-  //                                       ),
-  //                                     ),
-  //                                   ],
-  //                                 ),
-  //                                 const SizedBox(height: 5),
-  //                                 Row(
-  //                                   children: [
-  //                                     const Expanded(
-  //                                       flex: 4,
-  //                                       child: Text(
-  //                                         'Slot Time',
-  //                                         style: TextStyle(color: Colors.black),
-  //                                       ),
-  //                                     ),
-  //                                     Expanded(
-  //                                       flex: 6,
-  //                                       child: Row(
-  //                                         mainAxisAlignment: MainAxisAlignment.start,
-  //                                         children: [
-  //                                           Text(
-  //                                             ': ${DateFormat('dd-MM-yyyy').format(DateTime.parse(data.date))}, ${data.slotDuration}',
-  //                                             style: const TextStyle(
-  //                                               color: CommonStyles.primaryTextColor,
-  //                                               fontSize: 14,
-  //                                               fontFamily: "Calibri",
-  //                                               fontWeight: FontWeight.w500,
-  //                                             ),
-  //                                           ),
-  //                                         ],
-  //                                       ),
-  //                                     ),
-  //                                   ],
-  //                                 ),
-  //                                 const SizedBox(height: 5),
-  //                                 Row(
-  //                                   children: [
-  //                                     const Expanded(
-  //                                       flex: 4,
-  //                                       child: Text(
-  //                                         'Purpose',
-  //                                         style: TextStyle(
-  //                                           color: Colors.black,
-  //                                           fontSize: 14,
-  //                                           fontFamily: "Calibri",
-  //                                           fontWeight: FontWeight.w500,
-  //                                         ),
-  //                                       ),
-  //                                     ),
-  //                                     Expanded(
-  //                                       flex: 6,
-  //                                       child: Row(
-  //                                         mainAxisAlignment: MainAxisAlignment.start,
-  //                                         children: [
-  //                                           Text(
-  //                                             ': ${data.purposeOfVisit}',
-  //                                             style: const TextStyle(
-  //                                               color: CommonStyles.primaryTextColor,
-  //                                             ),
-  //                                           ),
-  //                                         ],
-  //                                       ),
-  //                                     ),
-  //                                   ],
-  //                                 ),
-  //                                 const SizedBox(height: 20),
-  //                                 const Row(
-  //                                   children: [
-  //                                     Text(
-  //                                       'Payment Mode ',
-  //                                       style: TextStyle(
-  //                                           fontSize: 12,
-  //                                           fontWeight: FontWeight.bold),
-  //                                     ),
-  //                                     Text(
-  //                                       '*',
-  //                                       style: TextStyle(color: Colors.red),
-  //                                     ),
-  //                                   ],
-  //                                 ),
-  //                                 Padding(
-  //                                   padding: const EdgeInsets.only(left: 0, top: 5.0, right: 0),
-  //                                   child: Container(
-  //                                     width: MediaQuery.of(context).size.width,
-  //                                     decoration: BoxDecoration(
-  //                                       border: Border.all(
-  //                                         color: isPaymentModeSelected
-  //                                             ? const Color.fromARGB(255, 175, 15, 4)
-  //                                             : CommonUtils.primaryTextColor,
-  //                                       ),
-  //                                       borderRadius: BorderRadius.circular(5.0),
-  //                                       color: Colors.white,
-  //                                     ),
-  //                                     child: DropdownButtonHideUnderline(
-  //                                       child: ButtonTheme(
-  //                                         alignedDropdown: true,
-  //                                         child: DropdownButton<int>(
-  //                                           value: selectedPaymentOption,
-  //                                           iconSize: 30,
-  //                                           icon: null,
-  //                                           style: const TextStyle(
-  //                                             color: Colors.black,
-  //                                           ),
-  //                                           onChanged: (value) {
-  //                                             setState(() {
-  //                                               if (value != null) {
-  //                                                 selectedPaymentOption = value;
-  //                                                 print("==========4572 $selectedPaymentOption");
-  //
-  //                                                 if (selectedPaymentOption != -1) {
-  //                                                   print("==========4575 $selectedPaymentOption");
-  //
-  //                                                   apiPaymentMode = paymentOptions[selectedPaymentOption]['typeCdId'];
-  //                                                   selectedPaymentMode = paymentOptions[selectedPaymentOption]['desc'];
-  //                                                   print("========== $apiPaymentMode $selectedPaymentMode");
-  //
-  //                                                 }
-  //                                                 isPaymentModeSelected = false;
-  //                                               }
-  //                                             });
-  //                                           },
-  //                                           items: [
-  //                                             const DropdownMenuItem<int>(
-  //                                               value: -1,
-  //                                               child: Text(
-  //                                                 'Select Payment Mode',
-  //                                                 style: TextStyle(
-  //                                                     color: Colors.grey,
-  //                                                     fontWeight: FontWeight.w500),
-  //                                               ),
-  //                                             ),
-  //                                             ...paymentOptions
-  //                                                 .asMap()
-  //                                                 .entries
-  //                                                 .map((entry) {
-  //                                               final index = entry.key;
-  //                                               final item = entry.value;
-  //                                               return DropdownMenuItem<int>(
-  //                                                 value: index,
-  //                                                 child: Text(item['desc']),
-  //                                               );
-  //                                             }).toList(),
-  //                                           ],
-  //                                         ),
-  //                                       ),
-  //                                     ),
-  //                                   ),
-  //                                 ),
-  //                                 if (isPaymentModeSelected)
-  //                                   const Row(
-  //                                     mainAxisAlignment: MainAxisAlignment.start,
-  //                                     children: [
-  //                                       Padding(
-  //                                         padding: EdgeInsets.symmetric(
-  //                                             horizontal: 16, vertical: 5),
-  //                                         child: Text(
-  //                                           'Please Select Payment Mode',
-  //                                           style: TextStyle(
-  //                                             color: Color.fromARGB(255, 175, 15, 4),
-  //                                             fontSize: 12,
-  //                                           ),
-  //                                         ),
-  //                                       ),
-  //                                     ],
-  //                                   ),
-  //                                 const SizedBox(height: 10.0),
-  //                                 const Row(
-  //                                   children: [
-  //                                     Text(
-  //                                       'Billing Amount (Rs)',
-  //                                       style: TextStyle(
-  //                                           fontSize: 12,
-  //                                           fontWeight: FontWeight.bold),
-  //                                     ),
-  //                                     Text(
-  //                                       '*',
-  //                                       style: TextStyle(color: Colors.red),
-  //                                     ),
-  //                                   ],
-  //                                 ),
-  //                                 const SizedBox(height: 5.0),
-  //                                 TextFormField(
-  //                                   controller: _priceController,
-  //                                   keyboardType: TextInputType.number,
-  //                                   maxLength: 10,
-  //                                   decoration: InputDecoration(
-  //                                     contentPadding: const EdgeInsets.only(
-  //                                         top: 15, bottom: 10, left: 15, right: 15),
-  //                                     focusedBorder: OutlineInputBorder(
-  //                                       borderSide: const BorderSide(
-  //                                         color: CommonUtils.primaryTextColor,
-  //                                       ),
-  //                                       borderRadius: BorderRadius.circular(6.0),
-  //                                     ),
-  //                                     enabledBorder: OutlineInputBorder(
-  //                                       borderSide: const BorderSide(
-  //                                         color: CommonUtils.primaryTextColor,
-  //                                       ),
-  //                                       borderRadius: BorderRadius.circular(6.0),
-  //                                     ),
-  //                                     errorBorder: OutlineInputBorder(
-  //                                       borderSide: const BorderSide(
-  //                                         color: Color.fromARGB(255, 175, 15, 4),
-  //                                       ),
-  //                                       borderRadius: BorderRadius.circular(6.0),
-  //                                     ),
-  //                                     border: const OutlineInputBorder(
-  //                                       borderRadius: BorderRadius.all(
-  //                                         Radius.circular(10),
-  //                                       ),
-  //                                     ),
-  //                                     hintText: 'Enter Billing Amount (Rs)',
-  //                                     counterText: "",
-  //                                     hintStyle: const TextStyle(
-  //                                         color: Colors.grey,
-  //                                         fontWeight: FontWeight.w400),
-  //                                   ),
-  //                                   validator: validateAmount,
-  //                                 ),
-  //                                 const SizedBox(height: 20),
-  //                               ],
-  //                             ),
-  //                           ),
-  //                         ),
-  //                         Row(
-  //                           children: [
-  //                             Expanded(
-  //                               child: SizedBox(
-  //                                 child: Center(
-  //                                   child: Container(
-  //                                     height: 40.0,
-  //                                     decoration: BoxDecoration(
-  //                                       borderRadius: BorderRadius.circular(10.0),
-  //                                       color: CommonUtils.primaryTextColor,
-  //                                     ),
-  //                                     child: Center(
-  //                                       child: CustomButton(
-  //                                         buttonText: 'Submit',
-  //                                         color: CommonUtils.primaryTextColor,
-  //                                         onPressed: () {
-  //                                           validatePaymentMode(selectedPaymentMode);
-  //                                           if (_formKey.currentState!.validate()) {
-  //                                             if (isPaymentValidate) {
-  //                                               double? price = double.tryParse(_priceController.text);
-  //                                               postCloseAppointment(data, 17, price!, apiPaymentMode, userId);
-  //                                               Navigator.of(context).pop();
-  //                                             }
-  //                                           }
-  //                                         },
-  //                                       ),
-  //                                     ),
-  //                                   ),
-  //                                 ),
-  //                               ),
-  //                             ),
-  //                           ],
-  //                         ),
-  //                       ],
-  //                     ),
-  //                   ),
-  //                 ],
-  //               );
-  //             },
-  //           ),
-  //         ),
-  //       );
-  //     },
-  //   );
-  // }
+
 
   void closePopUp(BuildContext context, Appointment data, int i, int? userId) {
     showDialog(
@@ -5188,22 +4725,7 @@ class _OpCardState extends State<OpCard> {
     }
   }
 
-  // Future<List<Statusmodel>> fetchPaymentOptions() async {
-  //   final response = await http.get(Uri.parse(baseUrl + getPaymentMode));
-  //   try {
-  //     if (response.statusCode == 200) {
-  //       final data = json.decode(response.body);
-  //       setState(() {
-  //         cityDropdownItems = data['listResult'];
-  //       });
-  //       return;
-  //     } else {
-  //       print('Request failed with status: ${response.statusCode}');
-  //     }
-  //   } catch (e) {
-  //     rethrow;
-  //   }
-  // }
+
 
   Future<void> postCloseAppointment(Appointment data, int i, double? billingAmount, int? paymentTypeId, int? userId) async {
     final url = Uri.parse(baseUrl + postApiAppointment);

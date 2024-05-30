@@ -56,3 +56,4 @@ var getholidayslist = 'api/HolidayList/GetHolidayListdetails';
 var getconsulationbyranchid = 'api/Consultation/GetConsultationsByBranchId';
 //var validateusernameotp = "ValidateOTP";
  var AddCustomerNotification = "AddCustomerNotification";
+ var GetTechnicians = "api/Appointment/GetTechnicians";

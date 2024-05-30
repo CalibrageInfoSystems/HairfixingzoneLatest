@@ -1311,12 +1311,12 @@ class _HomeScreenState extends State<HomeScreen> {
       FocusScope.of(context).unfocus();
     }
 
-    if (isValid && _commentstexteditcontroller.text.trim().isEmpty) {
-      CommonUtils.showCustomToastMessageLong('Please Enter Comment', context, 1, 4);
-      isValid = false;
-      hasValidationFailed = true;
-      FocusScope.of(context).unfocus();
-    }
+    // if (isValid && _commentstexteditcontroller.text.trim().isEmpty) {
+    //   CommonUtils.showCustomToastMessageLong('Please Enter Comment', context, 1, 4);
+    //   isValid = false;
+    //   hasValidationFailed = true;
+    //   FocusScope.of(context).unfocus();
+    // }
     if (isValid) {
       SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
       String? storedEmployeeId = sharedPreferences.getString("employeeId");
