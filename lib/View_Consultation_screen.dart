@@ -80,8 +80,7 @@ class _ViewConsultationState extends State<View_Consultation_screen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-        child: Scaffold(
+    return Scaffold(
       appBar: _appBar(context),
       body: FutureBuilder(
         future: agentData,
@@ -142,7 +141,7 @@ class _ViewConsultationState extends State<View_Consultation_screen> {
           }
         },
       ),
-    ));
+    );
   }
 
   AppBar _appBar(BuildContext context) {
