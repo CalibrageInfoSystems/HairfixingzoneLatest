@@ -72,7 +72,7 @@ class Slot {
 class _BookingScreenState extends State<Rescheduleslotscreen> {
   List<String> timeSlots = [];
   List<String> availableSlots = [];
-  List<String> timeSlotParts = [];
+  List<String?> timeSlotParts = [];
   String _selectedTimeSlot = '';
   String _selectedSlot = '';
   String AvailableSlots = '';
@@ -123,6 +123,11 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
   int selectedTypeCdId = -1; // Initial value for dropdown selection
   String selectedName = ''; // Prepopulated selectedName
 
+  int selectedTechnician = -1;
+  int? selectedTechnicianValue;
+  String? selectedTechnicianName;
+  List<dynamic> dropdownForTechnicians = [];
+
   int? selectedValue;
   // String? selectedName;
   String userFullName = '';
@@ -140,7 +145,7 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
   int? genderttypeid;
 
   final TextEditingController _textEditingController =
-  TextEditingController(text: "Hair fixing Appointment");
+      TextEditingController(text: "Hair fixing Appointment");
   DateTime currentDate = DateTime.now();
   DateTime? eventDate;
 
@@ -263,7 +268,7 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
 
     Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(builder: (context) => const CustomerLoginScreen()),
-          (route) => false,
+      (route) => false,
     );
   }
 
@@ -462,15 +467,15 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
                                       4 /
                                       2,
                                   width:
-                                  MediaQuery.of(context).size.width / 3.2,
+                                      MediaQuery.of(context).size.width / 3.2,
                                   errorBuilder: (context, error, stackTrace) {
                                     return Image.asset(
                                       'assets/hairfixing_logo.png', // Path to your PNG placeholder image
                                       fit: BoxFit.cover,
                                       height:
-                                      MediaQuery.of(context).size.height /
-                                          4 /
-                                          2,
+                                          MediaQuery.of(context).size.height /
+                                              4 /
+                                              2,
                                       width: MediaQuery.of(context).size.width /
                                           3.2,
                                     );
@@ -590,186 +595,205 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
                       Scrollbar(
                         child: isLoading
                             ? const Center(
-                          child: CircularProgressIndicator(),
-                        )
+                                child: CircularProgressIndicator(),
+                              )
                             : isSlotsAvailable
-                            ? GridView.builder(
-                          shrinkWrap: true,
-                          gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 3,
-                            childAspectRatio: 2.5,
-                          ),
-                          itemCount:
-                          getVisibleSlots(slots, isTodayHoliday)
-                              .length,
-                          itemBuilder: (BuildContext context, int i) {
-                            final visibleSlots = getVisibleSlots(
-                                slots, isTodayHoliday);
-                            if (i >= visibleSlots.length) {
-                              return const SizedBox.shrink();
-                            }
+                                ? GridView.builder(
+                                    shrinkWrap: true,
+                                    gridDelegate:
+                                        const SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 3,
+                                      childAspectRatio: 2.5,
+                                    ),
+                                    itemCount:
+                                        getVisibleSlots(slots, isTodayHoliday)
+                                            .length,
+                                    itemBuilder: (BuildContext context, int i) {
+                                      final visibleSlots = getVisibleSlots(
+                                          slots, isTodayHoliday);
+                                      if (i >= visibleSlots.length) {
+                                        return const SizedBox.shrink();
+                                      }
 
-                            final slot = visibleSlots[i];
+                                      final slot = visibleSlots[i];
 
-                            return Container(
-                              margin: const EdgeInsets.symmetric(
-                                  vertical: 2, horizontal: 2),
-                              child: ElevatedButton(
-                                onPressed: slot.availableSlots <= 0
-                                    ? null
-                                    : () {
-                                  setState(() {
-                                    _selectedTimeSlot =
-                                        slot.SlotTimeSpan;
-                                    _selectedSlot = slot.slot;
-                                    AvailableSlots = slot
-                                        .availableSlots
-                                        .toString();
-                                    timeSlotParts =
-                                        _selectedSlot
-                                            .split(' - ');
-                                    slotselection = true;
-                                    print(
-                                        '===123==$timeSlotParts[0]');
-                                    print(
-                                        '===12===$timeSlotParts[1]');
-                                    _selectedTimeSlot24 =
-                                        DateFormat('HH:mm')
-                                            .format(DateFormat(
-                                            'h:mm a')
-                                            .parse(
-                                            _selectedTimeSlot));
-                                    print(
-                                        '_selectedTimeSlot24 $_selectedTimeSlot24');
-                                    String formattedDate =
-                                    DateFormat("yyyy-MM-dd")
-                                        .format(
-                                        _selectedDate);
-                                    String datePart =
-                                    formattedDate.substring(
-                                        0, 10);
+                                      return Container(
+                                        margin: const EdgeInsets.symmetric(
+                                            vertical: 2, horizontal: 2),
+                                        child: ElevatedButton(
+                                          onPressed: slot.availableSlots <= 0
+                                              ? null
+                                              : () {
+                                                  setState(() {
+                                                    _selectedTimeSlot =
+                                                        slot.SlotTimeSpan;
+                                                    _selectedSlot = slot.slot;
+                                                    AvailableSlots = slot
+                                                        .availableSlots
+                                                        .toString();
+                                                    timeSlotParts =
+                                                        _selectedSlot
+                                                            .split(' - ');
+                                                    fetchTechnicians();
+                                                    selectedTechnician = -1;
+                                                    slotselection = true;
+                                                    print(
+                                                        '===123==$timeSlotParts[0]');
+                                                    print(
+                                                        '===12===$timeSlotParts[1]');
+                                                    _selectedTimeSlot24 =
+                                                        DateFormat('HH:mm')
+                                                            .format(DateFormat(
+                                                                    'h:mm a')
+                                                                .parse(
+                                                                    _selectedTimeSlot));
+                                                    print(
+                                                        '_selectedTimeSlot24 $_selectedTimeSlot24');
+                                                    String formattedDate =
+                                                        DateFormat("yyyy-MM-dd")
+                                                            .format(
+                                                                _selectedDate);
+                                                    String datePart =
+                                                        formattedDate.substring(
+                                                            0, 10);
 // Concatenate datePart and time
-                                    String
-                                    selectedDateTimeString =
-                                        '$datePart $_selectedTimeSlot24';
+                                                    String
+                                                        selectedDateTimeString =
+                                                        '$datePart $_selectedTimeSlot24';
 
 // Parse the concatenated string into a DateTime object
-                                    slotSelected_DateTime = DateFormat(
-                                        'yyyy-MM-dd HH:mm')
-                                        .parse(
-                                        selectedDateTimeString);
-                                    print(
-                                        'SlotselectedDateTime: $slotSelected_DateTime');
+                                                    slotSelected_DateTime = DateFormat(
+                                                            'yyyy-MM-dd HH:mm')
+                                                        .parse(
+                                                            selectedDateTimeString);
+                                                    print(
+                                                        'SlotselectedDateTime: $slotSelected_DateTime');
 // Assuming slotSelectedDateTime is your DateTime object
-                                    slotSelectedDateTime =
-                                        slotSelected_DateTime!
-                                            .subtract(
-                                            const Duration(
-                                                hours: 1));
-                                    print(
-                                        '-1 hour Modified DateTime: $slotSelectedDateTime');
-                                    newDateTime =
-                                        slotSelected_DateTime!
-                                            .add(const Duration(
-                                            days: 20));
-                                    print('New DateTime after adding 20 days: $newDateTime');
-                                    // Parse the concatenated string into a DateTime object
-                                    //  DateTime SlotselectedDateTime = DateFormat('yyyy-MM-dd hh:mm a').parse(selectedDateTimeString);
-                                    print('SlotselectedDateTime==613==$selectedDateTimeString');
-                                    print('==234==$_selectedTimeSlot');
-                                    print('==234==$_selectedTimeSlot');
-                                    print('===567==$_selectedSlot');
-                                    print('==900==$AvailableSlots');
-                                  });
-                                  // setState(() {
-                                  //   _selectedTimeSlot = slot.SlotTimeSpan;
-                                  //   _selectedSlot = slot.slot;
-                                  //   AvailableSlots = slot.availableSlots.toString();
-                                  //   timeSlotParts = _selectedSlot.split(' - ');
-                                  //   slotselection = true;
-                                  //   print('===123==$timeSlotParts[0]');
-                                  //   print('===12===$timeSlotParts[1]');
-                                  //   _selectedTimeSlot24 = DateFormat('HH:mm').format(DateFormat('h:mm a').parse(_selectedTimeSlot));
-                                  //   print('_selectedTimeSlot24 $_selectedTimeSlot24');
-                                  //   print('==234==$_selectedTimeSlot');
-                                  //   print('===567==$_selectedSlot');
-                                  //   print('==900==$AvailableSlots');
-                                  // });
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 1.0, horizontal: 1.0),
-                                  backgroundColor:
-                                  _selectedTimeSlot == slot.SlotTimeSpan ? CommonUtils.primaryTextColor : (slot.availableSlots <= 0 ? Colors.grey : Colors.white),
-                                  side: BorderSide(
-                                    color: _selectedTimeSlot == slot.SlotTimeSpan ? CommonUtils.primaryTextColor
-                                        : (slot.availableSlots <= 0 ? Colors.transparent : CommonUtils.primaryTextColor),
-                                    width: 1.0,
-                                  ),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius:
-                                    BorderRadius.circular(5.0),
-                                  ),
-                                  textStyle: TextStyle(
-                                    color: _selectedTimeSlot ==
-                                        slot.SlotTimeSpan
-                                        ? Colors.white
-                                        : Colors.black,
-                                  ),
-                                ),
-                                child: Text(
-                                  slot.SlotTimeSpan,
-                                  style: TextStyle(
-                                    color: _selectedTimeSlot ==
-                                        slot.SlotTimeSpan
-                                        ? Colors.white
-                                        : (slot.availableSlots <= 0
-                                        ? Colors.white
-                                        : Colors.black),
-                                    fontFamily: 'Calibri',
-                                    fontSize: 12,
-                                  ),
-                                ),
-                              ),
-                            );
-                          },
-                        )
-                            : isTodayHoliday
-                            ? const Center(
-                          child: Column(
-                            mainAxisAlignment:
-                            MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                'Today is a Holiday',
-                                style: TextStyle(
-                                  fontFamily: 'Calibri',
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                          ),
-                        )
-                        // Show your regular widget when today is not a holiday
+                                                    slotSelectedDateTime =
+                                                        slotSelected_DateTime!
+                                                            .subtract(
+                                                                const Duration(
+                                                                    hours: 1));
+                                                    print(
+                                                        '-1 hour Modified DateTime: $slotSelectedDateTime');
+                                                    newDateTime =
+                                                        slotSelected_DateTime!
+                                                            .add(const Duration(
+                                                                days: 20));
+                                                    print(
+                                                        'New DateTime after adding 20 days: $newDateTime');
+                                                    // Parse the concatenated string into a DateTime object
+                                                    //  DateTime SlotselectedDateTime = DateFormat('yyyy-MM-dd hh:mm a').parse(selectedDateTimeString);
+                                                    print(
+                                                        'SlotselectedDateTime==613==$selectedDateTimeString');
+                                                    print(
+                                                        '==234==$_selectedTimeSlot');
+                                                    print(
+                                                        '==234==$_selectedTimeSlot');
+                                                    print(
+                                                        '===567==$_selectedSlot');
+                                                    print(
+                                                        '==900==$AvailableSlots');
+                                                  });
+                                                  // setState(() {
+                                                  //   _selectedTimeSlot = slot.SlotTimeSpan;
+                                                  //   _selectedSlot = slot.slot;
+                                                  //   AvailableSlots = slot.availableSlots.toString();
+                                                  //   timeSlotParts = _selectedSlot.split(' - ');
+                                                  //   slotselection = true;
+                                                  //   print('===123==$timeSlotParts[0]');
+                                                  //   print('===12===$timeSlotParts[1]');
+                                                  //   _selectedTimeSlot24 = DateFormat('HH:mm').format(DateFormat('h:mm a').parse(_selectedTimeSlot));
+                                                  //   print('_selectedTimeSlot24 $_selectedTimeSlot24');
+                                                  //   print('==234==$_selectedTimeSlot');
+                                                  //   print('===567==$_selectedSlot');
+                                                  //   print('==900==$AvailableSlots');
+                                                  // });
+                                                },
+                                          style: ElevatedButton.styleFrom(
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 1.0, horizontal: 1.0),
+                                            backgroundColor:
+                                                _selectedTimeSlot ==
+                                                        slot.SlotTimeSpan
+                                                    ? CommonUtils
+                                                        .primaryTextColor
+                                                    : (slot.availableSlots <= 0
+                                                        ? Colors.grey
+                                                        : Colors.white),
+                                            side: BorderSide(
+                                              color: _selectedTimeSlot ==
+                                                      slot.SlotTimeSpan
+                                                  ? CommonUtils.primaryTextColor
+                                                  : (slot.availableSlots <= 0
+                                                      ? Colors.transparent
+                                                      : CommonUtils
+                                                          .primaryTextColor),
+                                              width: 1.0,
+                                            ),
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(5.0),
+                                            ),
+                                            textStyle: TextStyle(
+                                              color: _selectedTimeSlot ==
+                                                      slot.SlotTimeSpan
+                                                  ? Colors.white
+                                                  : Colors.black,
+                                            ),
+                                          ),
+                                          child: Text(
+                                            slot.SlotTimeSpan,
+                                            style: TextStyle(
+                                              color: _selectedTimeSlot ==
+                                                      slot.SlotTimeSpan
+                                                  ? Colors.white
+                                                  : (slot.availableSlots <= 0
+                                                      ? Colors.white
+                                                      : Colors.black),
+                                              fontFamily: 'Calibri',
+                                              fontSize: 12,
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  )
+                                : isTodayHoliday
+                                    ? const Center(
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              'Today is a Holiday',
+                                              style: TextStyle(
+                                                fontFamily: 'Calibri',
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      )
+                                    // Show your regular widget when today is not a holiday
 
-                            : const Center(
-                          child: Column(
-                            mainAxisAlignment:
-                            MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                'No Slots Are Available Today',
-                                style: TextStyle(
-                                  fontFamily: 'Calibri',
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
+                                    : const Center(
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              'No Slots Are Available Today',
+                                              style: TextStyle(
+                                                fontFamily: 'Calibri',
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
                       ),
                       const SizedBox(
                         height: 15,
@@ -795,7 +819,7 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
 
                       Padding(
                         padding:
-                        const EdgeInsets.only(left: 0, top: .0, right: 0),
+                            const EdgeInsets.only(left: 0, top: .0, right: 0),
                         child: Container(
                           width: double.infinity,
                           decoration: BoxDecoration(
@@ -820,11 +844,11 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
                                     selectedTypeCdId = value!;
                                     if (selectedTypeCdId != -1) {
                                       selectedName =
-                                      dropdownItems[selectedTypeCdId]
-                                      ['desc'];
+                                          dropdownItems[selectedTypeCdId]
+                                              ['desc'];
                                       selectedValue =
-                                      dropdownItems[selectedTypeCdId]
-                                      ['typeCdId'];
+                                          dropdownItems[selectedTypeCdId]
+                                              ['typeCdId'];
                                       print(
                                           "selectedName onchange:$selectedName");
                                       print(
@@ -875,21 +899,132 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
                             ),
                           ],
                         ),
-                      const SizedBox(height: 25),
-                      Visibility(
-                        visible: !isLoading,
-                        child: SizedBox(
-                          width: MediaQuery.of(context).size.width / 1.5,
-                          child: CustomButton(
-                            buttonText: 'Book Appointment',
-                            color: CommonUtils.primaryTextColor,
-                            onPressed: () {
-                              // Validate purpose first
-                              validatePurpose(selectedName);
-                            },
+
+                      //MARK: Technicians DropDown
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      const Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Technician',
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontFamily: "Calibri",
+                              fontWeight: FontWeight.w500,
+                              color: Color(0xFF662e91),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 5),
+                      Padding(
+                        padding:
+                            const EdgeInsets.only(left: 0, top: .0, right: 0),
+                        child: Container(
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10.0),
+                            border: Border.all(
+                              color: CommonUtils.primaryTextColor,
+                            ),
+                          ),
+                          child: DropdownButtonHideUnderline(
+                            child: ButtonTheme(
+                              alignedDropdown: true,
+                              child: DropdownButton<int>(
+                                  value: selectedTechnician,
+                                  iconSize: 30,
+                                  icon: null,
+                                  style: const TextStyle(
+                                    color: Colors.black,
+                                  ),
+                                  onChanged: (value) {
+                                    setState(() {
+                                      selectedTechnician = value!;
+                                      if (selectedTechnician != -1) {
+                                        selectedTechnicianValue =
+                                            dropdownForTechnicians[
+                                                selectedTechnician]['id'];
+                                        selectedTechnicianName =
+                                            dropdownForTechnicians[
+                                                    selectedTechnician]
+                                                ['firstName'];
+
+                                        print(
+                                            "selectedTechnicianValue: $selectedTechnicianValue");
+                                        print(
+                                            "selectedTechnicianName:$selectedTechnicianName");
+                                      } else {
+                                        print("==========");
+                                        print(selectedTechnicianValue);
+                                        print(selectedTechnicianName);
+                                      }
+                                      // isDropdownValid = selectedTypeCdId != -1;
+                                    });
+                                  },
+                                  items: [
+                                    const DropdownMenuItem<int>(
+                                      value: -1,
+                                      child: Text(
+                                        'Select Technician',
+                                        style: TextStyle(
+                                            color: Colors.grey,
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                                      // Static text
+                                    ),
+                                    ...dropdownForTechnicians
+                                        .asMap()
+                                        .entries
+                                        .map((entry) {
+                                      final index = entry.key;
+                                      final item = entry.value;
+                                      return DropdownMenuItem<int>(
+                                        value: index,
+                                        child: Text(item['firstName']),
+                                      );
+                                    }).toList(),
+                                  ]),
+                            ),
                           ),
                         ),
                       ),
+
+                      const SizedBox(height: 40),
+
+                      Visibility(
+                        visible: !isLoading,
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: CustomButton(
+                                buttonText: 'Book Appointment',
+                                color: CommonUtils.primaryTextColor,
+                                onPressed: () {
+                                  // Validate purpose first
+                                  validatePurpose(selectedName);
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      // Visibility(
+                      //   visible: !isLoading,
+                      //   child: SizedBox(
+                      //     width: MediaQuery.of(context).size.width / 1.5,
+                      //     child: CustomButton(
+                      //       buttonText: 'Book Appointment',
+                      //       color: CommonUtils.primaryTextColor,
+                      //       onPressed: () {
+                      //         // Validate purpose first
+                      //         validatePurpose(selectedName);
+                      //       },
+                      //     ),
+                      //   ),
+                      // ),
 
                       // Container(
                       //   width: MediaQuery.of(context).size.width / 1.5,
@@ -999,28 +1134,31 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
             await NotificationService().scheduleNotification(
               title: 'Reminder Notification',
               body:
-              // Hey $userFullName, Today Your Appointment is Scheduled for  ${_selectedTimeSlot24!} at the ${widget.branchname} Branch, Located At ${widget.branchaddress}.
-              'Hey $userFullName, Today Your Appointment is Scheduled for  ${_selectedTimeSlot!} at the  ${widget.data.branch} Branch, Located at ${widget.data.address}.',
+                  // Hey $userFullName, Today Your Appointment is Scheduled for  ${_selectedTimeSlot24!} at the ${widget.branchname} Branch, Located At ${widget.branchaddress}.
+                  'Hey $userFullName, Today Your Appointment is Scheduled for  $_selectedTimeSlot at the  ${widget.data.branch} Branch, Located at ${widget.data.address}.',
               // scheduledNotificationDateTime: testdate!,
               scheduledNotificationDateTime: slotSelectedDateTime!,
               id: notificationId1,
             );
 
-            if (selectedValue == 8 || selectedValue == 9 || selectedValue == 10 || selectedValue == 11) {
+            if (selectedValue == 8 ||
+                selectedValue == 9 ||
+                selectedValue == 10 ||
+                selectedValue == 11) {
               DateTime testdate = DateTime.now();
               print(' testdate ====1072$testdate');
               // Handle each case separately
               switch (selectedValue) {
-
                 case 8:
                   final int notificationId2 = UniqueKey().hashCode;
                   debugPrint(
                       'Notification Scheduled for $newDateTime with ID: $notificationId2');
                   await NotificationService().scheduleNotification(
                     title: 'Reminder Notification',
-                    body: 'Hey $userFullName, It Has Been 20 Days Since Your  ${selectedName!} Was Done. Please Revisit the Hairfixing Zone at the ${widget.data.branch} Branch',
-                   scheduledNotificationDateTime: newDateTime!,
-                 //   scheduledNotificationDateTime: testdate!,
+                    body:
+                        'Hey $userFullName, It Has Been 20 Days Since Your  $selectedName Was Done. Please Revisit the Hairfixing Zone at the ${widget.data.branch} Branch',
+                    scheduledNotificationDateTime: newDateTime!,
+                    //   scheduledNotificationDateTime: testdate!,
                     id: notificationId2,
                   );
                   // Handle value 8
@@ -1031,23 +1169,25 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
                       'Notification Scheduled for $newDateTime with ID: $notificationId2');
                   await NotificationService().scheduleNotification(
                     title: 'Reminder Notification',
-                    body: 'Hey $userFullName, It Has Been 20 Days Since Your  ${selectedName!} Was Done. Please Revisit the Hairfixing Zone at the ${widget.data.branch} Branch',
-                 scheduledNotificationDateTime: newDateTime!,
-                  //  scheduledNotificationDateTime: testdate!,
+                    body:
+                        'Hey $userFullName, It Has Been 20 Days Since Your  $selectedName Was Done. Please Revisit the Hairfixing Zone at the ${widget.data.branch} Branch',
+                    scheduledNotificationDateTime: newDateTime!,
+                    //  scheduledNotificationDateTime: testdate!,
                     id: notificationId2,
                   );
                   // Handle value 9
                   break;
                 case 10:
-                // Handle value 10
+                  // Handle value 10
                   final int notificationId2 = UniqueKey().hashCode;
                   debugPrint(
                       'Notification Scheduled for $newDateTime with ID: $notificationId2');
                   await NotificationService().scheduleNotification(
                     title: 'Reminder Notification',
-                    body: 'Hey $userFullName, It Has Been 20 Days Since Your  ${selectedName!} Was Done. Please Revisit the Hairfixing Zone at the ${widget.data.branch} Branch',
-                  scheduledNotificationDateTime: newDateTime!,
-                 //   scheduledNotificationDateTime: testdate!,
+                    body:
+                        'Hey $userFullName, It Has Been 20 Days Since Your  $selectedName Was Done. Please Revisit the Hairfixing Zone at the ${widget.data.branch} Branch',
+                    scheduledNotificationDateTime: newDateTime!,
+                    //   scheduledNotificationDateTime: testdate!,
                     id: notificationId2,
                   );
                   break;
@@ -1057,19 +1197,19 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
                       'Notification Scheduled for $newDateTime with ID: $notificationId2');
                   await NotificationService().scheduleNotification(
                     title: 'Reminder Notification',
-                    body: 'Hey $userFullName, It Has Been 20 Days Since Your  ${selectedName!} Was Done. Please Revisit the Hairfixing Zone at the ${widget.data.branch} Branch',
+                    body:
+                        'Hey $userFullName, It Has Been 20 Days Since Your  $selectedName Was Done. Please Revisit the Hairfixing Zone at the ${widget.data.branch} Branch',
                     scheduledNotificationDateTime: newDateTime!,
-                   // scheduledNotificationDateTime: testdate!,
+                    // scheduledNotificationDateTime: testdate!,
                     id: notificationId2,
                   );
                   // Handle value 11
                   break;
                 default:
-                // Handle other cases if needed
+                  // Handle other cases if needed
                   break;
               }
             }
-
 
             // Your existing code...
             progressDialog.dismiss();
@@ -1077,16 +1217,16 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
             Navigator.of(context).pushReplacement(
               MaterialPageRoute(
                   builder: (context) => SlotSuccessScreen(
-                    slotdate: slotdate,
-                    slottime: _selectedTimeSlot,
-                    Purpose: selectedName,
-                    slotbranchname: widget.data.branch,
-                    slotbrnach_address: widget.data.address!,
-                    phonenumber: widget.data.contactNumber,
-                    branchImage: widget.data.imageName,
-                    latitude: widget.data.latitude!,
-                    longitude: widget.data.longitude!,
-                  )),
+                        slotdate: slotdate,
+                        slottime: _selectedTimeSlot,
+                        Purpose: selectedName,
+                        slotbranchname: widget.data.branch,
+                        slotbrnach_address: widget.data.address!,
+                        phonenumber: widget.data.contactNumber,
+                        branchImage: widget.data.imageName,
+                        latitude: widget.data.latitude!,
+                        longitude: widget.data.longitude!,
+                      )),
             );
             // showCustomToastMessageLong('Slot booked successfully', context, 0, 2);
             // Navigator.pop(context);
@@ -1119,7 +1259,7 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
 
   bool isHoliday(DateTime date) {
     return holidayList.any((holiday) =>
-    date.year == holiday.holidayDate.year &&
+        date.year == holiday.holidayDate.year &&
         date.month == holiday.holidayDate.month &&
         date.day == holiday.holidayDate.day);
   }
@@ -1134,7 +1274,7 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
 
   bool selectableDayPredicate(DateTime date) {
     final isPastDate =
-    date.isBefore(DateTime.now().subtract(const Duration(days: 1)));
+        date.isBefore(DateTime.now().subtract(const Duration(days: 1)));
     final isHolidayDate = isHoliday(date);
     final isPreviousYear = date.year < DateTime.now().year;
 
@@ -1290,7 +1430,7 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
   List<Slot> getVisibleSlots(List<Slot> slots, bool isTodayHoliday) {
     print('isTodayHoliday====$isTodayHoliday');
     // Get the current time and add 30 minutes
-    DateTime now = DateTime.now().add(Duration(minutes: 30));
+    DateTime now = DateTime.now().add(const Duration(minutes: 30));
 
     // Format the time in 12-hour format
     String formattedTime = DateFormat('hh:mm a').format(now);
@@ -1299,10 +1439,12 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
     DateTime currentDate = DateTime.now();
 
     // Combine the current date and formatted time
-    String combinedDateTimeString = '${DateFormat('yyyy-MM-dd').format(currentDate)} $formattedTime';
+    String combinedDateTimeString =
+        '${DateFormat('yyyy-MM-dd').format(currentDate)} $formattedTime';
 
     // Parse the combined date and time string into a DateTime object
-    DateTime combinedDateTime = DateFormat('yyyy-MM-dd hh:mm a').parse(combinedDateTimeString);
+    DateTime combinedDateTime =
+        DateFormat('yyyy-MM-dd hh:mm a').parse(combinedDateTimeString);
 
     if (isTodayHoliday) {
       // Today is a holiday, return an empty list
@@ -1317,7 +1459,8 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
     return slots.where((slot) {
       String timespan = slot.SlotTimeSpan;
       // Combine the current date and formatted time
-      String SlotDateTimeString = '${DateFormat('yyyy-MM-dd').format(currentDate)} $timespan';
+      String SlotDateTimeString =
+          '${DateFormat('yyyy-MM-dd').format(currentDate)} $timespan';
 
       DateFormat dateformat = DateFormat('yyyy-MM-dd');
       String currentdate = dateformat.format(DateTime.now());
@@ -1329,24 +1472,28 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
         String timespan = slot.SlotTimeSpan;
 
         // Combine the current date and time span
-        String SlotDateTimeString = '${DateFormat('yyyy-MM-dd').format(currentDate)} $timespan';
+        String SlotDateTimeString =
+            '${DateFormat('yyyy-MM-dd').format(currentDate)} $timespan';
 
         // Parse the combined date and time string into a DateTime object
-        slotDateTime = DateFormat('yyyy-MM-dd hh:mm a').parse(SlotDateTimeString);
+        slotDateTime =
+            DateFormat('yyyy-MM-dd hh:mm a').parse(SlotDateTimeString);
       } else {
         // If the slot is for a different date, use the slot's date and time
-        slotDateTime = DateFormat('yyyy-MM-dd HH:mm').parse('$formattedapiDate $timespan');
+        slotDateTime =
+            DateFormat('yyyy-MM-dd HH:mm').parse('$formattedapiDate $timespan');
       }
 
       return !slotDateTime.isBefore(combinedDateTime);
     }).toList();
   }
+
   List<Slot> getDisabledSlots(List<Slot> slots) {
     // Get the current time
     DateTime now = DateTime.now();
 
     // Add 30 minutes to the current time
-    DateTime futureTime = now.subtract(Duration(minutes: 30));
+    DateTime futureTime = now.subtract(const Duration(minutes: 30));
 
     // Format the time in 12-hour format
     String formattedTime = DateFormat('hh:mm a').format(futureTime);
@@ -1355,15 +1502,19 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
     DateTime currentDate = DateTime.now();
 
     // Combine the current date and formatted time
-    String combinedDateTimeString = '${DateFormat('yyyy-MM-dd').format(currentDate)} $formattedTime';
+    String combinedDateTimeString =
+        '${DateFormat('yyyy-MM-dd').format(currentDate)} $formattedTime';
 
     // Parse the combined date and time string into a DateTime object
-    DateTime combinedDateTime = DateFormat('yyyy-MM-dd hh:mm a').parse(combinedDateTimeString);
+    DateTime combinedDateTime =
+        DateFormat('yyyy-MM-dd hh:mm a').parse(combinedDateTimeString);
 
     // Filter the slots based on visibility criteria
     List<Slot> disabledSlots = slots.where((slot) {
-      DateTime slotDateTime = DateFormat('yyyy-MM-dd HH:mm').parse('${slot.date} ${slot.date}');
-      return !slotDateTime.isBefore(combinedDateTime) && slot.availableSlots <= 0;
+      DateTime slotDateTime =
+          DateFormat('yyyy-MM-dd HH:mm').parse('${slot.date} ${slot.date}');
+      return !slotDateTime.isBefore(combinedDateTime) &&
+          slot.availableSlots <= 0;
     }).toList();
 
     return disabledSlots;
@@ -1406,7 +1557,7 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
 
     final formattedDate = DateFormat('yyyy-MM-dd').format(selectedDate);
     final url =
-    Uri.parse("$baseUrl$GetSlotsByDateAndBranch$formattedDate/$branchId");
+        Uri.parse("$baseUrl$GetSlotsByDateAndBranch$formattedDate/$branchId");
     print('url==>969: $url');
 
     try {
@@ -1416,7 +1567,7 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
         final List<dynamic> slotData = jsonResult['listResult'];
 
         List<Slot> slots =
-        slotData.map((slotJson) => Slot.fromJson(slotJson)).toList();
+            slotData.map((slotJson) => Slot.fromJson(slotJson)).toList();
 
         setState(() {
           isLoading = false; // Set isLoading to false after data is fetched
@@ -1436,11 +1587,11 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
   }
 
   void showCustomToastMessageLong(
-      String message,
-      BuildContext context,
-      int backgroundColorType,
-      int length,
-      ) {
+    String message,
+    BuildContext context,
+    int backgroundColorType,
+    int length,
+  ) {
     final double screenWidth = MediaQuery.of(context).size.width;
     final double textWidth = screenWidth / 1.5; // Adjust multiplier as needed
 
@@ -1466,7 +1617,7 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
             ),
             child: Padding(
               padding:
-              const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
+                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
               child: Center(
                 child: Text(
                   message,
@@ -1518,7 +1669,7 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
 
         // Assuming widget.data.purposeOfVisitId is the value you want to match
         selectedTypeCdId = dropdownItems.indexWhere(
-                (item) => item['typeCdId'] == widget.data.purposeOfVisitId);
+            (item) => item['typeCdId'] == widget.data.purposeOfVisitId);
         print("selectedTypeCdId: $selectedTypeCdId"); // Print selectedTypeCdId
         if (selectedTypeCdId != -1) {
           selectedName = widget.data.purposeOfVisit;
@@ -1589,6 +1740,47 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
 
     // Create and return a TimeOfDay object
     return TimeOfDay(hour: hour, minute: minute);
+  }
+
+  Future<void> fetchTechnicians() async {
+    try {
+      final url = Uri.parse(baseUrl + GetTechnicians);
+      final requestBody = {
+        "branchId": widget.data.branchId,
+        "date": selecteddate,
+        "slot": timeSlotParts[0]
+
+        // "branchId": 4,
+        // "date": "2024-05-29T15:25:27.7701898+05:30",
+        // "slot": 3
+      };
+      final response = await http.post(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode(requestBody),
+      );
+
+      print(
+          'fetchTechnicians branchId: ${widget.data.branchId} , selecteddate: $selecteddate');
+      print('fetchTechnicians slot: ${timeSlotParts[0] ?? 'xxx'}');
+      print('fetchTechnicians url: $url');
+      print('fetchTechnicians requestBody: ${json.encode(requestBody)}');
+      print('fetchTechnicians response: ${response.body}');
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        setState(() {
+          dropdownForTechnicians = data['listResult'] ?? [];
+        });
+      } else {
+        print('Failed to fetch data');
+      }
+    } catch (e) {
+      print('fetchTechnicians catch: $e');
+      rethrow;
+    }
   }
 }
 
@@ -1662,7 +1854,7 @@ class HolidayResponse {
 
   factory HolidayResponse.fromJson(List<dynamic> json) {
     List<Holiday> holidays =
-    json.map((holidayJson) => Holiday.fromJson(holidayJson)).toList();
+        json.map((holidayJson) => Holiday.fromJson(holidayJson)).toList();
     return HolidayResponse(listResult: holidays);
   }
 }
