@@ -1718,7 +1718,7 @@ class _OpCardState extends State<OpCard> {
       //   );
 
       case 17: // Closed
-        if (data.review == null) {
+        if (data.rating == null) {
           // If status is Closed, show review or rate button
           return GestureDetector(
             onTap: () {
@@ -1750,16 +1750,16 @@ class _OpCardState extends State<OpCard> {
               ),
             ),
           );
-        } else {
-          // If status is not Closed, show the review
+        } else if (data.review != null && data.review != "") {
+          // If status is not Closed and review is not null or empty, show the review
           return Flexible(
             child: RichText(
               text: TextSpan(
-                text: 'Review :',
+                text: 'Review : ',
                 style: CommonStyles.txSty_16blu_f5,
                 children: <TextSpan>[
                   TextSpan(
-                    text: '${data.review} ' ?? '',
+                    text: data.review,
                     style: const TextStyle(
                       fontWeight: FontWeight.w500,
                       fontFamily: "Calibri",
@@ -1770,6 +1770,9 @@ class _OpCardState extends State<OpCard> {
               ),
             ),
           );
+        } else {
+          // If no review, return an empty Container or any other widget you deem fit
+          return Container();
         }
       case 18: // Reschuduled
         return const SizedBox();
@@ -2393,13 +2396,13 @@ class _OpCardState extends State<OpCard> {
       hasValidationFailed = true;
     }
 
-    if (isValid && _commentstexteditcontroller.text.trim().isEmpty) {
-      FocusScope.of(context).unfocus();
-      CommonUtils.showCustomToastMessageLong(
-          'Please Enter Comment', context, 1, 4);
-      isValid = false;
-      hasValidationFailed = true;
-    }
+    // if (isValid && _commentstexteditcontroller.text.trim().isEmpty) {
+    //   FocusScope.of(context).unfocus();
+    //   CommonUtils.showCustomToastMessageLong(
+    //       'Please Enter Comment', context, 1, 4);
+    //   isValid = false;
+    //   hasValidationFailed = true;
+    // }
     if (isValid) {
       final url = Uri.parse(baseUrl + postApiAppointment);
       print('url==>890: $url');

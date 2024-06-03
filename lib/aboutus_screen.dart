@@ -82,8 +82,16 @@ class AboutUsScreen extends StatelessWidget {
                               },
                           ),
                           TextSpan(
-                            text: '.',
+                            text: '. \n\n',
                           ),
+
+                          TextSpan(
+                            text: 'Thank You,\n',
+                          ),
+                          TextSpan(
+                            text: 'Hair Fixing Zone Team.',
+                          ),
+
                         ],
                       ),
                     ),

@@ -299,11 +299,11 @@ class _LoginPageState extends State<CustomerLoginScreen> {
                       Expanded(
                         child: GestureDetector(
                             onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const HomeScreen()),
-                              );
+                              // Navigator.push(
+                              //   context,
+                              //   MaterialPageRoute(
+                              //       builder: (context) => const HomeScreen()),
+                              // );
                             },
                             child: CustomButton(
                               buttonText: 'Login',

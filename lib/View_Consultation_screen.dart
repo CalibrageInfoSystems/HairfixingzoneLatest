@@ -100,7 +100,7 @@ class _ViewConsultationState extends State<View_Consultation_screen> {
                 child: Text('No Branches are Found!'),
               );
             } else {
-              return Expanded(
+              return Container(
                 child: ListView.builder(
                   itemCount: data.length,
                   itemBuilder: (context, index) {
