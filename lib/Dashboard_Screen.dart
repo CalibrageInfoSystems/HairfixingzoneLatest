@@ -515,22 +515,44 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
                             child: CircularProgressIndicator.adaptive());
                       } else if (snapshot.hasError) {
                         return Center(
-                          child: Text(snapshot.error.toString()),
+                          child: Text('No Branches Available ',   style: TextStyle(
+                            fontSize: 12.0,
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: "Roboto",
+                          ),),
                         );
                       } else {
                         List<BranchList>? data = snapshot.data!;
-                        return Container(
-                          child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: data.length,
-                            itemBuilder: (context, index) {
-                              return BranchCard(
-                                branch: data[index],
-                              );
-                            },
-                          ),
-                        );
+                        if (data.isNotEmpty) {
+                          return Container(
+                            child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemCount: data.length,
+                              itemBuilder: (context, index) {
+                                return BranchCard(
+                                  branch: data[index],
+                                );
+                              },
+                            ),
+                          );
+                        } else {
+                          return const Center(
+                            child: Text(
+                              'No Branches Available',
+                              style: TextStyle(
+                                fontSize: 12.0,
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: "Roboto",
+                              ),
+                            ),
+                          );
+                        }
+
                       }
+
+
                     },
                   ),
                 ),
@@ -940,9 +962,15 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
         List<dynamic> branchesData = response['listResult'];
         List<BranchList> result =
         branchesData.map((e) => BranchList.fromJson(e)).toList();
-        print('result: ${result[0].name}');
-        print('result: ${result[0].address}');
-        print('result: ${result[0].imageName}');
+
+        if (result.isNotEmpty) {
+          print('result: ${result[0].name}');
+          print('result: ${result[0].address}');
+          print('result: ${result[0].imageName}');
+        } else {
+          result = [];
+          print('No Data');
+        }
         return result;
       } else {
         throw Exception('api failed');

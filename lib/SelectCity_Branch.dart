@@ -68,6 +68,7 @@ class _BookingScreenState extends State<SelectCity_Branch_screen> {
   int selectedTypeCdId = -1;
   late int selectedValue;
   late String selectedName;
+  bool isLoading = false;
 
   @override
   @override
@@ -231,9 +232,32 @@ class _BookingScreenState extends State<SelectCity_Branch_screen> {
                           ),
                         ),
                       ),
+                  if ( model_branches.isEmpty)
+                    const SizedBox(
+                      height: 200.0,
+                    ), // Default image asset path
                       const SizedBox(
                         height: 15.0,
-                      ),
+                      ), //
+
+                      isLoading
+                          ? Center(
+                        child: CircularProgressIndicator(),
+                      )
+                          : model_branches.isEmpty
+                          ? Center(
+                        child: Text(
+                          'No Branches Available',
+                          style: TextStyle(
+                            fontSize: 12.0,
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: "Roboto",
+                          ),
+                        ),
+                      )
+
+                          :
                       ListView.builder(
                           itemCount: model_branches.length,
                           shrinkWrap: true,
@@ -411,6 +435,10 @@ class _BookingScreenState extends State<SelectCity_Branch_screen> {
   }
 
   void getbrancheslist(int? cityid) async {
+    setState(() {
+      isLoading = true; // Start loading
+    });
+
     final url = Uri.parse(baseUrl + getbrancheselectedcity + cityid.toString());
     print('getbrancheslist: $url');
     try {
@@ -427,20 +455,30 @@ class _BookingScreenState extends State<SelectCity_Branch_screen> {
             brancheslist.add(Model_branch.fromJson(item));
             print('id: ${item['id']}, branchName: ${item['branchName']}');
           }
-
-          setState(() {
-            model_branches = brancheslist;
-          });
         } else {
           print('Error: listResult is null or not a List');
         }
+
+        setState(() {
+          model_branches = brancheslist;
+          isLoading = false; // Stop loading
+        });
       } else {
         print('Request failed with status: ${response.statusCode}');
+        setState(() {
+          model_branches = [];
+          isLoading = false; // Stop loading
+        });
       }
     } catch (error) {
       print('Error fetching data from API: $error');
+      setState(() {
+        model_branches = [];
+        isLoading = false; // Stop loading
+      });
     }
   }
+
   void showCustomToastMessageLong(
       String message,
       BuildContext context,
