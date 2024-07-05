@@ -67,9 +67,9 @@ class _UserSelectionScreenState extends State<UserSelectionScreen> {
                           child: GestureDetector(
                               onTap: () {
                                 //     // Navigate to agent login screen
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(builder: (context) => agentloginscreen()),
-                                );
+                                // Navigator.of(context).push(
+                                //   MaterialPageRoute(builder: (context) => agentloginscreen()),
+                                // );
                               },
                               child: Image.asset('assets/AGENT.png')))
                     ],

@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:loading_progress/loading_progress.dart';
 
+import '../NewScreen.dart';
+
 class CommonStyles {
   // colors
   static const statusBlueBg = Color(0xFFd9edfd);
@@ -202,20 +204,166 @@ class CommonStyles {
     );
   }
 
-  static AppBar homeAppBar({required void Function()? onPressed}) {
+  // static AppBar homeAppBar({
+  //   required BuildContext context, // Add context parameter
+  //   required String userName,
+  // }) {
+  //   return AppBar(
+  //     backgroundColor: const Color(0xFFf3e3ff),
+  //     automaticallyImplyLeading: false,
+  //     title: SizedBox(
+  //       width: 85,
+  //       height: 40,
+  //       child: FractionallySizedBox(
+  //         widthFactor: 1,
+  //         child: Image.asset(
+  //           'assets/hfz_logo.png',
+  //           fit: BoxFit.fitWidth,
+  //         ),
+  //       ),
+  //     ),
+  //     actions: [
+  //       IconButton(
+  //         icon: Container(
+  //           padding: const EdgeInsets.all(10).copyWith(bottom: 10),
+  //           decoration: const BoxDecoration(
+  //             color: CommonStyles.primaryTextColor,
+  //             shape: BoxShape.circle,
+  //           ),
+  //           child: Text(
+  //             userName, // 'X',
+  //             style: const TextStyle(fontSize: 22, color: Colors.white),
+  //           ),
+  //         ),
+  //         onPressed: () {
+  //           // Navigate to the new screen
+  //           Navigator.push(
+  //             context,
+  //             MaterialPageRoute(builder: (context) => const NewScreen()),
+  //           );
+  //         },
+  //       ),
+  //     ],
+  //   );
+  // }
+  static AppBar homeAppBar({
+    required BuildContext context, // Add context parameter
+    required String userName, required String userFullName, required String email,
+  }) {
     return AppBar(
       backgroundColor: const Color(0xFFf3e3ff),
       automaticallyImplyLeading: false,
-      title: SizedBox(
-        width: 85,
-        height: 40,
-        child: FractionallySizedBox(
-          widthFactor: 1,
-          child: Image.asset(
-            'assets/hfz_logo.png',
-            fit: BoxFit.fitWidth,
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          SizedBox(
+
+            width: 85,
+            height: 40,
+            child: FractionallySizedBox(
+              widthFactor: 1,
+              child: Image.asset(
+                'assets/hfz_logo.png',
+                fit: BoxFit.fitWidth,
+              ),
+            ),
           ),
+        ],
+      ),
+      actions: [
+        IconButton(
+          icon: Container(
+            width: 40,
+            height: 40,
+            decoration: const BoxDecoration(
+              color: CommonStyles.primaryTextColor,
+              shape: BoxShape.circle,
+            ),
+            child: Center(
+              child: Text(
+                userName, // 'X',
+                style: const TextStyle(fontSize: 22, color: Colors.white),
+              ),
+            ),
+          ),
+          onPressed: () {
+            // Navigate to the new screen
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) =>  NewScreen(userName: userFullName,email :email)),
+            );
+          },
         ),
+      ],
+    );
+  }
+
+  // static AppBar homeAppBar({
+  //   required BuildContext context, // Add context parameter
+  //   required String userName,
+  // }) {
+  //   return AppBar(
+  //     backgroundColor: const Color(0xFFf3e3ff),
+  //     automaticallyImplyLeading: false,
+  //     title: SizedBox(
+  //       width: 85,
+  //       height: 40,
+  //       child: FractionallySizedBox(
+  //         widthFactor: 1,
+  //         child: Image.asset(
+  //           'assets/hfz_logo.png',
+  //           fit: BoxFit.fitWidth,
+  //         ),
+  //       ),
+  //     ),
+  //     actions: [
+  //       IconButton(
+  //         icon: Container(
+  //           width: 40,
+  //           height: 40,
+  //           decoration: const BoxDecoration(
+  //             color: CommonStyles.primaryTextColor,
+  //             shape: BoxShape.circle,
+  //           ),
+  //           child: Center(
+  //             child: Text(
+  //               userName, // 'X',
+  //               style: const TextStyle(fontSize: 22, color: Colors.white),
+  //             ),
+  //           ),
+  //         ),
+  //         onPressed: () {
+  //           // Navigate to the new screen
+  //           Navigator.push(
+  //             context,
+  //             MaterialPageRoute(builder: (context) => const NewScreen()),
+  //           );
+  //         },
+  //       ),
+  //     ],
+  //   );
+  // }
+
+
+  static AppBar AgenthomeAppBar({required void Function()? onPressed}) {
+    return AppBar(
+      backgroundColor: const Color(0xFFf3e3ff),
+      automaticallyImplyLeading: false,
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          SizedBox(
+            width: 85,
+            height: 40,
+            child: FractionallySizedBox(
+              widthFactor: 1,
+              child: Image.asset(
+                'assets/hfz_logo.png',
+                fit: BoxFit.fitWidth,
+              ),
+            ),
+          ),
+        ],
       ),
       actions: [
         IconButton(

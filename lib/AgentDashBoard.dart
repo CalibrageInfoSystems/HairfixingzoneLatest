@@ -32,7 +32,7 @@ class AgentDashBoard extends StatefulWidget {
 class _AgentDashBoardState extends State<AgentDashBoard> {
   List<Item> _items = [];
   late Timer _timer;
-  String marqueeText = '';
+  String? marqueeText;
   final int _currentPage = 0;
   late Future<List<BranchModel>> apiData;
   String userFullName = '';
@@ -136,30 +136,35 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(
-                height: 30,
-                child: FutureBuilder(
-                  future: getMarqueeText(),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const SizedBox();
-                    } else if (snapshot.hasError) {
-                      return const SizedBox();
-                    } else {
-                      return Marquee(
-                        text: marqueeText,
-                        style: const TextStyle(
-                            fontSize: 16,
-                            fontFamily: "Calibri",
-                            fontWeight: FontWeight.w600,
-                            color: Color(0xFFff0176)),
-                        velocity: _shouldStartMarquee
-                            ? 30
-                            : 0, // Control Marquee scrolling with velocity
+              // marquee(),
+              FutureBuilder(
+                future: getMarqueeText(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const SizedBox();
+                  } else if (snapshot.hasError) {
+                    return const SizedBox();
+                  } else {
+                    if (marqueeText != null) {
+                      return SizedBox(
+                        height: 30,
+                        child: Marquee(
+                          text: marqueeText!,
+                          style: const TextStyle(
+                              fontSize: 16,
+                              fontFamily: "Calibri",
+                              fontWeight: FontWeight.w600,
+                              color: Color(0xFFff0176)),
+                          velocity: _shouldStartMarquee
+                              ? 30
+                              : 0, // Control Marquee scrolling with velocity
+                        ),
                       );
+                    } else {
+                      return const SizedBox();
                     }
-                  },
-                ),
+                  }
+                },
               ),
 
               // Carousel widget
@@ -167,7 +172,8 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
                 width: MediaQuery.of(context).size.width,
                 height: 200,
                 child: FlutterCarousel(
-                  options: CarouselOptions(
+                  options:
+                  CarouselOptions(
                     // height: 400.0,
                     showIndicator: true,
                     autoPlay: true,
@@ -177,6 +183,7 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
                     slideIndicator: const CircularSlideIndicator(
                       indicatorBorderColor: CommonStyles.blackColor,
                       currentIndicatorColor: CommonStyles.primaryTextColor,
+                      indicatorRadius: 2, // Decrease the size of the indicator
                     ),
                   ),
                   items: _items.map((item) {
@@ -309,9 +316,13 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
 
         if (response['isSuccess']) {
           int records = response['affectedRecords'];
+          String resultText = '';
           for (var i = 0; i < records; i++) {
-            marqueeText += '${response['listResult'][i]['text']}  -  ';
+            if (response['listResult'][i]['text'] != null) {
+              resultText += '${response['listResult'][i]['text']}  -  ';
+            }
           }
+          marqueeText = resultText.isEmpty ? null : resultText;
         } else {
           print('api failed');
           throw Exception('api failed');
@@ -372,27 +383,31 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
   Widget marquee() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: SizedBox(
-        height: 30,
-        child: FutureBuilder(
-          future: getMarqueeText(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const SizedBox();
-            } else if (snapshot.hasError) {
-              return const SizedBox();
-            } else {
-              return Marquee(
-                text: marqueeText,
-                style: const TextStyle(
-                    fontSize: 16,
-                    fontFamily: "Calibri",
-                    fontWeight: FontWeight.w600,
-                    color: Color(0xFFff0176)),
+      child: FutureBuilder(
+        future: getMarqueeText(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const SizedBox();
+          } else if (snapshot.hasError) {
+            return const SizedBox();
+          } else {
+            if (marqueeText != null) {
+              return SizedBox(
+                height: 30,
+                child: Marquee(
+                  text: marqueeText!,
+                  style: const TextStyle(
+                      fontSize: 16,
+                      fontFamily: "Calibri",
+                      fontWeight: FontWeight.w600,
+                      color: Color(0xFFff0176)),
+                ),
               );
+            } else {
+              return const SizedBox();
             }
-          },
-        ),
+          }
+        },
       ),
     );
   }
@@ -754,7 +769,9 @@ class BranchCard extends StatelessWidget {
                   Text(branch.address,
                       maxLines: 3,
                       overflow: TextOverflow.ellipsis,
-                      style: CommonStyles.txSty_12b_f5),
+                      style: CommonStyles.txSty_12b_f5.copyWith(
+                        color: Colors.black , fontWeight: FontWeight.w600),
+                  )
                 ],
               ),
             ),

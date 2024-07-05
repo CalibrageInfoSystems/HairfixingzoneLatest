@@ -16,6 +16,8 @@ import 'package:hairfixingzone/slotbookingscreen.dart';
 // import 'package:hrms/home_screen.dart';
 // import 'package:hrms/personal_details.dart';
 import 'package:intl/intl.dart';
+import 'package:photo_view/photo_view.dart';
+import 'package:photo_view/photo_view_gallery.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -732,24 +734,22 @@ class ProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
+    return
+      Card(
         elevation: 5,
         shadowColor: CommonUtils.primaryColor, // Set the shadow color here
         child: IntrinsicHeight(
           child: Container(
             padding: const EdgeInsets.all(10),
-            // decoration: BoxDecoration(
-            //     color: Colors.white, borderRadius: BorderRadius.circular(10)),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(10.0),
-              // borderRadius: BorderRadius.circular(30), //border corner radius
               boxShadow: [
                 BoxShadow(
-                  color: const Color(0xFF960efd).withOpacity(0.2), //color of shadow
-                  spreadRadius: 2, //spread radius
-                  blurRadius: 4, // blur radius
-                  offset: const Offset(0, 2), // changes position of shadow
+                  color: const Color(0xFF960efd).withOpacity(0.2), // Shadow color
+                  spreadRadius: 2, // Spread radius
+                  blurRadius: 4, // Blur radius
+                  offset: const Offset(0, 2), // Shadow position
                 ),
               ],
             ),
@@ -757,33 +757,22 @@ class ProductCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // product image
-                // Container(
-                //   width: MediaQuery.of(context).size.width / 3,
-                //   //    height: 100,
-                //   height: MediaQuery.of(context).size.height / 10,
-                //
-                //   padding: const EdgeInsets.all(10),
-                //   decoration: BoxDecoration(
-                //     color: CommonUtils.primaryColor,
-                //     borderRadius: BorderRadius.circular(10),
-                //   ),
-                //   child: Image.network(product.imageName),
-                // ),
                 Stack(
                   children: [
                     Container(
                       width: MediaQuery.of(context).size.width / 3,
                       height: MediaQuery.of(context).size.height / 10,
-                      padding: EdgeInsets.only(top: 10, left: 10, right: 10, bottom: 10),
+                      padding: const EdgeInsets.all(10),
                       decoration: BoxDecoration(
-                        //   color: Colors.purple,
                         color: CommonUtils.primaryColor,
                         borderRadius: BorderRadius.circular(10),
                       ),
-                      child: Image.network(product.imageName),
+                      child: GestureDetector(
+                        onTap: () => showZoomedAttachments(product.imageName,context),
+                        child: Image.network(product.imageName),
+                      ),
                     ),
-                    if (product.bestseller == true) ...{
+                    if (product.bestseller == true)
                       Positioned(
                         top: -8,
                         left: -10,
@@ -791,83 +780,22 @@ class ProductCard extends StatelessWidget {
                           'assets/bs_v2.svg',
                           width: 80.0,
                           height: 35.0,
-                          // color: Color(0xFF0f75bc),
                         ),
                       ),
-                    } else
-                      ...{}
                   ],
                 ),
-                const SizedBox(
-                  width: 10,
-                ),
+                const SizedBox(width: 10),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Container(
+                    SizedBox(
                       width: MediaQuery.of(context).size.width / 2,
                       child: Text(
                         "${product.name} (${product.code}) ",
                         style: CommonUtils.txSty_18p_f7,
                       ),
                     ),
-                    Row(
-                      children: [
-                        // Flexible(
-                        //   child: Text(
-                        //     "${product.name} (${product.code}) ",
-                        //     style: CommonUtils.txSty_18p_f7,
-                        //   ),
-                        // )
-                        // Shimmer.fromColors(
-                        //   baseColor: Colors.yellow[700]!,
-                        //   highlightColor: Colors.yellow[500]!,
-                        //   child: Container(
-                        //     //  padding: EdgeInsets.all(16.0),
-                        //     decoration: BoxDecoration(
-                        //       color: Colors.yellow[700],
-                        //       borderRadius: BorderRadius.circular(8.0),
-                        //     ),
-                        //     child: Text(
-                        //       'BEST SELLER',
-                        //       style: TextStyle(
-                        //         fontWeight: FontWeight.bold,
-                        //         //  fontSize: 16.0,
-                        //         color: Colors.white,
-                        //       ),
-                        //     ),
-                        //   ),
-                        // ),
-                        // Container(
-                        //   //  padding: EdgeInsets.all(16.0),
-                        //   decoration: BoxDecoration(
-                        //       //    color: Colors.black,
-                        //       // borderRadius: BorderRadius.circular(8.0),
-                        //       ),
-                        //   child: Shimmer.fromColors(
-                        //     baseColor: Colors.yellow[700]!,
-                        //     highlightColor: Colors.yellow[500]!,
-                        //     child: Container(
-                        //       //  padding: EdgeInsets.all(16.0),
-                        //       decoration: BoxDecoration(
-                        //         //   color: Colors.yellow[700],
-                        //         borderRadius: BorderRadius.circular(8.0),
-                        //       ),
-                        //       child: Text(
-                        //         'BEST SELLER',
-                        //         style: TextStyle(
-                        //           fontWeight: FontWeight.bold,
-                        //           //  fontSize: 16.0,
-                        //           color: Colors.white,
-                        //         ),
-                        //       ),
-                        //     ),
-                        //   ),
-                        // ),
-                      ],
-                    ),
-
                     const SizedBox(height: 8), // Add space here
                     Text(
                       product.categoryName,
@@ -890,15 +818,73 @@ class ProductCard extends StatelessWidget {
                       ),
                     ),
                   ],
-                )
+                ),
               ],
             ),
           ),
-        ));
+        ),
+      );
   }
 
   String formatNumber(double number) {
     NumberFormat formatter = NumberFormat("#,##,##,##,##,##,##0.00", "en_US");
     return formatter.format(number);
+  }
+
+  void showZoomedAttachments(String imageString, BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          child: Container(
+            padding: const EdgeInsets.all(5),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10), color: Colors.white),
+            width: double.infinity,
+            height: 500,
+            child: Stack(
+              children: [
+                Center(
+                  child: PhotoViewGallery.builder(
+                    itemCount: 1,
+                    builder: (context, index) {
+                      return PhotoViewGalleryPageOptions(
+                        imageProvider: NetworkImage(imageString),
+                        minScale: PhotoViewComputedScale.contained,
+                        maxScale: PhotoViewComputedScale.covered,
+                      );
+                    },
+                    scrollDirection: Axis.vertical,
+                    scrollPhysics: const PageScrollPhysics(),
+                    allowImplicitScrolling: true,
+                    backgroundDecoration: const BoxDecoration(
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+                Positioned(
+                  top: 0,
+                  right: 0,
+                  child: GestureDetector(
+                    onTap: () => Navigator.of(context).pop(),
+                    child: Container(
+                      padding: const EdgeInsets.all(5),
+                      decoration: BoxDecoration(
+                          color: Colors.red.withOpacity(0.2),
+                          borderRadius: BorderRadius.circular(20)),
+                      child: const Icon(
+                        Icons.close,
+                        color: Colors.red,
+                        size: 16,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 }

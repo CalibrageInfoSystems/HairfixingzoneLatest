@@ -293,16 +293,16 @@ class _SlotSuccessScreenState extends State<SlotSuccessScreen> with TickerProvid
                                         // },
                                         onTap: openPhone,
                                         child: Container(
-                                          padding: const EdgeInsets.all(10),
-                                          decoration: BoxDecoration(
-                                              border: Border.all(
-                                                color: CommonStyles.statusGreenText,
-                                              ),
-                                              shape: BoxShape.circle),
+                                          padding: const EdgeInsets.all(1),
+                                          // decoration: BoxDecoration(
+                                          //     border: Border.all(
+                                          //       color: CommonStyles.statusGreenText,
+                                          //     ),
+                                          //     shape: BoxShape.circle),
                                           child: SvgPicture.asset(
                                             'assets/phone_call.svg',
-                                            width: 30,
-                                            height: 30,
+                                            width: 25,
+                                            height: 25,
                                             color: CommonStyles.statusGreenText,
                                           ),
                                         ),
@@ -313,13 +313,13 @@ class _SlotSuccessScreenState extends State<SlotSuccessScreen> with TickerProvid
                                       GestureDetector(
                                         onTap: openMap,
                                         child: Container(
-                                          padding: const EdgeInsets.all(10),
-                                          decoration: BoxDecoration(border: Border.all(color: CommonStyles.primaryTextColor), shape: BoxShape.circle),
+                                          padding: const EdgeInsets.all(1),
+                                        //  decoration: BoxDecoration(border: Border.all(color: CommonStyles.primaryTextColor), shape: BoxShape.circle),
                                           child: SvgPicture.asset(
                                             'assets/map_marker.svg',
-                                            width: 30,
-                                            height: 30,
-                                            color: CommonStyles.primaryTextColor,
+                                            width: 25,
+                                            height: 25,
+                                            color: CommonStyles.statusGreenText,
                                           ),
                                         ),
                                       ),

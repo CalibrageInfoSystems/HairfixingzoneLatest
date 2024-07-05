@@ -1,3 +1,4 @@
+
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -112,7 +113,7 @@ class _AgentHomeState extends State<AgentHome> {
       },
       child: Scaffold(
         appBar: _currentIndex == 0
-            ? CommonStyles.homeAppBar(
+            ? CommonStyles.AgenthomeAppBar(
                 onPressed: () => logOutDialog(),
               )
             : CommonStyles.remainingAppBars(

@@ -13,9 +13,12 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:marquee/marquee.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+import 'Model_Branch.dart';
 
 class Dashboard_Screen extends StatelessWidget {
-  const Dashboard_Screen({Key? key}) : super(key: key);
+  const Dashboard_Screen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +30,7 @@ class Dashboard_Screen extends StatelessWidget {
 }
 
 class TwoCardPageView extends StatefulWidget {
-  const TwoCardPageView({Key? key}) : super(key: key);
+  const TwoCardPageView({super.key});
 
   @override
   _TwoCardPageViewState createState() => _TwoCardPageViewState();
@@ -36,8 +39,8 @@ class TwoCardPageView extends StatefulWidget {
 class _TwoCardPageViewState extends State<TwoCardPageView> {
   List<Item> _items = [];
   int? userId;
-  String marqueeText = '';
-  Future<List<BranchList>>? apiData;
+  String? marqueeText;
+  Future<List<Model_branch>>? apiData;
   String userFullName = '';
   String email = '';
   String phonenumber = '';
@@ -88,9 +91,10 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
 
         if (response['isSuccess']) {
           int records = response['affectedRecords'];
-          print('marquee: ${response['affectedRecords']}');
           for (var i = 0; i < records; i++) {
-            marqueeText += '${response['listResult'][i]['text']}  -  ';
+            marqueeText = response['listResult'][i]['text'] != null
+                ? '${response['listResult'][i]['text']}  -  '
+                : null;
             // marqueeText += response['listResult'][i]['text'];
           }
         } else {
@@ -111,7 +115,6 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
     return Scaffold(
       // backgroundColor: CommonStyles.primaryTextColor,
       body: Column(
-
         children: [
 //MARK: Marquee
           SingleChildScrollView(
@@ -121,30 +124,34 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
                 const SizedBox(
                   height: 5,
                 ),
-                SizedBox(
-                  height: 30,
-                  child: FutureBuilder(
-                    future: getMarqueeText(),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const SizedBox();
-                      } else if (snapshot.hasError) {
-                        return const SizedBox();
-                      } else {
-                        return Marquee(
-                          text: marqueeText,
-                          style: const TextStyle(
-                              fontSize: 16,
-                              fontFamily: "Calibri",
-                              fontWeight: FontWeight.w600,
-                              color: Color(0xFFff0176)),
-                          velocity: _shouldStartMarquee
-                              ? 30
-                              : 0, // Control Marquee scrolling with velocity
+                FutureBuilder(
+                  future: getMarqueeText(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const SizedBox();
+                    } else if (snapshot.hasError) {
+                      return const SizedBox();
+                    } else {
+                      if (marqueeText != null) {
+                        return SizedBox(
+                          height: 30,
+                          child: Marquee(
+                            text: marqueeText!,
+                            style: const TextStyle(
+                                fontSize: 16,
+                                fontFamily: "Calibri",
+                                fontWeight: FontWeight.w600,
+                                color: Color(0xFFff0176)),
+                            velocity: _shouldStartMarquee
+                                ? 30
+                                : 0, // Control Marquee scrolling with velocity
+                          ),
                         );
+                      } else {
+                        return const SizedBox();
                       }
-                    },
-                  ),
+                    }
+                  },
                 ),
                 // Carousel widget
                 SizedBox(
@@ -152,15 +159,14 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
                   height: 180,
                   child: FlutterCarousel(
                     options: CarouselOptions(
-                      // height: 400.0,
                       showIndicator: true,
                       autoPlay: true,
                       floatingIndicator: false,
                       autoPlayCurve: Curves.linear,
-                      // enlargeCenterPage: true,
-                      slideIndicator: const CircularSlideIndicator(
+                      slideIndicator: CircularSlideIndicator(
                         indicatorBorderColor: CommonStyles.blackColor,
                         currentIndicatorColor: CommonStyles.primaryTextColor,
+                        indicatorRadius: 2, // Decrease the size of the indicator
                       ),
                     ),
                     items: _items.map((item) {
@@ -168,8 +174,6 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
                         builder: (BuildContext context) {
                           return SizedBox(
                             width: MediaQuery.of(context).size.width,
-                            // margin: const EdgeInsets.symmetric(horizontal: 5.0),
-                            // decoration: const BoxDecoration(color: Colors.grey),
                             child: Card(
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10),
@@ -181,13 +185,9 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
                                   item.imageName,
                                   height: 100,
                                   fit: BoxFit.cover,
-                                  loadingBuilder:
-                                      (context, child, loadingProgress) {
+                                  loadingBuilder: (context, child, loadingProgress) {
                                     if (loadingProgress == null) return child;
-
-                                    return const Center(
-                                        child: CircularProgressIndicator
-                                            .adaptive());
+                                    return const Center(child: CircularProgressIndicator.adaptive());
                                   },
                                 ),
                               ),
@@ -197,32 +197,8 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
                       );
                     }).toList(),
                   ),
-
-                  // PageView.builder(
-                  //   controller: _pageController,
-                  //   itemCount: _items.length,
-                  //   itemBuilder: (context, index) {
-                  //     final itemIndex = index % _items.length;
-                  //     return SizedBox(
-                  //       child: Row(
-                  //         children: [
-                  //           Expanded(
-                  //             child: ItemBuilder(
-                  //               items: _items,
-                  //               index: itemIndex,
-                  //             ),
-                  //           ),
-                  //         ],
-                  //       ),
-                  //     );
-                  //   },
-                  //   onPageChanged: (int page) {
-                  //     setState(() {
-                  //       _currentPage = page;
-                  //     });
-                  //   },
-                  // ),
                 ),
+
 
                 // Carousel indicator
                 // CarouselIndicator(
@@ -374,126 +350,126 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
                   height: 15,
                 ),
                 //MARK: Screens
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.of(context, rootNavigator: true)
-                            .pushNamed("/Mybookings");
-                      },
-                      child: Column(
-                        children: [
-                          Container(
-                            width: MediaQuery.of(context).size.width / 7,
-                            // height: MediaQuery.of(context).size.height / 5,
-                            padding: const EdgeInsets.all(15),
-                            decoration: const BoxDecoration(
-                              color: Color(0xFFe656ae),
-                              shape: BoxShape.circle,
-                            ),
-                            child: SvgPicture.asset(
-                              'assets/my_bookings_icon.svg',
-                              color: CommonStyles.whiteColor,
-                            ),
-                          ),
-                          const SizedBox(height: 5),
-                          const Text(
-                            'My Bookings',
-                            style: CommonStyles.txSty_14p_f5,
-                          ),
-                        ],
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.of(context, rootNavigator: true)
-                            .pushNamed("/Products");
-                      },
-                      child: Column(
-                        children: [
-                          Container(
-                            width: MediaQuery.of(context).size.width / 7,
-                            //height: 60,
-                            padding: const EdgeInsets.all(15),
-                            decoration: const BoxDecoration(
-                              color: Color(0xFFe44561),
-                              shape: BoxShape.circle,
-                            ),
-                            child: SvgPicture.asset(
-                              'assets/products_icon.svg',
-                              color: CommonStyles.whiteColor,
-                            ),
-                          ),
-                          const SizedBox(height: 5),
-                          const Text(
-                            'Products',
-                            style: CommonStyles.txSty_14p_f5,
-                          ),
-                        ],
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.of(context, rootNavigator: true)
-                            .pushNamed("/about");
-                      },
-                      child: Column(
-                        children: [
-                          Container(
-                            width: MediaQuery.of(context).size.width / 7,
-                            // height: 60,
-                            padding: const EdgeInsets.all(15),
-                            decoration: const BoxDecoration(
-                              color: Color(0xFF662d91),
-                              shape: BoxShape.circle,
-                            ),
-                            child: SvgPicture.asset(
-                              'assets/about_us_icon.svg',
-                              color: CommonStyles.whiteColor,
-                              // width: 11.0,
-                              // height: 11.0,
-                            ),
-                          ),
-                          const SizedBox(height: 5),
-                          const Text(
-                            'About Us',
-                            style: CommonStyles.txSty_14p_f5,
-                          ),
-                        ],
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.of(context, rootNavigator: true)
-                            .pushNamed("/ProfileMy");
-                      },
-                      child: Column(
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.all(15),
-                            width: MediaQuery.of(context).size.width / 7,
-                            //   height: 60,
-                            decoration: const BoxDecoration(
-                              color: Color(0xFF295f5a),
-                              shape: BoxShape.circle,
-                            ),
-                            child: SvgPicture.asset(
-                              'assets/my_profile_icon.svg',
-                              color: CommonStyles.whiteColor,
-                            ),
-                          ),
-                          const SizedBox(height: 5),
-                          const Text(
-                            'My Profile',
-                            style: CommonStyles.txSty_14p_f5,
-                          ),
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-                const SizedBox(height: 15),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //   children: [
+                //     GestureDetector(
+                //       onTap: () {
+                //         Navigator.of(context, rootNavigator: true)
+                //             .pushNamed("/Mybookings");
+                //       },
+                //       child: Column(
+                //         children: [
+                //           Container(
+                //             width: MediaQuery.of(context).size.width / 7,
+                //             // height: MediaQuery.of(context).size.height / 5,
+                //             padding: const EdgeInsets.all(15),
+                //             decoration: const BoxDecoration(
+                //               color: Color(0xFFe656ae),
+                //               shape: BoxShape.circle,
+                //             ),
+                //             child: SvgPicture.asset(
+                //               'assets/my_bookings_icon.svg',
+                //               color: CommonStyles.whiteColor,
+                //             ),
+                //           ),
+                //           const SizedBox(height: 5),
+                //           const Text(
+                //             'My Bookings',
+                //             style: CommonStyles.txSty_14p_f5,
+                //           ),
+                //         ],
+                //       ),
+                //     ),
+                //     GestureDetector(
+                //       onTap: () {
+                //         Navigator.of(context, rootNavigator: true)
+                //             .pushNamed("/Products");
+                //       },
+                //       child: Column(
+                //         children: [
+                //           Container(
+                //             width: MediaQuery.of(context).size.width / 7,
+                //             //height: 60,
+                //             padding: const EdgeInsets.all(15),
+                //             decoration: const BoxDecoration(
+                //               color: Color(0xFFe44561),
+                //               shape: BoxShape.circle,
+                //             ),
+                //             child: SvgPicture.asset(
+                //               'assets/products_icon.svg',
+                //               color: CommonStyles.whiteColor,
+                //             ),
+                //           ),
+                //           const SizedBox(height: 5),
+                //           const Text(
+                //             'Products',
+                //             style: CommonStyles.txSty_14p_f5,
+                //           ),
+                //         ],
+                //       ),
+                //     ),
+                //     GestureDetector(
+                //       onTap: () {
+                //         Navigator.of(context, rootNavigator: true)
+                //             .pushNamed("/about");
+                //       },
+                //       child: Column(
+                //         children: [
+                //           Container(
+                //             width: MediaQuery.of(context).size.width / 7,
+                //             // height: 60,
+                //             padding: const EdgeInsets.all(15),
+                //             decoration: const BoxDecoration(
+                //               color: Color(0xFF662d91),
+                //               shape: BoxShape.circle,
+                //             ),
+                //             child: SvgPicture.asset(
+                //               'assets/about_us_icon.svg',
+                //               color: CommonStyles.whiteColor,
+                //               // width: 11.0,
+                //               // height: 11.0,
+                //             ),
+                //           ),
+                //           const SizedBox(height: 5),
+                //           const Text(
+                //             'About Us',
+                //             style: CommonStyles.txSty_14p_f5,
+                //           ),
+                //         ],
+                //       ),
+                //     ),
+                //     GestureDetector(
+                //       onTap: () {
+                //         Navigator.of(context, rootNavigator: true)
+                //             .pushNamed("/ProfileMy");
+                //       },
+                //       child: Column(
+                //         children: [
+                //           Container(
+                //             padding: const EdgeInsets.all(15),
+                //             width: MediaQuery.of(context).size.width / 7,
+                //             //   height: 60,
+                //             decoration: const BoxDecoration(
+                //               color: Color(0xFF295f5a),
+                //               shape: BoxShape.circle,
+                //             ),
+                //             child: SvgPicture.asset(
+                //               'assets/my_profile_icon.svg',
+                //               color: CommonStyles.whiteColor,
+                //             ),
+                //           ),
+                //           const SizedBox(height: 5),
+                //           const Text(
+                //             'My Profile',
+                //             style: CommonStyles.txSty_14p_f5,
+                //           ),
+                //         ],
+                //       ),
+                //     )
+                //   ],
+                // ),
+                // const SizedBox(height: 15),
                 //MARK: Branches
                 const Row(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -514,17 +490,20 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
                         return const Center(
                             child: CircularProgressIndicator.adaptive());
                       } else if (snapshot.hasError) {
-                        return Center(
-                          child: Text('No Branches Available ',   style: TextStyle(
-                            fontSize: 12.0,
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: "Roboto",
-                          ),),
+                        return const Center(
+                          child: Text(
+                            'No Branches Available ',
+                            style: TextStyle(
+                              fontSize: 12.0,
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: "Roboto",
+                            ),
+                          ),
                         );
                       } else {
-                        List<BranchList>? data = snapshot.data!;
-                        if (data.isNotEmpty) {
+                        List<Model_branch>? data = snapshot.data!;
+                        if (data!.isNotEmpty) {
                           return Container(
                             child: ListView.builder(
                               scrollDirection: Axis.horizontal,
@@ -549,10 +528,7 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
                             ),
                           );
                         }
-
                       }
-
-
                     },
                   ),
                 ),
@@ -562,396 +538,14 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
         ],
       ),
 
-      // Column(
-      //   children: [
-      //     //MARK: Welcome Text
-      //     // Container(
-      //     //   padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-      //     //   height: 80,
-      //     //   child: Column(
-      //     //     crossAxisAlignment: CrossAxisAlignment.stretch,
-      //     //     mainAxisAlignment: MainAxisAlignment.center,
-      //     //     children: [
-      //     //       GestureDetector(
-      //     //         onTap: () {
-      //     //           // Navigator.push(
-      //     //           //   context,
-      //     //           //   MaterialPageRoute(
-      //     //           //       builder: (context) => const AgentDashBoard()),
-      //     //           // );
-      //     //         },
-      //     //         child: const Text(
-      //     //           'Hello!',
-      //     //           style: CommonStyles.txSty_16w_fb,
-      //     //         ),
-      //     //       ),
-      //     //       Text(
-      //     //         userFullName,
-      //     //         style: CommonStyles.txSty_18w_fb,
-      //     //       ),
-      //     //     ],
-      //     //   ),
-      //     // ),
-      //     //MARK: Main Card
-      //
-      //     SingleChildScrollView(
-      //       child: Container(
-      //         decoration: const BoxDecoration(
-      //           color: CommonStyles.whiteColor,
-      //           borderRadius: BorderRadius.only(
-      //             topLeft: Radius.circular(20),
-      //             topRight: Radius.circular(20),
-      //           ),
-      //         ),
-      //
-      //         child: Column(
-      //           children: [
-      //             //MARK: Marquee
-      //             Column(
-      //               crossAxisAlignment: CrossAxisAlignment.start, // Adjust as needed
-      //               children: [
-      //                 SizedBox(
-      //                   height: 30,
-      //                   child: FutureBuilder(
-      //                     future: getMarqueeText(),
-      //                     builder: (context, snapshot) {
-      //                       if (snapshot.connectionState == ConnectionState.waiting) {
-      //                         return const SizedBox();
-      //                       } else if (snapshot.hasError) {
-      //                         return const SizedBox();
-      //                       } else {
-      //                         return Marquee(
-      //                           text: marqueeText,
-      //                           style: const TextStyle(fontSize: 16, fontFamily: "Calibri", fontWeight: FontWeight.w600, color: Color(0xFFff0176)),
-      //                         );
-      //                       }
-      //                     },
-      //                   ),
-      //                 ),
-      //                 isDataBinding
-      //                     ? Center(
-      //                         child: CircularProgressIndicator.adaptive(),
-      //                       )
-      //                     : SizedBox(
-      //                         width: MediaQuery.of(context).size.width,
-      //                         height: 180,
-      //                         child: PageView.builder(
-      //                           controller: _pageController,
-      //                           itemCount: _items.length,
-      //                           itemBuilder: (context, index) {
-      //                             final itemIndex = index % _items.length;
-      //                             return SizedBox(
-      //                               child: Row(
-      //                                 children: [
-      //                                   Expanded(
-      //                                     child: ItemBuilder(items: _items, index: itemIndex),
-      //                                   ),
-      //                                 ],
-      //                               ),
-      //                             );
-      //                           },
-      //                           onPageChanged: (int page) {
-      //                             setState(() {
-      //                               _currentPage = page;
-      //                             });
-      //                           },
-      //                         ),
-      //                       ),
-      //               ],
-      //             ),
-      //
-      //             Row(
-      //               mainAxisAlignment: MainAxisAlignment.center,
-      //               children: <Widget>[
-      //                 for (int i = 0; i < _items.length; i++)
-      //                   Container(
-      //                     margin: const EdgeInsets.all(2),
-      //                     width: 10,
-      //                     height: 10,
-      //                     decoration: BoxDecoration(
-      //                       borderRadius: BorderRadius.circular(10),
-      //                       border: Border.all(color: CommonStyles.primaryTextColor, width: 1.5),
-      //                       color: _currentPage == i ? Colors.grey.withOpacity(0.9) : Colors.transparent,
-      //                     ),
-      //                   )
-      //               ],
-      //             ),
-      //             const SizedBox(height: 8.0),
-      //
-      //             Padding(
-      //               padding: const EdgeInsets.symmetric(horizontal: 15.0),
-      //               child: Column(
-      //                 children: [
-      //                   //MARK: Book Appointment
-      //                   IntrinsicHeight(
-      //                     child: GestureDetector(
-      //                       onTap: () {
-      //                         Navigator.of(context, rootNavigator: true).pushNamed("/BookAppointment");
-      //                       },
-      //                       child: Container(
-      //                           width: double.infinity,
-      //                           height: MediaQuery.of(context).size.height / 11,
-      //                           //height: 60,
-      //                           padding: const EdgeInsets.all(5),
-      //                           decoration: BoxDecoration(
-      //                             border: Border.all(color: CommonStyles.primaryTextColor),
-      //                             borderRadius: BorderRadius.circular(10),
-      //                           ),
-      //                           child:
-      //                               // GestureDetector(
-      //                               //     onTap: () {
-      //                               //       Navigator.of(context, rootNavigator: true).pushNamed("/BookAppointment");
-      //                               //     },
-      //                               //     child:
-      //                               Row(
-      //                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      //                             children: [
-      //                               SizedBox(
-      //                                 width: 2,
-      //                               ),
-      //                               Container(
-      //                                 padding: const EdgeInsets.all(15),
-      //                                 decoration: const BoxDecoration(shape: BoxShape.circle, color: CommonStyles.primaryTextColor),
-      //                                 child: Center(
-      //                                   child: SvgPicture.asset(
-      //                                     'assets/noun-appointment-date-2417776.svg',
-      //                                     width: 30.0,
-      //                                     height: 30.0,
-      //                                     color: CommonStyles.whiteColor,
-      //                                   ),
-      //                                 ),
-      //                               ),
-      //                               const SizedBox(
-      //                                 width: 10,
-      //                               ),
-      //                               // Expanded(
-      //                               //   child: Column(
-      //                               //     crossAxisAlignment: CrossAxisAlignment.start,
-      //                               //     children: [
-      //                               //       Text(
-      //                               //         'Click Here',
-      //                               //         style: CommonStyles.txSty_16p_f5,
-      //                               //       ),
-      //                               //       Text(
-      //                               //         'To Book an Appointment',
-      //                               //         style: CommonStyles.txSty_20p_fb,
-      //                               //       ),
-      //                               //     ],
-      //                               //   ),
-      //                               // ),
-      //                               SizedBox(
-      //                                 width: MediaQuery.of(context).size.width / 2,
-      //                                 child: const Column(
-      //                                   crossAxisAlignment: CrossAxisAlignment.start,
-      //                                   mainAxisAlignment: MainAxisAlignment.center,
-      //                                   children: [
-      //                                     Text(
-      //                                       'Click Here To',
-      //                                       style: CommonStyles.txSty_16p_f5,
-      //                                     ),
-      //                                     Text(
-      //                                       'Book an Appointment',
-      //
-      //                                       /// style: CommonStyles.txSty_20p_fb,
-      //                                       style: TextStyle(
-      //                                         fontSize: 14,
-      //                                         fontFamily: "Calibri",
-      //                                         fontWeight: FontWeight.bold,
-      //                                         color: CommonStyles.primaryTextColor,
-      //                                         letterSpacing: 2,
-      //                                       ),
-      //                                     ),
-      //                                   ],
-      //                                 ),
-      //                               ),
-      //                               const SizedBox(
-      //                                 width: 10,
-      //                               ),
-      //                               SvgPicture.asset(
-      //                                 'assets/book_op_illusion.svg',
-      //                                 width: 60.0,
-      //                                 height: 55.0,
-      //                                 alignment: Alignment.centerRight,
-      //                               ),
-      //                             ],
-      //                           )),
-      //                       // )
-      //                     ),
-      //                   ),
-      //                   const SizedBox(
-      //                     height: 10,
-      //                   ),
-      //                   //MARK: Screens
-      //                   Row(
-      //                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      //                     children: [
-      //                       GestureDetector(
-      //                         onTap: () {
-      //                           Navigator.of(context, rootNavigator: true).pushNamed("/Mybookings");
-      //                         },
-      //                         child: Column(
-      //                           children: [
-      //                             Container(
-      //                               width: MediaQuery.of(context).size.width / 7,
-      //                               // height: MediaQuery.of(context).size.height / 5,
-      //                               padding: const EdgeInsets.all(15),
-      //                               decoration: const BoxDecoration(
-      //                                 color: Color(0xFFe656ae),
-      //                                 shape: BoxShape.circle,
-      //                               ),
-      //                               child: SvgPicture.asset(
-      //                                 'assets/my_bookings_icon.svg',
-      //                                 color: CommonStyles.whiteColor,
-      //                               ),
-      //                             ),
-      //                             const SizedBox(height: 5),
-      //                             const Text(
-      //                               'My Bookings',
-      //                               style: CommonStyles.txSty_14p_f5,
-      //                             ),
-      //                           ],
-      //                         ),
-      //                       ),
-      //                       GestureDetector(
-      //                         onTap: () {
-      //                           Navigator.of(context, rootNavigator: true).pushNamed("/Products");
-      //                         },
-      //                         child: Column(
-      //                           children: [
-      //                             Container(
-      //                               width: MediaQuery.of(context).size.width / 7,
-      //                               //height: 60,
-      //                               padding: const EdgeInsets.all(15),
-      //                               decoration: const BoxDecoration(
-      //                                 color: Color(0xFFe44561),
-      //                                 shape: BoxShape.circle,
-      //                               ),
-      //                               child: SvgPicture.asset(
-      //                                 'assets/products_icon.svg',
-      //                                 color: CommonStyles.whiteColor,
-      //                               ),
-      //                             ),
-      //                             const SizedBox(height: 5),
-      //                             const Text(
-      //                               'Products',
-      //                               style: CommonStyles.txSty_14p_f5,
-      //                             ),
-      //                           ],
-      //                         ),
-      //                       ),
-      //                       GestureDetector(
-      //                         onTap: () {
-      //                           Navigator.of(context, rootNavigator: true).pushNamed("/about");
-      //                         },
-      //                         child: Column(
-      //                           children: [
-      //                             Container(
-      //                               width: MediaQuery.of(context).size.width / 7,
-      //                               // height: 60,
-      //                               padding: const EdgeInsets.all(15),
-      //                               decoration: const BoxDecoration(
-      //                                 color: Color(0xFF662d91),
-      //                                 shape: BoxShape.circle,
-      //                               ),
-      //                               child: SvgPicture.asset(
-      //                                 'assets/about_us_icon.svg',
-      //                                 color: CommonStyles.whiteColor,
-      //                                 // width: 11.0,
-      //                                 // height: 11.0,
-      //                               ),
-      //                             ),
-      //                             const SizedBox(height: 5),
-      //                             const Text(
-      //                               'About Us',
-      //                               style: CommonStyles.txSty_14p_f5,
-      //                             ),
-      //                           ],
-      //                         ),
-      //                       ),
-      //                       GestureDetector(
-      //                         onTap: () {
-      //                           Navigator.of(context, rootNavigator: true).pushNamed("/ProfileMy");
-      //                         },
-      //                         child: Column(
-      //                           children: [
-      //                             Container(
-      //                               padding: const EdgeInsets.all(15),
-      //                               width: MediaQuery.of(context).size.width / 7,
-      //                               //   height: 60,
-      //                               decoration: const BoxDecoration(
-      //                                 color: Color(0xFF295f5a),
-      //                                 shape: BoxShape.circle,
-      //                               ),
-      //                               child: SvgPicture.asset(
-      //                                 'assets/my_profile_icon.svg',
-      //                                 color: CommonStyles.whiteColor,
-      //                               ),
-      //                             ),
-      //                             const SizedBox(height: 5),
-      //                             const Text(
-      //                               'My Profile',
-      //                               style: CommonStyles.txSty_14p_f5,
-      //                             ),
-      //                           ],
-      //                         ),
-      //                       )
-      //                     ],
-      //                   ),
-      //                   const SizedBox(height: 10),
-      //                   //MARK: Branches
-      //                   const Row(
-      //                     mainAxisAlignment: MainAxisAlignment.start,
-      //                     children: [
-      //                       Text(
-      //                         'Branches',
-      //                         style: CommonStyles.txSty_16p_fb,
-      //                       ),
-      //                     ],
-      //                   ),
-      //
-      //                   SizedBox(
-      //                     height: MediaQuery.of(context).size.height / 4,
-      //                     child: FutureBuilder(
-      //                       future: apiData,
-      //                       builder: (context, snapshot) {
-      //                         if (snapshot.connectionState == ConnectionState.waiting) {
-      //                           return const Center(child: CircularProgressIndicator.adaptive());
-      //                         } else if (snapshot.hasError) {
-      //                           return Center(
-      //                             child: Text(snapshot.error.toString()),
-      //                           );
-      //                         } else {
-      //                           List<BranchList>? data = snapshot.data!;
-      //                           return Container(
-      //                             child: ListView.builder(
-      //                               scrollDirection: Axis.horizontal,
-      //                               itemCount: data.length,
-      //                               itemBuilder: (context, index) {
-      //                                 return BranchCard(
-      //                                   branch: data[index],
-      //                                 );
-      //                               },
-      //                             ),
-      //                           );
-      //                         }
-      //                       },
-      //                     ),
-      //                   ),
-      //                 ],
-      //               ),
-      //             ),
-      //           ],
-      //         ),
-      //       ),
-      //     ),
-      //   ],
-      // ),
+
     );
   }
 
-  Future<List<BranchList>> getBranchsData() async {
-    var apiUrl = baseUrl+getbranchesall;
-
+  Future<List<Model_branch>> getBranchsData() async {
+    //var apiUrl = baseUrl + getbranchesall;
+    var apiUrl = baseUrl + getbrancheselectedcity + 'null';
+    print('result: ${apiUrl}');
     try {
       final jsonResponse = await http.get(
         Uri.parse(apiUrl),
@@ -960,11 +554,11 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
       if (jsonResponse.statusCode == 200) {
         Map<String, dynamic> response = jsonDecode(jsonResponse.body);
         List<dynamic> branchesData = response['listResult'];
-        List<BranchList> result =
-        branchesData.map((e) => BranchList.fromJson(e)).toList();
+        List<Model_branch> result =
+        branchesData.map((e) => Model_branch.fromJson(e)).toList();
 
         if (result.isNotEmpty) {
-          print('result: ${result[0].name}');
+          print('result: ${result[0].branchName}');
           print('result: ${result[0].address}');
           print('result: ${result[0].imageName}');
         } else {
@@ -1009,24 +603,22 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
 }
 
 class BranchCard extends StatelessWidget {
-  final BranchList branch;
+  final Model_branch branch;
 
   const BranchCard({super.key, required this.branch});
 
   @override
   Widget build(BuildContext context) {
-    return Card(
+    return  Card(
       elevation: 2,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
       ),
       child: Container(
         height: MediaQuery.of(context).size.height,
-        // width: 170,
         width: MediaQuery.of(context).size.width / 2.5,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
-          // color: Colors.grey,
           color: CommonStyles.branchBg,
         ),
         child: Column(
@@ -1049,94 +641,78 @@ class BranchCard extends StatelessWidget {
                 ),
               ),
             ),
-            // Expanded(
-            //   child: ClipRRect(
-            //     borderRadius: const BorderRadius.only(
-            //       topLeft: Radius.circular(10),
-            //       topRight: Radius.circular(10),
-            //     ),
-            //     child: Image.network(
-            //       branch.imageName,
-            //       fit: BoxFit.cover,
-            //     ),
-            //   ),
-            // ),
-            // Expanded(
-            //   child: Container(
-            //     padding: const EdgeInsets.all(5),
-            //     decoration: const BoxDecoration(
-            //       borderRadius: BorderRadius.only(
-            //         topLeft: Radius.circular(10),
-            //         topRight: Radius.circular(10),
-            //       ),
-            //       color: Colors.greenAccent,
-            //     ),
-            //     child: Image.network(
-            //       // 'https://via.placeholder.com/600/92c952',
-            //       'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTH7vDN07mCqaSv-VvdFX3VYd2Ic9uFyha4kA&s',
-            //       fit: BoxFit.fill,
-            //     ),
-            //   ),
-            // ),
-            // Expanded(
-            //   child: Container(
-            //     padding: const EdgeInsets.all(10),
-            //     decoration: const BoxDecoration(
-            //       borderRadius: BorderRadius.only(
-            //         bottomLeft: Radius.circular(10),
-            //         bottomRight: Radius.circular(10),
-            //       ),
-            //       color: CommonStyles.branchBg,
-            //     ),
-            //     child: Column(
-            //       crossAxisAlignment: CrossAxisAlignment.stretch,
-            //       children: [
-            //         Text(
-            //           branch.name,
-            //           style: CommonStyles.txSty_16p_fb,
-            //         ),
-            //         Text(branch.address, style: CommonStyles.txSty_12b_f5),
-            //       ],
-            //     ),
-            //   ),
-            // ),
-            Container(
-              // height: MediaQuery.of(context).size.height,
-              padding: const EdgeInsets.all(10),
-              decoration: const BoxDecoration(
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(10),
-                  bottomRight: Radius.circular(10),
-                ),
-                color: CommonStyles.branchBg,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Text(
-                    branch.name,
-                    style: CommonStyles.txSty_16p_fb,
+            Expanded(
+              child: Container(
+                padding: const EdgeInsets.all(10),
+                decoration: const BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(10),
+                    bottomRight: Radius.circular(10),
                   ),
-                  Text(branch.address,
-                      maxLines: 3,
-                      overflow: TextOverflow.ellipsis,
-                      style: CommonStyles.txSty_12b_f5),
-                ],
+                  color: CommonStyles.branchBg,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            branch.branchName,
+                            style: CommonStyles.txSty_16p_fb,
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            openMap(branch); // Call the openMap method
+                          },
+                          child: SvgPicture.asset(
+                            'assets/map_marker.svg',
+                            width: 20,
+                            height: 20,
+                            color: CommonStyles.statusGreenText,
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 5.0,),
+                    Expanded(
+                      child: Text(
+                        branch.address,
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
+                        style: CommonStyles.txSty_12b_f5,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ],
         ),
       ),
     );
+
   }
+  Future<void> openMap(Model_branch branchnames) async {
+
+    // Replace with your logic to open the map, for example:
+    final url = 'https://www.google.com/maps/search/?api=1&query=${branchnames.latitude},${branchnames.longitude}';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
 }
 
 class ItemBuilder extends StatelessWidget {
   const ItemBuilder({
-    Key? key,
+    super.key,
     required this.items,
     required this.index,
-  }) : super(key: key);
+  });
 
   final List<Item> items;
   final int index;

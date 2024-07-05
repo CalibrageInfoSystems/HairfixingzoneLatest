@@ -417,15 +417,15 @@ class _AgentLoginState extends State<AgentLogin> {
 
         if (responseData["isSuccess"]) {
           List<dynamic>? listResult = responseData["listResult"];
-
-          Map<String, dynamic> user = listResult![0];
+          print('Role ID: ${listResult!.length}');
+          Map<String, dynamic> user = listResult[0];
           print('User ID: ${user['id']}');
           print('Full Name: ${user['firstName']}');
           print('Role ID: ${user['roleID']}');
 
 
           LoadingProgress.stop(context);
-          if (listResult != null && listResult.isNotEmpty && listResult[0]['roleID'] == 3) {
+          if (listResult != null && listResult.isNotEmpty && (listResult[0]['roleID'] == 3 || listResult[0]['roleID'] == 1)) {
             agentId = listResult[0]["id"];
             await saveUserDataToSharedPreferences(user);
             final Map<String, dynamic> agentSlotsDetailsMap = {
@@ -453,7 +453,8 @@ class _AgentLoginState extends State<AgentLogin> {
 
             // Send the agentSlotsDetailsMap as the body of the request
             await addAgentSlotInformation(agentSlotsDetailsMap, agentId);
-          } else {
+          }
+          else {
             // setState(() {
             //   _isLoading = false;
 
@@ -462,7 +463,7 @@ class _AgentLoginState extends State<AgentLogin> {
             FocusScope.of(context).unfocus();
             CommonUtils.showCustomToastMessageLong('Invalid user ', context, 1, 4);
           //  LoadingProgress.stop(context);
-            print("ListResult is null");
+            print("ListResult is null ${listResult[0]['roleID']}");
           }
         } else {
           // setState(() {

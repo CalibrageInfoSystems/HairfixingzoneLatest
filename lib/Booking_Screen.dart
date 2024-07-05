@@ -599,7 +599,7 @@ class _BookingScreenState extends State<Bookingscreen> {
                       ),
                       const SizedBox(
                         height: 15,
-                      ),
+                         ),
                       Scrollbar(
                         child: isLoading
                             ? const Center(

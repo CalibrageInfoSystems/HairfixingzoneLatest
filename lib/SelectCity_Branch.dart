@@ -186,12 +186,8 @@ class _BookingScreenState extends State<SelectCity_Branch_screen> {
                                     setState(() {
                                       selectedTypeCdId = value!;
                                       if (selectedTypeCdId != -1) {
-                                        selectedValue =
-                                        dropdownItems[selectedTypeCdId]
-                                        ['typecdid'];
-                                        selectedName =
-                                        dropdownItems[selectedTypeCdId]
-                                        ['desc'];
+                                        selectedValue = dropdownItems[selectedTypeCdId]['typecdid'];
+                                        selectedName = dropdownItems[selectedTypeCdId]['desc'];
                                         getbrancheslist(selectedValue);
                                         print("selectedValue:$selectedValue");
                                         print("selectedName:$selectedName");
@@ -257,8 +253,7 @@ class _BookingScreenState extends State<SelectCity_Branch_screen> {
                         ),
                       )
 
-                          :
-                      ListView.builder(
+                          : ListView.builder(
                           itemCount: model_branches.length,
                           shrinkWrap: true,
                           physics: const PageScrollPhysics(),
@@ -294,7 +289,7 @@ class _BookingScreenState extends State<SelectCity_Branch_screen> {
                                     child: Container(
                                       height:
                                       MediaQuery.of(context).size.height /
-                                          10,
+                                          8,
                                       width: MediaQuery.of(context).size.width,
                                       // decoration: BoxDecoration(
                                       //   border: Border.all(color: Color(0xFF662e91), width: 1.0),
@@ -317,80 +312,76 @@ class _BookingScreenState extends State<SelectCity_Branch_screen> {
                                           ),
                                         ],
                                       ),
-                                      child: Row(
+                                      child:
+                                      Row(
                                         children: [
                                           Container(
                                             padding: const EdgeInsets.all(10),
-                                            // width: MediaQuery.of(context).size.width / 4,
                                             child: Image.network(
                                               imageUrl.isNotEmpty
                                                   ? imageUrl
                                                   : 'https://example.com/placeholder-image.jpg',
                                               fit: BoxFit.cover,
-                                              height: MediaQuery.of(context)
-                                                  .size
-                                                  .height /
-                                                  4 /
-                                                  2,
-                                              width: MediaQuery.of(context)
-                                                  .size
-                                                  .width /
-                                                  3.2,
-                                              errorBuilder:
-                                                  (context, error, stackTrace) {
+                                              height: MediaQuery.of(context).size.height / 4 / 2,
+                                              width: MediaQuery.of(context).size.width / 3.2,
+                                              errorBuilder: (context, error, stackTrace) {
                                                 return Image.asset(
                                                   'assets/hairfixing_logo.png', // Path to your PNG placeholder image
                                                   fit: BoxFit.cover,
-                                                  height: MediaQuery.of(context)
-                                                      .size
-                                                      .height /
-                                                      4 /
-                                                      2,
-                                                  width: MediaQuery.of(context)
-                                                      .size
-                                                      .width /
-                                                      3.2,
+                                                  height: MediaQuery.of(context).size.height / 4 / 2,
+                                                  width: MediaQuery.of(context).size.width / 3.2,
                                                 );
                                               },
                                             ),
                                           ),
-                                          Container(
-                                            // height: MediaQuery.of(context).size.height / 4 / 2,
-
-                                            width: MediaQuery.of(context)
-                                                .size
-                                                .width /
-                                                2.2,
-                                            padding:
-                                            const EdgeInsets.only(top: 7),
-                                            // width: MediaQuery.of(context).size.width / 4,
-                                            child: Column(
-                                              //  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                              crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  branchnames.branchName!,
-                                                  style: const TextStyle(
-                                                    color: Color(0xFF0f75bc),
-                                                    fontSize: 14.0,
-                                                    fontWeight: FontWeight.w600,
+                                          Expanded(
+                                            child: Container(
+                                              width: MediaQuery.of(context).size.width / 2.2,
+                                              padding: const EdgeInsets.only(top: 7,right: 7),
+                                              child: Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  Row(
+                                                    children: [
+                                                      Expanded(
+                                                        child: Text(
+                                                          branchnames.branchName!,
+                                                          style: const TextStyle(
+                                                            color: Color(0xFF0f75bc),
+                                                            fontSize: 14.0,
+                                                            fontWeight: FontWeight.w600,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      GestureDetector(
+                                                        onTap: () {
+                                                          openMap(branchnames); // Call the openMap method
+                                                        },
+                                                        child: SvgPicture.asset(
+                                                          'assets/map_marker.svg',
+                                                          width: 20,
+                                                          height: 20,
+                                                          color: CommonStyles.statusGreenText,
+                                                        ),
+                                                      ),
+                                                    ],
                                                   ),
-                                                ),
-                                                const SizedBox(
-                                                  height: 5,
-                                                ),
-                                                Text(branchnames.address!,
+                                                  const SizedBox(height: 5),
+                                                  Text(
+                                                    branchnames.address!,
                                                     maxLines: 2,
-                                                    overflow:
-                                                    TextOverflow.ellipsis,
-                                                    style: CommonStyles
-                                                        .txSty_12b_f5),
-                                              ],
+                                                    overflow: TextOverflow.ellipsis,
+                                                    style: CommonStyles.txSty_12b_f5,
+                                                  ),
+                                                ],
+                                              ),
                                             ),
-                                          )
+                                          ),
                                         ],
-                                      ),
+                                      )
+
+
+
                                     )));
                           })
                     ],
@@ -552,4 +543,16 @@ class _BookingScreenState extends State<SelectCity_Branch_screen> {
     // Return false to indicate that we handled the back button press
     return Future.value(false);
   }
+
+  Future<void> openMap(Model_branch branchnames) async {
+
+    // Replace with your logic to open the map, for example:
+    final url = 'https://www.google.com/maps/search/?api=1&query=${branchnames.latitude},${branchnames.longitude}';
+    if (await canLaunch(url)) {
+    await launch(url);
+    } else {
+    throw 'Could not launch $url';
+    }
+  }
+
 }

@@ -677,7 +677,7 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
                                                     ),
                                                     Text(
                                                       consultationslist[index]
-                                                          .email,
+                                                          .phoneNumber,
                                                       style: const TextStyle(
                                                         fontSize: 14,
                                                         fontFamily: "Calibri",
@@ -745,7 +745,7 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
                                                     ),
                                                     Text(
                                                       consultationslist[index]
-                                                          .phoneNumber,
+                                                          .email,
                                                       style: const TextStyle(
                                                         fontSize: 14,
                                                         fontFamily: "Calibri",
@@ -776,28 +776,28 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
                                           // ),
 
                                           Flexible(
-                                            child: RichText(
-                                              text: TextSpan(
-                                                text: 'Remark : ',
-                                                style:
-                                                    CommonStyles.txSty_14blu_f5,
-                                                children: <TextSpan>[
-                                                  TextSpan(
-                                                    text:
-                                                        consultationslist[index]
-                                                            .remarks,
-                                                    style: const TextStyle(
-                                                      color: Color(0xFF5f5f5f),
-                                                      fontSize: 14,
-                                                      fontWeight:
-                                                          FontWeight.w500,
-                                                      fontFamily: 'Calibri',
+                                            child: Visibility(
+                                              visible: consultationslist[index].remarks != null && consultationslist[index].remarks!.isNotEmpty,
+                                              child: RichText(
+                                                text: TextSpan(
+                                                  text: 'Remark : ',
+                                                  style: CommonStyles.txSty_14blu_f5,
+                                                  children: <TextSpan>[
+                                                    TextSpan(
+                                                      text: consultationslist[index].remarks ?? '',
+                                                      style: const TextStyle(
+                                                        color: Color(0xFF5f5f5f),
+                                                        fontSize: 14,
+                                                        fontWeight: FontWeight.w500,
+                                                        fontFamily: 'Calibri',
+                                                      ),
                                                     ),
-                                                  ),
-                                                ],
+                                                  ],
+                                                ),
                                               ),
                                             ),
-                                          )
+                                          ),
+
                                           // based on status hide this row
                                         ],
                                       ),

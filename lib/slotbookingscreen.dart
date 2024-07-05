@@ -527,8 +527,7 @@ class _BookingScreenState extends State<slotbookingscreen>  {
                                                                 });
                                                               },
                                                         style: ElevatedButton.styleFrom(
-                                                          padding: EdgeInsets.symmetric(vertical: 1.0, horizontal: 1.0),
-                                                          primary: _selectedTimeSlot == slot.SlotTimeSpan
+                                                          padding: EdgeInsets.symmetric(vertical: 1.0, horizontal: 1.0) , backgroundColor: _selectedTimeSlot == slot.SlotTimeSpan
                                                               ? Colors.green
                                                               : (slot.availableSlots <= 0 ? Colors.grey : Colors.white),
                                                           side: BorderSide(

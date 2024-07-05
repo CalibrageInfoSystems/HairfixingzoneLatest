@@ -1,5 +1,4 @@
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/scheduler.dart';
@@ -8,28 +7,20 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hairfixingzone/Common/common_styles.dart';
 import 'package:hairfixingzone/Profile.dart';
-import 'package:hairfixingzone/UserSelectionScreen.dart';
-import 'package:hairfixingzone/feedback.dart';
-import 'package:hairfixingzone/slotbookingscreen.dart';
 
 import 'dart:async';
 
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:shimmer/shimmer.dart';
 import 'dart:convert';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/services.dart';
-import 'Appointment.dart';
 import 'BranchModel.dart';
-import 'Branches_screen.dart';
 import 'CustomerLoginScreen.dart';
 import 'Dashboard_Screen.dart';
 import 'LatestAppointment.dart';
 import 'MyAppointments.dart';
 import 'MyProducts.dart';
 import 'aboutus_screen.dart';
-import 'agentloginscreen.dart';
 import 'api_config.dart';
 import 'CommonUtils.dart';
 
@@ -69,7 +60,6 @@ class _HomeScreenState extends State<HomeScreen> {
   // String Gender = '';
   @override
   void initState() {
-    // TODO: implement initState
     _expandedTileController = ExpandedTileController(isExpanded: false);
 
     CommonUtils.checkInternetConnectivity().then((isConnected) {
@@ -82,7 +72,8 @@ class _HomeScreenState extends State<HomeScreen> {
         //fetchimagesslider();
         fetchImages();
       } else {
-        CommonUtils.showCustomToastMessageLong('Please Check Your Internet Connection', context, 1, 4);
+        CommonUtils.showCustomToastMessageLong(
+            'Please Check Your Internet Connection', context, 1, 4);
         print('Not connected to the internet'); // Not connected to the internet
       }
     });
@@ -94,6 +85,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     setState(() {
       userFullName = prefs.getString('userFullName') ?? '';
+      print('userFullName: $userFullName');
       email = prefs.getString('email') ?? '';
       phonenumber = prefs.getString('contactNumber') ?? '';
       Gender = prefs.getString('gender') ?? '';
@@ -104,7 +96,7 @@ class _HomeScreenState extends State<HomeScreen> {
       // gender = selectedGender;
       print('userId:$userId');
       GetLatestAppointmentByUserId(userId);
-      print('userFullName:$userFullName');
+      print('userFullName: $userFullName');
       print('gender:$Gender');
       // if (gender == 1) {
       //   Gender = 'Female';
@@ -157,7 +149,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                 ),
-                const SizedBox(width: 10), // Add spacing between buttons
+                const SizedBox(width: 10),
                 Container(
                   child: ElevatedButton(
                     onPressed: () => Navigator.of(context).pop(true),
@@ -189,22 +181,52 @@ class _HomeScreenState extends State<HomeScreen> {
             );
           },
         );
-
-        // Close the app if user confirms
         if (confirmClose == true) {
-          // Close the app
           SystemNavigator.pop();
         }
-
-        // Return false to prevent default back button behavior
         return Future.value(false);
       },
-      // child: MaterialApp(
-      //   debugShowCheckedModeBanner: false,
-      child: Scaffold(
-        appBar: _currentIndex == 0
+      //MARK: AppBar
+
+      child:Scaffold(
+      appBar: CommonStyles.homeAppBar(
+context: context,
+      userName: userFullName.isNotEmpty ? userFullName[0].toUpperCase() : "H",userFullName: userFullName,email :email
+    ),
+
+        /* appBar: _currentIndex == 0
             ? CommonStyles.homeAppBar(
-                onPressed: () => logOutDialog(),
+                onSelected: (value) {
+                  print('value: $value');
+                  switch (value) {
+                    case 'profile':
+                      print('Profile');
+                      setState(() {
+                        _currentIndex = 3;
+                      });
+                      break;
+                    case 'favorites':
+                      print('Favorites');
+                      break;
+                    case 'about':
+                      print('About');
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const AboutUsScreen()),
+                      );
+                      break;
+                    case 'logout':
+                      logOutDialog();
+                      break;
+                    default:
+                      print('default');
+                      break;
+                  }
+                }, // logOutDialog()
+                userName: userFullName.isNotEmpty
+                    ? userFullName[0].toLowerCase()
+                    : "H",
               )
             : CommonStyles.remainingAppBars(
                 context,
@@ -213,516 +235,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   logOutDialog();
                 },
               ),
-
-        // AppBar(
-        //   backgroundColor: const Color(0xFFf3e3ff),
-        //   automaticallyImplyLeading: false,
-        //   title: _currentIndex == 0
-        //       ? Container(
-        //           width: 85,
-        //           height: 40,
-        //           child: FractionallySizedBox(
-        //             widthFactor: 1,
-        //             child: Image.asset(
-        //               'assets/hfz_logo.png',
-        //               fit: BoxFit.fitWidth,
-        //             ),
-        //           ),
-        //         )
-        //       : _currentIndex == 1 || _currentIndex == 2 || _currentIndex == 3
-        //           ? Text(
-        //               _getAppBarTitle(_currentIndex),
-        //               style: CommonUtils.header_Styles,
-        //             )
-        //           : null,
-        //   actions: [
-        //     IconButton(
-        //       icon: SvgPicture.asset(
-        //         'assets/sign-out-alt.svg',
-        //         color: Color(0xFF662e91),
-        //         width: 24,
-        //         height: 24,
-        //       ),
-        //       onPressed: () {
-        //         logOutDialog();
-        //         // Add logout functionality here
-        //       },
-        //     ),
-        //   ],
-        // ),
-
+        */
         body: _buildScreens(_currentIndex),
-
-        // Column(
-        //   children: [
-        //
-        //     Expanded(
-        //       child: Padding(
-        //         padding: EdgeInsets.symmetric(horizontal: 10.0),
-        //         child: Column(
-        //           children: [
-        //             Expanded(
-        //               child: Stack(
-        //                 children: [
-        //                   Align(
-        //                     alignment: Alignment.topCenter,
-        //                     child: isDataBinding
-        //                         ? Center(
-        //                             child: CircularProgressIndicator.adaptive(),
-        //                           )
-        //                         : imageList.isEmpty
-        //                             ? Center(
-        //                                 // child: CircularProgressIndicator.adaptive(),
-        //                                 child: Icon(
-        //                                   Icons.signal_cellular_connected_no_internet_0_bar_sharp,
-        //                                   color: Colors.red,
-        //                                 ),
-        //                               )
-        //                             : CarouselSlider(
-        //                                 items: imageList
-        //                                     .map((item) => Image.network(
-        //                                           item.imageName,
-        //                                           fit: BoxFit.fitWidth,
-        //                                           width: MediaQuery.of(context).size.width,
-        //                                         ))
-        //                                     .toList(),
-        //                                 carouselController: carouselController,
-        //                                 options: CarouselOptions(
-        //                                   scrollPhysics: const BouncingScrollPhysics(),
-        //                                   autoPlay: true,
-        //                                   aspectRatio: 23 / 9,
-        //                                   viewportFraction: 1,
-        //                                   onPageChanged: (index, reason) {
-        //                                     setState(() {
-        //                                       currentIndex = index;
-        //                                     });
-        //                                   },
-        //                                 ),
-        //                               ),
-        //                   ),
-        //
-        //                   Container(
-        //                     width: MediaQuery.of(context).size.width,
-        //                     //  padding: EdgeInsets.all(20.0),
-        //
-        //                     height: MediaQuery.of(context).size.height,
-        //                     child: Align(
-        //                       alignment: Alignment.bottomCenter,
-        //                       child: Padding(
-        //                         padding: EdgeInsets.only(bottom: 25.0),
-        //                         child: Row(
-        //                           mainAxisAlignment: MainAxisAlignment.center,
-        //                           children: imageList.asMap().entries.map((entry) {
-        //                             final index = entry.key;
-        //                             return buildIndicator(index);
-        //                           }).toList(),
-        //                         ),
-        //                       ),
-        //                     ),
-        //                   )
-        //                 ],
-        //               ),
-        //             ),
-        //             // Padding(
-        //             //   padding: EdgeInsets.symmetric(horizontal: 5.0, vertical: 5.0),
-        //             //   child: Align(
-        //             //     alignment: Alignment.topCenter,
-        //             //     child: Text(
-        //             //       'Branches',
-        //             //       textAlign: TextAlign.left,
-        //             //       style: TextStyle(
-        //             //         fontFamily: 'Calibri',
-        //             //         fontSize: 20,
-        //             //         color: Color(0xFF163CF1),
-        //             //         fontWeight: FontWeight.bold,
-        //             //       ),
-        //             //     ),
-        //             //   ),
-        //             // ),
-        //             // if (isLoading)
-        //             //   Text('Please Wait Loading Slow Internet Connection !')
-        //             // else if (brancheslist.isEmpty && imageList.isEmpty)
-        //             //   Container(
-        //             //     padding: EdgeInsets.all(15.0),
-        //             //     child: Center(
-        //             //       child: Column(
-        //             //         mainAxisAlignment: MainAxisAlignment.center,
-        //             //         children: [
-        //             //           Text('Failed to fetch data. Please check your internet connection.!'),
-        //             //           SizedBox(height: 20),
-        //             //           ElevatedButton(
-        //             //             onPressed: retryDataFetching,
-        //             //             child: Text('Retry'),
-        //             //           ),
-        //             //         ],
-        //             //       ),
-        //             //     ),
-        //             //   ),
-        //             // // if (brancheslist == null || brancheslist.isEmpty)
-        //             // //   Container(
-        //             // //     padding: EdgeInsets.all(15.0),
-        //             // //     child: Center(
-        //             // //       child: Column(
-        //             // //         mainAxisAlignment: MainAxisAlignment.center,
-        //             // //         children: [
-        //             // //           SizedBox(height: 100),
-        //             // //           Center(
-        //             // //             child: Text('No found.'),
-        //             // //           ),
-        //             // //         ],
-        //             // //       ),
-        //             // //     ),
-        //             // //   ),
-        //             // Expanded(
-        //             //     flex: 3,
-        //             //     child: ListView.builder(
-        //             //       shrinkWrap: true,
-        //             //       itemCount: isLoading ? 5 : brancheslist.length, // Display a fixed number of shimmer items when loading
-        //             //       itemBuilder: (context, index) {
-        //             //         if (isLoading) {
-        //             //           // Return shimmer effect if isLoading is true
-        //             //           return Padding(
-        //             //             padding: EdgeInsets.symmetric(horizontal: 0.0, vertical: 5.0),
-        //             //             child: Shimmer.fromColors(
-        //             //               baseColor: Colors.grey.shade300,
-        //             //               highlightColor: Colors.grey.shade100,
-        //             //               child: Container(
-        //             //                 height: 150, // Adjust height as needed
-        //             //                 decoration: BoxDecoration(
-        //             //                   color: Colors.white,
-        //             //                   borderRadius: BorderRadius.circular(15.0),
-        //             //                 ),
-        //             //               ),
-        //             //             ),
-        //             //           );
-        //             //         } else {
-        //             //           // Return actual data when isLoading is false
-        //             //           BranchModel branch = brancheslist[index];
-        //             //           return Padding(
-        //             //             padding: EdgeInsets.symmetric(horizontal: 0.0, vertical: 5.0),
-        //             //             child: IntrinsicHeight(
-        //             //               child: ClipRRect(
-        //             //                 borderRadius: BorderRadius.only(
-        //             //                   topRight: Radius.circular(15.0),
-        //             //                   bottomLeft: Radius.circular(15.0),
-        //             //                 ),
-        //             //                 child: GestureDetector(
-        //             //                   onTap: () {
-        //             //                     Navigator.push(
-        //             //                       context,
-        //             //                       MaterialPageRoute(
-        //             //                         builder: (context) => slotbookingscreen(
-        //             //                           branchId: branch.id,
-        //             //                           branchname: branch.name,
-        //             //                           branchlocation: branch.address,
-        //             //                           filepath: branch.imageName != null ? branch.imageName! : 'assets/top_image.png',
-        //             //                           MobileNumber: branch.mobileNumber,
-        //             //                           appointmentId: 0,
-        //             //                           // Provide the appointmentId value
-        //             //                           screenFrom: "Schedule",
-        //             //                         ),
-        //             //                       ),
-        //             //                     );
-        //             //                     //
-        //             //                     // Navigator.of(context).push(
-        //             //                     //   MaterialPageRoute(builder: (context) => feedback_Screen()),
-        //             //                     // );
-        //             //                   },
-        //             //                   child: Card(
-        //             //                     shadowColor: Colors.transparent,
-        //             //                     surfaceTintColor: Colors.transparent,
-        //             //                     child: ClipRRect(
-        //             //                       borderRadius: BorderRadius.only(
-        //             //                         topRight: Radius.circular(15.0),
-        //             //                         bottomLeft: Radius.circular(15.0),
-        //             //                       ),
-        //             //                       child: Container(
-        //             //                         decoration: BoxDecoration(
-        //             //                           gradient: LinearGradient(
-        //             //                             colors: [
-        //             //                               Color(0xFFFEE7E1), // Start color
-        //             //                               Color(0xFFD7DEFA),
-        //             //                             ],
-        //             //                             begin: Alignment.centerLeft,
-        //             //                             end: Alignment.centerRight,
-        //             //                           ),
-        //             //                         ),
-        //             //                         child: Row(
-        //             //                           crossAxisAlignment: CrossAxisAlignment.center,
-        //             //                           children: [
-        //             //                             Padding(
-        //             //                               padding: EdgeInsets.only(left: 15.0),
-        //             //                               child: Container(
-        //             //                                 width: 110,
-        //             //                                 height: 65,
-        //             //                                 decoration: BoxDecoration(
-        //             //                                   borderRadius: BorderRadius.circular(10.0),
-        //             //                                   border: Border.all(
-        //             //                                     color: Color(0xFF9FA1EE),
-        //             //                                     width: 3.0,
-        //             //                                   ),
-        //             //                                 ),
-        //             //                                 child: ClipRRect(
-        //             //                                   borderRadius: BorderRadius.circular(7.0),
-        //             //                                   child: branch.imageName != null
-        //             //                                       ? Image.network(
-        //             //                                           branch.imageName!,
-        //             //                                           width: 110,
-        //             //                                           height: 65,
-        //             //                                           fit: BoxFit.fill,
-        //             //                                           loadingBuilder: (context, child, loadingProgress) {
-        //             //                                             if (loadingProgress == null) return child;
-        //             //
-        //             //                                             return const Center(child: CircularProgressIndicator.adaptive());
-        //             //                                           },
-        //             //                                         )
-        //             //                                       : Image.asset(
-        //             //                                           'assets/top_image.png', // Provide the path to your default image asset
-        //             //                                           width: 110,
-        //             //                                           height: 65,
-        //             //                                           fit: BoxFit.fill,
-        //             //                                         ),
-        //             //                                 ),
-        //             //                               ),
-        //             //                             ),
-        //             //                             // Padding(
-        //             //                             //   padding: EdgeInsets.only(left: 15.0),
-        //             //                             //   child: Container(
-        //             //                             //     width: 110,
-        //             //                             //     height: 65,
-        //             //                             //     decoration: BoxDecoration(
-        //             //                             //       borderRadius: BorderRadius.circular(10.0),
-        //             //                             //       border: Border.all(
-        //             //                             //         color: Color(0xFF9FA1EE),
-        //             //                             //         width: 3.0,
-        //             //                             //       ),
-        //             //                             //     ),
-        //             //                             //     child: ClipRRect(
-        //             //                             //       borderRadius: BorderRadius.circular(7.0),
-        //             //                             //       child: isLoading
-        //             //                             //           ? Shimmer.fromColors(
-        //             //                             //               baseColor: Colors.grey.shade300,
-        //             //                             //               highlightColor: Colors.white,
-        //             //                             //               child: Container(
-        //             //                             //                 width: 110,
-        //             //                             //                 height: 65,
-        //             //                             //                 decoration: BoxDecoration(
-        //             //                             //                   color: Colors.white,
-        //             //                             //                   borderRadius: BorderRadius.circular(7.0),
-        //             //                             //                 ),
-        //             //                             //               ),
-        //             //                             //             )
-        //             //                             //           : Image.network(
-        //             //                             //               imagesflierepo + branch.filePath,
-        //             //                             //               width: 110,
-        //             //                             //               height: 65,
-        //             //                             //               fit: BoxFit.fill,
-        //             //                             //             ),
-        //             //                             //     ),
-        //             //                             //   ),
-        //             //                             // ),
-        //             //
-        //             //                             Expanded(
-        //             //                               child: Padding(
-        //             //                                 padding: EdgeInsets.only(left: 15.0),
-        //             //                                 child: Column(
-        //             //                                   mainAxisAlignment: MainAxisAlignment.start,
-        //             //                                   crossAxisAlignment: CrossAxisAlignment.start,
-        //             //                                   children: [
-        //             //                                     Padding(
-        //             //                                       padding: EdgeInsets.only(top: 15.0),
-        //             //                                       child: Text(
-        //             //                                         branch.name,
-        //             //                                         style: TextStyle(
-        //             //                                           fontSize: 18,
-        //             //                                           color: Color(0xFFFB4110),
-        //             //                                           fontWeight: FontWeight.bold,
-        //             //                                           fontFamily: 'Calibri',
-        //             //                                         ),
-        //             //                                       ),
-        //             //                                     ),
-        //             //                                     SizedBox(height: 4.0),
-        //             //                                     Expanded(
-        //             //                                       child: Padding(
-        //             //                                         padding: EdgeInsets.only(right: 10.0),
-        //             //                                         child: Column(
-        //             //                                           crossAxisAlignment: CrossAxisAlignment.start,
-        //             //                                           children: [
-        //             //                                             Row(
-        //             //                                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        //             //                                               children: [
-        //             //                                                 Image.asset(
-        //             //                                                   'assets/location_icon.png',
-        //             //                                                   width: 20,
-        //             //                                                   height: 18,
-        //             //                                                 ),
-        //             //                                                 SizedBox(width: 4.0),
-        //             //                                                 Expanded(
-        //             //                                                   child: Text(
-        //             //                                                     branch.address,
-        //             //                                                     style: TextStyle(
-        //             //                                                       fontFamily: 'Calibri',
-        //             //                                                       fontSize: 12,
-        //             //                                                       color: Color(0xFF000000),
-        //             //                                                     ),
-        //             //                                                   ),
-        //             //                                                 ),
-        //             //                                               ],
-        //             //                                             ),
-        //             //                                             Spacer(flex: 3),
-        //             //                                           ],
-        //             //                                         ),
-        //             //                                       ),
-        //             //                                     ),
-        //             //                                     Align(
-        //             //                                       alignment: Alignment.bottomRight,
-        //             //                                       child: Container(
-        //             //                                         height: 26,
-        //             //                                         margin: EdgeInsets.only(bottom: 10.0, right: 10.0),
-        //             //                                         decoration: BoxDecoration(
-        //             //                                           color: Colors.white,
-        //             //                                           border: Border.all(
-        //             //                                             color: Color(0xFF8d97e2),
-        //             //                                           ),
-        //             //                                           borderRadius: BorderRadius.circular(10.0),
-        //             //                                         ),
-        //             //                                         child: ElevatedButton(
-        //             //                                           onPressed: () {
-        //             //                                             // Handle button press
-        //             //                                           },
-        //             //                                           style: ElevatedButton.styleFrom(
-        //             //                                             primary: Colors.transparent,
-        //             //                                             onPrimary: Color(0xFF8d97e2),
-        //             //                                             elevation: 0,
-        //             //                                             shadowColor: Colors.transparent,
-        //             //                                             shape: RoundedRectangleBorder(
-        //             //                                               borderRadius: BorderRadius.circular(10.0),
-        //             //                                             ),
-        //             //                                           ),
-        //             //                                           child: GestureDetector(
-        //             //                                             onTap: () {
-        //             //                                               print('booknowbuttonisclciked');
-        //             //                                               print(branch.id);
-        //             //                                               print(branch.name);
-        //             //                                               Navigator.push(
-        //             //                                                 context,
-        //             //                                                 MaterialPageRoute(
-        //             //                                                   builder: (context) => slotbookingscreen(
-        //             //                                                     branchId: branch.id,
-        //             //                                                     branchname: branch.name,
-        //             //                                                     branchlocation: branch.address,
-        //             //                                                     filepath:
-        //             //                                                         branch.imageName != null ? branch.imageName! : 'assets/top_image.png',
-        //             //                                                     MobileNumber: branch.mobileNumber,
-        //             //                                                     appointmentId: 0,
-        //             //                                                     // Provide the appointmentId value
-        //             //                                                     screenFrom: "Schedule",
-        //             //                                                   ),
-        //             //                                                 ),
-        //             //                                               );
-        //             //                                             },
-        //             //
-        //             //                                             // Handle button press, navigate to a new screen
-        //             //
-        //             //                                             child: Row(
-        //             //                                               mainAxisSize: MainAxisSize.min,
-        //             //                                               children: [
-        //             //                                                 SvgPicture.asset(
-        //             //                                                   'assets/datepicker_icon.svg',
-        //             //                                                   width: 15.0,
-        //             //                                                   height: 15.0,
-        //             //                                                 ),
-        //             //                                                 SizedBox(width: 5),
-        //             //                                                 Text(
-        //             //                                                   'Book Now',
-        //             //                                                   style: TextStyle(
-        //             //                                                     fontSize: 13,
-        //             //                                                     color: Color(0xFF8d97e2),
-        //             //                                                   ),
-        //             //                                                 ),
-        //             //                                               ],
-        //             //                                             ),
-        //             //                                           ),
-        //             //                                         ),
-        //             //                                       ),
-        //             //                                     ),
-        //             //                                   ],
-        //             //                                 ),
-        //             //                               ),
-        //             //                             ),
-        //             //                           ],
-        //             //                         ),
-        //             //                       ),
-        //             //                     ),
-        //             //                   ),
-        //             //                 ),
-        //             //               ),
-        //             //             ),
-        //             //           );
-        //             //         }
-        //             //       },
-        //             //     )),
-        //             //
-        //             // // width: 300.0,
-        //             // Padding(
-        //             //   padding: EdgeInsets.only(bottom: 10.0),
-        //             //   child: Container(
-        //             //     margin: EdgeInsets.symmetric(horizontal: 15.0, vertical: 5.0),
-        //             //     decoration: BoxDecoration(
-        //             //       color: Color(0xFFFFFFFF),
-        //             //       border: Border.all(
-        //             //         color: Color(0xFFFB4110),
-        //             //       ),
-        //             //       borderRadius: BorderRadius.circular(10.0),
-        //             //     ),
-        //             //     child: TextButton(
-        //             //       onPressed: () async {
-        //             //         const url = 'https://www.hairfixingzone.com/';
-        //             //         try {
-        //             //           if (await canLaunch(url)) {
-        //             //             await launch(url);
-        //             //           } else {
-        //             //             throw 'Could not launch $url';
-        //             //           }
-        //             //         } catch (e) {
-        //             //           print('Error launching URL: $e');
-        //             //         }
-        //             //       },
-        //             //       style: ButtonStyle(
-        //             //         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-        //             //           RoundedRectangleBorder(
-        //             //             borderRadius: BorderRadius.circular(10.0),
-        //             //           ),
-        //             //         ),
-        //             //       ),
-        //             //       child: Row(
-        //             //         crossAxisAlignment: CrossAxisAlignment.center,
-        //             //         mainAxisAlignment: MainAxisAlignment.center,
-        //             //         children: [
-        //             //           Image.asset(
-        //             //             'assets/web_icon.png',
-        //             //             width: 20,
-        //             //             height: 20,
-        //             //           ),
-        //             //           SizedBox(width: 5),
-        //             //           Text(
-        //             //             'Click Here for Website',
-        //             //             style: TextStyle(
-        //             //               fontSize: 18,
-        //             //               color: Color(0xFFFB4110),
-        //             //             ),
-        //             //           ),
-        //             //         ],
-        //             //       ),
-        //             //     ),
-        //             //   ),
-        //             // )
-        //           ],
-        //         ),
-        //       ),
-        //     ),
-        //   ],
-        // ),
         bottomNavigationBar: BottomNavyBar(
           selectedIndex: _currentIndex,
           backgroundColor: const Color(0xFFf3e3ff),
@@ -740,7 +254,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 'assets/objects-column.svg',
                 width: 24,
                 height: 24,
-                color: _currentIndex == 0 ? CommonUtils.primaryTextColor : Colors.grey,
+                color: _currentIndex == 0
+                    ? CommonUtils.primaryTextColor
+                    : Colors.grey,
               ),
               title: const Text(
                 'Home',
@@ -753,7 +269,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 'assets/invite-alt.svg',
                 width: 24,
                 height: 24,
-                color: _currentIndex == 1 ? CommonUtils.primaryTextColor : Colors.grey, // Change color based
+                color: _currentIndex == 1
+                    ? CommonUtils.primaryTextColor
+                    : Colors.grey, // Change color based
               ),
               title: const Text(
                 'Bookings',
@@ -766,7 +284,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 'assets/bin-bottles.svg',
                 width: 24,
                 height: 24,
-                color: _currentIndex == 2 ? CommonUtils.primaryTextColor : Colors.grey, // Change color based on selection
+                color: _currentIndex == 2
+                    ? CommonUtils.primaryTextColor
+                    : Colors.grey, // Change color based on selection
               ),
               title: const Text('Products'),
               activeColor: Colors.blue,
@@ -777,7 +297,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 'assets/my_profile_icon.svg',
                 width: 24,
                 height: 24,
-                color: _currentIndex == 3 ? CommonUtils.primaryTextColor : Colors.grey, // Change color based on selection
+                color: _currentIndex == 3
+                    ? CommonUtils.primaryTextColor
+                    : Colors.grey, // Change color based on selection
               ),
               title: const Text('My Profile'),
               activeColor: Colors.blue,
@@ -884,11 +406,12 @@ class _HomeScreenState extends State<HomeScreen> {
     prefs.setBool('isLoggedIn', false);
     prefs.remove('userId'); // Remove userId from SharedPreferences
     prefs.remove('userRoleId'); // Remove roleId from SharedPreferences
-    CommonUtils.showCustomToastMessageLong("Logout Successfully", context, 0, 3);
+    CommonUtils.showCustomToastMessageLong(
+        "Logout Successfully", context, 0, 3);
 
     Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(builder: (context) => const CustomerLoginScreen()),
-      (route) => false,
+          (route) => false,
     );
   }
 
@@ -1019,14 +542,16 @@ class _HomeScreenState extends State<HomeScreen> {
 
         List<BannerImages> bannerImages = [];
         for (var item in jsonData['listResult']) {
-          bannerImages.add(BannerImages(imageName: item['imageName'] ?? '', id: item['id'] ?? 0));
+          bannerImages.add(BannerImages(
+              imageName: item['imageName'] ?? '', id: item['id'] ?? 0));
         }
 
         setState(() {
           imageList = bannerImages;
           isDataBinding = false;
 
-          isLoading = false; // Set isLoading to false after completing the API call
+          isLoading =
+          false; // Set isLoading to false after completing the API call
         });
       } else {
         // Handle error if the API request was not successful
@@ -1061,7 +586,8 @@ class _HomeScreenState extends State<HomeScreen> {
         fetchData();
         fetchimagesslider();
       } else {
-        CommonUtils.showCustomToastMessageLong('Please Check Your Internet Connection', context, 1, 4);
+        CommonUtils.showCustomToastMessageLong(
+            'Please Check Your Internet Connection', context, 1, 4);
         print('Not connected to the internet'); // Not connected to the internet
       }
     });
@@ -1069,7 +595,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> GetLatestAppointmentByUserId(int? userId) async {
     //  final response = await http.get('http://182.18.157.215/SaloonApp/API/api/Role/GetLatestAppointmentByUserId/1');
-    final Uri url = Uri.parse('http://182.18.157.215/SaloonApp/API/api/Role/GetLatestAppointmentByUserId/$userId');
+    final Uri url = Uri.parse(
+        'http://182.18.157.215/SaloonApp/API/api/Role/GetLatestAppointmentByUserId/$userId');
     print('url==>1086: $url');
     final response = await http.get(url);
 
@@ -1125,10 +652,12 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  final TextEditingController _commentstexteditcontroller = TextEditingController();
+  final TextEditingController _commentstexteditcontroller =
+  TextEditingController();
   double rating_star = 0.0;
 
-  void _showBottomSheet(BuildContext context, List<LastAppointment> appointments) {
+  void _showBottomSheet(
+      BuildContext context, List<LastAppointment> appointments) {
     showModalBottomSheet(
       isScrollControlled: true,
       context: context,
@@ -1196,7 +725,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       height: 80,
                       width: MediaQuery.of(context).size.width,
                       decoration: BoxDecoration(
-                        border: Border.all(color: CommonUtils.primaryTextColor, width: 1.5),
+                        border: Border.all(
+                            color: CommonUtils.primaryTextColor, width: 1.5),
                         borderRadius: BorderRadius.circular(5.0),
                         color: Colors.white,
                       ),
@@ -1305,7 +835,8 @@ class _HomeScreenState extends State<HomeScreen> {
     bool isValid = true;
     bool hasValidationFailed = false;
     if (isValid && rating_star <= 0.0) {
-      CommonUtils.showCustomToastMessageLong('Please Rate Your Experience', context, 1, 4);
+      CommonUtils.showCustomToastMessageLong(
+          'Please Rate Your Experience', context, 1, 4);
       isValid = false;
       hasValidationFailed = true;
       FocusScope.of(context).unfocus();
@@ -1318,7 +849,8 @@ class _HomeScreenState extends State<HomeScreen> {
     //   FocusScope.of(context).unfocus();
     // }
     if (isValid) {
-      SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+      SharedPreferences sharedPreferences =
+      await SharedPreferences.getInstance();
       String? storedEmployeeId = sharedPreferences.getString("employeeId");
       print('employidinfeedback$storedEmployeeId');
       String comments = _commentstexteditcontroller.text.toString();
@@ -1345,7 +877,8 @@ class _HomeScreenState extends State<HomeScreen> {
         "Date": appointment.date,
         "SlotTime": appointment.slotTime,
         "CustomerName": appointment.customerName,
-        "PhoneNumber": appointment.contactNumber, // Changed from appointments.phoneNumber
+        "PhoneNumber":
+        appointment.contactNumber, // Changed from appointments.phoneNumber
         "Email": appointment.email,
         "GenderTypeId": appointment.genderTypeId,
         "StatusTypeId": 17,
@@ -1375,11 +908,13 @@ class _HomeScreenState extends State<HomeScreen> {
         );
 
         if (response.statusCode == 200) {
-          CommonUtils.showCustomToastMessageLong('Feedback Successfully Submitted', context, 0, 4);
+          CommonUtils.showCustomToastMessageLong(
+              'Feedback Successfully Submitted', context, 0, 4);
           print('Request sent successfully');
           Navigator.pop(context);
         } else {
-          print('Failed to send the request. Status code: ${response.statusCode}');
+          print(
+              'Failed to send the request. Status code: ${response.statusCode}');
         }
       } catch (e) {
         print('Error: $e');
@@ -1393,18 +928,18 @@ class _HomeScreenState extends State<HomeScreen> {
         return const Dashboard_Screen();
 
       case 1:
-        // Return the messages screen widget
-        return const MyAppointments();
+      // Return the messages screen widget
+        return  MyAppointments();
 
       case 2:
-        // Return the settings screen widget
-        return const MyProducts();
+      // Return the settings screen widget
+        return  MyProducts();
       case 3:
-        // Return the settings screen widget
-        return Profile();
+      // Return the settings screen widget
+        return  Profile();
 
       default:
-        return const Dashboard_Screen();
+        return  Dashboard_Screen();
     }
   }
 }

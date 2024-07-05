@@ -413,13 +413,13 @@ class _LoginPageState extends State<CustomerLoginScreen> {
         'password': password,
         "deviceTokens": "",
       };
-
+      print('Object: ${json.encode(requestBody)}');
       // Make the POST request
       final response = await http.post(
         Uri.parse(apiUrl),
         body: requestBody,
       );
-
+      print('Is Success: $JsonEncoder{}');
       // Check if the request was successful
       if (response.statusCode == 200) {
         // Parse the JSON response
