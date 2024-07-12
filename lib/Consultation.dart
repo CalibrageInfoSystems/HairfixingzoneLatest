@@ -12,6 +12,7 @@ class Consultation {
   final String remarks;
   final int createdByUser;
   final String createdDate;
+  final String visitingDate;
   // final String updatedByUser;
   // final String? updatedDate;
 
@@ -28,6 +29,7 @@ class Consultation {
     required this.remarks,
     required this.createdByUser,
     required this.createdDate,
+    required this.visitingDate,
     // required this.updatedByUser,
     // required this.updatedDate,
   });
@@ -46,8 +48,8 @@ class Consultation {
       remarks: json['remarks'],
       createdByUser: json['createdByUser'],
       createdDate: json['createdDate'],
-      // updatedByUser: json['updatedByUser'] ?? 0,
-      // updatedDate: json['updatedDate'] ?? '',
+      // visitingDate: json['updatedByUser'] ?? 0,
+    visitingDate: json['visitingDate'] ?? '',
     );
   }
 }

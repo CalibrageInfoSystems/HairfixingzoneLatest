@@ -1,7 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'Common/common_styles.dart';
 import 'CommonUtils.dart';
 import 'CustomerLoginScreen.dart';
 import 'FavouritesScreen.dart';
@@ -9,103 +12,131 @@ import 'ProfileMy.dart';
 import 'aboutus_screen.dart';
 import 'contactus.dart';
 
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+
+
 class NewScreen extends StatelessWidget {
   final String userName;
   final String email;
-  const NewScreen({Key? key, required this.userName, required this.email }) : super(key: key);
+
+  const NewScreen({
+    Key? key,
+    required this.userName,
+    required this.email,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-        onWillPop: () => onBackPressed(context),
-        child: Scaffold(
-            appBar: AppBar(
-                elevation: 0,
-                backgroundColor: const Color(0xffffffff),
-                title: const Text(
-                  '',
-                  style: TextStyle(
-                      color: Color(0xFF0f75bc),
-                      fontSize: 16.0,
-                      fontWeight: FontWeight.w600),
-                ),
-                // actions: [
-                //   IconButton(
-                //     icon: SvgPicture.asset(
-                //       'assets/sign-out-alt.svg', // Path to your SVG asset
-                //       color: Color(0xFF662e91),
-                //       width: 24, // Adjust width as needed
-                //       height: 24, // Adjust height as needed
-                //     ),
-                //     onPressed: () {
-                //       logOutDialog(context);
-                //       // Add logout functionality here
-                //     },
-                //   ),
-                // ],
-                // centerTitle: true,
-                leading: IconButton(
-                  icon: const Icon(
-                    Icons.arrow_back_ios,
-                    color: CommonUtils.primaryTextColor,
+      onWillPop: () => onBackPressed(context),
+      child: Scaffold(
+        appBar: AppBar(
+          elevation: 0,
+          backgroundColor: const Color(0xffffffff),
+          leading: IconButton(
+            icon: const Icon(
+              Icons.arrow_back_ios,
+              color: CommonUtils.primaryTextColor, // Adjust the color as needed
+            ),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ),
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              ListTile(
+                leading: CircleAvatar(
+                  backgroundColor: CommonStyles.primaryTextColor,
+                  child: Text(
+                    userName.isNotEmpty ? userName[0].toUpperCase() : "H",
+                    style: TextStyle(fontSize: 24, color: Colors.white),
                   ),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                )),
-            body:  SingleChildScrollView(
-    child: Column(
-    children: [
-    ListTile(
-    leading: CircleAvatar(
-    backgroundColor: Colors.purple,
-    child: Text(
-      userName.isNotEmpty ? userName[0].toUpperCase() : "H",
-    style: TextStyle(fontSize: 24, color: Colors.white),
-    ),
-    radius: 30,
-    ),
-    title: Text(userName),
-    subtitle: Text(email),
-    onTap: () {
-    // Add your edit profile navigation logic here
-    },
-    ),
-
-    Divider(),
-      _buildListTile(context, Icons.person, 'Profile', ProfileMy()),
-      Divider(),
-      _buildListTile(context, Icons.info, 'About Us', AboutUsScreen()),
-      Divider(),
-      _buildListTile(context, Icons.favorite, 'Favourites', FavouritesScreen()),
-      Divider(),
-      _buildListTile(context, Icons.phone, 'Contact Us', contactus()),
-      Divider(),
-      _buildListTile(context, Icons.logout, 'LogOut', null, isLogout: true),
-    ],
-
-
-    ),
-    ),
-
-    ));
-  }
-
-  ListTile _buildListTile(BuildContext context, IconData icon, String title, Widget? screen, {bool isLogout = false}) {
-    return ListTile(
-      leading: Icon(icon),
-      title: Text(title),
-      trailing: Icon(Icons.arrow_forward_ios),
-      onTap: () {
-        if (isLogout) {
-          logOutDialog(context);
-        } else if (screen != null) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => screen),
-          );
-        }
-      },
+                  radius: 25,
+                ),
+                title: Text(userName, style: CommonStyles.txSty_20black_fb),
+                subtitle: Text(email, style: CommonStyles.txSty_20black_fb),
+                onTap: () {
+                  // Add your edit profile navigation logic here
+                },
+              ),
+              Divider(),
+              ListTile(
+                leading: SvgPicture.asset(
+                  'assets/Profile_new.svg',
+                  width: 25,
+                  height: 25,
+                  color: Color(0xFF662e91), // Adjust color as needed
+                ),
+                title: Text('Profile', style: CommonStyles.txSty_20black_fb),
+                trailing: Icon(Icons.arrow_forward_ios, color: Colors.grey, size: 16), // Add trailing icon here
+                onTap: () {
+                  profile(context); // Execute your action here
+                },
+              ),
+              Divider(),
+              ListTile(
+                leading: SvgPicture.asset(
+                  'assets/about_us.svg',
+                  width: 25,
+                  height: 25,
+                  color:Color(0xFF662e91), // Adjust color as needed
+                ),
+                title: Text('About Us', style: CommonStyles.txSty_20black_fb),
+                trailing: Icon(Icons.arrow_forward_ios, color: Colors.grey, size: 16), // Add trailing icon here
+                onTap: () {
+                  AboutUs(context);
+                },
+              ),
+              Divider(),
+              ListTile(
+                leading: SvgPicture.asset(
+                  'assets/fav_star.svg',
+                  width: 25,
+                  height: 25,
+                  color:Color(0xFF662e91), // Adjust color as needed
+                ),
+                title: Text('Favourites', style: CommonStyles.txSty_20black_fb),
+                  trailing: Icon(Icons.arrow_forward_ios, color: Colors.grey, size: 16), // Add trailing icon here
+                onTap: () {
+                  Favourite(context);
+                }
+              ),
+              Divider(),
+              ListTile(
+                leading: SvgPicture.asset(
+                  'assets/headset.svg',
+                  width: 25,
+                  height: 25,
+                  color: Color(0xFF662e91), // Adjust color as needed
+                ),
+                title: Text('Contact Us', style: CommonStyles.txSty_20black_fb),
+                trailing: Icon(Icons.arrow_forward_ios, color: Colors.grey, size: 16), // Add trailing icon here
+                onTap: () {
+                  contact_us(context); // Execute your action here
+                },
+              ),
+              Divider(),
+              ListTile(
+                leading: SvgPicture.asset(
+                  'assets/logout_new.svg',
+                  width: 25,
+                  height: 25,
+                  color: Color(0xFF662e91), // Adjust color as needed
+                ),
+                title: Text('Logout', style: CommonStyles.txSty_20black_fb),
+                trailing: Icon(Icons.arrow_forward_ios, color: Colors.grey, size: 16), // Add trailing icon here
+                onTap: () {
+                  logOutDialog(context); // Execute your action here
+                },
+              ),
+              Divider(),
+            ],
+          ),
+        ),
+      ),
     );
   }
 
@@ -195,12 +226,6 @@ class NewScreen extends StatelessWidget {
     );
   }
 
-
-}
-
-
-
-
   Future<bool> onBackPressed(BuildContext context) {
     // Navigate back when the back button is pressed
     Navigator.pop(context);
@@ -208,4 +233,32 @@ class NewScreen extends StatelessWidget {
     return Future.value(false);
   }
 
+  void contact_us(BuildContext context) {
+    // Implement your contact us logic here, like navigating to a contact screen
+    print('Navigating to Contact Us screen');
+    // Example navigation
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (context) => contactus()),
+    );
+  }
 
+  void AboutUs(BuildContext context) {
+    print('Navigating to About Us screen');
+    // Example navigation
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (context) => AboutUsScreen()),
+    );
+  }
+
+  void profile(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (context) => ProfileMy()),
+    );
+  }
+
+  void Favourite(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (context) => FavouritesScreen()),
+    );
+  }
+}

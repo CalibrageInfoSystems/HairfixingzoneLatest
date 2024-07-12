@@ -114,11 +114,20 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
   Widget build(BuildContext context) {
     return Scaffold(
       // backgroundColor: CommonStyles.primaryTextColor,
-      body: Column(
-        children: [
-//MARK: Marquee
-          SingleChildScrollView(
-            child: Column(
+      body:
+      // SingleChildScrollView(
+      //
+      //   child:
+        Container(
+          height: MediaQuery.of(context).size.height,
+         // color: Colors.white, // Set the background color to white
+decoration: BoxDecoration(
+  color: Colors.white
+),
+        child: Column(
+          children: [
+            //MARK: Marquee
+            Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(
@@ -153,7 +162,7 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
                     }
                   },
                 ),
-                // Carousel widget
+                //MARK: Carousel widget
                 SizedBox(
                   width: MediaQuery.of(context).size.width,
                   height: 180,
@@ -163,10 +172,10 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
                       autoPlay: true,
                       floatingIndicator: false,
                       autoPlayCurve: Curves.linear,
-                      slideIndicator: CircularSlideIndicator(
+                      slideIndicator: const CircularSlideIndicator(
                         indicatorBorderColor: CommonStyles.blackColor,
                         currentIndicatorColor: CommonStyles.primaryTextColor,
-                        indicatorRadius: 2, // Decrease the size of the indicator
+                        indicatorRadius: 2,
                       ),
                     ),
                     items: _items.map((item) {
@@ -185,9 +194,12 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
                                   item.imageName,
                                   height: 100,
                                   fit: BoxFit.cover,
-                                  loadingBuilder: (context, child, loadingProgress) {
+                                  loadingBuilder:
+                                      (context, child, loadingProgress) {
                                     if (loadingProgress == null) return child;
-                                    return const Center(child: CircularProgressIndicator.adaptive());
+                                    return const Center(
+                                        child: CircularProgressIndicator
+                                            .adaptive());
                                   },
                                 ),
                               ),
@@ -198,7 +210,6 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
                     }).toList(),
                   ),
                 ),
-
 
                 // Carousel indicator
                 // CarouselIndicator(
@@ -239,286 +250,130 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
                 // ),
               ],
             ),
-          ),
 
-          const SizedBox(height: 20.0),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15.0),
-            child: Column(
-              children: [
-                //MARK: Book Appointment
-                IntrinsicHeight(
-                  child: GestureDetector(
-                    onTap: () {
-                      Navigator.of(context, rootNavigator: true)
-                          .pushNamed("/BookAppointment");
-                    },
-                    child: Container(
-                        width: double.infinity,
-                        height: MediaQuery.of(context).size.height / 11,
-                        //height: 60,
-                        padding: const EdgeInsets.all(5),
-                        decoration: BoxDecoration(
-                          border:
-                          Border.all(color: CommonStyles.primaryTextColor),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child:
-                        // GestureDetector(
-                        //     onTap: () {
-                        //       Navigator.of(context, rootNavigator: true).pushNamed("/BookAppointment");
-                        //     },
-                        //     child:
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            const SizedBox(
-                              width: 2,
-                            ),
-                            Container(
-                              padding: const EdgeInsets.all(15),
-                              decoration: const BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: CommonStyles.primaryTextColor),
-                              child: Center(
-                                child: SvgPicture.asset(
-                                  'assets/noun-appointment-date-2417776.svg',
-                                  width: 30.0,
-                                  height: 30.0,
-                                  color: CommonStyles.whiteColor,
+            const SizedBox(height: 20.0),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15.0),
+              child: Column(
+                children: [
+                  //MARK: Book Appointment
+                  IntrinsicHeight(
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.of(context, rootNavigator: true)
+                            .pushNamed("/BookAppointment");
+                      },
+                      child: Container(
+                          width: double.infinity,
+                          height: MediaQuery.of(context).size.height / 11,
+                          padding: const EdgeInsets.all(5),
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                                color: CommonStyles.primaryTextColor),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const SizedBox(
+                                width: 2,
+                              ),
+                              Container(
+                                padding: const EdgeInsets.all(15),
+                                decoration: const BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: CommonStyles.primaryTextColor),
+                                child: Center(
+                                  child: SvgPicture.asset(
+                                    'assets/noun-appointment-date-2417776.svg',
+                                    width: 30.0,
+                                    height: 30.0,
+                                    color: CommonStyles.whiteColor,
+                                  ),
                                 ),
                               ),
-                            ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            // Expanded(
-                            //   child: Column(
-                            //     crossAxisAlignment: CrossAxisAlignment.start,
-                            //     children: [
-                            //       Text(
-                            //         'Click Here',
-                            //         style: CommonStyles.txSty_16p_f5,
-                            //       ),
-                            //       Text(
-                            //         'To Book an Appointment',
-                            //         style: CommonStyles.txSty_20p_fb,
-                            //       ),
-                            //     ],
-                            //   ),
-                            // ),
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width / 2,
-                              child: const Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    'Click Here To',
-                                    style: CommonStyles.txSty_16p_f5,
-                                  ),
-                                  Text(
-                                    'Book an Appointment',
-
-                                    /// style: CommonStyles.txSty_20p_fb,
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      fontFamily: "Calibri",
-                                      fontWeight: FontWeight.bold,
-                                      color: CommonStyles.primaryTextColor,
-                                      letterSpacing: 2,
-                                    ),
-                                  ),
-                                ],
+                              const SizedBox(
+                                width: 10,
                               ),
-                            ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            SvgPicture.asset(
-                              'assets/book_op_illusion.svg',
-                              width: 60.0,
-                              height: 55.0,
-                              alignment: Alignment.centerRight,
-                            ),
-                          ],
-                        )),
-                    // )
-                  ),
-                ),
-                const SizedBox(
-                  height: 15,
-                ),
-                //MARK: Screens
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                //   children: [
-                //     GestureDetector(
-                //       onTap: () {
-                //         Navigator.of(context, rootNavigator: true)
-                //             .pushNamed("/Mybookings");
-                //       },
-                //       child: Column(
-                //         children: [
-                //           Container(
-                //             width: MediaQuery.of(context).size.width / 7,
-                //             // height: MediaQuery.of(context).size.height / 5,
-                //             padding: const EdgeInsets.all(15),
-                //             decoration: const BoxDecoration(
-                //               color: Color(0xFFe656ae),
-                //               shape: BoxShape.circle,
-                //             ),
-                //             child: SvgPicture.asset(
-                //               'assets/my_bookings_icon.svg',
-                //               color: CommonStyles.whiteColor,
-                //             ),
-                //           ),
-                //           const SizedBox(height: 5),
-                //           const Text(
-                //             'My Bookings',
-                //             style: CommonStyles.txSty_14p_f5,
-                //           ),
-                //         ],
-                //       ),
-                //     ),
-                //     GestureDetector(
-                //       onTap: () {
-                //         Navigator.of(context, rootNavigator: true)
-                //             .pushNamed("/Products");
-                //       },
-                //       child: Column(
-                //         children: [
-                //           Container(
-                //             width: MediaQuery.of(context).size.width / 7,
-                //             //height: 60,
-                //             padding: const EdgeInsets.all(15),
-                //             decoration: const BoxDecoration(
-                //               color: Color(0xFFe44561),
-                //               shape: BoxShape.circle,
-                //             ),
-                //             child: SvgPicture.asset(
-                //               'assets/products_icon.svg',
-                //               color: CommonStyles.whiteColor,
-                //             ),
-                //           ),
-                //           const SizedBox(height: 5),
-                //           const Text(
-                //             'Products',
-                //             style: CommonStyles.txSty_14p_f5,
-                //           ),
-                //         ],
-                //       ),
-                //     ),
-                //     GestureDetector(
-                //       onTap: () {
-                //         Navigator.of(context, rootNavigator: true)
-                //             .pushNamed("/about");
-                //       },
-                //       child: Column(
-                //         children: [
-                //           Container(
-                //             width: MediaQuery.of(context).size.width / 7,
-                //             // height: 60,
-                //             padding: const EdgeInsets.all(15),
-                //             decoration: const BoxDecoration(
-                //               color: Color(0xFF662d91),
-                //               shape: BoxShape.circle,
-                //             ),
-                //             child: SvgPicture.asset(
-                //               'assets/about_us_icon.svg',
-                //               color: CommonStyles.whiteColor,
-                //               // width: 11.0,
-                //               // height: 11.0,
-                //             ),
-                //           ),
-                //           const SizedBox(height: 5),
-                //           const Text(
-                //             'About Us',
-                //             style: CommonStyles.txSty_14p_f5,
-                //           ),
-                //         ],
-                //       ),
-                //     ),
-                //     GestureDetector(
-                //       onTap: () {
-                //         Navigator.of(context, rootNavigator: true)
-                //             .pushNamed("/ProfileMy");
-                //       },
-                //       child: Column(
-                //         children: [
-                //           Container(
-                //             padding: const EdgeInsets.all(15),
-                //             width: MediaQuery.of(context).size.width / 7,
-                //             //   height: 60,
-                //             decoration: const BoxDecoration(
-                //               color: Color(0xFF295f5a),
-                //               shape: BoxShape.circle,
-                //             ),
-                //             child: SvgPicture.asset(
-                //               'assets/my_profile_icon.svg',
-                //               color: CommonStyles.whiteColor,
-                //             ),
-                //           ),
-                //           const SizedBox(height: 5),
-                //           const Text(
-                //             'My Profile',
-                //             style: CommonStyles.txSty_14p_f5,
-                //           ),
-                //         ],
-                //       ),
-                //     )
-                //   ],
-                // ),
-                // const SizedBox(height: 15),
-                //MARK: Branches
-                const Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Branches',
-                      style: CommonStyles.txSty_16p_fb,
-                    ),
-                  ],
-                ),
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width / 2,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    //MARK: WORK
+                                    const Text(
+                                      'Click Here To',
+                                      style: CommonStyles.txSty_16p_f5,
+                                    ),
+                                    Text(
+                                      'Book an Appointment',
 
-                SizedBox(
-                  height: MediaQuery.of(context).size.height / 4,
-                  child: FutureBuilder(
-                    future: apiData,
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const Center(
-                            child: CircularProgressIndicator.adaptive());
-                      } else if (snapshot.hasError) {
-                        return const Center(
-                          child: Text(
-                            'No Branches Available ',
-                            style: TextStyle(
-                              fontSize: 12.0,
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                              fontFamily: "Roboto",
-                            ),
-                          ),
-                        );
-                      } else {
-                        List<Model_branch>? data = snapshot.data!;
-                        if (data!.isNotEmpty) {
-                          return Container(
-                            child: ListView.builder(
-                              scrollDirection: Axis.horizontal,
-                              itemCount: data.length,
-                              itemBuilder: (context, index) {
-                                return BranchCard(
-                                  branch: data[index],
-                                );
-                              },
-                            ),
-                          );
-                        } else {
+                                      /// style: CommonStyles.txSty_20p_fb,
+                                      // style: TextStyle(
+                                      //   fontSize: 14,
+                                      //   fontFamily: "Calibri",
+                                      //   fontWeight: FontWeight.bold,
+                                      //   color: CommonStyles.primaryTextColor,
+                                      //   letterSpacing: 2,
+                                      // ),
+                                      style: CommonStyles.txSty_16p_fb.copyWith(
+                                        fontSize: 20,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(30),
+                                child: SvgPicture.asset(
+                                  'assets/book_op_illusion.svg',
+                                  width: 60.0,
+                                  height: 55.0,
+                                  alignment: Alignment.centerRight,
+                                ),
+                              ),
+                            ],
+                          )),
+                      // )
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  //MARK: Screens
+                  const Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        width: 5,
+                      ),
+                      Text(
+                        'Branches',
+                        style: CommonStyles.txSty_16p_fb,
+                      ),
+                    ],
+                  ),
+                  Container(
+                    color: Colors.white, // Set the background color to white
+                 child:
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height / 3,
+
+                    child:    FutureBuilder(
+                      future: apiData,
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const Center(
+                              child: CircularProgressIndicator.adaptive());
+                        } else if (snapshot.hasError) {
                           return const Center(
                             child: Text(
-                              'No Branches Available',
+                              'No Branches Available ',
                               style: TextStyle(
                                 fontSize: 12.0,
                                 color: Colors.black,
@@ -527,25 +382,49 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
                               ),
                             ),
                           );
+                        } else {
+                          List<Model_branch>? data = snapshot.data!;
+                          if (data.isNotEmpty) {
+                            return ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemCount: data.length,
+                              itemBuilder: (context, index) {
+                                return BranchCard(
+                                  branch: data[index],
+                                );
+                              },
+                            );
+                          } else {
+                            return const Center(
+                              child: Text(
+                                'No Branches Available',
+                                style: TextStyle(
+                                  fontSize: 12.0,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: "Roboto",
+                                ),
+                              ),
+                            );
+                          }
                         }
-                      }
-                    },
+                      },
+                    ),
                   ),
-                ),
-              ],
+                  )],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
-
-
+  //  )
     );
   }
 
   Future<List<Model_branch>> getBranchsData() async {
     //var apiUrl = baseUrl + getbranchesall;
-    var apiUrl = baseUrl + getbrancheselectedcity + 'null';
-    print('result: ${apiUrl}');
+    var apiUrl = '$baseUrl${getbrancheselectedcity}null';
+    print('result: $apiUrl');
     try {
       final jsonResponse = await http.get(
         Uri.parse(apiUrl),
@@ -609,14 +488,17 @@ class BranchCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  Card(
+    return Container(
+        color: Colors.white, // Set the background color to white
+      child:
+      Card(
       elevation: 2,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
       ),
       child: Container(
         height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width / 2.5,
+        width: MediaQuery.of(context).size.width / 2,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           color: CommonStyles.branchBg,
@@ -624,20 +506,22 @@ class BranchCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Container(
-              height: MediaQuery.of(context).size.height / 8.5,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Colors.grey,
-              ),
-              child: ClipRRect(
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(10),
-                  topRight: Radius.circular(10),
+            Expanded(
+              child: Container(
+                clipBehavior: Clip.antiAlias,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  // color: Colors.grey,
                 ),
-                child: Image.network(
-                  branch.imageName,
-                  fit: BoxFit.cover,
+                child: ClipRRect(
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(10),
+                    topRight: Radius.circular(10),
+                  ),
+                  child: Image.network(
+                    branch.imageName,
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
             ),
@@ -659,7 +543,9 @@ class BranchCard extends StatelessWidget {
                         Expanded(
                           child: Text(
                             branch.branchName,
-                            style: CommonStyles.txSty_16p_fb,
+                            style: CommonStyles.txSty_16p_fb.copyWith(
+                              fontSize: 22,
+                            ),
                           ),
                         ),
                         GestureDetector(
@@ -675,13 +561,17 @@ class BranchCard extends StatelessWidget {
                         ),
                       ],
                     ),
-                    SizedBox(height: 5.0,),
+                    const SizedBox(
+                      height: 5.0,
+                    ),
                     Expanded(
                       child: Text(
                         branch.address,
                         maxLines: 3,
                         overflow: TextOverflow.ellipsis,
-                        style: CommonStyles.txSty_12b_f5,
+                        style: CommonStyles.txSty_12b_f5.copyWith(
+                          fontSize: 16,
+                        ),
                       ),
                     ),
                   ],
@@ -691,20 +581,19 @@ class BranchCard extends StatelessWidget {
           ],
         ),
       ),
-    );
-
+    )) ;
   }
-  Future<void> openMap(Model_branch branchnames) async {
 
+  Future<void> openMap(Model_branch branchnames) async {
     // Replace with your logic to open the map, for example:
-    final url = 'https://www.google.com/maps/search/?api=1&query=${branchnames.latitude},${branchnames.longitude}';
+    final url =
+        'https://www.google.com/maps/search/?api=1&query=${branchnames.latitude},${branchnames.longitude}';
     if (await canLaunch(url)) {
       await launch(url);
     } else {
       throw 'Could not launch $url';
     }
   }
-
 }
 
 class ItemBuilder extends StatelessWidget {
@@ -762,3 +651,114 @@ class Item {
     );
   }
 }
+// return GestureDetector(
+// onTap: () {
+// // Add your onTap functionality here
+// Navigator.push(
+// context,
+// MaterialPageRoute(
+// builder: (context) => Bookingscreen(
+// branchId: branchnames.id!,
+// branchname: branchnames.branchName!,
+// branchaddress: branchnames.address!,
+// phonenumber: branchnames.mobileNumber!,
+// branchImage: branchnames.imageName!,
+// latitude: branchnames.latitude,
+// longitude: branchnames.longitude,
+// ),
+// ),
+// );
+// },
+// child: Card(
+// elevation: 2,
+// shape: RoundedRectangleBorder(
+// borderRadius: BorderRadius.circular(10),
+// ),
+// child: Container(
+// height: MediaQuery.of(context).size.height,
+// width: MediaQuery.of(context).size.width / 2,
+// decoration: BoxDecoration(
+// borderRadius: BorderRadius.circular(10),
+// color: CommonStyles.branchBg,
+// ),
+// child: Column(
+// crossAxisAlignment: CrossAxisAlignment.stretch,
+// children: [
+// Expanded(
+// child: Container(
+// clipBehavior: Clip.antiAlias,
+// decoration: BoxDecoration(
+// borderRadius: BorderRadius.circular(10),
+// // color: Colors.grey,
+// ),
+// child: ClipRRect(
+// borderRadius: const BorderRadius.only(
+// topLeft: Radius.circular(10),
+// topRight: Radius.circular(10),
+// ),
+// child: Image.network(
+// branch.imageName,
+// fit: BoxFit.cover,
+// ),
+// ),
+// ),
+// ),
+// Expanded(
+// child: Container(
+// padding: const EdgeInsets.all(10),
+// decoration: const BoxDecoration(
+// borderRadius: BorderRadius.only(
+// bottomLeft: Radius.circular(10),
+// bottomRight: Radius.circular(10),
+// ),
+// color: CommonStyles.branchBg,
+// ),
+// child: Column(
+// crossAxisAlignment: CrossAxisAlignment.stretch,
+// children: [
+// Row(
+// children: [
+// Expanded(
+// child: Text(
+// branch.branchName,
+// style: CommonStyles.txSty_16p_fb.copyWith(
+// fontSize: 22,
+// ),
+// ),
+// ),
+// GestureDetector(
+// onTap: () {
+// openMap(branch); // Call the openMap method
+// },
+// child: SvgPicture.asset(
+// 'assets/map_marker.svg',
+// width: 20,
+// height: 20,
+// color: CommonStyles.statusGreenText,
+// ),
+// ),
+// ],
+// ),
+// const SizedBox(
+// height: 5.0,
+// ),
+// Expanded(
+// child: Text(
+// branch.address,
+// maxLines: 3,
+// overflow: TextOverflow.ellipsis,
+// style: CommonStyles.txSty_12b_f5.copyWith(
+// fontSize: 16,
+// ),
+// ),
+// ),
+// ],
+// ),
+// ),
+// ),
+// ],
+// ),
+// ),
+// ),
+// )
+// ;

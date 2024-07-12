@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:ffi';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:hairfixingzone/Common/common_styles.dart';

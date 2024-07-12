@@ -150,7 +150,7 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
     lastDate: DateTime(2030),
     dayTextStyle: CommonStyles.dayTextStyle,
     calendarType: CalendarDatePicker2Type.range,
-    selectedDayHighlightColor: Colors.purple[800],
+   // selectedDayHighlightColor: Colors.purple[800],
     closeDialogOnCancelTapped: true,
     firstDayOfWeek: 1,
     weekdayLabelTextStyle: const TextStyle(
@@ -179,7 +179,10 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: _appBar(context),
-      body: Column(
+      body:Container(
+    color: Colors.white, // Set the background color to white
+    child:
+    Column(
         children: [
           // branch and dates
           Padding(
@@ -198,16 +201,16 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(10.0),
                       // borderRadius: BorderRadius.circular(30), //border corner radius
-                      boxShadow: [
-                        BoxShadow(
-                          color: const Color(0xFF960efd)
-                              .withOpacity(0.2), //color of shadow
-                          spreadRadius: 2, //spread radius
-                          blurRadius: 4, // blur radius
-                          offset:
-                              const Offset(0, 2), // changes position of shadow
-                        ),
-                      ],
+                      // boxShadow: [
+                      //   BoxShadow(
+                      //     color: const Color(0xFF960efd)
+                      //         .withOpacity(0.2), //color of shadow
+                      //     spreadRadius: 2, //spread radius
+                      //     blurRadius: 4, // blur radius
+                      //     offset:
+                      //         const Offset(0, 2), // changes position of shadow
+                      //   ),
+                      // ],
                     ),
                     child: Row(
                       children: [
@@ -488,9 +491,9 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
                       borderRadius: BorderRadius.circular(6.0),
                     ),
                     enabledBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(
-                        color: CommonUtils.primaryTextColor,
-                      ),
+                      // borderSide: const BorderSide(
+                      //   color: CommonUtils.primaryTextColor,
+                      // ),
                       borderRadius: BorderRadius.circular(6.0),
                     ),
                     border: const OutlineInputBorder(
@@ -538,7 +541,7 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
                             : consultationslist.length,
                         itemBuilder: (context, index) {
                           DateTime createdDateTime = DateTime.parse(
-                            consultationslist[index].createdDate,
+                            consultationslist[index].visitingDate,
                           );
                           month = DateFormat('MMM').format(createdDateTime);
                           date = DateFormat('dd').format(createdDateTime);
@@ -565,16 +568,16 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
                                   color: Colors.white,
                                   borderRadius: BorderRadius.circular(10.0),
                                   // borderRadius: BorderRadius.circular(30), //border corner radius
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: const Color(0xFF960efd)
-                                          .withOpacity(0.2), //color of shadow
-                                      spreadRadius: 2, //spread radius
-                                      blurRadius: 4, // blur radius
-                                      offset: const Offset(
-                                          0, 2), // changes position of shadow
-                                    ),
-                                  ],
+                                  // boxShadow: [
+                                  //   BoxShadow(
+                                  //     color: const Color(0xFF960efd)
+                                  //         .withOpacity(0.2), //color of shadow
+                                  //     spreadRadius: 2, //spread radius
+                                  //     blurRadius: 4, // blur radius
+                                  //     offset: const Offset(
+                                  //         0, 2), // changes position of shadow
+                                  //   ),
+                                  // ],
                                 ),
                                 child: Row(
                                   children: [
@@ -652,10 +655,7 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
                                               //   ),
                                               // ),
                                               SizedBox(
-                                                width: MediaQuery.of(context)
-                                                        .size
-                                                        .width /
-                                                    2.1,
+                                                width: MediaQuery.of(context).size.width / 2.1,
                                                 child: Column(
                                                   mainAxisAlignment:
                                                       MainAxisAlignment
@@ -693,36 +693,7 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
                                               const SizedBox(
                                                 height: 5.0,
                                               ),
-                                              // Expanded(
-                                              //   child: Container(
-                                              //     child: Column(
-                                              //       mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                              //       crossAxisAlignment: CrossAxisAlignment.start,
-                                              //       children: [
-                                              //         Text(
-                                              //           consultationslist[index].gender,
-                                              //           style: const TextStyle(
-                                              //             fontSize: 14,
-                                              //             fontFamily: "Calibri",
-                                              //             fontWeight: FontWeight.w500,
-                                              //             color: Color(0xFF5f5f5f),
-                                              //           ),
-                                              //         ),
-                                              //         Text(
-                                              //           consultationslist[index].phoneNumber,
-                                              //           style: const TextStyle(
-                                              //             fontSize: 14,
-                                              //             fontFamily: "Calibri",
-                                              //             fontWeight: FontWeight.w500,
-                                              //             color: Color(0xFF5f5f5f),
-                                              //           ),
-                                              //         ),
-                                              //         //Text('', style: CommonStyles.txSty_16black_f5),
-                                              //         // Text(consultationslist[index].gender, style: CommonStyles.txSty_16black_f5),
-                                              //       ],
-                                              //     ),
-                                              //   ),
-                                              // ),
+
                                               Container(
                                                 child: Column(
                                                   mainAxisAlignment:
@@ -816,13 +787,13 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
           ),
         ],
       ),
-    );
+    ));
   }
 
   AppBar _appBar(BuildContext context) {
     return AppBar(
         elevation: 0,
-        backgroundColor: const Color(0xFFf3e3ff),
+        backgroundColor: const Color(0xffffffff),
         title: const Text(
           'View Consultation',
           style: TextStyle(color: Color(0xFF0f75bc), fontSize: 16.0),
@@ -843,7 +814,7 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
         leading: IconButton(
           icon: const Icon(
             Icons.arrow_back_ios,
-            color: CommonUtils.primaryTextColor,
+          //  color: CommonUtils.primaryTextColor,
           ),
           onPressed: () {
             Navigator.of(context).pop();

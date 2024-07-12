@@ -92,7 +92,6 @@ class MyApp extends StatelessWidget {
       print("onMessageOpenedApp: $messageBody");
       print("onMessageOpenedApp: $messagelog");
       LocalNotificationService.showNotificationOnForeground(context, message);
-
       RegExp datePattern = RegExp(r'\b(\d{1,2} \w+ \d{4})\b');
       Match? match = datePattern.firstMatch(messageBody!);
 

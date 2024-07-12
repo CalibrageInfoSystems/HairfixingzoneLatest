@@ -173,6 +173,19 @@ flutter:
     - assets/bs_v1.svg
     - assets/bs_v2.svg
     - assets/bs_v3.svg
+    - assets/facebook.svg
+    - assets/instagram.svg
+    - assets/logout.svg
+    - assets/site.svg
+    - assets/youtube.svg
+    - assets/user_profile.svg
+    - assets/Profile_new.svg
+    - assets/headset.svg
+    - assets/fav_star.svg
+    - assets/logout_new.svg
+    - assets/about_us.svg
+    - assets/f_us3.png
+
 
 
 

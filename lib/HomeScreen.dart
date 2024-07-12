@@ -113,80 +113,87 @@ class _HomeScreenState extends State<HomeScreen> {
     return WillPopScope(
       onWillPop: () async {
         // Show a confirmation dialog
-        bool confirmClose = await showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: const Text('Confirm Exit'),
-              content: const Text('Are You Sure You Want to Close The App?'),
-              actions: [
-                Container(
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    style: ElevatedButton.styleFrom(
-                      textStyle: const TextStyle(
-                        color: CommonUtils.primaryTextColor,
+        if (_currentIndex != 0) {
+          setState(() {
+            _currentIndex = 0;
+          });
+          return Future.value(false);
+        } else {
+          bool confirmClose = await showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: const Text('Confirm Exit'),
+                content: const Text('Are You Sure You Want to Close The App?'),
+                actions: [
+                  Container(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      style: ElevatedButton.styleFrom(
+                        textStyle: const TextStyle(
+                          color: CommonUtils.primaryTextColor,
+                        ),
+                        side: const BorderSide(
+                          color: CommonUtils.primaryTextColor,
+                        ),
+                        backgroundColor: Colors.white,
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(5),
+                          ),
+                        ),
                       ),
-                      side: const BorderSide(
-                        color: CommonUtils.primaryTextColor,
-                      ),
-                      backgroundColor: Colors.white,
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(5),
+                      child: const Text(
+                        'No',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: CommonUtils.primaryTextColor,
+                          fontFamily: 'Calibri',
                         ),
                       ),
                     ),
-                    child: const Text(
-                      'No',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: CommonUtils.primaryTextColor,
-                        fontFamily: 'Calibri',
-                      ),
-                    ),
                   ),
-                ),
-                const SizedBox(width: 10),
-                Container(
-                  child: ElevatedButton(
-                    onPressed: () => Navigator.of(context).pop(true),
-                    style: ElevatedButton.styleFrom(
-                      textStyle: const TextStyle(
-                        color: CommonUtils.primaryTextColor,
+                  const SizedBox(width: 10),
+                  Container(
+                    child: ElevatedButton(
+                      onPressed: () => Navigator.of(context).pop(true),
+                      style: ElevatedButton.styleFrom(
+                        textStyle: const TextStyle(
+                          color: CommonUtils.primaryTextColor,
+                        ),
+                        side: const BorderSide(
+                          color: CommonUtils.primaryTextColor,
+                        ),
+                        backgroundColor: CommonUtils.primaryTextColor,
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(5),
+                          ),
+                        ),
                       ),
-                      side: const BorderSide(
-                        color: CommonUtils.primaryTextColor,
-                      ),
-                      backgroundColor: CommonUtils.primaryTextColor,
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(5),
+                      child: const Text(
+                        'Yes',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.white,
+                          fontFamily: 'Calibri',
                         ),
                       ),
                     ),
-                    child: const Text(
-                      'Yes',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.white,
-                        fontFamily: 'Calibri',
-                      ),
-                    ),
                   ),
-                ),
-              ],
-            );
-          },
-        );
-        if (confirmClose == true) {
-          SystemNavigator.pop();
+                ],
+              );
+            },
+          );
+          if (confirmClose == true) {
+            SystemNavigator.pop();
+          }
+          return Future.value(false);
         }
-        return Future.value(false);
       },
-      //MARK: AppBar
+      //MARK: AppBar000000000000000000000000000000000000
 
       child:Scaffold(
       appBar: CommonStyles.homeAppBar(
@@ -236,10 +243,11 @@ context: context,
                 },
               ),
         */
-        body: _buildScreens(_currentIndex),
+        body:
+        _buildScreens(_currentIndex),
         bottomNavigationBar: BottomNavyBar(
           selectedIndex: _currentIndex,
-          backgroundColor: const Color(0xFFf3e3ff),
+          backgroundColor: const Color(0xffffffff),
           showElevation: true,
           itemCornerRadius: 24,
           curve: Curves.easeIn,
@@ -256,10 +264,10 @@ context: context,
                 height: 24,
                 color: _currentIndex == 0
                     ? CommonUtils.primaryTextColor
-                    : Colors.grey,
+                    : Colors.black,
               ),
-              title: const Text(
-                'Home',
+              title:  Text(
+                'Home',style: CommonStyles.txSty_14b_f5,
               ),
               activeColor: Colors.blue,
               textAlign: TextAlign.center,
@@ -271,10 +279,10 @@ context: context,
                 height: 24,
                 color: _currentIndex == 1
                     ? CommonUtils.primaryTextColor
-                    : Colors.grey, // Change color based
+                    : Colors.black, // Change color based
               ),
               title: const Text(
-                'Bookings',
+                'Bookings',style: CommonStyles.txSty_14b_f5,
               ),
               activeColor: Colors.blue,
               textAlign: TextAlign.center,
@@ -286,9 +294,9 @@ context: context,
                 height: 24,
                 color: _currentIndex == 2
                     ? CommonUtils.primaryTextColor
-                    : Colors.grey, // Change color based on selection
+                    : Colors.black, // Change color based on selection
               ),
-              title: const Text('Products'),
+              title: const Text('Products',style: CommonStyles.txSty_14b_f5,),
               activeColor: Colors.blue,
               textAlign: TextAlign.center,
             ),
@@ -299,9 +307,9 @@ context: context,
                 height: 24,
                 color: _currentIndex == 3
                     ? CommonUtils.primaryTextColor
-                    : Colors.grey, // Change color based on selection
+                    : Colors.black, // Change color based on selection
               ),
-              title: const Text('My Profile'),
+              title: const Text('My Profile',style: CommonStyles.txSty_14b_f5,),
               activeColor: Colors.blue,
               textAlign: TextAlign.center,
             ),

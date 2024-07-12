@@ -111,13 +111,23 @@ class CommonStyles {
     fontWeight: FontWeight.bold,
     color: blackColor,
   );
+  static const TextStyle txSty_20black_fb = TextStyle(
+    fontSize: 20,
+    fontFamily: "Calibri",
+    color: blackColor,
+  );
   static const TextStyle txSty_20blu_fb = TextStyle(
     fontSize: 20,
     fontFamily: "Calibri",
     fontWeight: FontWeight.bold,
     color: blueColor,
   );
+  static const TextStyle txSty_20w_fb = TextStyle(
+    fontSize: 20,
+    fontFamily: "Calibri",
 
+    color: whiteColor,
+  );
   static TextStyle dayTextStyle = const TextStyle(color: Colors.black, fontWeight: FontWeight.w700);
 
   static void progressBar(BuildContext context) {
@@ -251,7 +261,7 @@ class CommonStyles {
     required String userName, required String userFullName, required String email,
   }) {
     return AppBar(
-      backgroundColor: const Color(0xFFf3e3ff),
+      backgroundColor: const Color(0xffffffff),
       automaticallyImplyLeading: false,
       title: Row(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -345,7 +355,7 @@ class CommonStyles {
   // }
 
 
-  static AppBar AgenthomeAppBar({required void Function()? onPressed}) {
+  static AppBar AgenthomeAppBar({required String userName,required void Function()? onPressed}) {
     return AppBar(
       backgroundColor: const Color(0xFFf3e3ff),
       automaticallyImplyLeading: false,
@@ -367,14 +377,23 @@ class CommonStyles {
       ),
       actions: [
         IconButton(
-          icon: SvgPicture.asset(
-            'assets/sign-out-alt.svg',
-            color: const Color(0xFF662e91),
-            width: 24,
-            height: 24,
+          icon: Container(
+            width: 40,
+            height: 40,
+            decoration: const BoxDecoration(
+              color: CommonStyles.primaryTextColor,
+              shape: BoxShape.circle,
+            ),
+            child: Center(
+              child: Text(
+                userName, // 'X',
+                style: const TextStyle(fontSize: 22, color: Colors.white),
+              ),
+            ),
           ),
           onPressed: onPressed,
         ),
+
       ],
     );
   }

@@ -25,9 +25,11 @@ class AgentHome extends StatefulWidget {
 }
 
 class _AgentHomeState extends State<AgentHome> {
+  String userFullName = '';
   @override
   void initState() {
     super.initState();
+    checkLoginuserdata();
     print('_____Agent Home_____');
   }
 
@@ -36,86 +38,96 @@ class _AgentHomeState extends State<AgentHome> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        bool confirmClose = await showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: const Text('Confirm Exit'),
-              content: const Text('Are You Sure You Want to Close The App?'),
-              actions: [
-                Container(
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    style: ElevatedButton.styleFrom(
-                      textStyle: const TextStyle(
-                        color: CommonUtils.primaryTextColor,
+        // Show a confirmation dialog
+        if (_currentIndex != 0) {
+          setState(() {
+            _currentIndex = 0;
+          });
+          return Future.value(false);
+        } else {
+          bool confirmClose = await showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: const Text('Confirm Exit'),
+                content: const Text('Are You Sure You Want to Close The App?'),
+                actions: [
+                  Container(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      style: ElevatedButton.styleFrom(
+                        textStyle: const TextStyle(
+                          color: CommonUtils.primaryTextColor,
+                        ),
+                        side: const BorderSide(
+                          color: CommonUtils.primaryTextColor,
+                        ),
+                        backgroundColor: Colors.white,
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(5),
+                          ),
+                        ),
                       ),
-                      side: const BorderSide(
-                        color: CommonUtils.primaryTextColor,
-                      ),
-                      backgroundColor: Colors.white,
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(5),
+                      child: const Text(
+                        'No',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: CommonUtils.primaryTextColor,
+                          fontFamily: 'Calibri',
                         ),
                       ),
                     ),
-                    child: const Text(
-                      'No',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: CommonUtils.primaryTextColor,
-                        fontFamily: 'Calibri',
-                      ),
-                    ),
                   ),
-                ),
-                const SizedBox(width: 10), // Add spacing between buttons
-                Container(
-                  child: ElevatedButton(
-                    onPressed: () => Navigator.of(context).pop(true),
-                    style: ElevatedButton.styleFrom(
-                      textStyle: const TextStyle(
-                        color: CommonUtils.primaryTextColor,
+                  const SizedBox(width: 10),
+                  Container(
+                    child: ElevatedButton(
+                      onPressed: () => Navigator.of(context).pop(true),
+                      style: ElevatedButton.styleFrom(
+                        textStyle: const TextStyle(
+                          color: CommonUtils.primaryTextColor,
+                        ),
+                        side: const BorderSide(
+                          color: CommonUtils.primaryTextColor,
+                        ),
+                        backgroundColor: CommonUtils.primaryTextColor,
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(5),
+                          ),
+                        ),
                       ),
-                      side: const BorderSide(
-                        color: CommonUtils.primaryTextColor,
-                      ),
-                      backgroundColor: CommonUtils.primaryTextColor,
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(5),
+                      child: const Text(
+                        'Yes',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.white,
+                          fontFamily: 'Calibri',
                         ),
                       ),
                     ),
-                    child: const Text(
-                      'Yes',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.white,
-                        fontFamily: 'Calibri',
-                      ),
-                    ),
                   ),
-                ),
-              ],
-            );
-          },
-        );
-
-        if (confirmClose == true) {
-          SystemNavigator.pop();
+                ],
+              );
+            },
+          );
+          if (confirmClose == true) {
+            SystemNavigator.pop();
+          }
+          return Future.value(false);
         }
-
-        return Future.value(false);
       },
       child: Scaffold(
+
         appBar: _currentIndex == 0
-            ? CommonStyles.AgenthomeAppBar(
-                onPressed: () => logOutDialog(),
-              )
+            ?  CommonStyles.AgenthomeAppBar(
+          onPressed: () {
+            logOutDialog();
+            // Define what happens when the button in the AppBar is pressed
+          }, userName: userFullName.isNotEmpty ? userFullName[0].toUpperCase() : "H",
+        )
             : CommonStyles.remainingAppBars(
                 context,
                 title: _getAppBarTitle(_currentIndex),
@@ -176,7 +188,7 @@ class _AgentHomeState extends State<AgentHome> {
                 'assets/objects-column.svg',
                 width: 24,
                 height: 24,
-                color: _currentIndex == 0 ? CommonUtils.primaryTextColor : Colors.grey,
+                color: _currentIndex == 0 ? CommonUtils.primaryTextColor : Colors.black,
               ),
               title: const Text(
                 'Home',
@@ -189,7 +201,7 @@ class _AgentHomeState extends State<AgentHome> {
                 'assets/calendar-day.svg',
                 width: 24,
                 height: 24,
-                color: _currentIndex == 1 ? CommonUtils.primaryTextColor : Colors.grey,
+                color: _currentIndex == 1 ? CommonUtils.primaryTextColor : Colors.black,
               ),
               title: const Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -210,7 +222,7 @@ class _AgentHomeState extends State<AgentHome> {
                 'assets/calendar-lines.svg',
                 width: 24,
                 height: 24,
-                color: _currentIndex == 2 ? CommonUtils.primaryTextColor : Colors.grey,
+                color: _currentIndex == 2 ? CommonUtils.primaryTextColor : Colors.black,
               ),
               title: const Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -351,5 +363,15 @@ class _AgentHomeState extends State<AgentHome> {
       default:
         return '';
     }
+  }
+
+  void checkLoginuserdata() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    setState(() {
+      userFullName = prefs.getString('userFullName') ?? '';
+      print('userFullName: $userFullName');
+
+    });
   }
 }
