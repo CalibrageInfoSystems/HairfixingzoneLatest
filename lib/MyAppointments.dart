@@ -1760,32 +1760,88 @@ class _OpCardState extends State<OpCard> {
                           const SizedBox(
                             height: 15.0,
                           ),
-                          Center(
-                            child: SizedBox(
-                              width: MediaQuery.of(context).size.width *
-                                  0.8, // Adjusted width
-                              child: Center(
-                                child: RatingBar.builder(
-                                  initialRating: 0,
-                                  minRating: 0,
-                                  direction: Axis.horizontal,
-                                  allowHalfRating: true,
-                                  itemCount: 5,
-                                  itemPadding: const EdgeInsets.symmetric(
-                                      horizontal: 1.0),
-                                  itemBuilder: (context, _) => const Icon(
-                                    Icons.star,
-                                    color: CommonUtils.primaryTextColor,
+                          Row(
+                            children: [
+                              Text(
+                                'Quality',
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  color: CommonUtils.primaryTextColor,
+                                  fontFamily: 'Calibri',
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                              Container(
+                                child: SizedBox(
+                                  width: MediaQuery.of(context).size.width *
+                                      0.6, // Adjusted width
+                                  child: Center(
+                                    child: RatingBar.builder(
+                                      initialRating: 0,
+                                      minRating: 0,
+                                      direction: Axis.horizontal,
+                                      allowHalfRating: true,
+                                      itemCount: 5,
+                                      itemPadding: const EdgeInsets.symmetric(
+                                          horizontal: 1.0),
+                                      itemBuilder: (context, _) => const Icon(
+                                        Icons.star,
+                                        color: CommonUtils.primaryTextColor,
+                                      ),
+                                      onRatingUpdate: (rating) {
+                                        setState(() {
+                                          rating_star = rating;
+                                          print('rating_star$rating_star');
+                                        });
+                                      },
+                                    ),
                                   ),
-                                  onRatingUpdate: (rating) {
-                                    setState(() {
-                                      rating_star = rating;
-                                      print('rating_star$rating_star');
-                                    });
-                                  },
                                 ),
                               ),
-                            ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 8.0,
+                          ),
+                          Row(
+                            children: [
+                              Text(
+                                'Service',
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  color: CommonUtils.primaryTextColor,
+                                  fontFamily: 'Calibri',
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                              Container(
+                                child: SizedBox(
+                                  width: MediaQuery.of(context).size.width *
+                                      0.6, // Adjusted width
+                                  child: Center(
+                                    child: RatingBar.builder(
+                                      initialRating: 0,
+                                      minRating: 0,
+                                      direction: Axis.horizontal,
+                                      allowHalfRating: true,
+                                      itemCount: 5,
+                                      itemPadding: const EdgeInsets.symmetric(
+                                          horizontal: 1.0),
+                                      itemBuilder: (context, _) => const Icon(
+                                        Icons.star,
+                                        color: CommonUtils.primaryTextColor,
+                                      ),
+                                      onRatingUpdate: (rating) {
+                                        setState(() {
+                                          rating_star = rating;
+                                          print('rating_star$rating_star');
+                                        });
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                           Padding(
                             padding: const EdgeInsets.only(
@@ -1975,11 +2031,12 @@ class _OpCardState extends State<OpCard> {
           // userfeedbacklist[index].comments = _commentstexteditcontroller.text.toString();
 
           Navigator.of(context).pop();
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => const MyAppointments(),
-            ),
-          );
+          // Navigator.of(context).push(
+          //   MaterialPageRoute(
+          //     builder: (context) => const MyAppointments(),
+          //   ),
+          // );
+
         } else {
           print(
               'Failed to send the request. Status code: ${response.statusCode}');
