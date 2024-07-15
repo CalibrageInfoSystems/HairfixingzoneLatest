@@ -1,8 +1,9 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
+
 import 'package:flutter_svg/svg.dart';
 import 'package:hairfixingzone/BranchesModel.dart';
 import 'package:hairfixingzone/Common/common_styles.dart';
@@ -17,6 +18,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'Booking_Screen.dart';
 import 'BranchModel.dart';
 import 'CommonUtils.dart';
 import 'HomeScreen.dart';
@@ -485,6 +487,658 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
     });
   }
 }
+
+class SliderScreen extends StatefulWidget {
+  @override
+  _SliderScreenState createState() => _SliderScreenState();
+}
+
+class _SliderScreenState extends State<SliderScreen> {
+  List<BannerImages> imageList = [];
+
+  List<BranchModel> brancheslist = [];
+  final CarouselController carouselController = CarouselController();
+  int currentIndex = 0;
+  bool isLoading = true;
+  bool isDataBinding = false;
+  bool apiAllowed = true;
+  late Timer _timer;
+  @override
+  initState() {
+    super.initState();
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitDown,
+      DeviceOrientation.portraitUp,
+    ]);
+
+    CommonUtils.checkInternetConnectivity().then((isConnected) {
+      if (isConnected) {
+        print('Connected to the internet');
+        fetchData();
+        // Call API immediately when screen loads
+        //  fetchData();
+        //fetchimagesslider();
+        fetchImages();
+      } else {
+        CommonUtils.showCustomToastMessageLong('No Internet Connection', context, 1, 4);
+        print('Not connected to the internet'); // Not connected to the internet
+      }
+    });
+  }
+
+  void fetchData() async {
+    setState(() {
+      isLoading = true;
+    });
+
+    // Add a timeout of 8 seconds using Future.delayed
+    Future.delayed(Duration(seconds: 15), () {
+      if (isLoading) {
+        setState(() {
+          isLoading = false;
+          brancheslist.clear(); // Clear the list if timeout occurs
+        });
+      }
+    });
+
+    await _getData(); // Call your API method
+  }
+
+  void fetchimagesslider() async {
+    setState(() {
+      isLoading = true;
+    });
+
+    // Add a timeout of 8 seconds using Future.delayed
+    Future.delayed(Duration(seconds: 15), () {
+      if (isLoading) {
+        setState(() {
+          isLoading = false;
+          imageList.clear(); // Clear the list if timeout occurs
+        });
+      }
+    });
+
+    await fetchImages(); // Call your API method
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
+
+  Future<void> _getData() async {
+    setState(() {
+      isLoading = true; // Set isLoading to true before making the API call
+    });
+
+    final url = Uri.parse(baseUrl + getbranches);
+    print('url==>135: $url');
+
+    bool success = false;
+    int retries = 0;
+    const maxRetries = 1;
+
+    while (!success && retries < maxRetries) {
+      try {
+        final response = await http.get(url);
+
+        // Check if the request was successful
+        if (response.statusCode == 200) {
+          // Parse the response body
+          final data = json.decode(response.body);
+          print('Failed to fetch data:  $data');
+
+          List<BranchModel> branchList = [];
+
+          for (var item in data['listResult']) {
+            branchList.add(BranchModel(
+              id: item['id'],
+              name: item['name'],
+              imageName: item['imageName'],
+              address: item['address'],
+              startTime: item['startTime'],
+              closeTime: item['closeTime'],
+              room: item['room'],
+              mobileNumber: item['mobileNumber'],
+              isActive: item['isActive'],
+            ));
+          }
+
+
+          // Update the state with the fetched data
+          setState(() {
+            brancheslist = branchList;
+            isLoading = false; // Set isLoading to false after data is fetched
+          });
+
+          success = true;
+        } else {
+          // Handle error if the API request was not successful
+          print('Request failed with status: ${response.statusCode}');
+          setState(() {
+            isLoading = false; // Set isLoading to false if request fails
+          });
+        }
+      } catch (error) {
+        // Handle any exception that occurred during the API call
+        print('Error data is not getting from the api: $error');
+        setState(() {
+          isLoading = false; // Set isLoading to false if error occurs
+        });
+      }
+
+      retries++;
+    }
+
+    if (!success) {
+      // Handle the case where all retries failed
+      print('All retries failed. Unable to fetch data from the API.');
+    }
+  }
+
+
+  Future<void> fetchImages() async {
+    setState(() {
+      isDataBinding = true; // Set the flag to true when data fetching starts
+
+      isLoading = true; // Set isLoading to true before making the API call
+    });
+    final url = Uri.parse(baseUrl + getBanners);
+    print('url==>127: $url');
+
+
+    try {
+      final response = await http.get(url);
+
+      if (response.statusCode == 200) {
+        final jsonData = json.decode(response.body);
+
+        List<BannerImages> bannerImages = [];
+        for (var item in jsonData['listResult']) {
+          bannerImages.add(BannerImages(
+              imageName: item['imageName'] ?? '', id: item['id'] ?? 0));
+        }
+        // for (var item in jsonData['ListResult']) {
+        //   bannerImages.add(BannerImages(FilePath: item['FilePath'], Id: item['Id']));
+        // }
+
+        setState(() {
+          imageList = bannerImages;
+          isDataBinding = false;
+
+          isLoading = false; // Set isLoading to false after completing the API call
+        });
+      } else {
+        // Handle error if the API request was not successful
+        print('Request failed with status: ${response.statusCode}');
+        setState(() {
+          isDataBinding = false;
+
+          isLoading = false; // Set isLoading to false if request fails
+        });
+      }
+    } catch (error) {
+      // Handle any exception that occurred during the API call
+      print('Error images are not from the api: $error');
+      setState(() {
+        isDataBinding = false;
+        isLoading = false; // Set isLoading to false if error occurs
+      });
+    }
+  }
+
+  void retryDataFetching() {
+    // setState(() {
+    //   isLoading = true; // Set isLoading to true to show loading indicator
+    // });
+    // _getData(); // Call your API method to fetch data
+    // fetchImages(); // Call your API method to fetch images
+    CommonUtils.checkInternetConnectivity().then((isConnected) {
+      if (isConnected) {
+        print('Connected to the internet');
+        //fetchImages();
+        // _getData();
+        fetchData();
+        fetchimagesslider();
+      } else {
+        CommonUtils.showCustomToastMessageLong('No Internet Connection', context, 1, 4);
+        print('Not connected to the internet'); // Not connected to the internet
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 0.0),
+          child: Padding(
+            padding: EdgeInsets.only(top: 10.0, bottom: 10.0),
+            child: RichText(
+              text: TextSpan(
+                style: DefaultTextStyle.of(context).style,
+                children: [
+                  TextSpan(
+                    text: 'Welcome to ',
+                    style: TextStyle(
+                      fontFamily: 'Calibri',
+                      fontSize: 20,
+                      color: Color(0xFFFB4110),
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  TextSpan(
+                    text: 'Hair Fixing Zone',
+                    style: TextStyle(
+                      fontFamily: 'Calibri',
+                      fontSize: 20,
+                      color: Color(0xFF163CF1),
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+        Expanded(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 10.0),
+            child: Column(
+              children: [
+                Expanded(
+                  child: Stack(
+                    children: [
+                      Align(
+                        alignment: Alignment.topCenter,
+                        child: isDataBinding
+                            ? Center(
+                          child: CircularProgressIndicator.adaptive(),
+                        )
+                            : imageList.isEmpty
+                            ? Center(
+                          // child: CircularProgressIndicator.adaptive(),
+                          child: Icon(
+                            Icons.signal_cellular_connected_no_internet_0_bar_sharp,
+                            color: Colors.red,
+                          ),
+                        )
+                            : CarouselSlider(
+                          items: imageList
+                              .map((item) => Image.network(
+                            item.imageName,
+                            fit: BoxFit.fitWidth,
+                            width: MediaQuery.of(context).size.width,
+                          ))
+                              .toList(),
+                          carouselController: carouselController,
+                          options: CarouselOptions(
+                            scrollPhysics: const BouncingScrollPhysics(),
+                            autoPlay: true,
+                            aspectRatio: 23 / 9,
+                            viewportFraction: 1,
+                            onPageChanged: (index, reason) {
+                              setState(() {
+                                currentIndex = index;
+                              });
+                            },
+                          ),
+                        ),
+                      ),
+
+                      // Align(
+                      //   alignment: Alignment.topCenter,
+                      //   child: Padding(
+                      //     padding: EdgeInsets.only(top: 110.0),
+                      //     child: Row(
+                      //       mainAxisAlignment: MainAxisAlignment.center,
+                      //       children: imageList.asMap().entries.map((entry) {
+                      //         final index = entry.key;
+                      //         return buildIndicator(index);
+                      //       }).toList(),
+                      //     ),
+                      //   ),
+                      // ),working code has been hide because it is intialize static padding
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        //  padding: EdgeInsets.all(20.0),
+
+                        height: MediaQuery.of(context).size.height,
+                        child: Align(
+                          alignment: Alignment.bottomCenter,
+                          child: Padding(
+                            padding: EdgeInsets.only(bottom: 25.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: imageList.asMap().entries.map((entry) {
+                                final index = entry.key;
+                                return buildIndicator(index);
+                              }).toList(),
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 5.0, vertical: 5.0),
+                  child: Align(
+                    alignment: Alignment.topCenter,
+                    child: Text(
+                      'Branches',
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                        fontFamily: 'Calibri',
+                        fontSize: 20,
+                        color: Color(0xFF163CF1),
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+                if (isLoading)
+                  Text('Please Wait Loading Slow Internet Connection !')
+                else if (brancheslist.isEmpty && imageList.isEmpty)
+                  Container(
+                    padding: EdgeInsets.all(15.0),
+                    child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text('Failed to fetch data. Please check your internet connection.!'),
+                          SizedBox(height: 20),
+                          ElevatedButton(
+                            onPressed: retryDataFetching,
+                            child: Text('Retry'),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                Expanded(
+                    flex: 3,
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: isLoading ? 5 : brancheslist.length, // Display a fixed number of shimmer items when loading
+                      itemBuilder: (context, index) {
+                        if (isLoading) {
+                          // Return shimmer effect if isLoading is true
+                          return Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 0.0, vertical: 5.0),
+                            child: Shimmer.fromColors(
+                              baseColor: Colors.grey.shade300,
+                              highlightColor: Colors.grey.shade100,
+                              child: Container(
+                                height: 150, // Adjust height as needed
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(15.0),
+                                ),
+                                // child: Shimmer.fromColors(
+                                //   baseColor: Colors.grey.shade300,
+                                //   highlightColor: Colors.grey.shade100,
+                                //   child: ClipRRect(
+                                //     borderRadius: BorderRadius.circular(7.0),
+                                //     child: Image.network(
+                                //       imagesflierepo,
+                                //       width: 110,
+                                //       height: 65,
+                                //       fit: BoxFit.fill,
+                                //       // loadingBuilder: (context, child, loadingProgress) {
+                                //       //   if (loadingProgress == null) return child;
+                                //       //
+                                //       //   return const Center(child: CircularProgressIndicator.adaptive());
+                                //       //   // You can use LinearProgressIndicator or CircularProgressIndicator instead
+                                //       // },
+                                //     ),
+                                //   ),
+                                // ),
+                              ),
+                            ),
+                          );
+                        } else {
+                          // Return actual data when isLoading is false
+                          BranchModel branch = brancheslist[index];
+                          return Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 0.0, vertical: 5.0),
+                            child: IntrinsicHeight(
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.only(
+                                  topRight: Radius.circular(42.5),
+                                  bottomLeft: Radius.circular(42.5),
+                                ),
+                                child: GestureDetector(
+                                  onTap: () {
+                                    // Navigator.push(
+                                    //   context,
+                                    //   MaterialPageRoute(builder: (context) => slotbookingscreen(branchId: branch.id, branchname: branch.name, branchlocation: branch.address, filepath: branch.filePath, MobileNumber: branch.mobileNumber)),
+                                    // );
+                                  },
+                                  child: Card(
+                                    shadowColor: Colors.transparent,
+                                    surfaceTintColor: Colors.transparent,
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.only(
+                                        topRight: Radius.circular(29.0),
+                                        bottomLeft: Radius.circular(29.0),
+                                      ),
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          gradient: LinearGradient(
+                                            colors: [
+                                              Color(0xFFFEE7E1), // Start color
+                                              Color(0xFFD7DEFA),
+                                            ],
+                                            begin: Alignment.centerLeft,
+                                            end: Alignment.centerRight,
+                                          ),
+                                        ),
+                                        child: Row(
+                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                          children: [
+                                            Padding(
+                                              padding: EdgeInsets.only(left: 15.0),
+                                              child: Container(
+                                                width: 110,
+                                                height: 65,
+                                                decoration: BoxDecoration(
+                                                  borderRadius: BorderRadius.circular(10.0),
+                                                  border: Border.all(
+                                                    color: Color(0xFF9FA1EE),
+                                                    width: 3.0,
+                                                  ),
+                                                ),
+                                                child: ClipRRect(
+                                                  borderRadius: BorderRadius.circular(7.0),
+                                                  child: Image.network(
+                                                    branch.imageName!,
+                                                    width: 110,
+                                                    height: 65,
+                                                    fit: BoxFit.fill,
+                                                    loadingBuilder: (context, child, loadingProgress) {
+                                                      if (loadingProgress == null) return child;
+
+                                                      return const Center(child: CircularProgressIndicator.adaptive());
+                                                      // You can use LinearProgressIndicator or CircularProgressIndicator instead
+                                                    },
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+
+
+                                            Expanded(
+                                              child: Padding(
+                                                padding: EdgeInsets.only(left: 15.0),
+                                                child: Column(
+                                                  mainAxisAlignment: MainAxisAlignment.start,
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  children: [
+                                                    Padding(
+                                                      padding: EdgeInsets.only(top: 15.0),
+                                                      child: Text(
+                                                        branch.name,
+                                                        style: TextStyle(
+                                                          fontSize: 18,
+                                                          color: Color(0xFFFB4110),
+                                                          fontWeight: FontWeight.bold,
+                                                          fontFamily: 'Calibri',
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    SizedBox(height: 4.0),
+                                                    Expanded(
+                                                      child: Padding(
+                                                        padding: EdgeInsets.only(right: 10.0),
+                                                        child: Column(
+                                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                                          children: [
+                                                            Row(
+                                                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                              children: [
+                                                                Image.asset(
+                                                                  'assets/location_icon.png',
+                                                                  width: 20,
+                                                                  height: 18,
+                                                                ),
+                                                                SizedBox(width: 4.0),
+                                                                Expanded(
+                                                                  child: Text(
+                                                                    branch.address,
+                                                                    style: TextStyle(
+                                                                      fontFamily: 'Calibri',
+                                                                      fontSize: 12,
+                                                                      color: Color(0xFF000000),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                            Spacer(flex: 3),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Align(
+                                                      alignment: Alignment.bottomRight,
+                                                      child: Container(
+                                                        height: 26,
+                                                        margin: EdgeInsets.only(bottom: 10.0, right: 10.0),
+                                                        decoration: BoxDecoration(
+                                                          color: Colors.white,
+                                                          border: Border.all(
+                                                            color: Color(0xFF8d97e2),
+                                                          ),
+                                                          borderRadius: BorderRadius.circular(10.0),
+                                                        ),
+                                                        child: ElevatedButton(
+                                                          onPressed: () {
+                                                            // Handle button press
+                                                          },
+                                                          style: ElevatedButton.styleFrom(
+                                                            foregroundColor: Color(0xFF8d97e2), backgroundColor: Colors.transparent,
+                                                            elevation: 0,
+                                                            shadowColor: Colors.transparent,
+                                                            shape: RoundedRectangleBorder(
+                                                              borderRadius: BorderRadius.circular(10.0),
+                                                            ),
+                                                          ),
+                                                          child: GestureDetector(
+                                                            onTap: () {
+                                                              print('booknowbuttonisclciked');
+                                                              print(branch.id);
+                                                              print(branch.name);
+                                                              Navigator.push(
+                                                                context,
+                                                                MaterialPageRoute(
+                                                                  builder: (context) => Bookingscreen(
+                                                                    branchId: branch.id!,
+                                                                    branchname: branch.name!,
+                                                                    branchaddress: branch.address!,
+                                                                    phonenumber: branch.mobileNumber!,
+                                                                    branchImage: branch.imageName!,
+                                                                    latitude: branch.latitude,
+                                                                    longitude: branch.longitude,
+                                                                  ),
+                                                                ),
+                                                              );
+                                                              // Handle button press, navigate to a new screen
+                                                              // Navigator.push(
+                                                              //   context,
+                                                              //   MaterialPageRoute(
+                                                              //       builder: (context) => slotbookingscreen(branchId: branch.id, branchname: branch.name, branchlocation: branch.address, filepath: branch.filePath, MobileNumber: branch.mobileNumber)),
+                                                              // );
+                                                            },
+                                                            child: Row(
+                                                              mainAxisSize: MainAxisSize.min,
+                                                              children: [
+                                                                SvgPicture.asset(
+                                                                  'assets/datepicker_icon.svg',
+                                                                  width: 15.0,
+                                                                  height: 15.0,
+                                                                ),
+                                                                SizedBox(width: 5),
+                                                                Text(
+                                                                  'Book Now',
+                                                                  style: TextStyle(
+                                                                    fontSize: 13,
+                                                                    color: Color(0xFF8d97e2),
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          );
+                        }
+                      },
+                    )
+
+
+                ),
+
+                // width: 300.0,
+
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget buildIndicator(int index) {
+    return Container(
+      width: 8,
+      height: 8,
+      margin: EdgeInsets.symmetric(horizontal: 4),
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: index == currentIndex ? Colors.orange : Colors.grey,
+      ),
+    );
+  }
+}
+
 
 // class SliderScreen extends StatefulWidget {
 //   @override
