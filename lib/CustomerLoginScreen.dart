@@ -457,7 +457,7 @@ class _LoginPageState extends State<CustomerLoginScreen> {
               AddCustomer_Notification(user['id'],user['roleID']);
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const HomeScreen()),
+                MaterialPageRoute(builder: (context) =>  HomeScreen()),
               );
 
             } else {
@@ -586,7 +586,7 @@ class _LoginPageState extends State<CustomerLoginScreen> {
         if(isSuccess){
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const HomeScreen()),
+            MaterialPageRoute(builder: (context) =>  HomeScreen()),
           );
         }
 

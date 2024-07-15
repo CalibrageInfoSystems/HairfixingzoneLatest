@@ -352,7 +352,7 @@ class _SlotSuccessScreenState extends State<SlotSuccessScreen> with TickerProvid
                                 // sharedprefsdelete();
                                 Navigator.push(
                                   context,
-                                  MaterialPageRoute(builder: (context) => const HomeScreen()),
+                                  MaterialPageRoute(builder: (context) =>  HomeScreen()),
                                 );
                               },
                               child: Container(

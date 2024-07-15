@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
+
 import 'package:flutter_svg/svg.dart';
 import 'package:hairfixingzone/BranchesModel.dart';
 import 'package:hairfixingzone/Common/common_styles.dart';
@@ -13,71 +15,94 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:marquee/marquee.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'Booking_Screen.dart';
+import 'BranchModel.dart';
+import 'CommonUtils.dart';
+import 'HomeScreen.dart';
 import 'Model_Branch.dart';
 
-class Dashboard_Screen extends StatelessWidget {
-  const Dashboard_Screen({super.key});
+class Branch {
+  final int branchId;
+  final String branchname;
+  final String branchaddress;
+  final String phonenumber;
+  final String branchImage;
+  final double? latitude;
+  final double? longitude;
 
-  @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: TwoCardPageView(),
-    );
-  }
+  Branch({
+    required this.branchId,
+    required this.branchname,
+    required this.branchaddress,
+    required this.phonenumber,
+    required this.branchImage,
+    required this.latitude,
+    required this.longitude,
+  });
 }
 
-class TwoCardPageView extends StatefulWidget {
-  const TwoCardPageView({super.key});
+class CustomerDashBoard extends StatefulWidget {
+  final void Function()? bookNowButtonPressed;
+  final Function(Branch data) toNavigate;
+  const CustomerDashBoard(
+      {super.key, this.bookNowButtonPressed, required this.toNavigate});
 
   @override
-  _TwoCardPageViewState createState() => _TwoCardPageViewState();
+  State<CustomerDashBoard> createState() => _CustomerDashBoardState();
 }
 
-class _TwoCardPageViewState extends State<TwoCardPageView> {
-  List<Item> _items = [];
-  int? userId;
+class _CustomerDashBoardState extends State<CustomerDashBoard> {
   String? marqueeText;
-  Future<List<Model_branch>>? apiData;
-  String userFullName = '';
-  String email = '';
-  String phonenumber = '';
+
+  List<BannerImages> imageList = [];
+
+  List<BranchModel> brancheslist = [];
+  final CarouselController carouselController = CarouselController();
+  int currentIndex = 0;
+  bool isLoading = true;
   bool isDataBinding = false;
+  bool apiAllowed = true;
+  late Timer _timer;
+  final bool _shouldStartMarquee = true;
+  List<Item> _items = [];
 
-//  String gender ='';
-  String Gender = '';
-  final bool _shouldStartMarquee =
-  true; // Variable to control Marquee scrolling
-
-  // final PageController _pageController = PageController();
+  String userFullName = '';
 
   @override
-  void initState() {
+  initState() {
     super.initState();
-    checkLoginuserdata();
-    _fetchItems();
-    apiData = getBranchsData();
-    getMarqueeText();
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitDown,
+      DeviceOrientation.portraitUp,
+    ]);
+
+    CommonUtils.checkInternetConnectivity().then((isConnected) {
+      if (isConnected) {
+        print('Connected to the internet');
+        getMarqueeText();
+        fetchCarouselData();
+        fetchData();
+        fetchLoginUserInfo();
+
+        //fetchimagesslider();
+        fetchImages();
+      } else {
+        CommonUtils.showCustomToastMessageLong(
+            'No Internet Connection', context, 1, 4);
+        print('Not connected to the internet');
+      }
+    });
   }
 
-  void _fetchItems() async {
-    final response = await http.get(Uri.parse(baseUrl + getbanner));
+  void fetchLoginUserInfo() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
     setState(() {
-      isDataBinding = true;
+      userFullName = prefs.getString('userFullName') ?? '';
     });
-    if (response.statusCode == 200) {
-      setState(() {
-        _items = (json.decode(response.body)['listResult'] as List)
-            .map((item) => Item.fromJson(item))
-            .toList();
-        isDataBinding = false;
-      });
-    } else {
-      isDataBinding = false;
-      throw Exception('Failed to load items');
-    }
   }
 
   Future<void> getMarqueeText() async {
@@ -95,7 +120,6 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
             marqueeText = response['listResult'][i]['text'] != null
                 ? '${response['listResult'][i]['text']}  -  '
                 : null;
-            // marqueeText += response['listResult'][i]['text'];
           }
         } else {
           print('api failed');
@@ -110,73 +134,256 @@ class _TwoCardPageViewState extends State<TwoCardPageView> {
     }
   }
 
+  void fetchData() async {
+    setState(() {
+      isLoading = true;
+    });
+
+    Future.delayed(const Duration(seconds: 15), () {
+      if (isLoading) {
+        setState(() {
+          isLoading = false;
+          brancheslist.clear();
+        });
+      }
+    });
+
+    await _getData();
+  }
+
+  void fetchimagesslider() async {
+    setState(() {
+      isLoading = true;
+    });
+
+    Future.delayed(const Duration(seconds: 15), () {
+      if (isLoading) {
+        setState(() {
+          isLoading = false;
+          imageList.clear();
+        });
+      }
+    });
+
+    await fetchImages();
+  }
+
+  void fetchCarouselData() async {
+    final response = await http.get(Uri.parse(baseUrl + getbanner));
+    setState(() {
+      isDataBinding = true;
+    });
+    if (response.statusCode == 200) {
+      setState(() {
+        _items = (json.decode(response.body)['listResult'] as List)
+            .map((item) => Item.fromJson(item))
+            .toList();
+        isDataBinding = false;
+      });
+    } else {
+      isDataBinding = false;
+      throw Exception('Failed to load items');
+    }
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
+  }
+
+  Future<void> _getData() async {
+    setState(() {
+      isLoading = true;
+    });
+
+    final url = Uri.parse(baseUrl + getbranches);
+    print('url==>135: $url');
+
+    bool success = false;
+    int retries = 0;
+    const maxRetries = 1;
+
+    while (!success && retries < maxRetries) {
+      try {
+        final response = await http.get(url);
+
+        if (response.statusCode == 200) {
+          final data = json.decode(response.body);
+          print('Failed to fetch data:  $data');
+
+          List<BranchModel> branchList = [];
+
+          for (var item in data['listResult']) {
+            branchList.add(BranchModel(
+              id: item['id'],
+              name: item['name'],
+              imageName: item['imageName'],
+              address: item['address'],
+              startTime: item['startTime'],
+              closeTime: item['closeTime'],
+              room: item['room'],
+              mobileNumber: item['mobileNumber'],
+              isActive: item['isActive'],
+            ));
+          }
+
+          setState(() {
+            brancheslist = branchList;
+            isLoading = false;
+          });
+
+          success = true;
+        } else {
+          print('Request failed with status: ${response.statusCode}');
+          setState(() {
+            isLoading = false;
+          });
+        }
+      } catch (error) {
+        print('Error data is not getting from the api: $error');
+        setState(() {
+          isLoading = false;
+        });
+      }
+
+      retries++;
+    }
+
+    if (!success) {
+      print('All retries failed. Unable to fetch data from the API.');
+    }
+  }
+
+  Future<void> fetchImages() async {
+    setState(() {
+      isDataBinding = true;
+
+      isLoading = true;
+    });
+    final url = Uri.parse(baseUrl + getBanners);
+    print('url==>127: $url');
+
+    try {
+      final response = await http.get(url);
+
+      if (response.statusCode == 200) {
+        final jsonData = json.decode(response.body);
+
+        List<BannerImages> bannerImages = [];
+        for (var item in jsonData['listResult']) {
+          bannerImages.add(BannerImages(
+              imageName: item['imageName'] ?? '', id: item['id'] ?? 0));
+        }
+
+        setState(() {
+          imageList = bannerImages;
+          isDataBinding = false;
+
+          isLoading = false;
+        });
+      } else {
+        print('Request failed with status: ${response.statusCode}');
+        setState(() {
+          isDataBinding = false;
+
+          isLoading = false;
+        });
+      }
+    } catch (error) {
+      print('Error images are not from the api: $error');
+      setState(() {
+        isDataBinding = false;
+        isLoading = false;
+      });
+    }
+  }
+
+  void retryDataFetching() {
+    CommonUtils.checkInternetConnectivity().then((isConnected) {
+      if (isConnected) {
+        print('Connected to the internet');
+        //fetchImages();
+
+        fetchData();
+        fetchimagesslider();
+      } else {
+        CommonUtils.showCustomToastMessageLong(
+            'No Internet Connection', context, 1, 4);
+        print('Not connected to the internet');
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // backgroundColor: CommonStyles.primaryTextColor,
-      body:
-      // SingleChildScrollView(
-      //
-      //   child:
-        Container(
-          height: MediaQuery.of(context).size.height,
-         // color: Colors.white, // Set the background color to white
-decoration: BoxDecoration(
-  color: Colors.white
-),
-        child: Column(
-          children: [
-            //MARK: Marquee
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+      backgroundColor: CommonStyles.whiteColor,
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+            child: Column(
               children: [
-                const SizedBox(
-                  height: 5,
+                Row(
+                  children: [
+                    Text(
+                      'Hey,',
+                      style: CommonStyles.txSty_20b_fb.copyWith(fontSize: 24),
+                    ),
+                    Text(
+                      userFullName,
+                      style: CommonStyles.txSty_20b_fb.copyWith(fontSize: 24),
+                    ),
+                  ],
                 ),
-                FutureBuilder(
-                  future: getMarqueeText(),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const SizedBox();
-                    } else if (snapshot.hasError) {
-                      return const SizedBox();
-                    } else {
-                      if (marqueeText != null) {
-                        return SizedBox(
-                          height: 30,
-                          child: Marquee(
-                            text: marqueeText!,
-                            style: const TextStyle(
-                                fontSize: 16,
-                                fontFamily: "Calibri",
-                                fontWeight: FontWeight.w600,
-                                color: Color(0xFFff0176)),
-                            velocity: _shouldStartMarquee
-                                ? 30
-                                : 0, // Control Marquee scrolling with velocity
-                          ),
-                        );
-                      } else {
-                        return const SizedBox();
-                      }
-                    }
-                  },
+                RichText(
+                  text: TextSpan(
+                    style: DefaultTextStyle.of(context).style,
+                    children: const [
+                      TextSpan(
+                        text: 'Welcome to ',
+                        style: TextStyle(
+                          fontFamily: 'Calibri',
+                          fontSize: 20,
+                          color: Color(0xFFFB4110),
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      TextSpan(
+                        text: 'Hair Fixing Zone',
+                        style: TextStyle(
+                          fontFamily: 'Calibri',
+                          fontSize: 20,
+                          color: Color(0xFF163CF1),
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-                //MARK: Carousel widget
-                SizedBox(
+              ],
+            ),
+          ),
+          Expanded(
+            child: Column(
+              children: [
+                //MARK: Carousel view
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
                   width: MediaQuery.of(context).size.width,
                   height: 180,
                   child: FlutterCarousel(
                     options: CarouselOptions(
-                      showIndicator: true,
+                      height: 180,
+                      viewportFraction: 1.0,
+                      enlargeCenterPage: true,
                       autoPlay: true,
-                      floatingIndicator: false,
-                      autoPlayCurve: Curves.linear,
-                      slideIndicator: const CircularSlideIndicator(
-                        indicatorBorderColor: CommonStyles.blackColor,
-                        currentIndicatorColor: CommonStyles.primaryTextColor,
-                        indicatorRadius: 2,
-                      ),
+                      aspectRatio: 16 / 9,
+                      autoPlayCurve: Curves.fastOutSlowIn,
+                      enableInfiniteScroll: true,
+                      autoPlayAnimationDuration:
+                          const Duration(milliseconds: 800),
                     ),
                     items: _items.map((item) {
                       return Builder(
@@ -210,274 +417,506 @@ decoration: BoxDecoration(
                     }).toList(),
                   ),
                 ),
-
-                // Carousel indicator
-                // CarouselIndicator(
-                //   currentPage: _currentPage,
-                //   itemCount: _items.length,
-                //   onPageChanged: (int page) {
-                //     setState(() {
-                //       _currentPage = page;
-                //     });
-                //   },
-                // ),
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.center,
-                //   children: <Widget>[
-                //     for (int i = 0; i < _items.length; i++)
-                //       GestureDetector(
-                //         onTap: () {
-                //           setState(() {
-                //             _currentPage = i;
-                //           });
-                //         },
-                //         child: Container(
-                //           margin: const EdgeInsets.all(2),
-                //           width: 10,
-                //           height: 10,
-                //           decoration: BoxDecoration(
-                //             borderRadius: BorderRadius.circular(10),
-                //             border: Border.all(
-                //                 color: CommonStyles.primaryTextColor,
-                //                 width: 1.5),
-                //             color: _currentPage == i
-                //                 ? Colors.grey.withOpacity(0.9)
-                //                 : Colors.transparent,
-                //           ),
-                //         ),
-                //       ),
-                //   ],
-                // ),
-              ],
-            ),
-
-            const SizedBox(height: 20.0),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15.0),
-              child: Column(
-                children: [
-                  //MARK: Book Appointment
-                  IntrinsicHeight(
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.of(context, rootNavigator: true)
-                            .pushNamed("/BookAppointment");
-                      },
-                      child: Container(
-                          width: double.infinity,
-                          height: MediaQuery.of(context).size.height / 11,
-                          padding: const EdgeInsets.all(5),
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                                color: CommonStyles.primaryTextColor),
-                            borderRadius: BorderRadius.circular(10),
+                const SizedBox(height: 10),
+                /* 
+                Expanded(
+                  child: Stack(
+                    children: [
+                      Align(
+                        alignment: Alignment.topCenter,
+                        child: isDataBinding
+                            ? const Center(
+                                child: CircularProgressIndicator.adaptive(),
+                              )
+                            : imageList.isEmpty
+                                ? const Center(
+                                    
+                                    child: Icon(
+                                      Icons
+                                          .signal_cellular_connected_no_internet_0_bar_sharp,
+                                      color: Colors.red,
+                                    ),
+                                  )
+                                : CarouselSlider(
+                                    items: imageList
+                                        .map((item) => Image.network(
+                                              item.imageName,
+                                              fit: BoxFit.fitWidth,
+                                              width: MediaQuery.of(context)
+                                                  .size
+                                                  .width,
+                                            ))
+                                        .toList(),
+                                    carouselController: carouselController,
+                                    options: CarouselOptions(
+                                      scrollPhysics:
+                                          const BouncingScrollPhysics(),
+                                      autoPlay: true,
+                                      aspectRatio: 23 / 9,
+                                      viewportFraction: 1,
+                                      onPageChanged: (index, reason) {
+                                        setState(() {
+                                          currentIndex = index;
+                                        });
+                                      },
+                                    ),
+                                  ),
+                      ),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width,
+                        
+            
+                        height: MediaQuery.of(context).size.height,
+                        child: Align(
+                          alignment: Alignment.bottomCenter,
+                          child: Padding(
+                            padding: const EdgeInsets.only(bottom: 25.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: imageList.asMap().entries.map((entry) {
+                                final index = entry.key;
+                                return buildIndicator(index);
+                              }).toList(),
+                            ),
                           ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              const SizedBox(
-                                width: 2,
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+             */
+                //MARK: Marquee Text
+                FutureBuilder(
+                  future: getMarqueeText(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const SizedBox();
+                    } else if (snapshot.hasError) {
+                      return const SizedBox();
+                    } else {
+                      if (marqueeText != null) {
+                        return Container(
+                          height: 60,
+                          decoration: const BoxDecoration(
+                            image: DecorationImage(
+                              fit: BoxFit.cover,
+                              image: AssetImage(
+                                'assets/wave_background.png',
                               ),
-                              Container(
-                                padding: const EdgeInsets.all(15),
-                                decoration: const BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: CommonStyles.primaryTextColor),
-                                child: Center(
-                                  child: SvgPicture.asset(
-                                    'assets/noun-appointment-date-2417776.svg',
-                                    width: 30.0,
-                                    height: 30.0,
-                                    color: CommonStyles.whiteColor,
+                            ),
+                          ),
+                          child: Marquee(
+                            text: marqueeText!,
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontFamily: "Calibri",
+                              fontWeight: FontWeight.w600,
+                              color: CommonStyles.whiteColor,
+                            ),
+                            velocity: _shouldStartMarquee ? 30 : 0,
+                          ),
+                        );
+                      } else {
+                        return const SizedBox();
+                      }
+                    }
+                  },
+                ),
+
+                const Padding(
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+                  child: Align(
+                    alignment: Alignment.topCenter,
+                    child: Text(
+                      'Branches',
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                        fontFamily: 'Calibri',
+                        fontSize: 20,
+                        color: Color(0xFF163CF1),
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+                if (isLoading)
+                  const Text('Please Wait Loading Slow Internet Connection !')
+                else if (brancheslist.isEmpty && imageList.isEmpty)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                    child: Container(
+                      padding: const EdgeInsets.all(15.0),
+                      child: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Text(
+                                'Failed to fetch data. Please check your internet connection.!'),
+                            const SizedBox(height: 20),
+                            ElevatedButton(
+                              onPressed: retryDataFetching,
+                              child: const Text('Retry'),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                Expanded(
+                    flex: 3,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: isLoading ? 5 : brancheslist.length,
+                        itemBuilder: (context, index) {
+                          if (isLoading) {
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 0.0, vertical: 5.0),
+                              child: Shimmer.fromColors(
+                                baseColor: Colors.grey.shade300,
+                                highlightColor: Colors.grey.shade100,
+                                child: Container(
+                                  height: 150,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(15.0),
                                   ),
                                 ),
                               ),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              SizedBox(
-                                width: MediaQuery.of(context).size.width / 2,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    //MARK: WORK
-                                    const Text(
-                                      'Click Here To',
-                                      style: CommonStyles.txSty_16p_f5,
-                                    ),
-                                    Text(
-                                      'Book an Appointment',
-
-                                      /// style: CommonStyles.txSty_20p_fb,
-                                      // style: TextStyle(
-                                      //   fontSize: 14,
-                                      //   fontFamily: "Calibri",
-                                      //   fontWeight: FontWeight.bold,
-                                      //   color: CommonStyles.primaryTextColor,
-                                      //   letterSpacing: 2,
-                                      // ),
-                                      style: CommonStyles.txSty_16p_fb.copyWith(
-                                        fontSize: 20,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(30),
-                                child: SvgPicture.asset(
-                                  'assets/book_op_illusion.svg',
-                                  width: 60.0,
-                                  height: 55.0,
-                                  alignment: Alignment.centerRight,
-                                ),
-                              ),
-                            ],
-                          )),
-                      // )
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  //MARK: Screens
-                  const Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        width: 5,
-                      ),
-                      Text(
-                        'Branches',
-                        style: CommonStyles.txSty_16p_fb,
-                      ),
-                    ],
-                  ),
-                  Container(
-                    color: Colors.white, // Set the background color to white
-                 child:
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height / 3,
-
-                    child:    FutureBuilder(
-                      future: apiData,
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return const Center(
-                              child: CircularProgressIndicator.adaptive());
-                        } else if (snapshot.hasError) {
-                          return const Center(
-                            child: Text(
-                              'No Branches Available ',
-                              style: TextStyle(
-                                fontSize: 12.0,
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: "Roboto",
-                              ),
-                            ),
-                          );
-                        } else {
-                          List<Model_branch>? data = snapshot.data!;
-                          if (data.isNotEmpty) {
-                            return ListView.builder(
-                              scrollDirection: Axis.horizontal,
-                              itemCount: data.length,
-                              itemBuilder: (context, index) {
-                                return BranchCard(
-                                  branch: data[index],
-                                );
-                              },
                             );
                           } else {
-                            return const Center(
-                              child: Text(
-                                'No Branches Available',
-                                style: TextStyle(
-                                  fontSize: 12.0,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: "Roboto",
+                            BranchModel branch = brancheslist[index];
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 0.0, vertical: 5.0),
+                              child: IntrinsicHeight(
+                                child: ClipRRect(
+                                  borderRadius: const BorderRadius.only(
+                                    topRight: Radius.circular(42.5),
+                                    bottomLeft: Radius.circular(42.5),
+                                  ),
+                                  child: GestureDetector(
+                                    onTap: () {},
+                                    child: Card(
+                                      shadowColor: Colors.transparent,
+                                      surfaceTintColor: Colors.transparent,
+                                      child: ClipRRect(
+                                        borderRadius: const BorderRadius.only(
+                                          topRight: Radius.circular(29.0),
+                                          bottomLeft: Radius.circular(29.0),
+                                        ),
+                                        child: Container(
+                                          decoration: const BoxDecoration(
+                                            gradient: LinearGradient(
+                                              colors: [
+                                                Color(0xFFFEE7E1),
+                                                Color(0xFFD7DEFA),
+                                              ],
+                                              begin: Alignment.centerLeft,
+                                              end: Alignment.centerRight,
+                                            ),
+                                          ),
+                                          child: Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 15.0),
+                                                child: Container(
+                                                  width: 110,
+                                                  height: 65,
+                                                  decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10.0),
+                                                    border: Border.all(
+                                                      color: const Color(
+                                                          0xFF9FA1EE),
+                                                      width: 3.0,
+                                                    ),
+                                                  ),
+                                                  child: ClipRRect(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            7.0),
+                                                    child: Image.network(
+                                                      branch.imageName!,
+                                                      width: 110,
+                                                      height: 65,
+                                                      fit: BoxFit.fill,
+                                                      loadingBuilder: (context,
+                                                          child,
+                                                          loadingProgress) {
+                                                        if (loadingProgress ==
+                                                            null) return child;
+
+                                                        return const Center(
+                                                            child:
+                                                                CircularProgressIndicator
+                                                                    .adaptive());
+                                                      },
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                              Expanded(
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 15.0),
+                                                  child: Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.start,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .only(
+                                                                top: 15.0),
+                                                        child: Text(
+                                                          branch.name,
+                                                          style:
+                                                              const TextStyle(
+                                                            fontSize: 18,
+                                                            color: Color(
+                                                                0xFFFB4110),
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontFamily:
+                                                                'Calibri',
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      const SizedBox(
+                                                          height: 4.0),
+                                                      Expanded(
+                                                        child: Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .only(
+                                                                  right: 10.0),
+                                                          child: Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              Row(
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .spaceEvenly,
+                                                                children: [
+                                                                  Image.asset(
+                                                                    'assets/location_icon.png',
+                                                                    width: 20,
+                                                                    height: 18,
+                                                                  ),
+                                                                  const SizedBox(
+                                                                      width:
+                                                                          4.0),
+                                                                  Expanded(
+                                                                    child: Text(
+                                                                      branch
+                                                                          .address,
+                                                                      style:
+                                                                          const TextStyle(
+                                                                        fontFamily:
+                                                                            'Calibri',
+                                                                        fontSize:
+                                                                            12,
+                                                                        color: Color(
+                                                                            0xFF000000),
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                              const Spacer(
+                                                                  flex: 3),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Align(
+                                                        alignment: Alignment
+                                                            .bottomRight,
+                                                        child: Container(
+                                                          height: 26,
+                                                          margin:
+                                                              const EdgeInsets
+                                                                  .only(
+                                                                  bottom: 10.0,
+                                                                  right: 10.0),
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            color: Colors.white,
+                                                            border: Border.all(
+                                                              color: const Color(
+                                                                  0xFF8d97e2),
+                                                            ),
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        10.0),
+                                                          ),
+                                                          child: ElevatedButton(
+                                                            onPressed: () {},
+                                                            style:
+                                                                ElevatedButton
+                                                                    .styleFrom(
+                                                              foregroundColor:
+                                                                  const Color(
+                                                                      0xFF8d97e2),
+                                                              backgroundColor:
+                                                                  Colors
+                                                                      .transparent,
+                                                              elevation: 0,
+                                                              shadowColor: Colors
+                                                                  .transparent,
+                                                              shape:
+                                                                  RoundedRectangleBorder(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            10.0),
+                                                              ),
+                                                            ),
+                                                            child:
+                                                                GestureDetector(
+                                                              onTap:
+                                                                  // widget
+                                                                  //     .bookNowButtonPressed
+                                                                  () {
+                                                                Branch
+                                                                    branchData =
+                                                                    Branch(
+                                                                  branchId:
+                                                                      branch
+                                                                          .id!,
+                                                                  branchname:
+                                                                      branch
+                                                                          .name,
+                                                                  branchaddress:
+                                                                      branch
+                                                                          .address,
+                                                                  phonenumber:
+                                                                      branch
+                                                                          .mobileNumber,
+                                                                  branchImage:
+                                                                      branch
+                                                                          .imageName!,
+                                                                  latitude: branch
+                                                                      .latitude,
+                                                                  longitude: branch
+                                                                      .longitude,
+                                                                );
+
+                                                                widget.toNavigate(
+                                                                    branchData);
+
+                                                                /*   Navigator.push(
+                                                                  context,
+                                                                  MaterialPageRoute(
+                                                                    builder:
+                                                                        (context) =>
+                                                                            Bookingscreen(
+                                                                      branchId:
+                                                                          branch
+                                                                              .id!,
+                                                                      branchname:
+                                                                          branch
+                                                                              .name,
+                                                                      branchaddress:
+                                                                          branch
+                                                                              .address,
+                                                                      phonenumber:
+                                                                          branch
+                                                                              .mobileNumber,
+                                                                      branchImage:
+                                                                          branch
+                                                                              .imageName!,
+                                                                      latitude:
+                                                                          branch
+                                                                              .latitude,
+                                                                      longitude:
+                                                                          branch
+                                                                              .longitude,
+                                                                    ),
+                                                                  ),
+                                                                );
+                                                               */
+                                                              },
+                                                              child: Row(
+                                                                mainAxisSize:
+                                                                    MainAxisSize
+                                                                        .min,
+                                                                children: [
+                                                                  SvgPicture
+                                                                      .asset(
+                                                                    'assets/datepicker_icon.svg',
+                                                                    width: 15.0,
+                                                                    height:
+                                                                        15.0,
+                                                                  ),
+                                                                  const SizedBox(
+                                                                      width: 5),
+                                                                  const Text(
+                                                                    'Book Now',
+                                                                    style:
+                                                                        TextStyle(
+                                                                      fontSize:
+                                                                          13,
+                                                                      color: Color(
+                                                                          0xFF8d97e2),
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
                                 ),
                               ),
                             );
                           }
-                        }
-                      },
-                    ),
-                  ),
-                  )],
-              ),
+                        },
+                      ),
+                    )),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
-  //  )
     );
   }
 
-  Future<List<Model_branch>> getBranchsData() async {
-    //var apiUrl = baseUrl + getbranchesall;
-    var apiUrl = '$baseUrl${getbrancheselectedcity}null';
-    print('result: $apiUrl');
-    try {
-      final jsonResponse = await http.get(
-        Uri.parse(apiUrl),
-      );
-
-      if (jsonResponse.statusCode == 200) {
-        Map<String, dynamic> response = jsonDecode(jsonResponse.body);
-        List<dynamic> branchesData = response['listResult'];
-        List<Model_branch> result =
-        branchesData.map((e) => Model_branch.fromJson(e)).toList();
-
-        if (result.isNotEmpty) {
-          print('result: ${result[0].branchName}');
-          print('result: ${result[0].address}');
-          print('result: ${result[0].imageName}');
-        } else {
-          result = [];
-          print('No Data');
-        }
-        return result;
-      } else {
-        throw Exception('api failed');
-      }
-    } catch (e) {
-      print('errorin$e');
-      rethrow;
-    }
-  }
-
-  void checkLoginuserdata() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    setState(() {
-      userFullName = prefs.getString('userFullName') ?? '';
-      email = prefs.getString('email') ?? '';
-      phonenumber = prefs.getString('contactNumber') ?? '';
-      Gender = prefs.getString('gender') ?? '';
-      userId = prefs.getInt('userId');
-      // _fullnameController1.text = userFullName;
-      // _emailController3.text = email;
-      // _phonenumberController2.text = phonenumber;
-      // gender = selectedGender;
-      print('userId:$userId');
-      print('userFullName:$userFullName');
-      print('gender:$Gender');
-      // if (gender == 1) {
-      //   Gender = 'Female';
-      // } else if (gender == 2) {
-      //   Gender = 'Male';
-      // } else if (gender == 3) {
-      //   Gender = 'Other';
-      // }
-    });
+  Widget buildIndicator(int index) {
+    return Container(
+      width: 8,
+      height: 8,
+      margin: const EdgeInsets.symmetric(horizontal: 4),
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: index == currentIndex ? Colors.orange : Colors.grey,
+      ),
+    );
   }
 }
 
@@ -489,103 +928,100 @@ class BranchCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        color: Colors.white, // Set the background color to white
-      child:
-      Card(
-      elevation: 2,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Container(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width / 2,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          color: CommonStyles.branchBg,
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Expanded(
-              child: Container(
-                clipBehavior: Clip.antiAlias,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  // color: Colors.grey,
-                ),
-                child: ClipRRect(
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(10),
-                    topRight: Radius.circular(10),
-                  ),
-                  child: Image.network(
-                    branch.imageName,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
+        color: Colors.white,
+        child: Card(
+          elevation: 2,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Container(
+            height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width / 2,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              color: CommonStyles.branchBg,
             ),
-            Expanded(
-              child: Container(
-                padding: const EdgeInsets.all(10),
-                decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(10),
-                    bottomRight: Radius.circular(10),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Expanded(
+                  child: Container(
+                    clipBehavior: Clip.antiAlias,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: ClipRRect(
+                      borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(10),
+                        topRight: Radius.circular(10),
+                      ),
+                      child: Image.network(
+                        branch.imageName,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
                   ),
-                  color: CommonStyles.branchBg,
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Row(
+                Expanded(
+                  child: Container(
+                    padding: const EdgeInsets.all(10),
+                    decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(10),
+                        bottomRight: Radius.circular(10),
+                      ),
+                      color: CommonStyles.branchBg,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                branch.branchName,
+                                style: CommonStyles.txSty_16p_fb.copyWith(
+                                  fontSize: 22,
+                                ),
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                openMap(branch);
+                              },
+                              child: SvgPicture.asset(
+                                'assets/map_marker.svg',
+                                width: 20,
+                                height: 20,
+                                color: CommonStyles.statusGreenText,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 5.0,
+                        ),
                         Expanded(
                           child: Text(
-                            branch.branchName,
-                            style: CommonStyles.txSty_16p_fb.copyWith(
-                              fontSize: 22,
+                            branch.address,
+                            maxLines: 3,
+                            overflow: TextOverflow.ellipsis,
+                            style: CommonStyles.txSty_12b_f5.copyWith(
+                              fontSize: 16,
                             ),
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            openMap(branch); // Call the openMap method
-                          },
-                          child: SvgPicture.asset(
-                            'assets/map_marker.svg',
-                            width: 20,
-                            height: 20,
-                            color: CommonStyles.statusGreenText,
                           ),
                         ),
                       ],
                     ),
-                    const SizedBox(
-                      height: 5.0,
-                    ),
-                    Expanded(
-                      child: Text(
-                        branch.address,
-                        maxLines: 3,
-                        overflow: TextOverflow.ellipsis,
-                        style: CommonStyles.txSty_12b_f5.copyWith(
-                          fontSize: 16,
-                        ),
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
-              ),
+              ],
             ),
-          ],
-        ),
-      ),
-    )) ;
+          ),
+        ));
   }
 
   Future<void> openMap(Model_branch branchnames) async {
-    // Replace with your logic to open the map, for example:
     final url =
         'https://www.google.com/maps/search/?api=1&query=${branchnames.latitude},${branchnames.longitude}';
     if (await canLaunch(url)) {
@@ -645,120 +1081,8 @@ class Item {
   factory Item.fromJson(Map<String, dynamic> json) {
     return Item(
       json['name'] as String,
-      Colors.blue, // Default color
-      json['imageName'] as String? ??
-          '', // Add null check and provide a default value
+      Colors.blue,
+      json['imageName'] as String? ?? '',
     );
   }
 }
-// return GestureDetector(
-// onTap: () {
-// // Add your onTap functionality here
-// Navigator.push(
-// context,
-// MaterialPageRoute(
-// builder: (context) => Bookingscreen(
-// branchId: branchnames.id!,
-// branchname: branchnames.branchName!,
-// branchaddress: branchnames.address!,
-// phonenumber: branchnames.mobileNumber!,
-// branchImage: branchnames.imageName!,
-// latitude: branchnames.latitude,
-// longitude: branchnames.longitude,
-// ),
-// ),
-// );
-// },
-// child: Card(
-// elevation: 2,
-// shape: RoundedRectangleBorder(
-// borderRadius: BorderRadius.circular(10),
-// ),
-// child: Container(
-// height: MediaQuery.of(context).size.height,
-// width: MediaQuery.of(context).size.width / 2,
-// decoration: BoxDecoration(
-// borderRadius: BorderRadius.circular(10),
-// color: CommonStyles.branchBg,
-// ),
-// child: Column(
-// crossAxisAlignment: CrossAxisAlignment.stretch,
-// children: [
-// Expanded(
-// child: Container(
-// clipBehavior: Clip.antiAlias,
-// decoration: BoxDecoration(
-// borderRadius: BorderRadius.circular(10),
-// // color: Colors.grey,
-// ),
-// child: ClipRRect(
-// borderRadius: const BorderRadius.only(
-// topLeft: Radius.circular(10),
-// topRight: Radius.circular(10),
-// ),
-// child: Image.network(
-// branch.imageName,
-// fit: BoxFit.cover,
-// ),
-// ),
-// ),
-// ),
-// Expanded(
-// child: Container(
-// padding: const EdgeInsets.all(10),
-// decoration: const BoxDecoration(
-// borderRadius: BorderRadius.only(
-// bottomLeft: Radius.circular(10),
-// bottomRight: Radius.circular(10),
-// ),
-// color: CommonStyles.branchBg,
-// ),
-// child: Column(
-// crossAxisAlignment: CrossAxisAlignment.stretch,
-// children: [
-// Row(
-// children: [
-// Expanded(
-// child: Text(
-// branch.branchName,
-// style: CommonStyles.txSty_16p_fb.copyWith(
-// fontSize: 22,
-// ),
-// ),
-// ),
-// GestureDetector(
-// onTap: () {
-// openMap(branch); // Call the openMap method
-// },
-// child: SvgPicture.asset(
-// 'assets/map_marker.svg',
-// width: 20,
-// height: 20,
-// color: CommonStyles.statusGreenText,
-// ),
-// ),
-// ],
-// ),
-// const SizedBox(
-// height: 5.0,
-// ),
-// Expanded(
-// child: Text(
-// branch.address,
-// maxLines: 3,
-// overflow: TextOverflow.ellipsis,
-// style: CommonStyles.txSty_12b_f5.copyWith(
-// fontSize: 16,
-// ),
-// ),
-// ),
-// ],
-// ),
-// ),
-// ),
-// ],
-// ),
-// ),
-// ),
-// )
-// ;

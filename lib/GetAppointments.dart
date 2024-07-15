@@ -81,7 +81,7 @@ class MyAppointments_screenState extends State<GetAppointments> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => const HomeScreen(),
+              builder: (context) => HomeScreen(),
             ),
           );
           myAppointmentsProvider!.clearFilter();
@@ -114,7 +114,7 @@ class MyAppointments_screenState extends State<GetAppointments> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const HomeScreen(),
+                          builder: (context) =>  HomeScreen(),
                         ),
                       );
                       provider.clearFilter();
