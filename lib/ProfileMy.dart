@@ -20,6 +20,8 @@ import 'package:flutter/material.dart';
 import 'api_config.dart';
 
 class ProfileMy extends StatefulWidget {
+  const ProfileMy({super.key});
+
   @override
   Profile_screenState createState() => Profile_screenState();
 }
@@ -67,7 +69,7 @@ class Profile_screenState extends State<ProfileMy> {
 
   Future<void> fetchdetailsofcustomer(int id) async {
     // String apiUrl = 'http://182.18.157.215/SaloonApp/API/GetCustomerData?id=$id';
-    String apiUrl = baseUrl + getCustomerDatabyid + '$id';
+    String apiUrl = '$baseUrl$getCustomerDatabyid$id';
     setState(() {
       isloading = true;
     });
@@ -97,21 +99,19 @@ class Profile_screenState extends State<ProfileMy> {
           // Mobilenumber = customerData['MobileNumber']??'';
           String dob = customerData['dateofbirth'] ?? '';
           if (dob.isNotEmpty) {
-            formattedDate = DateFormat('dd-MM-yyyy').format(DateTime.parse(dob));
+            formattedDate =
+                DateFormat('dd-MM-yyyy').format(DateTime.parse(dob));
           } else {
             formattedDate = '';
           }
 
-          if (!formattedDate.isEmpty) {
-            formattedDate = DateFormat('dd-MM-yyyy').format(DateTime.parse(dob));
+          if (formattedDate.isNotEmpty) {
+            formattedDate =
+                DateFormat('dd-MM-yyyy').format(DateTime.parse(dob));
           } else {
             formattedDate = '';
           }
-          if (mobileNumber != null) {
-            mobileNumber = customerData['mobileNumber'] ?? '';
-          } else {
-            mobileNumber = '';
-          }
+          mobileNumber = customerData['mobileNumber'] ?? '';
 
           // formattedDate = DateFormat('dd-MM-yyyy').format(DateTime.parse(dob));
           // fullusername = firstName;
@@ -144,20 +144,25 @@ class Profile_screenState extends State<ProfileMy> {
     }
   }
 
-  Future<void> saveUserDataToSharedPreferences(Map<String, dynamic> customerData) async {
+  Future<void> saveUserDataToSharedPreferences(
+      Map<String, dynamic> customerData) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     await prefs.setInt('profileId', customerData['id'] ?? '');
     await prefs.setString('profileUserId', customerData['userid'] ?? '');
     await prefs.setString('profilefullname', customerData['firstname'] ?? '');
-    await prefs.setString('profiledateofbirth', customerData['dateofbirth'] ?? '');
+    await prefs.setString(
+        'profiledateofbirth', customerData['dateofbirth'] ?? '');
     await prefs.setString('profilegender', customerData['gender'] ?? '');
     await prefs.setInt('profilegenderId', customerData['genderId'] ?? '');
     await prefs.setString('profileemail', customerData['email'] ?? '');
-    await prefs.setString('profilecontactNumber', customerData['contactNumber'] ?? '');
-    await prefs.setString('profilealternatenumber', customerData['mobileNumber'] ?? '');
+    await prefs.setString(
+        'profilecontactNumber', customerData['contactNumber'] ?? '');
+    await prefs.setString(
+        'profilealternatenumber', customerData['mobileNumber'] ?? '');
     // await prefs.setInt('profilecreatedId', customerData['createdByUserId'] ?? '');
-    await prefs.setString('profilecreateddate', customerData['createdDate'] ?? '');
+    await prefs.setString(
+        'profilecreateddate', customerData['createdDate'] ?? '');
   }
 
   void logOutDialog(BuildContext context) {
@@ -195,7 +200,7 @@ class Profile_screenState extends State<ProfileMy> {
     CommonUtils.showCustomToastMessageLong("Logout Successful", context, 0, 3);
 
     Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(builder: (context) => CustomerLoginScreen()),
+      MaterialPageRoute(builder: (context) => const CustomerLoginScreen()),
       (route) => false,
     );
   }
@@ -227,7 +232,7 @@ class Profile_screenState extends State<ProfileMy> {
           // ],
           // centerTitle: true,
           leading: IconButton(
-            icon: Icon(
+            icon: const Icon(
               Icons.arrow_back_ios,
               color: CommonUtils.primaryTextColor,
             ),
@@ -238,7 +243,7 @@ class Profile_screenState extends State<ProfileMy> {
       body: Column(
         children: [
           Container(
-            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
             height: 80,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -248,14 +253,14 @@ class Profile_screenState extends State<ProfileMy> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     isloading
-                        ? Center(
+                        ? const Center(
                             child: CircularProgressIndicator.adaptive(),
                           )
                         : Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                '$fullusername',
+                                fullusername,
                                 style: CommonStyles.txSty_18w_fb,
                               ),
                               Text(
@@ -268,7 +273,8 @@ class Profile_screenState extends State<ProfileMy> {
                       onTap: () {
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (context) => EditProfile(createdDate: "$createdDate"),
+                            builder: (context) =>
+                                EditProfile(createdDate: "$createdDate"),
                           ),
                         );
                       },
@@ -287,8 +293,8 @@ class Profile_screenState extends State<ProfileMy> {
           Expanded(
             child: Container(
               //height:   MediaQuery.of(context).size.height,
-              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-              decoration: BoxDecoration(
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+              decoration: const BoxDecoration(
                 color: CommonStyles.whiteColor,
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(20),
@@ -298,7 +304,7 @@ class Profile_screenState extends State<ProfileMy> {
               width: double.infinity,
 
               child: isloading
-                  ? Center(
+                  ? const Center(
                       child: CircularProgressIndicator.adaptive(),
                     )
                   : Column(
@@ -312,51 +318,51 @@ class Profile_screenState extends State<ProfileMy> {
                             // userLayOut('assets/calendar_icon.svg', CommonStyles.statusRedText, formattedDate,'Date of Birth'),
                             // userLayOut('assets/mobile-notch.svg', CommonStyles.statusYellowText, '+91 ${contactNumber}','Contact Number'),
                             // userLayOut('assets/mobile-notch.svg', CommonStyles.statusBlueText, '+91${Mobilenumber}','Alternate Number'),
-                            Container(
+                            SizedBox(
                                 height: 50,
                                 child: UserLayout(
                                   icon: 'assets/id-card-clip-alt.svg',
                                   bgColor: CommonStyles.primaryTextColor,
-                                  data: '$username',
+                                  data: username,
                                   tooltipMessage: 'User Name',
                                 )),
-                            SizedBox(height: 15),
+                            const SizedBox(height: 15),
 
-                            Container(
+                            SizedBox(
                                 height: 50,
                                 child: UserLayout(
                                   icon: 'assets/venus-mars.svg',
                                   bgColor: CommonStyles.statusGreenText,
-                                  data: '$gender',
+                                  data: gender,
                                   tooltipMessage: 'Gender',
                                 )),
-                            SizedBox(height: 15),
-                            Container(
+                            const SizedBox(height: 15),
+                            SizedBox(
                                 height: 50,
                                 child: UserLayout(
                                   icon: 'assets/calendar_icon.svg',
                                   bgColor: CommonStyles.statusRedText,
-                                  data: '$formattedDate',
+                                  data: formattedDate,
                                   tooltipMessage: 'Date of Birth',
                                 )),
-                            SizedBox(height: 15),
-                            Container(
+                            const SizedBox(height: 15),
+                            SizedBox(
                                 height: 50,
                                 child: UserLayout(
                                   icon: 'assets/mobile-notch.svg',
                                   bgColor: CommonStyles.statusYellowText,
-                                  data: '+91 ${contactNumber}',
+                                  data: '+91 $contactNumber',
                                   tooltipMessage: 'Mobile Number',
                                 )),
-                            SizedBox(height: 15),
-                            Container(
+                            const SizedBox(height: 15),
+                            SizedBox(
                               height: 50,
                               child: Visibility(
-                                visible: mobileNumber != null && mobileNumber.isNotEmpty,
+                                visible: mobileNumber.isNotEmpty,
                                 child: UserLayout(
                                   icon: 'assets/mobile-notch.svg',
                                   bgColor: CommonStyles.statusBlueText,
-                                  data: '+91 ${mobileNumber}',
+                                  data: '+91 $mobileNumber',
                                   tooltipMessage: 'Alternate Mobile Number',
                                 ),
                               ),
@@ -366,7 +372,7 @@ class Profile_screenState extends State<ProfileMy> {
                         Padding(
                           // height:  MediaQuery.of(context).size.height,
                           //  width: MediaQuery.of(context).size.width,
-                          padding: EdgeInsets.symmetric(horizontal: 10),
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
                           child: Row(
                             children: [
                               Expanded(
@@ -378,7 +384,8 @@ class Profile_screenState extends State<ProfileMy> {
                                     onPressed: () {
                                       Navigator.of(context).push(
                                         MaterialPageRoute(
-                                          builder: (context) => ChangePasswordScreen(
+                                          builder: (context) =>
+                                              ChangePasswordScreen(
                                             id: Id,
                                             password: password!,
                                           ),
@@ -517,7 +524,7 @@ class _UserLayoutState extends State<UserLayout> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: 100,
       child: GestureDetector(
         onTap: () {
@@ -525,7 +532,7 @@ class _UserLayoutState extends State<UserLayout> {
             _isTooltipVisible = !_isTooltipVisible;
           });
           if (_isTooltipVisible) {
-            Future.delayed(Duration(seconds: 5), () {
+            Future.delayed(const Duration(seconds: 5), () {
               setState(() {
                 _isTooltipVisible = false;
               });
@@ -539,9 +546,9 @@ class _UserLayoutState extends State<UserLayout> {
                 mini: true,
                 backgroundColor: widget.bgColor,
                 onPressed: () {},
-                tooltip: '${widget.tooltipMessage}',
+                tooltip: widget.tooltipMessage,
                 child: Container(
-                  padding: EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(10),
                   child: SvgPicture.asset(
                     widget.icon,
                     width: 30.0,

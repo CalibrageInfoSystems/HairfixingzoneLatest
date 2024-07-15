@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:hairfixingzone/EditProfile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'Common/common_styles.dart';
@@ -15,8 +16,7 @@ import 'contactus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-
-class NewScreen extends StatelessWidget {
+class NewScreen extends StatefulWidget {
   final String userName;
   final String email;
 
@@ -25,6 +25,13 @@ class NewScreen extends StatelessWidget {
     required this.userName,
     required this.email,
   }) : super(key: key);
+
+  @override
+  State<NewScreen> createState() => _NewScreenState();
+}
+
+class _NewScreenState extends State<NewScreen> {
+  DateTime? createdDate;
 
   @override
   Widget build(BuildContext context) {
@@ -48,94 +55,173 @@ class NewScreen extends StatelessWidget {
           child: Column(
             children: [
               ListTile(
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          EditProfile(createdDate: '$createdDate'),
+                    ),
+                  );
+                },
                 leading: CircleAvatar(
                   backgroundColor: CommonStyles.primaryTextColor,
-                  child: Text(
-                    userName.isNotEmpty ? userName[0].toUpperCase() : "H",
-                    style: TextStyle(fontSize: 24, color: Colors.white),
-                  ),
                   radius: 25,
+                  child: Text(
+                    widget.userName.isNotEmpty
+                        ? widget.userName[0].toUpperCase()
+                        : "H",
+                    style: const TextStyle(fontSize: 24, color: Colors.white),
+                  ),
                 ),
-                title: Text(userName, style: CommonStyles.txSty_20black_fb),
-                subtitle: Text(email, style: CommonStyles.txSty_20black_fb),
-                onTap: () {
-                  // Add your edit profile navigation logic here
-                },
+                title:
+                    Text(widget.userName, style: CommonStyles.txSty_20black_fb),
+                subtitle: const Text('Edit profile',
+                    style: CommonStyles.txSty_16black_f5),
               ),
-              Divider(),
+              const Divider(),
               ListTile(
                 leading: SvgPicture.asset(
                   'assets/Profile_new.svg',
                   width: 25,
                   height: 25,
-                  color: Color(0xFF662e91), // Adjust color as needed
+                  color: const Color(0xFF662e91), // Adjust color as needed
                 ),
-                title: Text('Profile', style: CommonStyles.txSty_20black_fb),
-                trailing: Icon(Icons.arrow_forward_ios, color: Colors.grey, size: 16), // Add trailing icon here
+                title:
+                    const Text('Profile', style: CommonStyles.txSty_20black_fb),
+                trailing: const Icon(Icons.arrow_forward_ios,
+                    color: Colors.grey, size: 16), // Add trailing icon here
                 onTap: () {
                   profile(context); // Execute your action here
                 },
               ),
-              Divider(),
+              const Divider(),
               ListTile(
                 leading: SvgPicture.asset(
                   'assets/about_us.svg',
                   width: 25,
                   height: 25,
-                  color:Color(0xFF662e91), // Adjust color as needed
+                  color: const Color(0xFF662e91), // Adjust color as needed
                 ),
-                title: Text('About Us', style: CommonStyles.txSty_20black_fb),
-                trailing: Icon(Icons.arrow_forward_ios, color: Colors.grey, size: 16), // Add trailing icon here
+                title: const Text('About Us',
+                    style: CommonStyles.txSty_20black_fb),
+                trailing: const Icon(Icons.arrow_forward_ios,
+                    color: Colors.grey, size: 16), // Add trailing icon here
                 onTap: () {
                   AboutUs(context);
                 },
               ),
-              Divider(),
+              const Divider(),
               ListTile(
-                leading: SvgPicture.asset(
-                  'assets/fav_star.svg',
-                  width: 25,
-                  height: 25,
-                  color:Color(0xFF662e91), // Adjust color as needed
-                ),
-                title: Text('Favourites', style: CommonStyles.txSty_20black_fb),
-                  trailing: Icon(Icons.arrow_forward_ios, color: Colors.grey, size: 16), // Add trailing icon here
-                onTap: () {
-                  Favourite(context);
-                }
-              ),
-              Divider(),
+                  leading: SvgPicture.asset(
+                    'assets/fav_star.svg',
+                    width: 25,
+                    height: 25,
+                    color: const Color(0xFF662e91), // Adjust color as needed
+                  ),
+                  title: const Text('Favourites',
+                      style: CommonStyles.txSty_20black_fb),
+                  trailing: const Icon(Icons.arrow_forward_ios,
+                      color: Colors.grey, size: 16), // Add trailing icon here
+                  onTap: () {
+                    Favourite(context);
+                  }),
+              const Divider(),
               ListTile(
                 leading: SvgPicture.asset(
                   'assets/headset.svg',
                   width: 25,
                   height: 25,
-                  color: Color(0xFF662e91), // Adjust color as needed
+                  color: const Color(0xFF662e91), // Adjust color as needed
                 ),
-                title: Text('Contact Us', style: CommonStyles.txSty_20black_fb),
-                trailing: Icon(Icons.arrow_forward_ios, color: Colors.grey, size: 16), // Add trailing icon here
+                title: const Text('Contact Us',
+                    style: CommonStyles.txSty_20black_fb),
+                trailing: const Icon(Icons.arrow_forward_ios,
+                    color: Colors.grey, size: 16), // Add trailing icon here
                 onTap: () {
                   contact_us(context); // Execute your action here
                 },
               ),
-              Divider(),
+              const Divider(),
               ListTile(
                 leading: SvgPicture.asset(
                   'assets/logout_new.svg',
                   width: 25,
                   height: 25,
-                  color: Color(0xFF662e91), // Adjust color as needed
+                  color: const Color(0xFF662e91), // Adjust color as needed
                 ),
-                title: Text('Logout', style: CommonStyles.txSty_20black_fb),
-                trailing: Icon(Icons.arrow_forward_ios, color: Colors.grey, size: 16), // Add trailing icon here
+                title:
+                    const Text('Logout', style: CommonStyles.txSty_20black_fb),
+                trailing: const Icon(Icons.arrow_forward_ios,
+                    color: Colors.grey, size: 16), // Add trailing icon here
                 onTap: () {
                   logOutDialog(context); // Execute your action here
                 },
               ),
-              Divider(),
+              const Divider(),
+              const SizedBox(height: 50),
+              referBox(),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget referBox() {
+    return Container(
+      height: 150,
+      margin: const EdgeInsets.all(12),
+      clipBehavior: Clip.antiAlias,
+      alignment: Alignment.center,
+      decoration: const BoxDecoration(
+        color: CommonStyles.primaryColor,
+        borderRadius: BorderRadius.all(
+          Radius.circular(10),
+        ),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            flex: 3,
+            child: Container(
+                padding: const EdgeInsets.all(12),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text('Refer & earn \$100',
+                        style: CommonStyles.txSty_20black_fb),
+                    const Text(
+                        'Get \$100 when your friend completes their first booking',
+                        style: CommonStyles.txSty_16black_f5),
+                    const SizedBox(height: 5),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: CommonStyles.primaryTextColor,
+                        padding: const EdgeInsets.all(10),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        // shape: const StadiumBorder(),
+                      ),
+                      onPressed: () {},
+                      child: const Text(
+                        'Refer now',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    )
+                  ],
+                )),
+          ),
+          Expanded(
+            flex: 1,
+            child: Container(
+              child: const Center(
+                child: Icon(Icons.home),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -222,7 +308,7 @@ class NewScreen extends StatelessWidget {
 
     Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(builder: (context) => const CustomerLoginScreen()),
-          (route) => false,
+      (route) => false,
     );
   }
 
@@ -246,19 +332,19 @@ class NewScreen extends StatelessWidget {
     print('Navigating to About Us screen');
     // Example navigation
     Navigator.of(context).push(
-      MaterialPageRoute(builder: (context) => AboutUsScreen()),
+      MaterialPageRoute(builder: (context) => const AboutUsScreen()),
     );
   }
 
   void profile(BuildContext context) {
     Navigator.of(context).push(
-      MaterialPageRoute(builder: (context) => ProfileMy()),
+      MaterialPageRoute(builder: (context) => const ProfileMy()),
     );
   }
 
   void Favourite(BuildContext context) {
     Navigator.of(context).push(
-      MaterialPageRoute(builder: (context) => FavouritesScreen()),
+      MaterialPageRoute(builder: (context) => const FavouritesScreen()),
     );
   }
 }
