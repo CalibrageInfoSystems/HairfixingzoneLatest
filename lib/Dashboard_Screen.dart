@@ -328,7 +328,7 @@ class _CustomerDashBoardState extends State<CustomerDashBoard> {
                 Row(
                   children: [
                     Text(
-                      'Hey,',
+                      'Hey, ',
                       style: CommonStyles.txSty_20b_fb.copyWith(fontSize: 24),
                     ),
                     Text(
@@ -346,7 +346,7 @@ class _CustomerDashBoardState extends State<CustomerDashBoard> {
                         style: TextStyle(
                           fontFamily: 'Calibri',
                           fontSize: 20,
-                          color: Color(0xFFFB4110),
+                          color:  Color(0xFF662e91),
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -355,7 +355,7 @@ class _CustomerDashBoardState extends State<CustomerDashBoard> {
                         style: TextStyle(
                           fontFamily: 'Calibri',
                           fontSize: 20,
-                          color: Color(0xFF163CF1),
+                          color: Color(0xFF0f75bc),
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -375,6 +375,7 @@ class _CustomerDashBoardState extends State<CustomerDashBoard> {
                   height: 180,
                   child: FlutterCarousel(
                     options: CarouselOptions(
+                      floatingIndicator: false,
                       height: 180,
                       viewportFraction: 1.0,
                       enlargeCenterPage: true,
@@ -382,6 +383,11 @@ class _CustomerDashBoardState extends State<CustomerDashBoard> {
                       aspectRatio: 16 / 9,
                       autoPlayCurve: Curves.fastOutSlowIn,
                       enableInfiniteScroll: true,
+                      slideIndicator: const CircularSlideIndicator(
+                        indicatorBorderColor: CommonStyles.blackColor,
+                        currentIndicatorColor: CommonStyles.primaryTextColor,
+                        indicatorRadius: 2, // Decrease the size of the indicator
+                      ),
                       autoPlayAnimationDuration:
                           const Duration(milliseconds: 800),
                     ),
@@ -685,8 +691,7 @@ class _CustomerDashBoardState extends State<CustomerDashBoard> {
                                                           style:
                                                               const TextStyle(
                                                             fontSize: 18,
-                                                            color: Color(
-                                                                0xFFFB4110),
+                                                            color:CommonStyles.primaryTextColor,
                                                             fontWeight:
                                                                 FontWeight.bold,
                                                             fontFamily:

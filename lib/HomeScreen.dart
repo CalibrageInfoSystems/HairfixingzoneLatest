@@ -1,4 +1,5 @@
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_svg/svg.dart';
@@ -185,156 +186,127 @@ class _HomeScreenState extends State<HomeScreen> {
 
         //   body: SliderScreen(),
         body: _buildScreens(_currentIndex, context),
-        bottomNavigationBar: BottomNavyBar(
-          selectedIndex: _currentIndex,
-          backgroundColor: const Color(0xffffffff),
-          showElevation: true,
-          itemCornerRadius: 24,
-          curve: Curves.easeIn,
-          onItemSelected: (index) => setState(() {
-            setState(() {
-              _currentIndex = index;
-            });
+        bottomNavigationBar: BottomNavigationBar(
+          currentIndex: _currentIndex,
+          onTap: (index) => setState(() {
+            _currentIndex = index;
           }),
-          items: <BottomNavyBarItem>[
-            BottomNavyBarItem(
-              icon: SvgPicture.asset(
-                'assets/objects-column.svg',
-                width: 24,
+          selectedItemColor: Colors.black,
+          items: <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon:  SvgPicture.asset('assets/objects-column.svg',
+
+         width: 24,
+          height: 24,
+          color: Colors.black.withOpacity(0.6)
+
+        ),
+              activeIcon: SvgPicture.asset('assets/objects-column.svg',
+                  width: 24,
                 height: 24,
-                color: _currentIndex == 0
-                    ? CommonUtils.primaryTextColor
-                    : Colors.black,
-              ),
-              title: const Text(
-                'Home',
-                style: CommonStyles.txSty_14b_f5,
-              ),
-              activeColor: Colors.blue,
-              textAlign: TextAlign.center,
+                color:CommonUtils.primaryTextColor),
+
+              label: 'Home',
+
             ),
-            BottomNavyBarItem(
-              icon: SvgPicture.asset(
-                'assets/invite-alt.svg',
-                width: 24,
-                height: 24,
-                color: _currentIndex == 1
-                    ? CommonUtils.primaryTextColor
-                    : Colors.black, // Change color based
+            BottomNavigationBarItem(
+              icon:  SvgPicture.asset('assets/invite-alt.svg',
+
+                  width: 24,
+                  height: 24,
+                  color: Colors.black.withOpacity(0.6)
+
               ),
-              title: const Text(
-                'Bookings',
-                style: CommonStyles.txSty_14b_f5,
-              ),
-              activeColor: Colors.blue,
-              textAlign: TextAlign.center,
+              activeIcon: SvgPicture.asset('assets/invite-alt.svg',
+                  width: 24,
+                  height: 24,
+                  color:CommonUtils.primaryTextColor),
+
+              label: 'Bookings',
+
             ),
-            BottomNavyBarItem(
-              icon: SvgPicture.asset(
-                'assets/bin-bottles.svg',
-                width: 24,
-                height: 24,
-                color: _currentIndex == 2
-                    ? CommonUtils.primaryTextColor
-                    : Colors.black, // Change color based on selection
+            BottomNavigationBarItem(
+              icon:  SvgPicture.asset('assets/bin-bottles.svg',
+
+                  width: 24,
+                  height: 24,
+                  color: Colors.black.withOpacity(0.6)
+
               ),
-              title: const Text(
-                'Products',
-                style: CommonStyles.txSty_14b_f5,
-              ),
-              activeColor: Colors.blue,
-              textAlign: TextAlign.center,
-            ),
-            BottomNavyBarItem(
-              icon: SvgPicture.asset(
-                'assets/my_profile_icon.svg',
-                width: 24,
-                height: 24,
-                color: _currentIndex == 3
-                    ? CommonUtils.primaryTextColor
-                    : Colors.black, // Change color based on selection
-              ),
-              title: const Text(
-                'My Profile',
-                style: CommonStyles.txSty_14b_f5,
-              ),
-              activeColor: Colors.blue,
-              textAlign: TextAlign.center,
+              activeIcon: SvgPicture.asset('assets/bin-bottles.svg',
+                  width: 24,
+                  height: 24,
+                  color:CommonUtils.primaryTextColor),
+
+              label: 'Products',
+
             ),
           ],
         ),
-      ),
-    );
-    // return MaterialApp(
-    //   debugShowCheckedModeBanner: false,
-    //   home: Scaffold(
-    //     appBar: AppBar(
-    //       backgroundColor: const Color(0xFFF44614), // Orange color
+    // bottomNavigationBar: BottomNavyBar(
+    // selectedIndex: _currentIndex,
+    // backgroundColor: const Color(0xffffffff),
+    // showElevation: true,
+    // itemCornerRadius: 24,
+    // curve: Curves.easeIn,
+    // onItemSelected: (index) => setState(() {
+    // _currentIndex = index;
+    // }),
+    // items: [
+    // _buildBottomNavyBarItem(
+    // iconPath: 'assets/objects-column.svg',
+    // title: 'Home',
+    // index: 0,
+    // ),
+    // _buildBottomNavyBarItem(
+    // iconPath: 'assets/invite-alt.svg',
+    // title: 'Bookings',
+    // index: 1,
+    // ),
+    // _buildBottomNavyBarItem(
+    // iconPath: 'assets/bin-bottles.svg',
+    // title: 'Products',
+    // index: 2,
+    // ),
     //
-    //       actions: [
-    //         Align(
-    //           alignment: Alignment.bottomRight,
-    //           child: Container(
-    //             width: 115,
-    //             height: 35,
-    //             margin: EdgeInsets.only(bottom: 10.0, right: 10.0),
-    //             decoration: BoxDecoration(
-    //               color: Colors.white,
-    //               border: Border.all(
-    //                 color: Color(0xFF8d97e2),
-    //                 width: 3,
-    //               ),
-    //               borderRadius: BorderRadius.circular(10.0),
-    //             ),
-    //             child: InkWell(
-    //               onTap: () {
-    //                 checkLoginStatus();
-    //                 // Handle button press
-    //               },
-    //               child: Container(
-    //                 padding: EdgeInsets.symmetric(horizontal: 10), // Adjust padding as needed
-    //                 child: Row(
-    //                   mainAxisSize: MainAxisSize.min,
-    //                   children: [
-    //                     Image.asset(
-    //                       'assets/agent_icon.png',
-    //                       width: 20,
-    //                       height: 20,
-    //                     ),
-    //                     SizedBox(width: 5),
-    //                     Text(
-    //                       'AGENT',
-    //                       style: TextStyle(
-    //                         fontSize: 16,
-    //                         fontWeight: FontWeight.bold,
-    //                         color: Color(0xFF042de3),
-    //                       ),
-    //                     ),
-    //                   ],
-    //                 ),
-    //               ),
-    //             ),
-    //           ),
-    //         ),
-    //       ],
-    //
-    //
-    //       title: Container(
-    //         width: 85, // Adjust the width as needed
-    //         height: 50, // Adjust the height as needed
-    //         child: FractionallySizedBox(
-    //           widthFactor: 1, // Adjust the width factor as needed (0.8 = 80% of available width)
-    //           child: Image.asset(
-    //             'assets/logo.png',
-    //             fit: BoxFit.fitHeight,
-    //           ),
-    //         ),
-    //       ),
-    //     ),
-    //
-    //   ),
-    // );
+    // ],
+    // ),
+    ));
   }
+
+  BottomNavyBarItem _buildBottomNavyBarItem({
+    required String iconPath,
+    required String title,
+    required int index,
+  }) {
+    return BottomNavyBarItem(
+      icon: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SvgPicture.asset(
+            iconPath,
+            width: 24,
+            height: 24,
+            color: _currentIndex == index
+                ? CommonUtils.primaryTextColor
+                : Colors.black,
+          ),
+          const SizedBox(height: 4),
+          Text(
+            title,
+            style: CommonStyles.txSty_14b_f5,
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+      title: const Text(''), // We don't need this title anymore
+      activeColor: Colors.blue,
+      textAlign: TextAlign.center,
+    );
+  }
+
+
+
 
   void checkLoginStatus() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();

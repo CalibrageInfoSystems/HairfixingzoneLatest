@@ -189,27 +189,27 @@ class _NewScreenState extends State<NewScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text('Refer & earn \$100',
+                    const Text('Refer & earn',
                         style: CommonStyles.txSty_20black_fb),
                     const Text(
-                        'Get \$100 when your friend completes their first booking',
+                        'Invite a Friend to Hair Fixing Zone and you will get Complimentary Service',
                         style: CommonStyles.txSty_16black_f5),
                     const SizedBox(height: 5),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: CommonStyles.primaryTextColor,
-                        padding: const EdgeInsets.all(10),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                        // shape: const StadiumBorder(),
-                      ),
-                      onPressed: () {},
-                      child: const Text(
-                        'Refer now',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    )
+                    // ElevatedButton(
+                    //   style: ElevatedButton.styleFrom(
+                    //     backgroundColor: CommonStyles.primaryTextColor,
+                    //     padding: const EdgeInsets.all(10),
+                    //     shape: RoundedRectangleBorder(
+                    //       borderRadius: BorderRadius.circular(10.0),
+                    //     ),
+                    //     // shape: const StadiumBorder(),
+                    //   ),
+                    //   onPressed: () {},
+                    //   child: const Text(
+                    //     'Refer now',
+                    //     style: TextStyle(color: Colors.white),
+                    //   ),
+                    // )
                   ],
                 )),
           ),

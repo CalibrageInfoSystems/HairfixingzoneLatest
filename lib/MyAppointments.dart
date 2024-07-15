@@ -1108,7 +1108,8 @@ class _OpCardState extends State<OpCard> {
   late List<dynamic> dateValues;
   final TextEditingController _commentstexteditcontroller =
       TextEditingController();
-  double rating_star = 0.0;
+  double Serv_rating_star = 0.0;
+  double Qul_rating_star = 0.0;
   int? userId;
 
   @override
@@ -1791,8 +1792,8 @@ class _OpCardState extends State<OpCard> {
                                       ),
                                       onRatingUpdate: (rating) {
                                         setState(() {
-                                          rating_star = rating;
-                                          print('rating_star$rating_star');
+                                          Qul_rating_star = rating;
+                                          print('Qul_rating_star$Qul_rating_star');
                                         });
                                       },
                                     ),
@@ -1834,8 +1835,8 @@ class _OpCardState extends State<OpCard> {
                                       ),
                                       onRatingUpdate: (rating) {
                                         setState(() {
-                                          rating_star = rating;
-                                          print('rating_star$rating_star');
+                                          Serv_rating_star = rating;
+                                          print('Serv_rating_star$Serv_rating_star');
                                         });
                                       },
                                     ),
@@ -1947,16 +1948,22 @@ class _OpCardState extends State<OpCard> {
     print('userId validaterating : $userId');
     bool isValid = true;
     bool hasValidationFailed = false;
-    int myInt = rating_star.toInt();
-    print('changedintoint$myInt');
-    if (isValid && rating_star <= 0.0) {
+
+    if (isValid && Qul_rating_star <= 0.0) {
       FocusScope.of(context).unfocus();
       CommonUtils.showCustomToastMessageLong(
-          'Please Rate Your Experience', context, 1, 4);
+          'Please Rate Your Experience with Quality' , context, 1, 4);
       isValid = false;
       hasValidationFailed = true;
     }
 
+    if (isValid && Serv_rating_star <= 0.0) {
+      FocusScope.of(context).unfocus();
+      CommonUtils.showCustomToastMessageLong(
+          'Please Rate Your Experience with Service', context, 1, 4);
+      isValid = false;
+      hasValidationFailed = true;
+    }
     // if (isValid && _commentstexteditcontroller.text.trim().isEmpty) {
     //   FocusScope.of(context).unfocus();
     //   CommonUtils.showCustomToastMessageLong(
@@ -1989,7 +1996,7 @@ class _OpCardState extends State<OpCard> {
         "CreatedDate": dateTimeString,
         "UpdatedDate": dateTimeString,
         "UpdatedByUserId": null,
-        "rating": rating_star,
+        "rating": Serv_rating_star,
         "review": _commentstexteditcontroller.text.toString(),
         "reviewSubmittedDate": dateTimeString,
         "timeofslot": appointmens.timeofSlot,
@@ -1997,6 +2004,7 @@ class _OpCardState extends State<OpCard> {
         "customerId": userId,
         "price": appointmens.price,
         "paymentTypeId": appointmens.paymentTypeId,
+        "qualityRating":Qul_rating_star,
       };
       print('AddUpdatefeedback object: : ${json.encode(request)}');
 

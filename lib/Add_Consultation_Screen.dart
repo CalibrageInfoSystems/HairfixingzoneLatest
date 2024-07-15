@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/widgets.dart';
 import 'package:hairfixingzone/AgentDashBoard.dart';
 import 'package:hairfixingzone/AgentHome.dart';
+import 'package:hairfixingzone/services/notifi_service.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -88,6 +89,11 @@ class AddConsulationscreen_screenState extends State<Add_Consulation_screen> {
   DateTime selectedDate = DateTime.now();
   late String visiteddate;
   TextEditingController _dateController = TextEditingController();
+  TextEditingController _timeController = TextEditingController();
+
+  TimeOfDay? _selectedTime;
+  String?  visitingDateTime;
+  DateTime? VisitslotDateTime;
   @override
   void initState() {
     super.initState();
@@ -752,6 +758,69 @@ class AddConsulationscreen_screenState extends State<Add_Consulation_screen> {
                           const SizedBox(
                             height: 10,
                           ),
+
+                          const Row(
+                            children: [
+                              Text(
+                                'Visiting Time ',
+                                style: TextStyle(
+                                    fontSize: 12, fontWeight: FontWeight.bold),
+                              ),
+                              Text(
+                                '*',
+                                style: TextStyle(color: Colors.red),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 5.0,
+                          ),
+                          TextFormField(
+                            controller: _timeController,
+                            keyboardType: TextInputType.visiblePassword,
+                            onTap: () {
+                              _openTimePicker();
+                            },
+                            readOnly: true,
+                            validator: (value) {
+                              if (value!.isEmpty || value.isEmpty) {
+                                return 'Choose Time ';
+                              }
+                              return null;
+                            },
+                            decoration: InputDecoration(
+                              contentPadding: const EdgeInsets.only(
+                                  top: 15, bottom: 10, left: 15, right: 15),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                  color: Color(0xFF662e91),
+                                ),
+                                borderRadius: BorderRadius.circular(6.0),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                  color: CommonUtils.primaryTextColor,
+                                ),
+                                borderRadius: BorderRadius.circular(6.0),
+                              ),
+                              border: const OutlineInputBorder(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(10),
+                                ),
+                              ),
+                              hintText: 'Time',
+                              counterText: "",
+                              hintStyle: const TextStyle(
+                                  color: Colors.grey, fontWeight: FontWeight.w400),
+                              suffixIcon: const Icon(
+                                Icons.access_time,
+                                color: Color(0xFF662e91),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
                           const Row(
                             children: [
                               Text(
@@ -866,6 +935,7 @@ class AddConsulationscreen_screenState extends State<Add_Consulation_screen> {
     validatebranch(branchName);
 
     if (_formKey.currentState!.validate()) {
+      _printVisitingDateTime();
       print(isFullNameValidate);
       print(isGenderValidate);
       print(isMobileNumberValidate);
@@ -1067,7 +1137,7 @@ class AddConsulationscreen_screenState extends State<Add_Consulation_screen> {
         "createdDate": '$now',
         "updatedByUserId": null,
         "updatedDate": null,
-        "visitingDate":visiteddate
+        "visitingDate":visitingDateTime
       };
       print('Object: ${json.encode(request)}');
       try {
@@ -1086,16 +1156,30 @@ class AddConsulationscreen_screenState extends State<Add_Consulation_screen> {
         final statusMessage = jsonResponse['statusMessage'];
         // Check the response status code
         if (response.statusCode == 200) {
-          print('Request sent successfully');
-          progressDialog.dismiss();
-          CommonUtils.showCustomToastMessageLong(
-              '$statusMessage', context, 0, 5);
-          print(response.body);
-          Navigator.push(
-            context,
-            MaterialPageRoute(
+          final isSuccess = jsonResponse['isSuccess'];
+          if(isSuccess) {
+            DateTime testdate = DateTime.now();
+            print('Request sent successfully');
+            progressDialog.dismiss();
+            CommonUtils.showCustomToastMessageLong(
+                '$statusMessage', context, 0, 5);
+            print(response.body);
+            final int notificationId1 = UniqueKey().hashCode;
+            // debugPrint('Notification Scheduled for $testdate with ID: $notificationId1');
+            debugPrint(
+                'Notification Scheduled for $VisitslotDateTime with ID: $notificationId1');
+            await NotificationService().scheduleNotification(
+              title: 'Reminder Notification',
+              body: 'Add consultation=====',
+              //  body: 'Hey $userFullName, Today Your Appointment is Scheduled for  $_selectedTimeSlot at the ${widget.branchname} Branch, Located at ${widget.branchaddress}.',
+            //  scheduledNotificationDateTime: testdate!,
+            scheduledNotificationDateTime: VisitslotDateTime!,
+              id: notificationId1,
+            );
+            Navigator.push(context, MaterialPageRoute(
                 builder: (context) => AgentHome(userId: widget.agentId)),
-          );
+            );
+          }
           // Navigator.pop(context);
         } else {
           progressDialog.dismiss();
@@ -1118,20 +1202,7 @@ class AddConsulationscreen_screenState extends State<Add_Consulation_screen> {
       initialDate: DateTime.now(),
       firstDate: DateTime.now(),
       lastDate: DateTime(2101),
-      builder: (BuildContext context, Widget? child) {
-        return Theme(
-          data: ThemeData.light().copyWith(
-            colorScheme: ColorScheme.light(
-              primary: Color(0xFF662e91), // header background color
-              onPrimary: Colors.white, // header text color
-              surface: Color(0xFF662e91), // header surface color
-              onSurface: Colors.black, // body text color
-            ),
-            dialogBackgroundColor: Colors.white, // background color
-          ),
-          child: child!,
-        );
-      },
+
     );
 
     if (selectedDate != null) {
@@ -1141,4 +1212,49 @@ class AddConsulationscreen_screenState extends State<Add_Consulation_screen> {
       });
     }
   }
+
+  void _openTimePicker() async {
+    TimeOfDay? pickedTime = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+    );
+
+    if (pickedTime != null) {
+      setState(() {
+        _selectedTime = pickedTime;
+        _timeController.text = pickedTime.format(context);
+      });
+    }
+  }
+
+  String _formatTimeOfDay(TimeOfDay time) {
+    final now = DateTime.now();
+    final dt = DateTime(now.year, now.month, now.day, time.hour, time.minute);
+    final format = DateFormat.Hm(); // 24-hour format
+    return format.format(dt);
+  }
+
+  void _printVisitingDateTime() {
+    print('selectedDate $selectedDate');
+    if (selectedDate != null && _selectedTime != null) {
+
+      //   final formattedDate = DateFormat('yyyy-MM-dd').format(_selectedDate!);
+      final formattedTime = _formatTimeOfDay(_selectedTime!);
+      visitingDateTime = '$visiteddate $formattedTime';
+      print('SlotselectedDateTime: $visitingDateTime');
+
+      DateTime Visitslot_DateTime = DateFormat('yyyy-MM-dd HH:mm').parse(visitingDateTime!);
+      //  DateTime VisitslotDateTime = VisitslotDateTime.subtract(const Duration(hours: 1));
+
+      print('Visiting Date: $visitingDateTime');
+      print('Visitslot DateTime:1230 $Visitslot_DateTime');
+
+      VisitslotDateTime = Visitslot_DateTime!.subtract(const Duration(hours: 2));
+
+      print('Visiting Date:1234 $VisitslotDateTime');
+    } else {
+      print('Please select both date and time.');
+    }
+  }
+
 }

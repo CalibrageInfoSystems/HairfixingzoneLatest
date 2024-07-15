@@ -110,11 +110,17 @@ class CommonStyles {
     letterSpacing: 2,
   );
   static const TextStyle txSty_20b_fb = TextStyle(
-    fontSize: 20,
+    fontSize: 24,
     fontFamily: "Calibri",
     fontWeight: FontWeight.bold,
     color: blackColor,
   );
+  // static const TextStyle txSty_20b_fb = TextStyle(
+  //   fontSize: 20,
+  //   fontFamily: "Calibri",
+  //   fontWeight: FontWeight.bold,
+  //   color: blackColor,
+  // );
   static const TextStyle txSty_20black_fb = TextStyle(
     fontSize: 20,
     fontFamily: "Calibri",
