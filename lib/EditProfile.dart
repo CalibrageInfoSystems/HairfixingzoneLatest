@@ -18,7 +18,7 @@ import 'api_config.dart';
 class EditProfile extends StatefulWidget {
   final String createdDate;
 
-  EditProfile({required this.createdDate});
+  const EditProfile({super.key, required this.createdDate});
 
   @override
   EditProfile_screenState createState() => EditProfile_screenState();
@@ -35,7 +35,8 @@ class EditProfile_screenState extends State<EditProfile> {
   TextEditingController dobController = TextEditingController();
   TextEditingController genderController = TextEditingController();
   TextEditingController mobileNumberController = TextEditingController();
-  TextEditingController alernateMobileNumberController = TextEditingController();
+  TextEditingController alernateMobileNumberController =
+      TextEditingController();
   TextEditingController emailController = TextEditingController();
 
   bool _fullNameError = false;
@@ -81,13 +82,14 @@ class EditProfile_screenState extends State<EditProfile> {
       DeviceOrientation.portraitDown,
       DeviceOrientation.portraitUp,
     ]);
-    selectedDate = DateTime.now(); // Initialize selectedDate with a non-null value, if needed
+    selectedDate = DateTime
+        .now(); // Initialize selectedDate with a non-null value, if needed
 
     CommonUtils.checkInternetConnectivity().then((isConnected) async {
       if (isConnected) {
         print('The Internet Is Connected');
         fetchRadioButtonOptions();
-         setState(() async {
+        setState(() async {
           // Wait for SharedPreferences.getInstance() to complete
           SharedPreferences prefs = await SharedPreferences.getInstance();
 
@@ -109,7 +111,8 @@ class EditProfile_screenState extends State<EditProfile> {
           print('Date of birth:$dob');
           // Format date if dob is not empty
           if (dob!.isNotEmpty) {
-            formattedDate = DateFormat('yyyy-MM-dd').format(DateTime.parse(dob!));
+            formattedDate =
+                DateFormat('yyyy-MM-dd').format(DateTime.parse(dob!));
             APIDate = DateFormat('dd-MM-yyyy').format(DateTime.parse(dob!));
           }
           print('APIDate:117$dob==$APIDate  =$formattedDate');
@@ -133,12 +136,12 @@ class EditProfile_screenState extends State<EditProfile> {
 
         // fetchMyAppointments(userId);
       } else {
-        CommonUtils.showCustomToastMessageLong('Please Check Your Internet Connection', context, 1, 4);
+        CommonUtils.showCustomToastMessageLong(
+            'Please Check Your Internet Connection', context, 1, 4);
         print('The Internet Is not  Connected');
       }
     });
   }
-
 
   // Future<void> _selectDate(BuildContext context) async {
   //   final DateTime currentDate = DateTime.now();
@@ -162,13 +165,15 @@ class EditProfile_screenState extends State<EditProfile> {
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime currentDate = DateTime.now();
-    final DateTime oldestDate = DateTime(currentDate.year - 100); // Allow selection from 100 years ago
-    final DateTime initialDate = selectedDate ?? currentDate; // Use currentDate if selectedDate is null
+    final DateTime oldestDate =
+        DateTime(currentDate.year - 100); // Allow selection from 100 years ago
+    final DateTime initialDate =
+        selectedDate ?? currentDate; // Use currentDate if selectedDate is null
 
     final DateTime? pickedDay = await showDatePicker(
       context: context,
       initialDate: initialDate,
-      initialEntryMode: DatePickerEntryMode.calendarOnly,
+      // initialEntryMode: DatePickerEntryMode.calendarOnly,
       firstDate: oldestDate,
       lastDate: currentDate,
       initialDatePickerMode: DatePickerMode.day,
@@ -181,7 +186,6 @@ class EditProfile_screenState extends State<EditProfile> {
       });
     }
   }
-
 
   Future<void> fetchRadioButtonOptions() async {
     final url = Uri.parse(baseUrl + getgender);
@@ -224,7 +228,10 @@ class EditProfile_screenState extends State<EditProfile> {
                 backgroundColor: const Color(0xFFf3e3ff),
                 title: const Text(
                   'Edit Profile',
-                  style: TextStyle(color: Color(0xFF0f75bc), fontSize: 16.0, fontWeight: FontWeight.w600),
+                  style: TextStyle(
+                      color: Color(0xFF0f75bc),
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.w600),
                 ),
                 leading: IconButton(
                   icon: const Icon(
@@ -239,7 +246,8 @@ class EditProfile_screenState extends State<EditProfile> {
               child: Form(
                   key: _formKey,
                   child: Container(
-                      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 15),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 20, horizontal: 15),
                       child: Column(
                         children: [
                           const SizedBox(
@@ -252,18 +260,21 @@ class EditProfile_screenState extends State<EditProfile> {
 
                             validator: validatefullname,
                             inputFormatters: [
-                              FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]')), // Including '\s' for space
+                              FilteringTextInputFormatter.allow(RegExp(
+                                  r'[a-zA-Z\s]')), // Including '\s' for space
                             ],
                             controller: fullNameController,
                             keyboardType: TextInputType.name,
-                            errorText: _fullNameError ? _fullNameErrorMsg : null,
+                            errorText:
+                                _fullNameError ? _fullNameErrorMsg : null,
                             onChanged: (value) {
                               //MARK: Space restrict
                               setState(() {
                                 if (value.startsWith(' ')) {
                                   fullNameController.value = TextEditingValue(
                                     text: value.trimLeft(),
-                                    selection: TextSelection.collapsed(offset: value.trimLeft().length),
+                                    selection: TextSelection.collapsed(
+                                        offset: value.trimLeft().length),
                                   );
                                 }
                                 _fullNameError = false;
@@ -285,7 +296,8 @@ class EditProfile_screenState extends State<EditProfile> {
                             children: [
                               Text(
                                 'Date of Birth ',
-                                style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                                style: TextStyle(
+                                    fontSize: 12, fontWeight: FontWeight.bold),
                               ),
                               Text(
                                 '*',
@@ -306,7 +318,8 @@ class EditProfile_screenState extends State<EditProfile> {
                             readOnly: true,
                             decoration: InputDecoration(
                               errorText: _dobError ? _dobErrorMsg : null,
-                              contentPadding: const EdgeInsets.only(top: 15, bottom: 10, left: 15, right: 15),
+                              contentPadding: const EdgeInsets.only(
+                                  top: 15, bottom: 10, left: 15, right: 15),
                               focusedBorder: OutlineInputBorder(
                                 borderSide: const BorderSide(
                                   color: CommonUtils.primaryTextColor,
@@ -326,7 +339,9 @@ class EditProfile_screenState extends State<EditProfile> {
                               ),
                               hintText: 'Enter Date of Birth',
                               counterText: "",
-                              hintStyle: const TextStyle(color: Colors.grey, fontWeight: FontWeight.w400),
+                              hintStyle: const TextStyle(
+                                  color: Colors.grey,
+                                  fontWeight: FontWeight.w400),
                               suffixIcon: const Icon(Icons.calendar_today),
                             ),
                             validator: validateDOB,
@@ -344,7 +359,8 @@ class EditProfile_screenState extends State<EditProfile> {
                             children: [
                               Text(
                                 'Gender ',
-                                style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                                style: TextStyle(
+                                    fontSize: 12, fontWeight: FontWeight.bold),
                               ),
                               Text(
                                 '*',
@@ -356,7 +372,8 @@ class EditProfile_screenState extends State<EditProfile> {
                             height: 5,
                           ),
                           Padding(
-                            padding: const EdgeInsets.only(left: 0, top: 5.0, right: 0),
+                            padding: const EdgeInsets.only(
+                                left: 0, top: 5.0, right: 0),
                             child: Container(
                               width: MediaQuery.of(context).size.width,
                               decoration: BoxDecoration(
@@ -364,7 +381,6 @@ class EditProfile_screenState extends State<EditProfile> {
                                   color: CommonUtils.primaryTextColor,
                                 ),
                                 borderRadius: BorderRadius.circular(5.0),
-                                color: Colors.white,
                               ),
                               child: DropdownButtonHideUnderline(
                                 child: ButtonTheme(
@@ -380,7 +396,10 @@ class EditProfile_screenState extends State<EditProfile> {
                                         setState(() {
                                           selectedGender = value!;
 
-                                          gendertypeid = dropdownItems.firstWhere((item) => item['desc'] == selectedGender)['typeCdId'];
+                                          gendertypeid =
+                                              dropdownItems.firstWhere((item) =>
+                                                  item['desc'] ==
+                                                  selectedGender)['typeCdId'];
 
                                           // if (selectedTypeCdId != -1) {
                                           //   selectedValue = dropdownItems[selectedTypeCdId]['typeCdId'];
@@ -516,7 +535,8 @@ class EditProfile_screenState extends State<EditProfile> {
                             children: [
                               Text(
                                 'Email ',
-                                style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                                style: TextStyle(
+                                    fontSize: 12, fontWeight: FontWeight.bold),
                               ),
                               Text(
                                 '*',
@@ -552,7 +572,8 @@ class EditProfile_screenState extends State<EditProfile> {
                             },
                             decoration: InputDecoration(
                               errorText: _emailError ? _emailErrorMsg : null,
-                              contentPadding: const EdgeInsets.only(top: 15, bottom: 10, left: 15, right: 15),
+                              contentPadding: const EdgeInsets.only(
+                                  top: 15, bottom: 10, left: 15, right: 15),
                               focusedBorder: OutlineInputBorder(
                                 borderSide: const BorderSide(
                                   color: Color(0xFF0f75bc),
@@ -572,7 +593,9 @@ class EditProfile_screenState extends State<EditProfile> {
                               ),
                               hintText: 'Enter Email',
                               counterText: "",
-                              hintStyle: const TextStyle(color: Colors.grey, fontWeight: FontWeight.w400),
+                              hintStyle: const TextStyle(
+                                  color: Colors.grey,
+                                  fontWeight: FontWeight.w400),
                             ),
                             validator: validateEmail,
                             onChanged: (value) {
@@ -594,19 +617,25 @@ class EditProfile_screenState extends State<EditProfile> {
                             maxLength: 10,
 
                             inputFormatters: [
-                              FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                              FilteringTextInputFormatter.allow(
+                                  RegExp(r'[0-9]')),
                             ],
                             keyboardType: TextInputType.phone,
-                            errorText: _mobileNumberError ? _mobileNumberErrorMsg : null,
+                            errorText: _mobileNumberError
+                                ? _mobileNumberErrorMsg
+                                : null,
                             onChanged: (value) {
                               setState(() {
-                                if (value.length == 1 && ['0', '1', '2', '3', '4'].contains(value)) {
+                                if (value.length == 1 &&
+                                    ['0', '1', '2', '3', '4'].contains(value)) {
                                   mobileNumberController.clear();
                                 }
                                 if (value.startsWith(' ')) {
-                                  mobileNumberController.value = TextEditingValue(
+                                  mobileNumberController.value =
+                                      TextEditingValue(
                                     text: value.trimLeft(),
-                                    selection: TextSelection.collapsed(offset: value.trimLeft().length),
+                                    selection: TextSelection.collapsed(
+                                        offset: value.trimLeft().length),
                                   );
                                 }
                                 _mobileNumberError = false;
@@ -628,7 +657,9 @@ class EditProfile_screenState extends State<EditProfile> {
                                 children: [
                                   Text(
                                     'Alternate Mobile Number ',
-                                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                                    style: TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.bold),
                                   ),
                                 ],
                               ),
@@ -661,8 +692,11 @@ class EditProfile_screenState extends State<EditProfile> {
                                 },
                                 decoration: InputDecoration(
                                   counterText: '',
-                                  errorText: _altNumberError ? _altNumberErrorMsg : null,
-                                  contentPadding: const EdgeInsets.only(top: 15, bottom: 10, left: 15, right: 15),
+                                  errorText: _altNumberError
+                                      ? _altNumberErrorMsg
+                                      : null,
+                                  contentPadding: const EdgeInsets.only(
+                                      top: 15, bottom: 10, left: 15, right: 15),
                                   focusedBorder: OutlineInputBorder(
                                     borderSide: const BorderSide(
                                       color: Color(0xFF0f75bc),
@@ -681,22 +715,29 @@ class EditProfile_screenState extends State<EditProfile> {
                                     ),
                                   ),
                                   hintText: 'Enter Alternate Mobile Number',
-                                  hintStyle: const TextStyle(color: Colors.grey, fontWeight: FontWeight.w400),
+                                  hintStyle: const TextStyle(
+                                      color: Colors.grey,
+                                      fontWeight: FontWeight.w400),
                                 ),
                                 maxLength: 10,
                                 inputFormatters: [
-                                  FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                                  FilteringTextInputFormatter.allow(
+                                      RegExp(r'[0-9]')),
                                 ],
                                 validator: validateAlterMobilenum,
                                 onChanged: (value) {
                                   setState(() {
-                                    if (value.length == 1 && ['0', '1', '2', '3', '4'].contains(value)) {
+                                    if (value.length == 1 &&
+                                        ['0', '1', '2', '3', '4']
+                                            .contains(value)) {
                                       alernateMobileNumberController.clear();
                                     }
                                     if (value.startsWith(' ')) {
-                                      alernateMobileNumberController.value = TextEditingValue(
+                                      alernateMobileNumberController.value =
+                                          TextEditingValue(
                                         text: value.trimLeft(),
-                                        selection: TextSelection.collapsed(offset: value.trimLeft().length),
+                                        selection: TextSelection.collapsed(
+                                            offset: value.trimLeft().length),
                                       );
                                     }
                                     _altNumberError = false;
@@ -757,8 +798,13 @@ class EditProfile_screenState extends State<EditProfile> {
       print(isDobValidate);
       print(alernateMobileNumberController.text);
 
-      if (isFullNameValidate && isMobileNumberValidate && isEmailValidate && isDobValidate) {
-        String? alternateMobile = alernateMobileNumberController.text.isNotEmpty ? alernateMobileNumberController.text : null;
+      if (isFullNameValidate &&
+          isMobileNumberValidate &&
+          isEmailValidate &&
+          isDobValidate) {
+        String? alternateMobile = alernateMobileNumberController.text.isNotEmpty
+            ? alernateMobileNumberController.text
+            : null;
 
         if (alternateMobile != null && isAltMobileNumberValidate) {
           updateUser();
@@ -845,7 +891,9 @@ class EditProfile_screenState extends State<EditProfile> {
       });
       isEmailValidate = false;
       return null;
-    } else if (!RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(value)) {
+    } else if (!RegExp(
+            r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+        .hasMatch(value)) {
       setState(() {
         _emailError = true;
         _emailErrorMsg = 'Please Enter Valid Email';
@@ -901,7 +949,8 @@ class EditProfile_screenState extends State<EditProfile> {
     if (value.startsWith(RegExp('[1-4]'))) {
       setState(() {
         _altNumberError = true;
-        _altNumberErrorMsg = 'Alternate Mobile Number Should Not Start with 1-4';
+        _altNumberErrorMsg =
+            'Alternate Mobile Number Should Not Start with 1-4';
       });
       isAltMobileNumberValidate = false;
       return null;
@@ -909,7 +958,8 @@ class EditProfile_screenState extends State<EditProfile> {
     if (value.contains(RegExp(r'[a-zA-Z]'))) {
       setState(() {
         _altNumberError = true;
-        _altNumberErrorMsg = 'Alternate Mobile Number Should Contain Only Digits';
+        _altNumberErrorMsg =
+            'Alternate Mobile Number Should Contain Only Digits';
       });
       isAltMobileNumberValidate = false;
       return null;
@@ -962,15 +1012,15 @@ class EditProfile_screenState extends State<EditProfile> {
       final request = {
         "id": Id,
         "userId": UserId, //null
-        "firstName": "${fullnametext}",
+        "firstName": fullnametext,
         "middleName": "",
         "lastName": "",
-        "contactNumber": "${contacttext}",
-        "mobileNumber": "${alernatetext}",
+        "contactNumber": contacttext,
+        "mobileNumber": alernatetext,
         "userName": "$username",
         "password": "$password", //saved
         "confirmPassword": "$password",
-        "email": "${emailtext}",
+        "email": emailtext,
         "isActive": true,
         "createdByUserId": createdByUserId,
         "createdDate": createdDate,
@@ -978,7 +1028,7 @@ class EditProfile_screenState extends State<EditProfile> {
         "updatedDate": "$now",
         "roleId": roleId,
         "gender": gendertypeid,
-        "dateofbirth": "${DOBobject}",
+        "dateofbirth": DOBobject,
         "branchIds": "null"
       };
 
@@ -1008,7 +1058,8 @@ class EditProfile_screenState extends State<EditProfile> {
             );
             print('statusmesssage:${data['statusMessage']}');
             //CommonUtils.showCustomToastMessageLong('${data['statusMessage']}', context, 0, 5);
-            CommonUtils.showCustomToastMessageLong('Customer Updated Successfully', context, 0, 5);
+            CommonUtils.showCustomToastMessageLong(
+                'Customer Updated Successfully', context, 0, 5);
 
             // Success case11.Customer Updated Sucessfully
             // Handle success scenario here
@@ -1017,13 +1068,15 @@ class EditProfile_screenState extends State<EditProfile> {
             // Failure case
             // Handle failure scenario here
             print('statusmesssage${data['statusMessage']}');
-            CommonUtils.showCustomToastMessageLong('${data['statusMessage']}', context, 1, 5);
+            CommonUtils.showCustomToastMessageLong(
+                '${data['statusMessage']}', context, 1, 5);
           }
         } else {
           progressDialog.dismiss();
           //showCustomToastMessageLong(
           // 'Failed to send the request', context, 1, 2);
-          print('Failed to send the request. Status code: ${response.statusCode}');
+          print(
+              'Failed to send the request. Status code: ${response.statusCode}');
         }
       } catch (e) {
         progressDialog.dismiss();

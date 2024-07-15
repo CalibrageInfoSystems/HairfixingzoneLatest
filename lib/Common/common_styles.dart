@@ -90,8 +90,12 @@ class CommonStyles {
     fontWeight: FontWeight.bold,
     color: whiteColor,
   );
-  static const TextStyle txSty_18w_fb =
-      TextStyle(fontSize: 22, fontFamily: "Calibri", fontWeight: FontWeight.bold, color: whiteColor, letterSpacing: 1);
+  static const TextStyle txSty_18w_fb = TextStyle(
+      fontSize: 22,
+      fontFamily: "Calibri",
+      fontWeight: FontWeight.bold,
+      color: whiteColor,
+      letterSpacing: 1);
   static const TextStyle txSty_16p_f5 = TextStyle(
     fontSize: 16,
     fontFamily: "Calibri",
@@ -125,10 +129,10 @@ class CommonStyles {
   static const TextStyle txSty_20w_fb = TextStyle(
     fontSize: 20,
     fontFamily: "Calibri",
-
     color: whiteColor,
   );
-  static TextStyle dayTextStyle = const TextStyle(color: Colors.black, fontWeight: FontWeight.w700);
+  static TextStyle dayTextStyle =
+      const TextStyle(color: Colors.black, fontWeight: FontWeight.w700);
 
   static void progressBar(BuildContext context) {
     LoadingProgress.start(
@@ -165,7 +169,8 @@ class CommonStyles {
     );
   }
 
-  static CalendarDatePicker2WithActionButtonsConfig config = CalendarDatePicker2WithActionButtonsConfig(
+  static CalendarDatePicker2WithActionButtonsConfig config =
+      CalendarDatePicker2WithActionButtonsConfig(
     firstDate: DateTime(2012),
     lastDate: DateTime(2030),
     dayTextStyle: CommonStyles.dayTextStyle,
@@ -184,7 +189,8 @@ class CommonStyles {
     ),
     centerAlignModePicker: true,
     customModePickerIcon: const SizedBox(),
-    selectedDayTextStyle: CommonStyles.dayTextStyle.copyWith(color: Colors.white),
+    selectedDayTextStyle:
+        CommonStyles.dayTextStyle.copyWith(color: Colors.white),
   );
 
   static void stopProgress(BuildContext context) {
@@ -256,9 +262,12 @@ class CommonStyles {
   //     ],
   //   );
   // }
+
   static AppBar homeAppBar({
     required BuildContext context, // Add context parameter
-    required String userName, required String userFullName, required String email,
+    required String userName,
+    required String userFullName,
+    required String email,
   }) {
     return AppBar(
       backgroundColor: const Color(0xffffffff),
@@ -267,7 +276,6 @@ class CommonStyles {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           SizedBox(
-
             width: 85,
             height: 40,
             child: FractionallySizedBox(
@@ -300,7 +308,70 @@ class CommonStyles {
             // Navigate to the new screen
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) =>  NewScreen(userName: userFullName,email :email)),
+              MaterialPageRoute(
+                  builder: (context) =>
+                      NewScreen(userName: userFullName, email: email)),
+            );
+          },
+        ),
+      ],
+    );
+  }
+
+  static AppBar customAppbar({
+    required BuildContext context, // Add context parameter
+    required String userName,
+    required String userFullName,
+    required String email,
+    required String title,
+  }) {
+    return AppBar(
+      backgroundColor: const Color(0xffffffff),
+      automaticallyImplyLeading: false,
+      // title: Row(
+      //   mainAxisAlignment: MainAxisAlignment.start,
+      //   children: [
+      //     Row(
+      //       children: [
+      //         Text(
+      //           'Hey,',
+      //           style: CommonStyles.txSty_20b_fb.copyWith(fontSize: 24),
+      //         ),
+      //         Text(
+      //           userFullName,
+      //           style: CommonStyles.txSty_20b_fb.copyWith(fontSize: 24),
+      //         ),
+      //       ],
+      //     ),
+      //   ],
+      // ),
+      title: Text(
+        title,
+        style: CommonStyles.txSty_20b_fb.copyWith(fontSize: 24),
+      ),
+      actions: [
+        IconButton(
+          icon: Container(
+            width: 40,
+            height: 40,
+            decoration: const BoxDecoration(
+              color: CommonStyles.primaryTextColor,
+              shape: BoxShape.circle,
+            ),
+            child: Center(
+              child: Text(
+                userName, // 'X',
+                style: const TextStyle(fontSize: 22, color: Colors.white),
+              ),
+            ),
+          ),
+          onPressed: () {
+            // Navigate to the new screen
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                      NewScreen(userName: userFullName, email: email)),
             );
           },
         ),
@@ -354,8 +425,8 @@ class CommonStyles {
   //   );
   // }
 
-
-  static AppBar AgenthomeAppBar({required String userName,required void Function()? onPressed}) {
+  static AppBar AgenthomeAppBar(
+      {required String userName, required void Function()? onPressed}) {
     return AppBar(
       backgroundColor: const Color(0xFFf3e3ff),
       automaticallyImplyLeading: false,
@@ -393,12 +464,12 @@ class CommonStyles {
           ),
           onPressed: onPressed,
         ),
-
       ],
     );
   }
 
-  static AppBar remainingAppBars(BuildContext context, {required String title, required void Function()? onPressed}) {
+  static AppBar remainingAppBars(BuildContext context,
+      {required String title, required void Function()? onPressed}) {
     return AppBar(
       backgroundColor: const Color(0xFFf3e3ff),
       automaticallyImplyLeading: false,
@@ -460,7 +531,8 @@ class ProgressDialog {
                   child: const CircularProgressIndicator.adaptive()));
         },
       );
-      _isShowing = false; // Set _isShowing back to false after dialog is dismissed
+      _isShowing =
+          false; // Set _isShowing back to false after dialog is dismissed
     }
   }
 
@@ -472,11 +544,15 @@ class ProgressDialog {
   }
 }
 
-void showSnackBarMessage({required String message, Widget? icon, Color messageColor = Colors.white, required BuildContext context}) {
+void showSnackBarMessage(
+    {required String message,
+    Widget? icon,
+    Color messageColor = Colors.white,
+    required BuildContext context}) {
   ScaffoldMessenger.of(context).removeCurrentSnackBar();
 
   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      margin: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       behavior: SnackBarBehavior.floating,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       content: Row(
@@ -562,7 +638,7 @@ class HorizontalSpacer extends StatelessWidget {
 class TooltipOverlay extends StatelessWidget {
   final String message;
 
-  TooltipOverlay({required this.message});
+  const TooltipOverlay({super.key, required this.message});
 
   @override
   Widget build(BuildContext context) {
@@ -574,7 +650,7 @@ class TooltipOverlay extends StatelessWidget {
       ),
       child: Text(
         message,
-        style: TextStyle(color: Colors.white, fontSize: 12),
+        style: const TextStyle(color: Colors.white, fontSize: 12),
       ),
     );
   }

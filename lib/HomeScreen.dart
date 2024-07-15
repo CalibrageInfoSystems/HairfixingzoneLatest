@@ -26,6 +26,8 @@ import 'api_config.dart';
 import 'CommonUtils.dart';
 
 class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
+
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
@@ -40,8 +42,6 @@ class _HomeScreenState extends State<HomeScreen> {
   int? userId;
   @override
   void initState() {
-
-
     CommonUtils.checkInternetConnectivity().then((isConnected) {
       if (isConnected) {
         print('Connected to the internet');
@@ -50,7 +50,6 @@ class _HomeScreenState extends State<HomeScreen> {
         // Call API immediately when screen loads
         //  fetchData();
         //();
-
       } else {
         CommonUtils.showCustomToastMessageLong(
             'Please Check Your Internet Connection', context, 1, 4);
@@ -75,7 +74,7 @@ class _HomeScreenState extends State<HomeScreen> {
       // _phonenumberController2.text = phonenumber;
       // gender = selectedGender;
       print('userId:$userId');
-    //  GetLatestAppointmentByUserId(userId);
+      //  GetLatestAppointmentByUserId(userId);
       print('userFullName: $userFullName');
       print('gender:$Gender');
       // if (gender == 1) {
@@ -173,16 +172,19 @@ class _HomeScreenState extends State<HomeScreen> {
           return Future.value(false);
         }
       },
-      //MARK: AppBar000000000000000000000000000000000000
-
-      child:Scaffold(
-        appBar: CommonStyles.homeAppBar(
-            context: context,
-            userName: userFullName.isNotEmpty ? userFullName[0].toUpperCase() : "H",userFullName: userFullName,email :email
+      child: Scaffold(
+        backgroundColor: CommonStyles.whiteColor,
+        appBar: CommonStyles.customAppbar(
+          context: context,
+          title: buildTitle(_currentIndex, context),
+          userName:
+              userFullName.isNotEmpty ? userFullName[0].toUpperCase() : "H",
+          userFullName: userFullName,
+          email: email,
         ),
 
-     //   body: SliderScreen(),
-   body: _buildScreens(_currentIndex),
+        //   body: SliderScreen(),
+        body: _buildScreens(_currentIndex, context),
         bottomNavigationBar: BottomNavyBar(
           selectedIndex: _currentIndex,
           backgroundColor: const Color(0xffffffff),
@@ -204,8 +206,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     ? CommonUtils.primaryTextColor
                     : Colors.black,
               ),
-              title:  Text(
-                'Home',style: CommonStyles.txSty_14b_f5,
+              title: const Text(
+                'Home',
+                style: CommonStyles.txSty_14b_f5,
               ),
               activeColor: Colors.blue,
               textAlign: TextAlign.center,
@@ -220,7 +223,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     : Colors.black, // Change color based
               ),
               title: const Text(
-                'Bookings',style: CommonStyles.txSty_14b_f5,
+                'Bookings',
+                style: CommonStyles.txSty_14b_f5,
               ),
               activeColor: Colors.blue,
               textAlign: TextAlign.center,
@@ -234,7 +238,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     ? CommonUtils.primaryTextColor
                     : Colors.black, // Change color based on selection
               ),
-              title: const Text('Products',style: CommonStyles.txSty_14b_f5,),
+              title: const Text(
+                'Products',
+                style: CommonStyles.txSty_14b_f5,
+              ),
               activeColor: Colors.blue,
               textAlign: TextAlign.center,
             ),
@@ -247,7 +254,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     ? CommonUtils.primaryTextColor
                     : Colors.black, // Change color based on selection
               ),
-              title: const Text('My Profile',style: CommonStyles.txSty_14b_f5,),
+              title: const Text(
+                'My Profile',
+                style: CommonStyles.txSty_14b_f5,
+              ),
               activeColor: Colors.blue,
               textAlign: TextAlign.center,
             ),
@@ -336,17 +346,40 @@ class _HomeScreenState extends State<HomeScreen> {
       if (userId != null) {
         // Use the user ID as needed
         print('User ID: $userId');
-        Navigator.push(context, MaterialPageRoute(builder: (context) => Branches_screen(userId: userId)));
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => Branches_screen(userId: userId)));
       } else {
         // Handle the case where the user ID is not available
         print('User ID not found in SharedPreferences');
       }
-    }
-    else {
+    } else {
       // Navigator.push(
       //   context,
       //   MaterialPageRoute(builder: (context) => agentloginscreen()),
       // );
+    }
+  }
+
+  String buildTitle(int currentIndex, BuildContext context) {
+    switch (currentIndex) {
+      case 0:
+        return '';
+
+      case 1:
+        // Return the messages screen widget
+        return 'Appointments';
+
+      case 2:
+        // Return the settings screen widget
+        return 'Products';
+      case 3:
+        // Return the settings screen widget
+        return 'Profile';
+
+      default:
+        return 'default';
     }
   }
 }
@@ -357,8 +390,6 @@ class _HomeScreenState extends State<HomeScreen> {
 //
 //   BannerImages({required this.FilePath, required this.Id});
 // }
-
-
 
 // class HomeScreen extends StatefulWidget {
 //   const HomeScreen({super.key});
@@ -529,7 +560,6 @@ class _HomeScreenState extends State<HomeScreen> {
 //           return Future.value(false);
 //         }
 //       },
-//       //MARK: AppBar000000000000000000000000000000000000
 //
 //       child:Scaffold(
 //       appBar: CommonStyles.homeAppBar(
@@ -1266,27 +1296,58 @@ class _HomeScreenState extends State<HomeScreen> {
 //     }
 //   }
 //
-  Widget _buildScreens(int index) {
-    switch (index) {
-      case 0:
-        return const Dashboard_Screen();
+Widget _buildScreens(int index, BuildContext context) {
+  switch (index) {
+    case 0:
+      return CustomerDashBoard(toNavigate: (Branch value) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => Bookingscreen(
+              branchId: value.branchId,
+              branchname: value.branchname,
+              branchaddress: value.branchaddress,
+              phonenumber: value.phonenumber,
+              branchImage: value.branchImage,
+              latitude: value.latitude,
+              longitude: value.longitude,
+            ),
+          ),
+        );
+      });
 
-      case 1:
+    case 1:
       // Return the messages screen widget
-        return  MyAppointments();
+      return const MyAppointments();
 
-      case 2:
+    case 2:
       // Return the settings screen widget
-        return  MyProducts();
-      case 3:
+      return const MyProducts();
+    case 3:
       // Return the settings screen widget
-        return  Profile();
+      return Profile();
 
-      default:
-        return  Dashboard_Screen();
-    }
+    default:
+      return Profile();
   }
+}
 
+/* bookNowButtonPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const Bookingscreen(
+                branchId: 1,
+                branchname: 'branch.name',
+                branchaddress: 'branch.address',
+                phonenumber: 'branch.mobileNumber',
+                branchImage: 'branch.imageName!',
+                latitude: 0.1,
+                longitude: 0.2,
+              ),
+            ),
+          );
+        }, */
 //
 class BannerImages {
   final int id;

@@ -78,6 +78,7 @@ class MyAppointments_screenState extends State<MyAppointments> {
       },
       child: Consumer<MyAppointmentsProvider>(
         builder: (context, provider, _) => Scaffold(
+          backgroundColor: CommonStyles.whiteColor,
           body: WillPopScope(
             onWillPop: () async {
               provider.clearFilter();
