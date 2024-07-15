@@ -36,6 +36,58 @@ class _HomeScreenState extends State<HomeScreen> {
   String userFullName = '';
   String email = '';
   String phonenumber = '';
+  String Gender = '';
+  int? userId;
+  @override
+  void initState() {
+
+
+    CommonUtils.checkInternetConnectivity().then((isConnected) {
+      if (isConnected) {
+        print('Connected to the internet');
+
+        checkLoginuserdata();
+        // Call API immediately when screen loads
+        //  fetchData();
+        //();
+
+      } else {
+        CommonUtils.showCustomToastMessageLong(
+            'Please Check Your Internet Connection', context, 1, 4);
+        print('Not connected to the internet'); // Not connected to the internet
+      }
+    });
+    super.initState();
+  }
+
+  void checkLoginuserdata() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    setState(() {
+      userFullName = prefs.getString('userFullName') ?? '';
+      print('userFullName: $userFullName');
+      email = prefs.getString('email') ?? '';
+      phonenumber = prefs.getString('contactNumber') ?? '';
+      Gender = prefs.getString('gender') ?? '';
+      userId = prefs.getInt('userId');
+      // _fullnameController1.text = userFullName;
+      // _emailController3.text = email;
+      // _phonenumberController2.text = phonenumber;
+      // gender = selectedGender;
+      print('userId:$userId');
+    //  GetLatestAppointmentByUserId(userId);
+      print('userFullName: $userFullName');
+      print('gender:$Gender');
+      // if (gender == 1) {
+      //   Gender = 'Female';
+      // } else if (gender == 2) {
+      //   Gender = 'Male';
+      // } else if (gender == 3) {
+      //   Gender = 'Other';
+      // }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
