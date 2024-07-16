@@ -174,6 +174,9 @@ class _BookingScreenState extends State<Bookingscreen> {
     //fetchdropdown();
     BranchId = widget.branchId;
     print('BranchId:$BranchId');
+    print('latitude  ${widget.latitude}');
+    print('longitude  ${widget.longitude}');
+
     dropValue = 'Select';
     _dateController.text = DateFormat('dd-MM-yyyy').format(DateTime.now());
     selecteddate = DateFormat('yyyy-MM-dd').format(DateTime.now());
@@ -1270,6 +1273,7 @@ class _BookingScreenState extends State<Bookingscreen> {
             // Your existing code...
             // LoadingProgress.stop(context,rootNavigator);
             print('Request sent successfully');
+
             Navigator.of(context).pushReplacement(
               MaterialPageRoute(
                 builder: (context) => SlotSuccessScreen(

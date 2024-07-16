@@ -190,7 +190,7 @@ class _CustomerDashBoardState extends State<CustomerDashBoard> {
 
   @override
   void dispose() {
-    _timer.cancel();
+ //   _timer.cancel();
     super.dispose();
   }
 
@@ -227,6 +227,11 @@ class _CustomerDashBoardState extends State<CustomerDashBoard> {
               room: item['room'],
               mobileNumber: item['mobileNumber'],
               isActive: item['isActive'],
+              cityName: item['cityName'],
+              createdBy: item['createdBy'],
+              updatedBy: item['updatedBy'],
+              latitude: item['latitude'],
+              longitude: item['longitude'],
             ));
           }
 

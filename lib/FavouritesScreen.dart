@@ -47,22 +47,22 @@ class FavouritesScreen extends StatelessWidget {
         const Text('Your favourites list is empty, Let\'s fill it up!',
             style: CommonStyles.txSty_16black_f5),
         const SizedBox(height: 8),
-        ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            // backgroundColor: CommonStyles.primaryTextColor,
-            padding: const EdgeInsets.all(10),
-            shape: RoundedRectangleBorder(
-              side: const BorderSide(color: Colors.black),
-              borderRadius: BorderRadius.circular(20.0),
-            ),
-            // shape: const StadiumBorder(),
-          ),
-          onPressed: () {},
-          child: const Text(
-            'Start searching',
-            style: TextStyle(color: Colors.black),
-          ),
-        )
+        // ElevatedButton(
+        //   style: ElevatedButton.styleFrom(
+        //     // backgroundColor: CommonStyles.primaryTextColor,
+        //     padding: const EdgeInsets.all(10),
+        //     shape: RoundedRectangleBorder(
+        //       side: const BorderSide(color: Colors.black),
+        //       borderRadius: BorderRadius.circular(20.0),
+        //     ),
+        //     // shape: const StadiumBorder(),
+        //   ),
+        //   onPressed: () {},
+        //   child: const Text(
+        //     'Start searching',
+        //     style: TextStyle(color: Colors.black),
+        //   ),
+        // )
       ],
     );
   }

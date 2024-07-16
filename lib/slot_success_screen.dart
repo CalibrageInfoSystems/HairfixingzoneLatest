@@ -54,6 +54,9 @@ class _SlotSuccessScreenState extends State<SlotSuccessScreen> with TickerProvid
   @override
   void initState() {
     super.initState();
+    print('latitude  success${widget.latitude}');
+    print('longitude success  ${widget.longitude}');
+
     _controller = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 20),
