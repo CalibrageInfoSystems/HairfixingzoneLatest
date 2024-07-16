@@ -397,9 +397,10 @@ class _BookingScreenState extends State<Bookingscreen> {
     return WillPopScope(
         onWillPop: () => onBackPressed(context),
         child: Scaffold(
+            backgroundColor: CommonStyles.whiteColor,
             appBar: AppBar(
                 elevation: 0,
-                backgroundColor: const Color(0xFFf3e3ff),
+                backgroundColor: CommonStyles.whiteColor,
                 title: const Text(
                   'Book Appointment',
                   style: TextStyle(
@@ -602,7 +603,7 @@ class _BookingScreenState extends State<Bookingscreen> {
                       ),
                       const SizedBox(
                         height: 15,
-                         ),
+                      ),
                       Scrollbar(
                         child: isLoading
                             ? const Center(

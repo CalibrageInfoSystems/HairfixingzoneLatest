@@ -81,7 +81,7 @@ class MyAppointments_screenState extends State<GetAppointments> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => HomeScreen(),
+              builder: (context) => const HomeScreen(),
             ),
           );
           myAppointmentsProvider!.clearFilter();
@@ -94,8 +94,9 @@ class MyAppointments_screenState extends State<GetAppointments> {
           },
           child: Consumer<MyAppointmentsProvider>(
             builder: (context, provider, _) => Scaffold(
+              backgroundColor: CommonStyles.whiteColor,
               appBar: AppBar(
-                  backgroundColor: const Color(0xFFf3e3ff),
+                  backgroundColor: CommonStyles.whiteColor,
                   title: const Text(
                     'My Bookings',
                     style: TextStyle(
@@ -114,7 +115,7 @@ class MyAppointments_screenState extends State<GetAppointments> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) =>  HomeScreen(),
+                          builder: (context) => const HomeScreen(),
                         ),
                       );
                       provider.clearFilter();
@@ -131,33 +132,33 @@ class MyAppointments_screenState extends State<GetAppointments> {
 
                   //MARK: Appointment
                   Expanded(
-                    child: FutureBuilder(
-                      future: apiData,
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return const Center(
-                            child: CircularProgressIndicator.adaptive(),
-                          );
-                        } else if (snapshot.hasError) {
-                          return const Center(
-                            child: Text(
-                              'No appointments found',
-                              style: TextStyle(
-                                fontSize: 12.0,
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: "Roboto",
+                    child: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: FutureBuilder(
+                        future: apiData,
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const Center(
+                              child: CircularProgressIndicator.adaptive(),
+                            );
+                          } else if (snapshot.hasError) {
+                            return const Center(
+                              child: Text(
+                                'No appointments found',
+                                style: TextStyle(
+                                  fontSize: 12.0,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: "Roboto",
+                                ),
                               ),
-                            ),
-                          );
-                        } else {
-                          List<MyAppointment_Model> data =
-                              provider.proAppointments;
-                          if (data.isNotEmpty) {
-                            return Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: ListView.builder(
+                            );
+                          } else {
+                            List<MyAppointment_Model> data =
+                                provider.proAppointments;
+                            if (data.isNotEmpty) {
+                              return ListView.builder(
                                 itemCount: data.length,
                                 itemBuilder: (context, index) {
                                   return Column(
@@ -174,23 +175,23 @@ class MyAppointments_screenState extends State<GetAppointments> {
                                   //     data: data[index],
                                   //     day: parseDayFromDate(data[index].date),);
                                 },
-                              ),
-                            );
-                          } else {
-                            return const Center(
-                              child: Text(
-                                'No Appointments Available',
-                                style: TextStyle(
-                                  fontSize: 12.0,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: "Roboto",
+                              );
+                            } else {
+                              return const Center(
+                                child: Text(
+                                  'No Appointments Available',
+                                  style: TextStyle(
+                                    fontSize: 12.0,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: "Roboto",
+                                  ),
                                 ),
-                              ),
-                            );
+                              );
+                            }
                           }
-                        }
-                      },
+                        },
+                      ),
                     ),
                   ),
                 ],
