@@ -2,7 +2,10 @@ import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:hairfixingzone/LatestAppointment.dart';
 import 'package:hairfixingzone/slotbookingscreen.dart';
 import 'dart:async';
 
@@ -41,6 +44,12 @@ class _HomeScreenState extends State<HomeScreen> {
   String phonenumber = '';
   String Gender = '';
   int? userId;
+  List<LastAppointment> appointments = [];
+
+  final TextEditingController _commentstexteditcontroller =
+      TextEditingController();
+  double ratingStar = 0.0;
+
   @override
   void initState() {
     CommonUtils.checkInternetConnectivity().then((isConnected) {
@@ -60,6 +69,173 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
   }
 
+  @override
+  Widget build(BuildContext context) {
+    return WillPopScope(
+        onWillPop: () async {
+          // Show a confirmation dialog
+          if (_currentIndex != 0) {
+            setState(() {
+              _currentIndex = 0;
+            });
+            return Future.value(false);
+          } else {
+            bool confirmClose = await showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: const Text('Confirm Exit'),
+                  content:
+                      const Text('Are You Sure You Want to Close The App?'),
+                  actions: [
+                    Container(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        style: ElevatedButton.styleFrom(
+                          textStyle: const TextStyle(
+                            color: CommonUtils.primaryTextColor,
+                          ),
+                          side: const BorderSide(
+                            color: CommonUtils.primaryTextColor,
+                          ),
+                          backgroundColor: Colors.white,
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(5),
+                            ),
+                          ),
+                        ),
+                        child: const Text(
+                          'No',
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: CommonUtils.primaryTextColor,
+                            fontFamily: 'Calibri',
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Container(
+                      child: ElevatedButton(
+                        onPressed: () => Navigator.of(context).pop(true),
+                        style: ElevatedButton.styleFrom(
+                          textStyle: const TextStyle(
+                            color: CommonUtils.primaryTextColor,
+                          ),
+                          side: const BorderSide(
+                            color: CommonUtils.primaryTextColor,
+                          ),
+                          backgroundColor: CommonUtils.primaryTextColor,
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(5),
+                            ),
+                          ),
+                        ),
+                        child: const Text(
+                          'Yes',
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.white,
+                            fontFamily: 'Calibri',
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+              },
+            );
+            if (confirmClose == true) {
+              SystemNavigator.pop();
+            }
+            return Future.value(false);
+          }
+        },
+        child: Scaffold(
+          backgroundColor: CommonStyles.whiteColor,
+          appBar: CommonStyles.customAppbar(
+            context: context,
+            title: buildTitle(_currentIndex, context),
+            userName:
+                userFullName.isNotEmpty ? userFullName[0].toUpperCase() : "H",
+            userFullName: userFullName,
+            email: email,
+          ),
+
+          //   body: SliderScreen(),
+          body: _buildScreens(_currentIndex, context),
+          bottomNavigationBar: BottomNavigationBar(
+            currentIndex: _currentIndex,
+            backgroundColor: const Color(0xffffffff),
+            onTap: (index) => setState(() {
+              _currentIndex = index;
+            }),
+            selectedItemColor: Colors.black,
+            items: <BottomNavigationBarItem>[
+              BottomNavigationBarItem(
+                icon: SvgPicture.asset('assets/objects-column.svg',
+                    width: 24,
+                    height: 24,
+                    color: Colors.black.withOpacity(0.6)),
+                activeIcon: SvgPicture.asset('assets/objects-column.svg',
+                    width: 24, height: 24, color: CommonUtils.primaryTextColor),
+                label: 'Home',
+              ),
+              BottomNavigationBarItem(
+                icon: SvgPicture.asset('assets/invite-alt.svg',
+                    width: 24,
+                    height: 24,
+                    color: Colors.black.withOpacity(0.6)),
+                activeIcon: SvgPicture.asset('assets/invite-alt.svg',
+                    width: 24, height: 24, color: CommonUtils.primaryTextColor),
+                label: 'Bookings',
+              ),
+              BottomNavigationBarItem(
+                icon: SvgPicture.asset('assets/bin-bottles.svg',
+                    width: 24,
+                    height: 24,
+                    color: Colors.black.withOpacity(0.6)),
+                activeIcon: SvgPicture.asset('assets/bin-bottles.svg',
+                    width: 24, height: 24, color: CommonUtils.primaryTextColor),
+                label: 'Products',
+              ),
+            ],
+          ),
+          // bottomNavigationBar: BottomNavyBar(
+          // selectedIndex: _currentIndex,
+          // backgroundColor: const Color(0xffffffff),
+          // showElevation: true,
+          // itemCornerRadius: 24,
+          // curve: Curves.easeIn,
+          // onItemSelected: (index) => setState(() {
+          // _currentIndex = index;
+          // }),
+          // items: [
+          // _buildBottomNavyBarItem(
+          // iconPath: 'assets/objects-column.svg',
+          // title: 'Home',
+          // index: 0,
+          // ),
+          // _buildBottomNavyBarItem(
+          // iconPath: 'assets/invite-alt.svg',
+          // title: 'Bookings',
+          // index: 1,
+          // ),
+          // _buildBottomNavyBarItem(
+          // iconPath: 'assets/bin-bottles.svg',
+          // title: 'Products',
+          // index: 2,
+          // ),
+          //
+          // ],
+          // ),
+        ));
+  }
+
   void checkLoginuserdata() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
@@ -75,7 +251,7 @@ class _HomeScreenState extends State<HomeScreen> {
       // _phonenumberController2.text = phonenumber;
       // gender = selectedGender;
       print('userId:$userId');
-      //  GetLatestAppointmentByUserId(userId);
+      getLatestAppointmentByUserId(userId);
       print('userFullName: $userFullName');
       print('gender:$Gender');
       // if (gender == 1) {
@@ -88,191 +264,315 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        // Show a confirmation dialog
-        if (_currentIndex != 0) {
-          setState(() {
-            _currentIndex = 0;
-          });
-          return Future.value(false);
-        } else {
-          bool confirmClose = await showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                title: const Text('Confirm Exit'),
-                content: const Text('Are You Sure You Want to Close The App?'),
-                actions: [
-                  Container(
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
+  Future<void> getLatestAppointmentByUserId(int? userId) async {
+    //  final response = await http.get('http://182.18.157.215/SaloonApp/API/api/Role/GetLatestAppointmentByUserId/1');
+    final Uri url = Uri.parse(
+        'http://182.18.157.215/SaloonApp/API/api/Role/GetLatestAppointmentByUserId/$userId');
+    print('url==>1086: $url');
+    final response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      final List<dynamic> jsonData = jsonDecode(response.body);
+      List<LastAppointment> loadedAppointments = [];
+
+      for (var item in jsonData) {
+        loadedAppointments.add(LastAppointment.fromJson(item));
+      }
+
+      setState(() {
+        appointments = loadedAppointments;
+        print('Appointment ID: ${appointments.length}');
+      });
+
+      // Print each appointment in the logs
+      for (var appointment in appointments) {
+        print('Appointment ID: ${appointment.id}');
+        print('Branch: ${appointment.branch}');
+        print('Date: ${appointment.date}');
+        print('Customer Name: ${appointment.customerName}');
+        print('Slot Time: ${appointment.slotTime}');
+        print('Contact Number: ${appointment.contactNumber}');
+        print('Email: ${appointment.email}');
+        print('Gender: ${appointment.gender}');
+        print('Status: ${appointment.status}');
+        print('Purpose of Visit: ${appointment.purposeOfVisit}');
+        print('Slot Duration: ${appointment.slotDuration}');
+        print('Appointment Time: ${appointment.appointmentTime}');
+        print('xxx: here');
+        SchedulerBinding.instance.addPostFrameCallback((_) {
+          _showBottomSheet(context, appointments);
+        });
+        // WidgetsBinding.instance.addPostFrameCallback((_) {
+        //   _showBottomSheet(context, appointments);
+        // });
+      }
+    } else {
+      throw Exception('Failed to load appointments');
+    }
+  }
+
+  void _showBottomSheet(
+      BuildContext context, List<LastAppointment> appointments) {
+    showModalBottomSheet(
+      isScrollControlled: true,
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (BuildContext context) {
+        return Padding(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+          ),
+          child: Container(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Please Rate Your Recent Experience With Us',
+                  style: TextStyle(
+                    fontSize: 24,
+                    color: CommonUtils.primaryTextColor,
+                    fontFamily: 'Calibri',
+                  ),
+                ),
+                const SizedBox(
+                  height: 15.0,
+                ),
+                const Text(
+                  'Rating',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: CommonUtils.primaryTextColor,
+                    fontFamily: 'Calibri',
+                  ),
+                ),
+                const SizedBox(
+                  height: 15.0,
+                ),
+                SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    child: RatingBar.builder(
+                      initialRating: 0,
+                      minRating: 0,
+                      direction: Axis.horizontal,
+                      allowHalfRating: true,
+                      itemCount: 5,
+                      itemPadding: const EdgeInsets.symmetric(horizontal: 1.0),
+                      itemBuilder: (context, _) => const Icon(
+                        Icons.star,
+                        color: CommonUtils.primaryTextColor,
+                      ),
+                      onRatingUpdate: (rating) {
+                        setState(() {
+                          ratingStar = rating;
+                          print('ratingStar $ratingStar');
+                        });
                       },
-                      style: ElevatedButton.styleFrom(
-                        textStyle: const TextStyle(
-                          color: CommonUtils.primaryTextColor,
-                        ),
-                        side: const BorderSide(
-                          color: CommonUtils.primaryTextColor,
-                        ),
-                        backgroundColor: Colors.white,
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(5),
-                          ),
-                        ),
+                    )),
+                Padding(
+                  padding: const EdgeInsets.only(left: 0, top: 10.0, right: 0),
+                  child: GestureDetector(
+                    onTap: () async {},
+                    child: Container(
+                      height: 80,
+                      width: MediaQuery.of(context).size.width,
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                            color: CommonUtils.primaryTextColor, width: 1.5),
+                        borderRadius: BorderRadius.circular(5.0),
+                        color: Colors.white,
                       ),
-                      child: const Text(
-                        'No',
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: CommonUtils.primaryTextColor,
+                      child: TextFormField(
+                        controller: _commentstexteditcontroller,
+                        style: const TextStyle(
                           fontFamily: 'Calibri',
+                          fontSize: 14,
+                          fontWeight: FontWeight.w300,
+                        ),
+                        maxLines: null,
+                        maxLength: 250,
+                        // Set maxLines to null for multiline input
+                        decoration: const InputDecoration(
+                          hintText: 'Comment',
+                          hintStyle: TextStyle(
+                            color: Colors.black54,
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'Calibri',
+                          ),
+                          contentPadding: EdgeInsets.symmetric(
+                            horizontal: 16.0,
+                            vertical: 12.0,
+                          ),
+                          border: InputBorder.none,
                         ),
                       ),
                     ),
                   ),
-                  const SizedBox(width: 10),
-                  Container(
-                    child: ElevatedButton(
-                      onPressed: () => Navigator.of(context).pop(true),
-                      style: ElevatedButton.styleFrom(
-                        textStyle: const TextStyle(
-                          color: CommonUtils.primaryTextColor,
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        style: ElevatedButton.styleFrom(
+                          textStyle: const TextStyle(
+                            color: CommonUtils.primaryTextColor,
+                          ),
+                          side: const BorderSide(
+                            color: CommonUtils.primaryTextColor,
+                          ),
+                          backgroundColor: Colors.white,
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(10),
+                            ),
+                          ),
                         ),
-                        side: const BorderSide(
-                          color: CommonUtils.primaryTextColor,
-                        ),
-                        backgroundColor: CommonUtils.primaryTextColor,
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(5),
+                        child: const Text(
+                          'Close',
+                          style: TextStyle(
+                            fontFamily: 'Calibri',
+                            fontSize: 14,
+                            color: CommonUtils.primaryTextColor,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),
-                      child: const Text(
-                        'Yes',
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.white,
-                          fontFamily: 'Calibri',
+                    ),
+                    const SizedBox(width: 20),
+                    Expanded(
+                      child: SizedBox(
+                        child: Center(
+                          child: GestureDetector(
+                            onTap: () {
+                              validaterating(appointments);
+                            },
+                            child: Container(
+                              // width: desiredWidth * 0.9,
+                              height: 40.0,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15.0),
+                                color: CommonUtils.primaryTextColor,
+                              ),
+                              child: const Center(
+                                child: Text(
+                                  'Submit',
+                                  style: TextStyle(
+                                    fontFamily: 'Calibri',
+                                    fontSize: 14,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
-              );
-            },
-          );
-          if (confirmClose == true) {
-            SystemNavigator.pop();
-          }
-          return Future.value(false);
-        }
+                  ],
+                ),
+              ],
+            ),
+          ),
+        );
       },
-      child: Scaffold(
-        backgroundColor: CommonStyles.whiteColor,
-        appBar: CommonStyles.customAppbar(
-          context: context,
-          title: buildTitle(_currentIndex, context),
-          userName:
-              userFullName.isNotEmpty ? userFullName[0].toUpperCase() : "H",
-          userFullName: userFullName,
-          email: email,
-        ),
+    );
+  }
 
-        //   body: SliderScreen(),
-        body: _buildScreens(_currentIndex, context),
-        bottomNavigationBar: BottomNavigationBar(
-          currentIndex: _currentIndex,
-          backgroundColor: const Color(0xffffffff),
-          onTap: (index) => setState(() {
-            _currentIndex = index;
-          }),
-          selectedItemColor: Colors.black,
-          items: <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon:  SvgPicture.asset('assets/objects-column.svg',
+  Future<void> validaterating(List<LastAppointment> appointments) async {
+    bool isValid = true;
+    bool hasValidationFailed = false;
+    if (isValid && ratingStar <= 0.0) {
+      CommonUtils.showCustomToastMessageLong(
+          'Please Rate Your Experience', context, 1, 4);
+      isValid = false;
+      hasValidationFailed = true;
+      FocusScope.of(context).unfocus();
+    }
 
-         width: 24,
-          height: 24,
-          color: Colors.black.withOpacity(0.6)
+    // if (isValid && _commentstexteditcontroller.text.trim().isEmpty) {
+    //   CommonUtils.showCustomToastMessageLong('Please Enter Comment', context, 1, 4);
+    //   isValid = false;
+    //   hasValidationFailed = true;
+    //   FocusScope.of(context).unfocus();
+    // }
+    if (isValid) {
+      SharedPreferences sharedPreferences =
+          await SharedPreferences.getInstance();
+      String? storedEmployeeId = sharedPreferences.getString("employeeId");
+      print('employidinfeedback$storedEmployeeId');
+      String comments = _commentstexteditcontroller.text.toString();
+      int myInt = ratingStar.toInt();
+      print('changedintoint$myInt');
+      addUpdatefeedback(appointments);
+    }
+  }
 
-        ),
-              activeIcon: SvgPicture.asset('assets/objects-column.svg',
-                  width: 24,
-                height: 24,
-                color:CommonUtils.primaryTextColor),
+  Future<void> addUpdatefeedback(List<LastAppointment> appointments) async {
+    final url = Uri.parse(baseUrl + postApiAppointment);
+    print('url==>890: $url');
+    DateTime now = DateTime.now();
+    String dateTimeString = now.toString();
+    print('DateTime as String: $dateTimeString');
 
-              label: 'Home',
+    for (LastAppointment appointment in appointments) {
+      // Create the request object for each appointment
+      final request = {
+        "Id": appointment.id,
+        "BranchId": appointment.branchId,
+        "Date": appointment.date,
+        "SlotTime": appointment.slotTime,
+        "CustomerName": appointment.customerName,
+        "PhoneNumber":
+            appointment.contactNumber, // Changed from appointments.phoneNumber
+        "Email": appointment.email,
+        "GenderTypeId": appointment.genderTypeId,
+        "StatusTypeId": 17,
+        "PurposeOfVisitId": appointment.purposeOfVisitId,
+        "PurposeOfVisit": appointment.purposeOfVisit,
+        "IsActive": true,
+        "CreatedDate": dateTimeString,
+        "UpdatedDate": dateTimeString,
+        "UpdatedByUserId": null,
+        "rating": ratingStar,
+        "review": _commentstexteditcontroller.text.toString(),
+        "reviewSubmittedDate": dateTimeString,
+        "timeofslot": null,
+        "customerId": userId,
+        "paymentTypeId": null
+      };
+      print('AddUpdatefeedback object: : ${json.encode(request)}');
 
-            ),
-            BottomNavigationBarItem(
-              icon:  SvgPicture.asset('assets/invite-alt.svg',
+      try {
+        // Send the POST request for each appointment
+        final response = await http.post(
+          url,
+          body: json.encode(request),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        );
 
-                  width: 24,
-                  height: 24,
-                  color: Colors.black.withOpacity(0.6)
-
-              ),
-              activeIcon: SvgPicture.asset('assets/invite-alt.svg',
-                  width: 24,
-                  height: 24,
-                  color:CommonUtils.primaryTextColor),
-
-              label: 'Bookings',
-
-            ),
-            BottomNavigationBarItem(
-              icon:  SvgPicture.asset('assets/bin-bottles.svg',
-
-                  width: 24,
-                  height: 24,
-                  color: Colors.black.withOpacity(0.6)
-
-              ),
-              activeIcon: SvgPicture.asset('assets/bin-bottles.svg',
-                  width: 24,
-                  height: 24,
-                  color:CommonUtils.primaryTextColor),
-
-              label: 'Products',
-
-            ),
-          ],
-        ),
-    // bottomNavigationBar: BottomNavyBar(
-    // selectedIndex: _currentIndex,
-    // backgroundColor: const Color(0xffffffff),
-    // showElevation: true,
-    // itemCornerRadius: 24,
-    // curve: Curves.easeIn,
-    // onItemSelected: (index) => setState(() {
-    // _currentIndex = index;
-    // }),
-    // items: [
-    // _buildBottomNavyBarItem(
-    // iconPath: 'assets/objects-column.svg',
-    // title: 'Home',
-    // index: 0,
-    // ),
-    // _buildBottomNavyBarItem(
-    // iconPath: 'assets/invite-alt.svg',
-    // title: 'Bookings',
-    // index: 1,
-    // ),
-    // _buildBottomNavyBarItem(
-    // iconPath: 'assets/bin-bottles.svg',
-    // title: 'Products',
-    // index: 2,
-    // ),
-    //
-    // ],
-    // ),
-    ));
+        if (response.statusCode == 200) {
+          CommonUtils.showCustomToastMessageLong(
+              'Feedback Successfully Submitted', context, 0, 4);
+          print('Request sent successfully');
+          Navigator.pop(context);
+        } else {
+          print(
+              'Failed to send the request. Status code: ${response.statusCode}');
+        }
+      } catch (e) {
+        print('Error: $e');
+      }
+    }
   }
 
   BottomNavyBarItem _buildBottomNavyBarItem({
@@ -305,9 +605,6 @@ class _HomeScreenState extends State<HomeScreen> {
       textAlign: TextAlign.center,
     );
   }
-
-
-
 
   void checkLoginStatus() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -1003,164 +1300,163 @@ class _HomeScreenState extends State<HomeScreen> {
 //   TextEditingController();
 //   double rating_star = 0.0;
 //
-//   void _showBottomSheet(
-//       BuildContext context, List<LastAppointment> appointments) {
-//     showModalBottomSheet(
-//       isScrollControlled: true,
-//       context: context,
-//       shape: const RoundedRectangleBorder(
-//         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-//       ),
-//       builder: (BuildContext context) {
-//         return Padding(
-//           padding: EdgeInsets.only(
-//             bottom: MediaQuery.of(context).viewInsets.bottom,
-//           ),
-//           child: Container(
-//             padding: const EdgeInsets.all(20),
-//             child: Column(
-//               mainAxisSize: MainAxisSize.min,
-//               crossAxisAlignment: CrossAxisAlignment.start,
-//               children: [
-//                 const Text(
-//                   'Please Rate Your Recent Experience With Us',
-//                   style: TextStyle(
-//                     fontSize: 24,
-//                     color: CommonUtils.primaryTextColor,
-//                     fontFamily: 'Calibri',
-//                   ),
+// void _showBottomSheet(
+//     BuildContext context, List<LastAppointment> appointments) {
+//   showModalBottomSheet(
+//     isScrollControlled: true,
+//     context: context,
+//     shape: const RoundedRectangleBorder(
+//       borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+//     ),
+//     builder: (BuildContext context) {
+//       return Padding(
+//         padding: EdgeInsets.only(
+//           bottom: MediaQuery.of(context).viewInsets.bottom,
+//         ),
+//         child: Container(
+//           padding: const EdgeInsets.all(20),
+//           child: Column(
+//             mainAxisSize: MainAxisSize.min,
+//             crossAxisAlignment: CrossAxisAlignment.start,
+//             children: [
+//               const Text(
+//                 'Please Rate Your Recent Experience With Us',
+//                 style: TextStyle(
+//                   fontSize: 24,
+//                   color: CommonUtils.primaryTextColor,
+//                   fontFamily: 'Calibri',
 //                 ),
-//                 const SizedBox(
-//                   height: 15.0,
+//               ),
+//               const SizedBox(
+//                 height: 15.0,
+//               ),
+//               const Text(
+//                 'Rating',
+//                 style: TextStyle(
+//                   fontSize: 16,
+//                   color: CommonUtils.primaryTextColor,
+//                   fontFamily: 'Calibri',
 //                 ),
-//                 const Text(
-//                   'Rating',
-//                   style: TextStyle(
-//                     fontSize: 16,
-//                     color: CommonUtils.primaryTextColor,
-//                     fontFamily: 'Calibri',
-//                   ),
-//                 ),
-//                 const SizedBox(
-//                   height: 15.0,
-//                 ),
-//                 SizedBox(
+//               ),
+//               const SizedBox(
+//                 height: 15.0,
+//               ),
+//               SizedBox(
+//                   width: MediaQuery.of(context).size.width,
+//                   child: RatingBar.builder(
+//                     initialRating: 0,
+//                     minRating: 0,
+//                     direction: Axis.horizontal,
+//                     allowHalfRating: true,
+//                     itemCount: 5,
+//                     itemPadding: const EdgeInsets.symmetric(horizontal: 1.0),
+//                     itemBuilder: (context, _) => const Icon(
+//                       Icons.star,
+//                       color: CommonUtils.primaryTextColor,
+//                     ),
+//                     onRatingUpdate: (rating) {
+//                       setState(() {
+//                         rating_star = rating;
+//                         print('rating_star$rating_star');
+//                       });
+//                     },
+//                   )),
+//               Padding(
+//                 padding: const EdgeInsets.only(left: 0, top: 10.0, right: 0),
+//                 child: GestureDetector(
+//                   onTap: () async {},
+//                   child: Container(
+//                     height: 80,
 //                     width: MediaQuery.of(context).size.width,
-//                     child: RatingBar.builder(
-//                       initialRating: 0,
-//                       minRating: 0,
-//                       direction: Axis.horizontal,
-//                       allowHalfRating: true,
-//                       itemCount: 5,
-//                       itemPadding: const EdgeInsets.symmetric(horizontal: 1.0),
-//                       itemBuilder: (context, _) => const Icon(
-//                         Icons.star,
-//                         color: CommonUtils.primaryTextColor,
+//                     decoration: BoxDecoration(
+//                       border: Border.all(
+//                           color: CommonUtils.primaryTextColor, width: 1.5),
+//                       borderRadius: BorderRadius.circular(5.0),
+//                       color: Colors.white,
+//                     ),
+//                     child: TextFormField(
+//                       controller: _commentstexteditcontroller,
+//                       style: const TextStyle(
+//                         fontFamily: 'Calibri',
+//                         fontSize: 14,
+//                         fontWeight: FontWeight.w300,
 //                       ),
-//                       onRatingUpdate: (rating) {
-//                         setState(() {
-//                           rating_star = rating;
-//                           print('rating_star$rating_star');
-//                         });
+//                       maxLines: null,
+//                       maxLength: 250,
+//                       // Set maxLines to null for multiline input
+//                       decoration: const InputDecoration(
+//                         hintText: 'Comment',
+//                         hintStyle: TextStyle(
+//                           color: Colors.black54,
+//                           fontSize: 14,
+//                           fontWeight: FontWeight.bold,
+//                           fontFamily: 'Calibri',
+//                         ),
+//                         contentPadding: EdgeInsets.symmetric(
+//                           horizontal: 16.0,
+//                           vertical: 12.0,
+//                         ),
+//                         border: InputBorder.none,
+//                       ),
+//                     ),
+//                   ),
+//                 ),
+//               ),
+//               Row(
+//                 children: [
+//                   Expanded(
+//                     child: ElevatedButton(
+//                       onPressed: () {
+//                         Navigator.of(context).pop();
 //                       },
-//                     )),
-//                 Padding(
-//                   padding: const EdgeInsets.only(left: 0, top: 10.0, right: 0),
-//                   child: GestureDetector(
-//                     onTap: () async {},
-//                     child: Container(
-//                       height: 80,
-//                       width: MediaQuery.of(context).size.width,
-//                       decoration: BoxDecoration(
-//                         border: Border.all(
-//                             color: CommonUtils.primaryTextColor, width: 1.5),
-//                         borderRadius: BorderRadius.circular(5.0),
-//                         color: Colors.white,
+//                       style: ElevatedButton.styleFrom(
+//                         textStyle: const TextStyle(
+//                           color: CommonUtils.primaryTextColor,
+//                         ),
+//                         side: const BorderSide(
+//                           color: CommonUtils.primaryTextColor,
+//                         ),
+//                         backgroundColor: Colors.white,
+//                         shape: const RoundedRectangleBorder(
+//                           borderRadius: BorderRadius.all(
+//                             Radius.circular(10),
+//                           ),
+//                         ),
 //                       ),
-//                       child: TextFormField(
-//                         controller: _commentstexteditcontroller,
-//                         style: const TextStyle(
+//                       child: const Text(
+//                         'Close',
+//                         style: TextStyle(
 //                           fontFamily: 'Calibri',
 //                           fontSize: 14,
-//                           fontWeight: FontWeight.w300,
-//                         ),
-//                         maxLines: null,
-//                         maxLength: 250,
-//                         // Set maxLines to null for multiline input
-//                         decoration: const InputDecoration(
-//                           hintText: 'Comment',
-//                           hintStyle: TextStyle(
-//                             color: Colors.black54,
-//                             fontSize: 14,
-//                             fontWeight: FontWeight.bold,
-//                             fontFamily: 'Calibri',
-//                           ),
-//                           contentPadding: EdgeInsets.symmetric(
-//                             horizontal: 16.0,
-//                             vertical: 12.0,
-//                           ),
-//                           border: InputBorder.none,
+//                           color: CommonUtils.primaryTextColor,
+//                           fontWeight: FontWeight.bold,
 //                         ),
 //                       ),
 //                     ),
 //                   ),
-//                 ),
-//                 Row(
-//                   children: [
-//                     Expanded(
-//                       child: ElevatedButton(
-//                         onPressed: () {
-//                           Navigator.of(context).pop();
-//                         },
-//                         style: ElevatedButton.styleFrom(
-//                           textStyle: const TextStyle(
-//                             color: CommonUtils.primaryTextColor,
-//                           ),
-//                           side: const BorderSide(
-//                             color: CommonUtils.primaryTextColor,
-//                           ),
-//                           backgroundColor: Colors.white,
-//                           shape: const RoundedRectangleBorder(
-//                             borderRadius: BorderRadius.all(
-//                               Radius.circular(10),
+//                   const SizedBox(width: 20),
+//                   Expanded(
+//                     child: SizedBox(
+//                       child: Center(
+//                         child: GestureDetector(
+//                           onTap: () {
+//                             validaterating(appointments);
+//                           },
+//                           child: Container(
+//                             // width: desiredWidth * 0.9,
+//                             height: 40.0,
+//                             decoration: BoxDecoration(
+//                               borderRadius: BorderRadius.circular(15.0),
+//                               color: CommonUtils.primaryTextColor,
 //                             ),
-//                           ),
-//                         ),
-//                         child: const Text(
-//                           'Close',
-//                           style: TextStyle(
-//                             fontFamily: 'Calibri',
-//                             fontSize: 14,
-//                             color: CommonUtils.primaryTextColor,
-//                             fontWeight: FontWeight.bold,
-//                           ),
-//                         ),
-//                       ),
-//                     ),
-//                     const SizedBox(width: 20),
-//                     Expanded(
-//                       child: SizedBox(
-//                         child: Center(
-//                           child: GestureDetector(
-//                             onTap: () {
-//                               validaterating(appointments);
-//                             },
-//                             child: Container(
-//                               // width: desiredWidth * 0.9,
-//                               height: 40.0,
-//                               decoration: BoxDecoration(
-//                                 borderRadius: BorderRadius.circular(15.0),
-//                                 color: CommonUtils.primaryTextColor,
-//                               ),
-//                               child: const Center(
-//                                 child: Text(
-//                                   'Submit',
-//                                   style: TextStyle(
-//                                     fontFamily: 'Calibri',
-//                                     fontSize: 14,
-//                                     color: Colors.white,
-//                                     fontWeight: FontWeight.bold,
-//                                   ),
+//                             child: const Center(
+//                               child: Text(
+//                                 'Submit',
+//                                 style: TextStyle(
+//                                   fontFamily: 'Calibri',
+//                                   fontSize: 14,
+//                                   color: Colors.white,
+//                                   fontWeight: FontWeight.bold,
 //                                 ),
 //                               ),
 //                             ),
@@ -1168,15 +1464,16 @@ class _HomeScreenState extends State<HomeScreen> {
 //                         ),
 //                       ),
 //                     ),
-//                   ],
-//                 ),
-//               ],
-//             ),
+//                   ),
+//                 ],
+//               ),
+//             ],
 //           ),
-//         );
-//       },
-//     );
-//   }
+//         ),
+//       );
+//     },
+//   );
+// }
 //
 //   Future<void> validaterating(List<LastAppointment> appointments) async {
 //     bool isValid = true;

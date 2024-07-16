@@ -29,7 +29,13 @@ class viewconsulationlistscreen extends StatefulWidget {
   final BranchModel agent;
   final int userid;
 
-  const viewconsulationlistscreen({super.key, required this.branchid, required this.fromdate, required this.todate, required this.agent, required this.userid});
+  const viewconsulationlistscreen(
+      {super.key,
+      required this.branchid,
+      required this.fromdate,
+      required this.todate,
+      required this.agent,
+      required this.userid});
 
   @override
   State<viewconsulationlistscreen> createState() => _ViewConsultationState();
@@ -52,14 +58,19 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
     super.initState();
     startDate = DateTime.now().subtract(const Duration(days: 14));
     endDate = DateTime.now();
-    _fromToDatesController.text = '${startDate != null ? DateFormat("dd/MM/yyyy").format(startDate!) : '-'} - ${endDate != null ? DateFormat("dd/MM/yyyy").format(endDate!) : '-'}';
+    _fromToDatesController.text =
+        '${startDate != null ? DateFormat("dd/MM/yyyy").format(startDate!) : '-'} - ${endDate != null ? DateFormat("dd/MM/yyyy").format(endDate!) : '-'}';
 
-    print('branchid ${widget.branchid} fromdate${widget.fromdate} todate ${widget.todate}');
-    ConsultationData = getviewconsulationlist(DateFormat('yyyy-MM-dd').format(startDate!), DateFormat('yyyy-MM-dd').format(endDate!));
+    print(
+        'branchid ${widget.branchid} fromdate${widget.fromdate} todate ${widget.todate}');
+    ConsultationData = getviewconsulationlist(
+        DateFormat('yyyy-MM-dd').format(startDate!),
+        DateFormat('yyyy-MM-dd').format(endDate!));
   }
 
 // http://182.18.157.215/SaloonApp/API/api/Consultation/GetConsultationsByBranchId
-  Future<List<Consultation>> getviewconsulationlist(String fromdate, String todate) async {
+  Future<List<Consultation>> getviewconsulationlist(
+      String fromdate, String todate) async {
     // const String apiUrl =
     //     'http://182.18.157.215/SaloonApp/API/api/Consultation/GetConsultationsByBranchId';
     String apiUrl = baseUrl + getconsulationbyranchid;
@@ -94,7 +105,8 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
           List<dynamic> jsonList = responseData["listResult"];
           final dynamic listResult = responseData["listResult"];
           if (listResult != null && listResult is List<dynamic>) {
-            List<Consultation> consultations = jsonList.map((e) => Consultation.fromJson(e)).toList();
+            List<Consultation> consultations =
+                jsonList.map((e) => Consultation.fromJson(e)).toList();
             // for (var consultation in consultations) {
             //   DateTime createdDateTime = DateTime.parse(consultation.createdDate);
             //   month = DateFormat('MMM').format(createdDateTime);
@@ -157,7 +169,8 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
     centerAlignModePicker: true,
     customModePickerIcon: const SizedBox(),
     // ensure SizedBox is constant
-    selectedDayTextStyle: CommonStyles.dayTextStyle.copyWith(color: Colors.white),
+    selectedDayTextStyle:
+        CommonStyles.dayTextStyle.copyWith(color: Colors.white),
     // dayTextStylePredicate: ({required DateTime date}) {
     //   TextStyle? textStyle;
     //   if (DateUtils.isSameDay(date, DateTime(2021, 1, 25))) {
@@ -168,10 +181,14 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
   );
 
   void showTooltip(BuildContext context, String message, GlobalKey toolTipKey) {
-    final renderBox = toolTipKey.currentContext!.findRenderObject() as RenderBox;
+    final renderBox =
+        toolTipKey.currentContext!.findRenderObject() as RenderBox;
     final overlay = Overlay.of(context).context.findRenderObject() as RenderBox;
 
-    final target = renderBox.localToGlobal(renderBox.size.bottomLeft(Offset.zero), ancestor: overlay) + const Offset(-10, 0);
+    final target = renderBox.localToGlobal(
+            renderBox.size.bottomLeft(Offset.zero),
+            ancestor: overlay) +
+        const Offset(-10, 0);
 
     final entry = OverlayEntry(
       builder: (context) => Positioned(
@@ -190,6 +207,7 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
       entry.remove();
     });
   }
+
   Future<void> makePhoneCall(String phoneNumber) async {
     if (await canLaunch(phoneNumber)) {
       await launch(phoneNumber);
@@ -242,16 +260,25 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
                               child: ClipRRect(
                                 //  borderRadius: BorderRadius.circular(10.0),
                                 child: Image.network(
-                                  widget.agent.imageName!.isNotEmpty ? widget.agent.imageName! : 'https://example.com/placeholder-image.jpg',
+                                  widget.agent.imageName!.isNotEmpty
+                                      ? widget.agent.imageName!
+                                      : 'https://example.com/placeholder-image.jpg',
                                   fit: BoxFit.cover,
-                                  height: MediaQuery.of(context).size.height / 5.5 / 2,
-                                  width: MediaQuery.of(context).size.width / 3.2,
+                                  height: MediaQuery.of(context).size.height /
+                                      5.5 /
+                                      2,
+                                  width:
+                                      MediaQuery.of(context).size.width / 3.2,
                                   errorBuilder: (context, error, stackTrace) {
                                     return Image.asset(
                                       'assets/hairfixing_logo.png', // Path to your PNG placeholder image
                                       fit: BoxFit.cover,
-                                      height: MediaQuery.of(context).size.height / 4 / 2,
-                                      width: MediaQuery.of(context).size.width / 3.2,
+                                      height:
+                                          MediaQuery.of(context).size.height /
+                                              4 /
+                                              2,
+                                      width: MediaQuery.of(context).size.width /
+                                          3.2,
                                     );
                                   },
                                 ),
@@ -293,183 +320,17 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
                         ),
                       ),
                     ),
-                    // Row(
-                    //   children: [
-                    //     // Expanded(
-                    //     //   child: Container(
-                    //     //     height: MediaQuery.of(context).size.height / 12,
-                    //     //     //height: 60,
-                    //     //     padding: const EdgeInsets.all(5),
-                    //     //     decoration: BoxDecoration(
-                    //     //       border: Border.all(color: CommonStyles.primaryTextColor),
-                    //     //       borderRadius: BorderRadius.circular(10),
-                    //     //     ),
-                    //     //     child: Row(
-                    //     //       mainAxisAlignment: MainAxisAlignment.start,
-                    //     //       children: [
-                    //     //         ClipRRect(
-                    //     //           borderRadius: BorderRadius.circular(8),
-                    //     //           child: Image.network(
-                    //     //             '${widget.agent.imageName}',
-                    //     //             fit: BoxFit.cover,
-                    //     //             width: 100.0,
-                    //     //             height: MediaQuery.of(context).size.height / 13,
-                    //     //             errorBuilder: (context, error, stackTrace) {
-                    //     //               return Image.asset(
-                    //     //                 'assets/hairfixing_logo.png',
-                    //     //                 fit: BoxFit.cover,
-                    //     //                 width: 60.0,
-                    //     //                 height: MediaQuery.of(context).size.height / 13,
-                    //     //               );
-                    //     //             },
-                    //     //           ),
-                    //     //         ),
-                    //     //         const SizedBox(
-                    //     //           width: 20,
-                    //     //         ),
-                    //     //         Column(
-                    //     //           crossAxisAlignment: CrossAxisAlignment.start,
-                    //     //           mainAxisAlignment: MainAxisAlignment.center,
-                    //     //           children: [
-                    //     //             // Text(
-                    //     //             //   widget.agent.name,
-                    //     //             //   style: CommonStyles.txSty_16p_f5,
-                    //     //             // ),
-                    //     //             SizedBox(
-                    //     //               width: MediaQuery.of(context).size.width / 2.2,
-                    //     //               //    padding: EdgeInsets.only(top: 7),
-                    //     //               // width: MediaQuery.of(context).size.width / 4,
-                    //     //               child: Column(
-                    //     //                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    //     //                 crossAxisAlignment: CrossAxisAlignment.start,
-                    //     //                 children: [
-                    //     //                   Text(
-                    //     //                     widget.agent.name,
-                    //     //                     style: const TextStyle(
-                    //     //                       color: Color(0xFF0f75bc),
-                    //     //                       fontSize: 14.0,
-                    //     //                       fontWeight: FontWeight.w600,
-                    //     //                     ),
-                    //     //                   ),
-                    //     //                   const SizedBox(
-                    //     //                     height: 5,
-                    //     //                   ),
-                    //     //                   Text(
-                    //     //                     widget.agent.address,
-                    //     //                     maxLines: 2,
-                    //     //                     overflow: TextOverflow.ellipsis,
-                    //     //                     style: const TextStyle(color: Colors.black, fontSize: 12.0, fontWeight: FontWeight.w600),
-                    //     //                   ),
-                    //     //                 ],
-                    //     //               ),
-                    //     //             )
-                    //     //           ],
-                    //     //         ),
-                    //     //       ],
-                    //     //     ),
-                    //     //   ),
-                    //     // ),
-                    //
-                    //     // const SizedBox(
-                    //     //   width: 10,
-                    //     // ),
-                    //     // Container(
-                    //     //   height: MediaQuery.of(context).size.height / 12,
-                    //     //   padding: const EdgeInsets.symmetric(
-                    //     //       vertical: 5, horizontal: 10),
-                    //     //   decoration: BoxDecoration(
-                    //     //     border:
-                    //     //         Border.all(color: CommonStyles.primaryTextColor),
-                    //     //     borderRadius: BorderRadius.circular(10),
-                    //     //   ),
-                    //     //   child: Container(
-                    //     //     padding: const EdgeInsets.all(15),
-                    //     //     decoration: const BoxDecoration(
-                    //     //         shape: BoxShape.circle,
-                    //     //         color: CommonStyles.primaryTextColor),
-                    //     //     child: Center(
-                    //     //       child: SvgPicture.asset(
-                    //     //         'assets/noun-appointment-date-2417776.svg',
-                    //     //         width: 30.0,
-                    //     //         height: 30.0,
-                    //     //         color: CommonStyles.whiteColor,
-                    //     //       ),
-                    //     //     ),
-                    //     //   ),
-                    //     // )
-                    //   ],
-                    // ),
-
                     const SizedBox(
                       height: 10,
                     ),
-
-                    //MARK: _fromToDatesController
-
-                    // TextFormField(
-                    //   controller: _fromToDatesController,
-                    //   keyboardType: TextInputType.visiblePassword,
-                    //   onTap: () {
-                    //     showCustomDateRangePicker(
-                    //       context,
-                    //       dismissible: true,
-                    //       endDate: endDate,
-                    //       startDate: startDate,
-                    //       maximumDate: DateTime.now().add(const Duration(days: 50)),
-                    //       minimumDate: DateTime.now().subtract(const Duration(days: 50)),
-                    //       onApplyClick: (s, e) {
-                    //         setState(() {
-                    //           //MARK: Date
-                    //           endDate = e;
-                    //           startDate = s;
-                    //           _fromToDatesController.text =
-                    //               '${startDate != null ? DateFormat("dd/MM/yyyy").format(startDate!) : '-'} / ${endDate != null ? DateFormat("dd/MM/yyyy").format(endDate!) : '-'}';
-                    //           ConsultationData =
-                    //               getviewconsulationlist(DateFormat('yyyy-MM-dd').format(startDate!), DateFormat('yyyy-MM-dd').format(endDate!));
-                    //         });
-                    //       },
-                    //       onCancelClick: () {
-                    //         setState(() {
-                    //           endDate = null;
-                    //           startDate = null;
-                    //         });
-                    //       },
-                    //     );
-                    //   },
-                    //   readOnly: true,
-                    //   decoration: InputDecoration(
-                    //     contentPadding: const EdgeInsets.only(top: 15, bottom: 10, left: 15, right: 15),
-                    //     focusedBorder: OutlineInputBorder(
-                    //       borderSide: const BorderSide(
-                    //         color: Color(0xFF0f75bc),
-                    //       ),
-                    //       borderRadius: BorderRadius.circular(6.0),
-                    //     ),
-                    //     enabledBorder: OutlineInputBorder(
-                    //       borderSide: const BorderSide(
-                    //         color: CommonUtils.primaryTextColor,
-                    //       ),
-                    //       borderRadius: BorderRadius.circular(6.0),
-                    //     ),
-                    //     border: const OutlineInputBorder(
-                    //       borderRadius: BorderRadius.all(
-                    //         Radius.circular(10),
-                    //       ),
-                    //     ),
-                    //     hintText: 'Select Dates',
-                    //     counterText: "",
-                    //     hintStyle: const TextStyle(color: Colors.grey, fontWeight: FontWeight.w400),
-                    //     prefixIcon: const Icon(Icons.calendar_today),
-                    //   ),
-                    //   //  validator: validatePassword,
-                    // ),
-
                     TextFormField(
                       controller: _fromToDatesController,
                       keyboardType: TextInputType.visiblePassword,
                       onTap: () async {
-                        FocusScope.of(context).requestFocus(FocusNode()); // to prevent the keyboard from appearing
-                        final values = await showCustomCalendarDialog(context, config);
+                        FocusScope.of(context).requestFocus(
+                            FocusNode()); // to prevent the keyboard from appearing
+                        final values =
+                            await showCustomCalendarDialog(context, config);
                         if (values != null) {
                           setState(() {
                             //           startDate = s;
@@ -479,11 +340,14 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
                             //           ConsultationData =
                             //               getviewconsulationlist(DateFormat('yyyy-MM-dd').format(startDate!), DateFormat('yyyy-MM-dd').format(endDate!));
 
-                            selectedDate = _getValueText(config.calendarType, values);
-                            _fromToDatesController.text = '${selectedDate![0]} - ${selectedDate![1]}';
+                            selectedDate =
+                                _getValueText(config.calendarType, values);
+                            _fromToDatesController.text =
+                                '${selectedDate![0]} - ${selectedDate![1]}';
                             String apiFromDate = formateDate(selectedDate![0]);
                             String apiToDate = formateDate(selectedDate![1]);
-                            ConsultationData = getviewconsulationlist(apiFromDate, apiToDate);
+                            ConsultationData =
+                                getviewconsulationlist(apiFromDate, apiToDate);
                             // provider.getDisplayDate =
                             //     '${selectedDate![0]}  to  ${selectedDate![1]}';
                             // provider.getApiFromDate = selectedDate![0];
@@ -493,7 +357,8 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
                       },
                       readOnly: true,
                       decoration: InputDecoration(
-                        contentPadding: const EdgeInsets.only(top: 15, bottom: 10, left: 15, right: 15),
+                        contentPadding: const EdgeInsets.only(
+                            top: 15, bottom: 10, left: 15, right: 15),
                         focusedBorder: OutlineInputBorder(
                           borderSide: const BorderSide(
                             color: Color(0xFF0f75bc),
@@ -513,7 +378,8 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
                         ),
                         hintText: 'Select Dates',
                         counterText: "",
-                        hintStyle: const TextStyle(color: Colors.grey, fontWeight: FontWeight.w400),
+                        hintStyle: const TextStyle(
+                            color: Colors.grey, fontWeight: FontWeight.w400),
                         prefixIcon: const Icon(Icons.calendar_today),
                       ),
                       //  validator: validatePassword,
@@ -545,224 +411,22 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
                       return Expanded(
                         child: ListView.builder(
                             // shrinkWrap: true,
-                            itemCount: consultationslist.isEmpty ? 1 : consultationslist.length,
+                            itemCount: consultationslist.isEmpty
+                                ? 1
+                                : consultationslist.length,
                             itemBuilder: (context, index) {
                               DateTime createdDateTime = DateTime.parse(
                                 consultationslist[index].visitingDate,
                               );
-                              final GlobalKey _mobilenumber = GlobalKey();
+                              final GlobalKey mobilenumber = GlobalKey();
 
                               month = DateFormat('MMM').format(createdDateTime);
                               date = DateFormat('dd').format(createdDateTime);
                               year = DateFormat('yyyy').format(createdDateTime);
                               print('month: $month, Date: $date, Year: $year');
                               // if (consultationslist.length > 0) {
-                              return Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                                child: Card(
-                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                                  elevation: 5,
-                                  child: IntrinsicHeight(
-                                      child: Container(
-                                    //   height: MediaQuery.of(context).size.height / 5,
-                                    padding: const EdgeInsets.all(10),
-                                    // decoration: BoxDecoration(
-                                    //   borderRadius: BorderRadius.circular(10.0),
-                                    //   color: Colors.white,
-                                    //
-                                    // ),
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(10.0),
-                                      // borderRadius: BorderRadius.circular(30), //border corner radius
-                                      // boxShadow: [
-                                      //   BoxShadow(
-                                      //     color: const Color(0xFF960efd)
-                                      //         .withOpacity(0.2), //color of shadow
-                                      //     spreadRadius: 2, //spread radius
-                                      //     blurRadius: 4, // blur radius
-                                      //     offset: const Offset(
-                                      //         0, 2), // changes position of shadow
-                                      //   ),
-                                      // ],
-                                    ),
-                                    child: Row(
-                                      children: [
-                                        Container(
-                                          //  height: MediaQuery.of(context).size.height,
-                                          //  width: MediaQuery.of(context).size.height / 16,
-                                          child: Column(
-                                            mainAxisAlignment: MainAxisAlignment.center,
-                                            crossAxisAlignment: CrossAxisAlignment.center,
-                                            children: [
-                                              Text(
-                                                '$month',
-                                                style: CommonUtils.txSty_18p_f7,
-                                              ),
-                                              Text(
-                                                '$date',
-                                                style: const TextStyle(
-                                                  fontSize: 22,
-                                                  fontFamily: "Calibri",
-                                                  // letterSpacing: 1.5,
-                                                  fontWeight: FontWeight.w700,
-                                                  color: Color(0xFF0f75bc),
-                                                ),
-                                              ),
-                                              Text(
-                                                '$year',
-                                                style: const TextStyle(
-                                                  fontSize: 14,
-                                                  fontFamily: "Calibri",
-                                                  fontWeight: FontWeight.w700,
-                                                  color: Color(0xFF0f75bc),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        const VerticalDivider(
-                                          color: CommonUtils.primaryTextColor,
-                                        ),
-                                        Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Row(
-                                              children: [
-                                                Container(
-                                                  width: MediaQuery.of(context).size.width / 2.5,
-                                                  child: Column(
-                                                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    children: [
-                                                      Text(
-                                                        consultationslist[index].consultationName,
-                                                        style: const TextStyle(
-                                                          fontSize: 14,
-                                                          fontFamily: "Calibri",
-                                                          fontWeight: FontWeight.w700,
-                                                          color: Color(0xFF0f75bc),
-                                                        ),
-                                                      ),
-                                                      Row(
-                                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                                        children: [
-                                                          GestureDetector(
-                                                            onTap: () {
-                                                              makePhoneCall('tel:91' + consultationslist[index].phoneNumber);
-                                                            },
-                                                            child: RichText(
-                                                              text: TextSpan(
-                                                                text: consultationslist[index].phoneNumber,
-                                                                style: const TextStyle(
-                                                                  fontSize: 14,
-                                                                  fontFamily: "Calibri",
-                                                                  fontWeight: FontWeight.w500,
-                                                                  color: Color(0xFF0f75bc),
-                                                                  decoration: TextDecoration.underline,
-                                                                  decorationColor: Color(0xFF0f75bc), // Change this to your desired underline color
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          SizedBox(
-                                                            width: 5.0,
-                                                          ),
-                                                          GestureDetector(
-                                                            key: _mobilenumber,
-                                                            child: Icon(
-                                                              Icons.copy,
-                                                              size: 14,
-                                                              color: Colors.black,
-                                                            ),
-                                                            onTap: () {
-                                                              Clipboard.setData(ClipboardData(text: consultationslist[index].phoneNumber));
-                                                              showTooltip(context, "Copied", _mobilenumber);
-                                                            },
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                                const SizedBox(
-                                                  height: 5.0,
-                                                ),
-                                                Container(
-                                                  width: MediaQuery.of(context).size.width / 3.2,
-                                                  child: Column(
-                                                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    children: [
-                                                      Text(
-                                                        consultationslist[index].gender,
-                                                        style: const TextStyle(
-                                                          fontSize: 14,
-                                                          fontFamily: "Calibri",
-                                                          fontWeight: FontWeight.w500,
-                                                          color: Color(0xFF5f5f5f),
-                                                        ),
-                                                      ),
-                                                      Text(
-                                                        consultationslist[index].email,
-                                                        style: const TextStyle(
-                                                          fontSize: 14,
-                                                          fontFamily: "Calibri",
-                                                          fontWeight: FontWeight.w500,
-                                                          color: Color(0xFF5f5f5f),
-                                                        ),
-                                                      ),
-                                                      //Text('', style: CommonStyles.txSty_16black_f5),
-                                                      // Text(consultationslist[index].gender, style: CommonStyles.txSty_16black_f5),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            // SizedBox(
-                                            //   height: 5.0,
-                                            // ),
-                                            // Text(
-                                            //   consultationslist[index].remarks,
-                                            //   style: const TextStyle(
-                                            //     fontSize: 14,
-                                            //     fontFamily: "Calibri",
-                                            //     fontWeight: FontWeight.w500,
-                                            //     color: Color(0xFF5f5f5f),
-                                            //   ),
-                                            // ),
-
-                                            Flexible(
-                                              child: Visibility(
-                                                visible: consultationslist[index].remarks != null && consultationslist[index].remarks!.isNotEmpty,
-                                                child: RichText(
-                                                  text: TextSpan(
-                                                    text: 'Remark : ',
-                                                    style: CommonStyles.txSty_14blu_f5,
-                                                    children: <TextSpan>[
-                                                      TextSpan(
-                                                        text: consultationslist[index].remarks ?? '',
-                                                        style: const TextStyle(
-                                                          color: Color(0xFF5f5f5f),
-                                                          fontSize: 14,
-                                                          fontWeight: FontWeight.w500,
-                                                          fontFamily: 'Calibri',
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-
-                                            // based on status hide this row
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  )),
-                                ),
-                              );
+                              return consultationCard(
+                                  context, index, mobilenumber);
                               //  }
                             }),
                       );
@@ -773,6 +437,214 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
             ],
           ),
         ));
+  }
+
+  Padding consultationCard(BuildContext context, int index,
+      GlobalKey<State<StatefulWidget>> mobilenumber) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+      child: Card(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        elevation: 5,
+        child: IntrinsicHeight(
+            child: Container(
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          child: Row(
+            children: [
+              Container(
+                //  height: MediaQuery.of(context).size.height,
+                //  width: MediaQuery.of(context).size.height / 16,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      '$month',
+                      style: CommonUtils.txSty_18p_f7,
+                    ),
+                    Text(
+                      '$date',
+                      style: const TextStyle(
+                        fontSize: 22,
+                        fontFamily: "Calibri",
+                        fontWeight: FontWeight.w700,
+                        color: Color(0xFF0f75bc),
+                      ),
+                    ),
+                    Text(
+                      '$year',
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontFamily: "Calibri",
+                        fontWeight: FontWeight.w700,
+                        color: Color(0xFF0f75bc),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const VerticalDivider(
+                color: CommonUtils.primaryTextColor,
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width / 2.5,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              formatVisitingDate(
+                                  consultationslist[index].visitingDate),
+                              style: const TextStyle(
+                                fontSize: 14,
+                                fontFamily: "Calibri",
+                                fontWeight: FontWeight.w700,
+                                color: Color(0xFF0f75bc),
+                              ),
+                            ),
+                            Text(
+                              consultationslist[index].consultationName,
+                              style: const TextStyle(
+                                fontSize: 14,
+                                fontFamily: "Calibri",
+                                fontWeight: FontWeight.w700,
+                                color: Color(0xFF0f75bc),
+                              ),
+                            ),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                GestureDetector(
+                                  onTap: () {
+                                    makePhoneCall(
+                                        'tel:91${consultationslist[index].phoneNumber}');
+                                  },
+                                  child: RichText(
+                                    text: TextSpan(
+                                      text:
+                                          consultationslist[index].phoneNumber,
+                                      style: const TextStyle(
+                                        fontSize: 14,
+                                        fontFamily: "Calibri",
+                                        fontWeight: FontWeight.w500,
+                                        color: Color(0xFF0f75bc),
+                                        decoration: TextDecoration.underline,
+                                        decorationColor: Color(
+                                            0xFF0f75bc), // Change this to your desired underline color
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 5.0,
+                                ),
+                                GestureDetector(
+                                  key: mobilenumber,
+                                  child: const Icon(
+                                    Icons.copy,
+                                    size: 14,
+                                    color: Colors.black,
+                                  ),
+                                  onTap: () {
+                                    Clipboard.setData(ClipboardData(
+                                        text: consultationslist[index]
+                                            .phoneNumber));
+                                    showTooltip(
+                                        context, "Copied", mobilenumber);
+                                  },
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 5.0,
+                      ),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width / 3.2,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              consultationslist[index].gender,
+                              style: const TextStyle(
+                                fontSize: 14,
+                                fontFamily: "Calibri",
+                                fontWeight: FontWeight.w500,
+                                color: Color(0xFF5f5f5f),
+                              ),
+                            ),
+                            Text(
+                              consultationslist[index].email,
+                              style: const TextStyle(
+                                fontSize: 14,
+                                fontFamily: "Calibri",
+                                fontWeight: FontWeight.w500,
+                                color: Color(0xFF5f5f5f),
+                              ),
+                            ),
+                            //Text('', style: CommonStyles.txSty_16black_f5),
+                            // Text(consultationslist[index].gender, style: CommonStyles.txSty_16black_f5),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  // SizedBox(
+                  //   height: 5.0,
+                  // ),
+                  // Text(
+                  //   consultationslist[index].remarks,
+                  //   style: const TextStyle(
+                  //     fontSize: 14,
+                  //     fontFamily: "Calibri",
+                  //     fontWeight: FontWeight.w500,
+                  //     color: Color(0xFF5f5f5f),
+                  //   ),
+                  // ),
+
+                  Flexible(
+                    child: Visibility(
+                      visible: consultationslist[index].remarks.isNotEmpty,
+                      child: RichText(
+                        text: TextSpan(
+                          text: 'Remark : ',
+                          style: CommonStyles.txSty_14blu_f5,
+                          children: <TextSpan>[
+                            TextSpan(
+                              text: consultationslist[index].remarks ?? '',
+                              style: const TextStyle(
+                                color: Color(0xFF5f5f5f),
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500,
+                                fontFamily: 'Calibri',
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  // based on status hide this row
+                ],
+              ),
+            ],
+          ),
+        )),
+      ),
+    );
   }
 
   AppBar _appBar(BuildContext context) {
@@ -807,8 +679,10 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
         ));
   }
 
-  List<String>? _getValueText(CalendarDatePicker2Type datePickerType, List<DateTime?> values) {
-    values = values.map((e) => e != null ? DateUtils.dateOnly(e) : null).toList();
+  List<String>? _getValueText(
+      CalendarDatePicker2Type datePickerType, List<DateTime?> values) {
+    values =
+        values.map((e) => e != null ? DateUtils.dateOnly(e) : null).toList();
 
     DateTime? startDate;
     DateTime? endDate;
@@ -816,8 +690,17 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
     startDate = values[0];
     endDate = values.length > 1 ? values[1] : null;
     String? formattedStartDate = DateFormat('dd/MM/yyyy').format(startDate!);
-    String? formattedEndDate = endDate != null ? DateFormat('dd/MM/yyyy').format(endDate) : 'null';
+    String? formattedEndDate =
+        endDate != null ? DateFormat('dd/MM/yyyy').format(endDate) : 'null';
 
     return [formattedStartDate, formattedEndDate];
+  }
+
+  String formatVisitingDate(String visitingDate) {
+    // String visitingDate = '2024-07-16T16:15:00';
+    DateTime parsedDate = DateTime.parse(visitingDate);
+    String formattedTime = DateFormat.jm().format(parsedDate);
+    print(formattedTime); // Output: 4:15 PM
+    return formattedTime;
   }
 }

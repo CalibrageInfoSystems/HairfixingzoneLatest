@@ -11,9 +11,10 @@ import 'api_config.dart';
 class ViewConsultations extends StatefulWidget {
   final int branchid;
 
-  ViewConsultations({required this.branchid});
+  const ViewConsultations({super.key, required this.branchid});
   @override
-  ViewConsultations_screenState createState() => ViewConsultations_screenState();
+  ViewConsultations_screenState createState() =>
+      ViewConsultations_screenState();
 }
 
 class ViewConsultations_screenState extends State<ViewConsultations> {
@@ -47,16 +48,16 @@ class ViewConsultations_screenState extends State<ViewConsultations> {
         return true; // Prevent default back navigation behavior
       },
       child: Scaffold(
+          backgroundColor: Colors.red,
           appBar: AppBar(
               elevation: 0,
-              backgroundColor: Color(0xFFf15f22),
-              title: Text(
+              title: const Text(
                 'View Consultations',
                 style: TextStyle(color: Colors.white, fontSize: 16.0),
               ),
               centerTitle: true,
               leading: IconButton(
-                icon: Icon(
+                icon: const Icon(
                   Icons.arrow_back,
                   color: Colors.white,
                 ),
@@ -69,11 +70,11 @@ class ViewConsultations_screenState extends State<ViewConsultations> {
                 },
               )),
           body: isLoading
-              ? Center(
+              ? const Center(
                   child: CircularProgressIndicator.adaptive(),
                 )
               : Consultations_List.isEmpty
-                  ? Center(
+                  ? const Center(
                       child: Text('No data found'),
                     )
                   : ListView.builder(
@@ -86,21 +87,22 @@ class ViewConsultations_screenState extends State<ViewConsultations> {
                             print('CardView clicked!');
                           },
                           child: ClipRRect(
-                            borderRadius: BorderRadius.only(
+                            borderRadius: const BorderRadius.only(
                               topRight: Radius.circular(15.0),
                               bottomLeft: Radius.circular(15.0),
                               // topRight: Radius.circular(42.5),
                               // bottomLeft: Radius.circular(42.5),
                             ),
                             child: Card(
-                              shape: RoundedRectangleBorder(
+                              shape: const RoundedRectangleBorder(
                                   borderRadius: BorderRadius.only(
                                 topRight: Radius.circular(15.0),
                                 bottomLeft: Radius.circular(15.0),
                               )),
                               child: Container(
-                                padding: EdgeInsets.only(bottom: 10, top: 5, left: 0, right: 0),
-                                decoration: BoxDecoration(
+                                padding: const EdgeInsets.only(
+                                    bottom: 10, top: 5, left: 0, right: 0),
+                                decoration: const BoxDecoration(
                                     gradient: LinearGradient(
                                       colors: [
                                         Color(0xFFfee7e1),
@@ -116,15 +118,20 @@ class ViewConsultations_screenState extends State<ViewConsultations> {
                                 child: Column(
                                   children: [
                                     Row(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Expanded(
                                           child: ListTile(
                                             subtitle: Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
                                               children: [
-                                                Container(
-                                                  width: MediaQuery.of(context).size.width / 2,
+                                                SizedBox(
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width /
+                                                      2,
                                                   child: Column(
                                                     children: [
                                                       Row(
@@ -132,17 +139,31 @@ class ViewConsultations_screenState extends State<ViewConsultations> {
                                                           Expanded(
                                                             flex: 3,
                                                             child: Column(
-                                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .start,
                                                               children: [
                                                                 Padding(
-                                                                  padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                          .fromLTRB(
+                                                                          0,
+                                                                          0,
+                                                                          0,
+                                                                          0),
                                                                   child: Text(
-                                                                    '${branch.branchName}',
-                                                                    style: TextStyle(
-                                                                        color: Color(0xFFF44614),
-                                                                        fontSize: 16,
-                                                                        fontWeight: FontWeight.bold,
-                                                                        fontFamily: 'Calibri'),
+                                                                    branch
+                                                                        .branchName,
+                                                                    style: const TextStyle(
+                                                                        color: Color(
+                                                                            0xFFF44614),
+                                                                        fontSize:
+                                                                            16,
+                                                                        fontWeight:
+                                                                            FontWeight
+                                                                                .bold,
+                                                                        fontFamily:
+                                                                            'Calibri'),
                                                                   ),
                                                                 ),
                                                               ],
@@ -152,20 +173,32 @@ class ViewConsultations_screenState extends State<ViewConsultations> {
                                                       ),
                                                       Row(
                                                         children: [
-                                                          Expanded(
+                                                          const Expanded(
                                                             flex: 7,
                                                             child: Column(
-                                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .start,
                                                               children: [
-                                                                const Padding(
-                                                                  padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                                                Padding(
+                                                                  padding: EdgeInsets
+                                                                      .fromLTRB(
+                                                                          0,
+                                                                          0,
+                                                                          0,
+                                                                          0),
                                                                   child: Text(
                                                                     'Name',
                                                                     style: TextStyle(
-                                                                        color: Color(0xFFF44614),
-                                                                        fontSize: 12,
-                                                                        fontWeight: FontWeight.bold,
-                                                                        fontFamily: 'Calibri'),
+                                                                        color: Color(
+                                                                            0xFFF44614),
+                                                                        fontSize:
+                                                                            12,
+                                                                        fontWeight:
+                                                                            FontWeight
+                                                                                .bold,
+                                                                        fontFamily:
+                                                                            'Calibri'),
                                                                   ),
                                                                   // Icon(
                                                                   //   Icons.lock_clock,
@@ -176,20 +209,32 @@ class ViewConsultations_screenState extends State<ViewConsultations> {
                                                               ],
                                                             ),
                                                           ),
-                                                          Expanded(
+                                                          const Expanded(
                                                             flex: 0,
                                                             child: Column(
-                                                              crossAxisAlignment: CrossAxisAlignment.center,
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .center,
                                                               children: [
                                                                 Padding(
-                                                                  padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                                                  padding: EdgeInsets
+                                                                      .fromLTRB(
+                                                                          0,
+                                                                          0,
+                                                                          0,
+                                                                          0),
                                                                   child: Text(
                                                                     ' : ',
                                                                     style: TextStyle(
-                                                                        color: Color(0xFFF44614),
-                                                                        fontSize: 12,
-                                                                        fontWeight: FontWeight.bold,
-                                                                        fontFamily: 'Calibri'),
+                                                                        color: Color(
+                                                                            0xFFF44614),
+                                                                        fontSize:
+                                                                            12,
+                                                                        fontWeight:
+                                                                            FontWeight
+                                                                                .bold,
+                                                                        fontFamily:
+                                                                            'Calibri'),
                                                                   ),
                                                                 ),
                                                               ],
@@ -198,13 +243,28 @@ class ViewConsultations_screenState extends State<ViewConsultations> {
                                                           Expanded(
                                                             flex: 12,
                                                             child: Column(
-                                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .start,
                                                               children: [
                                                                 Padding(
-                                                                  padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                          .fromLTRB(
+                                                                          0,
+                                                                          0,
+                                                                          0,
+                                                                          0),
                                                                   child: Text(
-                                                                    '${branch.consultationName}',
-                                                                    style: TextStyle(color: Color(0xFF042DE3), fontSize: 12, fontFamily: 'Calibri'),
+                                                                    branch
+                                                                        .consultationName,
+                                                                    style: const TextStyle(
+                                                                        color: Color(
+                                                                            0xFF042DE3),
+                                                                        fontSize:
+                                                                            12,
+                                                                        fontFamily:
+                                                                            'Calibri'),
                                                                   ),
                                                                 ),
                                                               ],
@@ -214,39 +274,63 @@ class ViewConsultations_screenState extends State<ViewConsultations> {
                                                       ),
                                                       Row(
                                                         children: [
-                                                          Expanded(
+                                                          const Expanded(
                                                             flex: 6,
                                                             child: Column(
-                                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .start,
                                                               children: [
-                                                                const Padding(
-                                                                  padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                                                Padding(
+                                                                  padding: EdgeInsets
+                                                                      .fromLTRB(
+                                                                          0,
+                                                                          0,
+                                                                          0,
+                                                                          0),
                                                                   child: Text(
                                                                     'Phone',
                                                                     style: TextStyle(
-                                                                        color: Color(0xFFF44614),
-                                                                        fontSize: 12,
-                                                                        fontWeight: FontWeight.bold,
-                                                                        fontFamily: 'Calibri'),
+                                                                        color: Color(
+                                                                            0xFFF44614),
+                                                                        fontSize:
+                                                                            12,
+                                                                        fontWeight:
+                                                                            FontWeight
+                                                                                .bold,
+                                                                        fontFamily:
+                                                                            'Calibri'),
                                                                   ),
                                                                 ),
                                                               ],
                                                             ),
                                                           ),
-                                                          Expanded(
+                                                          const Expanded(
                                                             flex: 0,
                                                             child: Column(
-                                                              crossAxisAlignment: CrossAxisAlignment.center,
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .center,
                                                               children: [
                                                                 Padding(
-                                                                  padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                                                  padding: EdgeInsets
+                                                                      .fromLTRB(
+                                                                          0,
+                                                                          0,
+                                                                          0,
+                                                                          0),
                                                                   child: Text(
                                                                     ': ',
                                                                     style: TextStyle(
-                                                                        color: Color(0xFFF44614),
-                                                                        fontSize: 12,
-                                                                        fontWeight: FontWeight.bold,
-                                                                        fontFamily: 'Calibri'),
+                                                                        color: Color(
+                                                                            0xFFF44614),
+                                                                        fontSize:
+                                                                            12,
+                                                                        fontWeight:
+                                                                            FontWeight
+                                                                                .bold,
+                                                                        fontFamily:
+                                                                            'Calibri'),
                                                                   ),
                                                                 ),
                                                               ],
@@ -255,13 +339,28 @@ class ViewConsultations_screenState extends State<ViewConsultations> {
                                                           Expanded(
                                                             flex: 10,
                                                             child: Column(
-                                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .start,
                                                               children: [
                                                                 Padding(
-                                                                  padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                          .fromLTRB(
+                                                                          0,
+                                                                          0,
+                                                                          0,
+                                                                          0),
                                                                   child: Text(
-                                                                    '${branch.phoneNumber}',
-                                                                    style: TextStyle(color: Color(0xFF042DE3), fontSize: 12, fontFamily: 'Calibri'),
+                                                                    branch
+                                                                        .phoneNumber,
+                                                                    style: const TextStyle(
+                                                                        color: Color(
+                                                                            0xFF042DE3),
+                                                                        fontSize:
+                                                                            12,
+                                                                        fontFamily:
+                                                                            'Calibri'),
                                                                   ),
                                                                 ),
                                                               ],
@@ -276,49 +375,69 @@ class ViewConsultations_screenState extends State<ViewConsultations> {
                                             ),
                                           ),
                                         ),
-                                        Container(
-                                          width: MediaQuery.of(context).size.width / 2.25,
+                                        SizedBox(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width /
+                                              2.25,
                                           child: Column(
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
                                             children: [
-                                              SizedBox(
+                                              const SizedBox(
                                                 height: 20,
                                               ),
                                               Row(
                                                 children: [
-                                                  Expanded(
+                                                  const Expanded(
                                                     flex: 6,
                                                     child: Column(
-                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
                                                       children: [
-                                                        const Padding(
-                                                          padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                                        Padding(
+                                                          padding: EdgeInsets
+                                                              .fromLTRB(
+                                                                  0, 0, 0, 0),
                                                           child: Text(
                                                             'Gender',
                                                             style: TextStyle(
-                                                                color: Color(0xFFF44614),
+                                                                color: Color(
+                                                                    0xFFF44614),
                                                                 fontSize: 12,
-                                                                fontWeight: FontWeight.bold,
-                                                                fontFamily: 'Calibri'),
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                fontFamily:
+                                                                    'Calibri'),
                                                           ),
                                                         ),
                                                       ],
                                                     ),
                                                   ),
-                                                  Expanded(
+                                                  const Expanded(
                                                     flex: 0,
                                                     child: Column(
-                                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .center,
                                                       children: [
                                                         Padding(
-                                                          padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                                          padding: EdgeInsets
+                                                              .fromLTRB(
+                                                                  0, 0, 0, 0),
                                                           child: Text(
                                                             ': ',
                                                             style: TextStyle(
-                                                                color: Color(0xFFF44614),
+                                                                color: Color(
+                                                                    0xFFF44614),
                                                                 fontSize: 12,
-                                                                fontWeight: FontWeight.bold,
-                                                                fontFamily: 'Calibri'),
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                fontFamily:
+                                                                    'Calibri'),
                                                           ),
                                                         ),
                                                       ],
@@ -327,13 +446,23 @@ class ViewConsultations_screenState extends State<ViewConsultations> {
                                                   Expanded(
                                                     flex: 10,
                                                     child: Column(
-                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
                                                       children: [
                                                         Padding(
-                                                          padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .fromLTRB(
+                                                                  0, 0, 0, 0),
                                                           child: Text(
-                                                            '${branch.gender}',
-                                                            style: TextStyle(color: Color(0xFF042DE3), fontSize: 12, fontFamily: 'Calibri'),
+                                                            branch.gender,
+                                                            style: const TextStyle(
+                                                                color: Color(
+                                                                    0xFF042DE3),
+                                                                fontSize: 12,
+                                                                fontFamily:
+                                                                    'Calibri'),
                                                           ),
                                                         ),
                                                       ],
@@ -343,39 +472,55 @@ class ViewConsultations_screenState extends State<ViewConsultations> {
                                               ),
                                               Row(
                                                 children: [
-                                                  Expanded(
+                                                  const Expanded(
                                                     flex: 6,
                                                     child: Column(
-                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
                                                       children: [
-                                                        const Padding(
-                                                          padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                                        Padding(
+                                                          padding: EdgeInsets
+                                                              .fromLTRB(
+                                                                  0, 0, 0, 0),
                                                           child: Text(
                                                             'Email',
                                                             style: TextStyle(
-                                                                color: Color(0xFFF44614),
+                                                                color: Color(
+                                                                    0xFFF44614),
                                                                 fontSize: 12,
-                                                                fontWeight: FontWeight.bold,
-                                                                fontFamily: 'Calibri'),
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                fontFamily:
+                                                                    'Calibri'),
                                                           ),
                                                         ),
                                                       ],
                                                     ),
                                                   ),
-                                                  Expanded(
+                                                  const Expanded(
                                                     flex: 0,
                                                     child: Column(
-                                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .center,
                                                       children: [
                                                         Padding(
-                                                          padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                                          padding: EdgeInsets
+                                                              .fromLTRB(
+                                                                  0, 0, 0, 0),
                                                           child: Text(
                                                             ': ',
                                                             style: TextStyle(
-                                                                color: Color(0xFFF44614),
+                                                                color: Color(
+                                                                    0xFFF44614),
                                                                 fontSize: 12,
-                                                                fontWeight: FontWeight.bold,
-                                                                fontFamily: 'Calibri'),
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                fontFamily:
+                                                                    'Calibri'),
                                                           ),
                                                         ),
                                                       ],
@@ -384,13 +529,23 @@ class ViewConsultations_screenState extends State<ViewConsultations> {
                                                   Expanded(
                                                     flex: 10,
                                                     child: Column(
-                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
                                                       children: [
                                                         Padding(
-                                                          padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .fromLTRB(
+                                                                  0, 0, 0, 0),
                                                           child: Text(
-                                                            '${branch.email}',
-                                                            style: TextStyle(color: Color(0xFF042DE3), fontSize: 12, fontFamily: 'Calibri'),
+                                                            branch.email,
+                                                            style: const TextStyle(
+                                                                color: Color(
+                                                                    0xFF042DE3),
+                                                                fontSize: 12,
+                                                                fontFamily:
+                                                                    'Calibri'),
                                                           ),
                                                         ),
                                                       ],
@@ -406,14 +561,17 @@ class ViewConsultations_screenState extends State<ViewConsultations> {
 
                                     Row(
                                       children: [
-                                        Expanded(
+                                        const Expanded(
                                           flex: 6,
                                           child: Padding(
-                                            padding: EdgeInsets.only(left: 15.0), // Add left padding to the Feedback text
+                                            padding: EdgeInsets.only(
+                                                left:
+                                                    15.0), // Add left padding to the Feedback text
                                             child: Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
                                               children: [
-                                                const Text(
+                                                Text(
                                                   'Remarks',
                                                   style: TextStyle(
                                                     color: Color(0xFFF44614),
@@ -426,10 +584,11 @@ class ViewConsultations_screenState extends State<ViewConsultations> {
                                             ),
                                           ),
                                         ),
-                                        Expanded(
+                                        const Expanded(
                                           flex: 0,
                                           child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
                                             children: [
                                               Text(
                                                 ': ',
@@ -446,14 +605,18 @@ class ViewConsultations_screenState extends State<ViewConsultations> {
                                         Expanded(
                                           flex: 22,
                                           child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            mainAxisSize: MainAxisSize.min, // Ensure the Column takes minimum vertical space
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            mainAxisSize: MainAxisSize
+                                                .min, // Ensure the Column takes minimum vertical space
                                             children: [
                                               Padding(
-                                                padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                                padding:
+                                                    const EdgeInsets.fromLTRB(
+                                                        0, 0, 0, 0),
                                                 child: Text(
-                                                  '${branch.remarks}',
-                                                  style: TextStyle(
+                                                  branch.remarks,
+                                                  style: const TextStyle(
                                                     color: Color(0xFF042DE3),
                                                     fontSize: 12,
                                                     fontFamily: 'Calibri',
@@ -511,7 +674,7 @@ class ViewConsultations_screenState extends State<ViewConsultations> {
   Future<void> fetchConsultations(int userid) async {
     // final String url =
     //     'http://182.18.157.215/SaloonApp/API/api/Consultation/GetConsultationsByBranchId/$userid';
-    final String url = baseUrl + getconsulationbyranchid + '/$userid';
+    final String url = '$baseUrl$getconsulationbyranchid/$userid';
     print('url: $url');
     try {
       final response = await http.get(Uri.parse(url));
@@ -520,7 +683,9 @@ class ViewConsultations_screenState extends State<ViewConsultations> {
         if (responseData['listResult'] != null) {
           final List<dynamic> appointmentsData = responseData['listResult'];
           setState(() {
-            Consultations_List = appointmentsData.map((appointment) => Consultation.fromJson(appointment)).toList();
+            Consultations_List = appointmentsData
+                .map((appointment) => Consultation.fromJson(appointment))
+                .toList();
             isLoading = false; // Set isLoading to false when data is fetched
           });
         } else {
@@ -532,8 +697,10 @@ class ViewConsultations_screenState extends State<ViewConsultations> {
           // Display 'No data found' in your UI or handle it accordingly
         }
       } else {
-        print('Failed to fetch appointments. Status code: ${response.statusCode}');
-        throw Exception('Failed to fetch appointments. Status code: ${response.statusCode}');
+        print(
+            'Failed to fetch appointments. Status code: ${response.statusCode}');
+        throw Exception(
+            'Failed to fetch appointments. Status code: ${response.statusCode}');
       }
     } catch (error) {
       print('Failed to connect to the API: $error');
