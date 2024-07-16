@@ -792,93 +792,91 @@ class ProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 5,
-      shadowColor: CommonUtils.primaryColor, // Set the shadow color here
-      child: IntrinsicHeight(
-        child: Container(
-          padding: const EdgeInsets.all(10),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(10.0),
-            boxShadow: [
-              BoxShadow(
-                color: const Color(0xFF960efd).withOpacity(0.2), // Shadow color
-                spreadRadius: 2, // Spread radius
-                blurRadius: 4, // Blur radius
-                offset: const Offset(0, 2), // Shadow position
-              ),
-            ],
-          ),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Stack(
-                children: [
-                  Container(
-                    width: MediaQuery.of(context).size.width / 3,
-                    height: MediaQuery.of(context).size.height / 10,
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      color: CommonUtils.primaryColor,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: GestureDetector(
-                      onTap: () =>
-                          showZoomedAttachments(product.imageName, context),
-                      child: Image.network(product.imageName),
-                    ),
+    return IntrinsicHeight(
+      child: Container(
+        padding: const EdgeInsets.all(10),
+        margin: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10.0),
+          boxShadow: [
+            BoxShadow(
+              color: const Color.fromARGB(255, 193, 193, 194)
+                  .withOpacity(0.2), // Shadow color
+              spreadRadius: 2, // Spread radius
+              blurRadius: 4, // Blur radius
+              offset: const Offset(0, 2), // Shadow position
+            ),
+          ],
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Stack(
+              children: [
+                Container(
+                  width: MediaQuery.of(context).size.width / 3,
+                  height: MediaQuery.of(context).size.height / 10,
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: CommonUtils.primaryColor,
+                    borderRadius: BorderRadius.circular(10),
                   ),
-                  if (product.bestseller == true)
-                    Positioned(
-                      top: -8,
-                      left: -10,
-                      child: SvgPicture.asset(
-                        'assets/bs_v2.svg',
-                        width: 80.0,
-                        height: 35.0,
-                      ),
-                    ),
-                ],
-              ),
-              const SizedBox(width: 10),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width / 2,
-                    child: Text(
-                      "${product.name} (${product.code}) ",
-                      style: CommonUtils.txSty_18p_f7,
+                  child: GestureDetector(
+                    onTap: () =>
+                        showZoomedAttachments(product.imageName, context),
+                    child: Image.network(product.imageName),
+                  ),
+                ),
+                if (product.bestseller == true)
+                  Positioned(
+                    top: -8,
+                    left: -10,
+                    child: SvgPicture.asset(
+                      'assets/bs_v2.svg',
+                      width: 80.0,
+                      height: 35.0,
                     ),
                   ),
-                  const SizedBox(height: 8), // Add space here
-                  Text(
-                    product.categoryName,
-                    style: CommonUtils.txSty_12bs_fb,
+              ],
+            ),
+            const SizedBox(width: 10),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                SizedBox(
+                  width: MediaQuery.of(context).size.width / 2,
+                  child: Text(
+                    "${product.name} (${product.code}) ",
+                    style: CommonUtils.txSty_18p_f7,
                   ),
-                  const SizedBox(height: 8), // Add space here
-                  Text(
-                    product.gender ?? ' ',
-                    style: CommonUtils.txSty_12bs_fb,
+                ),
+                const SizedBox(height: 8), // Add space here
+                Text(
+                  product.categoryName,
+                  style: CommonUtils.txSty_12bs_fb,
+                ),
+                const SizedBox(height: 8), // Add space here
+                Text(
+                  product.gender ?? ' ',
+                  style: CommonUtils.txSty_12bs_fb,
+                ),
+                const SizedBox(height: 8), // Add space here
+                Text(
+                  '₹ ${formatNumber(product.maxPrice)}',
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontFamily: "Calibri",
+                    fontWeight: FontWeight.w500,
+                    letterSpacing: 1,
+                    color: Color(0xFF662d91),
                   ),
-                  const SizedBox(height: 8), // Add space here
-                  Text(
-                    '₹ ${formatNumber(product.maxPrice)}',
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontFamily: "Calibri",
-                      fontWeight: FontWeight.w500,
-                      letterSpacing: 1,
-                      color: Color(0xFF662d91),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     );
