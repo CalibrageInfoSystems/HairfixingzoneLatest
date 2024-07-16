@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -337,6 +339,7 @@ class _CustomerDashBoardState extends State<CustomerDashBoard> {
                     ),
                   ],
                 ),
+                SizedBox(height: 10.0,),
                 RichText(
                   text: TextSpan(
                     style: DefaultTextStyle.of(context).style,
@@ -346,7 +349,7 @@ class _CustomerDashBoardState extends State<CustomerDashBoard> {
                         style: TextStyle(
                           fontFamily: 'Calibri',
                           fontSize: 20,
-                          color:  Color(0xFF662e91),
+                          color:  Colors.black,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -355,7 +358,7 @@ class _CustomerDashBoardState extends State<CustomerDashBoard> {
                         style: TextStyle(
                           fontFamily: 'Calibri',
                           fontSize: 20,
-                          color: Color(0xFF0f75bc),
+                          color:Colors.black,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -502,7 +505,7 @@ class _CustomerDashBoardState extends State<CustomerDashBoard> {
                     } else {
                       if (marqueeText != null) {
                         return Container(
-                          height: 60,
+                          height: 40,
                           decoration: const BoxDecoration(
                             image: DecorationImage(
                               fit: BoxFit.cover,
@@ -601,8 +604,8 @@ class _CustomerDashBoardState extends State<CustomerDashBoard> {
                               child: IntrinsicHeight(
                                 child: ClipRRect(
                                   borderRadius: const BorderRadius.only(
-                                    topRight: Radius.circular(42.5),
-                                    bottomLeft: Radius.circular(42.5),
+                                    // topRight: Radius.circular(42.5),
+                                    // bottomLeft: Radius.circular(42.5),
                                   ),
                                   child: GestureDetector(
                                     onTap: () {},
@@ -610,21 +613,38 @@ class _CustomerDashBoardState extends State<CustomerDashBoard> {
                                       shadowColor: Colors.transparent,
                                       surfaceTintColor: Colors.transparent,
                                       child: ClipRRect(
-                                        borderRadius: const BorderRadius.only(
-                                          topRight: Radius.circular(29.0),
-                                          bottomLeft: Radius.circular(29.0),
-                                        ),
+                                        // borderRadius: const BorderRadius.only(
+                                        //   topRight: Radius.circular(29.0),
+                                        //   bottomLeft: Radius.circular(29.0),
+                                        // ),
                                         child: Container(
-                                          decoration: const BoxDecoration(
-                                            gradient: LinearGradient(
-                                              colors: [
-                                                Color(0xFFFEE7E1),
-                                                Color(0xFFD7DEFA),
-                                              ],
-                                              begin: Alignment.centerLeft,
-                                              end: Alignment.centerRight,
-                                            ),
-                                          ),
+                          decoration: BoxDecoration(
+                          gradient: const LinearGradient(
+                          colors: [
+                          Color(0xFFFFFFFF),
+                          Color(0xFFFFFFFF),
+                          ],
+                          begin: Alignment.centerLeft,
+                          end: Alignment.centerRight,
+                          ),
+                          border: Border.all(
+                            color:Colors.grey,
+                        //  color: const Color(0xFF8d97e2), // Add your desired border color here
+                          width: 1.0, // Set the border width
+                          ),
+                          borderRadius: BorderRadius.circular(10.0), // Optional: Add border radius if needed
+                          ),
+                                          //) decoration: const BoxDecoration(
+                                          //   gradient: LinearGradient(
+                                          //     colors: [
+                                          //       Color(0xFFFFFFFF),
+                                          //       Color(0xFFFFFFFF),
+                                          //     ],
+                                          //     begin: Alignment.centerLeft,
+                                          //     end: Alignment.centerRight,
+                                          //   ),
+                                          //
+                                          // ),
                                           child: Row(
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.center,
@@ -691,7 +711,7 @@ class _CustomerDashBoardState extends State<CustomerDashBoard> {
                                                           style:
                                                               const TextStyle(
                                                             fontSize: 18,
-                                                            color:CommonStyles.primaryTextColor,
+                                                            color:Colors.black,
                                                             fontWeight:
                                                                 FontWeight.bold,
                                                             fontFamily:

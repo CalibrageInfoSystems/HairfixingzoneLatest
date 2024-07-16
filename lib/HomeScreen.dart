@@ -188,6 +188,7 @@ class _HomeScreenState extends State<HomeScreen> {
         body: _buildScreens(_currentIndex, context),
         bottomNavigationBar: BottomNavigationBar(
           currentIndex: _currentIndex,
+          backgroundColor: const Color(0xffffffff),
           onTap: (index) => setState(() {
             _currentIndex = index;
           }),

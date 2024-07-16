@@ -38,6 +38,7 @@ class _NewScreenState extends State<NewScreen> {
     return WillPopScope(
       onWillPop: () => onBackPressed(context),
       child: Scaffold(
+        backgroundColor: CommonStyles.whiteColor,
         appBar: AppBar(
           elevation: 0,
           backgroundColor: const Color(0xffffffff),
@@ -52,9 +53,85 @@ class _NewScreenState extends State<NewScreen> {
           ),
         ),
         body: SingleChildScrollView(
+
           child: Column(
             children: [
-              ListTile(
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  const SizedBox(
+                    width: 20,
+                  ),
+                  Text(
+                    'Profile',
+                    style: CommonStyles.txSty_20b_fb.copyWith(fontSize: 24),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20),
+              GestureDetector(
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          EditProfile(createdDate: '$createdDate'),
+                    ),
+                  );
+                },
+                child: Container(
+                  height: 90,
+                  margin: const EdgeInsets.symmetric(horizontal: 20),
+                  padding:
+                  const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                  decoration: BoxDecoration(
+                    // color: Colors.grey,
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(color: Colors.grey),
+                  ),
+                  child: Row(
+                    children: [
+                      CircleAvatar(
+                        backgroundColor: CommonStyles.primaryTextColor,
+                        radius: 25,
+                        child: Text(
+                          widget.userName.isNotEmpty
+                              ? widget.userName[0].toUpperCase()
+                              : 'X',
+                          style: const TextStyle(
+                              fontSize: 22, color: Colors.white),
+                        ),
+                      ),
+                      // Container(
+                      //   width: 40,
+                      //   height: 40,
+                      //   decoration: const BoxDecoration(
+                      //     color: CommonStyles.primaryTextColor,
+                      //     shape: BoxShape.circle,
+                      //   ),
+                      //   child: Center(
+                      //     child: Text(
+                      //       widget.userName[0].toUpperCase(),
+                      //       style: const TextStyle(
+                      //           fontSize: 22, color: Colors.white),
+                      //     ),
+                      //   ),
+                      // ),
+                      const SizedBox(width: 15),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(widget.userName,
+                              style: CommonStyles.txSty_20black_fb),
+                          const Text('Edit profile',
+                              style: CommonStyles.txSty_16black_f5),
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+              ),
+              /*    ListTile(
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
@@ -77,8 +154,8 @@ class _NewScreenState extends State<NewScreen> {
                     Text(widget.userName, style: CommonStyles.txSty_20black_fb),
                 subtitle: const Text('Edit profile',
                     style: CommonStyles.txSty_16black_f5),
-              ),
-              const Divider(),
+              ), */
+              /*  const Divider(),
               ListTile(
                 leading: SvgPicture.asset(
                   'assets/Profile_new.svg',
@@ -93,7 +170,49 @@ class _NewScreenState extends State<NewScreen> {
                 onTap: () {
                   profile(context); // Execute your action here
                 },
-              ),
+              ), */
+              const SizedBox(height: 10),
+              // const Divider(),
+              // ListTile(
+              //   onTap: () {
+              //     Navigator.of(context).push(
+              //       MaterialPageRoute(
+              //         builder: (context) =>
+              //             EditProfile(createdDate: '$createdDate'),
+              //       ),
+              //     );
+              //   },
+              //   leading: CircleAvatar(
+              //     backgroundColor: CommonStyles.primaryTextColor,
+              //     radius: 25,
+              //     child: Text(
+              //       widget.userName.isNotEmpty
+              //           ? widget.userName[0].toUpperCase()
+              //           : "H",
+              //       style: const TextStyle(fontSize: 24, color: Colors.white),
+              //     ),
+              //   ),
+              //   title:
+              //       Text(widget.userName, style: CommonStyles.txSty_20black_fb),
+              //   subtitle: const Text('Edit profile',
+              //       style: CommonStyles.txSty_16black_f5),
+              // ),
+              // const Divider(),
+              // ListTile(
+              //   leading: SvgPicture.asset(
+              //     'assets/Profile_new.svg',
+              //     width: 25,
+              //     height: 25,
+              //     color: const Color(0xFF662e91), // Adjust color as needed
+              //   ),
+              //   title:
+              //       const Text('Profile', style: CommonStyles.txSty_20black_fb),
+              //   trailing: const Icon(Icons.arrow_forward_ios,
+              //       color: Colors.grey, size: 16), // Add trailing icon here
+              //   onTap: () {
+              //     profile(context); // Execute your action here
+              //   },
+              // ),
               const Divider(),
               ListTile(
                 leading: SvgPicture.asset(
