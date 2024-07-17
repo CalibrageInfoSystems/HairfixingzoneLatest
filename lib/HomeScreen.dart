@@ -342,66 +342,72 @@ class _HomeScreenState extends State<HomeScreen> {
                 const SizedBox(
                   height: 15.0,
                 ),
-                const Text(
-                  'Service Rating',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: CommonUtils.primaryTextColor,
-                    fontFamily: 'Calibri',
-                  ),
-                ),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width,
-                  child: RatingBar.builder(
-                    initialRating: 0,
-                    minRating: 0,
-                    direction: Axis.horizontal,
-                    allowHalfRating: true,
-                    itemCount: 5,
-                    itemPadding: const EdgeInsets.symmetric(horizontal: 1.0),
-                    itemBuilder: (context, _) => const Icon(
-                      Icons.star,
-                      color: CommonUtils.primaryTextColor,
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Text(
+                      'Service Rating',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: CommonUtils.primaryTextColor,
+                        fontFamily: 'Calibri',
+                      ),
                     ),
-                    onRatingUpdate: (rating) {
-                      setState(() {
-                        ratingStar = rating;
-                        print('ratingStar $ratingStar');
-                      });
-                    },
-                  ),
+                    const SizedBox(width: 10),
+                    RatingBar.builder(
+                      initialRating: 0,
+                      minRating: 0,
+                      direction: Axis.horizontal,
+                      allowHalfRating: true,
+                      itemCount: 5,
+                      itemPadding: const EdgeInsets.symmetric(horizontal: 1.0),
+                      itemBuilder: (context, _) => const Icon(
+                        Icons.star,
+                        color: CommonUtils.primaryTextColor,
+                      ),
+                      onRatingUpdate: (rating) {
+                        setState(() {
+                          ratingStar = rating;
+                          print('ratingStar $ratingStar');
+                        });
+                      },
+                    ),
+                  ],
                 ),
                 const SizedBox(
                   height: 10,
                 ),
-                const Text(
-                  'Quality Rating',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: CommonUtils.primaryTextColor,
-                    fontFamily: 'Calibri',
-                  ),
-                ),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width,
-                  child: RatingBar.builder(
-                    initialRating: 0,
-                    minRating: 0,
-                    direction: Axis.horizontal,
-                    allowHalfRating: true,
-                    itemCount: 5,
-                    itemPadding: const EdgeInsets.symmetric(horizontal: 1.0),
-                    itemBuilder: (context, _) => const Icon(
-                      Icons.star,
-                      color: CommonUtils.primaryTextColor,
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Text(
+                      'Quality Rating',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: CommonUtils.primaryTextColor,
+                        fontFamily: 'Calibri',
+                      ),
                     ),
-                    onRatingUpdate: (rating) {
-                      setState(() {
-                        qualityRating = rating;
-                        print('Qul_rating_star $qualityRating');
-                      });
-                    },
-                  ),
+                    const SizedBox(width: 10),
+                    RatingBar.builder(
+                      initialRating: 0,
+                      minRating: 0,
+                      direction: Axis.horizontal,
+                      allowHalfRating: true,
+                      itemCount: 5,
+                      itemPadding: const EdgeInsets.symmetric(horizontal: 1.0),
+                      itemBuilder: (context, _) => const Icon(
+                        Icons.star,
+                        color: CommonUtils.primaryTextColor,
+                      ),
+                      onRatingUpdate: (rating) {
+                        setState(() {
+                          qualityRating = rating;
+                          print('Qul_rating_star $qualityRating');
+                        });
+                      },
+                    ),
+                  ],
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 0, top: 10.0, right: 0),
