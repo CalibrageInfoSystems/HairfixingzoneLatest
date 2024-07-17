@@ -1148,6 +1148,7 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
               DateTime testdate = DateTime.now();
               print(' testdate ====1072$testdate');
               // Handle each case separately
+            //  Hey  Sai, It has Been 20 Days Since Your Tape with Glue Service was Done. Please Revisit the service at Hair Fixing Zone at the JNTU Branch
               switch (selectedValue) {
                 case 8:
                   final int notificationId2 = UniqueKey().hashCode;
@@ -1156,7 +1157,7 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
                   await NotificationService().scheduleNotification(
                     title: 'Reminder Notification',
                     body:
-                        'Hey $userFullName, It Has Been 20 Days Since Your  $selectedName Was Done. Please Revisit the Hairfixing Zone at the ${widget.data.branch} Branch',
+                        'Hey $userFullName, It Has Been 20 Days Since Your  $selectedName Was Done. Please Revisit the service at Hairfixing Zone at the ${widget.data.branch} Branch',
                     scheduledNotificationDateTime: newDateTime!,
                     //   scheduledNotificationDateTime: testdate!,
                     id: notificationId2,
@@ -1170,7 +1171,7 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
                   await NotificationService().scheduleNotification(
                     title: 'Reminder Notification',
                     body:
-                        'Hey $userFullName, It Has Been 20 Days Since Your  $selectedName Was Done. Please Revisit the Hairfixing Zone at the ${widget.data.branch} Branch',
+                        'Hey $userFullName, It Has Been 20 Days Since Your  $selectedName Was Done. Please Revisit the service at Hairfixing Zone at the ${widget.data.branch} Branch',
                     scheduledNotificationDateTime: newDateTime!,
                     //  scheduledNotificationDateTime: testdate!,
                     id: notificationId2,
@@ -1185,7 +1186,7 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
                   await NotificationService().scheduleNotification(
                     title: 'Reminder Notification',
                     body:
-                        'Hey $userFullName, It Has Been 20 Days Since Your  $selectedName Was Done. Please Revisit the Hairfixing Zone at the ${widget.data.branch} Branch',
+                        'Hey $userFullName, It Has Been 20 Days Since Your  $selectedName Was Done. Please Revisit the service at Hairfixing Zone at the ${widget.data.branch} Branch',
                     scheduledNotificationDateTime: newDateTime!,
                     //   scheduledNotificationDateTime: testdate!,
                     id: notificationId2,
@@ -1198,7 +1199,7 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
                   await NotificationService().scheduleNotification(
                     title: 'Reminder Notification',
                     body:
-                        'Hey $userFullName, It Has Been 20 Days Since Your  $selectedName Was Done. Please Revisit the Hairfixing Zone at the ${widget.data.branch} Branch',
+                        'Hey $userFullName, It Has Been 20 Days Since Your  $selectedName Was Done. Please Revisit the service at Hairfixing Zone at the ${widget.data.branch} Branch',
                     scheduledNotificationDateTime: newDateTime!,
                     // scheduledNotificationDateTime: testdate!,
                     id: notificationId2,

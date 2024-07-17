@@ -1137,7 +1137,8 @@ class AddConsulationscreen_screenState extends State<AddConsulationscreen> {
                 'Notification Scheduled for $VisitslotDateTime with ID: $notificationId1');
             await NotificationService().scheduleNotification(
               title: 'Reminder Notification',
-              body: 'Add consultation=====',
+              //An Consulatation has been booked by Manohar at 17th july 10.30 AM Marathahalli Branch. Please check with him once -- Consultation Reminder Notification
+              body: 'An Consulatation has been booked by  Manohar at 17th july 10.30 AM Marathahalli Branch. Please check with him once ',
               //  body: 'Hey $userFullName, Today Your Appointment is Scheduled for  $_selectedTimeSlot at the ${widget.branchname} Branch, Located at ${widget.branchaddress}.',
               //  scheduledNotificationDateTime: testdate!,
               scheduledNotificationDateTime: VisitslotDateTime!,

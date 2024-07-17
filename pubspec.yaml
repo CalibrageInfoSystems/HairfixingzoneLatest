@@ -217,7 +217,6 @@ flutter:
       fonts:
         - asset: fonts/NunitoBold.ttf
         - asset: fonts/NunitoMedium.ttf
-        - asset: fonts/ReguNunitolar.ttf
         - asset: fonts/NunitoSemiBold.ttf
     - family: Muli
       fonts:

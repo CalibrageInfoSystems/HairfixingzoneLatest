@@ -1178,14 +1178,15 @@ class _BookingScreenState extends State<Bookingscreen> {
             // debugPrint('Notification Scheduled for $testdate with ID: $notificationId1');
             debugPrint(
                 'Notification Scheduled for $slotSelectedDateTime with ID: $notificationId1');
+            // Hey Sai, Today your Appointment is Scheduled for 10.45 AM at the JNTU Branch, Located at Jntu Stop.
             await NotificationService().scheduleNotification(
               title: 'Reminder Notification',
-              body:
-                  'Hey $userFullName, Today Your Appointment is Scheduled for  $_selectedTimeSlot at the ${widget.branchname} Branch, Located at ${widget.branchaddress}.',
+              body: 'Hey $userFullName, Today Your Appointment is Scheduled for  $_selectedTimeSlot at the ${widget.branchname} Branch, Located at ${widget.branchaddress}.',
               //   scheduledNotificationDateTime: testdate!,
               scheduledNotificationDateTime: slotSelectedDateTime!,
               id: notificationId1,
             );
+          //  Hey  Sai, It has Been 20 Days Since Your Tape with Glue Service was Done. Please Revisit the service at Hair Fixing Zone at the JNTU Branch
             if (selectedValue == 8 ||
                 selectedValue == 9 ||
                 selectedValue == 10 ||
@@ -1201,7 +1202,7 @@ class _BookingScreenState extends State<Bookingscreen> {
                   await NotificationService().scheduleNotification(
                     title: 'Reminder Notification',
                     body:
-                        'Hey $userFullName, It Has Been 20 Days Since Your  ${selectedName!} Was Done. Please Revisit the Hairfixing Zone at the ${widget.branchname} Branch',
+                        'Hey $userFullName, It Has Been 20 Days Since Your  ${selectedName!} Was Done. Please Revisit the service at Hairfixing Zone at the ${widget.branchname} Branch',
                     scheduledNotificationDateTime: newDateTime!,
                     //   scheduledNotificationDateTime: testdate!,
                     id: notificationId2,
@@ -1215,7 +1216,7 @@ class _BookingScreenState extends State<Bookingscreen> {
                   await NotificationService().scheduleNotification(
                     title: 'Reminder Notification',
                     body:
-                        'Hey $userFullName, It Has Been 20 Days Since Your  ${selectedName!} Was Done. Please Revisit the Hairfixing Zone at the ${widget.branchname} Branch',
+                        'Hey $userFullName, It Has Been 20 Days Since Your  ${selectedName!} Was Done. Please Revisit the service at Hairfixing Zone at the ${widget.branchname} Branch',
                     scheduledNotificationDateTime: newDateTime!,
                     //  scheduledNotificationDateTime: testdate!,
                     id: notificationId2,
@@ -1230,7 +1231,7 @@ class _BookingScreenState extends State<Bookingscreen> {
                   await NotificationService().scheduleNotification(
                     title: 'Reminder Notification',
                     body:
-                        'Hey $userFullName, It Has Been 20 Days Since Your  ${selectedName!} Was Done. Please Revisit the Hairfixing Zone at the ${widget.branchname} Branch',
+                        'Hey $userFullName, It Has Been 20 Days Since Your  ${selectedName!} Was Done. Please Revisit the service at Hairfixing Zone at the ${widget.branchname} Branch',
                     scheduledNotificationDateTime: newDateTime!,
                     //   scheduledNotificationDateTime: testdate!,
                     id: notificationId2,
@@ -1243,7 +1244,7 @@ class _BookingScreenState extends State<Bookingscreen> {
                   await NotificationService().scheduleNotification(
                     title: 'Reminder Notification',
                     body:
-                        'Hey $userFullName, It Has Been 20 Days Since Your  ${selectedName!} Was Done. Please Revisit the Hairfixing Zone at the ${widget.branchname} Branch',
+                        'Hey $userFullName, It Has Been 20 Days Since Your  ${selectedName!} Was Done. Please Revisit the service at Hairfixing Zone at the ${widget.branchname} Branch',
                     scheduledNotificationDateTime: newDateTime!,
                     // scheduledNotificationDateTime: testdate!,
                     id: notificationId2,
