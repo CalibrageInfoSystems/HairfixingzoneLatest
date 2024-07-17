@@ -1172,7 +1172,9 @@ class AddConsulationscreen_screenState extends State<Add_Consulation_screen> {
             await NotificationService().scheduleNotification(
               title: 'Reminder Notification',
              // body: 'Add consultation=====',
-              body: 'An Consulatation has been booked by ${apiUsrname} at $formattedDateapi 10.30 AM ${branchName} Branch. Please check with him once ',
+              body: 'An Consulatation has been booked by ${apiUsrname} at $formattedDateapi $slot_time ${branchName} Branch. Please check with him once ',
+
+              // body: 'An Consulatation has been booked by ${apiUsrname} at $formattedDateapi 10.30 AM ${branchName} Branch. Please check with him once ',
               //  body: 'Hey $userFullName, Today Your Appointment is Scheduled for  $_selectedTimeSlot at the ${widget.branchname} Branch, Located at ${widget.branchaddress}.',
             //  scheduledNotificationDateTime: testdate!,
             scheduledNotificationDateTime: VisitslotDateTime!,
@@ -1239,7 +1241,20 @@ class AddConsulationscreen_screenState extends State<Add_Consulation_screen> {
     final format = DateFormat.Hm(); // 24-hour format
     return format.format(dt);
   }
-
+  String getDayOfMonthSuffix(int day) {
+    if (day >= 11 && day <= 13) {
+      return 'th';
+    }
+    switch (day % 10) {
+      case 1:
+        return 'st';
+      case 2:
+        return 'nd';
+      case 3:
+        return 'rd';
+      default:
+        return 'th';
+    }}
   void _printVisitingDateTime() {
     print('selectedDate $selectedDate');
 
@@ -1257,6 +1272,7 @@ class AddConsulationscreen_screenState extends State<Add_Consulation_screen> {
       print('Visiting Date: $visitingDateTime');
       print('Visitslot DateTime:1230 $Visitslot_DateTime');
 
+      formattedDateapi = DateFormat('d').format(selectedDate!) + getDayOfMonthSuffix(selectedDate!.day) + ' ' + DateFormat('MMMM').format(selectedDate!);
       VisitslotDateTime = Visitslot_DateTime!.subtract(const Duration(hours: 2));
 
       print('Visiting Date:1234 $VisitslotDateTime');
