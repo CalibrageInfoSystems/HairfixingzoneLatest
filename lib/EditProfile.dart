@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/widgets.dart';
+import 'package:hairfixingzone/NewScreen.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -199,6 +200,9 @@ class EditProfile_screenState extends State<EditProfile> {
         loginUserPassword = customerData['password'] ?? '';
         loginUserDob = customerData['dateofbirth'] ?? '';
         gendertypeid = customerData['genderId'] ?? 0;
+       // createdByUserId = prefs.getInt('profilecreatedId');
+        createdByUserId =customerData['createdByUserId'];
+        print('createdByUserId ${createdByUserId}');
         //  formattedDate = DateFormat('dd-MM-yyyy').format(DateTime.parse(dob));
 
         fullNameController.text = "$loginUserFullName";
@@ -481,7 +485,7 @@ class EditProfile_screenState extends State<EditProfile> {
                                     (item) =>
                                         item['desc'] ==
                                         selectedGender)['typeCdId'];
-
+                                print("gendertypeid:$gendertypeid");
                                 // if (selectedTypeCdId != -1) {
                                 //   selectedValue = dropdownItems[selectedTypeCdId]['typeCdId'];
                                 //   selectedName = dropdownItems[selectedTypeCdId]['desc'];
@@ -1066,9 +1070,9 @@ class EditProfile_screenState extends State<EditProfile> {
         "confirmPassword": "$loginUserPassword",
         "email": emailController.text,
         "isActive": true,
-        "createdByUserId": createdByUserId,
-        "createdDate": null,
-        "updatedByUserId": null,
+        "createdByUserId": loginUserId,
+        "createdDate": "$now",
+        "updatedByUserId": loginUserId,
         "updatedDate": "$now",
         "roleId": loginUserRoleID,
         "gender": gendertypeid,
@@ -1097,7 +1101,7 @@ class EditProfile_screenState extends State<EditProfile> {
             // showCustomToastMessageLong('Slot booked successfully', context, 0, 2);
             Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (context) => const HomeScreen(),
+                builder: (context) =>  NewScreen(userName: loginUserFullName!, email: loginUserEmail!),
               ),
             );
             print('statusmesssage:${data['statusMessage']}');

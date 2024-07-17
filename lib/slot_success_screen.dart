@@ -422,8 +422,25 @@ class _SlotSuccessScreenState extends State<SlotSuccessScreen> with TickerProvid
   }
 
   Future<void> openMap() async {
+    // if (widget.latitude != null && widget.longitude != null) {
+    //   final String url = 'https://www.google.com/maps?q=${widget.latitude},${widget.longitude}';
+    //   print('getbrancheslist: $url');
+    //   try {
+    //     await launchUrl(Uri.parse(url));
+    //   } catch (e) {
+    //     print(e);
+    //   }
+    // } else {
+    //   CommonUtils.showCustomToastMessageLong('Location not found', context, 1, 3);
+    // }
+    // final String url =
+    //     'https://www.google.com/maps?q=$label@${widget.latitude},${widget.longitude}';
     if (widget.latitude != null && widget.longitude != null) {
-      final String url = 'https://www.google.com/maps?q=${widget.latitude},${widget.longitude}';
+      final String label = 'Hair Fixing Zone - ${widget.slotbranchname}';
+      final String url = 'geo:${widget.latitude},${widget.longitude}?q=${Uri.encodeComponent(label)}';
+
+      // final String url =
+      //     'https://maps.app.goo.gl/wp5rYLH6Z7sxnFDB6';
       print('getbrancheslist: $url');
       try {
         await launchUrl(Uri.parse(url));
@@ -431,7 +448,8 @@ class _SlotSuccessScreenState extends State<SlotSuccessScreen> with TickerProvid
         print(e);
       }
     } else {
-      CommonUtils.showCustomToastMessageLong('Location not found', context, 1, 3);
+      CommonUtils.showCustomToastMessageLong(
+          'Location not found', context, 1, 3);
     }
   }
 
