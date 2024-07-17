@@ -49,6 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final TextEditingController _commentstexteditcontroller =
       TextEditingController();
   double ratingStar = 0.0;
+  double qualityRating = 0.0;
 
   @override
   void initState() {
@@ -341,20 +342,19 @@ class _HomeScreenState extends State<HomeScreen> {
                 const SizedBox(
                   height: 15.0,
                 ),
-                const Text(
-                  'Rating',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: CommonUtils.primaryTextColor,
-                    fontFamily: 'Calibri',
-                  ),
-                ),
-                const SizedBox(
-                  height: 15.0,
-                ),
-                SizedBox(
-                    width: MediaQuery.of(context).size.width,
-                    child: RatingBar.builder(
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Text(
+                      'Service Rating',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: CommonUtils.primaryTextColor,
+                        fontFamily: 'Calibri',
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    RatingBar.builder(
                       initialRating: 0,
                       minRating: 0,
                       direction: Axis.horizontal,
@@ -371,7 +371,44 @@ class _HomeScreenState extends State<HomeScreen> {
                           print('ratingStar $ratingStar');
                         });
                       },
-                    )),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Text(
+                      'Quality Rating',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: CommonUtils.primaryTextColor,
+                        fontFamily: 'Calibri',
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    RatingBar.builder(
+                      initialRating: 0,
+                      minRating: 0,
+                      direction: Axis.horizontal,
+                      allowHalfRating: true,
+                      itemCount: 5,
+                      itemPadding: const EdgeInsets.symmetric(horizontal: 1.0),
+                      itemBuilder: (context, _) => const Icon(
+                        Icons.star,
+                        color: CommonUtils.primaryTextColor,
+                      ),
+                      onRatingUpdate: (rating) {
+                        setState(() {
+                          qualityRating = rating;
+                          print('Qul_rating_star $qualityRating');
+                        });
+                      },
+                    ),
+                  ],
+                ),
                 Padding(
                   padding: const EdgeInsets.only(left: 0, top: 10.0, right: 0),
                   child: GestureDetector(
@@ -412,6 +449,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                   ),
+                ),
+                const SizedBox(
+                  height: 10,
                 ),
                 Row(
                   children: [
@@ -497,6 +537,14 @@ class _HomeScreenState extends State<HomeScreen> {
       FocusScope.of(context).unfocus();
     }
 
+    if (isValid && qualityRating <= 0.0) {
+      FocusScope.of(context).unfocus();
+      CommonUtils.showCustomToastMessageLong(
+          'Please Rate Your Experience with Quality', context, 1, 4);
+      isValid = false;
+      hasValidationFailed = true;
+    }
+
     // if (isValid && _commentstexteditcontroller.text.trim().isEmpty) {
     //   CommonUtils.showCustomToastMessageLong('Please Enter Comment', context, 1, 4);
     //   isValid = false;
@@ -546,7 +594,8 @@ class _HomeScreenState extends State<HomeScreen> {
         "reviewSubmittedDate": dateTimeString,
         "timeofslot": null,
         "customerId": userId,
-        "paymentTypeId": null
+        "paymentTypeId": null,
+        "qualityRating": qualityRating,
       };
       print('AddUpdatefeedback object: : ${json.encode(request)}');
 
