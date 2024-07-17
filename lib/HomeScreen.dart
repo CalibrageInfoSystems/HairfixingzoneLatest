@@ -177,11 +177,11 @@ class _HomeScreenState extends State<HomeScreen> {
             selectedItemColor: Colors.black,
             items: <BottomNavigationBarItem>[
               BottomNavigationBarItem(
-                icon: SvgPicture.asset('assets/objects-column.svg',
+                icon: SvgPicture.asset('assets/home.svg',
                     width: 24,
                     height: 24,
                     color: Colors.black.withOpacity(0.6)),
-                activeIcon: SvgPicture.asset('assets/objects-column.svg',
+                activeIcon: SvgPicture.asset('assets/gift-box-svgrepo-com.svg',
                     width: 24, height: 24, color: CommonUtils.primaryTextColor),
                 label: 'Home',
               ),
@@ -195,11 +195,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 label: 'Bookings',
               ),
               BottomNavigationBarItem(
-                icon: SvgPicture.asset('assets/bin-bottles.svg',
+                icon: SvgPicture.asset('assets/apps.svg',
                     width: 24,
                     height: 24,
                     color: Colors.black.withOpacity(0.6)),
-                activeIcon: SvgPicture.asset('assets/bin-bottles.svg',
+                activeIcon: SvgPicture.asset('assets/apps.svg',
                     width: 24, height: 24, color: CommonUtils.primaryTextColor),
                 label: 'Products',
               ),

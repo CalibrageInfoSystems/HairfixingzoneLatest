@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:hairfixingzone/Common/common_styles.dart';
 
 import 'CommonUtils.dart';
@@ -40,7 +41,12 @@ class FavouritesScreen extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const Icon(Icons.favorite),
+        SvgPicture.asset(
+          'assets/filter.svg',
+          width: 24,
+          height: 24,
+        ),
+
         const SizedBox(height: 10),
         const Text('No favourites', style: CommonStyles.txSty_20black_fb),
         const SizedBox(height: 5),

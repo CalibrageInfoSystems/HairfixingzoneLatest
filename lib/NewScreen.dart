@@ -335,11 +335,16 @@ class _NewScreenState extends State<NewScreen> {
           Expanded(
             flex: 1,
             child: Container(
-              child: const Center(
-                child: Icon(Icons.home),
+              child: Center(
+                child: SvgPicture.asset(
+                  'assets/filter.svg',
+                  width: 24,
+                  height: 24,
+                ),
               ),
             ),
           ),
+
         ],
       ),
     );

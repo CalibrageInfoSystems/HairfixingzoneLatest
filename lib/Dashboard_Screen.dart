@@ -190,7 +190,7 @@ class _CustomerDashBoardState extends State<CustomerDashBoard> {
 
   @override
   void dispose() {
-    //   _timer.cancel();
+ //   _timer.cancel();
     super.dispose();
   }
 
@@ -344,30 +344,18 @@ class _CustomerDashBoardState extends State<CustomerDashBoard> {
                     ),
                   ],
                 ),
-                const SizedBox(
-                  height: 10.0,
-                ),
+                SizedBox(height: 10.0,),
                 RichText(
                   text: TextSpan(
                     style: DefaultTextStyle.of(context).style,
                     children: const [
                       TextSpan(
                         text: 'Welcome to ',
-                        style: TextStyle(
-                          fontFamily: 'Calibri',
-                          fontSize: 20,
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                        ),
+                        style: CommonStyles.txSty_20b_fb
                       ),
                       TextSpan(
                         text: 'Hair Fixing Zone',
-                        style: TextStyle(
-                          fontFamily: 'Calibri',
-                          fontSize: 20,
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                        ),
+                        style: CommonStyles.txSty_20b_fb
                       ),
                     ],
                   ),
@@ -396,8 +384,7 @@ class _CustomerDashBoardState extends State<CustomerDashBoard> {
                       slideIndicator: const CircularSlideIndicator(
                         indicatorBorderColor: CommonStyles.blackColor,
                         currentIndicatorColor: CommonStyles.primaryTextColor,
-                        indicatorRadius:
-                            2, // Decrease the size of the indicator
+                        indicatorRadius: 2, // Decrease the size of the indicator
                       ),
                       autoPlayAnimationDuration:
                           const Duration(milliseconds: 800),
@@ -524,12 +511,7 @@ class _CustomerDashBoardState extends State<CustomerDashBoard> {
                           ),
                           child: Marquee(
                             text: marqueeText!,
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontFamily: "Calibri",
-                              fontWeight: FontWeight.w600,
-                              color: CommonStyles.whiteColor,
-                            ),
+                            style: CommonStyles.text16white,
                             velocity: _shouldStartMarquee ? 30 : 0,
                           ),
                         );
@@ -548,12 +530,7 @@ class _CustomerDashBoardState extends State<CustomerDashBoard> {
                     child: Text(
                       'Branches',
                       textAlign: TextAlign.left,
-                      style: TextStyle(
-                        fontFamily: 'Calibri',
-                        fontSize: 20,
-                        color: Color(0xFF163CF1),
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style: CommonStyles.txSty_20b_fb,
                     ),
                   ),
                 ),
@@ -612,9 +589,9 @@ class _CustomerDashBoardState extends State<CustomerDashBoard> {
                               child: IntrinsicHeight(
                                 child: ClipRRect(
                                   borderRadius: const BorderRadius.only(
-                                      // topRight: Radius.circular(42.5),
-                                      // bottomLeft: Radius.circular(42.5),
-                                      ),
+                                    // topRight: Radius.circular(42.5),
+                                    // bottomLeft: Radius.circular(42.5),
+                                  ),
                                   child: GestureDetector(
                                     onTap: () {},
                                     child: Card(
@@ -626,24 +603,22 @@ class _CustomerDashBoardState extends State<CustomerDashBoard> {
                                         //   bottomLeft: Radius.circular(29.0),
                                         // ),
                                         child: Container(
-                                          decoration: BoxDecoration(
-                                            gradient: const LinearGradient(
-                                              colors: [
-                                                Color(0xFFFFFFFF),
-                                                Color(0xFFFFFFFF),
-                                              ],
-                                              begin: Alignment.centerLeft,
-                                              end: Alignment.centerRight,
-                                            ),
-                                            border: Border.all(
-                                              color: Colors.grey,
-                                              //  color: const Color(0xFF8d97e2), // Add your desired border color here
-                                              width:
-                                                  1.0, // Set the border width
-                                            ),
-                                            borderRadius: BorderRadius.circular(
-                                                10.0), // Optional: Add border radius if needed
-                                          ),
+                          decoration: BoxDecoration(
+                          gradient: const LinearGradient(
+                          colors: [
+                          Color(0xFFFFFFFF),
+                          Color(0xFFFFFFFF),
+                          ],
+                          begin: Alignment.centerLeft,
+                          end: Alignment.centerRight,
+                          ),
+                          border: Border.all(
+                            color:Colors.grey,
+                        //  color: const Color(0xFF8d97e2), // Add your desired border color here
+                          width: 1.0, // Set the border width
+                          ),
+                          borderRadius: BorderRadius.circular(10.0), // Optional: Add border radius if needed
+                          ),
                                           //) decoration: const BoxDecoration(
                                           //   gradient: LinearGradient(
                                           //     colors: [
@@ -718,15 +693,8 @@ class _CustomerDashBoardState extends State<CustomerDashBoard> {
                                                                 top: 15.0),
                                                         child: Text(
                                                           branch.name,
-                                                          style:
-                                                              const TextStyle(
-                                                            fontSize: 18,
-                                                            color: Colors.black,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            fontFamily:
-                                                                'Calibri',
-                                                          ),
+                                                          style:CommonStyles.txSty_18b_fb
+
                                                         ),
                                                       ),
                                                       const SizedBox(
@@ -747,27 +715,20 @@ class _CustomerDashBoardState extends State<CustomerDashBoard> {
                                                                     MainAxisAlignment
                                                                         .spaceEvenly,
                                                                 children: [
-                                                                  // Image.asset(
-                                                                  //   'assets/location_icon.png',
-                                                                  //   width: 20,
-                                                                  //   height: 18,
-                                                                  // ),
-                                                                  // const SizedBox(
-                                                                  //     width:
-                                                                  //         10.0),
+                                                                  Image.asset(
+                                                                    'assets/location_icon.png',
+                                                                    width: 20,
+                                                                    height: 18,
+                                                                  ),
+                                                                  const SizedBox(
+                                                                      width:
+                                                                          4.0),
                                                                   Expanded(
                                                                     child: Text(
                                                                       branch
                                                                           .address,
-                                                                      style:
-                                                                          const TextStyle(
-                                                                        fontFamily:
-                                                                            'Calibri',
-                                                                        fontSize:
-                                                                            12,
-                                                                        color: Color(
-                                                                            0xFF000000),
-                                                                      ),
+                                                                      style:CommonStyles.txSty_12b_fb
+
                                                                     ),
                                                                   ),
                                                                 ],

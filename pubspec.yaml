@@ -186,6 +186,10 @@ flutter:
     - assets/about_us.svg
     - assets/f_us3.png
     - assets/wave_background.png
+    - assets/home.svg
+    - assets/apps.svg
+    - assets/favoritesvgrepo.svg
+    - assets/giftbox.svg
 
 
 
@@ -209,6 +213,18 @@ flutter:
     - family: Calibri
       fonts:
         - asset: fonts/Calibri.ttf
+    - family: Nunito
+      fonts:
+        - asset: fonts/NunitoBold.ttf
+        - asset: fonts/NunitoMedium.ttf
+        - asset: fonts/ReguNunitolar.ttf
+        - asset: fonts/NunitoSemiBold.ttf
+    - family: Muli
+      fonts:
+        - asset: fonts/Muli.ttf
+
+
+
 
   # fonts:
   #   - family: Schyler
