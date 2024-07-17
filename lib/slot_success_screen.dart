@@ -120,7 +120,7 @@ class _SlotSuccessScreenState extends State<SlotSuccessScreen> with TickerProvid
                                     borderType: BorderType.Circle,
                                     strokeWidth: 3,
                                     dashPattern: const <double>[9, 5],
-                                    padding: const EdgeInsets.all(30),
+                                    padding: const EdgeInsets.all(25),
                                     color: primaryGreen,
                                     child: Container(
                                       width: 80,
@@ -136,8 +136,8 @@ class _SlotSuccessScreenState extends State<SlotSuccessScreen> with TickerProvid
                                 turns: Tween(begin: 0.0, end: 1.0).animate(_controller2),
                                 child: SvgPicture.asset(
                                   'assets/check.svg',
-                                  width: 70,
-                                  height: 70,
+                                  width: 60,
+                                  height: 60,
                                   color: primaryGreen,
                                 ),
                               )
@@ -146,7 +146,7 @@ class _SlotSuccessScreenState extends State<SlotSuccessScreen> with TickerProvid
                         ],
                       ),
                       const SizedBox(
-                        height: 20,
+                        height: 10,
                       ),
                       const Column(
                         children: [
@@ -161,7 +161,7 @@ class _SlotSuccessScreenState extends State<SlotSuccessScreen> with TickerProvid
                         ],
                       ),
                       const SizedBox(
-                        height: 20,
+                        height: 10,
                       ),
                       Container(
                           width: MediaQuery.of(context).size.width,
