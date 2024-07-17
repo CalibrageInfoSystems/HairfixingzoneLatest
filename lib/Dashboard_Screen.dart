@@ -190,7 +190,7 @@ class _CustomerDashBoardState extends State<CustomerDashBoard> {
 
   @override
   void dispose() {
- //   _timer.cancel();
+    //   _timer.cancel();
     super.dispose();
   }
 
@@ -344,7 +344,9 @@ class _CustomerDashBoardState extends State<CustomerDashBoard> {
                     ),
                   ],
                 ),
-                SizedBox(height: 10.0,),
+                const SizedBox(
+                  height: 10.0,
+                ),
                 RichText(
                   text: TextSpan(
                     style: DefaultTextStyle.of(context).style,
@@ -354,7 +356,7 @@ class _CustomerDashBoardState extends State<CustomerDashBoard> {
                         style: TextStyle(
                           fontFamily: 'Calibri',
                           fontSize: 20,
-                          color:  Colors.black,
+                          color: Colors.black,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -363,7 +365,7 @@ class _CustomerDashBoardState extends State<CustomerDashBoard> {
                         style: TextStyle(
                           fontFamily: 'Calibri',
                           fontSize: 20,
-                          color:Colors.black,
+                          color: Colors.black,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -394,7 +396,8 @@ class _CustomerDashBoardState extends State<CustomerDashBoard> {
                       slideIndicator: const CircularSlideIndicator(
                         indicatorBorderColor: CommonStyles.blackColor,
                         currentIndicatorColor: CommonStyles.primaryTextColor,
-                        indicatorRadius: 2, // Decrease the size of the indicator
+                        indicatorRadius:
+                            2, // Decrease the size of the indicator
                       ),
                       autoPlayAnimationDuration:
                           const Duration(milliseconds: 800),
@@ -609,9 +612,9 @@ class _CustomerDashBoardState extends State<CustomerDashBoard> {
                               child: IntrinsicHeight(
                                 child: ClipRRect(
                                   borderRadius: const BorderRadius.only(
-                                    // topRight: Radius.circular(42.5),
-                                    // bottomLeft: Radius.circular(42.5),
-                                  ),
+                                      // topRight: Radius.circular(42.5),
+                                      // bottomLeft: Radius.circular(42.5),
+                                      ),
                                   child: GestureDetector(
                                     onTap: () {},
                                     child: Card(
@@ -623,22 +626,24 @@ class _CustomerDashBoardState extends State<CustomerDashBoard> {
                                         //   bottomLeft: Radius.circular(29.0),
                                         // ),
                                         child: Container(
-                          decoration: BoxDecoration(
-                          gradient: const LinearGradient(
-                          colors: [
-                          Color(0xFFFFFFFF),
-                          Color(0xFFFFFFFF),
-                          ],
-                          begin: Alignment.centerLeft,
-                          end: Alignment.centerRight,
-                          ),
-                          border: Border.all(
-                            color:Colors.grey,
-                        //  color: const Color(0xFF8d97e2), // Add your desired border color here
-                          width: 1.0, // Set the border width
-                          ),
-                          borderRadius: BorderRadius.circular(10.0), // Optional: Add border radius if needed
-                          ),
+                                          decoration: BoxDecoration(
+                                            gradient: const LinearGradient(
+                                              colors: [
+                                                Color(0xFFFFFFFF),
+                                                Color(0xFFFFFFFF),
+                                              ],
+                                              begin: Alignment.centerLeft,
+                                              end: Alignment.centerRight,
+                                            ),
+                                            border: Border.all(
+                                              color: Colors.grey,
+                                              //  color: const Color(0xFF8d97e2), // Add your desired border color here
+                                              width:
+                                                  1.0, // Set the border width
+                                            ),
+                                            borderRadius: BorderRadius.circular(
+                                                10.0), // Optional: Add border radius if needed
+                                          ),
                                           //) decoration: const BoxDecoration(
                                           //   gradient: LinearGradient(
                                           //     colors: [
@@ -716,7 +721,7 @@ class _CustomerDashBoardState extends State<CustomerDashBoard> {
                                                           style:
                                                               const TextStyle(
                                                             fontSize: 18,
-                                                            color:Colors.black,
+                                                            color: Colors.black,
                                                             fontWeight:
                                                                 FontWeight.bold,
                                                             fontFamily:
@@ -742,14 +747,14 @@ class _CustomerDashBoardState extends State<CustomerDashBoard> {
                                                                     MainAxisAlignment
                                                                         .spaceEvenly,
                                                                 children: [
-                                                                  Image.asset(
-                                                                    'assets/location_icon.png',
-                                                                    width: 20,
-                                                                    height: 18,
-                                                                  ),
-                                                                  const SizedBox(
-                                                                      width:
-                                                                          4.0),
+                                                                  // Image.asset(
+                                                                  //   'assets/location_icon.png',
+                                                                  //   width: 20,
+                                                                  //   height: 18,
+                                                                  // ),
+                                                                  // const SizedBox(
+                                                                  //     width:
+                                                                  //         10.0),
                                                                   Expanded(
                                                                     child: Text(
                                                                       branch
