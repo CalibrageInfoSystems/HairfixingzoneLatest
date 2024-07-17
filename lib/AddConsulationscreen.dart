@@ -38,7 +38,7 @@ class AddConsulationscreen_screenState extends State<AddConsulationscreen> {
   int? branchValue;
   int selectedTypeCdId = -1;
   int branchselectedTypeCdId = -1;
-
+  String formattedDate ='';
   String? cityName;
   int? cityValue;
   int citySelectedTypeCdId = -1;
@@ -88,7 +88,7 @@ class AddConsulationscreen_screenState extends State<AddConsulationscreen> {
   String? contactNumber;
   String? gender;
   String? dob;
-  String? formattedDate;
+  String? formattedDateapi;
   int? roleId;
   String? password;
   String? fullname;
@@ -1138,7 +1138,7 @@ class AddConsulationscreen_screenState extends State<AddConsulationscreen> {
             await NotificationService().scheduleNotification(
               title: 'Reminder Notification',
               //An Consulatation has been booked by Manohar at 17th july 10.30 AM Marathahalli Branch. Please check with him once -- Consultation Reminder Notification
-              body: 'An Consulatation has been booked by  Manohar at 17th july 10.30 AM Marathahalli Branch. Please check with him once ',
+              body: 'An Consulatation has been booked by ${apiUsrname} at $formattedDateapi 10.30 AM ${branchName} Branch. Please check with him once ',
               //  body: 'Hey $userFullName, Today Your Appointment is Scheduled for  $_selectedTimeSlot at the ${widget.branchname} Branch, Located at ${widget.branchaddress}.',
               //  scheduledNotificationDateTime: testdate!,
               scheduledNotificationDateTime: VisitslotDateTime!,
@@ -1219,15 +1219,29 @@ class AddConsulationscreen_screenState extends State<AddConsulationscreen> {
     final format = DateFormat.Hm(); // 24-hour format
     return format.format(dt);
   }
-
+  String getDayOfMonthSuffix(int day) {
+    if (day >= 11 && day <= 13) {
+      return 'th';
+    }
+    switch (day % 10) {
+      case 1:
+        return 'st';
+      case 2:
+        return 'nd';
+      case 3:
+        return 'rd';
+      default:
+        return 'th';
+    }}
   void _printVisitingDateTime() {
     print('selectedDate $selectedDate');
     if (selectedDate != null && _selectedTime != null) {
 
    //   final formattedDate = DateFormat('yyyy-MM-dd').format(_selectedDate!);
-      final formattedTime = _formatTimeOfDay(_selectedTime!);
+      final formattedTime =   _formatTimeOfDay(_selectedTime!);
       visitingDateTime = '$visiteddate $formattedTime';
       print('SlotselectedDateTime: $visitingDateTime');
+      print('formattedTime: $formattedTime');
 
       DateTime Visitslot_DateTime = DateFormat('yyyy-MM-dd HH:mm').parse(visitingDateTime!);
     //  DateTime VisitslotDateTime = VisitslotDateTime.subtract(const Duration(hours: 1));
@@ -1235,9 +1249,17 @@ class AddConsulationscreen_screenState extends State<AddConsulationscreen> {
       print('Visiting Date: $visitingDateTime');
       print('Visitslot DateTime:1230 $Visitslot_DateTime');
 
-      VisitslotDateTime = Visitslot_DateTime!.subtract(const Duration(hours: 2));
+      VisitslotDateTime = Visitslot_DateTime.subtract(const Duration(hours: 2));
 
       print('Visiting Date:1234 $VisitslotDateTime');
+
+
+      formattedDateapi = DateFormat('d').format(selectedDate!) + getDayOfMonthSuffix(selectedDate!.day) + ' ' + DateFormat('MMMM').format(selectedDate!);
+    //  String formattedTime_ = DateFormat('h:mm a').format(selectedDate!);
+
+      print('Date: $formattedDateapi');
+  //    print('Time: $formattedTime_');
+
     } else {
       print('Please select both date and time.');
     }
