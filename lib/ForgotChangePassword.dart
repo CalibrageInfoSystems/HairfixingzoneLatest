@@ -70,7 +70,7 @@ class _ForgotChangePasswordState extends State<ForgotChangePassword> {
                     const Text('Forgot Password',
                         style: TextStyle(
                           fontSize: 24,
-                          fontFamily: "Calibri",
+                          fontFamily: "Muli",
                           fontWeight: FontWeight.w700,
                           letterSpacing: 2,
                           color: Color(0xFF662d91),
@@ -342,7 +342,7 @@ class _ForgotChangePasswordState extends State<ForgotChangePassword> {
                                   child: const Text(' Click Here!',
                                       style: TextStyle(
                                         fontSize: 20,
-                                        fontFamily: "Calibri",
+                                        fontFamily: "Muli",
                                         fontWeight: FontWeight.w700,
                                         color: Color(0xFF0f75bc),
                                       )),

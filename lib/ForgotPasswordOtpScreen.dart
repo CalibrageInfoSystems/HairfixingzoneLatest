@@ -111,7 +111,7 @@ class _ForgotPasswordOtpScreenState extends State<ForgotPasswordOtpScreen> {
                       const Text('Forgot Password',
                           style: TextStyle(
                             fontSize: 24,
-                            fontFamily: "Calibri",
+                            fontFamily: "Muli",
                             fontWeight: FontWeight.w700,
                             letterSpacing: 2,
                             color: Color(0xFF662d91),
@@ -226,7 +226,7 @@ class _ForgotPasswordOtpScreenState extends State<ForgotPasswordOtpScreen> {
                                     'OTP Validate For ${(_secondsRemaining ~/ 60).toString().padLeft(2, '0')}:${(_secondsRemaining % 60).toString().padLeft(2, '0')} Minutes',
                                     style: const TextStyle(
                                       fontSize: 20,
-                                      fontFamily: "Calibri",
+                                      fontFamily: "Muli",
                                       fontWeight: FontWeight.w700,
                                       color: Colors.black,
                                     ),
@@ -240,7 +240,7 @@ class _ForgotPasswordOtpScreenState extends State<ForgotPasswordOtpScreen> {
                                       const Text('Didn\'t receive OTP? ',
                                           style: TextStyle(
                                             fontSize: 20,
-                                            fontFamily: "Calibri",
+                                            fontFamily: "Muli",
                                             fontWeight: FontWeight.w500,
                                             color: Colors.black,
                                           )),
@@ -255,7 +255,7 @@ class _ForgotPasswordOtpScreenState extends State<ForgotPasswordOtpScreen> {
                                         child: const Text('Resend OTP',
                                             style: TextStyle(
                                                 fontSize: 20,
-                                                fontFamily: "Calibri",
+                                                fontFamily: "Muli",
                                                 fontWeight: FontWeight.w700,
                                                 color: Color(0xFF662e91))),
                                       )
@@ -263,7 +263,7 @@ class _ForgotPasswordOtpScreenState extends State<ForgotPasswordOtpScreen> {
                                       //   ' Resend code',
                                       //   style: TextStyle(
                                       //     fontSize: 14,
-                                      //     fontFamily: "Calibri",
+                                      //     fontFamily: "Muli",
                                       //     fontWeight: FontWeight.w700,
                                       //     color:CommonUtils.primaryTextColor,
                                       //   )
@@ -305,7 +305,7 @@ class _ForgotPasswordOtpScreenState extends State<ForgotPasswordOtpScreen> {
                                         child: const Text(' Click Here!',
                                             style: TextStyle(
                                               fontSize: 20,
-                                              fontFamily: "Calibri",
+                                              fontFamily: "Muli",
                                               fontWeight: FontWeight.w700,
                                               color: Color(0xFF0f75bc),
                                             )),

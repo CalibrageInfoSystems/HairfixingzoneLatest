@@ -62,7 +62,7 @@ class CommonUtils{
                         Expanded(
                           child: Text(
                             message,
-                            style: TextStyle(fontSize: 16.0, color: Colors.black, fontFamily: 'Calibri'),
+                            style: TextStyle(fontSize: 16.0, color: Colors.black, fontFamily: 'Muli'),
                             textAlign: TextAlign.center,
                           ),
                         ),
@@ -91,44 +91,44 @@ class CommonUtils{
   static const blueColor = Color(0xFF0f75bc);
   static const TextStyle header_Styles = TextStyle(
     fontSize: 24,
-    fontFamily: "Calibri",
+    fontFamily: "Muli",
     fontWeight: FontWeight.w700,
     color: Color(0xFF662d91),
   );
   static const TextStyle Sub_header_Styles = TextStyle(
     fontSize: 24,
-    fontFamily: "Calibri",
+    fontFamily: "Muli",
     fontWeight: FontWeight.w500,
     color: Color(0xFF5f5f5f)
   );
   static const TextStyle Mediumtext_o_14 = TextStyle(
     fontSize: 20,
-    fontFamily: "Calibri",
+    fontFamily: "Muli",
     fontWeight: FontWeight.w500,
     color: Color(0xFF0f75bc),
   );
 
   static const TextStyle Mediumtext14 = TextStyle(
     fontSize: 14,
-    fontFamily: "Calibri",
+    fontFamily: "Muli",
     fontWeight: FontWeight.w500,
     color: Color(0xFF0f75bc),
   );
   static const TextStyle Mediumtext_14 = TextStyle(
     fontSize: 20,
-    fontFamily: "Calibri",
+    fontFamily: "Muli",
     fontWeight: FontWeight.w500,
     color: Color(0xFF5f5f5f),
   );
   static  TextStyle Mediumtext16 = TextStyle(
     fontSize: 16,
-    fontFamily: "Calibri",
+    fontFamily: "Muli",
     fontWeight: FontWeight.w500,
     color: Color(0xFF5f5f5f),
   );
   static const txSty_14w_fb = TextStyle(
     fontSize: 14,
-    fontFamily: 'Calibri',
+    fontFamily: 'Muli',
     fontWeight: FontWeight.bold,
     color: Color(0xFFFFFFFF),
   );
@@ -136,30 +136,30 @@ class CommonUtils{
     fontSize: 12.0,
     color: blackColor,
     fontWeight: FontWeight.bold,
-    fontFamily: "Calibri",
+    fontFamily: "Muli",
   );
   static const txSty_12bs_fb = TextStyle(
     fontSize: 12.0,
     letterSpacing: 1,
     fontWeight: FontWeight.bold,
-    fontFamily: "Calibri",
+    fontFamily: "Muli",
   );
   static const txSty_12p_fb = TextStyle(
     fontSize: 12.0,
     color: primaryTextColor,
     fontWeight: FontWeight.w500,
     letterSpacing: 1,
-    fontFamily: "Calibri",
+    fontFamily: "Muli",
   );
   static const txSty_18b_fb = TextStyle(
     fontSize: 18,
-    fontFamily: 'Calibri',
+    fontFamily: 'Muli',
     fontWeight: FontWeight.bold,
     color: Color(0xFF662d91),
   );
   static const txSty_18p_f7 = TextStyle(
     fontSize: 18,
-    fontFamily: 'Calibri',
+    fontFamily: 'Muli',
     fontWeight: FontWeight.w700,
     letterSpacing: 1,
     color:Color(0xFF0f75bc),

@@ -106,7 +106,7 @@
 //                   style: TextStyle(
 //                     color: Color(0xFF0f75bc),
 //                     fontSize: 16.0,
-//                     fontFamily: "Calibri",
+//                     fontFamily: "Muli",
 //                     fontWeight: FontWeight.w600,
 //                   ),
 //                   textAlign: TextAlign.start,
@@ -888,7 +888,7 @@
 //                             child: const Text(
 //                               'Close',
 //                               style: TextStyle(
-//                                 fontFamily: 'Calibri',
+//                                 fontFamily: 'Muli',
 //                                 fontSize: 14,
 //                                 color: CommonUtils.primaryTextColor,
 //                                 fontWeight: FontWeight.bold,
@@ -929,7 +929,7 @@
 //                                     child: Text(
 //                                       'Apply',
 //                                       style: TextStyle(
-//                                         fontFamily: 'Calibri',
+//                                         fontFamily: 'Muli',
 //                                         fontSize: 14,
 //                                         color: Colors.white,
 //                                         fontWeight: FontWeight.bold,
@@ -1139,7 +1139,7 @@
 //                         '${dateValues[0]}',
 //                         style: const TextStyle(
 //                           fontSize: 22,
-//                           fontFamily: "Calibri",
+//                           fontFamily: "Muli",
 //                           // letterSpacing: 1.5,
 //                           fontWeight: FontWeight.w700,
 //                           color: Color(0xFF0f75bc),
@@ -1149,7 +1149,7 @@
 //                         '${dateValues[2]}',
 //                         style: const TextStyle(
 //                           fontSize: 14,
-//                           fontFamily: "Calibri",
+//                           fontFamily: "Muli",
 //                           fontWeight: FontWeight.w700,
 //                           color: Color(0xFF0f75bc),
 //                         ),
@@ -1178,7 +1178,7 @@
 //                                       widget.data.slotDuration,
 //                                       style: const TextStyle(
 //                                         fontSize: 16,
-//                                         fontFamily: "Calibri",
+//                                         fontFamily: "Muli",
 //                                         fontWeight: FontWeight.w700,
 //                                         color: Color(0xFF0f75bc),
 //                                       ),
@@ -1316,7 +1316,7 @@
 //             status,
 //             style: TextStyle(
 //               fontSize: 16,
-//               fontFamily: "Calibri",
+//               fontFamily: "Muli",
 //               fontWeight: FontWeight.w500,
 //               color: statusColor,
 //             ),
@@ -1421,7 +1421,7 @@
 //                         '  Cancel',
 //                         style: TextStyle(
 //                           fontSize: 16,
-//                           fontFamily: "Calibri",
+//                           fontFamily: "Muli",
 //                           fontWeight: FontWeight.w500,
 //                           color: isPastDate(data.date, data.slotDuration)
 //                               ? Colors.grey
@@ -1469,7 +1469,7 @@
 //                         '  Close',
 //                         style: TextStyle(
 //                           fontSize: 16,
-//                           fontFamily: "Calibri",
+//                           fontFamily: "Muli",
 //                           fontWeight: FontWeight.w500,
 //                           color: isPastDate(data.date, data.slotDuration)
 //                               ? Colors.grey
@@ -1510,7 +1510,7 @@
 //                     text: '${data.review} ' ?? '',
 //                     style: const TextStyle(
 //                       fontWeight: FontWeight.w500,
-//                       fontFamily: "Calibri",
+//                       fontFamily: "Muli",
 //                       color: Color(0xFF5f5f5f),
 //                     ),
 //                   ),
@@ -1600,7 +1600,7 @@
 //           //   style: TextStyle(
 //           //     fontSize: 16,
 //           //     color: CommonUtils.blueColor,
-//           //     fontFamily: 'Calibri',
+//           //     fontFamily: 'Muli',
 //           //   ),
 //           // ),
 //           content: Column(
@@ -1630,7 +1630,7 @@
 //               //   style: const TextStyle(
 //               //     fontSize: 16,
 //               //     color: CommonUtils.primaryTextColor,
-//               //     fontFamily: 'Calibri',
+//               //     fontFamily: 'Muli',
 //               //   ),
 //               // ),
 //             ],
@@ -1660,7 +1660,7 @@
 //                   style: TextStyle(
 //                     fontSize: 16,
 //                     color: CommonUtils.primaryTextColor,
-//                     fontFamily: 'Calibri',
+//                     fontFamily: 'Muli',
 //                   ),
 //                 ),
 //               ),
@@ -1691,7 +1691,7 @@
 //                   style: TextStyle(
 //                     fontSize: 16,
 //                     color: Colors.white,
-//                     fontFamily: 'Calibri',
+//                     fontFamily: 'Muli',
 //                   ),
 //                 ),
 //               ),
@@ -1707,7 +1707,7 @@
 //           //       style: TextStyle(
 //           //         fontSize: 16,
 //           //         color: CommonUtils.blueColor,
-//           //         fontFamily: 'Calibri',
+//           //         fontFamily: 'Muli',
 //           //       ),
 //           //     ),
 //           //   ),
@@ -1721,7 +1721,7 @@
 //           //       style: TextStyle(
 //           //         fontSize: 16,
 //           //         color: CommonUtils.blueColor,
-//           //         fontFamily: 'Calibri',
+//           //         fontFamily: 'Muli',
 //           //       ),
 //           //     ),
 //           //   ),
@@ -1741,7 +1741,7 @@
 //   //           style: TextStyle(
 //   //             fontSize: 16,
 //   //             color: CommonUtils.blueColor,
-//   //             fontFamily: 'Calibri',
+//   //             fontFamily: 'Muli',
 //   //           ),
 //   //         ),
 //   //          SizedBox(
@@ -1767,7 +1767,7 @@
 //   //           style: const TextStyle(
 //   //             fontSize: 16,
 //   //             color: CommonUtils.primaryTextColor,
-//   //             fontFamily: 'Calibri',
+//   //             fontFamily: 'Muli',
 //   //           ),
 //   //         ),
 //   //         actions: [
@@ -1780,7 +1780,7 @@
 //   //               style: TextStyle(
 //   //                 fontSize: 16,
 //   //                 color: CommonUtils.blueColor,
-//   //                 fontFamily: 'Calibri',
+//   //                 fontFamily: 'Muli',
 //   //               ),
 //   //             ),
 //   //           ),
@@ -1794,7 +1794,7 @@
 //   //               style: TextStyle(
 //   //                 fontSize: 16,
 //   //                 color: CommonUtils.blueColor,
-//   //                 fontFamily: 'Calibri',
+//   //                 fontFamily: 'Muli',
 //   //               ),
 //   //             ),
 //   //           ),
@@ -2554,7 +2554,7 @@ class MyAppointments_screenState extends State<Agentappointmentlist> {
               style: TextStyle(
                 color: Color(0xFF0f75bc),
                 fontSize: 16.0,
-                fontFamily: "Calibri",
+                fontFamily: "Muli",
                 fontWeight: FontWeight.w600,
               ),
               textAlign: TextAlign.start,
@@ -3142,7 +3142,7 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                             child: const Text(
                               'Close',
                               style: TextStyle(
-                                fontFamily: 'Calibri',
+                                fontFamily: 'Muli',
                                 fontSize: 14,
                                 color: CommonUtils.primaryTextColor,
                                 fontWeight: FontWeight.bold,
@@ -3184,7 +3184,7 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                                     child: Text(
                                       'Apply',
                                       style: TextStyle(
-                                        fontFamily: 'Calibri',
+                                        fontFamily: 'Muli',
                                         fontSize: 14,
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold,
@@ -3412,7 +3412,7 @@ class _OpCardState extends State<OpCard> {
                         '${dateValues[0]}',
                         style: const TextStyle(
                           fontSize: 22,
-                          fontFamily: "Calibri",
+                          fontFamily: "Muli",
                           // letterSpacing: 1.5,
                           fontWeight: FontWeight.w700,
                           color: Color(0xFF0f75bc),
@@ -3422,7 +3422,7 @@ class _OpCardState extends State<OpCard> {
                         '${dateValues[2]}',
                         style: const TextStyle(
                           fontSize: 14,
-                          fontFamily: "Calibri",
+                          fontFamily: "Muli",
                           fontWeight: FontWeight.w700,
                           color: Color(0xFF0f75bc),
                         ),
@@ -3451,7 +3451,7 @@ class _OpCardState extends State<OpCard> {
                                       widget.data.slotDuration,
                                       style: const TextStyle(
                                         fontSize: 16,
-                                        fontFamily: "Calibri",
+                                        fontFamily: "Muli",
                                         fontWeight: FontWeight.w700,
                                         color: Color(0xFF0f75bc),
                                       ),
@@ -3723,7 +3723,7 @@ class _OpCardState extends State<OpCard> {
             status,
             style: TextStyle(
               fontSize: 16,
-              fontFamily: "Calibri",
+              fontFamily: "Muli",
               fontWeight: FontWeight.w500,
               color: statusColor,
             ),
@@ -3820,7 +3820,7 @@ class _OpCardState extends State<OpCard> {
                         '  Cancel',
                         style: TextStyle(
                           fontSize: 16,
-                          fontFamily: "Calibri",
+                          fontFamily: "Muli",
                           fontWeight: FontWeight.w500,
                           color: isPastDate(data.date, data.slotDuration)
                               ? Colors.grey
@@ -3862,7 +3862,7 @@ class _OpCardState extends State<OpCard> {
                       '  Close',
                       style: TextStyle(
                         fontSize: 16,
-                        fontFamily: "Calibri",
+                        fontFamily: "Muli",
                         fontWeight: FontWeight.w500,
                         color: CommonStyles.statusRedText,
                       ),
@@ -3904,7 +3904,7 @@ class _OpCardState extends State<OpCard> {
                     text: '${data.review} ' ?? '',
                     style: const TextStyle(
                       fontWeight: FontWeight.w500,
-                      fontFamily: "Calibri",
+                      fontFamily: "Muli",
                       color: Color(0xFF5f5f5f),
                     ),
                   ),
@@ -4016,7 +4016,7 @@ class _OpCardState extends State<OpCard> {
                   style: TextStyle(
                     fontSize: 16,
                     color: CommonUtils.primaryTextColor,
-                    fontFamily: 'Calibri',
+                    fontFamily: 'Muli',
                   ),
                 ),
               ),
@@ -4047,7 +4047,7 @@ class _OpCardState extends State<OpCard> {
                   style: TextStyle(
                     fontSize: 16,
                     color: Colors.white,
-                    fontFamily: 'Calibri',
+                    fontFamily: 'Muli',
                   ),
                 ),
               ),
@@ -4260,7 +4260,7 @@ class _OpCardState extends State<OpCard> {
                               style: TextStyle(
                                 color: CommonStyles.primaryTextColor,
                                 fontSize: 14,
-                                fontFamily: "Calibri",
+                                fontFamily: "Muli",
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
@@ -4310,7 +4310,7 @@ class _OpCardState extends State<OpCard> {
                                           style: TextStyle(
                                             color: Colors.black,
                                             fontSize: 14,
-                                            fontFamily: "Calibri",
+                                            fontFamily: "Muli",
                                             fontWeight: FontWeight.w500,
                                           ),
                                         ),
@@ -4327,7 +4327,7 @@ class _OpCardState extends State<OpCard> {
                                                 color: CommonStyles
                                                     .primaryTextColor,
                                                 fontSize: 14,
-                                                fontFamily: "Calibri",
+                                                fontFamily: "Muli",
                                                 fontWeight: FontWeight.w500,
                                               ),
                                             ),
@@ -4346,7 +4346,7 @@ class _OpCardState extends State<OpCard> {
                                           style: TextStyle(
                                             color: Colors.black,
                                             fontSize: 14,
-                                            fontFamily: "Calibri",
+                                            fontFamily: "Muli",
                                             fontWeight: FontWeight.w500,
                                           ),
                                         ),
@@ -4363,7 +4363,7 @@ class _OpCardState extends State<OpCard> {
                                                 color: CommonStyles
                                                     .primaryTextColor,
                                                 fontSize: 14,
-                                                fontFamily: "Calibri",
+                                                fontFamily: "Muli",
                                                 fontWeight: FontWeight.w500,
                                               ),
                                             ),
@@ -4382,7 +4382,7 @@ class _OpCardState extends State<OpCard> {
                                           style: TextStyle(
                                             color: Colors.black,
                                             fontSize: 14,
-                                            fontFamily: "Calibri",
+                                            fontFamily: "Muli",
                                             fontWeight: FontWeight.w500,
                                           ),
                                         ),
@@ -4399,7 +4399,7 @@ class _OpCardState extends State<OpCard> {
                                                 color: CommonStyles
                                                     .primaryTextColor,
                                                 fontSize: 14,
-                                                fontFamily: "Calibri",
+                                                fontFamily: "Muli",
                                                 fontWeight: FontWeight.w500,
                                               ),
                                             ),

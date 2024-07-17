@@ -56,7 +56,7 @@ class AddConsulationscreen_screenState extends State<Add_Consulation_screen> {
   String? _dobErrorMsg;
   bool _emailError = false;
   String? _emailErrorMsg;
-
+  late String slot_time;
   bool _remarksError = false;
   String? _remarksErrorMsg;
 
@@ -93,6 +93,7 @@ class AddConsulationscreen_screenState extends State<Add_Consulation_screen> {
 
   TimeOfDay? _selectedTime;
   String?  visitingDateTime;
+  String? formattedDateapi;
   DateTime? VisitslotDateTime;
   @override
   void initState() {
@@ -1170,7 +1171,8 @@ class AddConsulationscreen_screenState extends State<Add_Consulation_screen> {
                 'Notification Scheduled for $VisitslotDateTime with ID: $notificationId1');
             await NotificationService().scheduleNotification(
               title: 'Reminder Notification',
-              body: 'Add consultation=====',
+             // body: 'Add consultation=====',
+              body: 'An Consulatation has been booked by ${apiUsrname} at $formattedDateapi 10.30 AM ${branchName} Branch. Please check with him once ',
               //  body: 'Hey $userFullName, Today Your Appointment is Scheduled for  $_selectedTimeSlot at the ${widget.branchname} Branch, Located at ${widget.branchaddress}.',
             //  scheduledNotificationDateTime: testdate!,
             scheduledNotificationDateTime: VisitslotDateTime!,
@@ -1222,6 +1224,10 @@ class AddConsulationscreen_screenState extends State<Add_Consulation_screen> {
     if (pickedTime != null) {
       setState(() {
         _selectedTime = pickedTime;
+        print('_selectedTime $_selectedTime');
+        print('selected Time ${pickedTime.format(context)}');
+         slot_time = pickedTime.format(context);
+        print('selected Time $slot_time');
         _timeController.text = pickedTime.format(context);
       });
     }
@@ -1236,6 +1242,8 @@ class AddConsulationscreen_screenState extends State<Add_Consulation_screen> {
 
   void _printVisitingDateTime() {
     print('selectedDate $selectedDate');
+
+    print('selected Time 1245========$slot_time');
     if (selectedDate != null && _selectedTime != null) {
 
       //   final formattedDate = DateFormat('yyyy-MM-dd').format(_selectedDate!);

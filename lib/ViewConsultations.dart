@@ -163,7 +163,7 @@ class ViewConsultations_screenState extends State<ViewConsultations> {
                                                                             FontWeight
                                                                                 .bold,
                                                                         fontFamily:
-                                                                            'Calibri'),
+                                                                            'Muli'),
                                                                   ),
                                                                 ),
                                                               ],
@@ -198,7 +198,7 @@ class ViewConsultations_screenState extends State<ViewConsultations> {
                                                                             FontWeight
                                                                                 .bold,
                                                                         fontFamily:
-                                                                            'Calibri'),
+                                                                            'Muli'),
                                                                   ),
                                                                   // Icon(
                                                                   //   Icons.lock_clock,
@@ -234,7 +234,7 @@ class ViewConsultations_screenState extends State<ViewConsultations> {
                                                                             FontWeight
                                                                                 .bold,
                                                                         fontFamily:
-                                                                            'Calibri'),
+                                                                            'Muli'),
                                                                   ),
                                                                 ),
                                                               ],
@@ -264,7 +264,7 @@ class ViewConsultations_screenState extends State<ViewConsultations> {
                                                                         fontSize:
                                                                             12,
                                                                         fontFamily:
-                                                                            'Calibri'),
+                                                                            'Muli'),
                                                                   ),
                                                                 ),
                                                               ],
@@ -299,7 +299,7 @@ class ViewConsultations_screenState extends State<ViewConsultations> {
                                                                             FontWeight
                                                                                 .bold,
                                                                         fontFamily:
-                                                                            'Calibri'),
+                                                                            'Muli'),
                                                                   ),
                                                                 ),
                                                               ],
@@ -330,7 +330,7 @@ class ViewConsultations_screenState extends State<ViewConsultations> {
                                                                             FontWeight
                                                                                 .bold,
                                                                         fontFamily:
-                                                                            'Calibri'),
+                                                                            'Muli'),
                                                                   ),
                                                                 ),
                                                               ],
@@ -360,7 +360,7 @@ class ViewConsultations_screenState extends State<ViewConsultations> {
                                                                         fontSize:
                                                                             12,
                                                                         fontFamily:
-                                                                            'Calibri'),
+                                                                            'Muli'),
                                                                   ),
                                                                 ),
                                                               ],
@@ -410,7 +410,7 @@ class ViewConsultations_screenState extends State<ViewConsultations> {
                                                                     FontWeight
                                                                         .bold,
                                                                 fontFamily:
-                                                                    'Calibri'),
+                                                                    'Muli'),
                                                           ),
                                                         ),
                                                       ],
@@ -437,7 +437,7 @@ class ViewConsultations_screenState extends State<ViewConsultations> {
                                                                     FontWeight
                                                                         .bold,
                                                                 fontFamily:
-                                                                    'Calibri'),
+                                                                    'Muli'),
                                                           ),
                                                         ),
                                                       ],
@@ -462,7 +462,7 @@ class ViewConsultations_screenState extends State<ViewConsultations> {
                                                                     0xFF042DE3),
                                                                 fontSize: 12,
                                                                 fontFamily:
-                                                                    'Calibri'),
+                                                                    'Muli'),
                                                           ),
                                                         ),
                                                       ],
@@ -493,7 +493,7 @@ class ViewConsultations_screenState extends State<ViewConsultations> {
                                                                     FontWeight
                                                                         .bold,
                                                                 fontFamily:
-                                                                    'Calibri'),
+                                                                    'Muli'),
                                                           ),
                                                         ),
                                                       ],
@@ -520,7 +520,7 @@ class ViewConsultations_screenState extends State<ViewConsultations> {
                                                                     FontWeight
                                                                         .bold,
                                                                 fontFamily:
-                                                                    'Calibri'),
+                                                                    'Muli'),
                                                           ),
                                                         ),
                                                       ],
@@ -545,7 +545,7 @@ class ViewConsultations_screenState extends State<ViewConsultations> {
                                                                     0xFF042DE3),
                                                                 fontSize: 12,
                                                                 fontFamily:
-                                                                    'Calibri'),
+                                                                    'Muli'),
                                                           ),
                                                         ),
                                                       ],
@@ -577,7 +577,7 @@ class ViewConsultations_screenState extends State<ViewConsultations> {
                                                     color: Color(0xFFF44614),
                                                     fontSize: 12,
                                                     fontWeight: FontWeight.bold,
-                                                    fontFamily: 'Calibri',
+                                                    fontFamily: 'Muli',
                                                   ),
                                                 ),
                                               ],
@@ -596,7 +596,7 @@ class ViewConsultations_screenState extends State<ViewConsultations> {
                                                   color: Color(0xFFF44614),
                                                   fontSize: 12,
                                                   fontWeight: FontWeight.bold,
-                                                  fontFamily: 'Calibri',
+                                                  fontFamily: 'Muli',
                                                 ),
                                               ),
                                             ],
@@ -619,7 +619,7 @@ class ViewConsultations_screenState extends State<ViewConsultations> {
                                                   style: const TextStyle(
                                                     color: Color(0xFF042DE3),
                                                     fontSize: 12,
-                                                    fontFamily: 'Calibri',
+                                                    fontFamily: 'Muli',
                                                   ),
                                                 ),
                                               ),

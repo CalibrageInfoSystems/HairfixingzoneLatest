@@ -152,7 +152,7 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
                           text: marqueeText!,
                           style: const TextStyle(
                               fontSize: 16,
-                              fontFamily: "Calibri",
+                              fontFamily: "Muli",
                               fontWeight: FontWeight.w600,
                               color: Color(0xFFff0176)),
                           velocity: _shouldStartMarquee
@@ -398,7 +398,7 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
                   text: marqueeText!,
                   style: const TextStyle(
                       fontSize: 16,
-                      fontFamily: "Calibri",
+                      fontFamily: "Muli",
                       fontWeight: FontWeight.w600,
                       color: Color(0xFFff0176)),
                 ),

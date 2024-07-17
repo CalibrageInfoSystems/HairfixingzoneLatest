@@ -42,7 +42,7 @@ class FavouritesScreen extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         SvgPicture.asset(
-          'assets/filter.svg',
+          'assets/favoritesvgrepo.svg',
           width: 24,
           height: 24,
         ),

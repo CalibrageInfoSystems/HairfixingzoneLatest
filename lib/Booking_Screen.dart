@@ -542,7 +542,7 @@ class _BookingScreenState extends State<Bookingscreen> {
                             'Date ',
                             style: TextStyle(
                               fontSize: 14,
-                              fontFamily: "Calibri",
+                              fontFamily: "Muli",
                               fontWeight: FontWeight.w500,
                               color: Color(0xFF662e91),
                             ),
@@ -746,7 +746,7 @@ class _BookingScreenState extends State<Bookingscreen> {
                                                   : (slot.availableSlots <= 0
                                                       ? Colors.white
                                                       : Colors.black),
-                                              fontFamily: 'Calibri',
+                                              fontFamily: 'Muli',
                                               fontSize: 12,
                                             ),
                                           ),
@@ -763,7 +763,7 @@ class _BookingScreenState extends State<Bookingscreen> {
                                             Text(
                                               'Today is a Holiday',
                                               style: TextStyle(
-                                                fontFamily: 'Calibri',
+                                                fontFamily: 'Muli',
                                                 fontSize: 12,
                                                 fontWeight: FontWeight.bold,
                                               ),
@@ -781,7 +781,7 @@ class _BookingScreenState extends State<Bookingscreen> {
                                             Text(
                                               'No Slots Are Available Today',
                                               style: TextStyle(
-                                                fontFamily: 'Calibri',
+                                                fontFamily: 'Muli',
                                                 fontSize: 12,
                                                 fontWeight: FontWeight.bold,
                                               ),
@@ -799,7 +799,7 @@ class _BookingScreenState extends State<Bookingscreen> {
                             'Purpose of Visit ',
                             style: TextStyle(
                               fontSize: 14,
-                              fontFamily: "Calibri",
+                              fontFamily: "Muli",
                               fontWeight: FontWeight.w500,
                               color: Color(0xFF662e91),
                             ),
@@ -924,7 +924,7 @@ class _BookingScreenState extends State<Bookingscreen> {
                             'Technician',
                             style: TextStyle(
                               fontSize: 14,
-                              fontFamily: "Calibri",
+                              fontFamily: "Muli",
                               fontWeight: FontWeight.w500,
                               color: Color(0xFF662e91),
                             ),

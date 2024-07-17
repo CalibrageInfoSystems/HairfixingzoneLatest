@@ -113,7 +113,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           style: TextStyle(
                             fontSize: 16,
                             color: CommonUtils.primaryTextColor,
-                            fontFamily: 'Calibri',
+                            fontFamily: 'Muli',
                           ),
                         ),
                       ),
@@ -141,7 +141,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           style: TextStyle(
                             fontSize: 16,
                             color: Colors.white,
-                            fontFamily: 'Calibri',
+                            fontFamily: 'Muli',
                           ),
                         ),
                       ),
@@ -336,7 +336,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   style: TextStyle(
                     fontSize: 24,
                     color: CommonUtils.primaryTextColor,
-                    fontFamily: 'Calibri',
+                    fontFamily: 'Muli',
                   ),
                 ),
                 const SizedBox(
@@ -350,7 +350,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       style: TextStyle(
                         fontSize: 16,
                         color: CommonUtils.primaryTextColor,
-                        fontFamily: 'Calibri',
+                        fontFamily: 'Muli',
                       ),
                     ),
                     const SizedBox(width: 10),
@@ -385,7 +385,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       style: TextStyle(
                         fontSize: 16,
                         color: CommonUtils.primaryTextColor,
-                        fontFamily: 'Calibri',
+                        fontFamily: 'Muli',
                       ),
                     ),
                     const SizedBox(width: 10),
@@ -425,7 +425,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: TextFormField(
                         controller: _commentstexteditcontroller,
                         style: const TextStyle(
-                          fontFamily: 'Calibri',
+                          fontFamily: 'Muli',
                           fontSize: 14,
                           fontWeight: FontWeight.w300,
                         ),
@@ -438,7 +438,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             color: Colors.black54,
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
-                            fontFamily: 'Calibri',
+                            fontFamily: 'Muli',
                           ),
                           contentPadding: EdgeInsets.symmetric(
                             horizontal: 16.0,
@@ -477,7 +477,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: const Text(
                           'Close',
                           style: TextStyle(
-                            fontFamily: 'Calibri',
+                            fontFamily: 'Muli',
                             fontSize: 14,
                             color: CommonUtils.primaryTextColor,
                             fontWeight: FontWeight.bold,
@@ -504,7 +504,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 child: Text(
                                   'Submit',
                                   style: TextStyle(
-                                    fontFamily: 'Calibri',
+                                    fontFamily: 'Muli',
                                     fontSize: 14,
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold,
@@ -836,7 +836,7 @@ class _HomeScreenState extends State<HomeScreen> {
 //                         style: TextStyle(
 //                           fontSize: 16,
 //                           color: CommonUtils.primaryTextColor,
-//                           fontFamily: 'Calibri',
+//                           fontFamily: 'Muli',
 //                         ),
 //                       ),
 //                     ),
@@ -864,7 +864,7 @@ class _HomeScreenState extends State<HomeScreen> {
 //                         style: TextStyle(
 //                           fontSize: 16,
 //                           color: Colors.white,
-//                           fontFamily: 'Calibri',
+//                           fontFamily: 'Muli',
 //                         ),
 //                       ),
 //                     ),
@@ -1036,7 +1036,7 @@ class _HomeScreenState extends State<HomeScreen> {
 //                   style: TextStyle(
 //                     fontSize: 16,
 //                     color: CommonUtils.primaryTextColor,
-//                     fontFamily: 'Calibri',
+//                     fontFamily: 'Muli',
 //                   ),
 //                 ),
 //               ),
@@ -1067,7 +1067,7 @@ class _HomeScreenState extends State<HomeScreen> {
 //                   style: TextStyle(
 //                     fontSize: 16,
 //                     color: Colors.white,
-//                     fontFamily: 'Calibri',
+//                     fontFamily: 'Muli',
 //                   ),
 //                 ),
 //               ),
@@ -1373,7 +1373,7 @@ class _HomeScreenState extends State<HomeScreen> {
 //                 style: TextStyle(
 //                   fontSize: 24,
 //                   color: CommonUtils.primaryTextColor,
-//                   fontFamily: 'Calibri',
+//                   fontFamily: 'Muli',
 //                 ),
 //               ),
 //               const SizedBox(
@@ -1384,7 +1384,7 @@ class _HomeScreenState extends State<HomeScreen> {
 //                 style: TextStyle(
 //                   fontSize: 16,
 //                   color: CommonUtils.primaryTextColor,
-//                   fontFamily: 'Calibri',
+//                   fontFamily: 'Muli',
 //                 ),
 //               ),
 //               const SizedBox(
@@ -1426,7 +1426,7 @@ class _HomeScreenState extends State<HomeScreen> {
 //                     child: TextFormField(
 //                       controller: _commentstexteditcontroller,
 //                       style: const TextStyle(
-//                         fontFamily: 'Calibri',
+//                         fontFamily: 'Muli',
 //                         fontSize: 14,
 //                         fontWeight: FontWeight.w300,
 //                       ),
@@ -1439,7 +1439,7 @@ class _HomeScreenState extends State<HomeScreen> {
 //                           color: Colors.black54,
 //                           fontSize: 14,
 //                           fontWeight: FontWeight.bold,
-//                           fontFamily: 'Calibri',
+//                           fontFamily: 'Muli',
 //                         ),
 //                         contentPadding: EdgeInsets.symmetric(
 //                           horizontal: 16.0,
@@ -1475,7 +1475,7 @@ class _HomeScreenState extends State<HomeScreen> {
 //                       child: const Text(
 //                         'Close',
 //                         style: TextStyle(
-//                           fontFamily: 'Calibri',
+//                           fontFamily: 'Muli',
 //                           fontSize: 14,
 //                           color: CommonUtils.primaryTextColor,
 //                           fontWeight: FontWeight.bold,
@@ -1502,7 +1502,7 @@ class _HomeScreenState extends State<HomeScreen> {
 //                               child: Text(
 //                                 'Submit',
 //                                 style: TextStyle(
-//                                   fontFamily: 'Calibri',
+//                                   fontFamily: 'Muli',
 //                                   fontSize: 14,
 //                                   color: Colors.white,
 //                                   fontWeight: FontWeight.bold,

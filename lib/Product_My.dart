@@ -561,7 +561,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                               Text(
                                 option.desc,
                                 style: const TextStyle(
-                                  fontFamily: 'Calibri',
+                                  fontFamily: 'Muli',
                                   fontSize: 14,
                                   color: CommonUtils.primaryTextColor,
                                 ),
@@ -712,7 +712,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                         child: const Text(
                           'Close',
                           style: TextStyle(
-                            fontFamily: 'Calibri',
+                            fontFamily: 'Muli',
                             fontSize: 14,
                             color: CommonUtils.primaryTextColor,
                             fontWeight: FontWeight.bold,
@@ -742,7 +742,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                                 child: Text(
                                   'Apply',
                                   style: TextStyle(
-                                    fontFamily: 'Calibri',
+                                    fontFamily: 'Muli',
                                     fontSize: 14,
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold,
@@ -889,7 +889,7 @@ class ProductCard extends StatelessWidget {
                       '₹ ${formatNumber(product.maxPrice)}',
                       style: const TextStyle(
                         fontSize: 18,
-                        fontFamily: "Calibri",
+                        fontFamily: "Muli",
                         fontWeight: FontWeight.w500,
                         letterSpacing: 1,
                         color: Color(0xFF662d91),
@@ -956,7 +956,7 @@ class ProductCard extends StatelessWidget {
   //                 '₹ ${formatNumber(product.maxPrice)}',
   //                 style: const TextStyle(
   //                   fontSize: 18,
-  //                   fontFamily: "Calibri",
+  //                   fontFamily: "Muli",
   //                   fontWeight: FontWeight.w500,
   //                   letterSpacing: 1,
   //                   color: Color(0xFF662d91),

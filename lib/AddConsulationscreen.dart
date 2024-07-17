@@ -96,6 +96,7 @@ class AddConsulationscreen_screenState extends State<AddConsulationscreen> {
   //DateTime _selectedDate = DateTime.now();
   DateTime? selectedDate = DateTime.now();
   TimeOfDay? _selectedTime;
+  late String slot_time;
   String?  visitingDateTime;
   DateTime? VisitslotDateTime;
   @override
@@ -1138,7 +1139,7 @@ class AddConsulationscreen_screenState extends State<AddConsulationscreen> {
             await NotificationService().scheduleNotification(
               title: 'Reminder Notification',
               //An Consulatation has been booked by Manohar at 17th july 10.30 AM Marathahalli Branch. Please check with him once -- Consultation Reminder Notification
-              body: 'An Consulatation has been booked by ${apiUsrname} at $formattedDateapi 10.30 AM ${branchName} Branch. Please check with him once ',
+              body: 'An Consulatation has been booked by ${apiUsrname} at $formattedDateapi $slot_time ${branchName} Branch. Please check with him once ',
               //  body: 'Hey $userFullName, Today Your Appointment is Scheduled for  $_selectedTimeSlot at the ${widget.branchname} Branch, Located at ${widget.branchaddress}.',
               //  scheduledNotificationDateTime: testdate!,
               scheduledNotificationDateTime: VisitslotDateTime!,
@@ -1209,6 +1210,8 @@ class AddConsulationscreen_screenState extends State<AddConsulationscreen> {
     if (pickedTime != null) {
       setState(() {
         _selectedTime = pickedTime;
+        slot_time = pickedTime.format(context);
+        print('selected Time $slot_time');
         _timeController.text = pickedTime.format(context);
       });
     }
@@ -1235,6 +1238,7 @@ class AddConsulationscreen_screenState extends State<AddConsulationscreen> {
     }}
   void _printVisitingDateTime() {
     print('selectedDate $selectedDate');
+    print('selected Time $slot_time');
     if (selectedDate != null && _selectedTime != null) {
 
    //   final formattedDate = DateFormat('yyyy-MM-dd').format(_selectedDate!);

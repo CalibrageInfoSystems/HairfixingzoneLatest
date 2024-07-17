@@ -337,9 +337,9 @@ class _NewScreenState extends State<NewScreen> {
             child: Container(
               child: Center(
                 child: SvgPicture.asset(
-                  'assets/filter.svg',
-                  width: 24,
-                  height: 24,
+                  'assets/giftbox.svg',
+                  width: 60,
+                  height: 60,
                 ),
               ),
             ),
@@ -382,7 +382,7 @@ class _NewScreenState extends State<NewScreen> {
                   style: TextStyle(
                     fontSize: 16,
                     color: CommonUtils.primaryTextColor,
-                    fontFamily: 'Calibri',
+                    fontFamily: 'Muli',
                   ),
                 ),
               ),
@@ -413,7 +413,7 @@ class _NewScreenState extends State<NewScreen> {
                   style: TextStyle(
                     fontSize: 16,
                     color: Colors.white,
-                    fontFamily: 'Calibri',
+                    fontFamily: 'Muli',
                   ),
                 ),
               ),

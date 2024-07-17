@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:hairfixingzone/MyAppointment_Model.dart';
 import 'package:intl/intl.dart';
 
@@ -7,7 +8,7 @@ class MyAppointmentsProvider extends ChangeNotifier {
   int selectedCategoryIndex = 0;
   List<MyAppointment_Model> get storeIntoProvider => proAppointments;
 
-// varibles
+// variables
   String displayDate = 'Select Dates';
   String? apiFromDate;
   String? apiToDate;
@@ -18,20 +19,16 @@ class MyAppointmentsProvider extends ChangeNotifier {
   bool get filterStatus => isFilterApplied;
   set filterStatus(bool newStatus) {
     isFilterApplied = newStatus;
-    notifyListeners();
+    _notifyListeners();
   }
 
   String get getDisplayDate => displayDate;
   set getDisplayDate(String newCode) {
     displayDate = newCode;
-    notifyListeners();
+    _notifyListeners();
   }
 
   String? get getApiFromDate => apiFromDate;
-  // set getApiFromDate(String? newCode) {
-  //   apiFromDate = newCode;
-  //   notifyListeners();
-  // }
   set getApiFromDate(String? newCode) {
     if (newCode != null) {
       try {
@@ -52,14 +49,10 @@ class MyAppointmentsProvider extends ChangeNotifier {
       apiFromDate = null;
     }
 
-    notifyListeners();
+    _notifyListeners();
   }
 
   String? get getApiToDate => apiToDate;
-  // set getApiToDate(String? newCode) {
-  //   apiToDate = newCode;
-  //   notifyListeners();
-  // }
   set getApiToDate(String? newCode) {
     if (newCode != null) {
       try {
@@ -80,19 +73,19 @@ class MyAppointmentsProvider extends ChangeNotifier {
       apiToDate = null;
     }
 
-    notifyListeners();
+    _notifyListeners();
   }
 
   int? get getApiBranchId => apiBranchId;
   set getApiBranchId(int? newCode) {
     apiBranchId = newCode;
-    notifyListeners();
+    _notifyListeners();
   }
 
   int? get getApiStatusTypeId => apiStatusTypeId;
   set getApiStatusTypeId(int? newCode) {
     apiStatusTypeId = newCode;
-    notifyListeners();
+    _notifyListeners();
   }
 
   List<Statusmodel> prostatus = [];
@@ -108,12 +101,12 @@ class MyAppointmentsProvider extends ChangeNotifier {
   set storeIntoProvider(List<MyAppointment_Model> products) {
     proAppointments.clear();
     proAppointments = products;
-    notifyListeners();
+    _notifyListeners();
   }
 
   void filterProviderData(List<MyAppointment_Model> items) {
     proAppointments = List<MyAppointment_Model>.from(items);
-    notifyListeners();
+    _notifyListeners();
   }
 
   void clearFilter() {
@@ -124,31 +117,37 @@ class MyAppointmentsProvider extends ChangeNotifier {
     getApiToDate = null;
     getApiStatusTypeId = null;
     filterStatus = false;
-    notifyListeners();
+    _notifyListeners();
   }
 
   int? get getbranch => _selectedbranch;
   set getbranch(int? newCategory) {
     _selectedbranch = newCategory;
-    notifyListeners();
+    _notifyListeners();
   }
 
   int get selectedBranch => selectedbranchesIndex;
   set selectedBranch(int newStatus) {
     selectedbranchesIndex = newStatus;
-    notifyListeners();
+    _notifyListeners();
   }
 
   int get selectedstatus => selectedstatusIndex;
   set selectedStatus(int newStatus) {
     selectedstatusIndex = newStatus;
-    notifyListeners();
+    _notifyListeners();
   }
 
   int? get getStatus => _selectedStatus;
   set getStatus(int? newCategory) {
     _selectedStatus = newCategory;
-    notifyListeners();
+    _notifyListeners();
+  }
+
+  void _notifyListeners() {
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      notifyListeners();
+    });
   }
 }
 
@@ -165,3 +164,4 @@ class Statusmodel {
     );
   }
 }
+

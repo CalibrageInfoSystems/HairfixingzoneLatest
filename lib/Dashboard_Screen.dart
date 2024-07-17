@@ -66,6 +66,7 @@ class _CustomerDashBoardState extends State<CustomerDashBoard> {
   int currentIndex = 0;
   bool isLoading = true;
   bool isDataBinding = false;
+  bool isRetrying = false;
   bool apiAllowed = true;
   late Timer _timer;
   final bool _shouldStartMarquee = true;
@@ -171,23 +172,64 @@ class _CustomerDashBoardState extends State<CustomerDashBoard> {
   }
 
   void fetchCarouselData() async {
-    final response = await http.get(Uri.parse(baseUrl + getbanner));
+    final url = Uri.parse(baseUrl + getbanner);
     setState(() {
       isDataBinding = true;
+      isRetrying = false; // Initialize retrying state
     });
-    if (response.statusCode == 200) {
+
+    const timeoutDuration = Duration(seconds: 5); // Set the timeout duration
+    bool success = false;
+    int retries = 0;
+    const maxRetries = 3; // Number of retries
+
+    while (!success && retries < maxRetries) {
+      try {
+        if (retries > 0) {
+          setState(() {
+            isRetrying = true; // Set retrying state
+          });
+        }
+
+        final response = await http.get(url).timeout(timeoutDuration);
+
+        if (response.statusCode == 200) {
+          setState(() {
+            _items = (json.decode(response.body)['listResult'] as List)
+                .map((item) => Item.fromJson(item))
+                .toList();
+            isDataBinding = false;
+            isRetrying = false; // Reset retrying state
+          });
+          success = true;
+        } else {
+          setState(() {
+            isDataBinding = false;
+            isRetrying = false; // Reset retrying state
+          });
+          throw Exception('Failed to load items');
+        }
+      } on TimeoutException catch (_) {
+        print('Request timed out. Retrying...');
+        retries++;
+      } catch (error) {
+        print('Error fetching data from the API: $error');
+        setState(() {
+          isDataBinding = false;
+          isRetrying = false; // Reset retrying state
+        });
+        retries++;
+      }
+    }
+
+    if (!success) {
+      print('All retries failed. Unable to fetch data from the API.');
       setState(() {
-        _items = (json.decode(response.body)['listResult'] as List)
-            .map((item) => Item.fromJson(item))
-            .toList();
         isDataBinding = false;
+        isRetrying = false; // Reset retrying state
       });
-    } else {
-      isDataBinding = false;
-      throw Exception('Failed to load items');
     }
   }
-
   @override
   void dispose() {
  //   _timer.cancel();
@@ -204,15 +246,16 @@ class _CustomerDashBoardState extends State<CustomerDashBoard> {
 
     bool success = false;
     int retries = 0;
-    const maxRetries = 1;
+    const maxRetries = 3; // Increase the number of retries if needed
+    const timeoutDuration = Duration(seconds: 5); // Set timeout duration
 
     while (!success && retries < maxRetries) {
       try {
-        final response = await http.get(url);
+        final response = await http.get(url).timeout(timeoutDuration);
 
         if (response.statusCode == 200) {
           final data = json.decode(response.body);
-          print('Failed to fetch data:  $data');
+          print('Fetched data:  $data');
 
           List<BranchModel> branchList = [];
 
@@ -243,22 +286,27 @@ class _CustomerDashBoardState extends State<CustomerDashBoard> {
           success = true;
         } else {
           print('Request failed with status: ${response.statusCode}');
-          setState(() {
-            isLoading = false;
-          });
         }
+      } on TimeoutException catch (_) {
+        print('Request timed out. Retrying...');
+        retries++;
       } catch (error) {
-        print('Error data is not getting from the api: $error');
+        print('Error fetching data from the API: $error');
+        retries++;
+      }
+
+      if (!success && retries >= maxRetries) {
         setState(() {
           isLoading = false;
         });
       }
-
-      retries++;
     }
 
     if (!success) {
       print('All retries failed. Unable to fetch data from the API.');
+      setState(() {
+        isLoading = false;
+      });
     }
   }
 

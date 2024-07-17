@@ -76,7 +76,7 @@ class _AgentHomeState extends State<AgentHome> {
                         style: TextStyle(
                           fontSize: 16,
                           color: CommonUtils.primaryTextColor,
-                          fontFamily: 'Calibri',
+                          fontFamily: 'Muli',
                         ),
                       ),
                     ),
@@ -104,7 +104,7 @@ class _AgentHomeState extends State<AgentHome> {
                         style: TextStyle(
                           fontSize: 16,
                           color: Colors.white,
-                          fontFamily: 'Calibri',
+                          fontFamily: 'Muli',
                         ),
                       ),
                     ),
@@ -296,7 +296,7 @@ class _AgentHomeState extends State<AgentHome> {
                   style: TextStyle(
                     fontSize: 16,
                     color: CommonUtils.primaryTextColor,
-                    fontFamily: 'Calibri',
+                    fontFamily: 'Muli',
                   ),
                 ),
               ),
@@ -327,7 +327,7 @@ class _AgentHomeState extends State<AgentHome> {
                   style: TextStyle(
                     fontSize: 16,
                     color: Colors.white,
-                    fontFamily: 'Calibri',
+                    fontFamily: 'Muli',
                   ),
                 ),
               ),
