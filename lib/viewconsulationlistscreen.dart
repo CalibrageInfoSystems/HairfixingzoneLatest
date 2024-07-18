@@ -240,19 +240,22 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
                         // ),
                         padding: const EdgeInsets.all(10),
                         decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(10.0),
-                          // borderRadius: BorderRadius.circular(30), //border corner radius
-                          // boxShadow: [
-                          //   BoxShadow(
-                          //     color: const Color(0xFF960efd)
-                          //         .withOpacity(0.2), //color of shadow
-                          //     spreadRadius: 2, //spread radius
-                          //     blurRadius: 4, // blur radius
-                          //     offset:
-                          //         const Offset(0, 2), // changes position of shadow
-                          //   ),
-                          // ],
+                          gradient: const LinearGradient(
+                            colors: [
+                              Color(0xFFFFFFFF),
+                              Color(0xFFFFFFFF),
+                            ],
+                            begin: Alignment.centerLeft,
+                            end: Alignment.centerRight,
+                          ),
+                          border: Border.all(
+                            color: Colors.grey,
+                            //  color: const Color(0xFF8d97e2), // Add your desired border color here
+                            width:
+                            1.0, // Set the border width
+                          ),
+                          borderRadius: BorderRadius.circular(
+                              10.0), // Optional: Add border radius if needed
                         ),
                         child: Row(
                           children: [
@@ -260,9 +263,23 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
                               // padding: const EdgeInsets.all(10),
                               clipBehavior: Clip.antiAlias,
                               decoration: BoxDecoration(
-                                color: Colors.grey,
-                                borderRadius: BorderRadius.circular(10.0),
+                              gradient: const LinearGradient(
+                                colors: [
+                                  Color(0xFFFFFFFF),
+                                  Color(0xFFFFFFFF),
+                                ],
+                                begin: Alignment.centerLeft,
+                                end: Alignment.centerRight,
                               ),
+                              border: Border.all(
+                                color: Colors.grey,
+                                //  color: const Color(0xFF8d97e2), // Add your desired border color here
+                                width:
+                                1.0, // Set the border width
+                              ),
+                              borderRadius: BorderRadius.circular(
+                                  10.0), // Optional: Add border radius if needed
+                            ),
                               // width: MediaQuery.of(context).size.width / 4,
                               child: Image.network(
                                 widget.agent.imageName!.isNotEmpty
@@ -452,10 +469,24 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
         child: IntrinsicHeight(
             child: Container(
           padding: const EdgeInsets.all(10),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(10.0),
-          ),
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                  colors: [
+                    Color(0xFFFFFFFF),
+                    Color(0xFFFFFFFF),
+                  ],
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
+                ),
+                border: Border.all(
+                  color: Colors.grey,
+                  //  color: const Color(0xFF8d97e2), // Add your desired border color here
+                  width:
+                  1.0, // Set the border width
+                ),
+                borderRadius: BorderRadius.circular(
+                    10.0), // Optional: Add border radius if needed
+              ),
           child: Row(
             children: [
               Container(
@@ -473,7 +504,7 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
                       '$date',
                       style: const TextStyle(
                         fontSize: 22,
-                        fontFamily: "Muli",
+                        fontFamily: "LibreFranklin",
                         fontWeight: FontWeight.w700,
                         color: Color(0xFF0f75bc),
                       ),
@@ -482,7 +513,7 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
                       '$year',
                       style: const TextStyle(
                         fontSize: 14,
-                        fontFamily: "Muli",
+                        fontFamily: "LibreFranklin",
                         fontWeight: FontWeight.w700,
                         color: Color(0xFF0f75bc),
                       ),
@@ -509,18 +540,18 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
                                   consultationslist[index].visitingDate),
                               style: const TextStyle(
                                 fontSize: 14,
-                                fontFamily: "Muli",
-                                fontWeight: FontWeight.w700,
-                                color: Color(0xFF0f75bc),
+                                fontFamily: "LibreFranklin",
+                                fontWeight: FontWeight.w500,
+                                color: Colors.black,
                               ),
                             ),
                             Text(
                               consultationslist[index].consultationName,
                               style: const TextStyle(
                                 fontSize: 14,
-                                fontFamily: "Muli",
-                                fontWeight: FontWeight.w700,
-                                color: Color(0xFF0f75bc),
+                                fontFamily: "LibreFranklin",
+                                fontWeight: FontWeight.w500,
+                                color: Colors.black,
                               ),
                             ),
                             Row(
@@ -529,7 +560,7 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
                                 GestureDetector(
                                   onTap: () {
                                     makePhoneCall(
-                                        'tel:91${consultationslist[index].phoneNumber}');
+                                        'tel:+91${consultationslist[index].phoneNumber}');
                                   },
                                   child: RichText(
                                     text: TextSpan(
@@ -537,7 +568,7 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
                                           consultationslist[index].phoneNumber,
                                       style: const TextStyle(
                                         fontSize: 14,
-                                        fontFamily: "Muli",
+                                        fontFamily: "LibreFranklin",
                                         fontWeight: FontWeight.w500,
                                         color: Color(0xFF0f75bc),
                                         decoration: TextDecoration.underline,
@@ -583,7 +614,7 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
                               consultationslist[index].gender,
                               style: const TextStyle(
                                 fontSize: 14,
-                                fontFamily: "Muli",
+                                fontFamily: "LibreFranklin",
                                 fontWeight: FontWeight.w500,
                                 color: Color(0xFF5f5f5f),
                               ),
@@ -592,7 +623,7 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
                               consultationslist[index].email,
                               style: const TextStyle(
                                 fontSize: 14,
-                                fontFamily: "Muli",
+                                fontFamily: "LibreFranklin",
                                 fontWeight: FontWeight.w500,
                                 color: Color(0xFF5f5f5f),
                               ),
@@ -611,7 +642,7 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
                   //   consultationslist[index].remarks,
                   //   style: const TextStyle(
                   //     fontSize: 14,
-                  //     fontFamily: "Muli",
+                  //     fontFamily: "LibreFranklin",
                   //     fontWeight: FontWeight.w500,
                   //     color: Color(0xFF5f5f5f),
                   //   ),
@@ -631,7 +662,7 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
                                 color: Color(0xFF5f5f5f),
                                 fontSize: 14,
                                 fontWeight: FontWeight.w500,
-                                fontFamily: 'Muli',
+                                fontFamily: 'LibreFranklin',
                               ),
                             ),
                           ],
@@ -656,7 +687,7 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
         backgroundColor: const Color(0xffffffff),
         title: const Text(
           'View Consultation',
-          style: TextStyle(color: Color(0xFF0f75bc), fontSize: 16.0),
+          style: TextStyle(color: Color(0xFF0f75bc), fontSize: 16.0, fontFamily: "LibreFranklin",),
         ),
         // actions: [
         //   IconButton(

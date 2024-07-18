@@ -138,7 +138,7 @@ class _BookingScreenState extends State<SelectCity_Branch_screen> {
                             'City ',
                             style: TextStyle(
                               fontSize: 14,
-                              fontFamily: "Muli",
+                              fontFamily: "LibreFranklin",
                               fontWeight: FontWeight.w500,
                               color: Color(0xFF662e91),
                             ),
@@ -248,7 +248,7 @@ class _BookingScreenState extends State<SelectCity_Branch_screen> {
                             fontSize: 12.0,
                             color: Colors.black,
                             fontWeight: FontWeight.bold,
-                            fontFamily: "Roboto",
+                            fontFamily: "LibreFranklin",
                           ),
                         ),
                       )

@@ -152,7 +152,8 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
               ),
             ],
           ),
-          branches(),
+          agentBranches()
+         // newBranches()
         ],
       ),
     );
@@ -192,154 +193,201 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
     );
   }
 
-  Expanded branches() {
-    return Expanded(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              FutureBuilder(
-                future: apiData,
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(
-                        child: CircularProgressIndicator.adaptive());
-                  } else if (snapshot.hasError) {
-                    return Center(
-                      child: Text(snapshot.error.toString()),
-                    );
-                  } else {
-                    List<BranchModel>? data = snapshot.data!;
-                    return ListView.builder(
-                      scrollDirection: Axis.vertical,
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: data.length,
-                      itemBuilder: (context, index) {
-                        BranchModel branch = data[index];
-                        return IntrinsicHeight(
-                          child: GestureDetector(
-                            onTap: () {},
-                            child: Card(
-                              shadowColor: Colors.transparent,
-                              surfaceTintColor: Colors.transparent,
-                              child: ClipRRect(
-                                // borderRadius: const BorderRadius.only(
-                                //   topRight: Radius.circular(29.0),
-                                //   bottomLeft: Radius.circular(29.0),
-                                // ),
-                                child: Container(
-                                  padding: const EdgeInsets.all(20),
-                                  decoration: BoxDecoration(
-                                    gradient: const LinearGradient(
-                                      colors: [
-                                        Color(0xFFFFFFFF),
-                                        Color(0xFFFFFFFF),
-                                      ],
-                                      begin: Alignment.centerLeft,
-                                      end: Alignment.centerRight,
-                                    ),
-                                    border: Border.all(
-                                      color: Colors.grey,
-                                      //  color: const Color(0xFF8d97e2), // Add your desired border color here
-                                      width: 1.0, // Set the border width
-                                    ),
-                                    borderRadius: BorderRadius.circular(
-                                        10.0), // Optional: Add border radius if needed
-                                  ),
-                                  child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Container(
-                                        width: 110,
-                                        height: 65,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10.0),
-                                        ),
-                                        child: ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(7.0),
-                                          child: Image.network(
-                                            branch.imageName!,
-                                            width: 110,
-                                            height: 65,
-                                            fit: BoxFit.fill,
-                                            loadingBuilder: (context, child,
-                                                loadingProgress) {
-                                              if (loadingProgress == null) {
-                                                return child;
-                                              }
+  Widget newBranches() {
+    return FutureBuilder(
+      future: apiData,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator.adaptive());
+        } else if (snapshot.hasError) {
+          return Center(
+            child: Text(snapshot.error.toString()),
+          );
+        } else {
+          List<BranchModel>? data = snapshot.data!;
+          return SizedBox(
+            width: MediaQuery.of(context).size.width,
+            // height: MediaQuery.of(context).size.height / 3.5,
+            child: ListView.builder(
+              scrollDirection: Axis.vertical,
+              shrinkWrap: true,
+              itemCount: data.length,
+              itemBuilder: (context, index) {
+                BranchModel branch = data[index];
+                return IntrinsicHeight(
+                  child: GestureDetector(
+                    onTap: () {},
+                    child: Card(
+                      shadowColor: Colors.transparent,
+                      surfaceTintColor: Colors.transparent,
+                      child: ClipRRect(
+                        // borderRadius: const BorderRadius.only(
+                        //   topRight: Radius.circular(29.0),
+                        //   bottomLeft: Radius.circular(29.0),
+                        // ),
+                        child: Container(
+                          padding: const EdgeInsets.all(20),
+                          decoration: BoxDecoration(
+                            gradient: const LinearGradient(
+                              colors: [
+                                Color(0xFFFFFFFF),
+                                Color(0xFFFFFFFF),
+                              ],
+                              begin: Alignment.centerLeft,
+                              end: Alignment.centerRight,
+                            ),
+                            border: Border.all(
+                              color: Colors.grey,
+                              //  color: const Color(0xFF8d97e2), // Add your desired border color here
+                              width: 1.0, // Set the border width
+                            ),
+                            borderRadius: BorderRadius.circular(
+                                10.0), // Optional: Add border radius if needed
+                          ),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Container(
+                                width: 110,
+                                height: 65,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(7.0),
+                                  child: Image.network(
+                                    branch.imageName!,
+                                    width: 110,
+                                    height: 65,
+                                    fit: BoxFit.fill,
+                                    loadingBuilder:
+                                        (context, child, loadingProgress) {
+                                      if (loadingProgress == null) {
+                                        return child;
+                                      }
 
-                                              return const Center(
-                                                  child:
-                                                      CircularProgressIndicator
-                                                          .adaptive());
-                                            },
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(width: 10.0),
-                                      Expanded(
+                                      return const Center(
+                                          child: CircularProgressIndicator
+                                              .adaptive());
+                                    },
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 10.0),
+                              Expanded(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(branch.name,
+                                        style: CommonStyles.txSty_18b_fb),
+                                    const SizedBox(height: 4.0),
+                                    Expanded(
+                                      child: Padding(
+                                        padding:
+                                        const EdgeInsets.only(right: 10.0),
                                         child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
                                           crossAxisAlignment:
-                                              CrossAxisAlignment.start,
+                                          CrossAxisAlignment.start,
                                           children: [
-                                            Text(branch.name,
-                                                style:
-                                                    CommonStyles.txSty_18b_fb),
-                                            const SizedBox(height: 4.0),
-                                            Expanded(
-                                              child: Padding(
-                                                padding: const EdgeInsets.only(
-                                                    right: 10.0),
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .spaceEvenly,
-                                                      children: [
-                                                        Expanded(
-                                                          child: Text(
-                                                              branch.address,
-                                                              style: CommonStyles
-                                                                  .txSty_12b_fb),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ],
+                                            Row(
+                                              mainAxisAlignment:
+                                              MainAxisAlignment.spaceEvenly,
+                                              children: [
+                                                //MARK: location_icon
+                                                // Image.asset(
+                                                //   'assets/location_icon.png',
+                                                //   width: 20,
+                                                //   height: 18,
+                                                // ),
+                                                // const SizedBox(
+                                                //     width:
+                                                //         4.0),
+                                                Expanded(
+                                                  child: Text(branch.address,
+                                                      style: CommonStyles
+                                                          .txSty_12b_fb),
                                                 ),
-                                              ),
+                                              ],
                                             ),
                                           ],
                                         ),
                                       ),
-                                    ],
-                                  ),
+                                    ),
+
+                                    /*
+                                    Align(
+                                      alignment: Alignment.bottomRight,
+                                      child: Container(
+                                        height: 26,
+                                        margin: const EdgeInsets.only(
+                                            bottom: 10.0, right: 10.0),
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          border: Border.all(
+                                            color:
+                                                const Color(0xFF8d97e2),
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(10.0),
+                                        ),
+                                        child: ElevatedButton(
+                                          onPressed: () {},
+                                          style: ElevatedButton.styleFrom(
+                                            foregroundColor:
+                                                const Color(0xFF8d97e2),
+                                            backgroundColor:
+                                                Colors.transparent,
+                                            elevation: 0,
+                                            shadowColor:
+                                                Colors.transparent,
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(
+                                                      10.0),
+                                            ),
+                                          ),
+                                          child: Row(
+                                            mainAxisSize:
+                                                MainAxisSize.min,
+                                            children: [
+                                              SvgPicture.asset(
+                                                'assets/datepicker_icon.svg',
+                                                width: 15.0,
+                                                height: 15.0,
+                                              ),
+                                              const SizedBox(width: 5),
+                                              const Text(
+                                                'Book Now',
+                                                style: TextStyle(
+                                                  fontSize: 13,
+                                                  color:
+                                                      Color(0xFF8d97e2),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                 */
+                                  ],
                                 ),
                               ),
-                            ),
+                            ],
                           ),
-                        );
-                      },
-                    );
-                  }
-                },
-              ),
-            ],
-          ),
-        ),
-      ),
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          );
+        }
+      },
     );
-  }
-
+}
   FutureBuilder<Object?> marqueeScroll() {
     return FutureBuilder(
       future: getMarqueeText(),
@@ -536,8 +584,9 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
   }
 
   Widget agentBranches() {
-    return SizedBox(
+    return Container(
       height: MediaQuery.of(context).size.height / 4,
+      padding: EdgeInsets.symmetric(horizontal: 10.0),
       child: FutureBuilder(
         future: apiData,
         builder: (context, snapshot) {
@@ -852,428 +901,428 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
     );
   }
  */
-  Widget newBranches() {
-    return FutureBuilder(
-      future: apiData,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator.adaptive());
-        } else if (snapshot.hasError) {
-          return Center(
-            child: Text(snapshot.error.toString()),
-          );
-        } else {
-          List<BranchModel>? data = snapshot.data!;
-          return SizedBox(
-            width: MediaQuery.of(context).size.width,
-            // height: MediaQuery.of(context).size.height / 3.5,
-            child: ListView.builder(
-              scrollDirection: Axis.vertical,
-              shrinkWrap: true,
-              itemCount: data.length,
-              itemBuilder: (context, index) {
-                BranchModel branch = data[index];
-                return IntrinsicHeight(
-                  child: GestureDetector(
-                    onTap: () {},
-                    child: Card(
-                      shadowColor: Colors.transparent,
-                      surfaceTintColor: Colors.transparent,
-                      child: ClipRRect(
-                        // borderRadius: const BorderRadius.only(
-                        //   topRight: Radius.circular(29.0),
-                        //   bottomLeft: Radius.circular(29.0),
-                        // ),
-                        child: Container(
-                          padding: const EdgeInsets.all(20),
-                          decoration: BoxDecoration(
-                            gradient: const LinearGradient(
-                              colors: [
-                                Color(0xFFFFFFFF),
-                                Color(0xFFFFFFFF),
-                              ],
-                              begin: Alignment.centerLeft,
-                              end: Alignment.centerRight,
-                            ),
-                            border: Border.all(
-                              color: Colors.grey,
-                              //  color: const Color(0xFF8d97e2), // Add your desired border color here
-                              width: 1.0, // Set the border width
-                            ),
-                            borderRadius: BorderRadius.circular(
-                                10.0), // Optional: Add border radius if needed
-                          ),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Container(
-                                width: 110,
-                                height: 65,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10.0),
-                                ),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(7.0),
-                                  child: Image.network(
-                                    branch.imageName!,
-                                    width: 110,
-                                    height: 65,
-                                    fit: BoxFit.fill,
-                                    loadingBuilder:
-                                        (context, child, loadingProgress) {
-                                      if (loadingProgress == null) {
-                                        return child;
-                                      }
-
-                                      return const Center(
-                                          child: CircularProgressIndicator
-                                              .adaptive());
-                                    },
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(width: 10.0),
-                              Expanded(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(branch.name,
-                                        style: CommonStyles.txSty_18b_fb),
-                                    const SizedBox(height: 4.0),
-                                    Expanded(
-                                      child: Padding(
-                                        padding:
-                                            const EdgeInsets.only(right: 10.0),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.spaceEvenly,
-                                              children: [
-                                                //MARK: location_icon
-                                                // Image.asset(
-                                                //   'assets/location_icon.png',
-                                                //   width: 20,
-                                                //   height: 18,
-                                                // ),
-                                                // const SizedBox(
-                                                //     width:
-                                                //         4.0),
-                                                Expanded(
-                                                  child: Text(branch.address,
-                                                      style: CommonStyles
-                                                          .txSty_12b_fb),
-                                                ),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-
-                                    /* 
-                                    Align(
-                                      alignment: Alignment.bottomRight,
-                                      child: Container(
-                                        height: 26,
-                                        margin: const EdgeInsets.only(
-                                            bottom: 10.0, right: 10.0),
-                                        decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          border: Border.all(
-                                            color:
-                                                const Color(0xFF8d97e2),
-                                          ),
-                                          borderRadius:
-                                              BorderRadius.circular(10.0),
-                                        ),
-                                        child: ElevatedButton(
-                                          onPressed: () {},
-                                          style: ElevatedButton.styleFrom(
-                                            foregroundColor:
-                                                const Color(0xFF8d97e2),
-                                            backgroundColor:
-                                                Colors.transparent,
-                                            elevation: 0,
-                                            shadowColor:
-                                                Colors.transparent,
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(
-                                                      10.0),
-                                            ),
-                                          ),
-                                          child: Row(
-                                            mainAxisSize:
-                                                MainAxisSize.min,
-                                            children: [
-                                              SvgPicture.asset(
-                                                'assets/datepicker_icon.svg',
-                                                width: 15.0,
-                                                height: 15.0,
-                                              ),
-                                              const SizedBox(width: 5),
-                                              const Text(
-                                                'Book Now',
-                                                style: TextStyle(
-                                                  fontSize: 13,
-                                                  color:
-                                                      Color(0xFF8d97e2),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                 */
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                );
-              },
-            ),
-          );
-        }
-      },
-    );
-    /* 
-       return Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 0.0, vertical: 5.0),
-                              child: IntrinsicHeight(
-                                child: ClipRRect(
-                                  borderRadius: const BorderRadius.only(
-                                      // topRight: Radius.circular(42.5),
-                                      // bottomLeft: Radius.circular(42.5),
-                                      ),
-                                  child: GestureDetector(
-                                    onTap: () {    },
-                                    child: Card(
-                                      shadowColor: Colors.transparent,
-                                      surfaceTintColor: Colors.transparent,
-                                      child: ClipRRect(
-                                        // borderRadius: const BorderRadius.only(
-                                        //   topRight: Radius.circular(29.0),
-                                        //   bottomLeft: Radius.circular(29.0),
-                                        // ),
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                            gradient: const LinearGradient(
-                                              colors: [
-                                                Color(0xFFFFFFFF),
-                                                Color(0xFFFFFFFF),
-                                              ],
-                                              begin: Alignment.centerLeft,
-                                              end: Alignment.centerRight,
-                                            ),
-                                            border: Border.all(
-                                              color: Colors.grey,
-                                              //  color: const Color(0xFF8d97e2), // Add your desired border color here
-                                              width:
-                                                  1.0, // Set the border width
-                                            ),
-                                            borderRadius: BorderRadius.circular(
-                                                10.0), // Optional: Add border radius if needed
-                                          ),
-                                          child: Row(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: [
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                    left: 15.0),
-                                                child: Container(
-                                                  width: 110,
-                                                  height: 65,
-                                                  decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10.0),
-                                                  ),
-                                                  child: ClipRRect(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            7.0),
-                                                    child: Image.network(
-                                                      branch.imageName!,
-                                                      width: 110,
-                                                      height: 65,
-                                                      fit: BoxFit.fill,
-                                                      loadingBuilder: (context,
-                                                          child,
-                                                          loadingProgress) {
-                                                        if (loadingProgress ==
-                                                            null) return child;
-
-                                                        return const Center(
-                                                            child:
-                                                                CircularProgressIndicator
-                                                                    .adaptive());
-                                                      },
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                              Expanded(
-                                                child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          left: 15.0),
-                                                  child: Column(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment.start,
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .only(
-                                                                top: 15.0),
-                                                        child: Text(branch.name,
-                                                            style: CommonStyles
-                                                                .txSty_18b_fb),
-                                                      ),
-                                                      const SizedBox(
-                                                          height: 4.0),
-                                                      Expanded(
-                                                        child: Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .only(
-                                                                  right: 10.0),
-                                                          child: Column(
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .start,
-                                                            children: [
-                                                              Row(
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .spaceEvenly,
-                                                                children: [
-                                                                  //MARK: location_icon
-                                                                  // Image.asset(
-                                                                  //   'assets/location_icon.png',
-                                                                  //   width: 20,
-                                                                  //   height: 18,
-                                                                  // ),
-                                                                  // const SizedBox(
-                                                                  //     width:
-                                                                  //         4.0),
-                                                                  Expanded(
-                                                                    child: Text(
-                                                                        branch
-                                                                            .address,
-                                                                        style: CommonStyles
-                                                                            .txSty_12b_fb),
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                              const Spacer(
-                                                                  flex: 3),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      Align(
-                                                        alignment: Alignment
-                                                            .bottomRight,
-                                                        child: Container(
-                                                          height: 26,
-                                                          margin:
-                                                              const EdgeInsets
-                                                                  .only(
-                                                                  bottom: 10.0,
-                                                                  right: 10.0),
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            color: Colors.white,
-                                                            border: Border.all(
-                                                              color: const Color(
-                                                                  0xFF8d97e2),
-                                                            ),
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        10.0),
-                                                          ),
-                                                          child: ElevatedButton(
-                                                            onPressed: () {},
-                                                            style:
-                                                                ElevatedButton
-                                                                    .styleFrom(
-                                                              foregroundColor:
-                                                                  const Color(
-                                                                      0xFF8d97e2),
-                                                              backgroundColor:
-                                                                  Colors
-                                                                      .transparent,
-                                                              elevation: 0,
-                                                              shadowColor: Colors
-                                                                  .transparent,
-                                                              shape:
-                                                                  RoundedRectangleBorder(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            10.0),
-                                                              ),
-                                                            ),
-                                                            child: Row(
-                                                              mainAxisSize:
-                                                                  MainAxisSize
-                                                                      .min,
-                                                              children: [
-                                                                SvgPicture
-                                                                    .asset(
-                                                                  'assets/datepicker_icon.svg',
-                                                                  width: 15.0,
-                                                                  height: 15.0,
-                                                                ),
-                                                                const SizedBox(
-                                                                    width: 5),
-                                                                const Text(
-                                                                  'Book Now',
-                                                                  style:
-                                                                      TextStyle(
-                                                                    fontSize:
-                                                                        13,
-                                                                    color: Color(
-                                                                        0xFF8d97e2),
-                                                                  ),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            );
-     */
-  }
+  // Widget newBranches() {
+  //   return FutureBuilder(
+  //     future: apiData,
+  //     builder: (context, snapshot) {
+  //       if (snapshot.connectionState == ConnectionState.waiting) {
+  //         return const Center(child: CircularProgressIndicator.adaptive());
+  //       } else if (snapshot.hasError) {
+  //         return Center(
+  //           child: Text(snapshot.error.toString()),
+  //         );
+  //       } else {
+  //         List<BranchModel>? data = snapshot.data!;
+  //         return SizedBox(
+  //           width: MediaQuery.of(context).size.width,
+  //           // height: MediaQuery.of(context).size.height / 3.5,
+  //           child: ListView.builder(
+  //             scrollDirection: Axis.vertical,
+  //             shrinkWrap: true,
+  //             itemCount: data.length,
+  //             itemBuilder: (context, index) {
+  //               BranchModel branch = data[index];
+  //               return IntrinsicHeight(
+  //                 child: GestureDetector(
+  //                   onTap: () {},
+  //                   child: Card(
+  //                     shadowColor: Colors.transparent,
+  //                     surfaceTintColor: Colors.transparent,
+  //                     child: ClipRRect(
+  //                       // borderRadius: const BorderRadius.only(
+  //                       //   topRight: Radius.circular(29.0),
+  //                       //   bottomLeft: Radius.circular(29.0),
+  //                       // ),
+  //                       child: Container(
+  //                         padding: const EdgeInsets.all(20),
+  //                         decoration: BoxDecoration(
+  //                           gradient: const LinearGradient(
+  //                             colors: [
+  //                               Color(0xFFFFFFFF),
+  //                               Color(0xFFFFFFFF),
+  //                             ],
+  //                             begin: Alignment.centerLeft,
+  //                             end: Alignment.centerRight,
+  //                           ),
+  //                           border: Border.all(
+  //                             color: Colors.grey,
+  //                             //  color: const Color(0xFF8d97e2), // Add your desired border color here
+  //                             width: 1.0, // Set the border width
+  //                           ),
+  //                           borderRadius: BorderRadius.circular(
+  //                               10.0), // Optional: Add border radius if needed
+  //                         ),
+  //                         child: Row(
+  //                           crossAxisAlignment: CrossAxisAlignment.center,
+  //                           children: [
+  //                             Container(
+  //                               width: 110,
+  //                               height: 65,
+  //                               decoration: BoxDecoration(
+  //                                 borderRadius: BorderRadius.circular(10.0),
+  //                               ),
+  //                               child: ClipRRect(
+  //                                 borderRadius: BorderRadius.circular(7.0),
+  //                                 child: Image.network(
+  //                                   branch.imageName!,
+  //                                   width: 110,
+  //                                   height: 65,
+  //                                   fit: BoxFit.fill,
+  //                                   loadingBuilder:
+  //                                       (context, child, loadingProgress) {
+  //                                     if (loadingProgress == null) {
+  //                                       return child;
+  //                                     }
+  //
+  //                                     return const Center(
+  //                                         child: CircularProgressIndicator
+  //                                             .adaptive());
+  //                                   },
+  //                                 ),
+  //                               ),
+  //                             ),
+  //                             const SizedBox(width: 10.0),
+  //                             Expanded(
+  //                               child: Column(
+  //                                 mainAxisAlignment: MainAxisAlignment.start,
+  //                                 crossAxisAlignment: CrossAxisAlignment.start,
+  //                                 children: [
+  //                                   Text(branch.name,
+  //                                       style: CommonStyles.txSty_18b_fb),
+  //                                   const SizedBox(height: 4.0),
+  //                                   Expanded(
+  //                                     child: Padding(
+  //                                       padding:
+  //                                           const EdgeInsets.only(right: 10.0),
+  //                                       child: Column(
+  //                                         crossAxisAlignment:
+  //                                             CrossAxisAlignment.start,
+  //                                         children: [
+  //                                           Row(
+  //                                             mainAxisAlignment:
+  //                                                 MainAxisAlignment.spaceEvenly,
+  //                                             children: [
+  //                                               //MARK: location_icon
+  //                                               // Image.asset(
+  //                                               //   'assets/location_icon.png',
+  //                                               //   width: 20,
+  //                                               //   height: 18,
+  //                                               // ),
+  //                                               // const SizedBox(
+  //                                               //     width:
+  //                                               //         4.0),
+  //                                               Expanded(
+  //                                                 child: Text(branch.address,
+  //                                                     style: CommonStyles
+  //                                                         .txSty_12b_fb),
+  //                                               ),
+  //                                             ],
+  //                                           ),
+  //                                         ],
+  //                                       ),
+  //                                     ),
+  //                                   ),
+  //
+  //                                   /*
+  //                                   Align(
+  //                                     alignment: Alignment.bottomRight,
+  //                                     child: Container(
+  //                                       height: 26,
+  //                                       margin: const EdgeInsets.only(
+  //                                           bottom: 10.0, right: 10.0),
+  //                                       decoration: BoxDecoration(
+  //                                         color: Colors.white,
+  //                                         border: Border.all(
+  //                                           color:
+  //                                               const Color(0xFF8d97e2),
+  //                                         ),
+  //                                         borderRadius:
+  //                                             BorderRadius.circular(10.0),
+  //                                       ),
+  //                                       child: ElevatedButton(
+  //                                         onPressed: () {},
+  //                                         style: ElevatedButton.styleFrom(
+  //                                           foregroundColor:
+  //                                               const Color(0xFF8d97e2),
+  //                                           backgroundColor:
+  //                                               Colors.transparent,
+  //                                           elevation: 0,
+  //                                           shadowColor:
+  //                                               Colors.transparent,
+  //                                           shape: RoundedRectangleBorder(
+  //                                             borderRadius:
+  //                                                 BorderRadius.circular(
+  //                                                     10.0),
+  //                                           ),
+  //                                         ),
+  //                                         child: Row(
+  //                                           mainAxisSize:
+  //                                               MainAxisSize.min,
+  //                                           children: [
+  //                                             SvgPicture.asset(
+  //                                               'assets/datepicker_icon.svg',
+  //                                               width: 15.0,
+  //                                               height: 15.0,
+  //                                             ),
+  //                                             const SizedBox(width: 5),
+  //                                             const Text(
+  //                                               'Book Now',
+  //                                               style: TextStyle(
+  //                                                 fontSize: 13,
+  //                                                 color:
+  //                                                     Color(0xFF8d97e2),
+  //                                               ),
+  //                                             ),
+  //                                           ],
+  //                                         ),
+  //                                       ),
+  //                                     ),
+  //                                   ),
+  //                                */
+  //                                 ],
+  //                               ),
+  //                             ),
+  //                           ],
+  //                         ),
+  //                       ),
+  //                     ),
+  //                   ),
+  //                 ),
+  //               );
+  //             },
+  //           ),
+  //         );
+  //       }
+  //     },
+  //   );
+  //   /*
+  //      return Padding(
+  //                             padding: const EdgeInsets.symmetric(
+  //                                 horizontal: 0.0, vertical: 5.0),
+  //                             child: IntrinsicHeight(
+  //                               child: ClipRRect(
+  //                                 borderRadius: const BorderRadius.only(
+  //                                     // topRight: Radius.circular(42.5),
+  //                                     // bottomLeft: Radius.circular(42.5),
+  //                                     ),
+  //                                 child: GestureDetector(
+  //                                   onTap: () {    },
+  //                                   child: Card(
+  //                                     shadowColor: Colors.transparent,
+  //                                     surfaceTintColor: Colors.transparent,
+  //                                     child: ClipRRect(
+  //                                       // borderRadius: const BorderRadius.only(
+  //                                       //   topRight: Radius.circular(29.0),
+  //                                       //   bottomLeft: Radius.circular(29.0),
+  //                                       // ),
+  //                                       child: Container(
+  //                                         decoration: BoxDecoration(
+  //                                           gradient: const LinearGradient(
+  //                                             colors: [
+  //                                               Color(0xFFFFFFFF),
+  //                                               Color(0xFFFFFFFF),
+  //                                             ],
+  //                                             begin: Alignment.centerLeft,
+  //                                             end: Alignment.centerRight,
+  //                                           ),
+  //                                           border: Border.all(
+  //                                             color: Colors.grey,
+  //                                             //  color: const Color(0xFF8d97e2), // Add your desired border color here
+  //                                             width:
+  //                                                 1.0, // Set the border width
+  //                                           ),
+  //                                           borderRadius: BorderRadius.circular(
+  //                                               10.0), // Optional: Add border radius if needed
+  //                                         ),
+  //                                         child: Row(
+  //                                           crossAxisAlignment:
+  //                                               CrossAxisAlignment.center,
+  //                                           children: [
+  //                                             Padding(
+  //                                               padding: const EdgeInsets.only(
+  //                                                   left: 15.0),
+  //                                               child: Container(
+  //                                                 width: 110,
+  //                                                 height: 65,
+  //                                                 decoration: BoxDecoration(
+  //                                                   borderRadius:
+  //                                                       BorderRadius.circular(
+  //                                                           10.0),
+  //                                                 ),
+  //                                                 child: ClipRRect(
+  //                                                   borderRadius:
+  //                                                       BorderRadius.circular(
+  //                                                           7.0),
+  //                                                   child: Image.network(
+  //                                                     branch.imageName!,
+  //                                                     width: 110,
+  //                                                     height: 65,
+  //                                                     fit: BoxFit.fill,
+  //                                                     loadingBuilder: (context,
+  //                                                         child,
+  //                                                         loadingProgress) {
+  //                                                       if (loadingProgress ==
+  //                                                           null) return child;
+  //
+  //                                                       return const Center(
+  //                                                           child:
+  //                                                               CircularProgressIndicator
+  //                                                                   .adaptive());
+  //                                                     },
+  //                                                   ),
+  //                                                 ),
+  //                                               ),
+  //                                             ),
+  //                                             Expanded(
+  //                                               child: Padding(
+  //                                                 padding:
+  //                                                     const EdgeInsets.only(
+  //                                                         left: 15.0),
+  //                                                 child: Column(
+  //                                                   mainAxisAlignment:
+  //                                                       MainAxisAlignment.start,
+  //                                                   crossAxisAlignment:
+  //                                                       CrossAxisAlignment
+  //                                                           .start,
+  //                                                   children: [
+  //                                                     Padding(
+  //                                                       padding:
+  //                                                           const EdgeInsets
+  //                                                               .only(
+  //                                                               top: 15.0),
+  //                                                       child: Text(branch.name,
+  //                                                           style: CommonStyles
+  //                                                               .txSty_18b_fb),
+  //                                                     ),
+  //                                                     const SizedBox(
+  //                                                         height: 4.0),
+  //                                                     Expanded(
+  //                                                       child: Padding(
+  //                                                         padding:
+  //                                                             const EdgeInsets
+  //                                                                 .only(
+  //                                                                 right: 10.0),
+  //                                                         child: Column(
+  //                                                           crossAxisAlignment:
+  //                                                               CrossAxisAlignment
+  //                                                                   .start,
+  //                                                           children: [
+  //                                                             Row(
+  //                                                               mainAxisAlignment:
+  //                                                                   MainAxisAlignment
+  //                                                                       .spaceEvenly,
+  //                                                               children: [
+  //                                                                 //MARK: location_icon
+  //                                                                 // Image.asset(
+  //                                                                 //   'assets/location_icon.png',
+  //                                                                 //   width: 20,
+  //                                                                 //   height: 18,
+  //                                                                 // ),
+  //                                                                 // const SizedBox(
+  //                                                                 //     width:
+  //                                                                 //         4.0),
+  //                                                                 Expanded(
+  //                                                                   child: Text(
+  //                                                                       branch
+  //                                                                           .address,
+  //                                                                       style: CommonStyles
+  //                                                                           .txSty_12b_fb),
+  //                                                                 ),
+  //                                                               ],
+  //                                                             ),
+  //                                                             const Spacer(
+  //                                                                 flex: 3),
+  //                                                           ],
+  //                                                         ),
+  //                                                       ),
+  //                                                     ),
+  //                                                     Align(
+  //                                                       alignment: Alignment
+  //                                                           .bottomRight,
+  //                                                       child: Container(
+  //                                                         height: 26,
+  //                                                         margin:
+  //                                                             const EdgeInsets
+  //                                                                 .only(
+  //                                                                 bottom: 10.0,
+  //                                                                 right: 10.0),
+  //                                                         decoration:
+  //                                                             BoxDecoration(
+  //                                                           color: Colors.white,
+  //                                                           border: Border.all(
+  //                                                             color: const Color(
+  //                                                                 0xFF8d97e2),
+  //                                                           ),
+  //                                                           borderRadius:
+  //                                                               BorderRadius
+  //                                                                   .circular(
+  //                                                                       10.0),
+  //                                                         ),
+  //                                                         child: ElevatedButton(
+  //                                                           onPressed: () {},
+  //                                                           style:
+  //                                                               ElevatedButton
+  //                                                                   .styleFrom(
+  //                                                             foregroundColor:
+  //                                                                 const Color(
+  //                                                                     0xFF8d97e2),
+  //                                                             backgroundColor:
+  //                                                                 Colors
+  //                                                                     .transparent,
+  //                                                             elevation: 0,
+  //                                                             shadowColor: Colors
+  //                                                                 .transparent,
+  //                                                             shape:
+  //                                                                 RoundedRectangleBorder(
+  //                                                               borderRadius:
+  //                                                                   BorderRadius
+  //                                                                       .circular(
+  //                                                                           10.0),
+  //                                                             ),
+  //                                                           ),
+  //                                                           child: Row(
+  //                                                             mainAxisSize:
+  //                                                                 MainAxisSize
+  //                                                                     .min,
+  //                                                             children: [
+  //                                                               SvgPicture
+  //                                                                   .asset(
+  //                                                                 'assets/datepicker_icon.svg',
+  //                                                                 width: 15.0,
+  //                                                                 height: 15.0,
+  //                                                               ),
+  //                                                               const SizedBox(
+  //                                                                   width: 5),
+  //                                                               const Text(
+  //                                                                 'Book Now',
+  //                                                                 style:
+  //                                                                     TextStyle(
+  //                                                                   fontSize:
+  //                                                                       13,
+  //                                                                   color: Color(
+  //                                                                       0xFF8d97e2),
+  //                                                                 ),
+  //                                                               ),
+  //                                                             ],
+  //                                                           ),
+  //                                                         ),
+  //                                                       ),
+  //                                                     ),
+  //                                                   ],
+  //                                                 ),
+  //                                               ),
+  //                                             ),
+  //                                           ],
+  //                                         ),
+  //                                       ),
+  //                                     ),
+  //                                   ),
+  //                                 ),
+  //                               ),
+  //                             ),
+  //                           );
+  //    */
+  // }
 }
 
 class BranchCard extends StatelessWidget {

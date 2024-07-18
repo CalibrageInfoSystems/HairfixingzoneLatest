@@ -98,7 +98,7 @@ class _LoginPageState extends State<CustomerLoginScreen> {
                   const Text('Customer Login',
                       style: TextStyle(
                         fontSize: 24,
-                        fontFamily: "Muli",
+                        fontFamily: "LibreFranklin",
                         fontWeight: FontWeight.w700,
                         letterSpacing: 2,
                         color: Color(0xFF662d91),
@@ -352,7 +352,7 @@ class _LoginPageState extends State<CustomerLoginScreen> {
                         child: const Text('Register Here!',
                             style: TextStyle(
                               fontSize: 20,
-                              fontFamily: "Muli",
+                              fontFamily: "LibreFranklin",
                               fontWeight: FontWeight.w700,
                               color: Color(0xFF0f75bc),
                             )),
@@ -583,12 +583,12 @@ class _LoginPageState extends State<CustomerLoginScreen> {
         // LoadingProgress.stop(context);
         // Extract the necessary information
         bool isSuccess = data['isSuccess'];
-        if(isSuccess){
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) =>  HomeScreen()),
-          );
-        }
+        // if(isSuccess){
+        //   Navigator.push(
+        //     context,
+        //     MaterialPageRoute(builder: (context) =>  HomeScreen()),
+        //   );
+        // }
 
 
         } else {

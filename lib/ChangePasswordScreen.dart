@@ -91,7 +91,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                         children: [
                           Text(
                             'Current Password ',
-                            style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                            style: CommonStyles.txSty_12b_f5,
                           ),
                           Text(
                             ' *',
@@ -168,7 +168,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                         children: [
                           Text(
                             'New Password ',
-                            style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                            style: CommonStyles.txSty_12b_f5,
                           ),
                           Text(
                             ' *',
@@ -246,7 +246,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                         children: [
                           Text(
                             'Confirm  Password ',
-                            style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                            style: CommonStyles.txSty_12b_f5,
                           ),
                           Text(
                             ' *',
@@ -389,11 +389,12 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
         if (isSuccess) {
           // Success case: show the success message
           progressDialog.dismiss();
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => HomeScreen(),
-            ),
-          );
+          onConfirmLogout(context);
+          // Navigator.of(context).push(
+          //   MaterialPageRoute(
+          //     builder: (context) => HomeScreen(),
+          //   ),
+          // );
           CommonUtils.showCustomToastMessageLong('$statusMessage', context, 0, 5, toastPosition: MediaQuery.of(context).size.height / 2);
         } else {
           progressDialog.dismiss();
@@ -527,7 +528,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
     );
   }
 
-  Future<void> onConfirmLogout(BuildContext context) async {
+  Future<void>    onConfirmLogout(BuildContext context) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool('isLoggedIn', false);
     prefs.remove('userId'); // Remove userId from SharedPreferences

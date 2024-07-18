@@ -196,7 +196,7 @@ class MyProducts_screenState extends State<MyProducts> {
                                 fontSize: 12.0,
                                 color: Colors.black,
                                 fontWeight: FontWeight.bold,
-                                fontFamily: "Roboto",
+                                fontFamily: "LibreFranklin",
                               ),
                             ),
                           );
@@ -217,7 +217,7 @@ class MyProducts_screenState extends State<MyProducts> {
                                   fontSize: 12.0,
                                   color: Colors.black,
                                   fontWeight: FontWeight.bold,
-                                  fontFamily: "Roboto",
+                                  fontFamily: "LibreFranklin",
                                 ),
                               ),
                             );
@@ -542,7 +542,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                               Text(
                                 option.desc,
                                 style: const TextStyle(
-                                  fontFamily: 'Muli',
+                                  fontFamily: 'LibreFranklin',
                                   fontSize: 14,
                                   color: CommonUtils.primaryTextColor,
                                 ),
@@ -640,7 +640,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                                                         fontSize: 12.0,
                                                         fontWeight:
                                                             FontWeight.bold,
-                                                        fontFamily: "Roboto",
+                                                        fontFamily: "LibreFranklin",
                                                         color: isSelected
                                                             ? Colors.white
                                                             : Colors.black,
@@ -693,7 +693,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                         child: const Text(
                           'Close',
                           style: TextStyle(
-                            fontFamily: 'Muli',
+                            fontFamily: 'LibreFranklin',
                             fontSize: 14,
                             color: CommonUtils.primaryTextColor,
                             fontWeight: FontWeight.bold,
@@ -722,7 +722,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                                 child: Text(
                                   'Apply',
                                   style: TextStyle(
-                                    fontFamily: 'Muli',
+                                    fontFamily: 'LibreFranklin',
                                     fontSize: 14,
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold,
@@ -797,18 +797,36 @@ class ProductCard extends StatelessWidget {
         padding: const EdgeInsets.all(10),
         margin: const EdgeInsets.all(10),
         decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(10.0),
-          boxShadow: [
-            BoxShadow(
-              color: const Color.fromARGB(255, 193, 193, 194)
-                  .withOpacity(0.2), // Shadow color
-              spreadRadius: 2, // Spread radius
-              blurRadius: 4, // Blur radius
-              offset: const Offset(0, 2), // Shadow position
-            ),
-          ],
+          gradient: const LinearGradient(
+            colors: [
+              Color(0xFFFFFFFF),
+              Color(0xFFFFFFFF),
+            ],
+            begin: Alignment.centerLeft,
+            end: Alignment.centerRight,
+          ),
+          border: Border.all(
+            color: Colors.grey,
+            //  color: const Color(0xFF8d97e2), // Add your desired border color here
+            width:
+            1.0, // Set the border width
+          ),
+          borderRadius: BorderRadius.circular(
+              10.0), // Optional: Add border radius if needed
         ),
+        // decoration: BoxDecoration(
+        //   color: Colors.white,
+        //   borderRadius: BorderRadius.circular(10.0),
+        //   boxShadow: [
+        //     BoxShadow(
+        //       color: const Color.fromARGB(255, 193, 193, 194)
+        //           .withOpacity(0.2), // Shadow color
+        //       spreadRadius: 2, // Spread radius
+        //       blurRadius: 4, // Blur radius
+        //       offset: const Offset(0, 2), // Shadow position
+        //     ),
+        //   ],
+        // ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
@@ -834,7 +852,7 @@ class ProductCard extends StatelessWidget {
                     top: -8,
                     left: -10,
                     child: SvgPicture.asset(
-                      'assets/bs_v2.svg',
+                      'assets/bs_v1.svg',
                       width: 80.0,
                       height: 35.0,
                     ),
@@ -868,7 +886,7 @@ class ProductCard extends StatelessWidget {
                   '₹ ${formatNumber(product.maxPrice)}',
                   style: const TextStyle(
                     fontSize: 18,
-                    fontFamily: "Muli",
+                    fontFamily: "LibreFranklin",
                     fontWeight: FontWeight.w500,
                     letterSpacing: 1,
                     color: Color(0xFF662d91),

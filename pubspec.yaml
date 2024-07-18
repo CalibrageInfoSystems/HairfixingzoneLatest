@@ -190,6 +190,7 @@ flutter:
     - assets/apps.svg
     - assets/favoritesvgrepo.svg
     - assets/giftbox.svg
+    - assets/change-password-icon.svg
 
 
 
@@ -218,9 +219,23 @@ flutter:
         - asset: fonts/NunitoBold.ttf
         - asset: fonts/NunitoMedium.ttf
         - asset: fonts/NunitoSemiBold.ttf
+    - family: LibreFranklin
+      fonts:
+        - asset: fonts/LibreFranklin-Medium.ttf
     - family: Muli
       fonts:
         - asset: fonts/Muli.ttf
+    - family: Roboto
+      fonts:
+       - asset: fonts/Roboto-Bold.ttf
+         weight: 700
+       - asset: fonts/Roboto-Medium.ttf
+         weight: 600
+       - asset: fonts/Roboto-Regular.ttf
+         weight: 400
+       - asset: fonts/Roboto-Thin.ttf
+         weight: 100
+  
 
 
 

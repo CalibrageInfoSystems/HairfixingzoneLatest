@@ -51,6 +51,7 @@ class AboutUsScreen extends StatelessWidget {
                     Text('About Us',
                         style: TextStyle(
                           fontSize: 16,
+                          fontFamily: "LibreFranklin",
                           color: Color(0xFF662d91),
                         )),
                     SizedBox(height: 5),
@@ -63,9 +64,11 @@ class AboutUsScreen extends StatelessWidget {
                         children: [
                           TextSpan(
                             text: 'Welcome to Hair Fixing Zone Bangalore, your ultimate destination for premier hair replacement services For Men and Women. Established with a commitment to excellence, we specialize in providing innovative and non-surgical solutions to address hair loss and baldness. Our team of experienced professionals offers a comprehensive range of treatments, including Hair weaving, Hair bonding, customized hair systems, Hair Toppers For women, clip in hair extensions, Hair wigs for women, Hair Wigs for Men and Chemotherapy wigs ensuring that each client receives a personalized approach to meet their unique needs.\n\n',
+                            style: CommonStyles.txSty_16black_f5,
                           ),
                           TextSpan(
                             text: 'Located in the bustling areas of Marathahalli, Indiranagar, Kadugodi and Sarjapur Road our state-of-the-art clinics are equipped with the latest technology and adhere to the highest standards of hygiene and customer care. Whether you are looking for a quick, same-day solution or a more extensive hair restoration plan, Hair Fixing Zone Bangalore is dedicated to helping you regain your confidence with natural-looking, long-lasting results.\n\n',
+                            style: CommonStyles.txSty_16black_f5,
                           ),
                           TextSpan(
                             text: 'Choose Hair Fixing Zone for the best in hair Fixing and transformation. Experience the difference with our expert services and join the countless satisfied clients who have made us their preferred choice for hair replacement in Bangalore. For more information about our services, view our gallery, and read our Google reviews, please visit our website at ',
@@ -151,7 +154,7 @@ class AboutUsScreen extends StatelessWidget {
         backgroundColor: const Color(0xFFf3e3ff),
         title: const Text(
           'About Us',
-          style: TextStyle(color: Color(0xFF0f75bc), fontSize: 16.0),
+          style: TextStyle(color: Color(0xFF0f75bc), fontSize: 16.0,  fontFamily: "LibreFranklin",),
         ),
         // actions: [
         //   IconButton(

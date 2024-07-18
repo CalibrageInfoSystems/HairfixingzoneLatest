@@ -91,7 +91,7 @@ class _notifications_screenState extends State<notifications_screen> {
             style: TextStyle(
               color: Color(0xFF0f75bc),
               fontSize: 16.0,
-              fontFamily: "Muli",
+              fontFamily: "LibreFranklin",
               fontWeight: FontWeight.w600,
             ),
             textAlign: TextAlign.start,
@@ -124,7 +124,7 @@ class _notifications_screenState extends State<notifications_screen> {
                           fontSize: 12.0,
                           color: Colors.black,
                           fontWeight: FontWeight.bold,
-                          fontFamily: "Roboto",
+                          fontFamily: "LibreFranklin",
                         ),
                       ),
                     );
@@ -480,7 +480,7 @@ class _AgentOpCardState extends State<AgentOpCard> {
                         '${dateValues[0]}',
                         style: const TextStyle(
                           fontSize: 22,
-                          fontFamily: "Muli",
+                          fontFamily: "LibreFranklin",
                           // letterSpacing: 1.5,
                           fontWeight: FontWeight.w700,
                           color: Color(0xFF0f75bc),
@@ -490,7 +490,7 @@ class _AgentOpCardState extends State<AgentOpCard> {
                         '${dateValues[2]}',
                         style: const TextStyle(
                           fontSize: 14,
-                          fontFamily: "Muli",
+                          fontFamily: "LibreFranklin",
                           fontWeight: FontWeight.w700,
                           color: Color(0xFF0f75bc),
                         ),
@@ -522,7 +522,7 @@ class _AgentOpCardState extends State<AgentOpCard> {
                                       widget.data.slotDuration,
                                       style: const TextStyle(
                                         fontSize: 16,
-                                        fontFamily: "Muli",
+                                        fontFamily: "LibreFranklin",
                                         fontWeight: FontWeight.w700,
                                         color: Color(0xFF0f75bc),
                                       ),
@@ -565,7 +565,7 @@ class _AgentOpCardState extends State<AgentOpCard> {
                                           widget.data.status,
                                           style: const TextStyle(
                                             fontSize: 16,
-                                            fontFamily: "Muli",
+                                            fontFamily: "LibreFranklin",
                                             fontWeight: FontWeight.w500,
                                             color: CommonStyles.statusBlueText,
                                           ),
@@ -649,7 +649,7 @@ class _AgentOpCardState extends State<AgentOpCard> {
                 '  Cancel',
                 style: TextStyle(
                   fontSize: 16,
-                  fontFamily: "Muli",
+                  fontFamily: "LibreFranklin",
                   fontWeight: FontWeight.w500,
                   color: isPastDate(data.date, data.slotDuration)
                       ? Colors.grey
@@ -685,7 +685,7 @@ class _AgentOpCardState extends State<AgentOpCard> {
     //           '  Cancel',
     //           style: TextStyle(
     //             fontSize: 16,
-    //             fontFamily: "Muli",
+    //             fontFamily: "LibreFranklin",
     //             fontWeight: FontWeight.w500,
     //             color: CommonStyles.statusRedText,
     //           ),
@@ -795,7 +795,7 @@ class _AgentOpCardState extends State<AgentOpCard> {
           //   style: TextStyle(
           //     fontSize: 16,
           //     color: CommonUtils.blueColor,
-          //     fontFamily: 'Muli',
+          //     fontFamily: 'LibreFranklin',
           //   ),
           // ),
           content: Column(
@@ -847,7 +847,7 @@ class _AgentOpCardState extends State<AgentOpCard> {
                   style: TextStyle(
                     fontSize: 16,
                     color: CommonUtils.primaryTextColor,
-                    fontFamily: 'Muli',
+                    fontFamily: 'LibreFranklin',
                   ),
                 ),
               ),
@@ -878,7 +878,7 @@ class _AgentOpCardState extends State<AgentOpCard> {
                   style: TextStyle(
                     fontSize: 16,
                     color: Colors.white,
-                    fontFamily: 'Muli',
+                    fontFamily: 'LibreFranklin',
                   ),
                 ),
               ),
@@ -1137,7 +1137,7 @@ class _AgentOpCardState extends State<AgentOpCard> {
             status,
             style: TextStyle(
               fontSize: 16,
-              fontFamily: "Muli",
+              fontFamily: "LibreFranklin",
               fontWeight: FontWeight.w500,
               color: statusColor,
             ),
@@ -1609,14 +1609,14 @@ class _AgentOpCardState extends State<AgentOpCard> {
 //                                               color: Color(
 //                                                   0xFFF44614),fontSize: 12,
 //                                               fontWeight: FontWeight.bold,
-//                                               fontFamily: 'Muli'),
+//                                               fontFamily: 'LibreFranklin'),
 //                                         ),
 //                                         TextSpan(
 //                                           text: appointment.customerName,
 //                                           style: TextStyle(
 //                                               color: Color(
 //                                                   0xFF042DE3),fontSize: 12,
-//                                               fontFamily: 'Muli'),
+//                                               fontFamily: 'LibreFranklin'),
 //                                         ),
 //                                       ],
 //                                     ),
@@ -1636,14 +1636,14 @@ class _AgentOpCardState extends State<AgentOpCard> {
 //                                               color: Color(
 //                                                   0xFFF44614),fontSize: 12,
 //                                               fontWeight: FontWeight.bold,
-//                                               fontFamily: 'Muli'),
+//                                               fontFamily: 'LibreFranklin'),
 //                                         ),
 //                                         TextSpan(
 //                                           text: appointment.name,
 //                                           style: TextStyle(
 //                                               color: Color(
 //                                                   0xFF042DE3),fontSize: 12,
-//                                               fontFamily: 'Muli'),
+//                                               fontFamily: 'LibreFranklin'),
 //                                         ),
 //                                       ],
 //                                     ),
@@ -1661,7 +1661,7 @@ class _AgentOpCardState extends State<AgentOpCard> {
 //                                               color: Color(
 //                                                   0xFFF44614),fontSize: 12,
 //                                               fontWeight: FontWeight.bold,
-//                                               fontFamily: 'Muli'),
+//                                               fontFamily: 'LibreFranklin'),
 //                                         ),
 //                                         TextSpan(
 //                                           text: appointment.gender,
@@ -1669,7 +1669,7 @@ class _AgentOpCardState extends State<AgentOpCard> {
 //                                               color: Color(
 //                                                   0xFF042DE3),fontSize: 12,
 //
-//                                               fontFamily: 'Muli'),
+//                                               fontFamily: 'LibreFranklin'),
 //                                         ),
 //                                       ],
 //                                     ),
@@ -1687,7 +1687,7 @@ class _AgentOpCardState extends State<AgentOpCard> {
 //                                               color: Color(
 //                                                   0xFFF44614),fontSize: 12,
 //                                               fontWeight: FontWeight.bold,
-//                                               fontFamily: 'Muli'),
+//                                               fontFamily: 'LibreFranklin'),
 //                                         ),
 //                                         TextSpan(
 //                                           text: appointment.purposeOfVisit,
@@ -1695,7 +1695,7 @@ class _AgentOpCardState extends State<AgentOpCard> {
 //                                               color: Color(
 //                                                   0xFF042DE3),fontSize: 12,
 //
-//                                               fontFamily: 'Muli'),
+//                                               fontFamily: 'LibreFranklin'),
 //                                         ),
 //                                       ],
 //                                     ),
@@ -1724,7 +1724,7 @@ class _AgentOpCardState extends State<AgentOpCard> {
 //                                               fontSize: 12,
 //
 //                                               fontWeight: FontWeight.bold,
-//                                               fontFamily: 'Muli'),
+//                                               fontFamily: 'LibreFranklin'),
 //                                         ),
 //                                         TextSpan(
 //                                           text: appointment.email,
@@ -1732,7 +1732,7 @@ class _AgentOpCardState extends State<AgentOpCard> {
 //                                               color: Color(
 //                                                   0xFF042DE3),fontSize: 12,
 //
-//                                               fontFamily: 'Muli'),
+//                                               fontFamily: 'LibreFranklin'),
 //                                         ),
 //                                       ],
 //                                     ),
@@ -1761,7 +1761,7 @@ class _AgentOpCardState extends State<AgentOpCard> {
 //                                               fontSize: 12,
 //
 //                                               fontWeight: FontWeight.bold,
-//                                               fontFamily: 'Muli'),
+//                                               fontFamily: 'LibreFranklin'),
 //                                         ),
 //
 //                                         TextSpan(
@@ -1773,7 +1773,7 @@ class _AgentOpCardState extends State<AgentOpCard> {
 //                                                 0xFF042DE3,
 //                                               ),
 //                                               fontSize: 12,
-//                                               fontFamily: 'Muli'),
+//                                               fontFamily: 'LibreFranklin'),
 //                                         ),
 //                                         TextSpan(
 //                                           text: " "+ appointment.slotDuration,
@@ -1783,7 +1783,7 @@ class _AgentOpCardState extends State<AgentOpCard> {
 //                                               ),
 //                                               fontSize: 12,
 //
-//                                               fontFamily: 'Muli'),
+//                                               fontFamily: 'LibreFranklin'),
 //                                         ),
 //                                       ],
 //                                     ),
@@ -1822,14 +1822,14 @@ class _AgentOpCardState extends State<AgentOpCard> {
 //                                         style: TextStyle(
 //                                           color: Color(0xFFF44614),
 //                                           fontWeight: FontWeight.bold,
-//                                           fontFamily: 'Muli',
+//                                           fontFamily: 'LibreFranklin',
 //                                         ),
 //                                       ),
 //                                       TextSpan(
 //                                         text: appointment.phoneNumber,
 //                                         style: TextStyle(
 //                                           color: Color(0xFF042DE3),
-//                                           fontFamily: 'Muli',
+//                                           fontFamily: 'LibreFranklin',
 //                                         ),
 //                                       ),
 //                                     ],
@@ -1875,7 +1875,7 @@ class _AgentOpCardState extends State<AgentOpCard> {
 //                                                     color: Colors.green ,
 //                                                     fontSize: 12,
 //                                                     fontWeight: FontWeight.bold,
-//                                                     fontFamily: 'Muli'
+//                                                     fontFamily: 'LibreFranklin'
 //                                                 ),
 //                                               ),
 //                                             ),
@@ -1923,7 +1923,7 @@ class _AgentOpCardState extends State<AgentOpCard> {
 //                                                     color:  Colors.red,
 //                                                     fontSize: 12,
 //                                                     fontWeight: FontWeight.bold,
-//                                                     fontFamily: 'Muli'
+//                                                     fontFamily: 'LibreFranklin'
 //                                                 ),
 //                                               ),
 //                                             ),
@@ -2115,7 +2115,7 @@ class _AgentOpCardState extends State<AgentOpCard> {
 //                                                   color: appointment.isAccepted ? Colors.green : Colors.red,
 //                                                   fontSize: 12,
 //                                                   fontWeight: FontWeight.bold,
-//                                                   fontFamily: 'Muli',
+//                                                   fontFamily: 'LibreFranklin',
 //                                                 ),
 //                                               ),
 //                                             ),
@@ -2145,7 +2145,7 @@ class _AgentOpCardState extends State<AgentOpCard> {
 //               fontSize: 18,
 //               color: Color(0xFFFB4110),
 //               fontWeight: FontWeight.bold,
-//               fontFamily: 'Muli',
+//               fontFamily: 'LibreFranklin',
 //             ),
 //           ),
 //         ),

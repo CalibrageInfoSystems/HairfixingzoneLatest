@@ -75,7 +75,7 @@ class _CustomCalendarDialogState extends State<CustomCalendarDialog> {
                       style: TextStyle(
                         fontSize: 16,
                         color: CommonUtils.primaryTextColor,
-                        fontFamily: 'Muli',
+                        fontFamily: 'LibreFranklin',
                       ),
                     ),
                   ),
@@ -107,7 +107,7 @@ class _CustomCalendarDialogState extends State<CustomCalendarDialog> {
                       style: TextStyle(
                         fontSize: 16,
                         color: Colors.white,
-                        fontFamily: 'Muli',
+                        fontFamily: 'LibreFranklin',
                       ),
                     ),
                   ),

@@ -31,50 +31,50 @@ class CommonStyles {
   // styles
   static const TextStyle txSty_12b_f5 = TextStyle(
     fontSize: 12,
-    fontFamily: "Muli",
+    fontFamily: "LibreFranklin",
     fontWeight: FontWeight.w500,
     color: blackColor,
   );
 
   static const TextStyle txSty_14b_f5 = TextStyle(
     fontSize: 14,
-    fontFamily: "Muli",
+    fontFamily: "LibreFranklin",
     fontWeight: FontWeight.w500,
     color: blackColor,
   );
   static const TextStyle txSty_14p_f5 = TextStyle(
     fontSize: 14,
-    fontFamily: "Muli",
+    fontFamily: "LibreFranklin",
     fontWeight: FontWeight.w500,
     color: primaryTextColor,
   );
   static const TextStyle txSty_14g_f5 = TextStyle(
     fontSize: 16,
-    fontFamily: "Muli",
+    fontFamily: "LibreFranklin",
     fontWeight: FontWeight.w600,
     color: greenColor,
   );
   static const TextStyle txSty_14blu_f5 = TextStyle(
     fontSize: 14,
-    fontFamily: "Muli",
+    fontFamily: "LibreFranklin",
     fontWeight: FontWeight.w500,
     color: Color(0xFF0f75bc),
   );
   static const TextStyle txSty_16blu_f5 = TextStyle(
     fontSize: 16,
-    fontFamily: "Muli",
+    fontFamily: "LibreFranklin",
     fontWeight: FontWeight.w500,
     color: Color(0xFF0f75bc),
   );
   static const TextStyle txSty_16black_f5 = TextStyle(
     fontSize: 16,
-    fontFamily: "Muli",
+    fontFamily: "LibreFranklin",
     fontWeight: FontWeight.w500,
     color: Color(0xFF5f5f5f),
   );
   static const TextStyle txSty_16p_fb = TextStyle(
     fontSize: 16,
-    fontFamily: "Muli",
+    fontFamily: "LibreFranklin",
     fontWeight: FontWeight.bold,
     color: primaryTextColor,
   );
@@ -82,69 +82,80 @@ class CommonStyles {
     fontSize: 18,
     color: Colors.black,
     fontWeight: FontWeight.bold,
-    fontFamily: 'Muli',
+    fontFamily: 'LibreFranklin',
+  );
+  static const TextStyle txSty_16b_fb = TextStyle(
+    fontSize: 16,
+    color: Colors.black,
+    fontWeight: FontWeight.bold,
+    fontFamily: 'LibreFranklin',
   );
   static const TextStyle header_Styles = TextStyle(
     fontSize: 26,
-    fontFamily: "Muli",
+    fontFamily: "LibreFranklin",
     fontWeight: FontWeight.w700,
     color: Color(0xFF0f75bc),
   );
   static const TextStyle txSty_16w_fb = TextStyle(
     fontSize: 16,
-    fontFamily: "Muli",
+    fontFamily: "LibreFranklin",
     fontWeight: FontWeight.bold,
     color: whiteColor,
   );
   static const TextStyle txSty_18w_fb = TextStyle(
       fontSize: 22,
-      fontFamily: "Muli",
+      fontFamily: "LibreFranklin",
       fontWeight: FontWeight.bold,
       color: whiteColor,
       letterSpacing: 1);
   static const TextStyle txSty_16p_f5 = TextStyle(
     fontSize: 16,
-    fontFamily: "Muli",
+    fontFamily: "LibreFranklin",
     fontWeight: FontWeight.w500,
     color: primaryTextColor,
   );
   static const TextStyle txSty_20p_fb = TextStyle(
     fontSize: 20,
-    fontFamily: "Muli",
+    fontFamily: "LibreFranklin",
     fontWeight: FontWeight.bold,
     color: primaryTextColor,
     letterSpacing: 2,
   );
   static const TextStyle txSty_20b_fb = TextStyle(
-    fontSize: 24,
-    fontFamily: "Muli",
+    fontSize: 20,
+    fontFamily: "LibreFranklin",
     fontWeight: FontWeight.bold,
     color: blackColor,
   );
   static const TextStyle txSty_12b_fb = TextStyle(
-    fontFamily: 'Muli',
+    fontFamily: 'LibreFranklin',
     fontSize: 12,
     color: Color(0xFF000000),
   );
+  static const TextStyle txSty_12bl_fb = TextStyle(
+    fontFamily: 'LibreFranklin',
+    fontSize: 12,
+    color: Color(0xA1000000),
+  );
   static const TextStyle txSty_20black_fb = TextStyle(
     fontSize: 20,
-    fontFamily: "Muli",
+    fontFamily: "LibreFranklin",
     color: blackColor,
   );
   static const TextStyle txSty_20blu_fb = TextStyle(
     fontSize: 20,
-    fontFamily: "Muli",
+    fontFamily: "LibreFranklin",
     fontWeight: FontWeight.bold,
     color: blueColor,
   );
   static const TextStyle txSty_20w_fb = TextStyle(
     fontSize: 20,
-    fontFamily: "Muli",
+    fontFamily: "LibreFranklin",
     color: whiteColor,
   );
   static const TextStyle text16white = TextStyle(
     fontSize: 16,
-    fontFamily: "Muli",
+    fontFamily: "LibreFranklin",
     fontWeight: FontWeight.w600,
     color: CommonStyles.whiteColor,
   );

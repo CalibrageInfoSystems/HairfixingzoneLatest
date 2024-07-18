@@ -110,7 +110,7 @@ class MyAppointments_screenState extends State<MyAppointments> {
                               fontSize: 12.0,
                               color: Colors.black,
                               fontWeight: FontWeight.bold,
-                              fontFamily: "Roboto",
+                              fontFamily: "LibreFranklin",
                             ),
                           ),
                         );
@@ -147,7 +147,7 @@ class MyAppointments_screenState extends State<MyAppointments> {
                                 fontSize: 12.0,
                                 color: Colors.black,
                                 fontWeight: FontWeight.bold,
-                                fontFamily: "Roboto",
+                                fontFamily: "LibreFranklin",
                               ),
                             ),
                           );
@@ -751,7 +751,7 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                                                         fontSize: 12.0,
                                                         fontWeight:
                                                             FontWeight.bold,
-                                                        fontFamily: "Roboto",
+                                                        fontFamily: "LibreFranklin",
                                                         color: isSelected
                                                             ? Colors.white
                                                             : Colors.black,
@@ -864,7 +864,7 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                                                         fontSize: 12.0,
                                                         fontWeight:
                                                             FontWeight.bold,
-                                                        fontFamily: "Roboto",
+                                                        fontFamily: "LibreFranklin",
                                                         color: isSelected
                                                             ? Colors.white
                                                             : Colors.black,
@@ -913,7 +913,7 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                             child: const Text(
                               'Close',
                               style: TextStyle(
-                                fontFamily: 'Muli',
+                                fontFamily: 'LibreFranklin',
                                 fontSize: 14,
                                 color: CommonUtils.primaryTextColor,
                                 fontWeight: FontWeight.bold,
@@ -953,7 +953,7 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                                     child: Text(
                                       'Apply',
                                       style: TextStyle(
-                                        fontFamily: 'Muli',
+                                        fontFamily: 'LibreFranklin',
                                         fontSize: 14,
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold,
@@ -1148,19 +1148,37 @@ class _OpCardState extends State<OpCard> {
               //   borderRadius: BorderRadius.circular(10.0),
               // ),
               decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(10.0),
-                // borderRadius: BorderRadius.circular(30), //border corner radius
-                boxShadow: [
-                  BoxShadow(
-                    color: const Color(0xFF960efd)
-                        .withOpacity(0.2), //color of shadow
-                    spreadRadius: 2, //spread radius
-                    blurRadius: 4, // blur radius
-                    offset: const Offset(0, 2), // changes position of shadow
-                  ),
-                ],
+                gradient: const LinearGradient(
+                  colors: [
+                    Color(0xFFFFFFFF),
+                    Color(0xFFFFFFFF),
+                  ],
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
+                ),
+                border: Border.all(
+                  color: Colors.grey,
+                  //  color: const Color(0xFF8d97e2), // Add your desired border color here
+                  width:
+                  1.0, // Set the border width
+                ),
+                borderRadius: BorderRadius.circular(
+                    10.0), // Optional: Add border radius if needed
               ),
+              // decoration: BoxDecoration(
+              //   color: Colors.white,
+              //   borderRadius: BorderRadius.circular(10.0),
+              //   // borderRadius: BorderRadius.circular(30), //border corner radius
+              //   boxShadow: [
+              //     BoxShadow(
+              //       color: const Color(0xFF960efd)
+              //           .withOpacity(0.2), //color of shadow
+              //       spreadRadius: 2, //spread radius
+              //       blurRadius: 4, // blur radius
+              //       offset: const Offset(0, 2), // changes position of shadow
+              //     ),
+              //   ],
+              // ),
               child: Row(
                 children: [
                   SizedBox(
@@ -1178,7 +1196,7 @@ class _OpCardState extends State<OpCard> {
                           '${dateValues[0]}',
                           style: const TextStyle(
                             fontSize: 22,
-                            fontFamily: "Muli",
+                            fontFamily: "LibreFranklin",
                             // letterSpacing: 1.5,
                             fontWeight: FontWeight.w700,
                             color: Color(0xFF0f75bc),
@@ -1188,7 +1206,7 @@ class _OpCardState extends State<OpCard> {
                           '${dateValues[2]}',
                           style: const TextStyle(
                             fontSize: 14,
-                            fontFamily: "Muli",
+                            fontFamily: "LibreFranklin",
                             fontWeight: FontWeight.w700,
                             color: Color(0xFF0f75bc),
                           ),
@@ -1218,7 +1236,7 @@ class _OpCardState extends State<OpCard> {
                                         widget.data.slotDuration,
                                         style: const TextStyle(
                                           fontSize: 16,
-                                          fontFamily: "Muli",
+                                          fontFamily: "LibreFranklin",
                                           fontWeight: FontWeight.w700,
                                           color: Color(0xFF0f75bc),
                                         ),
@@ -1365,7 +1383,7 @@ class _OpCardState extends State<OpCard> {
             status,
             style: TextStyle(
               fontSize: 16,
-              fontFamily: "Muli",
+              fontFamily: "LibreFranklin",
               fontWeight: FontWeight.w500,
               color: statusColor,
             ),
@@ -1478,7 +1496,7 @@ class _OpCardState extends State<OpCard> {
                         '  Cancel',
                         style: TextStyle(
                           fontSize: 16,
-                          fontFamily: "Muli",
+                          fontFamily: "LibreFranklin",
                           fontWeight: FontWeight.w500,
                           color: isPastDate(data.date, data.slotDuration)
                               ? Colors.grey
@@ -1547,7 +1565,7 @@ class _OpCardState extends State<OpCard> {
                     text: data.review,
                     style: const TextStyle(
                       fontWeight: FontWeight.w500,
-                      fontFamily: "Muli",
+                      fontFamily: "LibreFranklin",
                       color: Color(0xFF5f5f5f),
                     ),
                   ),
@@ -1754,7 +1772,7 @@ class _OpCardState extends State<OpCard> {
                               style: const TextStyle(
                                 fontSize: 16,
                                 color: CommonUtils.primaryTextColor,
-                                fontFamily: 'Muli',
+                                fontFamily: 'LibreFranklin',
                               ),
                               textAlign: TextAlign.center,
                             ),
@@ -1769,7 +1787,7 @@ class _OpCardState extends State<OpCard> {
                                 style: const TextStyle(
                                   fontSize: 16,
                                   color: CommonUtils.primaryTextColor,
-                                  fontFamily: 'Muli',
+                                  fontFamily: 'LibreFranklin',
                                 ),
                                 textAlign: TextAlign.center,
                               ),
@@ -1812,7 +1830,7 @@ class _OpCardState extends State<OpCard> {
                                 style: const TextStyle(
                                   fontSize: 16,
                                   color: CommonUtils.primaryTextColor,
-                                  fontFamily: 'Muli',
+                                  fontFamily: 'LibreFranklin',
                                 ),
                                 textAlign: TextAlign.center,
                               ),
@@ -1865,7 +1883,7 @@ class _OpCardState extends State<OpCard> {
                                 child: TextFormField(
                                   controller: _commentstexteditcontroller,
                                   style: const TextStyle(
-                                    fontFamily: 'Muli',
+                                    fontFamily: 'LibreFranklin',
                                     fontSize: 14,
                                     fontWeight: FontWeight.w300,
                                   ),
@@ -1878,7 +1896,7 @@ class _OpCardState extends State<OpCard> {
                                       color: Colors.black54,
                                       fontSize: 14,
                                       fontWeight: FontWeight.bold,
-                                      fontFamily: 'Muli',
+                                      fontFamily: 'LibreFranklin',
                                     ),
                                     contentPadding: EdgeInsets.symmetric(
                                       horizontal: 16.0,
@@ -1914,7 +1932,7 @@ class _OpCardState extends State<OpCard> {
                                           child: Text(
                                             'Rate Now',
                                             style: TextStyle(
-                                              fontFamily: 'Muli',
+                                              fontFamily: 'LibreFranklin',
                                               fontSize: 14,
                                               color: Colors.white,
                                               fontWeight: FontWeight.bold,
@@ -2067,7 +2085,7 @@ class _OpCardState extends State<OpCard> {
           //   style: TextStyle(
           //     fontSize: 16,
           //     color: CommonUtils.blueColor,
-          //     fontFamily: 'Muli',
+          //     fontFamily: 'LibreFranklin',
           //   ),
           // ),
           content: Column(
@@ -2097,7 +2115,7 @@ class _OpCardState extends State<OpCard> {
               //   style: const TextStyle(
               //     fontSize: 16,
               //     color: CommonUtils.primaryTextColor,
-              //     fontFamily: 'Muli',
+              //     fontFamily: 'LibreFranklin',
               //   ),
               // ),
             ],
@@ -2127,7 +2145,7 @@ class _OpCardState extends State<OpCard> {
                   style: TextStyle(
                     fontSize: 16,
                     color: CommonUtils.primaryTextColor,
-                    fontFamily: 'Muli',
+                    fontFamily: 'LibreFranklin',
                   ),
                 ),
               ),
@@ -2158,7 +2176,7 @@ class _OpCardState extends State<OpCard> {
                   style: TextStyle(
                     fontSize: 16,
                     color: Colors.white,
-                    fontFamily: 'Muli',
+                    fontFamily: 'LibreFranklin',
                   ),
                 ),
               ),
@@ -2179,7 +2197,7 @@ class _OpCardState extends State<OpCard> {
   //           style: TextStyle(
   //             fontSize: 16,
   //             color: CommonUtils.blueColor,
-  //             fontFamily: 'Muli',
+  //             fontFamily: 'LibreFranklin',
   //           ),
   //         ),
   //         content: Text(
@@ -2187,7 +2205,7 @@ class _OpCardState extends State<OpCard> {
   //           style: const TextStyle(
   //             fontSize: 16,
   //             color: CommonUtils.primaryTextColor,
-  //             fontFamily: 'Muli',
+  //             fontFamily: 'LibreFranklin',
   //           ),
   //         ),
   //         actions: [
@@ -2200,7 +2218,7 @@ class _OpCardState extends State<OpCard> {
   //               style: TextStyle(
   //                 fontSize: 16,
   //                 color: CommonUtils.blueColor,
-  //                 fontFamily: 'Muli',
+  //                 fontFamily: 'LibreFranklin',
   //               ),
   //             ),
   //           ),
@@ -2214,7 +2232,7 @@ class _OpCardState extends State<OpCard> {
   //               style: TextStyle(
   //                 fontSize: 16,
   //                 color: CommonUtils.blueColor,
-  //                 fontFamily: 'Muli',
+  //                 fontFamily: 'LibreFranklin',
   //               ),
   //             ),
   //           ),

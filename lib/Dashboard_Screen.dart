@@ -328,37 +328,37 @@ class _CustomerDashBoardState extends State<CustomerDashBoard> {
       backgroundColor: CommonStyles.whiteColor,
       body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    Text(
-                      'Hey, ',
-                      style: CommonStyles.txSty_20b_fb.copyWith(fontSize: 24),
-                    ),
-                    Text(
-                      userFullName,
-                      style: CommonStyles.txSty_20b_fb.copyWith(fontSize: 24),
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 10.0,
-                ),
-                Text(
-                  'Welcome to Hair Fixing Zone',
-                  style: TextStyle(
-                    fontSize: MediaQuery.of(context).size.width * 0.04,
-                    fontFamily: "Muli",
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
-                ),
-              ],
-            ),
-          ),
+          // Padding(
+          //   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+          //   child: Column(
+          //     children: [
+          //       Row(
+          //         children: [
+          //           Text(
+          //             'Hey, ',
+          //             style: CommonStyles.txSty_20b_fb.copyWith(fontSize: 24),
+          //           ),
+          //           Text(
+          //             userFullName,
+          //             style: CommonStyles.txSty_20b_fb.copyWith(fontSize: 24),
+          //           ),
+          //         ],
+          //       ),
+          //       const SizedBox(
+          //         height: 10.0,
+          //       ),
+          //       // Text(
+          //       //   'Welcome to Hair Fixing Zone',
+          //       //   style: TextStyle(
+          //       //     fontSize: MediaQuery.of(context).size.width * 0.06,
+          //       //     fontFamily: "LibreFranklin",
+          //       //     fontWeight: FontWeight.bold,
+          //       //     color: Colors.black,
+          //       //   ),
+          //       // ),
+          //     ],
+          //   ),
+          // ),
           Expanded(
             child: Column(
               children: [
@@ -487,51 +487,51 @@ class _CustomerDashBoardState extends State<CustomerDashBoard> {
                 ),
              */
                 //MARK: Marquee Text
-                FutureBuilder(
-                  future: getMarqueeText(),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const SizedBox();
-                    } else if (snapshot.hasError) {
-                      return const SizedBox();
-                    } else {
-                      if (marqueeText != null) {
-                        return Container(
-                          height: 40,
-                          decoration: const BoxDecoration(
-                            image: DecorationImage(
-                              fit: BoxFit.cover,
-                              image: AssetImage(
-                                'assets/wave_background.png',
-                              ),
-                            ),
-                          ),
-                          child: Marquee(
-                            text: marqueeText!,
-                            style: CommonStyles.text16white,
-                            velocity: _shouldStartMarquee ? 30 : 0,
-                          ),
-                        );
-                      } else {
-                        return const SizedBox();
-                      }
-                    }
-                  },
-                ),
+                // FutureBuilder(
+                //   future: getMarqueeText(),
+                //   builder: (context, snapshot) {
+                //     if (snapshot.connectionState == ConnectionState.waiting) {
+                //       return const SizedBox();
+                //     } else if (snapshot.hasError) {
+                //       return const SizedBox();
+                //     } else {
+                //       if (marqueeText != null) {
+                //         return Container(
+                //           height: 40,
+                //           decoration: const BoxDecoration(
+                //             image: DecorationImage(
+                //               fit: BoxFit.cover,
+                //               image: AssetImage(
+                //                 'assets/wave_background.png',
+                //               ),
+                //             ),
+                //           ),
+                //           child: Marquee(
+                //             text: marqueeText!,
+                //             style: CommonStyles.text16white,
+                //             velocity: _shouldStartMarquee ? 30 : 0,
+                //           ),
+                //         );
+                //       } else {
+                //         return const SizedBox();
+                //       }
+                //     }
+                //   },
+                // ),
 
                 //MARK: Branches
-                const Padding(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-                  child: Align(
-                    alignment: Alignment.topCenter,
-                    child: Text(
-                      'Branches',
-                      textAlign: TextAlign.left,
-                      style: CommonStyles.txSty_20b_fb,
-                    ),
-                  ),
-                ),
+                // const Padding(
+                //   padding:
+                //       EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+                //   child: Align(
+                //     alignment: Alignment.topCenter,
+                //     child: Text(
+                //       'Branches',
+                //       textAlign: TextAlign.left,
+                //       style: CommonStyles.txSty_20b_fb,
+                //     ),
+                //   ),
+                // ),
                 if (isLoading)
                   const Text('Please Wait Loading Slow Internet Connection !')
                 else if (brancheslist.isEmpty && imageList.isEmpty)
@@ -559,7 +559,8 @@ class _CustomerDashBoardState extends State<CustomerDashBoard> {
                     flex: 3,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                      child: ListView.builder(
+                      child:
+                      ListView.builder(
                         shrinkWrap: true,
                         itemCount: isLoading ? 5 : brancheslist.length,
                         itemBuilder: (context, index) {
@@ -613,7 +614,8 @@ class _CustomerDashBoardState extends State<CustomerDashBoard> {
                                         //   bottomLeft: Radius.circular(29.0),
                                         // ),
                                         child: Container(
-                                          decoration: BoxDecoration(
+                                          decoration:
+                                          BoxDecoration(
                                             gradient: const LinearGradient(
                                               colors: [
                                                 Color(0xFFFFFFFF),
@@ -723,7 +725,7 @@ class _CustomerDashBoardState extends State<CustomerDashBoard> {
                                                                         branch
                                                                             .address,
                                                                         style: CommonStyles
-                                                                            .txSty_12b_fb),
+                                                                            .txSty_12bl_fb),
                                                                   ),
                                                                 ],
                                                               ),

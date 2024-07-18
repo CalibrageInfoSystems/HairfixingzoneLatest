@@ -40,13 +40,13 @@ class _SlotSuccessScreenState extends State<SlotSuccessScreen> with TickerProvid
   late AnimationController _controller2;
   static const textStyle = TextStyle(
     fontSize: 20,
-    fontFamily: "Muli",
+    fontFamily: "LibreFranklin",
     color: Colors.black,
   );
 
   static const txSty_20pr_fb = TextStyle(
     fontSize: 20,
-    fontFamily: "Muli",
+    fontFamily: "LibreFranklin",
     fontWeight: FontWeight.bold,
     color: Color(0xFF662e91),
   );
@@ -87,7 +87,7 @@ class _SlotSuccessScreenState extends State<SlotSuccessScreen> with TickerProvid
         child: Scaffold(
           appBar: AppBar(
             elevation: 0,
-            backgroundColor: const Color(0xFFf3e3ff),
+            backgroundColor: const Color(0xffffffff),
             title: const Text(
               'Booked Successfully',
               style: TextStyle(color: Color(0xFF0f75bc), fontSize: 16.0, fontWeight: FontWeight.w600),
@@ -96,6 +96,7 @@ class _SlotSuccessScreenState extends State<SlotSuccessScreen> with TickerProvid
             automaticallyImplyLeading: false,
           ),
           body: Container(
+            color: Colors.white,
             padding: const EdgeInsets.all(20),
             child: Column(
               children: [
@@ -146,7 +147,7 @@ class _SlotSuccessScreenState extends State<SlotSuccessScreen> with TickerProvid
                         ],
                       ),
                       const SizedBox(
-                        height: 10,
+                        height: 5,
                       ),
                       const Column(
                         children: [
@@ -161,7 +162,7 @@ class _SlotSuccessScreenState extends State<SlotSuccessScreen> with TickerProvid
                         ],
                       ),
                       const SizedBox(
-                        height: 10,
+                        height: 5,
                       ),
                       Container(
                           width: MediaQuery.of(context).size.width,
@@ -302,7 +303,8 @@ class _SlotSuccessScreenState extends State<SlotSuccessScreen> with TickerProvid
                                           //       color: CommonStyles.statusGreenText,
                                           //     ),
                                           //     shape: BoxShape.circle),
-                                          child: SvgPicture.asset(
+                                          child:
+                                          SvgPicture.asset(
                                             'assets/phone_call.svg',
                                             width: 25,
                                             height: 25,
@@ -318,11 +320,10 @@ class _SlotSuccessScreenState extends State<SlotSuccessScreen> with TickerProvid
                                         child: Container(
                                           padding: const EdgeInsets.all(1),
                                         //  decoration: BoxDecoration(border: Border.all(color: CommonStyles.primaryTextColor), shape: BoxShape.circle),
-                                          child: SvgPicture.asset(
-                                            'assets/map_marker.svg',
-                                            width: 25,
-                                            height: 25,
-                                            color: CommonStyles.statusGreenText,
+                                          child: Image.asset(
+                                            'assets/location_icon.png',
+                                            width: 20,
+                                            height: 20,
                                           ),
                                         ),
                                       ),

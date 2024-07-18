@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'ChangePasswordScreen.dart';
 import 'Common/common_styles.dart';
 import 'Common/custom_button.dart';
 import 'Common/custome_form_field.dart';
@@ -58,7 +59,7 @@ class EditProfile_screenState extends State<EditProfile> {
   bool isAltMobileNumberValidate = false;
   bool isEmailValidate = false;
   bool isGenderSelected = false;
-  int? Id;
+ // int? Id;
   int? createdByUserId;
   int? userId;
   String? createdDate;
@@ -84,6 +85,8 @@ class EditProfile_screenState extends State<EditProfile> {
   DateTime? selectedDate;
   late SharedPreferences prefs;
   int? gendertypeid;
+
+  int Id = 0;
   @override
   void initState() {
     _fetchUserDataFuture = fetchLoginUserData();
@@ -820,9 +823,33 @@ class EditProfile_screenState extends State<EditProfile> {
                     ),
                   ],
                 ),
+
                 const SizedBox(
                   height: 40,
                 ),
+              // Row(
+              //       children: [
+              //         Expanded(
+              //           child: CustomButton(
+              //               buttonText: 'Change Password',
+              //               textColor: CommonStyles.whiteColor,
+              //               borderColor: CommonStyles.primaryTextColor,
+              //               color: CommonStyles.primaryTextColor,
+              //               onPressed: () {
+              //                 Navigator.of(context).push(
+              //                   MaterialPageRoute(
+              //                     builder: (context) =>
+              //                         ChangePasswordScreen(
+              //                           id: loginUserId!,
+              //                           password: loginUserPassword!,
+              //                         ),
+              //                   ),
+              //                 );
+              //               }),
+              //         ),
+              //       ],
+              //     ),
+
                 Row(
                   children: [
                     Expanded(

@@ -102,19 +102,37 @@ class ViewConsultations_screenState extends State<ViewConsultations> {
                               child: Container(
                                 padding: const EdgeInsets.only(
                                     bottom: 10, top: 5, left: 0, right: 0),
-                                decoration: const BoxDecoration(
-                                    gradient: LinearGradient(
-                                      colors: [
-                                        Color(0xFFfee7e1),
-                                        Color(0xFFd7defa),
-                                      ],
-                                      begin: Alignment.centerLeft,
-                                      end: Alignment.centerRight,
-                                    ),
-                                    borderRadius: BorderRadius.only(
-                                      topRight: Radius.circular(15.0),
-                                      bottomLeft: Radius.circular(15.0),
-                                    )),
+                                decoration: BoxDecoration(
+                                  gradient: const LinearGradient(
+                                    colors: [
+                                      Color(0xFFFFFFFF),
+                                      Color(0xFFFFFFFF),
+                                    ],
+                                    begin: Alignment.centerLeft,
+                                    end: Alignment.centerRight,
+                                  ),
+                                  border: Border.all(
+                                    color: Colors.grey,
+                                    //  color: const Color(0xFF8d97e2), // Add your desired border color here
+                                    width:
+                                    1.0, // Set the border width
+                                  ),
+                                  borderRadius: BorderRadius.circular(
+                                      10.0), // Optional: Add border radius if needed
+                                ),
+                                // decoration: const BoxDecoration(
+                                //     gradient: LinearGradient(
+                                //       colors: [
+                                //         Color(0xFFfee7e1),
+                                //         Color(0xFFd7defa),
+                                //       ],
+                                //       begin: Alignment.centerLeft,
+                                //       end: Alignment.centerRight,
+                                //     ),
+                                //     borderRadius: BorderRadius.only(
+                                //       topRight: Radius.circular(15.0),
+                                //       bottomLeft: Radius.circular(15.0),
+                                //     )),
                                 child: Column(
                                   children: [
                                     Row(
@@ -163,7 +181,7 @@ class ViewConsultations_screenState extends State<ViewConsultations> {
                                                                             FontWeight
                                                                                 .bold,
                                                                         fontFamily:
-                                                                            'Muli'),
+                                                                            'LibreFranklin'),
                                                                   ),
                                                                 ),
                                                               ],
@@ -198,7 +216,7 @@ class ViewConsultations_screenState extends State<ViewConsultations> {
                                                                             FontWeight
                                                                                 .bold,
                                                                         fontFamily:
-                                                                            'Muli'),
+                                                                            'LibreFranklin'),
                                                                   ),
                                                                   // Icon(
                                                                   //   Icons.lock_clock,
@@ -234,7 +252,7 @@ class ViewConsultations_screenState extends State<ViewConsultations> {
                                                                             FontWeight
                                                                                 .bold,
                                                                         fontFamily:
-                                                                            'Muli'),
+                                                                            'LibreFranklin'),
                                                                   ),
                                                                 ),
                                                               ],
@@ -264,7 +282,7 @@ class ViewConsultations_screenState extends State<ViewConsultations> {
                                                                         fontSize:
                                                                             12,
                                                                         fontFamily:
-                                                                            'Muli'),
+                                                                            'LibreFranklin'),
                                                                   ),
                                                                 ),
                                                               ],
@@ -299,7 +317,7 @@ class ViewConsultations_screenState extends State<ViewConsultations> {
                                                                             FontWeight
                                                                                 .bold,
                                                                         fontFamily:
-                                                                            'Muli'),
+                                                                            'LibreFranklin'),
                                                                   ),
                                                                 ),
                                                               ],
@@ -330,7 +348,7 @@ class ViewConsultations_screenState extends State<ViewConsultations> {
                                                                             FontWeight
                                                                                 .bold,
                                                                         fontFamily:
-                                                                            'Muli'),
+                                                                            'LibreFranklin'),
                                                                   ),
                                                                 ),
                                                               ],
@@ -360,7 +378,7 @@ class ViewConsultations_screenState extends State<ViewConsultations> {
                                                                         fontSize:
                                                                             12,
                                                                         fontFamily:
-                                                                            'Muli'),
+                                                                            'LibreFranklin'),
                                                                   ),
                                                                 ),
                                                               ],
@@ -410,7 +428,7 @@ class ViewConsultations_screenState extends State<ViewConsultations> {
                                                                     FontWeight
                                                                         .bold,
                                                                 fontFamily:
-                                                                    'Muli'),
+                                                                    'LibreFranklin'),
                                                           ),
                                                         ),
                                                       ],
@@ -437,7 +455,7 @@ class ViewConsultations_screenState extends State<ViewConsultations> {
                                                                     FontWeight
                                                                         .bold,
                                                                 fontFamily:
-                                                                    'Muli'),
+                                                                    'LibreFranklin'),
                                                           ),
                                                         ),
                                                       ],
@@ -462,7 +480,7 @@ class ViewConsultations_screenState extends State<ViewConsultations> {
                                                                     0xFF042DE3),
                                                                 fontSize: 12,
                                                                 fontFamily:
-                                                                    'Muli'),
+                                                                    'LibreFranklin'),
                                                           ),
                                                         ),
                                                       ],
@@ -493,7 +511,7 @@ class ViewConsultations_screenState extends State<ViewConsultations> {
                                                                     FontWeight
                                                                         .bold,
                                                                 fontFamily:
-                                                                    'Muli'),
+                                                                    'LibreFranklin'),
                                                           ),
                                                         ),
                                                       ],
@@ -520,7 +538,7 @@ class ViewConsultations_screenState extends State<ViewConsultations> {
                                                                     FontWeight
                                                                         .bold,
                                                                 fontFamily:
-                                                                    'Muli'),
+                                                                    'LibreFranklin'),
                                                           ),
                                                         ),
                                                       ],
@@ -545,7 +563,7 @@ class ViewConsultations_screenState extends State<ViewConsultations> {
                                                                     0xFF042DE3),
                                                                 fontSize: 12,
                                                                 fontFamily:
-                                                                    'Muli'),
+                                                                    'LibreFranklin'),
                                                           ),
                                                         ),
                                                       ],
@@ -577,7 +595,7 @@ class ViewConsultations_screenState extends State<ViewConsultations> {
                                                     color: Color(0xFFF44614),
                                                     fontSize: 12,
                                                     fontWeight: FontWeight.bold,
-                                                    fontFamily: 'Muli',
+                                                    fontFamily: 'LibreFranklin',
                                                   ),
                                                 ),
                                               ],
@@ -596,7 +614,7 @@ class ViewConsultations_screenState extends State<ViewConsultations> {
                                                   color: Color(0xFFF44614),
                                                   fontSize: 12,
                                                   fontWeight: FontWeight.bold,
-                                                  fontFamily: 'Muli',
+                                                  fontFamily: 'LibreFranklin',
                                                 ),
                                               ),
                                             ],
@@ -619,7 +637,7 @@ class ViewConsultations_screenState extends State<ViewConsultations> {
                                                   style: const TextStyle(
                                                     color: Color(0xFF042DE3),
                                                     fontSize: 12,
-                                                    fontFamily: 'Muli',
+                                                    fontFamily: 'LibreFranklin',
                                                   ),
                                                 ),
                                               ),

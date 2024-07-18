@@ -113,7 +113,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           style: TextStyle(
                             fontSize: 16,
                             color: CommonUtils.primaryTextColor,
-                            fontFamily: 'Muli',
+                            fontFamily: 'LibreFranklin',
                           ),
                         ),
                       ),
@@ -141,7 +141,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           style: TextStyle(
                             fontSize: 16,
                             color: Colors.white,
-                            fontFamily: 'Muli',
+                            fontFamily: 'LibreFranklin',
                           ),
                         ),
                       ),
@@ -171,41 +171,69 @@ class _HomeScreenState extends State<HomeScreen> {
           body: _buildScreens(_currentIndex, context),
           bottomNavigationBar: BottomNavigationBar(
             currentIndex: _currentIndex,
+            showSelectedLabels: true,
+            showUnselectedLabels: false,
             backgroundColor: const Color(0xffffffff),
             onTap: (index) => setState(() {
               _currentIndex = index;
             }),
-            selectedItemColor: Colors.black,
-            items: <BottomNavigationBarItem>[
-              BottomNavigationBarItem(
-                icon: SvgPicture.asset('assets/home.svg',
+         selectedItemColor: Colors.black,
+
+              items: <BottomNavigationBarItem>[
+                BottomNavigationBarItem(
+                  icon: SvgPicture.asset(
+                    'assets/home.svg',
                     width: 24,
                     height: 24,
-                    color: Colors.black.withOpacity(0.6)),
-                activeIcon: SvgPicture.asset('assets/gift-box-svgrepo-com.svg',
-                    width: 24, height: 24, color: CommonUtils.primaryTextColor),
-                label: 'Home',
-              ),
-              BottomNavigationBarItem(
-                icon: SvgPicture.asset('assets/invite-alt.svg',
+                    color: Colors.black.withOpacity(0.6),
+                  ),
+                  activeIcon: SvgPicture.asset(
+                    'assets/home.svg',
                     width: 24,
                     height: 24,
-                    color: Colors.black.withOpacity(0.6)),
-                activeIcon: SvgPicture.asset('assets/invite-alt.svg',
-                    width: 24, height: 24, color: CommonUtils.primaryTextColor),
-                label: 'Bookings',
-              ),
-              BottomNavigationBarItem(
-                icon: SvgPicture.asset('assets/apps.svg',
+                    color: CommonUtils.primaryTextColor,
+                  ),
+                  label: 'Home',
+                ),
+                BottomNavigationBarItem(
+                  icon: SvgPicture.asset(
+                    'assets/invite-alt.svg',
                     width: 24,
                     height: 24,
-                    color: Colors.black.withOpacity(0.6)),
-                activeIcon: SvgPicture.asset('assets/apps.svg',
-                    width: 24, height: 24, color: CommonUtils.primaryTextColor),
-                label: 'Products',
-              ),
-            ],
-          ),
+                    color: Colors.black.withOpacity(0.6),
+                  ),
+                  activeIcon: SvgPicture.asset(
+                    'assets/invite-alt.svg',
+                    width: 24,
+                    height: 24,
+                    color: CommonUtils.primaryTextColor,
+                  ),
+                  label: 'Appointments',
+                ),
+                BottomNavigationBarItem(
+                  icon: SvgPicture.asset(
+                    'assets/apps.svg',
+                    width: 24,
+                    height: 24,
+                    color: Colors.black.withOpacity(0.6),
+                  ),
+                  activeIcon: SvgPicture.asset(
+                    'assets/apps.svg',
+                    width: 24,
+                    height: 24,
+                    color: CommonUtils.primaryTextColor,
+                  ),
+                  label: 'Products',
+                ),
+              ],
+              selectedLabelStyle: CommonStyles.txSty_16b_fb,
+              // unselectedLabelStyle: TextStyle(
+              //   fontSize: 14,
+              //   color: Colors.grey, // Customize the color as needed
+              // ),
+            ),
+
+
           // bottomNavigationBar: BottomNavyBar(
           // selectedIndex: _currentIndex,
           // backgroundColor: const Color(0xffffffff),
@@ -336,7 +364,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   style: TextStyle(
                     fontSize: 24,
                     color: CommonUtils.primaryTextColor,
-                    fontFamily: 'Muli',
+                    fontFamily: 'LibreFranklin',
                   ),
                 ),
                 const SizedBox(
@@ -350,7 +378,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       style: TextStyle(
                         fontSize: 16,
                         color: CommonUtils.primaryTextColor,
-                        fontFamily: 'Muli',
+                        fontFamily: 'LibreFranklin',
                       ),
                     ),
                     const SizedBox(width: 10),
@@ -385,7 +413,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       style: TextStyle(
                         fontSize: 16,
                         color: CommonUtils.primaryTextColor,
-                        fontFamily: 'Muli',
+                        fontFamily: 'LibreFranklin',
                       ),
                     ),
                     const SizedBox(width: 10),
@@ -425,7 +453,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: TextFormField(
                         controller: _commentstexteditcontroller,
                         style: const TextStyle(
-                          fontFamily: 'Muli',
+                          fontFamily: 'LibreFranklin',
                           fontSize: 14,
                           fontWeight: FontWeight.w300,
                         ),
@@ -438,7 +466,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             color: Colors.black54,
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
-                            fontFamily: 'Muli',
+                            fontFamily: 'LibreFranklin',
                           ),
                           contentPadding: EdgeInsets.symmetric(
                             horizontal: 16.0,
@@ -477,7 +505,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: const Text(
                           'Close',
                           style: TextStyle(
-                            fontFamily: 'Muli',
+                            fontFamily: 'LibreFranklin',
                             fontSize: 14,
                             color: CommonUtils.primaryTextColor,
                             fontWeight: FontWeight.bold,
@@ -504,7 +532,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 child: Text(
                                   'Submit',
                                   style: TextStyle(
-                                    fontFamily: 'Muli',
+                                    fontFamily: 'LibreFranklin',
                                     fontSize: 14,
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold,
@@ -684,7 +712,7 @@ class _HomeScreenState extends State<HomeScreen> {
   String buildTitle(int currentIndex, BuildContext context) {
     switch (currentIndex) {
       case 0:
-        return '';
+        return 'Hey, Sai ram';
 
       case 1:
         // Return the messages screen widget
@@ -836,7 +864,7 @@ class _HomeScreenState extends State<HomeScreen> {
 //                         style: TextStyle(
 //                           fontSize: 16,
 //                           color: CommonUtils.primaryTextColor,
-//                           fontFamily: 'Muli',
+//                           fontFamily: 'LibreFranklin',
 //                         ),
 //                       ),
 //                     ),
@@ -864,7 +892,7 @@ class _HomeScreenState extends State<HomeScreen> {
 //                         style: TextStyle(
 //                           fontSize: 16,
 //                           color: Colors.white,
-//                           fontFamily: 'Muli',
+//                           fontFamily: 'LibreFranklin',
 //                         ),
 //                       ),
 //                     ),
@@ -1036,7 +1064,7 @@ class _HomeScreenState extends State<HomeScreen> {
 //                   style: TextStyle(
 //                     fontSize: 16,
 //                     color: CommonUtils.primaryTextColor,
-//                     fontFamily: 'Muli',
+//                     fontFamily: 'LibreFranklin',
 //                   ),
 //                 ),
 //               ),
@@ -1067,7 +1095,7 @@ class _HomeScreenState extends State<HomeScreen> {
 //                   style: TextStyle(
 //                     fontSize: 16,
 //                     color: Colors.white,
-//                     fontFamily: 'Muli',
+//                     fontFamily: 'LibreFranklin',
 //                   ),
 //                 ),
 //               ),
@@ -1373,7 +1401,7 @@ class _HomeScreenState extends State<HomeScreen> {
 //                 style: TextStyle(
 //                   fontSize: 24,
 //                   color: CommonUtils.primaryTextColor,
-//                   fontFamily: 'Muli',
+//                   fontFamily: 'LibreFranklin',
 //                 ),
 //               ),
 //               const SizedBox(
@@ -1384,7 +1412,7 @@ class _HomeScreenState extends State<HomeScreen> {
 //                 style: TextStyle(
 //                   fontSize: 16,
 //                   color: CommonUtils.primaryTextColor,
-//                   fontFamily: 'Muli',
+//                   fontFamily: 'LibreFranklin',
 //                 ),
 //               ),
 //               const SizedBox(
@@ -1426,7 +1454,7 @@ class _HomeScreenState extends State<HomeScreen> {
 //                     child: TextFormField(
 //                       controller: _commentstexteditcontroller,
 //                       style: const TextStyle(
-//                         fontFamily: 'Muli',
+//                         fontFamily: 'LibreFranklin',
 //                         fontSize: 14,
 //                         fontWeight: FontWeight.w300,
 //                       ),
@@ -1439,7 +1467,7 @@ class _HomeScreenState extends State<HomeScreen> {
 //                           color: Colors.black54,
 //                           fontSize: 14,
 //                           fontWeight: FontWeight.bold,
-//                           fontFamily: 'Muli',
+//                           fontFamily: 'LibreFranklin',
 //                         ),
 //                         contentPadding: EdgeInsets.symmetric(
 //                           horizontal: 16.0,
@@ -1475,7 +1503,7 @@ class _HomeScreenState extends State<HomeScreen> {
 //                       child: const Text(
 //                         'Close',
 //                         style: TextStyle(
-//                           fontFamily: 'Muli',
+//                           fontFamily: 'LibreFranklin',
 //                           fontSize: 14,
 //                           color: CommonUtils.primaryTextColor,
 //                           fontWeight: FontWeight.bold,
@@ -1502,7 +1530,7 @@ class _HomeScreenState extends State<HomeScreen> {
 //                               child: Text(
 //                                 'Submit',
 //                                 style: TextStyle(
-//                                   fontFamily: 'Muli',
+//                                   fontFamily: 'LibreFranklin',
 //                                   fontSize: 14,
 //                                   color: Colors.white,
 //                                   fontWeight: FontWeight.bold,

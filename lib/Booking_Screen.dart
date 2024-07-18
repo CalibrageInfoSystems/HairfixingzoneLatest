@@ -448,21 +448,39 @@ class _BookingScreenState extends State<Bookingscreen> {
                           //   border: Border.all(color: Color(0xFF662e91), width: 1.0),
                           //   borderRadius: BorderRadius.circular(10.0),
                           // ),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(10.0),
-                            // borderRadius: BorderRadius.circular(30), //border corner radius
-                            boxShadow: [
-                              BoxShadow(
-                                color: const Color(0xFF960efd)
-                                    .withOpacity(0.2), //color of shadow
-                                spreadRadius: 2, //spread radius
-                                blurRadius: 4, // blur radius
-                                offset: const Offset(
-                                    0, 2), // changes position of shadow
+                          // decoration: BoxDecoration(
+                          //   color: Colors.white,
+                          //   borderRadius: BorderRadius.circular(10.0),
+                            decoration: BoxDecoration(
+                              gradient: const LinearGradient(
+                                colors: [
+                                  Color(0xFFFFFFFF),
+                                  Color(0xFFFFFFFF),
+                                ],
+                                begin: Alignment.centerLeft,
+                                end: Alignment.centerRight,
                               ),
-                            ],
-                          ),
+                              border: Border.all(
+                                color: Colors.grey,
+                                //  color: const Color(0xFF8d97e2), // Add your desired border color here
+                                width:
+                                1.0, // Set the border width
+                              ),
+                              borderRadius: BorderRadius.circular(
+                                  10.0), // Optional: Add border radius if needed
+                            ),
+                            // borderRadius: BorderRadius.circular(30), //border corner radius
+                            // boxShadow: [
+                            //   BoxShadow(
+                            //     color: const Color(0xFF960efd)
+                            //         .withOpacity(0.2), //color of shadow
+                            //     spreadRadius: 2, //spread radius
+                            //     blurRadius: 4, // blur radius
+                            //     offset: const Offset(
+                            //         0, 2), // changes position of shadow
+                            //   ),
+                            // ],
+
                           child: Row(
                             children: [
                               Container(
@@ -504,7 +522,7 @@ class _BookingScreenState extends State<Bookingscreen> {
                               ),
                               Container(
                                 width: MediaQuery.of(context).size.width / 2,
-                                padding: const EdgeInsets.only(top: 8),
+                                padding: const EdgeInsets.only(top: 4),
                                 // width: MediaQuery.of(context).size.width / 4,
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.start,
@@ -519,11 +537,14 @@ class _BookingScreenState extends State<Bookingscreen> {
                                       ),
                                     ),
                                     const SizedBox(
-                                      height: 10,
+                                      height: 5,
                                     ),
                                     Text(
                                       widget.branchaddress,
                                       style: CommonStyles.txSty_12b_f5,
+                                    ),
+                                    const SizedBox(
+                                      height: 5,
                                     ),
                                   ],
                                 ),
@@ -542,7 +563,7 @@ class _BookingScreenState extends State<Bookingscreen> {
                             'Date ',
                             style: TextStyle(
                               fontSize: 14,
-                              fontFamily: "Muli",
+                              fontFamily: "LibreFranklin",
                               fontWeight: FontWeight.w500,
                               color: Color(0xFF662e91),
                             ),
@@ -746,7 +767,7 @@ class _BookingScreenState extends State<Bookingscreen> {
                                                   : (slot.availableSlots <= 0
                                                       ? Colors.white
                                                       : Colors.black),
-                                              fontFamily: 'Muli',
+                                              fontFamily: 'LibreFranklin',
                                               fontSize: 12,
                                             ),
                                           ),
@@ -763,7 +784,7 @@ class _BookingScreenState extends State<Bookingscreen> {
                                             Text(
                                               'Today is a Holiday',
                                               style: TextStyle(
-                                                fontFamily: 'Muli',
+                                                fontFamily: 'LibreFranklin',
                                                 fontSize: 12,
                                                 fontWeight: FontWeight.bold,
                                               ),
@@ -781,7 +802,7 @@ class _BookingScreenState extends State<Bookingscreen> {
                                             Text(
                                               'No Slots Are Available Today',
                                               style: TextStyle(
-                                                fontFamily: 'Muli',
+                                                fontFamily: 'LibreFranklin',
                                                 fontSize: 12,
                                                 fontWeight: FontWeight.bold,
                                               ),
@@ -799,7 +820,7 @@ class _BookingScreenState extends State<Bookingscreen> {
                             'Purpose of Visit ',
                             style: TextStyle(
                               fontSize: 14,
-                              fontFamily: "Muli",
+                              fontFamily: "LibreFranklin",
                               fontWeight: FontWeight.w500,
                               color: Color(0xFF662e91),
                             ),
@@ -924,7 +945,7 @@ class _BookingScreenState extends State<Bookingscreen> {
                             'Technician',
                             style: TextStyle(
                               fontSize: 14,
-                              fontFamily: "Muli",
+                              fontFamily: "LibreFranklin",
                               fontWeight: FontWeight.w500,
                               color: Color(0xFF662e91),
                             ),
