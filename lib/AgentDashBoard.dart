@@ -125,184 +125,231 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        //  backgroundColor: CommonStyles.primaryTextColor,
-        // appBar: _appBar(),
-        body: IntrinsicHeight(
-      child: Column(
+      backgroundColor: CommonStyles.whiteColor,
+      body: Column(
         children: [
-          const SizedBox(
-            height: 5,
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // marquee(),
-              FutureBuilder(
-                future: getMarqueeText(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const SizedBox();
-                  } else if (snapshot.hasError) {
-                    return const SizedBox();
-                  } else {
-                    if (marqueeText != null) {
-                      return SizedBox(
-                        height: 30,
-                        child: Marquee(
-                          text: marqueeText!,
-                          style: const TextStyle(
-                              fontSize: 16,
-                              fontFamily: "Muli",
-                              fontWeight: FontWeight.w600,
-                              color: Color(0xFFff0176)),
-                          velocity: _shouldStartMarquee
-                              ? 30
-                              : 0, // Control Marquee scrolling with velocity
-                        ),
-                      );
-                    } else {
-                      return const SizedBox();
-                    }
-                  }
-                },
-              ),
-
-              // Carousel widget
-              SizedBox(
-                width: MediaQuery.of(context).size.width,
-                height: 200,
-                child: FlutterCarousel(
-                  options:
-                  CarouselOptions(
-                    // height: 400.0,
-                    showIndicator: true,
-                    autoPlay: true,
-                    floatingIndicator: false,
-                    autoPlayCurve: Curves.linear,
-                    // enlargeCenterPage: true,
-                    slideIndicator: const CircularSlideIndicator(
-                      indicatorBorderColor: CommonStyles.blackColor,
-                      currentIndicatorColor: CommonStyles.primaryTextColor,
-                      indicatorRadius: 2, // Decrease the size of the indicator
-                    ),
-                  ),
-                  items: _items.map((item) {
-                    return Builder(
-                      builder: (BuildContext context) {
-                        return SizedBox(
-                          width: MediaQuery.of(context).size.width,
-                          // margin: const EdgeInsets.symmetric(horizontal: 5.0),
-                          // decoration: const BoxDecoration(color: Colors.grey),
-                          child: Card(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            elevation: 4,
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(10),
-                              child: Image.network(
-                                item.imageName,
-                                height: 100,
-                                fit: BoxFit.cover,
-                                loadingBuilder:
-                                    (context, child, loadingProgress) {
-                                  if (loadingProgress == null) return child;
-
-                                  return const Center(
-                                      child:
-                                          CircularProgressIndicator.adaptive());
-                                },
-                              ),
-                            ),
-                          ),
-                        );
-                      },
-                    );
-                  }).toList(),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(
-            height: 15,
-          ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
             child: Column(
               children: [
-                screens(),
-                const SizedBox(height: 15),
-                //MARK: Branches
-                const Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
+                Row(
                   children: [
                     Text(
-                      'Branches',
-                      style: CommonStyles.txSty_16p_fb,
+                      'Hey, ',
+                      style: CommonStyles.txSty_20b_fb.copyWith(fontSize: 24),
+                    ),
+                    Text(
+                      userFullName,
+                      style: CommonStyles.txSty_20b_fb.copyWith(fontSize: 24),
                     ),
                   ],
                 ),
-                agentBranches(),
+                const SizedBox(
+                  height: 10.0,
+                ),
+                Text(
+                  'Welcome to Hair Fixing Zone',
+                  style: TextStyle(
+                    fontSize: MediaQuery.of(context).size.width * 0.04,
+                    fontFamily: "Muli",
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                ),
               ],
             ),
           ),
-          //MARK: Welcome Text
-          //     welcomeText(),
-          //MARK: Main Card
-          // Expanded(
-          //   child: Container(
-          //     height: MediaQuery.of(context).size.height,
-          //     decoration: const BoxDecoration(
-          //       color: CommonStyles.whiteColor,
-          //       borderRadius: BorderRadius.only(
-          //         topLeft: Radius.circular(20),
-          //         topRight: Radius.circular(20),
-          //       ),
-          //     ),
-          //     child: Column(
-          //       children: [
-          //         marquee(),
-          //         Column(
-          //           children: [
-          //             carousel(),
-          //             Row(
-          //               mainAxisAlignment: MainAxisAlignment.center,
-          //               children: <Widget>[
-          //                 for (int i = 0; i < _items.length; i++)
-          //                   Container(
-          //                     margin: const EdgeInsets.all(2),
-          //                     width: 10,
-          //                     height: 10,
-          //                     decoration: BoxDecoration(
-          //                       borderRadius: BorderRadius.circular(10),
-          //                       border: Border.all(color: CommonStyles.primaryTextColor, width: 1.5),
-          //                       color: _currentPage == i ? Colors.grey.withOpacity(0.9) : Colors.transparent,
-          //                     ),
-          //                   )
-          //               ],
-          //             ),
-          //             const SizedBox(
-          //               height: 15,
-          //             ),
-          //             Padding(
-          //               padding: const EdgeInsets.symmetric(horizontal: 20),
-          //               child: Column(
-          //                 children: [
-          //                   screens(),
-          //                   const SizedBox(height: 10),
-          //                   agentBranches(),
-          //                 ],
-          //               ),
-          //             ),
-          //           ],
-          //         ),
-          //       ],
-          //     ),
-          //   ),
-          // )
+          Expanded(
+            child: Column(
+              children: [
+                //MARK: Carousel view
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                  width: MediaQuery.of(context).size.width,
+                  height: 180,
+                  child: FlutterCarousel(
+                    options: CarouselOptions(
+                      floatingIndicator: false,
+                      height: 180,
+                      viewportFraction: 1.0,
+                      enlargeCenterPage: true,
+                      autoPlay: true,
+                      aspectRatio: 16 / 9,
+                      autoPlayCurve: Curves.fastOutSlowIn,
+                      enableInfiniteScroll: true,
+                      slideIndicator: const CircularSlideIndicator(
+                        indicatorBorderColor: CommonStyles.blackColor,
+                        currentIndicatorColor: CommonStyles.primaryTextColor,
+                        indicatorRadius:
+                            2, // Decrease the size of the indicator
+                      ),
+                      autoPlayAnimationDuration:
+                          const Duration(milliseconds: 800),
+                    ),
+                    items: _items.map((item) {
+                      return Builder(
+                        builder: (BuildContext context) {
+                          return SizedBox(
+                            width: MediaQuery.of(context).size.width,
+                            child: Card(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              elevation: 4,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(10),
+                                child: Image.network(
+                                  item.imageName,
+                                  height: 100,
+                                  fit: BoxFit.cover,
+                                  loadingBuilder:
+                                      (context, child, loadingProgress) {
+                                    if (loadingProgress == null) return child;
+                                    return const Center(
+                                        child: CircularProgressIndicator
+                                            .adaptive());
+                                  },
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    }).toList(),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                /* 
+                Expanded(
+                  child: Stack(
+                    children: [
+                      Align(
+                        alignment: Alignment.topCenter,
+                        child: isDataBinding
+                            ? const Center(
+                                child: CircularProgressIndicator.adaptive(),
+                              )
+                            : imageList.isEmpty
+                                ? const Center(
+                                    
+                                    child: Icon(
+                                      Icons
+                                          .signal_cellular_connected_no_internet_0_bar_sharp,
+                                      color: Colors.red,
+                                    ),
+                                  )
+                                : CarouselSlider(
+                                    items: imageList
+                                        .map((item) => Image.network(
+                                              item.imageName,
+                                              fit: BoxFit.fitWidth,
+                                              width: MediaQuery.of(context)
+                                                  .size
+                                                  .width,
+                                            ))
+                                        .toList(),
+                                    carouselController: carouselController,
+                                    options: CarouselOptions(
+                                      scrollPhysics:
+                                          const BouncingScrollPhysics(),
+                                      autoPlay: true,
+                                      aspectRatio: 23 / 9,
+                                      viewportFraction: 1,
+                                      onPageChanged: (index, reason) {
+                                        setState(() {
+                                          currentIndex = index;
+                                        });
+                                      },
+                                    ),
+                                  ),
+                      ),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width,
+                        
+            
+                        height: MediaQuery.of(context).size.height,
+                        child: Align(
+                          alignment: Alignment.bottomCenter,
+                          child: Padding(
+                            padding: const EdgeInsets.only(bottom: 25.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: imageList.asMap().entries.map((entry) {
+                                final index = entry.key;
+                                return buildIndicator(index);
+                              }).toList(),
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+             */
+                //MARK: Marquee Text
+                FutureBuilder(
+                  future: getMarqueeText(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const SizedBox();
+                    } else if (snapshot.hasError) {
+                      return const SizedBox();
+                    } else {
+                      if (marqueeText != null) {
+                        return Container(
+                          height: 40,
+                          decoration: const BoxDecoration(
+                            image: DecorationImage(
+                              fit: BoxFit.cover,
+                              image: AssetImage(
+                                'assets/wave_background.png',
+                              ),
+                            ),
+                          ),
+                          child: Marquee(
+                            text: marqueeText!,
+                            style: CommonStyles.text16white,
+                            velocity: _shouldStartMarquee ? 30 : 0,
+                          ),
+                        );
+                      } else {
+                        return const SizedBox();
+                      }
+                    }
+                  },
+                ),
+
+                //MARK: Branches
+                const SizedBox(
+                  height: 15,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: Column(
+                    children: [
+                      screens(),
+                      const SizedBox(height: 15),
+                      //MARK: Branches
+                      const Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Branches',
+                            style: CommonStyles.txSty_16p_fb,
+                          ),
+                        ],
+                      ),
+                      // agentBranches(),
+                      newBranches(),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
-    ));
+    );
   }
 
   getMarqueeText() async {
@@ -655,6 +702,429 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
       ],
     );
   }
+
+  Widget newBranches() {
+    return FutureBuilder(
+      future: apiData,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator.adaptive());
+        } else if (snapshot.hasError) {
+          return Center(
+            child: Text(snapshot.error.toString()),
+          );
+        } else {
+          List<BranchModel>? data = snapshot.data!;
+          return SizedBox(
+            width: MediaQuery.of(context).size.width,
+            // height: MediaQuery.of(context).size.height / 3.5,
+            child: ListView.builder(
+              scrollDirection: Axis.vertical,
+              shrinkWrap: true,
+              itemCount: data.length,
+              itemBuilder: (context, index) {
+                BranchModel branch = data[index];
+                return IntrinsicHeight(
+                  child: GestureDetector(
+                    onTap: () {},
+                    child: Card(
+                      shadowColor: Colors.transparent,
+                      surfaceTintColor: Colors.transparent,
+                      child: ClipRRect(
+                        // borderRadius: const BorderRadius.only(
+                        //   topRight: Radius.circular(29.0),
+                        //   bottomLeft: Radius.circular(29.0),
+                        // ),
+                        child: Container(
+                          padding: const EdgeInsets.all(20),
+                          decoration: BoxDecoration(
+                            gradient: const LinearGradient(
+                              colors: [
+                                Color(0xFFFFFFFF),
+                                Color(0xFFFFFFFF),
+                              ],
+                              begin: Alignment.centerLeft,
+                              end: Alignment.centerRight,
+                            ),
+                            border: Border.all(
+                              color: Colors.grey,
+                              //  color: const Color(0xFF8d97e2), // Add your desired border color here
+                              width: 1.0, // Set the border width
+                            ),
+                            borderRadius: BorderRadius.circular(
+                                10.0), // Optional: Add border radius if needed
+                          ),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Container(
+                                width: 110,
+                                height: 65,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(7.0),
+                                  child: Image.network(
+                                    branch.imageName!,
+                                    width: 110,
+                                    height: 65,
+                                    fit: BoxFit.fill,
+                                    loadingBuilder:
+                                        (context, child, loadingProgress) {
+                                      if (loadingProgress == null) {
+                                        return child;
+                                      }
+
+                                      return const Center(
+                                          child: CircularProgressIndicator
+                                              .adaptive());
+                                    },
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 10.0),
+                              Expanded(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(branch.name,
+                                        style: CommonStyles.txSty_18b_fb),
+                                    const SizedBox(height: 4.0),
+                                    Expanded(
+                                      child: Padding(
+                                        padding:
+                                            const EdgeInsets.only(right: 10.0),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceEvenly,
+                                              children: [
+                                                //MARK: location_icon
+                                                // Image.asset(
+                                                //   'assets/location_icon.png',
+                                                //   width: 20,
+                                                //   height: 18,
+                                                // ),
+                                                // const SizedBox(
+                                                //     width:
+                                                //         4.0),
+                                                Expanded(
+                                                  child: Text(branch.address,
+                                                      style: CommonStyles
+                                                          .txSty_12b_fb),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+
+                                    /* 
+                                    Align(
+                                      alignment: Alignment.bottomRight,
+                                      child: Container(
+                                        height: 26,
+                                        margin: const EdgeInsets.only(
+                                            bottom: 10.0, right: 10.0),
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          border: Border.all(
+                                            color:
+                                                const Color(0xFF8d97e2),
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(10.0),
+                                        ),
+                                        child: ElevatedButton(
+                                          onPressed: () {},
+                                          style: ElevatedButton.styleFrom(
+                                            foregroundColor:
+                                                const Color(0xFF8d97e2),
+                                            backgroundColor:
+                                                Colors.transparent,
+                                            elevation: 0,
+                                            shadowColor:
+                                                Colors.transparent,
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(
+                                                      10.0),
+                                            ),
+                                          ),
+                                          child: Row(
+                                            mainAxisSize:
+                                                MainAxisSize.min,
+                                            children: [
+                                              SvgPicture.asset(
+                                                'assets/datepicker_icon.svg',
+                                                width: 15.0,
+                                                height: 15.0,
+                                              ),
+                                              const SizedBox(width: 5),
+                                              const Text(
+                                                'Book Now',
+                                                style: TextStyle(
+                                                  fontSize: 13,
+                                                  color:
+                                                      Color(0xFF8d97e2),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                 */
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          );
+        }
+      },
+    );
+    /* 
+       return Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 0.0, vertical: 5.0),
+                              child: IntrinsicHeight(
+                                child: ClipRRect(
+                                  borderRadius: const BorderRadius.only(
+                                      // topRight: Radius.circular(42.5),
+                                      // bottomLeft: Radius.circular(42.5),
+                                      ),
+                                  child: GestureDetector(
+                                    onTap: () {    },
+                                    child: Card(
+                                      shadowColor: Colors.transparent,
+                                      surfaceTintColor: Colors.transparent,
+                                      child: ClipRRect(
+                                        // borderRadius: const BorderRadius.only(
+                                        //   topRight: Radius.circular(29.0),
+                                        //   bottomLeft: Radius.circular(29.0),
+                                        // ),
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            gradient: const LinearGradient(
+                                              colors: [
+                                                Color(0xFFFFFFFF),
+                                                Color(0xFFFFFFFF),
+                                              ],
+                                              begin: Alignment.centerLeft,
+                                              end: Alignment.centerRight,
+                                            ),
+                                            border: Border.all(
+                                              color: Colors.grey,
+                                              //  color: const Color(0xFF8d97e2), // Add your desired border color here
+                                              width:
+                                                  1.0, // Set the border width
+                                            ),
+                                            borderRadius: BorderRadius.circular(
+                                                10.0), // Optional: Add border radius if needed
+                                          ),
+                                          child: Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 15.0),
+                                                child: Container(
+                                                  width: 110,
+                                                  height: 65,
+                                                  decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10.0),
+                                                  ),
+                                                  child: ClipRRect(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            7.0),
+                                                    child: Image.network(
+                                                      branch.imageName!,
+                                                      width: 110,
+                                                      height: 65,
+                                                      fit: BoxFit.fill,
+                                                      loadingBuilder: (context,
+                                                          child,
+                                                          loadingProgress) {
+                                                        if (loadingProgress ==
+                                                            null) return child;
+
+                                                        return const Center(
+                                                            child:
+                                                                CircularProgressIndicator
+                                                                    .adaptive());
+                                                      },
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                              Expanded(
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 15.0),
+                                                  child: Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.start,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .only(
+                                                                top: 15.0),
+                                                        child: Text(branch.name,
+                                                            style: CommonStyles
+                                                                .txSty_18b_fb),
+                                                      ),
+                                                      const SizedBox(
+                                                          height: 4.0),
+                                                      Expanded(
+                                                        child: Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .only(
+                                                                  right: 10.0),
+                                                          child: Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              Row(
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .spaceEvenly,
+                                                                children: [
+                                                                  //MARK: location_icon
+                                                                  // Image.asset(
+                                                                  //   'assets/location_icon.png',
+                                                                  //   width: 20,
+                                                                  //   height: 18,
+                                                                  // ),
+                                                                  // const SizedBox(
+                                                                  //     width:
+                                                                  //         4.0),
+                                                                  Expanded(
+                                                                    child: Text(
+                                                                        branch
+                                                                            .address,
+                                                                        style: CommonStyles
+                                                                            .txSty_12b_fb),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                              const Spacer(
+                                                                  flex: 3),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Align(
+                                                        alignment: Alignment
+                                                            .bottomRight,
+                                                        child: Container(
+                                                          height: 26,
+                                                          margin:
+                                                              const EdgeInsets
+                                                                  .only(
+                                                                  bottom: 10.0,
+                                                                  right: 10.0),
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            color: Colors.white,
+                                                            border: Border.all(
+                                                              color: const Color(
+                                                                  0xFF8d97e2),
+                                                            ),
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        10.0),
+                                                          ),
+                                                          child: ElevatedButton(
+                                                            onPressed: () {},
+                                                            style:
+                                                                ElevatedButton
+                                                                    .styleFrom(
+                                                              foregroundColor:
+                                                                  const Color(
+                                                                      0xFF8d97e2),
+                                                              backgroundColor:
+                                                                  Colors
+                                                                      .transparent,
+                                                              elevation: 0,
+                                                              shadowColor: Colors
+                                                                  .transparent,
+                                                              shape:
+                                                                  RoundedRectangleBorder(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            10.0),
+                                                              ),
+                                                            ),
+                                                            child: Row(
+                                                              mainAxisSize:
+                                                                  MainAxisSize
+                                                                      .min,
+                                                              children: [
+                                                                SvgPicture
+                                                                    .asset(
+                                                                  'assets/datepicker_icon.svg',
+                                                                  width: 15.0,
+                                                                  height: 15.0,
+                                                                ),
+                                                                const SizedBox(
+                                                                    width: 5),
+                                                                const Text(
+                                                                  'Book Now',
+                                                                  style:
+                                                                      TextStyle(
+                                                                    fontSize:
+                                                                        13,
+                                                                    color: Color(
+                                                                        0xFF8d97e2),
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+     */
+  }
 }
 
 class BranchCard extends StatelessWidget {
@@ -766,11 +1236,12 @@ class BranchCard extends StatelessWidget {
                     branch.name,
                     style: CommonStyles.txSty_16p_fb,
                   ),
-                  Text(branch.address,
-                      maxLines: 3,
-                      overflow: TextOverflow.ellipsis,
-                      style: CommonStyles.txSty_12b_f5.copyWith(
-                        color: Colors.black , fontWeight: FontWeight.w600),
+                  Text(
+                    branch.address,
+                    maxLines: 3,
+                    overflow: TextOverflow.ellipsis,
+                    style: CommonStyles.txSty_12b_f5.copyWith(
+                        color: Colors.black, fontWeight: FontWeight.w600),
                   )
                 ],
               ),

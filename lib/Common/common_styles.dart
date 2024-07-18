@@ -78,13 +78,11 @@ class CommonStyles {
     fontWeight: FontWeight.bold,
     color: primaryTextColor,
   );
-  static const TextStyle txSty_18b_fb=  const TextStyle(
+  static const TextStyle txSty_18b_fb = TextStyle(
     fontSize: 18,
-    color:Colors.black,
-    fontWeight:
-    FontWeight.bold,
-    fontFamily:
-    'Muli',
+    color: Colors.black,
+    fontWeight: FontWeight.bold,
+    fontFamily: 'Muli',
   );
   static const TextStyle header_Styles = TextStyle(
     fontSize: 26,
@@ -123,9 +121,9 @@ class CommonStyles {
     fontWeight: FontWeight.bold,
     color: blackColor,
   );
-  static const TextStyle txSty_12b_fb =  const TextStyle(
+  static const TextStyle txSty_12b_fb = TextStyle(
     fontFamily: 'Muli',
-    fontSize:12,
+    fontSize: 12,
     color: Color(0xFF000000),
   );
   static const TextStyle txSty_20black_fb = TextStyle(
@@ -144,7 +142,7 @@ class CommonStyles {
     fontFamily: "Muli",
     color: whiteColor,
   );
-  static const TextStyle text16white = const TextStyle(
+  static const TextStyle text16white = TextStyle(
     fontSize: 16,
     fontFamily: "Muli",
     fontWeight: FontWeight.w600,
@@ -337,8 +335,8 @@ class CommonStyles {
     );
   }
 
-  static AppBar customAppbar({
-    required BuildContext context, // Add context parameter
+  static AppBar customerAppbar({
+    required BuildContext context,
     required String userName,
     required String userFullName,
     required String email,
@@ -347,23 +345,6 @@ class CommonStyles {
     return AppBar(
       backgroundColor: const Color(0xffffffff),
       automaticallyImplyLeading: false,
-      // title: Row(
-      //   mainAxisAlignment: MainAxisAlignment.start,
-      //   children: [
-      //     Row(
-      //       children: [
-      //         Text(
-      //           'Hey,',
-      //           style: CommonStyles.txSty_20b_fb.copyWith(fontSize: 24),
-      //         ),
-      //         Text(
-      //           userFullName,
-      //           style: CommonStyles.txSty_20b_fb.copyWith(fontSize: 24),
-      //         ),
-      //       ],
-      //     ),
-      //   ],
-      // ),
       title: Text(
         title,
         style: CommonStyles.txSty_20b_fb.copyWith(fontSize: 24),
@@ -393,6 +374,40 @@ class CommonStyles {
                       NewScreen(userName: userFullName, email: email)),
             );
           },
+        ),
+      ],
+    );
+  }
+
+  static AppBar agentAppbar(
+      {required BuildContext context,
+      required String userName,
+      required String title,
+      required void Function()? onTap}) {
+    return AppBar(
+      backgroundColor: const Color(0xffffffff),
+      automaticallyImplyLeading: false,
+      title: Text(
+        title,
+        style: CommonStyles.txSty_20b_fb.copyWith(fontSize: 24),
+      ),
+      actions: [
+        IconButton(
+          icon: Container(
+            width: 40,
+            height: 40,
+            decoration: const BoxDecoration(
+              color: CommonStyles.primaryTextColor,
+              shape: BoxShape.circle,
+            ),
+            child: Center(
+              child: Text(
+                userName,
+                style: const TextStyle(fontSize: 22, color: Colors.white),
+              ),
+            ),
+          ),
+          onPressed: onTap,
         ),
       ],
     );

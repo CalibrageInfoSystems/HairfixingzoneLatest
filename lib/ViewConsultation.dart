@@ -66,6 +66,7 @@ class _ViewConsultationState extends State<ViewConsultation> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        backgroundColor: CommonStyles.whiteColor,
         //    appBar: _appBar(context),
         body: FutureBuilder(
           future: agentData,
@@ -181,7 +182,7 @@ class ViewConsulatationBranchTemplate extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      padding: const EdgeInsets.all(10),
       width: MediaQuery.of(context).size.width,
       child: GestureDetector(
           onTap: () {
@@ -204,25 +205,39 @@ class ViewConsulatationBranchTemplate extends StatelessWidget {
             //   border: Border.all(color: Color(0xFF662e91), width: 1.0),
             //   borderRadius: BorderRadius.circular(10.0),
             // ),
+            // decoration: BoxDecoration(
+            //   color: Colors.white,
+            //   borderRadius: BorderRadius.circular(10.0),
+            //   // borderRadius: BorderRadius.circular(30), //border corner radius
+
+            // ),
+            padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(10.0),
-              // borderRadius: BorderRadius.circular(30), //border corner radius
-              boxShadow: [
-                BoxShadow(
-                  color: const Color(0xFF960efd)
-                      .withOpacity(0.2), //color of shadow
-                  spreadRadius: 2, //spread radius
-                  blurRadius: 4, // blur radius
-                  offset: const Offset(0, 2), // changes position of shadow
-                ),
-              ],
+              gradient: const LinearGradient(
+                colors: [
+                  Color(0xFFFFFFFF),
+                  Color(0xFFFFFFFF),
+                ],
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+              ),
+              border: Border.all(
+                color: Colors.grey,
+                //  color: const Color(0xFF8d97e2), // Add your desired border color here
+                width: 1.0, // Set the border width
+              ),
+              borderRadius: BorderRadius.circular(
+                  10.0), // Optional: Add border radius if needed
             ),
             child: Row(
               children: [
                 Container(
-                  padding: const EdgeInsets.all(10),
-                  // width: MediaQuery.of(context).size.width / 4,
+                  clipBehavior: Clip.antiAlias,
+                  // padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10.0),
+                    color: Colors.grey,
+                  ),
                   child: Image.network(
                     imageUrl.isNotEmpty
                         ? imageUrl
@@ -240,11 +255,11 @@ class ViewConsulatationBranchTemplate extends StatelessWidget {
                     },
                   ),
                 ),
+                const SizedBox(width: 12),
                 Container(
                   // height: MediaQuery.of(context).size.height / 4 / 2,
-
+                  alignment: Alignment.centerLeft,
                   width: MediaQuery.of(context).size.width / 2.2,
-                  padding: const EdgeInsets.only(top: 7),
                   // width: MediaQuery.of(context).size.width / 4,
                   child: Column(
                     //  mainAxisAlignment: MainAxisAlignment.spaceEvenly,

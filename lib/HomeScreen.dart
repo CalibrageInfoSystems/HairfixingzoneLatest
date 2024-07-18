@@ -158,7 +158,7 @@ class _HomeScreenState extends State<HomeScreen> {
         },
         child: Scaffold(
           backgroundColor: CommonStyles.whiteColor,
-          appBar: CommonStyles.customAppbar(
+          appBar: CommonStyles.customerAppbar(
             context: context,
             title: buildTitle(_currentIndex, context),
             userName:

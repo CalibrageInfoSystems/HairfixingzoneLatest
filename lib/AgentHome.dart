@@ -1,4 +1,3 @@
-
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -120,57 +119,57 @@ class _AgentHomeState extends State<AgentHome> {
         }
       },
       child: Scaffold(
-
-        appBar: _currentIndex == 0
-            ?  CommonStyles.AgenthomeAppBar(
-          onPressed: () {
-            logOutDialog();
-            // Define what happens when the button in the AppBar is pressed
-          }, userName: userFullName.isNotEmpty ? userFullName[0].toUpperCase() : "H",
-        )
-            : CommonStyles.remainingAppBars(
-                context,
-                title: _getAppBarTitle(_currentIndex),
-                onPressed: () {
-                  logOutDialog();
-                },
-              ),
-        //  AppBar(
-        //   backgroundColor: const Color(0xFFf3e3ff),
-        //   automaticallyImplyLeading: false,
-        //   title: _currentIndex == 0
-        //       ? SizedBox(
-        //           width: 85,
-        //           height: 40,
-        //           child: FractionallySizedBox(
-        //             widthFactor: 1,
-        //             child: Image.asset(
-        //               'assets/hfz_logo.png',
-        //               fit: BoxFit.fitWidth,
-        //             ),
-        //           ),
-        //         )
-        //       : _currentIndex == 1 || _currentIndex == 2 || _currentIndex == 3
-        //           ? Text(
-        //               _getAppBarTitle(_currentIndex),
-        //               style: CommonUtils.header_Styles,
-        //             )
-        //           : null,
-        //   actions: [
-        //     IconButton(
-        //       icon: SvgPicture.asset(
-        //         'assets/sign-out-alt.svg',
-        //         color: const Color(0xFF662e91),
-        //         width: 24,
-        //         height: 24,
-        //       ),
-        //       onPressed: () {
-        //         logOutDialog();
-        //       },
-        //     ),
-        //   ],
-        // ),
+        appBar: CommonStyles.agentAppbar(
+          context: context,
+          title: buildTitle(_currentIndex, context),
+          userName:
+              userFullName.isNotEmpty ? userFullName[0].toUpperCase() : "A",
+          onTap: () {
+            print('Logout dialog called');
+            logOutDialog(context);
+          },
+        ),
         body: _buildScreens(_currentIndex),
+        bottomNavigationBar: BottomNavigationBar(
+          currentIndex: _currentIndex,
+          showSelectedLabels: true,
+          showUnselectedLabels: false,
+          backgroundColor: const Color(0xffffffff),
+          onTap: (index) => setState(() {
+            _currentIndex = index;
+          }),
+          // selectedItemColor: Colors.black,
+          selectedLabelStyle: const TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.bold,
+            color: CommonUtils.primaryTextColor,
+          ),
+          items: <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: SvgPicture.asset('assets/home.svg',
+                  width: 24, height: 24, color: Colors.black.withOpacity(0.6)),
+              activeIcon: SvgPicture.asset('assets/home.svg',
+                  width: 24, height: 24, color: CommonUtils.primaryTextColor),
+              label: 'Home',
+            ),
+            BottomNavigationBarItem(
+              icon: SvgPicture.asset('assets/invite-alt.svg',
+                  width: 24, height: 24, color: Colors.black.withOpacity(0.6)),
+              activeIcon: SvgPicture.asset('assets/invite-alt.svg',
+                  width: 24, height: 24, color: CommonUtils.primaryTextColor),
+              label: 'Add Consultation',
+            ),
+            BottomNavigationBarItem(
+              icon: SvgPicture.asset('assets/apps.svg',
+                  width: 24, height: 24, color: Colors.black.withOpacity(0.6)),
+              activeIcon: SvgPicture.asset('assets/apps.svg',
+                  width: 24, height: 24, color: CommonUtils.primaryTextColor),
+              label: 'View Consultation',
+            ),
+          ],
+        ),
+
+        /* 
         bottomNavigationBar: BottomNavyBar(
           selectedIndex: _currentIndex,
           backgroundColor: const Color(0xFFf3e3ff),
@@ -188,7 +187,9 @@ class _AgentHomeState extends State<AgentHome> {
                 'assets/objects-column.svg',
                 width: 24,
                 height: 24,
-                color: _currentIndex == 0 ? CommonUtils.primaryTextColor : Colors.black,
+                color: _currentIndex == 0
+                    ? CommonUtils.primaryTextColor
+                    : Colors.black,
               ),
               title: const Text(
                 'Home',
@@ -201,7 +202,9 @@ class _AgentHomeState extends State<AgentHome> {
                 'assets/calendar-day.svg',
                 width: 24,
                 height: 24,
-                color: _currentIndex == 1 ? CommonUtils.primaryTextColor : Colors.black,
+                color: _currentIndex == 1
+                    ? CommonUtils.primaryTextColor
+                    : Colors.black,
               ),
               title: const Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -222,7 +225,9 @@ class _AgentHomeState extends State<AgentHome> {
                 'assets/calendar-lines.svg',
                 width: 24,
                 height: 24,
-                color: _currentIndex == 2 ? CommonUtils.primaryTextColor : Colors.black,
+                color: _currentIndex == 2
+                    ? CommonUtils.primaryTextColor
+                    : Colors.black,
               ),
               title: const Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -236,6 +241,7 @@ class _AgentHomeState extends State<AgentHome> {
             ),
           ],
         ),
+      */
       ),
     );
   }
@@ -264,7 +270,7 @@ class _AgentHomeState extends State<AgentHome> {
     }
   }
 
-  void logOutDialog() {
+  void logOutDialog(BuildContext context) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -343,7 +349,8 @@ class _AgentHomeState extends State<AgentHome> {
     prefs.setBool('isLoggedIn', false);
     prefs.remove('userId');
     prefs.remove('userRoleId');
-    CommonUtils.showCustomToastMessageLong("Logout Successfully", context, 0, 3);
+    CommonUtils.showCustomToastMessageLong(
+        "Logout Successfully", context, 0, 3);
 
     Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(builder: (context) => const AgentLogin()),
@@ -371,7 +378,19 @@ class _AgentHomeState extends State<AgentHome> {
     setState(() {
       userFullName = prefs.getString('userFullName') ?? '';
       print('userFullName: $userFullName');
-
     });
+  }
+
+  String buildTitle(int currentIndex, BuildContext context) {
+    switch (currentIndex) {
+      case 0:
+        return '';
+      case 1:
+        return 'Add Consultation';
+      case 2:
+        return 'View Consultation';
+      default:
+        return 'default';
+    }
   }
 }

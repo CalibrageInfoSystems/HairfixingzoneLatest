@@ -219,6 +219,7 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: CommonStyles.whiteColor,
         appBar: _appBar(context),
         body: Container(
           color: Colors.white, // Set the background color to white
@@ -237,6 +238,7 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
                         //   border: Border.all(color: Color(0xFF662e91), width: 1.0),
                         //   borderRadius: BorderRadius.circular(10.0),
                         // ),
+                        padding: const EdgeInsets.all(10),
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(10.0),
@@ -255,33 +257,33 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
                         child: Row(
                           children: [
                             Container(
-                              padding: const EdgeInsets.all(10),
+                              // padding: const EdgeInsets.all(10),
+                              clipBehavior: Clip.antiAlias,
+                              decoration: BoxDecoration(
+                                color: Colors.grey,
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
                               // width: MediaQuery.of(context).size.width / 4,
-                              child: ClipRRect(
-                                //  borderRadius: BorderRadius.circular(10.0),
-                                child: Image.network(
-                                  widget.agent.imageName!.isNotEmpty
-                                      ? widget.agent.imageName!
-                                      : 'https://example.com/placeholder-image.jpg',
-                                  fit: BoxFit.cover,
-                                  height: MediaQuery.of(context).size.height /
-                                      5.5 /
-                                      2,
-                                  width:
-                                      MediaQuery.of(context).size.width / 3.2,
-                                  errorBuilder: (context, error, stackTrace) {
-                                    return Image.asset(
-                                      'assets/hairfixing_logo.png', // Path to your PNG placeholder image
-                                      fit: BoxFit.cover,
-                                      height:
-                                          MediaQuery.of(context).size.height /
-                                              4 /
-                                              2,
-                                      width: MediaQuery.of(context).size.width /
-                                          3.2,
-                                    );
-                                  },
-                                ),
+                              child: Image.network(
+                                widget.agent.imageName!.isNotEmpty
+                                    ? widget.agent.imageName!
+                                    : 'https://example.com/placeholder-image.jpg',
+                                fit: BoxFit.cover,
+                                height: MediaQuery.of(context).size.height /
+                                    5.5 /
+                                    2,
+                                width: MediaQuery.of(context).size.width / 3.2,
+                                errorBuilder: (context, error, stackTrace) {
+                                  return Image.asset(
+                                    'assets/hairfixing_logo.png', // Path to your PNG placeholder image
+                                    fit: BoxFit.cover,
+                                    height: MediaQuery.of(context).size.height /
+                                        4 /
+                                        2,
+                                    width:
+                                        MediaQuery.of(context).size.width / 3.2,
+                                  );
+                                },
                               ),
                               // child: Image.asset(
                               //   'assets/top_image.png',
@@ -290,10 +292,11 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
                               //   width: MediaQuery.of(context).size.width / 2.8,
                               // )
                             ),
+                            const SizedBox(width: 10),
                             Container(
                               width: MediaQuery.of(context).size.width / 2,
-                              padding: const EdgeInsets.only(top: 8),
-                              // width: MediaQuery.of(context).size.width / 4,
+                              alignment: Alignment
+                                  .centerLeft, // width: MediaQuery.of(context).size.width / 4,
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,

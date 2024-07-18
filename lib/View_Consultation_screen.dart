@@ -81,6 +81,8 @@ class _ViewConsultationState extends State<View_Consultation_screen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: CommonStyles.blackColor,
+      // backgroundColor: CommonStyles.whiteColor,
       appBar: _appBar(context),
       body: FutureBuilder(
         future: agentData,
