@@ -66,7 +66,6 @@ class _CustomerDashBoardState extends State<CustomerDashBoard> {
   int currentIndex = 0;
   bool isLoading = true;
   bool isDataBinding = false;
-  bool isRetrying = false;
   bool apiAllowed = true;
   late Timer _timer;
   final bool _shouldStartMarquee = true;
@@ -172,67 +171,26 @@ class _CustomerDashBoardState extends State<CustomerDashBoard> {
   }
 
   void fetchCarouselData() async {
-    final url = Uri.parse(baseUrl + getbanner);
+    final response = await http.get(Uri.parse(baseUrl + getbanner));
     setState(() {
       isDataBinding = true;
-      isRetrying = false; // Initialize retrying state
     });
-
-    const timeoutDuration = Duration(seconds: 5); // Set the timeout duration
-    bool success = false;
-    int retries = 0;
-    const maxRetries = 3; // Number of retries
-
-    while (!success && retries < maxRetries) {
-      try {
-        if (retries > 0) {
-          setState(() {
-            isRetrying = true; // Set retrying state
-          });
-        }
-
-        final response = await http.get(url).timeout(timeoutDuration);
-
-        if (response.statusCode == 200) {
-          setState(() {
-            _items = (json.decode(response.body)['listResult'] as List)
-                .map((item) => Item.fromJson(item))
-                .toList();
-            isDataBinding = false;
-            isRetrying = false; // Reset retrying state
-          });
-          success = true;
-        } else {
-          setState(() {
-            isDataBinding = false;
-            isRetrying = false; // Reset retrying state
-          });
-          throw Exception('Failed to load items');
-        }
-      } on TimeoutException catch (_) {
-        print('Request timed out. Retrying...');
-        retries++;
-      } catch (error) {
-        print('Error fetching data from the API: $error');
-        setState(() {
-          isDataBinding = false;
-          isRetrying = false; // Reset retrying state
-        });
-        retries++;
-      }
-    }
-
-    if (!success) {
-      print('All retries failed. Unable to fetch data from the API.');
+    if (response.statusCode == 200) {
       setState(() {
+        _items = (json.decode(response.body)['listResult'] as List)
+            .map((item) => Item.fromJson(item))
+            .toList();
         isDataBinding = false;
-        isRetrying = false; // Reset retrying state
       });
+    } else {
+      isDataBinding = false;
+      throw Exception('Failed to load items');
     }
   }
+
   @override
   void dispose() {
- //   _timer.cancel();
+    //   _timer.cancel();
     super.dispose();
   }
 
@@ -246,16 +204,15 @@ class _CustomerDashBoardState extends State<CustomerDashBoard> {
 
     bool success = false;
     int retries = 0;
-    const maxRetries = 3; // Increase the number of retries if needed
-    const timeoutDuration = Duration(seconds: 5); // Set timeout duration
+    const maxRetries = 1;
 
     while (!success && retries < maxRetries) {
       try {
-        final response = await http.get(url).timeout(timeoutDuration);
+        final response = await http.get(url);
 
         if (response.statusCode == 200) {
           final data = json.decode(response.body);
-          print('Fetched data:  $data');
+          print('Failed to fetch data:  $data');
 
           List<BranchModel> branchList = [];
 
@@ -286,27 +243,22 @@ class _CustomerDashBoardState extends State<CustomerDashBoard> {
           success = true;
         } else {
           print('Request failed with status: ${response.statusCode}');
+          setState(() {
+            isLoading = false;
+          });
         }
-      } on TimeoutException catch (_) {
-        print('Request timed out. Retrying...');
-        retries++;
       } catch (error) {
-        print('Error fetching data from the API: $error');
-        retries++;
-      }
-
-      if (!success && retries >= maxRetries) {
+        print('Error data is not getting from the api: $error');
         setState(() {
           isLoading = false;
         });
       }
+
+      retries++;
     }
 
     if (!success) {
       print('All retries failed. Unable to fetch data from the API.');
-      setState(() {
-        isLoading = false;
-      });
     }
   }
 
@@ -392,20 +344,16 @@ class _CustomerDashBoardState extends State<CustomerDashBoard> {
                     ),
                   ],
                 ),
-                SizedBox(height: 10.0,),
-                RichText(
-                  text: TextSpan(
-                    style: DefaultTextStyle.of(context).style,
-                    children: const [
-                      TextSpan(
-                        text: 'Welcome to ',
-                        style: CommonStyles.txSty_20b_fb
-                      ),
-                      TextSpan(
-                        text: 'Hair Fixing Zone',
-                        style: CommonStyles.txSty_20b_fb
-                      ),
-                    ],
+                const SizedBox(
+                  height: 10.0,
+                ),
+                Text(
+                  'Welcome to Hair Fixing Zone',
+                  style: TextStyle(
+                    fontSize: MediaQuery.of(context).size.width * 0.04,
+                    fontFamily: "Muli",
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
                   ),
                 ),
               ],
@@ -432,7 +380,8 @@ class _CustomerDashBoardState extends State<CustomerDashBoard> {
                       slideIndicator: const CircularSlideIndicator(
                         indicatorBorderColor: CommonStyles.blackColor,
                         currentIndicatorColor: CommonStyles.primaryTextColor,
-                        indicatorRadius: 2, // Decrease the size of the indicator
+                        indicatorRadius:
+                            2, // Decrease the size of the indicator
                       ),
                       autoPlayAnimationDuration:
                           const Duration(milliseconds: 800),
@@ -570,6 +519,7 @@ class _CustomerDashBoardState extends State<CustomerDashBoard> {
                   },
                 ),
 
+                //MARK: Branches
                 const Padding(
                   padding:
                       EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
@@ -637,11 +587,23 @@ class _CustomerDashBoardState extends State<CustomerDashBoard> {
                               child: IntrinsicHeight(
                                 child: ClipRRect(
                                   borderRadius: const BorderRadius.only(
-                                    // topRight: Radius.circular(42.5),
-                                    // bottomLeft: Radius.circular(42.5),
-                                  ),
+                                      // topRight: Radius.circular(42.5),
+                                      // bottomLeft: Radius.circular(42.5),
+                                      ),
                                   child: GestureDetector(
-                                    onTap: () {},
+                                    onTap: () {
+                                      Branch branchData = Branch(
+                                        branchId: branch.id!,
+                                        branchname: branch.name,
+                                        branchaddress: branch.address,
+                                        phonenumber: branch.mobileNumber,
+                                        branchImage: branch.imageName!,
+                                        latitude: branch.latitude,
+                                        longitude: branch.longitude,
+                                      );
+
+                                      widget.toNavigate(branchData);
+                                    },
                                     child: Card(
                                       shadowColor: Colors.transparent,
                                       surfaceTintColor: Colors.transparent,
@@ -651,33 +613,24 @@ class _CustomerDashBoardState extends State<CustomerDashBoard> {
                                         //   bottomLeft: Radius.circular(29.0),
                                         // ),
                                         child: Container(
-                          decoration: BoxDecoration(
-                          gradient: const LinearGradient(
-                          colors: [
-                          Color(0xFFFFFFFF),
-                          Color(0xFFFFFFFF),
-                          ],
-                          begin: Alignment.centerLeft,
-                          end: Alignment.centerRight,
-                          ),
-                          border: Border.all(
-                            color:Colors.grey,
-                        //  color: const Color(0xFF8d97e2), // Add your desired border color here
-                          width: 1.0, // Set the border width
-                          ),
-                          borderRadius: BorderRadius.circular(10.0), // Optional: Add border radius if needed
-                          ),
-                                          //) decoration: const BoxDecoration(
-                                          //   gradient: LinearGradient(
-                                          //     colors: [
-                                          //       Color(0xFFFFFFFF),
-                                          //       Color(0xFFFFFFFF),
-                                          //     ],
-                                          //     begin: Alignment.centerLeft,
-                                          //     end: Alignment.centerRight,
-                                          //   ),
-                                          //
-                                          // ),
+                                          decoration: BoxDecoration(
+                                            gradient: const LinearGradient(
+                                              colors: [
+                                                Color(0xFFFFFFFF),
+                                                Color(0xFFFFFFFF),
+                                              ],
+                                              begin: Alignment.centerLeft,
+                                              end: Alignment.centerRight,
+                                            ),
+                                            border: Border.all(
+                                              color: Colors.grey,
+                                              //  color: const Color(0xFF8d97e2), // Add your desired border color here
+                                              width:
+                                                  1.0, // Set the border width
+                                            ),
+                                            borderRadius: BorderRadius.circular(
+                                                10.0), // Optional: Add border radius if needed
+                                          ),
                                           child: Row(
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.center,
@@ -692,11 +645,6 @@ class _CustomerDashBoardState extends State<CustomerDashBoard> {
                                                     borderRadius:
                                                         BorderRadius.circular(
                                                             10.0),
-                                                    border: Border.all(
-                                                      color: const Color(
-                                                          0xFF9FA1EE),
-                                                      width: 3.0,
-                                                    ),
                                                   ),
                                                   child: ClipRRect(
                                                     borderRadius:
@@ -739,11 +687,9 @@ class _CustomerDashBoardState extends State<CustomerDashBoard> {
                                                             const EdgeInsets
                                                                 .only(
                                                                 top: 15.0),
-                                                        child: Text(
-                                                          branch.name,
-                                                          style:CommonStyles.txSty_18b_fb
-
-                                                        ),
+                                                        child: Text(branch.name,
+                                                            style: CommonStyles
+                                                                .txSty_18b_fb),
                                                       ),
                                                       const SizedBox(
                                                           height: 4.0),
@@ -763,21 +709,21 @@ class _CustomerDashBoardState extends State<CustomerDashBoard> {
                                                                     MainAxisAlignment
                                                                         .spaceEvenly,
                                                                 children: [
-                                                                  Image.asset(
-                                                                    'assets/location_icon.png',
-                                                                    width: 20,
-                                                                    height: 18,
-                                                                  ),
-                                                                  const SizedBox(
-                                                                      width:
-                                                                          4.0),
+                                                                  //MARK: location_icon
+                                                                  // Image.asset(
+                                                                  //   'assets/location_icon.png',
+                                                                  //   width: 20,
+                                                                  //   height: 18,
+                                                                  // ),
+                                                                  // const SizedBox(
+                                                                  //     width:
+                                                                  //         4.0),
                                                                   Expanded(
                                                                     child: Text(
-                                                                      branch
-                                                                          .address,
-                                                                      style:CommonStyles.txSty_12b_fb
-
-                                                                    ),
+                                                                        branch
+                                                                            .address,
+                                                                        style: CommonStyles
+                                                                            .txSty_12b_fb),
                                                                   ),
                                                                 ],
                                                               ),
@@ -831,97 +777,30 @@ class _CustomerDashBoardState extends State<CustomerDashBoard> {
                                                                             10.0),
                                                               ),
                                                             ),
-                                                            child:
-                                                                GestureDetector(
-                                                              onTap:
-                                                                  // widget
-                                                                  //     .bookNowButtonPressed
-                                                                  () {
-                                                                Branch
-                                                                    branchData =
-                                                                    Branch(
-                                                                  branchId:
-                                                                      branch
-                                                                          .id!,
-                                                                  branchname:
-                                                                      branch
-                                                                          .name,
-                                                                  branchaddress:
-                                                                      branch
-                                                                          .address,
-                                                                  phonenumber:
-                                                                      branch
-                                                                          .mobileNumber,
-                                                                  branchImage:
-                                                                      branch
-                                                                          .imageName!,
-                                                                  latitude: branch
-                                                                      .latitude,
-                                                                  longitude: branch
-                                                                      .longitude,
-                                                                );
-
-                                                                widget.toNavigate(
-                                                                    branchData);
-
-                                                                /*   Navigator.push(
-                                                                  context,
-                                                                  MaterialPageRoute(
-                                                                    builder:
-                                                                        (context) =>
-                                                                            Bookingscreen(
-                                                                      branchId:
-                                                                          branch
-                                                                              .id!,
-                                                                      branchname:
-                                                                          branch
-                                                                              .name,
-                                                                      branchaddress:
-                                                                          branch
-                                                                              .address,
-                                                                      phonenumber:
-                                                                          branch
-                                                                              .mobileNumber,
-                                                                      branchImage:
-                                                                          branch
-                                                                              .imageName!,
-                                                                      latitude:
-                                                                          branch
-                                                                              .latitude,
-                                                                      longitude:
-                                                                          branch
-                                                                              .longitude,
-                                                                    ),
+                                                            child: Row(
+                                                              mainAxisSize:
+                                                                  MainAxisSize
+                                                                      .min,
+                                                              children: [
+                                                                SvgPicture
+                                                                    .asset(
+                                                                  'assets/datepicker_icon.svg',
+                                                                  width: 15.0,
+                                                                  height: 15.0,
+                                                                ),
+                                                                const SizedBox(
+                                                                    width: 5),
+                                                                const Text(
+                                                                  'Book Now',
+                                                                  style:
+                                                                      TextStyle(
+                                                                    fontSize:
+                                                                        13,
+                                                                    color: Color(
+                                                                        0xFF8d97e2),
                                                                   ),
-                                                                );
-                                                               */
-                                                              },
-                                                              child: Row(
-                                                                mainAxisSize:
-                                                                    MainAxisSize
-                                                                        .min,
-                                                                children: [
-                                                                  SvgPicture
-                                                                      .asset(
-                                                                    'assets/datepicker_icon.svg',
-                                                                    width: 15.0,
-                                                                    height:
-                                                                        15.0,
-                                                                  ),
-                                                                  const SizedBox(
-                                                                      width: 5),
-                                                                  const Text(
-                                                                    'Book Now',
-                                                                    style:
-                                                                        TextStyle(
-                                                                      fontSize:
-                                                                          13,
-                                                                      color: Color(
-                                                                          0xFF8d97e2),
-                                                                    ),
-                                                                  ),
-                                                                ],
-                                                              ),
+                                                                ),
+                                                              ],
                                                             ),
                                                           ),
                                                         ),
