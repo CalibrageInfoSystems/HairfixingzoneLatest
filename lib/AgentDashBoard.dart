@@ -159,193 +159,278 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
               ],
             ),
           ),
-          Expanded(
-            child: Column(
-              children: [
-                //MARK: Carousel view
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                  width: MediaQuery.of(context).size.width,
-                  height: 180,
-                  child: FlutterCarousel(
-                    options: CarouselOptions(
-                      floatingIndicator: false,
-                      height: 180,
-                      viewportFraction: 1.0,
-                      enlargeCenterPage: true,
-                      autoPlay: true,
-                      aspectRatio: 16 / 9,
-                      autoPlayCurve: Curves.fastOutSlowIn,
-                      enableInfiniteScroll: true,
-                      slideIndicator: const CircularSlideIndicator(
-                        indicatorBorderColor: CommonStyles.blackColor,
-                        currentIndicatorColor: CommonStyles.primaryTextColor,
-                        indicatorRadius:
-                            2, // Decrease the size of the indicator
-                      ),
-                      autoPlayAnimationDuration:
-                          const Duration(milliseconds: 800),
+          Column(
+            children: [
+              //MARK: Carousel view
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                width: MediaQuery.of(context).size.width,
+                height: 180,
+                child: FlutterCarousel(
+                  options: CarouselOptions(
+                    floatingIndicator: false,
+                    height: 180,
+                    viewportFraction: 1.0,
+                    enlargeCenterPage: true,
+                    autoPlay: true,
+                    aspectRatio: 16 / 9,
+                    autoPlayCurve: Curves.fastOutSlowIn,
+                    enableInfiniteScroll: true,
+                    slideIndicator: const CircularSlideIndicator(
+                      indicatorBorderColor: CommonStyles.blackColor,
+                      currentIndicatorColor: CommonStyles.primaryTextColor,
+                      indicatorRadius: 2, // Decrease the size of the indicator
                     ),
-                    items: _items.map((item) {
-                      return Builder(
-                        builder: (BuildContext context) {
-                          return SizedBox(
-                            width: MediaQuery.of(context).size.width,
-                            child: Card(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              elevation: 4,
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(10),
-                                child: Image.network(
-                                  item.imageName,
-                                  height: 100,
-                                  fit: BoxFit.cover,
-                                  loadingBuilder:
-                                      (context, child, loadingProgress) {
-                                    if (loadingProgress == null) return child;
-                                    return const Center(
-                                        child: CircularProgressIndicator
-                                            .adaptive());
-                                  },
-                                ),
+                    autoPlayAnimationDuration:
+                        const Duration(milliseconds: 800),
+                  ),
+                  items: _items.map((item) {
+                    return Builder(
+                      builder: (BuildContext context) {
+                        return SizedBox(
+                          width: MediaQuery.of(context).size.width,
+                          child: Card(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            elevation: 4,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: Image.network(
+                                item.imageName,
+                                height: 100,
+                                fit: BoxFit.cover,
+                                loadingBuilder:
+                                    (context, child, loadingProgress) {
+                                  if (loadingProgress == null) return child;
+                                  return const Center(
+                                      child:
+                                          CircularProgressIndicator.adaptive());
+                                },
                               ),
                             ),
-                          );
-                        },
-                      );
-                    }).toList(),
-                  ),
+                          ),
+                        );
+                      },
+                    );
+                  }).toList(),
                 ),
-                const SizedBox(height: 10),
-                /* 
-                Expanded(
-                  child: Stack(
-                    children: [
-                      Align(
-                        alignment: Alignment.topCenter,
-                        child: isDataBinding
-                            ? const Center(
-                                child: CircularProgressIndicator.adaptive(),
-                              )
-                            : imageList.isEmpty
-                                ? const Center(
-                                    
-                                    child: Icon(
-                                      Icons
-                                          .signal_cellular_connected_no_internet_0_bar_sharp,
-                                      color: Colors.red,
-                                    ),
-                                  )
-                                : CarouselSlider(
-                                    items: imageList
-                                        .map((item) => Image.network(
-                                              item.imageName,
-                                              fit: BoxFit.fitWidth,
-                                              width: MediaQuery.of(context)
-                                                  .size
-                                                  .width,
-                                            ))
-                                        .toList(),
-                                    carouselController: carouselController,
-                                    options: CarouselOptions(
-                                      scrollPhysics:
-                                          const BouncingScrollPhysics(),
-                                      autoPlay: true,
-                                      aspectRatio: 23 / 9,
-                                      viewportFraction: 1,
-                                      onPageChanged: (index, reason) {
-                                        setState(() {
-                                          currentIndex = index;
-                                        });
-                                      },
-                                    ),
-                                  ),
-                      ),
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width,
-                        
-            
-                        height: MediaQuery.of(context).size.height,
-                        child: Align(
-                          alignment: Alignment.bottomCenter,
-                          child: Padding(
-                            padding: const EdgeInsets.only(bottom: 25.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: imageList.asMap().entries.map((entry) {
-                                final index = entry.key;
-                                return buildIndicator(index);
-                              }).toList(),
+              ),
+              const SizedBox(height: 10),
+              //MARK: Marquee Text
+              FutureBuilder(
+                future: getMarqueeText(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const SizedBox();
+                  } else if (snapshot.hasError) {
+                    return const SizedBox();
+                  } else {
+                    if (marqueeText != null) {
+                      return Container(
+                        height: 40,
+                        decoration: const BoxDecoration(
+                          image: DecorationImage(
+                            fit: BoxFit.cover,
+                            image: AssetImage(
+                              'assets/wave_background.png',
                             ),
                           ),
                         ),
-                      )
-                    ],
-                  ),
-                ),
-             */
-                //MARK: Marquee Text
-                FutureBuilder(
-                  future: getMarqueeText(),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const SizedBox();
-                    } else if (snapshot.hasError) {
-                      return const SizedBox();
+                        child: Marquee(
+                          text: marqueeText!,
+                          style: CommonStyles.text16white,
+                          velocity: _shouldStartMarquee ? 30 : 0,
+                        ),
+                      );
                     } else {
-                      if (marqueeText != null) {
-                        return Container(
-                          height: 40,
-                          decoration: const BoxDecoration(
-                            image: DecorationImage(
-                              fit: BoxFit.cover,
-                              image: AssetImage(
-                                'assets/wave_background.png',
-                              ),
-                            ),
-                          ),
-                          child: Marquee(
-                            text: marqueeText!,
-                            style: CommonStyles.text16white,
-                            velocity: _shouldStartMarquee ? 30 : 0,
-                          ),
-                        );
-                      } else {
-                        return const SizedBox();
-                      }
+                      return const SizedBox();
                     }
-                  },
-                ),
+                  }
+                },
+              ),
 
-                //MARK: Branches
-                const SizedBox(
-                  height: 15,
+              //MARK: Branches
+              const SizedBox(
+                height: 15,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: Column(
+                  children: [
+                    screens(),
+                    const SizedBox(height: 15),
+                    //MARK: Branches
+                    const Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Branches',
+                          style: CommonStyles.txSty_16p_fb,
+                        ),
+                      ],
+                    ),
+                    // agentBranches(),
+                    SingleChildScrollView(
+                        child: Column(
+                      children: [
+                        FutureBuilder(
+                          future: apiData,
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return const Center(
+                                  child: CircularProgressIndicator.adaptive());
+                            } else if (snapshot.hasError) {
+                              return Center(
+                                child: Text(snapshot.error.toString()),
+                              );
+                            } else {
+                              List<BranchModel>? data = snapshot.data!;
+                              return SizedBox(
+                                width: MediaQuery.of(context).size.width,
+                                // height: MediaQuery.of(context).size.height / 3.5,
+                                child: ListView.builder(
+                                  scrollDirection: Axis.vertical,
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  itemCount: data.length,
+                                  itemBuilder: (context, index) {
+                                    BranchModel branch = data[index];
+                                    return IntrinsicHeight(
+                                      child: GestureDetector(
+                                        onTap: () {},
+                                        child: Card(
+                                          shadowColor: Colors.transparent,
+                                          surfaceTintColor: Colors.transparent,
+                                          child: ClipRRect(
+                                            // borderRadius: const BorderRadius.only(
+                                            //   topRight: Radius.circular(29.0),
+                                            //   bottomLeft: Radius.circular(29.0),
+                                            // ),
+                                            child: Container(
+                                              padding: const EdgeInsets.all(20),
+                                              decoration: BoxDecoration(
+                                                gradient: const LinearGradient(
+                                                  colors: [
+                                                    Color(0xFFFFFFFF),
+                                                    Color(0xFFFFFFFF),
+                                                  ],
+                                                  begin: Alignment.centerLeft,
+                                                  end: Alignment.centerRight,
+                                                ),
+                                                border: Border.all(
+                                                  color: Colors.grey,
+                                                  //  color: const Color(0xFF8d97e2), // Add your desired border color here
+                                                  width:
+                                                      1.0, // Set the border width
+                                                ),
+                                                borderRadius: BorderRadius.circular(
+                                                    10.0), // Optional: Add border radius if needed
+                                              ),
+                                              child: Row(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                children: [
+                                                  Container(
+                                                    width: 110,
+                                                    height: 65,
+                                                    decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10.0),
+                                                    ),
+                                                    child: ClipRRect(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              7.0),
+                                                      child: Image.network(
+                                                        branch.imageName!,
+                                                        width: 110,
+                                                        height: 65,
+                                                        fit: BoxFit.fill,
+                                                        loadingBuilder: (context,
+                                                            child,
+                                                            loadingProgress) {
+                                                          if (loadingProgress ==
+                                                              null) {
+                                                            return child;
+                                                          }
+
+                                                          return const Center(
+                                                              child: CircularProgressIndicator
+                                                                  .adaptive());
+                                                        },
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  const SizedBox(width: 10.0),
+                                                  Expanded(
+                                                    child: Column(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .start,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Text(branch.name,
+                                                            style: CommonStyles
+                                                                .txSty_18b_fb),
+                                                        const SizedBox(
+                                                            height: 4.0),
+                                                        Expanded(
+                                                          child: Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .only(
+                                                                    right:
+                                                                        10.0),
+                                                            child: Column(
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .start,
+                                                              children: [
+                                                                Row(
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .spaceEvenly,
+                                                                  children: [
+                                                                    Expanded(
+                                                                      child: Text(
+                                                                          branch
+                                                                              .address,
+                                                                          style:
+                                                                              CommonStyles.txSty_12b_fb),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              );
+                            }
+                          },
+                        ),
+                      ],
+                    )),
+                  ],
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: Column(
-                    children: [
-                      screens(),
-                      const SizedBox(height: 15),
-                      //MARK: Branches
-                      const Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Branches',
-                            style: CommonStyles.txSty_16p_fb,
-                          ),
-                        ],
-                      ),
-                      // agentBranches(),
-                      newBranches(),
-                    ],
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         ],
       ),
@@ -567,6 +652,79 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
   // }
 
   Widget screens() {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 15.0),
+      child: GestureDetector(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => Branches_screen(userId: AgentId!)),
+          );
+        },
+        child: Container(
+          width: double.infinity,
+          height: MediaQuery.of(context).size.height / 11,
+          //height: 60,
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            border: Border.all(color: CommonStyles.primaryTextColor),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(15),
+                decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: CommonStyles.primaryTextColor),
+                child: Center(
+                  child: SvgPicture.asset(
+                    'assets/noun-appointment-date-2417776.svg',
+                    width: 30.0,
+                    height: 30.0,
+                    color: CommonStyles.whiteColor,
+                  ),
+                ),
+              ),
+              const SizedBox(
+                width: 20,
+              ),
+              const Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Click Here To',
+                      style: CommonStyles.txSty_16p_f5,
+                    ),
+                    Text(
+                      'Check Appointment',
+
+                      /// style: CommonStyles.txSty_20p_fb,
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontFamily: "Calibri",
+                        fontWeight: FontWeight.bold,
+                        color: CommonStyles.primaryTextColor,
+                        letterSpacing: 2,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const Icon(Icons.arrow_forward_ios_rounded, size: 15),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+/* 
+  Widget screens() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -702,7 +860,7 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
       ],
     );
   }
-
+ */
   Widget newBranches() {
     return FutureBuilder(
       future: apiData,
