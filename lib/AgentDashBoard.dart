@@ -128,311 +128,302 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
       backgroundColor: CommonStyles.whiteColor,
       body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    Text(
-                      'Hey, ',
-                      style: CommonStyles.txSty_20b_fb.copyWith(fontSize: 24),
-                    ),
-                    Text(
-                      userFullName,
-                      style: CommonStyles.txSty_20b_fb.copyWith(fontSize: 24),
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 10.0,
-                ),
-                Text(
-                  'Welcome to Hair Fixing Zone',
-                  style: TextStyle(
-                    fontSize: MediaQuery.of(context).size.width * 0.04,
-                    fontFamily: "Muli",
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
-                ),
-              ],
+          wishSection(context),
+          //MARK: Carousel view
+          carousel(context),
+          const SizedBox(height: 10),
+          //MARK: Marquee Text
+          marqueeScroll(),
+
+          //MARK: Branches
+          const SizedBox(
+            height: 15,
+          ),
+          screens(),
+          const SizedBox(
+            height: 15,
+          ),
+          const Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                'Branches',
+                style: CommonStyles.txSty_20p_fb,
+              ),
+            ],
+          ),
+          branches(),
+        ],
+      ),
+    );
+  }
+
+  Padding wishSection(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Text(
+                'Hey, ',
+                style: CommonStyles.txSty_20b_fb.copyWith(fontSize: 24),
+              ),
+              Text(
+                userFullName,
+                style: CommonStyles.txSty_20b_fb.copyWith(fontSize: 24),
+              ),
+            ],
+          ),
+          const SizedBox(
+            height: 10.0,
+          ),
+          Text(
+            'Welcome to Hair Fixing Zone',
+            style: TextStyle(
+              fontSize: MediaQuery.of(context).size.width * 0.04,
+              fontFamily: "Muli",
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
             ),
           ),
-          Column(
+        ],
+      ),
+    );
+  }
+
+  Expanded branches() {
+    return Expanded(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12),
+        child: SingleChildScrollView(
+          child: Column(
             children: [
-              //MARK: Carousel view
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                width: MediaQuery.of(context).size.width,
-                height: 180,
-                child: FlutterCarousel(
-                  options: CarouselOptions(
-                    floatingIndicator: false,
-                    height: 180,
-                    viewportFraction: 1.0,
-                    enlargeCenterPage: true,
-                    autoPlay: true,
-                    aspectRatio: 16 / 9,
-                    autoPlayCurve: Curves.fastOutSlowIn,
-                    enableInfiniteScroll: true,
-                    slideIndicator: const CircularSlideIndicator(
-                      indicatorBorderColor: CommonStyles.blackColor,
-                      currentIndicatorColor: CommonStyles.primaryTextColor,
-                      indicatorRadius: 2, // Decrease the size of the indicator
-                    ),
-                    autoPlayAnimationDuration:
-                        const Duration(milliseconds: 800),
-                  ),
-                  items: _items.map((item) {
-                    return Builder(
-                      builder: (BuildContext context) {
-                        return SizedBox(
-                          width: MediaQuery.of(context).size.width,
-                          child: Card(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            elevation: 4,
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(10),
-                              child: Image.network(
-                                item.imageName,
-                                height: 100,
-                                fit: BoxFit.cover,
-                                loadingBuilder:
-                                    (context, child, loadingProgress) {
-                                  if (loadingProgress == null) return child;
-                                  return const Center(
-                                      child:
-                                          CircularProgressIndicator.adaptive());
-                                },
+              FutureBuilder(
+                future: apiData,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(
+                        child: CircularProgressIndicator.adaptive());
+                  } else if (snapshot.hasError) {
+                    return Center(
+                      child: Text(snapshot.error.toString()),
+                    );
+                  } else {
+                    List<BranchModel>? data = snapshot.data!;
+                    return ListView.builder(
+                      scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: data.length,
+                      itemBuilder: (context, index) {
+                        BranchModel branch = data[index];
+                        return IntrinsicHeight(
+                          child: GestureDetector(
+                            onTap: () {},
+                            child: Card(
+                              shadowColor: Colors.transparent,
+                              surfaceTintColor: Colors.transparent,
+                              child: ClipRRect(
+                                // borderRadius: const BorderRadius.only(
+                                //   topRight: Radius.circular(29.0),
+                                //   bottomLeft: Radius.circular(29.0),
+                                // ),
+                                child: Container(
+                                  padding: const EdgeInsets.all(20),
+                                  decoration: BoxDecoration(
+                                    gradient: const LinearGradient(
+                                      colors: [
+                                        Color(0xFFFFFFFF),
+                                        Color(0xFFFFFFFF),
+                                      ],
+                                      begin: Alignment.centerLeft,
+                                      end: Alignment.centerRight,
+                                    ),
+                                    border: Border.all(
+                                      color: Colors.grey,
+                                      //  color: const Color(0xFF8d97e2), // Add your desired border color here
+                                      width: 1.0, // Set the border width
+                                    ),
+                                    borderRadius: BorderRadius.circular(
+                                        10.0), // Optional: Add border radius if needed
+                                  ),
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                        width: 110,
+                                        height: 65,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10.0),
+                                        ),
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(7.0),
+                                          child: Image.network(
+                                            branch.imageName!,
+                                            width: 110,
+                                            height: 65,
+                                            fit: BoxFit.fill,
+                                            loadingBuilder: (context, child,
+                                                loadingProgress) {
+                                              if (loadingProgress == null) {
+                                                return child;
+                                              }
+
+                                              return const Center(
+                                                  child:
+                                                      CircularProgressIndicator
+                                                          .adaptive());
+                                            },
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(width: 10.0),
+                                      Expanded(
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(branch.name,
+                                                style:
+                                                    CommonStyles.txSty_18b_fb),
+                                            const SizedBox(height: 4.0),
+                                            Expanded(
+                                              child: Padding(
+                                                padding: const EdgeInsets.only(
+                                                    right: 10.0),
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceEvenly,
+                                                      children: [
+                                                        Expanded(
+                                                          child: Text(
+                                                              branch.address,
+                                                              style: CommonStyles
+                                                                  .txSty_12b_fb),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
                               ),
                             ),
                           ),
                         );
                       },
                     );
-                  }).toList(),
-                ),
-              ),
-              const SizedBox(height: 10),
-              //MARK: Marquee Text
-              FutureBuilder(
-                future: getMarqueeText(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const SizedBox();
-                  } else if (snapshot.hasError) {
-                    return const SizedBox();
-                  } else {
-                    if (marqueeText != null) {
-                      return Container(
-                        height: 40,
-                        decoration: const BoxDecoration(
-                          image: DecorationImage(
-                            fit: BoxFit.cover,
-                            image: AssetImage(
-                              'assets/wave_background.png',
-                            ),
-                          ),
-                        ),
-                        child: Marquee(
-                          text: marqueeText!,
-                          style: CommonStyles.text16white,
-                          velocity: _shouldStartMarquee ? 30 : 0,
-                        ),
-                      );
-                    } else {
-                      return const SizedBox();
-                    }
                   }
                 },
               ),
-
-              //MARK: Branches
-              const SizedBox(
-                height: 15,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: Column(
-                  children: [
-                    screens(),
-                    const SizedBox(height: 15),
-                    //MARK: Branches
-                    const Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Branches',
-                          style: CommonStyles.txSty_16p_fb,
-                        ),
-                      ],
-                    ),
-                    // agentBranches(),
-                    SingleChildScrollView(
-                        child: Column(
-                      children: [
-                        FutureBuilder(
-                          future: apiData,
-                          builder: (context, snapshot) {
-                            if (snapshot.connectionState ==
-                                ConnectionState.waiting) {
-                              return const Center(
-                                  child: CircularProgressIndicator.adaptive());
-                            } else if (snapshot.hasError) {
-                              return Center(
-                                child: Text(snapshot.error.toString()),
-                              );
-                            } else {
-                              List<BranchModel>? data = snapshot.data!;
-                              return SizedBox(
-                                width: MediaQuery.of(context).size.width,
-                                // height: MediaQuery.of(context).size.height / 3.5,
-                                child: ListView.builder(
-                                  scrollDirection: Axis.vertical,
-                                  shrinkWrap: true,
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  itemCount: data.length,
-                                  itemBuilder: (context, index) {
-                                    BranchModel branch = data[index];
-                                    return IntrinsicHeight(
-                                      child: GestureDetector(
-                                        onTap: () {},
-                                        child: Card(
-                                          shadowColor: Colors.transparent,
-                                          surfaceTintColor: Colors.transparent,
-                                          child: ClipRRect(
-                                            // borderRadius: const BorderRadius.only(
-                                            //   topRight: Radius.circular(29.0),
-                                            //   bottomLeft: Radius.circular(29.0),
-                                            // ),
-                                            child: Container(
-                                              padding: const EdgeInsets.all(20),
-                                              decoration: BoxDecoration(
-                                                gradient: const LinearGradient(
-                                                  colors: [
-                                                    Color(0xFFFFFFFF),
-                                                    Color(0xFFFFFFFF),
-                                                  ],
-                                                  begin: Alignment.centerLeft,
-                                                  end: Alignment.centerRight,
-                                                ),
-                                                border: Border.all(
-                                                  color: Colors.grey,
-                                                  //  color: const Color(0xFF8d97e2), // Add your desired border color here
-                                                  width:
-                                                      1.0, // Set the border width
-                                                ),
-                                                borderRadius: BorderRadius.circular(
-                                                    10.0), // Optional: Add border radius if needed
-                                              ),
-                                              child: Row(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                children: [
-                                                  Container(
-                                                    width: 110,
-                                                    height: 65,
-                                                    decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              10.0),
-                                                    ),
-                                                    child: ClipRRect(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              7.0),
-                                                      child: Image.network(
-                                                        branch.imageName!,
-                                                        width: 110,
-                                                        height: 65,
-                                                        fit: BoxFit.fill,
-                                                        loadingBuilder: (context,
-                                                            child,
-                                                            loadingProgress) {
-                                                          if (loadingProgress ==
-                                                              null) {
-                                                            return child;
-                                                          }
-
-                                                          return const Center(
-                                                              child: CircularProgressIndicator
-                                                                  .adaptive());
-                                                        },
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  const SizedBox(width: 10.0),
-                                                  Expanded(
-                                                    child: Column(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .start,
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        Text(branch.name,
-                                                            style: CommonStyles
-                                                                .txSty_18b_fb),
-                                                        const SizedBox(
-                                                            height: 4.0),
-                                                        Expanded(
-                                                          child: Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .only(
-                                                                    right:
-                                                                        10.0),
-                                                            child: Column(
-                                                              crossAxisAlignment:
-                                                                  CrossAxisAlignment
-                                                                      .start,
-                                                              children: [
-                                                                Row(
-                                                                  mainAxisAlignment:
-                                                                      MainAxisAlignment
-                                                                          .spaceEvenly,
-                                                                  children: [
-                                                                    Expanded(
-                                                                      child: Text(
-                                                                          branch
-                                                                              .address,
-                                                                          style:
-                                                                              CommonStyles.txSty_12b_fb),
-                                                                    ),
-                                                                  ],
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                ),
-                              );
-                            }
-                          },
-                        ),
-                      ],
-                    )),
-                  ],
-                ),
-              ),
             ],
           ),
-        ],
+        ),
+      ),
+    );
+  }
+
+  FutureBuilder<Object?> marqueeScroll() {
+    return FutureBuilder(
+      future: getMarqueeText(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const SizedBox();
+        } else if (snapshot.hasError) {
+          return const SizedBox();
+        } else {
+          if (marqueeText != null) {
+            return Container(
+              height: 40,
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                  fit: BoxFit.cover,
+                  image: AssetImage(
+                    'assets/wave_background.png',
+                  ),
+                ),
+              ),
+              child: Marquee(
+                text: marqueeText!,
+                style: CommonStyles.text16white,
+                velocity: _shouldStartMarquee ? 30 : 0,
+              ),
+            );
+          } else {
+            return const SizedBox();
+          }
+        }
+      },
+    );
+  }
+
+  Container carousel(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+      width: MediaQuery.of(context).size.width,
+      height: 180,
+      child: FlutterCarousel(
+        options: CarouselOptions(
+          floatingIndicator: false,
+          height: 180,
+          viewportFraction: 1.0,
+          enlargeCenterPage: true,
+          autoPlay: true,
+          aspectRatio: 16 / 9,
+          autoPlayCurve: Curves.fastOutSlowIn,
+          enableInfiniteScroll: true,
+          slideIndicator: const CircularSlideIndicator(
+            indicatorBorderColor: CommonStyles.blackColor,
+            currentIndicatorColor: CommonStyles.primaryTextColor,
+            indicatorRadius: 2, // Decrease the size of the indicator
+          ),
+          autoPlayAnimationDuration: const Duration(milliseconds: 800),
+        ),
+        items: _items.map((item) {
+          return Builder(
+            builder: (BuildContext context) {
+              return SizedBox(
+                width: MediaQuery.of(context).size.width,
+                child: Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  elevation: 4,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: Image.network(
+                      item.imageName,
+                      height: 100,
+                      fit: BoxFit.cover,
+                      loadingBuilder: (context, child, loadingProgress) {
+                        if (loadingProgress == null) return child;
+                        return const Center(
+                            child: CircularProgressIndicator.adaptive());
+                      },
+                    ),
+                  ),
+                ),
+              );
+            },
+          );
+        }).toList(),
       ),
     );
   }
