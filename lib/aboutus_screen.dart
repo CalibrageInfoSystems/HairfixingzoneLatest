@@ -51,7 +51,7 @@ class AboutUsScreen extends StatelessWidget {
                     Text('About Us',
                         style: TextStyle(
                           fontSize: 16,
-                          fontFamily: "OpenSans",
+                          fontFamily: "Outfit",
                           color: Color(0xFF662d91),
                         )),
                     SizedBox(height: 5),
@@ -154,7 +154,7 @@ class AboutUsScreen extends StatelessWidget {
         backgroundColor: const Color(0xFFf3e3ff),
         title: const Text(
           'About Us',
-          style: TextStyle(color: Color(0xFF0f75bc), fontSize: 16.0,  fontFamily: "OpenSans",),
+          style: TextStyle(color: Color(0xFF0f75bc), fontSize: 16.0,  fontFamily: "Outfit",),
         ),
         // actions: [
         //   IconButton(

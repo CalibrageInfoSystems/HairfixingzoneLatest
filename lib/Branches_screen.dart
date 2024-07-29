@@ -80,7 +80,7 @@ class _BranchesscreenState extends State<Branches_screen> {
           backgroundColor: const Color(0xFFf3e3ff),
           title: const Text(
             'Select Branch',
-            style: TextStyle(color: Color(0xFF0f75bc), fontSize: 16.0, fontFamily: "OpenSans", fontWeight: FontWeight.w600),
+            style: TextStyle(color: Color(0xFF0f75bc), fontSize: 16.0, fontFamily: "Outfit", fontWeight: FontWeight.w600),
           ),
           leading: IconButton(
             icon: const Icon(

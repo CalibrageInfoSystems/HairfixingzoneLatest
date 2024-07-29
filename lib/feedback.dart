@@ -107,7 +107,7 @@ class _feedback_Screen_screenState extends State<feedback_Screen> {
                       style: TextStyle(
                         fontSize: 24,
                         color: Color(0xFFf15f22),
-                        fontFamily: 'OpenSans',
+                        fontFamily: 'Outfit',
                       ),
                     ),
                     const SizedBox(
@@ -118,7 +118,7 @@ class _feedback_Screen_screenState extends State<feedback_Screen> {
                       style: TextStyle(
                         fontSize: 16,
                         color: Color(0xFFf15f22),
-                        fontFamily: 'OpenSans',
+                        fontFamily: 'Outfit',
                       ),
                     ),
                     const SizedBox(
@@ -162,7 +162,7 @@ class _feedback_Screen_screenState extends State<feedback_Screen> {
                           child: TextFormField(
                             controller: _commentstexteditcontroller,
                             style: const TextStyle(
-                              fontFamily: 'OpenSans',
+                              fontFamily: 'Outfit',
                               fontSize: 14,
                               fontWeight: FontWeight.w300,
                             ),
@@ -175,7 +175,7 @@ class _feedback_Screen_screenState extends State<feedback_Screen> {
                                 color: Colors.black54,
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold,
-                                fontFamily: 'OpenSans',
+                                fontFamily: 'Outfit',
                               ),
                               contentPadding: EdgeInsets.symmetric(
                                 horizontal: 16.0,
@@ -212,7 +212,7 @@ class _feedback_Screen_screenState extends State<feedback_Screen> {
                             style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 16,
-                                fontFamily: 'OpenSans'),
+                                fontFamily: 'Outfit'),
                           ),
                         ),
                       ),

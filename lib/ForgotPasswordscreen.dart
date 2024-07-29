@@ -73,7 +73,7 @@ class _ForgotPasswordscreen extends State<ForgotPasswordscreen> {
                       const Text('Forgot Password',
                           style: TextStyle(
                             fontSize: 24,
-                            fontFamily: "OpenSans",
+                            fontFamily: "Outfit",
                             fontWeight: FontWeight.w700,
                             letterSpacing: 2,
                             color: Color(0xFF662d91),
@@ -171,7 +171,7 @@ class _ForgotPasswordscreen extends State<ForgotPasswordscreen> {
                                         child: const Text(' Click Here!',
                                             style: TextStyle(
                                               fontSize: 20,
-                                              fontFamily: "OpenSans",
+                                              fontFamily: "Outfit",
                                               fontWeight: FontWeight.w700,
                                               color: Color(0xFF0f75bc),
                                             )),

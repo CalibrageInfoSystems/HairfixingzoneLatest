@@ -196,7 +196,7 @@ class MyProducts_screenState extends State<MyProducts> {
                                 fontSize: 12.0,
                                 color: Colors.black,
                                 fontWeight: FontWeight.bold,
-                                fontFamily: "OpenSans",
+                                fontFamily: "Outfit",
                               ),
                             ),
                           );
@@ -217,7 +217,7 @@ class MyProducts_screenState extends State<MyProducts> {
                                   fontSize: 12.0,
                                   color: Colors.black,
                                   fontWeight: FontWeight.bold,
-                                  fontFamily: "OpenSans",
+                                  fontFamily: "Outfit",
                                 ),
                               ),
                             );
@@ -542,7 +542,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                               Text(
                                 option.desc,
                                 style: const TextStyle(
-                                  fontFamily: 'OpenSans',
+                                  fontFamily: 'Outfit',
                                   fontSize: 14,
                                   color: CommonUtils.primaryTextColor,
                                 ),
@@ -640,7 +640,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                                                         fontSize: 12.0,
                                                         fontWeight:
                                                             FontWeight.bold,
-                                                        fontFamily: "OpenSans",
+                                                        fontFamily: "Outfit",
                                                         color: isSelected
                                                             ? Colors.white
                                                             : Colors.black,
@@ -693,7 +693,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                         child: const Text(
                           'Close',
                           style: TextStyle(
-                            fontFamily: 'OpenSans',
+                            fontFamily: 'Outfit',
                             fontSize: 14,
                             color: CommonUtils.primaryTextColor,
                             fontWeight: FontWeight.bold,
@@ -722,7 +722,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                                 child: Text(
                                   'Apply',
                                   style: TextStyle(
-                                    fontFamily: 'OpenSans',
+                                    fontFamily: 'Outfit',
                                     fontSize: 14,
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold,
@@ -886,7 +886,7 @@ class ProductCard extends StatelessWidget {
                   '₹ ${formatNumber(product.maxPrice)}',
                   style: const TextStyle(
                     fontSize: 18,
-                    fontFamily: "OpenSans",
+                    fontFamily: "Outfit",
                     fontWeight: FontWeight.w500,
                     letterSpacing: 1,
                     color: Color(0xFF662d91),

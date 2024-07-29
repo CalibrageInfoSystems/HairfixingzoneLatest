@@ -249,7 +249,7 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
                       'Customer Registration',
                       style: TextStyle(
                         fontSize: 22,
-                        fontFamily: "OpenSans",
+                        fontFamily: "Outfit",
                         fontWeight: FontWeight.w700,
                         // letterSpacing: 0.8,
                         color: Color(0xFF662d91),

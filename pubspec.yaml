@@ -198,6 +198,8 @@ flutter:
     - assets/squareupright.svg
     - assets/home_new.svg
     - assets/apps-add.svg
+    - assets/flashbg4.png
+    - assets/bar_texture_rec.png
 
 
 
@@ -243,6 +245,9 @@ flutter:
          weight: 400
        - asset: fonts/Roboto-Thin.ttf
          weight: 100
+    - family: Outfit
+      fonts:
+        - asset: fonts/Outfit-Medium.ttf     
   
 
 

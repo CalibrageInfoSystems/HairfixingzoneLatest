@@ -183,7 +183,7 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
             'Welcome to Hair Fixing Zone',
             style: TextStyle(
               fontSize: MediaQuery.of(context).size.width * 0.05,
-              fontFamily: "OpenSans",
+              fontFamily: "Outfit",
               fontWeight: FontWeight.bold,
               color: Colors.black,
             ),
@@ -569,7 +569,7 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
                   text: marqueeText!,
                   style: const TextStyle(
                       fontSize: 16,
-                      fontFamily: "OpenSans",
+                      fontFamily: "Outfit",
                       fontWeight: FontWeight.w600,
                       color: Color(0xFFff0176)),
                 ),

@@ -270,7 +270,7 @@ class ViewConsulatationBranchTemplate extends StatelessWidget {
                         style: const TextStyle(
                           color: Color(0xFF0f75bc),
                           fontSize: 14.0,
-                          fontFamily: "OpenSans",
+                          fontFamily: "Outfit",
                           fontWeight: FontWeight.w600,
                         ),
                       ),

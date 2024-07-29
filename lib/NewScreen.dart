@@ -482,7 +482,7 @@ class _NewScreenState extends State<NewScreen> {
                   style: TextStyle(
                     fontSize: 16,
                     color: CommonUtils.primaryTextColor,
-                    fontFamily: 'OpenSans',
+                    fontFamily: 'Outfit',
                   ),
                 ),
               ),
@@ -513,7 +513,7 @@ class _NewScreenState extends State<NewScreen> {
                   style: TextStyle(
                     fontSize: 16,
                     color: Colors.white,
-                    fontFamily: 'OpenSans',
+                    fontFamily: 'Outfit',
                   ),
                 ),
               ),

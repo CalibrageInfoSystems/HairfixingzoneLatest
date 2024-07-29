@@ -110,7 +110,7 @@ class MyAppointments_screenState extends State<MyAppointments> {
                               fontSize: 12.0,
                               color: Colors.black,
                               fontWeight: FontWeight.bold,
-                              fontFamily: "OpenSans",
+                              fontFamily: "Outfit",
                             ),
                           ),
                         );
@@ -147,7 +147,7 @@ class MyAppointments_screenState extends State<MyAppointments> {
                                 fontSize: 12.0,
                                 color: Colors.black,
                                 fontWeight: FontWeight.bold,
-                                fontFamily: "OpenSans",
+                                fontFamily: "Outfit",
                               ),
                             ),
                           );
@@ -751,7 +751,7 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                                                         fontSize: 12.0,
                                                         fontWeight:
                                                             FontWeight.bold,
-                                                        fontFamily: "OpenSans",
+                                                        fontFamily: "Outfit",
                                                         color: isSelected
                                                             ? Colors.white
                                                             : Colors.black,
@@ -864,7 +864,7 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                                                         fontSize: 12.0,
                                                         fontWeight:
                                                             FontWeight.bold,
-                                                        fontFamily: "OpenSans",
+                                                        fontFamily: "Outfit",
                                                         color: isSelected
                                                             ? Colors.white
                                                             : Colors.black,
@@ -913,7 +913,7 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                             child: const Text(
                               'Close',
                               style: TextStyle(
-                                fontFamily: 'OpenSans',
+                                fontFamily: 'Outfit',
                                 fontSize: 14,
                                 color: CommonUtils.primaryTextColor,
                                 fontWeight: FontWeight.bold,
@@ -953,7 +953,7 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                                     child: Text(
                                       'Apply',
                                       style: TextStyle(
-                                        fontFamily: 'OpenSans',
+                                        fontFamily: 'Outfit',
                                         fontSize: 14,
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold,
@@ -1196,7 +1196,7 @@ class _OpCardState extends State<OpCard> {
                           '${dateValues[0]}',
                           style: const TextStyle(
                             fontSize: 22,
-                            fontFamily: "OpenSans",
+                            fontFamily: "Outfit",
                             // letterSpacing: 1.5,
                             fontWeight: FontWeight.w700,
                             color: Color(0xFF0f75bc),
@@ -1206,7 +1206,7 @@ class _OpCardState extends State<OpCard> {
                           '${dateValues[2]}',
                           style: const TextStyle(
                             fontSize: 14,
-                            fontFamily: "OpenSans",
+                            fontFamily: "Outfit",
                             fontWeight: FontWeight.w700,
                             color: Color(0xFF0f75bc),
                           ),
@@ -1236,7 +1236,7 @@ class _OpCardState extends State<OpCard> {
                                         widget.data.slotDuration,
                                         style: const TextStyle(
                                           fontSize: 16,
-                                          fontFamily: "OpenSans",
+                                          fontFamily: "Outfit",
                                           fontWeight: FontWeight.w700,
                                           color: Color(0xFF0f75bc),
                                         ),
@@ -1383,7 +1383,7 @@ class _OpCardState extends State<OpCard> {
             status,
             style: TextStyle(
               fontSize: 16,
-              fontFamily: "OpenSans",
+              fontFamily: "Outfit",
               fontWeight: FontWeight.w500,
               color: statusColor,
             ),
@@ -1496,7 +1496,7 @@ class _OpCardState extends State<OpCard> {
                         '  Cancel',
                         style: TextStyle(
                           fontSize: 16,
-                          fontFamily: "OpenSans",
+                          fontFamily: "Outfit",
                           fontWeight: FontWeight.w500,
                           color: isPastDate(data.date, data.slotDuration)
                               ? Colors.grey
@@ -1565,7 +1565,7 @@ class _OpCardState extends State<OpCard> {
                     text: data.review,
                     style: const TextStyle(
                       fontWeight: FontWeight.w500,
-                      fontFamily: "OpenSans",
+                      fontFamily: "Outfit",
                       color: Color(0xFF5f5f5f),
                     ),
                   ),
@@ -1772,7 +1772,7 @@ class _OpCardState extends State<OpCard> {
                               style: const TextStyle(
                                 fontSize: 16,
                                 color: CommonUtils.primaryTextColor,
-                                fontFamily: 'OpenSans',
+                                fontFamily: 'Outfit',
                               ),
                               textAlign: TextAlign.center,
                             ),
@@ -1787,7 +1787,7 @@ class _OpCardState extends State<OpCard> {
                                 style: const TextStyle(
                                   fontSize: 16,
                                   color: CommonUtils.primaryTextColor,
-                                  fontFamily: 'OpenSans',
+                                  fontFamily: 'Outfit',
                                 ),
                                 textAlign: TextAlign.center,
                               ),
@@ -1831,7 +1831,7 @@ class _OpCardState extends State<OpCard> {
                                 style: const TextStyle(
                                   fontSize: 16,
                                   color: CommonUtils.primaryTextColor,
-                                  fontFamily: 'OpenSans',
+                                  fontFamily: 'Outfit',
                                 ),
                                 textAlign: TextAlign.center,
                               ),
@@ -1885,7 +1885,7 @@ class _OpCardState extends State<OpCard> {
                                 child: TextFormField(
                                   controller: _commentstexteditcontroller,
                                   style: const TextStyle(
-                                    fontFamily: 'OpenSans',
+                                    fontFamily: 'Outfit',
                                     fontSize: 14,
                                     fontWeight: FontWeight.w300,
                                   ),
@@ -1898,7 +1898,7 @@ class _OpCardState extends State<OpCard> {
                                       color: Colors.black54,
                                       fontSize: 14,
                                       fontWeight: FontWeight.bold,
-                                      fontFamily: 'OpenSans',
+                                      fontFamily: 'Outfit',
                                     ),
                                     contentPadding: EdgeInsets.symmetric(
                                       horizontal: 16.0,
@@ -1934,7 +1934,7 @@ class _OpCardState extends State<OpCard> {
                                           child: Text(
                                             'Rate Now',
                                             style: TextStyle(
-                                              fontFamily: 'OpenSans',
+                                              fontFamily: 'Outfit',
                                               fontSize: 14,
                                               color: Colors.white,
                                               fontWeight: FontWeight.bold,
@@ -2087,7 +2087,7 @@ class _OpCardState extends State<OpCard> {
           //   style: TextStyle(
           //     fontSize: 16,
           //     color: CommonUtils.blueColor,
-          //     fontFamily: 'OpenSans',
+          //     fontFamily: 'Outfit',
           //   ),
           // ),
           content: Column(
@@ -2117,7 +2117,7 @@ class _OpCardState extends State<OpCard> {
               //   style: const TextStyle(
               //     fontSize: 16,
               //     color: CommonUtils.primaryTextColor,
-              //     fontFamily: 'OpenSans',
+              //     fontFamily: 'Outfit',
               //   ),
               // ),
             ],
@@ -2147,7 +2147,7 @@ class _OpCardState extends State<OpCard> {
                   style: TextStyle(
                     fontSize: 16,
                     color: CommonUtils.primaryTextColor,
-                    fontFamily: 'OpenSans',
+                    fontFamily: 'Outfit',
                   ),
                 ),
               ),
@@ -2178,7 +2178,7 @@ class _OpCardState extends State<OpCard> {
                   style: TextStyle(
                     fontSize: 16,
                     color: Colors.white,
-                    fontFamily: 'OpenSans',
+                    fontFamily: 'Outfit',
                   ),
                 ),
               ),
@@ -2199,7 +2199,7 @@ class _OpCardState extends State<OpCard> {
   //           style: TextStyle(
   //             fontSize: 16,
   //             color: CommonUtils.blueColor,
-  //             fontFamily: 'OpenSans',
+  //             fontFamily: 'Outfit',
   //           ),
   //         ),
   //         content: Text(
@@ -2207,7 +2207,7 @@ class _OpCardState extends State<OpCard> {
   //           style: const TextStyle(
   //             fontSize: 16,
   //             color: CommonUtils.primaryTextColor,
-  //             fontFamily: 'OpenSans',
+  //             fontFamily: 'Outfit',
   //           ),
   //         ),
   //         actions: [
@@ -2220,7 +2220,7 @@ class _OpCardState extends State<OpCard> {
   //               style: TextStyle(
   //                 fontSize: 16,
   //                 color: CommonUtils.blueColor,
-  //                 fontFamily: 'OpenSans',
+  //                 fontFamily: 'Outfit',
   //               ),
   //             ),
   //           ),
@@ -2234,7 +2234,7 @@ class _OpCardState extends State<OpCard> {
   //               style: TextStyle(
   //                 fontSize: 16,
   //                 color: CommonUtils.blueColor,
-  //                 fontFamily: 'OpenSans',
+  //                 fontFamily: 'Outfit',
   //               ),
   //             ),
   //           ),

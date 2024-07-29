@@ -75,7 +75,7 @@ class _AgentHomeState extends State<AgentHome> {
                         style: TextStyle(
                           fontSize: 16,
                           color: CommonUtils.primaryTextColor,
-                          fontFamily: 'OpenSans',
+                          fontFamily: 'Outfit',
                         ),
                       ),
                     ),
@@ -103,7 +103,7 @@ class _AgentHomeState extends State<AgentHome> {
                         style: TextStyle(
                           fontSize: 16,
                           color: Colors.white,
-                          fontFamily: 'OpenSans',
+                          fontFamily: 'Outfit',
                         ),
                       ),
                     ),
@@ -325,7 +325,7 @@ class _AgentHomeState extends State<AgentHome> {
                   style: TextStyle(
                     fontSize: 16,
                     color: CommonUtils.primaryTextColor,
-                    fontFamily: 'OpenSans',
+                    fontFamily: 'Outfit',
                   ),
                 ),
               ),
@@ -356,7 +356,7 @@ class _AgentHomeState extends State<AgentHome> {
                   style: TextStyle(
                     fontSize: 16,
                     color: Colors.white,
-                    fontFamily: 'OpenSans',
+                    fontFamily: 'Outfit',
                   ),
                 ),
               ),

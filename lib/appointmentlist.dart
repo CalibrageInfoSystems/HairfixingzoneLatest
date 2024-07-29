@@ -166,7 +166,7 @@
 //                                   color: Colors.red,
 //                                   fontSize: 18.0,
 //                                   fontWeight: FontWeight.bold,
-//                                   fontFamily: 'OpenSans',
+//                                   fontFamily: 'Outfit',
 //                                 ),
 //                               ),
 //                             ),
@@ -201,7 +201,7 @@
 //                         child: SizedBox(
 //                           child: TextFormField(
 //                             controller: _dateController,
-//                             style: TextStyle(fontSize: 14, color: Color(0xFFFB4110), fontWeight: FontWeight.w300, fontFamily: 'OpenSans'),
+//                             style: TextStyle(fontSize: 14, color: Color(0xFFFB4110), fontWeight: FontWeight.w300, fontFamily: 'Outfit'),
 //                             decoration: InputDecoration(
 //                               hintText: 'Select date',
 //                               prefixIcon: Padding(
@@ -241,7 +241,7 @@
 //                       style: TextStyle(
 //                           color: selectedButtonIndex == 1 ? Colors.white : Color(0xFFF44614),
 //                           fontWeight: FontWeight.bold,
-//                           fontFamily: 'OpenSans',
+//                           fontFamily: 'Outfit',
 //                           fontSize: 14),
 //                     ),
 //                     style: ElevatedButton.styleFrom(
@@ -266,7 +266,7 @@
 //                       style: TextStyle(
 //                           color: selectedButtonIndex == 2 ? Colors.white : Color(0xFFF44614),
 //                           fontWeight: FontWeight.bold,
-//                           fontFamily: 'OpenSans',
+//                           fontFamily: 'Outfit',
 //                           fontSize: 14),
 //                     ),
 //                     style: ElevatedButton.styleFrom(
@@ -291,7 +291,7 @@
 //                       style: TextStyle(
 //                           color: selectedButtonIndex == 3 ? Colors.white : Color(0xFFF44614),
 //                           fontWeight: FontWeight.bold,
-//                           fontFamily: 'OpenSans',
+//                           fontFamily: 'Outfit',
 //                           fontSize: 14),
 //                     ),
 //                     style: ElevatedButton.styleFrom(
@@ -316,7 +316,7 @@
 //                       style: TextStyle(
 //                           color: selectedButtonIndex == 4 ? Colors.white : Color(0xFFF44614),
 //                           fontWeight: FontWeight.bold,
-//                           fontFamily: 'OpenSans',
+//                           fontFamily: 'Outfit',
 //                           fontSize: 14),
 //                     ),
 //                     style: ElevatedButton.styleFrom(
@@ -412,11 +412,11 @@
 //                                                               color: Color(0xFFF44614),
 //                                                               fontSize: 12,
 //                                                               fontWeight: FontWeight.bold,
-//                                                               fontFamily: 'OpenSans'),
+//                                                               fontFamily: 'Outfit'),
 //                                                         ),
 //                                                         TextSpan(
 //                                                           text: appointment.customerName,
-//                                                           style: TextStyle(color: Color(0xFF042DE3), fontSize: 12, fontFamily: 'OpenSans'),
+//                                                           style: TextStyle(color: Color(0xFF042DE3), fontSize: 12, fontFamily: 'Outfit'),
 //                                                         ),
 //                                                       ],
 //                                                     ),
@@ -433,11 +433,11 @@
 //                                                               color: Color(0xFFF44614),
 //                                                               fontSize: 12,
 //                                                               fontWeight: FontWeight.bold,
-//                                                               fontFamily: 'OpenSans'),
+//                                                               fontFamily: 'Outfit'),
 //                                                         ),
 //                                                         TextSpan(
 //                                                           text: appointment.gender,
-//                                                           style: TextStyle(color: Color(0xFF042DE3), fontSize: 12, fontFamily: 'OpenSans'),
+//                                                           style: TextStyle(color: Color(0xFF042DE3), fontSize: 12, fontFamily: 'Outfit'),
 //                                                         ),
 //                                                       ],
 //                                                     ),
@@ -454,11 +454,11 @@
 //                                                               color: Color(0xFFF44614),
 //                                                               fontSize: 12,
 //                                                               fontWeight: FontWeight.bold,
-//                                                               fontFamily: 'OpenSans'),
+//                                                               fontFamily: 'Outfit'),
 //                                                         ),
 //                                                         TextSpan(
 //                                                           text: appointment.purposeofvisit,
-//                                                           style: TextStyle(color: Color(0xFF042DE3), fontSize: 12, fontFamily: 'OpenSans'),
+//                                                           style: TextStyle(color: Color(0xFF042DE3), fontSize: 12, fontFamily: 'Outfit'),
 //                                                         ),
 //                                                       ],
 //                                                     ),
@@ -482,11 +482,11 @@
 //                                                               color: Color(0xFFF44614),
 //                                                               fontSize: 12,
 //                                                               fontWeight: FontWeight.bold,
-//                                                               fontFamily: 'OpenSans'),
+//                                                               fontFamily: 'Outfit'),
 //                                                         ),
 //                                                         TextSpan(
 //                                                           text: appointment.email,
-//                                                           style: TextStyle(color: Color(0xFF042DE3), fontSize: 12, fontFamily: 'OpenSans'),
+//                                                           style: TextStyle(color: Color(0xFF042DE3), fontSize: 12, fontFamily: 'Outfit'),
 //                                                         ),
 //                                                       ],
 //                                                     ),
@@ -510,7 +510,7 @@
 //                                                               color: Color(0xFFF44614),
 //                                                               fontSize: 12,
 //                                                               fontWeight: FontWeight.bold,
-//                                                               fontFamily: 'OpenSans'),
+//                                                               fontFamily: 'Outfit'),
 //                                                         ),
 //                                                         TextSpan(
 //                                                           text: appointment.SlotDuration,
@@ -519,7 +519,7 @@
 //                                                                 0xFF042DE3,
 //                                                               ),
 //                                                               fontSize: 12,
-//                                                               fontFamily: 'OpenSans'),
+//                                                               fontFamily: 'Outfit'),
 //                                                         ),
 //                                                       ],
 //                                                     ),
@@ -544,11 +544,11 @@
 //                                                 //                       children: [
 //                                                 //                         TextSpan(
 //                                                 //                           text: 'Name : ',
-//                                                 //                           style: TextStyle(color: Color(0xFFF44614), fontSize: 12, fontWeight: FontWeight.bold, fontFamily: 'OpenSans'),
+//                                                 //                           style: TextStyle(color: Color(0xFFF44614), fontSize: 12, fontWeight: FontWeight.bold, fontFamily: 'Outfit'),
 //                                                 //                         ),
 //                                                 //                         TextSpan(
 //                                                 //                           text: appointment.customerName,
-//                                                 //                           style: TextStyle(color: Color(0xFF042DE3), fontSize: 12, fontFamily: 'OpenSans'),
+//                                                 //                           style: TextStyle(color: Color(0xFF042DE3), fontSize: 12, fontFamily: 'Outfit'),
 //                                                 //                         ),
 //                                                 //                       ],
 //                                                 //                     ),
@@ -561,11 +561,11 @@
 //                                                 //                       children: [
 //                                                 //                         TextSpan(
 //                                                 //                           text: 'Gender : ',
-//                                                 //                           style: TextStyle(color: Color(0xFFF44614), fontSize: 12, fontWeight: FontWeight.bold, fontFamily: 'OpenSans'),
+//                                                 //                           style: TextStyle(color: Color(0xFFF44614), fontSize: 12, fontWeight: FontWeight.bold, fontFamily: 'Outfit'),
 //                                                 //                         ),
 //                                                 //                         TextSpan(
 //                                                 //                           text: appointment.gender,
-//                                                 //                           style: TextStyle(color: Color(0xFF042DE3), fontSize: 12, fontFamily: 'OpenSans'),
+//                                                 //                           style: TextStyle(color: Color(0xFF042DE3), fontSize: 12, fontFamily: 'Outfit'),
 //                                                 //                         ),
 //                                                 //                       ],
 //                                                 //                     ),
@@ -578,11 +578,11 @@
 //                                                 //                       children: [
 //                                                 //                         TextSpan(
 //                                                 //                           text: 'Purpose : ',
-//                                                 //                           style: TextStyle(color: Color(0xFFF44614), fontSize: 12, fontWeight: FontWeight.bold, fontFamily: 'OpenSans'),
+//                                                 //                           style: TextStyle(color: Color(0xFFF44614), fontSize: 12, fontWeight: FontWeight.bold, fontFamily: 'Outfit'),
 //                                                 //                         ),
 //                                                 //                         TextSpan(
 //                                                 //                           text: appointment.purposeofvisit,
-//                                                 //                           style: TextStyle(color: Color(0xFF042DE3), fontSize: 12, fontFamily: 'OpenSans'),
+//                                                 //                           style: TextStyle(color: Color(0xFF042DE3), fontSize: 12, fontFamily: 'Outfit'),
 //                                                 //                         ),
 //                                                 //                       ],
 //                                                 //                     ),
@@ -602,11 +602,11 @@
 //                                                 //                         ),
 //                                                 //                         TextSpan(
 //                                                 //                           text: ' : ',
-//                                                 //                           style: TextStyle(color: Color(0xFFF44614), fontSize: 12, fontWeight: FontWeight.bold, fontFamily: 'OpenSans'),
+//                                                 //                           style: TextStyle(color: Color(0xFFF44614), fontSize: 12, fontWeight: FontWeight.bold, fontFamily: 'Outfit'),
 //                                                 //                         ),
 //                                                 //                         TextSpan(
 //                                                 //                           text: appointment.email,
-//                                                 //                           style: TextStyle(color: Color(0xFF042DE3), fontSize: 12, fontFamily: 'OpenSans'),
+//                                                 //                           style: TextStyle(color: Color(0xFF042DE3), fontSize: 12, fontFamily: 'Outfit'),
 //                                                 //                         ),
 //                                                 //                       ],
 //                                                 //                     ),
@@ -626,7 +626,7 @@
 //                                                 //                         ),
 //                                                 //                         TextSpan(
 //                                                 //                           text: ' : ',
-//                                                 //                           style: TextStyle(color: Color(0xFFF44614), fontSize: 12, fontWeight: FontWeight.bold, fontFamily: 'OpenSans'),
+//                                                 //                           style: TextStyle(color: Color(0xFFF44614), fontSize: 12, fontWeight: FontWeight.bold, fontFamily: 'Outfit'),
 //                                                 //                         ),
 //                                                 //                         TextSpan(
 //                                                 //                           text: appointment.SlotDuration,
@@ -635,7 +635,7 @@
 //                                                 //                                 0xFF042DE3,
 //                                                 //                               ),
 //                                                 //                               fontSize: 12,
-//                                                 //                               fontFamily: 'OpenSans'),
+//                                                 //                               fontFamily: 'Outfit'),
 //                                                 //                         ),
 //                                                 //                       ],
 //                                                 //                     ),
@@ -654,11 +654,11 @@
 //                                                 //                               children: [
 //                                                 //                                 TextSpan(
 //                                                 //                                   text: 'FeedBack : ',
-//                                                 //                                   style: TextStyle(color: Color(0xFFF44614), fontSize: 12, fontWeight: FontWeight.bold, fontFamily: 'OpenSans'),
+//                                                 //                                   style: TextStyle(color: Color(0xFFF44614), fontSize: 12, fontWeight: FontWeight.bold, fontFamily: 'Outfit'),
 //                                                 //                                 ),
 //                                                 //                                 TextSpan(
 //                                                 //                                   text: "huuuuuuuuuuuuuuuuuuuuuuuuuuudkjdfkdsfgdsgfdgfgdfgdfgdgdfgdfgdfgdfgfdgfdg",
-//                                                 //                                   style: TextStyle(color: Color(0xFF042DE3), fontSize: 12, fontFamily: 'OpenSans'),
+//                                                 //                                   style: TextStyle(color: Color(0xFF042DE3), fontSize: 12, fontFamily: 'Outfit'),
 //                                                 //                                 ),
 //                                                 //                               ],
 //                                                 //                             ),
@@ -699,14 +699,14 @@
 //                                                 //                         style: TextStyle(
 //                                                 //                           color: Color(0xFFF44614),
 //                                                 //                           fontWeight: FontWeight.bold,
-//                                                 //                           fontFamily: 'OpenSans',
+//                                                 //                           fontFamily: 'Outfit',
 //                                                 //                         ),
 //                                                 //                       ),
 //                                                 //                       TextSpan(
 //                                                 //                         text: appointment.phoneNumber,
 //                                                 //                         style: TextStyle(
 //                                                 //                           color: Color(0xFF042DE3),
-//                                                 //                           fontFamily: 'OpenSans',
+//                                                 //                           fontFamily: 'Outfit',
 //                                                 //                         ),
 //                                                 //                       ),
 //                                                 //                     ],
@@ -752,14 +752,14 @@
 //                                                         style: TextStyle(
 //                                                           color: Color(0xFFF44614),
 //                                                           fontWeight: FontWeight.bold,
-//                                                           fontFamily: 'OpenSans',
+//                                                           fontFamily: 'Outfit',
 //                                                         ),
 //                                                       ),
 //                                                       TextSpan(
 //                                                         text: appointment.phoneNumber,
 //                                                         style: TextStyle(
 //                                                           color: Color(0xFF042DE3),
-//                                                           fontFamily: 'OpenSans',
+//                                                           fontFamily: 'Outfit',
 //                                                         ),
 //                                                       ),
 //                                                     ],
@@ -870,7 +870,7 @@
 //                                                                     color: Colors.green,
 //                                                                     fontSize: 12,
 //                                                                     fontWeight: FontWeight.bold,
-//                                                                     fontFamily: 'OpenSans'),
+//                                                                     fontFamily: 'Outfit'),
 //                                                               ),
 //                                                             ),
 //                                                           ],
@@ -917,7 +917,7 @@
 //                                                                     color: Colors.red,
 //                                                                     fontSize: 12,
 //                                                                     fontWeight: FontWeight.bold,
-//                                                                     fontFamily: 'OpenSans'),
+//                                                                     fontFamily: 'Outfit'),
 //                                                               ),
 //                                                             ),
 //                                                           ],
@@ -1094,7 +1094,7 @@
 //                                                                   color: appointment.isAccepted ? Colors.green : Colors.red,
 //                                                                   fontSize: 12,
 //                                                                   fontWeight: FontWeight.bold,
-//                                                                   fontFamily: 'OpenSans',
+//                                                                   fontFamily: 'Outfit',
 //                                                                 ),
 //                                                               ),
 //                                                             ),
@@ -1143,7 +1143,7 @@
 //                                                                     color: appointment.isClosed ? Colors.green : Colors.red,
 //                                                                     fontSize: 12,
 //                                                                     fontWeight: FontWeight.bold,
-//                                                                     fontFamily: 'OpenSans',
+//                                                                     fontFamily: 'Outfit',
 //                                                                   ),
 //                                                                 ),
 //                                                               ),
@@ -1171,7 +1171,7 @@
 //                               fontSize: 18,
 //                               color: Color(0xFFFB4110),
 //                               fontWeight: FontWeight.bold,
-//                               fontFamily: 'OpenSans',
+//                               fontFamily: 'Outfit',
 //                             ),
 //                           ),
 //                         ),
@@ -1500,7 +1500,7 @@
 //                           keyboardType: TextInputType.number,
 //                           style: TextStyle(
 //                             fontSize: 14,
-//                             fontFamily: 'OpenSans',
+//                             fontFamily: 'Outfit',
 //                             color: Color(0xFF042DE3),
 //                             fontWeight: FontWeight.w300,
 //                           ),
@@ -1521,7 +1521,7 @@
 //                             hintText: ' Price in Rs',
 //                             hintStyle: TextStyle(
 //                               fontSize: 14,
-//                               fontFamily: 'OpenSans',
+//                               fontFamily: 'Outfit',
 //                               color: Color(0xFF042DE3),
 //                               fontWeight: FontWeight.w300,
 //                             ),

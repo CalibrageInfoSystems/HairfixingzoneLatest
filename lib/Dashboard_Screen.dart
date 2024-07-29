@@ -222,14 +222,17 @@ class _CustomerDashBoardState extends State<CustomerDashBoard>  with SingleTicke
     final response = await http.get(Uri.parse(baseUrl + getbanner));
     setState(() {
       isDataBinding = true;
+      isLoading = true;
     });
     if (response.statusCode == 200) {
       setState(() {
         _items = (json.decode(response.body)['listResult'] as List).map((item) => Item.fromJson(item)).toList();
         isDataBinding = false;
+        isLoading = false;
       });
     } else {
       isDataBinding = false;
+      isLoading = false;
       throw Exception('Failed to load items');
     }
   }
@@ -313,7 +316,6 @@ class _CustomerDashBoardState extends State<CustomerDashBoard>  with SingleTicke
   Future<void> fetchImages() async {
     setState(() {
       isDataBinding = true;
-
       isLoading = true;
     });
     final url = Uri.parse(baseUrl + getBanners);
@@ -333,14 +335,12 @@ class _CustomerDashBoardState extends State<CustomerDashBoard>  with SingleTicke
         setState(() {
           imageList = bannerImages;
           isDataBinding = false;
-
           isLoading = false;
         });
       } else {
         print('Request failed with status: ${response.statusCode}');
         setState(() {
           isDataBinding = false;
-
           isLoading = false;
         });
       }
@@ -384,26 +384,26 @@ class _CustomerDashBoardState extends State<CustomerDashBoard>  with SingleTicke
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Row(
-                  //   children: [
-                  //     Text(
-                  //       'Hello ',
-                  //       //    style: CommonStyles.txSty_20b_fb.copyWith(fontSize: 22),
-                  //       style: GoogleFonts.outfit(fontWeight: FontWeight.w500,fontSize: 22,color: Colors.black),
-                  //     ),
-                  //     Text(
-                  //       userFullName,
-                  //       style:    GoogleFonts.outfit(fontWeight: FontWeight.w500,fontSize: 22,color: Color(0xFF11528f)),
-                  //     ),
-                  //   ],
-                  // ),
-                  // const SizedBox(
-                  //   height: 10.0,
-                  // ),
                   Row(
                     children: [
                       Text(
-                        ' Welcome to ',
+                        'Hello ',
+                        //    style: CommonStyles.txSty_20b_fb.copyWith(fontSize: 22),
+                        style: GoogleFonts.outfit(fontWeight: FontWeight.w700,fontSize: 22,color: Colors.black),
+                      ),
+                      Text(
+                        userFullName,
+                        style:GoogleFonts.outfit(fontWeight: FontWeight.w700,fontSize: 22,color: Color(0xFF11528f)),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 10.0,
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        'Welcome to ',
                         //    style: CommonStyles.txSty_20b_fb.copyWith(fontSize: 22),
                         style: GoogleFonts.outfit(fontWeight: FontWeight.w500,fontSize: 16,color: Colors.black),
                       ),
@@ -430,176 +430,114 @@ class _CustomerDashBoardState extends State<CustomerDashBoard>  with SingleTicke
             //   child:
               Column(
                 children: [
-                  //MARK: Carousel view
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
-                    width: MediaQuery.of(context).size.width,
-                    height: 200,
-
-                // Set your desired background color h
-                        child: FlutterCarousel(
-                      options:
-                      CarouselOptions(
-                        floatingIndicator: true,
+              Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
+        width: MediaQuery.of(context).size.width,
+        height: 200,
+        child: isLoading
+            ? Center(child: CircularProgressIndicator())
+            : FlutterCarousel(
+          options: CarouselOptions(
+            floatingIndicator: true,
+            height: 200,
+            viewportFraction: 1.0,
+            enlargeCenterPage: true,
+            autoPlay: true,
+            aspectRatio: 16 / 9,
+            autoPlayCurve: Curves.fastOutSlowIn,
+            enableInfiniteScroll: true,
+            slideIndicator: CircularSlideIndicator(
+              itemSpacing: 10,
+              padding: const EdgeInsets.only(bottom: 10.0),
+              indicatorBorderColor: Color(0xFF11528f),
+              currentIndicatorColor: Color(0xFF11528f),
+              indicatorRadius: 4,
+            ),
+            autoPlayAnimationDuration: const Duration(milliseconds: 800),
+          ),
+          items: _items.map((item) {
+            return Builder(
+              builder: (BuildContext context) {
+                return SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  child: Card(
+                    shadowColor: Colors.transparent,
+                    surfaceTintColor: Colors.transparent,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    elevation: 4,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: Image.network(
+                        item.imageName,
                         height: 200,
-                        viewportFraction: 1.0,
-                        enlargeCenterPage: true,
-                        autoPlay: true,
-                        aspectRatio: 16 / 9,
-                        autoPlayCurve: Curves.fastOutSlowIn,
-                        enableInfiniteScroll: true,
-                        slideIndicator: CircularSlideIndicator(
-                              itemSpacing: 10,
-                              padding: const EdgeInsets.only(bottom: 10.0), // Add bottom padding here
-                              indicatorBorderColor: Color(0xFF11528f),
-                              currentIndicatorColor:  Color(0xFF11528f),
-                              indicatorRadius: 4, // Decrease the size of the indicator
-                            ),
-
-
-                        autoPlayAnimationDuration: const Duration(milliseconds: 800),
+                        fit: BoxFit.fill,
+                        loadingBuilder: (context, child, loadingProgress) {
+                          if (loadingProgress == null) return child;
+                          return const Center(child: CircularProgressIndicator.adaptive());
+                        },
                       ),
-                      items: _items.map((item) {
-                        return Builder(
-                          builder: (BuildContext context) {
-                            return SizedBox(
-                              width: MediaQuery.of(context).size.width,
-                              child: Card(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                elevation: 4,
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(10),
-                                  child: Image.network(
-                                    item.imageName,
-                                    height: 100,
-                                    fit: BoxFit.fill,
-                                    loadingBuilder: (context, child, loadingProgress) {
-                                      if (loadingProgress == null) return child;
-                                      return const Center(child: CircularProgressIndicator.adaptive());
-                                    },
-                                  ),
-                                ),
-                              ),
-                            );
-                          },
-                        );
-                      }).toList(),
-                    )),
-
+                    ),
+                  ),
+                );
+              },
+            );
+          }).toList(),
+        ),
+      ),
 
                   SizedBox(height: 10),
-                  /*
-                Expanded(
-                  child: Stack(
-                    children: [
-                      Align(
-                        alignment: Alignment.topCenter,
-                        child: isDataBinding
-                            ? const Center(
-                                child: CircularProgressIndicator.adaptive(),
-                              )
-                            : imageList.isEmpty
-                                ? const Center(
 
-                                    child: Icon(
-                                      Icons
-                                          .signal_cellular_connected_no_internet_0_bar_sharp,
-                                      color: Colors.red,
-                                    ),
-                                  )
-                                : CarouselSlider(
-                                    items: imageList
-                                        .map((item) => Image.network(
-                                              item.imageName,
-                                              fit: BoxFit.fitWidth,
-                                              width: MediaQuery.of(context)
-                                                  .size
-                                                  .width,
-                                            ))
-                                        .toList(),
-                                    carouselController: carouselController,
-                                    options: CarouselOptions(
-                                      scrollPhysics:
-                                          const BouncingScrollPhysics(),
-                                      autoPlay: true,
-                                      aspectRatio: 23 / 9,
-                                      viewportFraction: 1,
-                                      onPageChanged: (index, reason) {
-                                        setState(() {
-                                          currentIndex = index;
-                                        });
-                                      },
-                                    ),
-                                  ),
-                      ),
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width,
-
-
-                        height: MediaQuery.of(context).size.height,
-                        child: Align(
-                          alignment: Alignment.bottomCenter,
-                          child: Padding(
-                            padding: const EdgeInsets.only(bottom: 25.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: imageList.asMap().entries.map((entry) {
-                                final index = entry.key;
-                                return buildIndicator(index);
-                              }).toList(),
+                  SizedBox(
+                    height: 70.0,
+                    child: Container(
+                      color: Color(0xFF11528f).withOpacity(0.9), // Set the background color here
+                      child: Stack(
+                        children: [
+                          ListView.builder(
+                            controller: _scrollController,
+                            scrollDirection: Axis.horizontal,
+                            itemCount: 2, // Ensures the image can scroll infinitely
+                            itemBuilder: (context, index) {
+                              return Image.asset(
+                                'assets/bar_texture_rec.png',
+                                fit: BoxFit.cover,
+                                width: MediaQuery.of(context).size.width,
+                              );
+                            },
+                          ),
+                          Center(
+                            child: Padding(
+                              padding: EdgeInsets.only(left: 10.0, right: 20.0), // Add padding to icon
+                              child: Text(
+                                marqueeTexts.isNotEmpty ? marqueeTexts[currentTextIndex] : '',
+                                style: GoogleFonts.outfit(
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 14,
+                                  color: Colors.white,
+                                  height: 1.5, // Adjust line spacing here
+                                ),
+                              ),
                             ),
                           ),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-             */
-        SizedBox(
-          height: 60.0,
-          child: Stack(
-            children: [
-              ListView.builder(
-                controller: _scrollController,
-                scrollDirection: Axis.horizontal,
-                itemCount: 2, // Ensures the image can scroll infinitely
-                itemBuilder: (context, index) {
-                  return Image.asset(
-                    'assets/flashbg.png',
-                    fit: BoxFit.cover,
-                    width: MediaQuery.of(context).size.width,
-                  );
-                },
-              ),
-              Center(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10.0), // Add padding to text
-                  child: Text(
-                    marqueeTexts.isNotEmpty ? marqueeTexts[currentTextIndex] : '',
-                    style: GoogleFonts.outfit(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 16,
-                      color: Colors.white,
+                          if (marqueeTexts.length > 1)
+                            Align(
+                              alignment: Alignment.centerRight,
+                              child: Padding(
+                                padding: EdgeInsets.only(left: 0.0, right: 0.0), // Add padding to icon
+                                child: IconButton(
+                                  icon: Icon(Icons.arrow_forward_ios, color: Colors.white),
+                                  onPressed: nextText,
+                                ),
+                              ),
+                            ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              ),
-              if (marqueeTexts.length > 1)
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: Padding(
-                    padding: EdgeInsets.only(left: 20.0), // Add padding to icon
-                    child: IconButton(
-                      icon: Icon(Icons.arrow_forward_ios, color: Colors.white),
-                      onPressed: nextText,
-                    ),
-                  ),
-                ),
-            ],
-          ),
-        ),
+
+
                   // SizedBox(
                   //     height: 50.0,
                   //     child:Stack(
@@ -807,10 +745,14 @@ class _CustomerDashBoardState extends State<CustomerDashBoard>  with SingleTicke
                                             style:  GoogleFonts.outfit(fontWeight: FontWeight.w700,fontSize: 18,color: Color(0xFF11528f)),
                                           ),  ),
                                           // SizedBox(height: 8.0),
-                                          Padding(padding: EdgeInsets.only(left: 10.0,right: 5.0,bottom: 5.0),child: Text(
+                                          Padding(padding: EdgeInsets.only(left: 10.0,right: 5.0,bottom: 5.0),
+                                            child:   SizedBox(
+                                              height: 70.0,
+                                              child:  Text(
                                             branch.address,
+                                            maxLines: 4,
                                             style:  GoogleFonts.outfit(fontSize: 12,fontWeight: FontWeight.w500,wordSpacing: 1.2,color: Colors.black.withOpacity(0.8)),
-                                          ),  ),
+                                          ), ) ),
                                           //  SizedBox(height: 5.0),
                                           // Display from date and to date multiple times
 Align(

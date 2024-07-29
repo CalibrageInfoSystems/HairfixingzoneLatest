@@ -115,7 +115,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           style: TextStyle(
                             fontSize: 16,
                             color: CommonUtils.primaryTextColor,
-                            fontFamily: 'OpenSans',
+                            fontFamily: 'Outfit',
                           ),
                         ),
                       ),
@@ -143,7 +143,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           style: TextStyle(
                             fontSize: 16,
                             color: Colors.white,
-                            fontFamily: 'OpenSans',
+                            fontFamily: 'Outfit',
                           ),
                         ),
                       ),
@@ -329,7 +329,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   style: TextStyle(
                     fontSize: 24,
                     color: CommonUtils.primaryTextColor,
-                    fontFamily: 'OpenSans',
+                    fontFamily: 'Outfit',
                   ),
                 ),
                 const SizedBox(
@@ -343,7 +343,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       style: TextStyle(
                         fontSize: 16,
                         color: CommonUtils.primaryTextColor,
-                        fontFamily: 'OpenSans',
+                        fontFamily: 'Outfit',
                       ),
                     ),
                     const SizedBox(width: 10),
@@ -378,7 +378,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       style: TextStyle(
                         fontSize: 16,
                         color: CommonUtils.primaryTextColor,
-                        fontFamily: 'OpenSans',
+                        fontFamily: 'Outfit',
                       ),
                     ),
                     const SizedBox(width: 10),
@@ -418,7 +418,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: TextFormField(
                         controller: _commentstexteditcontroller,
                         style: const TextStyle(
-                          fontFamily: 'OpenSans',
+                          fontFamily: 'Outfit',
                           fontSize: 14,
                           fontWeight: FontWeight.w300,
                         ),
@@ -431,7 +431,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             color: Colors.black54,
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
-                            fontFamily: 'OpenSans',
+                            fontFamily: 'Outfit',
                           ),
                           contentPadding: EdgeInsets.symmetric(
                             horizontal: 16.0,
@@ -470,7 +470,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: const Text(
                           'Close',
                           style: TextStyle(
-                            fontFamily: 'OpenSans',
+                            fontFamily: 'Outfit',
                             fontSize: 14,
                             color: CommonUtils.primaryTextColor,
                             fontWeight: FontWeight.bold,
@@ -497,7 +497,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 child: Text(
                                   'Submit',
                                   style: TextStyle(
-                                    fontFamily: 'OpenSans',
+                                    fontFamily: 'Outfit',
                                     fontSize: 14,
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold,
@@ -644,16 +644,7 @@ class _HomeScreenState extends State<HomeScreen> {
       case 0:
         return Text.rich(
           TextSpan(
-            children: [
-              TextSpan(
-                text: 'Hello, ',
-                style: GoogleFonts.outfit(fontWeight: FontWeight.w500,fontSize: 22,color: Colors.black),
-              ),
-              TextSpan(
-                text: userFullName,
-                style: GoogleFonts.outfit(fontWeight: FontWeight.w500,fontSize: 22,color: Color(0xFF11528f)),
-              ),
-            ],
+
           ),
         );
 
