@@ -107,7 +107,7 @@ class _feedback_Screen_screenState extends State<feedback_Screen> {
                       style: TextStyle(
                         fontSize: 24,
                         color: Color(0xFFf15f22),
-                        fontFamily: 'LibreFranklin',
+                        fontFamily: 'OpenSans',
                       ),
                     ),
                     const SizedBox(
@@ -118,7 +118,7 @@ class _feedback_Screen_screenState extends State<feedback_Screen> {
                       style: TextStyle(
                         fontSize: 16,
                         color: Color(0xFFf15f22),
-                        fontFamily: 'LibreFranklin',
+                        fontFamily: 'OpenSans',
                       ),
                     ),
                     const SizedBox(
@@ -162,7 +162,7 @@ class _feedback_Screen_screenState extends State<feedback_Screen> {
                           child: TextFormField(
                             controller: _commentstexteditcontroller,
                             style: const TextStyle(
-                              fontFamily: 'LibreFranklin',
+                              fontFamily: 'OpenSans',
                               fontSize: 14,
                               fontWeight: FontWeight.w300,
                             ),
@@ -175,7 +175,7 @@ class _feedback_Screen_screenState extends State<feedback_Screen> {
                                 color: Colors.black54,
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold,
-                                fontFamily: 'LibreFranklin',
+                                fontFamily: 'OpenSans',
                               ),
                               contentPadding: EdgeInsets.symmetric(
                                 horizontal: 16.0,
@@ -212,7 +212,7 @@ class _feedback_Screen_screenState extends State<feedback_Screen> {
                             style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 16,
-                                fontFamily: 'LibreFranklin'),
+                                fontFamily: 'OpenSans'),
                           ),
                         ),
                       ),

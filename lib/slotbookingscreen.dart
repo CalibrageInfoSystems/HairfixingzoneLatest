@@ -380,7 +380,7 @@ class _BookingScreenState extends State<slotbookingscreen>  {
                                               style: TextStyle(
                                                 color: Color(0xFFFB4110),
                                                 fontSize: 18,
-                                                fontFamily: 'LibreFranklin',
+                                                fontFamily: 'OpenSans',
                                                 fontWeight: FontWeight.bold,
                                               ),
                                             ),
@@ -392,7 +392,7 @@ class _BookingScreenState extends State<slotbookingscreen>  {
                                                 widget.branchlocation,
                                                 style: TextStyle(
                                                   fontSize: 14,
-                                                  fontFamily: 'LibreFranklin',
+                                                  fontFamily: 'OpenSans',
                                                 ),
                                                 maxLines: 6,
                                                 overflow: TextOverflow.ellipsis,
@@ -435,14 +435,14 @@ class _BookingScreenState extends State<slotbookingscreen>  {
                                         child: TextFormField(
                                           controller: _dateController,
                                           style: TextStyle(
-                                            fontFamily: 'LibreFranklin',
+                                            fontFamily: 'OpenSans',
                                             fontSize: 14,
                                             fontWeight: FontWeight.w300,
                                           ),
                                           decoration: InputDecoration(
                                             hintText: 'Select date',
                                             hintStyle: TextStyle(
-                                              fontFamily: 'LibreFranklin',
+                                              fontFamily: 'OpenSans',
                                               fontSize: 14,
                                               color: Color(0xFFFB4110),
                                               fontWeight: FontWeight.w300,
@@ -474,7 +474,7 @@ class _BookingScreenState extends State<slotbookingscreen>  {
                                         child: Text(
                                           'Select Slot',
                                           style: TextStyle(
-                                            fontFamily: 'LibreFranklin',
+                                            fontFamily: 'OpenSans',
                                             fontSize: 14,
                                             fontWeight: FontWeight.bold,
                                             color: Color(0xFFFB4110),
@@ -549,7 +549,7 @@ class _BookingScreenState extends State<slotbookingscreen>  {
                                                             color: _selectedTimeSlot == slot.SlotTimeSpan
                                                                 ? Colors.white
                                                                 : (slot.availableSlots <= 0 ? Colors.white : Colors.black),
-                                                            fontFamily: 'LibreFranklin',
+                                                            fontFamily: 'OpenSans',
                                                             fontSize: 12,
                                                           ),
                                                         ),
@@ -565,7 +565,7 @@ class _BookingScreenState extends State<slotbookingscreen>  {
                                                           Text(
                                                             'Today is a holiday',
                                                             style: TextStyle(
-                                                              fontFamily: 'LibreFranklin',
+                                                              fontFamily: 'OpenSans',
                                                               fontSize: 12,
                                                               fontWeight: FontWeight.bold,
                                                             ),
@@ -582,7 +582,7 @@ class _BookingScreenState extends State<slotbookingscreen>  {
                                                           Text(
                                                             'No Slots Available',
                                                             style: TextStyle(
-                                                              fontFamily: 'LibreFranklin',
+                                                              fontFamily: 'OpenSans',
                                                               fontSize: 12,
                                                               fontWeight: FontWeight.bold,
                                                             ),
@@ -691,7 +691,7 @@ class _BookingScreenState extends State<slotbookingscreen>  {
                                                 keyboardType: TextInputType.name,
                                                 controller: _fullnameController1,
                                                 style: TextStyle(
-                                                  fontFamily: 'LibreFranklin',
+                                                  fontFamily: 'OpenSans',
                                                   fontSize: 14,
                                                   fontWeight: FontWeight.w300,
                                                 ),
@@ -699,7 +699,7 @@ class _BookingScreenState extends State<slotbookingscreen>  {
                                                 decoration: InputDecoration(
                                                   hintText: 'Full Name',
                                                   hintStyle: TextStyle(
-                                                    fontFamily: 'LibreFranklin',
+                                                    fontFamily: 'OpenSans',
                                                     fontSize: 14,
                                                     color: Color(0xFFFB4110),
                                                     fontWeight: FontWeight.w300,
@@ -756,14 +756,14 @@ class _BookingScreenState extends State<slotbookingscreen>  {
                                                 ],
                                                 readOnly: true,
                                                 style: TextStyle(
-                                                  fontFamily: 'LibreFranklin',
+                                                  fontFamily: 'OpenSans',
                                                   fontSize: 14,
                                                   fontWeight: FontWeight.w300,
                                                 ),
                                                 decoration: InputDecoration(
                                                   hintText: 'Phone Number',
                                                   hintStyle: TextStyle(
-                                                    fontFamily: 'LibreFranklin',
+                                                    fontFamily: 'OpenSans',
                                                     fontSize: 14,
                                                     color: Color(0xFFFB4110),
                                                     fontWeight: FontWeight.w300,
@@ -818,7 +818,7 @@ class _BookingScreenState extends State<slotbookingscreen>  {
                                                 controller: _emailController3,
                                                 keyboardType: TextInputType.emailAddress,
                                                 style: TextStyle(
-                                                  fontFamily: 'LibreFranklin',
+                                                  fontFamily: 'OpenSans',
                                                   fontSize: 14,
                                                   fontWeight: FontWeight.w300,
                                                 ),
@@ -826,7 +826,7 @@ class _BookingScreenState extends State<slotbookingscreen>  {
                                                 decoration: InputDecoration(
                                                   hintText: 'Email',
                                                   hintStyle: TextStyle(
-                                                    fontFamily: 'LibreFranklin',
+                                                    fontFamily: 'OpenSans',
                                                     fontSize: 14,
                                                     color: Color(0xFFFB4110),
                                                     fontWeight: FontWeight.w300,
@@ -871,7 +871,7 @@ class _BookingScreenState extends State<slotbookingscreen>  {
                                               Text(
                                                 option.desc,
                                                 style: TextStyle(
-                                                  fontFamily: 'LibreFranklin',
+                                                  fontFamily: 'OpenSans',
                                                   fontSize: 14,
                                                   color: Color(0xFFFB4110),
                                                 ),
@@ -961,7 +961,7 @@ class _BookingScreenState extends State<slotbookingscreen>  {
                                           child: Text(
                                             'Book Appointment',
                                             style: TextStyle(
-                                              fontFamily: 'LibreFranklin',
+                                              fontFamily: 'OpenSans',
                                               fontSize: 14,
                                               color: Colors.white,
                                               fontWeight: FontWeight.bold,

@@ -1125,12 +1125,17 @@ class EditProfile_screenState extends State<EditProfile> {
           if (isSuccess == true) {
             progressDialog.dismiss();
             print('Request sent successfully');
-            // showCustomToastMessageLong('Slot booked successfully', context, 0, 2);
             Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (context) =>  NewScreen(userName: loginUserFullName!, email: loginUserEmail!),
+                builder: (context) =>  NewScreen(userName: loginUserFullName!),
               ),
             );
+            // showCustomToastMessageLong('Slot booked successfully', context, 0, 2);
+            // Navigator.of(context).push(
+            //   MaterialPageRoute(
+            //     builder: (context) =>  NewScreen(userName: loginUserFullName!, email: loginUserEmail!),
+            //   ),
+            // );
             print('statusmesssage:${data['statusMessage']}');
             //CommonUtils.showCustomToastMessageLong('${data['statusMessage']}', context, 0, 5);
             CommonUtils.showCustomToastMessageLong(

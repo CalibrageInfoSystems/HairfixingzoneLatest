@@ -530,7 +530,7 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
                             'Date ',
                             style: TextStyle(
                               fontSize: 14,
-                              fontFamily: "LibreFranklin",
+                              fontFamily: "OpenSans",
                               fontWeight: FontWeight.w500,
                               color: Color(0xFF662e91),
                             ),
@@ -751,7 +751,7 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
                                                   : (slot.availableSlots <= 0
                                                       ? Colors.white
                                                       : Colors.black),
-                                              fontFamily: 'LibreFranklin',
+                                              fontFamily: 'OpenSans',
                                               fontSize: 12,
                                             ),
                                           ),
@@ -768,7 +768,7 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
                                             Text(
                                               'Today is a Holiday',
                                               style: TextStyle(
-                                                fontFamily: 'LibreFranklin',
+                                                fontFamily: 'OpenSans',
                                                 fontSize: 12,
                                                 fontWeight: FontWeight.bold,
                                               ),
@@ -786,7 +786,7 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
                                             Text(
                                               'No Slots Are Available Today',
                                               style: TextStyle(
-                                                fontFamily: 'LibreFranklin',
+                                                fontFamily: 'OpenSans',
                                                 fontSize: 12,
                                                 fontWeight: FontWeight.bold,
                                               ),
@@ -804,7 +804,7 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
                             'Purpose of Visit ',
                             style: TextStyle(
                               fontSize: 14,
-                              fontFamily: "LibreFranklin",
+                              fontFamily: "OpenSans",
                               fontWeight: FontWeight.w500,
                               color: Color(0xFF662e91),
                             ),
@@ -911,7 +911,7 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
                             'Technician',
                             style: TextStyle(
                               fontSize: 14,
-                              fontFamily: "LibreFranklin",
+                              fontFamily: "OpenSans",
                               fontWeight: FontWeight.w500,
                               color: Color(0xFF662e91),
                             ),

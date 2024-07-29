@@ -13,6 +13,8 @@ import 'Common/common_styles.dart';
 import 'CommonUtils.dart';
 import 'CustomerLoginScreen.dart';
 import 'FavouritesScreen.dart';
+import 'MyProducts.dart';
+import 'Product_My.dart';
 import 'ProfileMy.dart';
 import 'aboutus_screen.dart';
 import 'api_config.dart';
@@ -23,12 +25,12 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 class NewScreen extends StatefulWidget {
   final String userName;
-  final String email;
+
 
   const NewScreen({
     Key? key,
     required this.userName,
-    required this.email,
+
   }) : super(key: key);
 
   @override
@@ -69,35 +71,35 @@ class _NewScreenState extends State<NewScreen> {
       onWillPop: () => onBackPressed(context),
       child: Scaffold(
         backgroundColor: CommonStyles.whiteColor,
-        appBar: AppBar(
-          elevation: 0,
-          backgroundColor: const Color(0xffffffff),
-          leading: IconButton(
-            icon: const Icon(
-              Icons.arrow_back_ios,
-              color: CommonUtils.primaryTextColor, // Adjust the color as needed
-            ),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-        ),
+        // appBar: AppBar(
+        //   elevation: 0,
+        //   backgroundColor: const Color(0xffffffff),
+        //   leading: IconButton(
+        //     icon: const Icon(
+        //       Icons.arrow_back_ios,
+        //       color: CommonUtils.primaryTextColor, // Adjust the color as needed
+        //     ),
+        //     onPressed: () {
+        //       Navigator.of(context).pop();
+        //     },
+        //   ),
+        // ),
         body: SingleChildScrollView(
 
           child: Column(
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  const SizedBox(
-                    width: 20,
-                  ),
-                  Text(
-                    'Profile',
-                    style: CommonStyles.txSty_20b_fb.copyWith(fontSize: 24),
-                  ),
-                ],
-              ),
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.start,
+              //   children: [
+              //     const SizedBox(
+              //       width: 20,
+              //     ),
+              //     Text(
+              //       'Profile',
+              //       style: CommonStyles.txSty_20b_fb.copyWith(fontSize: 24),
+              //     ),
+              //   ],
+              // ),
               const SizedBox(height: 20),
               GestureDetector(
                 onTap: () {
@@ -261,6 +263,27 @@ class _NewScreenState extends State<NewScreen> {
                     color: Colors.grey, size: 16), // Add trailing icon here
                 onTap: () {
                   AboutUs(context);
+                },
+              ),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16.0), // Adjust padding as needed
+                child: Divider(),
+              ),
+              ListTile(
+                minTileHeight: 40.0,
+                leading: SvgPicture.asset(
+                  'assets/apps.svg',
+                  width: 25,
+                  height: 25,
+                  color: const Color(0xFF662e91), // Adjust color as needed
+                ),
+                title: const Text('Products',
+                    style: CommonStyles.txSty_20black_fb),
+                trailing: const Icon(Icons.arrow_forward_ios,
+                    color: Colors.grey, size: 16), // Add trailing icon here
+                onTap: () {
+                  products(context);
+                  MyProducts();
                 },
               ),
               const Padding(
@@ -459,7 +482,7 @@ class _NewScreenState extends State<NewScreen> {
                   style: TextStyle(
                     fontSize: 16,
                     color: CommonUtils.primaryTextColor,
-                    fontFamily: 'LibreFranklin',
+                    fontFamily: 'OpenSans',
                   ),
                 ),
               ),
@@ -490,7 +513,7 @@ class _NewScreenState extends State<NewScreen> {
                   style: TextStyle(
                     fontSize: 16,
                     color: Colors.white,
-                    fontFamily: 'LibreFranklin',
+                    fontFamily: 'OpenSans',
                   ),
                 ),
               ),
@@ -532,6 +555,7 @@ class _NewScreenState extends State<NewScreen> {
   void AboutUs(BuildContext context) {
     print('Navigating to About Us screen');
     // Example navigation
+
     Navigator.of(context).push(
       MaterialPageRoute(builder: (context) => const AboutUsScreen()),
     );
@@ -590,5 +614,11 @@ class _NewScreenState extends State<NewScreen> {
       // Handle exceptions
       print('Exception occurred: $e');
     }
+  }
+
+  void products(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (context) => const ProductsMy()),
+    );
   }
 }

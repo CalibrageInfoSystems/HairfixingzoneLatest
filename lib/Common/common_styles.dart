@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:loading_progress/loading_progress.dart';
 
 import '../NewScreen.dart';
@@ -31,50 +32,56 @@ class CommonStyles {
   // styles
   static const TextStyle txSty_12b_f5 = TextStyle(
     fontSize: 12,
-    fontFamily: "LibreFranklin",
+    fontFamily: "OpenSans",
     fontWeight: FontWeight.w500,
     color: blackColor,
   );
 
   static const TextStyle txSty_14b_f5 = TextStyle(
     fontSize: 14,
-    fontFamily: "LibreFranklin",
+    fontFamily: "OpenSans",
     fontWeight: FontWeight.w500,
     color: blackColor,
   );
   static const TextStyle txSty_14p_f5 = TextStyle(
     fontSize: 14,
-    fontFamily: "LibreFranklin",
+    fontFamily: "OpenSans",
     fontWeight: FontWeight.w500,
     color: primaryTextColor,
   );
   static const TextStyle txSty_14g_f5 = TextStyle(
     fontSize: 16,
-    fontFamily: "LibreFranklin",
+    fontFamily: "OpenSans",
     fontWeight: FontWeight.w600,
     color: greenColor,
   );
   static const TextStyle txSty_14blu_f5 = TextStyle(
     fontSize: 14,
-    fontFamily: "LibreFranklin",
+    fontFamily: "OpenSans",
     fontWeight: FontWeight.w500,
     color: Color(0xFF0f75bc),
   );
   static const TextStyle txSty_16blu_f5 = TextStyle(
     fontSize: 16,
-    fontFamily: "LibreFranklin",
+    fontFamily: "OpenSans",
     fontWeight: FontWeight.w500,
     color: Color(0xFF0f75bc),
   );
   static const TextStyle txSty_16black_f5 = TextStyle(
     fontSize: 16,
-    fontFamily: "LibreFranklin",
+    fontFamily: "OpenSans",
+    fontWeight: FontWeight.w500,
+    color: Color(0xFF5f5f5f),
+  );
+  static const TextStyle txSty_14black_f5 = TextStyle(
+    fontSize: 14,
+    fontFamily: "OpenSans",
     fontWeight: FontWeight.w500,
     color: Color(0xFF5f5f5f),
   );
   static const TextStyle txSty_16p_fb = TextStyle(
     fontSize: 16,
-    fontFamily: "LibreFranklin",
+    fontFamily: "OpenSans",
     fontWeight: FontWeight.bold,
     color: primaryTextColor,
   );
@@ -82,80 +89,86 @@ class CommonStyles {
     fontSize: 18,
     color: Colors.black,
     fontWeight: FontWeight.bold,
-    fontFamily: 'LibreFranklin',
+    fontFamily: 'OpenSans',
   );
   static const TextStyle txSty_16b_fb = TextStyle(
     fontSize: 16,
     color: Colors.black,
     fontWeight: FontWeight.bold,
-    fontFamily: 'LibreFranklin',
+    fontFamily: 'OpenSans',
   );
   static const TextStyle header_Styles = TextStyle(
     fontSize: 26,
-    fontFamily: "LibreFranklin",
+    fontFamily: "OpenSans",
     fontWeight: FontWeight.w700,
     color: Color(0xFF0f75bc),
   );
   static const TextStyle txSty_16w_fb = TextStyle(
     fontSize: 16,
-    fontFamily: "LibreFranklin",
+    fontFamily: "OpenSans",
     fontWeight: FontWeight.bold,
     color: whiteColor,
   );
   static const TextStyle txSty_18w_fb = TextStyle(
       fontSize: 22,
-      fontFamily: "LibreFranklin",
+      fontFamily: "OpenSans",
       fontWeight: FontWeight.bold,
       color: whiteColor,
       letterSpacing: 1);
   static const TextStyle txSty_16p_f5 = TextStyle(
     fontSize: 16,
-    fontFamily: "LibreFranklin",
+    fontFamily: "OpenSans",
     fontWeight: FontWeight.w500,
     color: primaryTextColor,
   );
   static const TextStyle txSty_20p_fb = TextStyle(
     fontSize: 20,
-    fontFamily: "LibreFranklin",
+    fontFamily: "OpenSans",
     fontWeight: FontWeight.bold,
     color: primaryTextColor,
     letterSpacing: 2,
   );
   static const TextStyle txSty_20b_fb = TextStyle(
     fontSize: 20,
-    fontFamily: "LibreFranklin",
+    fontFamily: "OpenSans",
     fontWeight: FontWeight.bold,
     color: blackColor,
   );
+
   static const TextStyle txSty_12b_fb = TextStyle(
-    fontFamily: 'LibreFranklin',
+    fontFamily: 'OpenSans',
     fontSize: 12,
     color: Color(0xFF000000),
   );
   static const TextStyle txSty_12bl_fb = TextStyle(
-    fontFamily: 'LibreFranklin',
+    fontFamily: 'OpenSans',
     fontSize: 12,
     color: Color(0xA1000000),
   );
+  static const TextStyle txSty_12blu_fb = TextStyle(
+    fontFamily: 'OpenSans',
+    fontSize: 12,
+    color: Color(0xFF8d97e2),
+  );
   static const TextStyle txSty_20black_fb = TextStyle(
     fontSize: 20,
-    fontFamily: "LibreFranklin",
+    fontFamily: "OpenSans",
     color: blackColor,
   );
   static const TextStyle txSty_20blu_fb = TextStyle(
     fontSize: 20,
-    fontFamily: "LibreFranklin",
+    fontFamily: "OpenSans",
     fontWeight: FontWeight.bold,
     color: blueColor,
   );
   static const TextStyle txSty_20w_fb = TextStyle(
     fontSize: 20,
-    fontFamily: "LibreFranklin",
+    fontFamily: "OpenSans",
     color: whiteColor,
   );
   static const TextStyle text16white = TextStyle(
     fontSize: 16,
-    fontFamily: "LibreFranklin",
+    fontFamily: "OpenSans",
     fontWeight: FontWeight.w600,
     color: CommonStyles.whiteColor,
   );
@@ -338,7 +351,7 @@ class CommonStyles {
               context,
               MaterialPageRoute(
                   builder: (context) =>
-                      NewScreen(userName: userFullName, email: email)),
+                      NewScreen(userName: userFullName)),
             );
           },
         ),
@@ -351,42 +364,50 @@ class CommonStyles {
     required String userName,
     required String userFullName,
     required String email,
-    required String title,
+    required Widget  title,
   }) {
     return AppBar(
       backgroundColor: const Color(0xffffffff),
       automaticallyImplyLeading: false,
-      title: Text(
-        title,
-        style: CommonStyles.txSty_20b_fb.copyWith(fontSize: 24),
-      ),
-      actions: [
-        IconButton(
-          icon: Container(
-            width: 40,
-            height: 40,
-            decoration: const BoxDecoration(
-              color: CommonStyles.primaryTextColor,
-              shape: BoxShape.circle,
-            ),
-            child: Center(
-              child: Text(
-                userName, // 'X',
-                style: const TextStyle(fontSize: 22, color: Colors.white),
-              ),
-            ),
-          ),
-          onPressed: () {
-            // Navigate to the new screen
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) =>
-                      NewScreen(userName: userFullName, email: email)),
-            );
-          },
-        ),
-      ],
+      title: title,
+     //  title: Text(
+     //    title,
+     // style: GoogleFonts.outfit(fontWeight: FontWeight.w500,fontSize: 22,color: Colors.black),
+     //  ),
+      // actions: [
+      //   IconButton(
+      //     icon: Container(
+      //       width: 40,
+      //       height: 40,
+      //       decoration:  BoxDecoration(
+      //         color: CommonStyles.whiteColor,
+      //         shape: BoxShape.circle,
+      //         border:Border.all(
+      //
+      //             color: Colors.grey,
+      //             //  color: const Color(0xFF8d97e2), // Add your desired border color here
+      //             width: 1.0, // Set the border width
+      //           ),
+      //         ) ,
+      //
+      //       child: Center(
+      //         child: Text(
+      //           userName, // 'X',
+      //           style: const TextStyle(fontSize: 22, color: Color(0xFF5f5f5f)),
+      //         ),
+      //       ),
+      //     ),
+      //     onPressed: () {
+      //       // Navigate to the new screen
+      //       Navigator.push(
+      //         context,
+      //         MaterialPageRoute(
+      //             builder: (context) =>
+      //                 NewScreen(userName: userFullName, email: email)),
+      //       );
+      //     },
+      //   ),
+      // ],
     );
   }
 
@@ -400,7 +421,7 @@ class CommonStyles {
       automaticallyImplyLeading: false,
       title: Text(
         title,
-        style: CommonStyles.txSty_20b_fb.copyWith(fontSize: 24),
+        style: CommonStyles.txSty_20b_fb.copyWith(fontSize: 20),
       ),
       actions: [
         IconButton(

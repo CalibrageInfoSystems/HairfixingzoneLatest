@@ -7,6 +7,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
 
 import 'package:flutter_svg/svg.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hairfixingzone/BranchesModel.dart';
 import 'package:hairfixingzone/Common/common_styles.dart';
 import 'package:hairfixingzone/aboutus_screen.dart';
@@ -49,14 +50,16 @@ class Branch {
 class CustomerDashBoard extends StatefulWidget {
   final void Function()? bookNowButtonPressed;
   final Function(Branch data) toNavigate;
-  const CustomerDashBoard(
-      {super.key, this.bookNowButtonPressed, required this.toNavigate});
+
+  const CustomerDashBoard({super.key, this.bookNowButtonPressed, required this.toNavigate});
 
   @override
   State<CustomerDashBoard> createState() => _CustomerDashBoardState();
 }
 
-class _CustomerDashBoardState extends State<CustomerDashBoard> {
+class _CustomerDashBoardState extends State<CustomerDashBoard>  with SingleTickerProviderStateMixin {
+  late final ScrollController _scrollController;
+  late final AnimationController _animationController;
   String? marqueeText;
 
   List<BannerImages> imageList = [];
@@ -72,10 +75,24 @@ class _CustomerDashBoardState extends State<CustomerDashBoard> {
   List<Item> _items = [];
 
   String userFullName = '';
+  List<String> marqueeTexts = [];
+  int currentTextIndex = 0;
 
   @override
   initState() {
     super.initState();
+    _scrollController = ScrollController();
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 10),
+    )..addListener(() {
+      if (_scrollController.hasClients) {
+        _scrollController.jumpTo(_animationController.value *
+            _scrollController.position.maxScrollExtent);
+      }
+    });
+
+    _animationController.repeat();
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitDown,
       DeviceOrientation.portraitUp,
@@ -92,8 +109,7 @@ class _CustomerDashBoardState extends State<CustomerDashBoard> {
         //fetchimagesslider();
         fetchImages();
       } else {
-        CommonUtils.showCustomToastMessageLong(
-            'No Internet Connection', context, 1, 4);
+        CommonUtils.showCustomToastMessageLong('No Internet Connection', context, 1, 4);
         print('Not connected to the internet');
       }
     });
@@ -106,10 +122,9 @@ class _CustomerDashBoardState extends State<CustomerDashBoard> {
       userFullName = prefs.getString('userFullName') ?? '';
     });
   }
-
   Future<void> getMarqueeText() async {
     final apiUrl = Uri.parse(baseUrl + getcontent);
-
+    print('apiUrl$apiUrl');
     try {
       final jsonResponse = await http.get(apiUrl);
 
@@ -119,22 +134,55 @@ class _CustomerDashBoardState extends State<CustomerDashBoard> {
         if (response['isSuccess']) {
           int records = response['affectedRecords'];
           for (var i = 0; i < records; i++) {
-            marqueeText = response['listResult'][i]['text'] != null
-                ? '${response['listResult'][i]['text']}  -  '
-                : null;
+            String text = response['listResult'][i]['text'] ?? '';
+            if (text.isNotEmpty) {
+              marqueeTexts.add(text);
+            }
           }
+          setState(() {});
         } else {
-          print('api failed');
-          throw Exception('api failed');
+          print('API failed');
+          throw Exception('API failed');
         }
       } else {
-        throw Exception(
-            'Request failed with status: ${jsonResponse.statusCode}');
+        throw Exception('Request failed with status: ${jsonResponse.statusCode}');
       }
     } catch (error) {
       rethrow;
     }
   }
+
+  void nextText() {
+    setState(() {
+      currentTextIndex = (currentTextIndex + 1) % marqueeTexts.length;
+    });
+  }
+  // Future<void> getMarqueeText() async {
+  //   final apiUrl = Uri.parse(baseUrl + getcontent);
+  //   print('apiUrl$apiUrl');
+  //   try {
+  //     final jsonResponse = await http.get(apiUrl);
+  //
+  //     if (jsonResponse.statusCode == 200) {
+  //       final response = json.decode(jsonResponse.body);
+  //
+  //       if (response['isSuccess']) {
+  //         int records = response['affectedRecords'];
+  //         for (var i = 0; i < records; i++) {
+  //           marqueeText = response['listResult'][i]['text'] != null ? '${response['listResult'][i]['text']} ' : null;
+  //           print('marqueeTextA$marqueeText');
+  //         }
+  //       } else {
+  //         print('api failed');
+  //         throw Exception('api failed');
+  //       }
+  //     } else {
+  //       throw Exception('Request failed with status: ${jsonResponse.statusCode}');
+  //     }
+  //   } catch (error) {
+  //     rethrow;
+  //   }
+  // }
 
   void fetchData() async {
     setState(() {
@@ -177,9 +225,7 @@ class _CustomerDashBoardState extends State<CustomerDashBoard> {
     });
     if (response.statusCode == 200) {
       setState(() {
-        _items = (json.decode(response.body)['listResult'] as List)
-            .map((item) => Item.fromJson(item))
-            .toList();
+        _items = (json.decode(response.body)['listResult'] as List).map((item) => Item.fromJson(item)).toList();
         isDataBinding = false;
       });
     } else {
@@ -192,6 +238,8 @@ class _CustomerDashBoardState extends State<CustomerDashBoard> {
   void dispose() {
     //   _timer.cancel();
     super.dispose();
+    _scrollController.dispose();
+    _animationController.dispose();
   }
 
   Future<void> _getData() async {
@@ -279,8 +327,7 @@ class _CustomerDashBoardState extends State<CustomerDashBoard> {
 
         List<BannerImages> bannerImages = [];
         for (var item in jsonData['listResult']) {
-          bannerImages.add(BannerImages(
-              imageName: item['imageName'] ?? '', id: item['id'] ?? 0));
+          bannerImages.add(BannerImages(imageName: item['imageName'] ?? '', id: item['id'] ?? 0));
         }
 
         setState(() {
@@ -315,8 +362,7 @@ class _CustomerDashBoardState extends State<CustomerDashBoard> {
         fetchData();
         fetchimagesslider();
       } else {
-        CommonUtils.showCustomToastMessageLong(
-            'No Internet Connection', context, 1, 4);
+        CommonUtils.showCustomToastMessageLong('No Internet Connection', context, 1, 4);
         print('Not connected to the internet');
       }
     });
@@ -326,100 +372,125 @@ class _CustomerDashBoardState extends State<CustomerDashBoard> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: CommonStyles.whiteColor,
-      body: Column(
-        children: [
-          // Padding(
-          //   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-          //   child: Column(
-          //     children: [
-          //       Row(
-          //         children: [
-          //           Text(
-          //             'Hey, ',
-          //             style: CommonStyles.txSty_20b_fb.copyWith(fontSize: 24),
-          //           ),
-          //           Text(
-          //             userFullName,
-          //             style: CommonStyles.txSty_20b_fb.copyWith(fontSize: 24),
-          //           ),
-          //         ],
-          //       ),
-          //       const SizedBox(
-          //         height: 10.0,
-          //       ),
-          //       // Text(
-          //       //   'Welcome to Hair Fixing Zone',
-          //       //   style: TextStyle(
-          //       //     fontSize: MediaQuery.of(context).size.width * 0.06,
-          //       //     fontFamily: "LibreFranklin",
-          //       //     fontWeight: FontWeight.bold,
-          //       //     color: Colors.black,
-          //       //   ),
-          //       // ),
-          //     ],
-          //   ),
-          // ),
-          Expanded(
-            child: Column(
-              children: [
-                //MARK: Carousel view
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                  width: MediaQuery.of(context).size.width,
-                  height: 180,
-                  child: FlutterCarousel(
-                    options: CarouselOptions(
-                      floatingIndicator: false,
-                      height: 180,
-                      viewportFraction: 1.0,
-                      enlargeCenterPage: true,
-                      autoPlay: true,
-                      aspectRatio: 16 / 9,
-                      autoPlayCurve: Curves.fastOutSlowIn,
-                      enableInfiniteScroll: true,
-                      slideIndicator: const CircularSlideIndicator(
-                        indicatorBorderColor: CommonStyles.blackColor,
-                        currentIndicatorColor: CommonStyles.primaryTextColor,
-                        indicatorRadius:
-                            2, // Decrease the size of the indicator
+      body: SingleChildScrollView(child:
+      Container(
+        width: MediaQuery.of(context).size.width,
+      //  height: MediaQuery.of(context).size.height,
+        child: Column(
+          //    crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12.0, ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Row(
+                  //   children: [
+                  //     Text(
+                  //       'Hello ',
+                  //       //    style: CommonStyles.txSty_20b_fb.copyWith(fontSize: 22),
+                  //       style: GoogleFonts.outfit(fontWeight: FontWeight.w500,fontSize: 22,color: Colors.black),
+                  //     ),
+                  //     Text(
+                  //       userFullName,
+                  //       style:    GoogleFonts.outfit(fontWeight: FontWeight.w500,fontSize: 22,color: Color(0xFF11528f)),
+                  //     ),
+                  //   ],
+                  // ),
+                  // const SizedBox(
+                  //   height: 10.0,
+                  // ),
+                  Row(
+                    children: [
+                      Text(
+                        ' Welcome to ',
+                        //    style: CommonStyles.txSty_20b_fb.copyWith(fontSize: 22),
+                        style: GoogleFonts.outfit(fontWeight: FontWeight.w500,fontSize: 16,color: Colors.black),
                       ),
-                      autoPlayAnimationDuration:
-                          const Duration(milliseconds: 800),
-                    ),
-                    items: _items.map((item) {
-                      return Builder(
-                        builder: (BuildContext context) {
-                          return SizedBox(
-                            width: MediaQuery.of(context).size.width,
-                            child: Card(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              elevation: 4,
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(10),
-                                child: Image.network(
-                                  item.imageName,
-                                  height: 100,
-                                  fit: BoxFit.cover,
-                                  loadingBuilder:
-                                      (context, child, loadingProgress) {
-                                    if (loadingProgress == null) return child;
-                                    return const Center(
-                                        child: CircularProgressIndicator
-                                            .adaptive());
-                                  },
+                      Text(
+                        'Hair Fixing Zone',
+                        style:GoogleFonts.outfit(fontWeight: FontWeight.w500,fontSize: 16,color: Color(0xFF11528f)),
+                      ),
+                    ],
+                  ),
+                  // Text(
+                  //   'Welcome to Hair Fixing Zone',
+                  //   style: TextStyle(
+                  //     //  fontSize: MediaQuery.of(context).size.width * 0.04,
+                  //     fontSize: 10,
+                  //     fontFamily: "Muli",
+                  //     fontWeight: FontWeight.bold,
+                  //     color: Colors.black,
+                  //   ),
+                  // ),
+                ],
+              ),
+            ),
+            // Expanded(
+            //   child:
+              Column(
+                children: [
+                  //MARK: Carousel view
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
+                    width: MediaQuery.of(context).size.width,
+                    height: 200,
+
+                // Set your desired background color h
+                        child: FlutterCarousel(
+                      options:
+                      CarouselOptions(
+                        floatingIndicator: true,
+                        height: 200,
+                        viewportFraction: 1.0,
+                        enlargeCenterPage: true,
+                        autoPlay: true,
+                        aspectRatio: 16 / 9,
+                        autoPlayCurve: Curves.fastOutSlowIn,
+                        enableInfiniteScroll: true,
+                        slideIndicator: CircularSlideIndicator(
+                              itemSpacing: 10,
+                              padding: const EdgeInsets.only(bottom: 10.0), // Add bottom padding here
+                              indicatorBorderColor: Color(0xFF11528f),
+                              currentIndicatorColor:  Color(0xFF11528f),
+                              indicatorRadius: 4, // Decrease the size of the indicator
+                            ),
+
+
+                        autoPlayAnimationDuration: const Duration(milliseconds: 800),
+                      ),
+                      items: _items.map((item) {
+                        return Builder(
+                          builder: (BuildContext context) {
+                            return SizedBox(
+                              width: MediaQuery.of(context).size.width,
+                              child: Card(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                elevation: 4,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: Image.network(
+                                    item.imageName,
+                                    height: 100,
+                                    fit: BoxFit.fill,
+                                    loadingBuilder: (context, child, loadingProgress) {
+                                      if (loadingProgress == null) return child;
+                                      return const Center(child: CircularProgressIndicator.adaptive());
+                                    },
+                                  ),
                                 ),
                               ),
-                            ),
-                          );
-                        },
-                      );
-                    }).toList(),
-                  ),
-                ),
-                const SizedBox(height: 10),
-                /* 
+                            );
+                          },
+                        );
+                      }).toList(),
+                    )),
+
+
+                  SizedBox(height: 10),
+                  /*
                 Expanded(
                   child: Stack(
                     children: [
@@ -431,7 +502,7 @@ class _CustomerDashBoardState extends State<CustomerDashBoard> {
                               )
                             : imageList.isEmpty
                                 ? const Center(
-                                    
+
                                     child: Icon(
                                       Icons
                                           .signal_cellular_connected_no_internet_0_bar_sharp,
@@ -465,8 +536,8 @@ class _CustomerDashBoardState extends State<CustomerDashBoard> {
                       ),
                       SizedBox(
                         width: MediaQuery.of(context).size.width,
-                        
-            
+
+
                         height: MediaQuery.of(context).size.height,
                         child: Align(
                           alignment: Alignment.bottomCenter,
@@ -486,352 +557,460 @@ class _CustomerDashBoardState extends State<CustomerDashBoard> {
                   ),
                 ),
              */
-                //MARK: Marquee Text
-                // FutureBuilder(
-                //   future: getMarqueeText(),
-                //   builder: (context, snapshot) {
-                //     if (snapshot.connectionState == ConnectionState.waiting) {
-                //       return const SizedBox();
-                //     } else if (snapshot.hasError) {
-                //       return const SizedBox();
-                //     } else {
-                //       if (marqueeText != null) {
-                //         return Container(
-                //           height: 40,
-                //           decoration: const BoxDecoration(
-                //             image: DecorationImage(
-                //               fit: BoxFit.cover,
-                //               image: AssetImage(
-                //                 'assets/wave_background.png',
-                //               ),
-                //             ),
-                //           ),
-                //           child: Marquee(
-                //             text: marqueeText!,
-                //             style: CommonStyles.text16white,
-                //             velocity: _shouldStartMarquee ? 30 : 0,
-                //           ),
-                //         );
-                //       } else {
-                //         return const SizedBox();
-                //       }
-                //     }
-                //   },
-                // ),
+        SizedBox(
+          height: 60.0,
+          child: Stack(
+            children: [
+              ListView.builder(
+                controller: _scrollController,
+                scrollDirection: Axis.horizontal,
+                itemCount: 2, // Ensures the image can scroll infinitely
+                itemBuilder: (context, index) {
+                  return Image.asset(
+                    'assets/flashbg.png',
+                    fit: BoxFit.cover,
+                    width: MediaQuery.of(context).size.width,
+                  );
+                },
+              ),
+              Center(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 10.0), // Add padding to text
+                  child: Text(
+                    marqueeTexts.isNotEmpty ? marqueeTexts[currentTextIndex] : '',
+                    style: GoogleFonts.outfit(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+              if (marqueeTexts.length > 1)
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: Padding(
+                    padding: EdgeInsets.only(left: 20.0), // Add padding to icon
+                    child: IconButton(
+                      icon: Icon(Icons.arrow_forward_ios, color: Colors.white),
+                      onPressed: nextText,
+                    ),
+                  ),
+                ),
+            ],
+          ),
+        ),
+                  // SizedBox(
+                  //     height: 50.0,
+                  //     child:Stack(
+                  //       children: [
+                  //         ListView.builder(
+                  //           controller: _scrollController,
+                  //           scrollDirection: Axis.horizontal,
+                  //           itemCount: 2, // Ensures the image can scroll infinitely
+                  //           itemBuilder: (context, index) {
+                  //             return Image.asset(
+                  //               'assets/flashbg.png',
+                  //               fit: BoxFit.cover,
+                  //               width: MediaQuery.of(context).size.width,
+                  //             );
+                  //           },
+                  //         ),
+                  //         Center(
+                  //           child: Text(
+                  //             marqueeText!,
+                  //             style:    GoogleFonts.outfit(fontWeight: FontWeight.w500,fontSize: 16,color: Colors.white),
+                  //           ),
+                  //         ),
+                  //       ],
+                  //     )),
 
-                //MARK: Branches
-                // const Padding(
-                //   padding:
-                //       EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-                //   child: Align(
-                //     alignment: Alignment.topCenter,
-                //     child: Text(
-                //       'Branches',
-                //       textAlign: TextAlign.left,
-                //       style: CommonStyles.txSty_20b_fb,
-                //     ),
-                //   ),
-                // ),
-                if (isLoading)
-                  const Text('Please Wait Loading Slow Internet Connection !')
-                else if (brancheslist.isEmpty && imageList.isEmpty)
+                  SizedBox(height: 10),
+                  // FutureBuilder(
+                  //   future: getMarqueeText(),
+                  //   builder: (context, snapshot) {
+                  //     if (snapshot.connectionState == ConnectionState.waiting) {
+                  //       return const SizedBox();
+                  //     } else if (snapshot.hasError) {
+                  //       return const SizedBox();
+                  //     } else {
+                  //       if (marqueeText != null) {
+                  //         return Container(
+                  //           height: 40,
+                  //           decoration: const BoxDecoration(
+                  //             image: DecorationImage(
+                  //               fit: BoxFit.cover,
+                  //               image: AssetImage(
+                  //                 'assets/flashbg.png',
+                  //               ),
+                  //             ),
+                  //           ),
+                  //           child: Marquee(
+                  //             text: marqueeText!,
+                  //             style: CommonStyles.text16white,
+                  //             velocity: _shouldStartMarquee ? 30 : 0,
+                  //           ),
+                  //         );
+                  //       } else {
+                  //         return const SizedBox();
+                  //       }
+                  //     }
+                  //   },
+                  // ),
+
+
+
+                  //MARK: Branches
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                    child: Container(
-                      padding: const EdgeInsets.all(15.0),
-                      child: Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Text(
-                                'Failed to fetch data. Please check your internet connection.!'),
-                            const SizedBox(height: 20),
-                            ElevatedButton(
-                              onPressed: retryDataFetching,
-                              child: const Text('Retry'),
-                            ),
-                          ],
+                    padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 5.0),
+                    child: Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        "Our Branches",
+                        style:GoogleFonts.outfit(fontWeight: FontWeight.w700,fontSize: 20,color: Colors.black),
+
+                      ),
+
+                      // Text(
+                      //   'Select a Branch',
+                      //   textAlign: TextAlign.left,
+                      //   //style: CommonStyles.txSty_20b_fb,
+                      //   style: TextStyle(
+                      //     fontSize: 14,
+                      //     fontFamily: "Muli",
+                      //     fontWeight: FontWeight.bold,
+                      //     color: Colors.black,
+                      //   ),
+                      // //  style:  GoogleFonts.outfit(fontWeight: FontWeight.w500,fontSize: 16,color: Color(0xFF11528f)),
+                      //
+                      // ),
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  if (isLoading)
+                    const Text('Please Wait Loading Slow Internet Connection !')
+                  else if (brancheslist.isEmpty && imageList.isEmpty)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                      child: Container(
+                        padding: const EdgeInsets.all(15.0),
+                        child: Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Text('Failed to fetch data. Please check your internet connection.!'),
+                              const SizedBox(height: 20),
+                              ElevatedButton(
+                                onPressed: retryDataFetching,
+                                child: const Text('Retry'),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                Expanded(
-                    flex: 3,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                      child:
-                      ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: isLoading ? 5 : brancheslist.length,
-                        itemBuilder: (context, index) {
-                          if (isLoading) {
-                            return Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 0.0, vertical: 5.0),
-                              child: Shimmer.fromColors(
-                                baseColor: Colors.grey.shade300,
-                                highlightColor: Colors.grey.shade100,
-                                child: Container(
-                                  height: 150,
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(15.0),
-                                  ),
-                                ),
-                              ),
-                            );
-                          } else {
-                            BranchModel branch = brancheslist[index];
-                            return Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 0.0, vertical: 5.0),
-                              child: IntrinsicHeight(
-                                child: ClipRRect(
-                                  borderRadius: const BorderRadius.only(
-                                      // topRight: Radius.circular(42.5),
-                                      // bottomLeft: Radius.circular(42.5),
-                                      ),
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      Branch branchData = Branch(
-                                        branchId: branch.id!,
-                                        branchname: branch.name,
-                                        branchaddress: branch.address,
-                                        phonenumber: branch.mobileNumber,
-                                        branchImage: branch.imageName!,
-                                        latitude: branch.latitude,
-                                        longitude: branch.longitude,
-                                      );
-
-                                      widget.toNavigate(branchData);
-                                    },
-                                    child: Card(
-                                      shadowColor: Colors.transparent,
-                                      surfaceTintColor: Colors.transparent,
-                                      child: ClipRRect(
-                                        // borderRadius: const BorderRadius.only(
-                                        //   topRight: Radius.circular(29.0),
-                                        //   bottomLeft: Radius.circular(29.0),
-                                        // ),
-                                        child: Container(
-                                          decoration:
-                                          BoxDecoration(
-                                            gradient: const LinearGradient(
-                                              colors: [
-                                                Color(0xFFFFFFFF),
-                                                Color(0xFFFFFFFF),
-                                              ],
-                                              begin: Alignment.centerLeft,
-                                              end: Alignment.centerRight,
-                                            ),
-                                            border: Border.all(
-                                              color: Colors.grey,
-                                              //  color: const Color(0xFF8d97e2), // Add your desired border color here
-                                              width:
-                                                  1.0, // Set the border width
-                                            ),
-                                            borderRadius: BorderRadius.circular(
-                                                10.0), // Optional: Add border radius if needed
-                                          ),
-                                          child: Row(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: [
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                    left: 15.0),
-                                                child: Container(
-                                                  width: 110,
-                                                  height: 65,
-                                                  decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10.0),
-                                                  ),
-                                                  child: ClipRRect(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            7.0),
-                                                    child: Image.network(
-                                                      branch.imageName!,
-                                                      width: 110,
-                                                      height: 65,
-                                                      fit: BoxFit.fill,
-                                                      loadingBuilder: (context,
-                                                          child,
-                                                          loadingProgress) {
-                                                        if (loadingProgress ==
-                                                            null) return child;
-
-                                                        return const Center(
-                                                            child:
-                                                                CircularProgressIndicator
-                                                                    .adaptive());
-                                                      },
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                              Expanded(
-                                                child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          left: 15.0),
-                                                  child: Column(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment.start,
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .only(
-                                                                top: 15.0),
-                                                        child: Text(branch.name,
-                                                            style: CommonStyles
-                                                                .txSty_18b_fb),
-                                                      ),
-                                                      const SizedBox(
-                                                          height: 4.0),
-                                                      Expanded(
-                                                        child: Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .only(
-                                                                  right: 10.0),
-                                                          child: Column(
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .start,
-                                                            children: [
-                                                              Row(
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .spaceEvenly,
-                                                                children: [
-                                                                  //MARK: location_icon
-                                                                  // Image.asset(
-                                                                  //   'assets/location_icon.png',
-                                                                  //   width: 20,
-                                                                  //   height: 18,
-                                                                  // ),
-                                                                  // const SizedBox(
-                                                                  //     width:
-                                                                  //         4.0),
-                                                                  Expanded(
-                                                                    child: Text(
-                                                                        branch
-                                                                            .address,
-                                                                        style: CommonStyles
-                                                                            .txSty_12bl_fb),
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                              const Spacer(
-                                                                  flex: 3),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      Align(
-                                                        alignment: Alignment
-                                                            .bottomRight,
-                                                        child: Container(
-                                                          height: 26,
-                                                          margin:
-                                                              const EdgeInsets
-                                                                  .only(
-                                                                  bottom: 10.0,
-                                                                  right: 10.0),
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            color: Colors.white,
-                                                            border: Border.all(
-                                                              color: const Color(
-                                                                  0xFF8d97e2),
-                                                            ),
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        10.0),
-                                                          ),
-                                                          child: ElevatedButton(
-                                                            onPressed: () {},
-                                                            style:
-                                                                ElevatedButton
-                                                                    .styleFrom(
-                                                              foregroundColor:
-                                                                  const Color(
-                                                                      0xFF8d97e2),
-                                                              backgroundColor:
-                                                                  Colors
-                                                                      .transparent,
-                                                              elevation: 0,
-                                                              shadowColor: Colors
-                                                                  .transparent,
-                                                              shape:
-                                                                  RoundedRectangleBorder(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            10.0),
-                                                              ),
-                                                            ),
-                                                            child: Row(
-                                                              mainAxisSize:
-                                                                  MainAxisSize
-                                                                      .min,
-                                                              children: [
-                                                                SvgPicture
-                                                                    .asset(
-                                                                  'assets/datepicker_icon.svg',
-                                                                  width: 15.0,
-                                                                  height: 15.0,
-                                                                ),
-                                                                const SizedBox(
-                                                                    width: 5),
-                                                                const Text(
-                                                                  'Book Now',
-                                                                  style:
-                                                                      TextStyle(
-                                                                    fontSize:
-                                                                        13,
-                                                                    color: Color(
-                                                                        0xFF8d97e2),
-                                                                  ),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
+                  // Expanded(
+                  //     //flex: 3,
+                  //     child:
+                      Padding(
+                        padding:  EdgeInsets.symmetric(horizontal: 12.0),
+                        child: GridView.builder(
+                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2, crossAxisSpacing: 16.0, mainAxisSpacing: 16.0, mainAxisExtent: 250, childAspectRatio: 8 / 2),
+                          physics: NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: isLoading ? 5 : brancheslist.length,
+                          // ListView.builder(
+                          //   shrinkWrap: true,
+                          //   itemCount: isLoading ? 5 : brancheslist.length,
+                          itemBuilder: (context, index) {
+                            if (isLoading) {
+                              return Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 5.0),
+                                child: Shimmer.fromColors(
+                                  baseColor: Colors.grey.shade300,
+                                  highlightColor: Colors.grey.shade100,
+                                  child: Container(
+                                    height: 150,
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(15.0),
                                     ),
                                   ),
                                 ),
-                              ),
-                            );
-                          }
-                        },
-                      ),
-                    )),
-              ],
+                              );
+                            } else {
+                              BranchModel branch = brancheslist[index];
+                              Color backgroundColor = index % 2 == 0 ? Color(0xFFdbeaff) : Color(0xFFcdeac3);
+
+                              return   GestureDetector(
+                                  onTap: () {
+
+                                  },
+                                  child:  Container(
+
+                                    //padding: EdgeInsets.only(top: 10),
+                                      decoration: BoxDecoration(
+                                        color: Color(0xFFdbeaff),
+                                        borderRadius: BorderRadius.circular(15.0),
+                                        boxShadow: [
+                                          // BoxShadow(
+                                          //   color: Colors.grey.withOpacity(0.3),
+                                          //   spreadRadius: 2,
+                                          //   blurRadius: 5,
+                                          //   offset: Offset(1, 3),
+                                          //   blurStyle: BlurStyle.solid
+                                          // ),
+                                        ],
+                                      ),
+                                      child:
+                                      Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        children: [
+                                          Align(
+                                            alignment : Alignment.topLeft,
+                                            // top: 0,
+                                            //     right: 20,
+                                            child: Container(
+                                              margin: EdgeInsets.only(top: 20,left: 10),
+                                              decoration: BoxDecoration(
+                                                border: Border.all(
+                                                  color: Colors.grey,
+                                                  width: 2.5,
+                                                ),
+                                                borderRadius: BorderRadius.circular(15.0),
+                                              ),
+                                              child:
+                                              ClipRRect(
+                                                borderRadius: BorderRadius.circular(13.0),
+                                                child: Image.network(
+                                                  branch.imageName!,
+                                                  width: 65,
+                                                  height: 60,
+                                                  fit: BoxFit.fill,
+                                                  loadingBuilder: (context, child, loadingProgress) {
+                                                    if (loadingProgress == null) return child;
+
+                                                    return Center(child: CircularProgressIndicator.adaptive());
+                                                  },
+                                                ),
+                                              ),
+                                              width: 65,
+                                              height: 60,
+                                            ),
+                                          ),
+                                          // SizedBox(height: 8.0),
+                                          Padding(padding: EdgeInsets.only(left: 10.0,right: 5.0,top: 5.0,bottom: 5.0),child: Text(
+                                            branch.name,
+                                            maxLines: 3,
+                                            style:  GoogleFonts.outfit(fontWeight: FontWeight.w700,fontSize: 18,color: Color(0xFF11528f)),
+                                          ),  ),
+                                          // SizedBox(height: 8.0),
+                                          Padding(padding: EdgeInsets.only(left: 10.0,right: 5.0,bottom: 5.0),child: Text(
+                                            branch.address,
+                                            style:  GoogleFonts.outfit(fontSize: 12,fontWeight: FontWeight.w500,wordSpacing: 1.2,color: Colors.black.withOpacity(0.8)),
+                                          ),  ),
+                                          //  SizedBox(height: 5.0),
+                                          // Display from date and to date multiple times
+Align(
+  alignment: Alignment.bottomLeft,
+  child:
+  Container(
+    height: 30,
+    margin: const EdgeInsets.only(bottom: 2.0, left: 10.0, top: 5.0),
+    decoration: BoxDecoration(
+      border: Border.all(
+        color: Color(0xFF11528f),
+      ),
+      borderRadius: BorderRadius.circular(20.0),
+    ),
+    child: ElevatedButton(
+      onPressed: () {},
+      style: ElevatedButton.styleFrom(
+        padding:EdgeInsets.symmetric(horizontal: 10.0), // Adjust padding as needed, // Remove padding
+        foregroundColor: Color(0xFF8d97e2),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        shadowColor: Colors.transparent,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20.0),
+        ),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            'Book Now',
+            style: GoogleFonts.outfit(
+              fontWeight: FontWeight.w500,
+              fontSize: 14,
+              color: Color(0xFF11528f),
             ),
+          ),
+          SizedBox(width: 5),
+          SvgPicture.asset(
+            'assets/squareupright.svg',
+            width: 12.0,
+            height: 12.0,
+            color: Color(0xFF11528f),
           ),
         ],
       ),
+    ),
+  )
+
+)
+
+                                        ],
+                                      )
+                                  ));
+
+
+
+
+                            }
+                          },
+                        ),
+                      )
+                  //),
+                ],
+              ),
+           // ),
+          ],
+        )
+      )
+     ),
     );
   }
 
+  //   Padding(
+  //   padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 5.0),
+  //   child: IntrinsicHeight(
+  //     child: Container(
+  //         decoration: BoxDecoration(
+  //           color: Color(0xFFf3e7bc), // Set your desired background color here
+  //           borderRadius: BorderRadius.circular(15.0), // Match this with the border radius of the image
+  //         ),
+  //         child: GestureDetector(
+  //             onTap: () {
+  //               Branch branchData = Branch(
+  //                 branchId: branch.id!,
+  //                 branchname: branch.name,
+  //                 branchaddress: branch.address,
+  //                 phonenumber: branch.mobileNumber,
+  //                 branchImage: branch.imageName!,
+  //                 latitude: branch.latitude,
+  //                 longitude: branch.longitude,
+  //               );
+  //
+  //               widget.toNavigate(branchData);
+  //             },
+  //             child: Stack(
+  //               alignment: Alignment.topRight,
+  //               children: <Widget>[
+  //                 Container(
+  //                   width: MediaQuery.of(context).size.width,
+  //
+  //                   height: MediaQuery.of(context).size.height / 28,
+  //                   padding: EdgeInsets.only(right: 20),
+  //                   color: Colors.white,
+  //                 ),
+  //                 Container(
+  //                   width: 75,
+  //                   height: 60,
+  //                   decoration: BoxDecoration(
+  //                     border: Border.all(
+  //                       color: Colors.white,
+  //                       width: 2.5,
+  //                     ),
+  //                     borderRadius: BorderRadius.circular(15.0),
+  //                   ),
+  //                   //padding: EdgeInsets.symmetric(horizontal: 8),
+  //                   margin: EdgeInsets.only(right: 10.0),
+  //                   child: ClipRRect(
+  //                     borderRadius: BorderRadius.circular(15.0),
+  //                     child: Image.network(
+  //                       branch.imageName!,
+  //                       width: 110,
+  //                       height: 70,
+  //                       fit: BoxFit.fill,
+  //                       loadingBuilder: (context, child, loadingProgress) {
+  //                         if (loadingProgress == null) return child;
+  //
+  //                         return Center(child: CircularProgressIndicator.adaptive());
+  //                       },
+  //                     ),
+  //                   ),
+  //                 ),
+  //                 Container(
+  //                  // height: 60,
+  //                   padding: EdgeInsets.only(top: 40.0 / 2.0,right: 10.0, left: 10),
+  //
+  //                   decoration: BoxDecoration(
+  //                     // color: Colors.grey[200], // Set your desired background color here
+  //                     borderRadius: BorderRadius.circular(15.0), // Match this with the border radius of the image
+  //                   ),
+  //                   child: Column(
+  //                     crossAxisAlignment: CrossAxisAlignment.start,
+  //                     children: [
+  //                       // Text(branch.name, style: CommonStyles.txSty_18b_fb),
+  //                       Expanded(
+  //                         child: Container(
+  //                           decoration: BoxDecoration(
+  //                             // color: Colors.grey[200], // Set your desired background color here
+  //                             borderRadius: BorderRadius.circular(10.0), // Match this with the border radius of the image
+  //                           ),
+  //                           padding:  EdgeInsets.only(right: 10.0, left: 0,top: 10.0),
+  //                           child: Column(
+  //                             crossAxisAlignment: CrossAxisAlignment.start,
+  //                             children: [
+  //                               Text(branch.name, style: CommonStyles.txSty_18b_fb),
+  //                               // Row(
+  //                               //  // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+  //                               //   children: [
+  //                               //     Expanded(
+  //                               //       child: Text(branch.name, style: CommonStyles.txSty_18b_fb),
+  //                               //     ),
+  //                               //   ],
+  //                               // ),
+  //                               //const Spacer(flex: 3),
+  //                             ],
+  //                           ),
+  //                         ),
+  //                       ),
+  //
+  //                       Expanded(
+  //                         child: Padding(
+  //                           padding:  EdgeInsets.only(right: 10.0, bottom: 10.0, left: 0),
+  //                           child: Column(
+  //                             crossAxisAlignment: CrossAxisAlignment.start,
+  //                             children: [
+  //                               Row(
+  //                                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+  //                                 children: [
+  //                                   Expanded(
+  //                                     child: Text(branch.address, style: CommonStyles.txSty_12b_fb),
+  //                                   ),
+  //                                 ],
+  //                               ),
+  //                               //  const Spacer(flex: 3),
+  //                             ],
+  //                           ),
+  //                         ),
+  //                       ),
+  //                     ],
+  //                   ),
+  //                   // Some content
+  //                 ),
+  //
+  //
+  //
+  //               ],
+  //             ))),
+  //   ),
+  // );
   Widget buildIndicator(int index) {
     return Container(
       width: 8,
@@ -844,7 +1023,202 @@ class _CustomerDashBoardState extends State<CustomerDashBoard> {
     );
   }
 }
+// child:     Align(
+//   alignment: Alignment.topRight,
+//   child: Padding(
+//     padding: const EdgeInsets.only(left: 15.0),
+//     child: Container(
+//       width: 110,
+//       height: 65,
+//       decoration: BoxDecoration(
+//         borderRadius: BorderRadius.circular(10.0),
+//       ),
+//       child: ClipRRect(
+//         borderRadius: BorderRadius.circular(7.0),
+//         child: Image.network(
+//           branch.imageName!,
+//           width: 110,
+//           height: 65,
+//           fit: BoxFit.fill,
+//           loadingBuilder: (context, child, loadingProgress) {
+//             if (loadingProgress == null) return child;
+//
+//             return const Center(child: CircularProgressIndicator.adaptive());
+//           },
+//         ),
+//       ),
+//     ),
+//   ),
+// ),
 
+// Card(
+//   shadowColor: Colors.transparent,
+//   surfaceTintColor: Colors.transparent,
+//   child: ClipRRect(
+//     // borderRadius: const BorderRadius.only(
+//     //   topRight: Radius.circular(29.0),
+//     //   bottomLeft: Radius.circular(29.0),
+//     // ),
+//     child:
+//     Container(
+//       decoration: BoxDecoration(
+//         gradient: const LinearGradient(
+//           colors: [
+//             Color(0xFFFFFFFF),
+//             Color(0xFFFFFFFF),
+//           ],
+//           begin: Alignment.centerLeft,
+//           end: Alignment.centerRight,
+//         ),
+//         border: Border.all(
+//           color: Colors.grey,
+//           //  color: const Color(0xFF8d97e2), // Add your desired border color here
+//           width: 1.0, // Set the border width
+//         ),
+//         borderRadius: BorderRadius.circular(10.0), // Optional: Add border radius if needed
+//       ),
+//       child:
+//
+//
+//
+//           // Column(
+//           //   crossAxisAlignment: CrossAxisAlignment.start,
+//           // //  mainAxisAlignment: MainAxisAlignment.start,
+//           //   children: [
+//           //
+//           //     Row(
+//           //       mainAxisAlignment: MainAxisAlignment.spaceAround,
+//           //       children: [
+//           //         Text(branch.name, style: CommonStyles.txSty_18b_fb),
+//           //         Align(
+//           //           alignment: Alignment.topRight,
+//           //           child:  Padding(
+//           //             padding: const EdgeInsets.only(left: 15.0),
+//           //             child: Container(
+//           //               width: 110,
+//           //               height: 65,
+//           //               decoration: BoxDecoration(
+//           //                 borderRadius: BorderRadius.circular(10.0),
+//           //               ),
+//           //               child: ClipRRect(
+//           //                 borderRadius: BorderRadius.circular(7.0),
+//           //                 child: Image.network(
+//           //                   branch.imageName!,
+//           //                   width: 110,
+//           //                   height: 65,
+//           //                   fit: BoxFit.fill,
+//           //                   loadingBuilder: (context, child, loadingProgress) {
+//           //                     if (loadingProgress == null) return child;
+//           //
+//           //                     return const Center(child: CircularProgressIndicator.adaptive());
+//           //                   },
+//           //                 ),
+//           //               ),
+//           //             ),
+//           //           ),
+//           //         ),
+//           //       ],
+//           //     ),
+//           //
+//           //     Expanded(
+//           //       child: Text(branch.address, style: CommonStyles.txSty_12b_fb),
+//           //     ),
+//           //   ],
+//           // ),
+//
+//           // Expanded(
+//           //   child: Padding(
+//           //     padding: const EdgeInsets.only(left: 15.0),
+//           //     child:
+//           //     Column(
+//           //       mainAxisAlignment: MainAxisAlignment.start,
+//           //       crossAxisAlignment: CrossAxisAlignment.start,
+//           //       children: [
+//           //         // Padding(
+//           //         //   padding: const EdgeInsets.only(top: 15.0),
+//           //         //   child: Text(branch.name, style: CommonStyles.txSty_18b_fb),
+//           //         // ),
+//           //         const SizedBox(height: 4.0),
+//           //         Expanded(
+//           //           child: Padding(
+//           //             padding: const EdgeInsets.only(right: 10.0),
+//           //             child: Column(
+//           //               crossAxisAlignment: CrossAxisAlignment.start,
+//           //               children: [
+//           //                 Row(
+//           //                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+//           //                   children: [
+//           //                     //MARK: location_icon
+//           //                     // Image.asset(
+//           //                     //   'assets/location_icon.png',
+//           //                     //   width: 20,
+//           //                     //   height: 18,
+//           //                     // ),
+//           //                     // const SizedBox(
+//           //                     //     width:
+//           //                     //         4.0),
+//           //                     // Expanded(
+//           //                     //   child: Text(branch.address, style: CommonStyles.txSty_12b_fb),
+//           //                     // ),
+//           //                   ],
+//           //                 ),
+//           //                 const Spacer(flex: 3),
+//           //               ],
+//           //             ),
+//           //           ),
+//           //         ),
+//           //         // Align(
+//           //         //   alignment: Alignment.bottomRight,
+//           //         //   child: Container(
+//           //         //     height: 26,
+//           //         //     margin: const EdgeInsets.only(bottom: 10.0, right: 10.0),
+//           //         //     decoration: BoxDecoration(
+//           //         //       color: Colors.white,
+//           //         //       border: Border.all(
+//           //         //         color: const Color(0xFF8d97e2),
+//           //         //       ),
+//           //         //       borderRadius: BorderRadius.circular(10.0),
+//           //         //     ),
+//           //         //     child: ElevatedButton(
+//           //         //       onPressed: () {},
+//           //         //       style: ElevatedButton.styleFrom(
+//           //         //         foregroundColor: const Color(0xFF8d97e2),
+//           //         //         backgroundColor: Colors.transparent,
+//           //         //         elevation: 0,
+//           //         //         shadowColor: Colors.transparent,
+//           //         //         shape: RoundedRectangleBorder(
+//           //         //           borderRadius: BorderRadius.circular(10.0),
+//           //         //         ),
+//           //         //       ),
+//           //         //       child: Row(
+//           //         //         mainAxisSize: MainAxisSize.min,
+//           //         //         children: [
+//           //         //           SvgPicture.asset(
+//           //         //             'assets/datepicker_icon.svg',
+//           //         //             width: 15.0,
+//           //         //             height: 15.0,
+//           //         //           ),
+//           //         //           const SizedBox(width: 5),
+//           //         //           const Text(
+//           //         //             'Book Now',
+//           //         //             style: TextStyle(
+//           //         //               fontSize: 13,
+//           //         //               color: Color(0xFF8d97e2),
+//           //         //             ),
+//           //         //           ),
+//           //         //         ],
+//           //         //       ),
+//           //         //     ),
+//           //         //   ),
+//           //         // ),
+//           //       ],
+//           //     ),
+//           //   ),
+//           // ),
+//
+//     ),
+//   ),
+// ),
 class BranchCard extends StatelessWidget {
   final Model_branch branch;
 
@@ -853,6 +1227,7 @@ class BranchCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      padding: EdgeInsets.only(left: 5.0),
         color: Colors.white,
         child: Card(
           elevation: 2,
@@ -947,8 +1322,7 @@ class BranchCard extends StatelessWidget {
   }
 
   Future<void> openMap(Model_branch branchnames) async {
-    final url =
-        'https://www.google.com/maps/search/?api=1&query=${branchnames.latitude},${branchnames.longitude}';
+    final url = 'https://www.google.com/maps/search/?api=1&query=${branchnames.latitude},${branchnames.longitude}';
     if (await canLaunch(url)) {
       await launch(url);
     } else {

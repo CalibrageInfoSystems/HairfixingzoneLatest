@@ -112,8 +112,7 @@ class AddConsulationscreen_screenState extends State<AddConsulationscreen> {
         print('The Internet Is Connected');
 
         setState(() async {
-          _dateController.text =
-              DateFormat('dd-MM-yyyy').format(DateTime.now());
+          _dateController.text = DateFormat('dd-MM-yyyy').format(DateTime.now());
           visiteddate = DateFormat('yyyy-MM-dd').format(DateTime.now());
           fetchRadioButtonOptions();
           getCities(widget.agentId);

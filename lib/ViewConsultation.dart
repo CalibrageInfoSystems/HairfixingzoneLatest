@@ -270,6 +270,7 @@ class ViewConsulatationBranchTemplate extends StatelessWidget {
                         style: const TextStyle(
                           color: Color(0xFF0f75bc),
                           fontSize: 14.0,
+                          fontFamily: "OpenSans",
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -278,6 +279,7 @@ class ViewConsulatationBranchTemplate extends StatelessWidget {
                       ),
                       Text(agent.address,
                           maxLines: 2,
+
                           overflow: TextOverflow.ellipsis,
                           style: CommonStyles.txSty_12b_f5),
                     ],

@@ -75,7 +75,7 @@ class _AgentHomeState extends State<AgentHome> {
                         style: TextStyle(
                           fontSize: 16,
                           color: CommonUtils.primaryTextColor,
-                          fontFamily: 'Muli',
+                          fontFamily: 'OpenSans',
                         ),
                       ),
                     ),
@@ -103,7 +103,7 @@ class _AgentHomeState extends State<AgentHome> {
                         style: TextStyle(
                           fontSize: 16,
                           color: Colors.white,
-                          fontFamily: 'Muli',
+                          fontFamily: 'OpenSans',
                         ),
                       ),
                     ),
@@ -186,7 +186,7 @@ class _AgentHomeState extends State<AgentHome> {
               label: 'View Consultation',
             ),
           ],
-          selectedLabelStyle: CommonStyles.txSty_12b_fb,
+          selectedLabelStyle: CommonStyles.txSty_16b_fb,
           // unselectedLabelStyle: TextStyle(
           //   fontSize: 14,
           //   color: Colors.grey, // Customize the color as needed
@@ -325,7 +325,7 @@ class _AgentHomeState extends State<AgentHome> {
                   style: TextStyle(
                     fontSize: 16,
                     color: CommonUtils.primaryTextColor,
-                    fontFamily: 'Muli',
+                    fontFamily: 'OpenSans',
                   ),
                 ),
               ),
@@ -356,7 +356,7 @@ class _AgentHomeState extends State<AgentHome> {
                   style: TextStyle(
                     fontSize: 16,
                     color: Colors.white,
-                    fontFamily: 'Muli',
+                    fontFamily: 'OpenSans',
                   ),
                 ),
               ),

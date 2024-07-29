@@ -298,7 +298,7 @@
 //                       'Agent Login',
 //                       style: TextStyle(
 //                         fontSize: 24.0,
-//                         fontFamily: 'LibreFranklin',
+//                         fontFamily: 'OpenSans',
 //                         fontWeight: FontWeight.bold,
 //                         color: Color(0xFFF44614),
 //                       ),
@@ -342,7 +342,7 @@
 //                                   keyboardType: TextInputType.name,
 //                                   style: TextStyle(
 //                                     fontSize: 14,
-//                                     fontFamily: 'LibreFranklin',
+//                                     fontFamily: 'OpenSans',
 //                                     color: Color(0xFF042DE3),
 //                                     fontWeight: FontWeight.w300,
 //                                   ),
@@ -350,7 +350,7 @@
 //                                     hintText: ' User Name',
 //                                     hintStyle: TextStyle(
 //                                       fontSize: 14,
-//                                       fontFamily: 'LibreFranklin',
+//                                       fontFamily: 'OpenSans',
 //                                       color: Color(0xFF042DE3),
 //                                       fontWeight: FontWeight.w300,
 //                                     ),
@@ -405,11 +405,11 @@
 //                                   obscureText: _obscureText,
 //                                   keyboardType: TextInputType.name,
 //                                   // initialValue: 'Full Name',
-//                                   style: TextStyle(fontSize: 14, fontFamily: 'LibreFranklin', color: Color(0xFF042DE3), fontWeight: FontWeight.w300),
+//                                   style: TextStyle(fontSize: 14, fontFamily: 'OpenSans', color: Color(0xFF042DE3), fontWeight: FontWeight.w300),
 //
 //                                   decoration: InputDecoration(
 //                                     hintText: 'Password',
-//                                     hintStyle: TextStyle(fontSize: 14, fontFamily: 'LibreFranklin', color: Color(0xFF042DE3), fontWeight: FontWeight.w300),
+//                                     hintStyle: TextStyle(fontSize: 14, fontFamily: 'OpenSans', color: Color(0xFF042DE3), fontWeight: FontWeight.w300),
 //                                     alignLabelWithHint: true,
 //                                     suffixIcon: GestureDetector(
 //                                       onTap: _togglePasswordVisibility,

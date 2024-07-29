@@ -504,7 +504,7 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
                       '$date',
                       style: const TextStyle(
                         fontSize: 22,
-                        fontFamily: "LibreFranklin",
+                        fontFamily: "OpenSans",
                         fontWeight: FontWeight.w700,
                         color: Color(0xFF0f75bc),
                       ),
@@ -513,7 +513,7 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
                       '$year',
                       style: const TextStyle(
                         fontSize: 14,
-                        fontFamily: "LibreFranklin",
+                        fontFamily: "OpenSans",
                         fontWeight: FontWeight.w700,
                         color: Color(0xFF0f75bc),
                       ),
@@ -540,7 +540,7 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
                                   consultationslist[index].visitingDate),
                               style: const TextStyle(
                                 fontSize: 14,
-                                fontFamily: "LibreFranklin",
+                                fontFamily: "OpenSans",
                                 fontWeight: FontWeight.w500,
                                 color: Colors.black,
                               ),
@@ -549,7 +549,7 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
                               consultationslist[index].consultationName,
                               style: const TextStyle(
                                 fontSize: 14,
-                                fontFamily: "LibreFranklin",
+                                fontFamily: "OpenSans",
                                 fontWeight: FontWeight.w500,
                                 color: Colors.black,
                               ),
@@ -568,7 +568,7 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
                                           consultationslist[index].phoneNumber,
                                       style: const TextStyle(
                                         fontSize: 14,
-                                        fontFamily: "LibreFranklin",
+                                        fontFamily: "OpenSans",
                                         fontWeight: FontWeight.w500,
                                         color: Color(0xFF0f75bc),
                                         decoration: TextDecoration.underline,
@@ -614,7 +614,7 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
                               consultationslist[index].gender,
                               style: const TextStyle(
                                 fontSize: 14,
-                                fontFamily: "LibreFranklin",
+                                fontFamily: "OpenSans",
                                 fontWeight: FontWeight.w500,
                                 color: Color(0xFF5f5f5f),
                               ),
@@ -623,7 +623,7 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
                               consultationslist[index].email,
                               style: const TextStyle(
                                 fontSize: 14,
-                                fontFamily: "LibreFranklin",
+                                fontFamily: "OpenSans",
                                 fontWeight: FontWeight.w500,
                                 color: Color(0xFF5f5f5f),
                               ),
@@ -642,7 +642,7 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
                   //   consultationslist[index].remarks,
                   //   style: const TextStyle(
                   //     fontSize: 14,
-                  //     fontFamily: "LibreFranklin",
+                  //     fontFamily: "OpenSans",
                   //     fontWeight: FontWeight.w500,
                   //     color: Color(0xFF5f5f5f),
                   //   ),
@@ -662,7 +662,7 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
                                 color: Color(0xFF5f5f5f),
                                 fontSize: 14,
                                 fontWeight: FontWeight.w500,
-                                fontFamily: 'LibreFranklin',
+                                fontFamily: 'OpenSans',
                               ),
                             ),
                           ],
@@ -687,7 +687,7 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
         backgroundColor: const Color(0xffffffff),
         title: const Text(
           'View Consultation',
-          style: TextStyle(color: Color(0xFF0f75bc), fontSize: 16.0, fontFamily: "LibreFranklin",),
+          style: TextStyle(color: Color(0xFF0f75bc), fontSize: 16.0, fontFamily: "OpenSans",),
         ),
         // actions: [
         //   IconButton(

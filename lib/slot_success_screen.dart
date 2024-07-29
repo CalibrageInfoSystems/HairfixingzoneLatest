@@ -40,13 +40,13 @@ class _SlotSuccessScreenState extends State<SlotSuccessScreen> with TickerProvid
   late AnimationController _controller2;
   static const textStyle = TextStyle(
     fontSize: 20,
-    fontFamily: "LibreFranklin",
+    fontFamily: "OpenSans",
     color: Colors.black,
   );
 
   static const txSty_20pr_fb = TextStyle(
     fontSize: 20,
-    fontFamily: "LibreFranklin",
+    fontFamily: "OpenSans",
     fontWeight: FontWeight.bold,
     color: Color(0xFF662e91),
   );
