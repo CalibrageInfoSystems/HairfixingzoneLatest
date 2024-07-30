@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hairfixingzone/BranchModel.dart';
 import 'package:hairfixingzone/BranchesModel.dart';
 import 'package:hairfixingzone/Common/common_styles.dart';
@@ -133,24 +134,35 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
           carousel(context),
           const SizedBox(height: 10),
           //MARK: Marquee Text
-          marqueeScroll(),
+          //marqueeScroll(),
 
           //MARK: Branches
-          const SizedBox(
-            height: 15,
-          ),
-          screens(),
-          const SizedBox(
-            height: 15,
-          ),
-          const Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                'Branches',
-                style: CommonStyles.txSty_20p_fb,
+          // const SizedBox(
+          //   height: 15,
+          // ),
+         // screens(),
+         //  const SizedBox(
+         //    height: 0,
+         //  ),
+          // const Row(
+          //   mainAxisAlignment: MainAxisAlignment.center,
+          //   children: [
+          //     Text(
+          //       'Branches',
+          //       style: CommonStyles.txSty_20p_fb,
+          //     ),
+          //   ],
+          // ),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 5.0),
+            child: Align(
+              alignment: Alignment.topLeft,
+              child: Text(
+                "Branches",
+                style:GoogleFonts.outfit(fontWeight: FontWeight.w700,fontSize: 20,color: Colors.black),
+
               ),
-            ],
+            ),
           ),
           agentBranches()
          // newBranches()
@@ -161,32 +173,47 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
 
   Padding wishSection(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 0),
       child: Column(
         children: [
           Row(
             children: [
               Text(
-                'Hey, ',
-                style: CommonStyles.txSty_20b_fb.copyWith(fontSize: 24),
+                'Hello, ',
+                // style: CommonStyles.txSty_20b_fb.copyWith(fontSize: 24),
+                style: GoogleFonts.outfit(fontWeight: FontWeight.w700,fontSize: 22,color: Colors.black),
               ),
               Text(
                 userFullName,
-                style: CommonStyles.txSty_20b_fb.copyWith(fontSize: 24),
+                style:GoogleFonts.outfit(fontWeight: FontWeight.w700,fontSize: 22,color: Color(0xFF11528f)),
+                //  style: CommonStyles.txSty_20b_fb.copyWith(fontSize: 24),
               ),
             ],
           ),
           const SizedBox(
             height: 10.0,
           ),
-          Text(
-            'Welcome to Hair Fixing Zone',
-            style: TextStyle(
-              fontSize: MediaQuery.of(context).size.width * 0.05,
-              fontFamily: "Outfit",
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
-            ),
+          // Text(
+          //   'Welcome to Hair Fixing Zone',
+          //   style: TextStyle(
+          //     fontSize: MediaQuery.of(context).size.width * 0.05,
+          //     fontFamily: "Outfit",
+          //     fontWeight: FontWeight.bold,
+          //     color: Colors.black,
+          //   ),
+          // ),
+          Row(
+            children: [
+              Text(
+                'Welcome to ',
+                //    style: CommonStyles.txSty_20b_fb.copyWith(fontSize: 22),
+                style: GoogleFonts.outfit(fontWeight: FontWeight.w500,fontSize: 16,color: Colors.black),
+              ),
+              Text(
+                'Hair Fixing Zone',
+                style:GoogleFonts.outfit(fontWeight: FontWeight.w500,fontSize: 16,color: Color(0xFF11528f)),
+              ),
+            ],
           ),
         ],
       ),
@@ -214,9 +241,12 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
               itemCount: data.length,
               itemBuilder: (context, index) {
                 BranchModel branch = data[index];
-                return IntrinsicHeight(
+                return
+                  IntrinsicHeight(
                   child: GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      // print('branchid${branch.id}');
+                    },
                     child: Card(
                       shadowColor: Colors.transparent,
                       surfaceTintColor: Colors.transparent,
@@ -423,13 +453,13 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
   }
 
   Container carousel(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+    return    Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
       width: MediaQuery.of(context).size.width,
       height: 180,
-      child: FlutterCarousel(
+      child:  FlutterCarousel(
         options: CarouselOptions(
-          floatingIndicator: false,
+          floatingIndicator: true,
           height: 180,
           viewportFraction: 1.0,
           enlargeCenterPage: true,
@@ -437,10 +467,12 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
           aspectRatio: 16 / 9,
           autoPlayCurve: Curves.fastOutSlowIn,
           enableInfiniteScroll: true,
-          slideIndicator: const CircularSlideIndicator(
-            indicatorBorderColor: CommonStyles.blackColor,
-            currentIndicatorColor: CommonStyles.primaryTextColor,
-            indicatorRadius: 2, // Decrease the size of the indicator
+          slideIndicator: CircularSlideIndicator(
+            itemSpacing: 10,
+            padding: const EdgeInsets.only(bottom: 10.0),
+            indicatorBorderColor: Color(0xFF11528f),
+            currentIndicatorColor: Color(0xFF11528f),
+            indicatorRadius: 4,
           ),
           autoPlayAnimationDuration: const Duration(milliseconds: 800),
         ),
@@ -450,6 +482,8 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
               return SizedBox(
                 width: MediaQuery.of(context).size.width,
                 child: Card(
+                  shadowColor: Colors.transparent,
+                  surfaceTintColor: Colors.transparent,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
@@ -458,12 +492,11 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
                     borderRadius: BorderRadius.circular(10),
                     child: Image.network(
                       item.imageName,
-                      height: 100,
-                      fit: BoxFit.cover,
+                      height: 200,
+                      fit: BoxFit.fill,
                       loadingBuilder: (context, child, loadingProgress) {
                         if (loadingProgress == null) return child;
-                        return const Center(
-                            child: CircularProgressIndicator.adaptive());
+                        return const Center(child: CircularProgressIndicator.adaptive());
                       },
                     ),
                   ),
@@ -474,6 +507,57 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
         }).toList(),
       ),
     );
+    //   Container(
+    //   padding: const EdgeInsets.symmetric(horizontal: 10.0),
+    //   width: MediaQuery.of(context).size.width,
+    //   height: 180,
+    //   child: FlutterCarousel(
+    //     options: CarouselOptions(
+    //       floatingIndicator: false,
+    //       height: 180,
+    //       viewportFraction: 1.0,
+    //       enlargeCenterPage: true,
+    //       autoPlay: true,
+    //       aspectRatio: 16 / 9,
+    //       autoPlayCurve: Curves.fastOutSlowIn,
+    //       enableInfiniteScroll: true,
+    //       slideIndicator: const CircularSlideIndicator(
+    //         indicatorBorderColor: CommonStyles.blackColor,
+    //         currentIndicatorColor: CommonStyles.primaryTextColor,
+    //         indicatorRadius: 2, // Decrease the size of the indicator
+    //       ),
+    //       autoPlayAnimationDuration: const Duration(milliseconds: 800),
+    //     ),
+    //     items: _items.map((item) {
+    //       return Builder(
+    //         builder: (BuildContext context) {
+    //           return SizedBox(
+    //             width: MediaQuery.of(context).size.width,
+    //             child: Card(
+    //               shape: RoundedRectangleBorder(
+    //                 borderRadius: BorderRadius.circular(10),
+    //               ),
+    //               elevation: 4,
+    //               child: ClipRRect(
+    //                 borderRadius: BorderRadius.circular(10),
+    //                 child: Image.network(
+    //                   item.imageName,
+    //                   height: 100,
+    //                   fit: BoxFit.cover,
+    //                   loadingBuilder: (context, child, loadingProgress) {
+    //                     if (loadingProgress == null) return child;
+    //                     return const Center(
+    //                         child: CircularProgressIndicator.adaptive());
+    //                   },
+    //                 ),
+    //               ),
+    //             ),
+    //           );
+    //         },
+    //       );
+    //     }).toList(),
+    //   ),
+    // );
   }
 
   getMarqueeText() async {
@@ -585,7 +669,7 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
 
   Widget agentBranches() {
     return Container(
-      height: MediaQuery.of(context).size.height / 4,
+      //height: MediaQuery.of(context).size.height / 4,
       padding: EdgeInsets.symmetric(horizontal: 10.0),
       child: FutureBuilder(
         future: apiData,
@@ -599,14 +683,21 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
           } else {
             List<BranchModel>? data = snapshot.data!;
             return SizedBox(
-              width: MediaQuery.of(context).size.width,
+            //  width: MediaQuery.of(context).size.width,
               // height: MediaQuery.of(context).size.height / 3.5,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
+              child:
+              // ListView.builder(
+              //   scrollDirection: Axis.horizontal,
+              //   itemCount: data.length,
+              GridView.builder(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2, crossAxisSpacing: 16.0, mainAxisSpacing: 16.0, mainAxisExtent: 250, childAspectRatio: 8 / 2),
+                physics: NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
                 itemCount: data.length,
                 itemBuilder: (context, index) {
                   return BranchCard(
-                    branch: data[index],
+                    branch: data[index], agentid: widget.agentid,
                   );
                 },
               ),
@@ -1327,126 +1418,266 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
 
 class BranchCard extends StatelessWidget {
   final BranchModel branch;
+  final int agentid;
 
-  const BranchCard({super.key, required this.branch});
+  const BranchCard({super.key, required this.branch,required this.agentid});
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 2,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Container(
-        height: MediaQuery.of(context).size.height,
-        // width: 170,
-        width: MediaQuery.of(context).size.width / 2.5,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          // color: Colors.grey,
-          color: CommonStyles.branchBg,
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Container(
-              height: MediaQuery.of(context).size.height / 8.5,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Colors.grey,
-              ),
-              child: ClipRRect(
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(10),
-                  topRight: Radius.circular(10),
-                ),
-                child: Image.network(
-                  branch.imageName!,
-                  fit: BoxFit.cover,
-                ),
-              ),
+    return     GestureDetector(
+        onTap: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => AddConsulationscreen(agentId:agentid, branchname: branch.name,)));
+
+          print('branchid${branch.id}');
+
+        },
+        child:  Container(
+
+          //padding: EdgeInsets.only(top: 10),
+            decoration: BoxDecoration(
+              color: Color(0xFFdbeaff),
+              borderRadius: BorderRadius.circular(15.0),
+              boxShadow: [
+                // BoxShadow(
+                //   color: Colors.grey.withOpacity(0.3),
+                //   spreadRadius: 2,
+                //   blurRadius: 5,
+                //   offset: Offset(1, 3),
+                //   blurStyle: BlurStyle.solid
+                // ),
+              ],
             ),
-            // Expanded(
-            //   child: ClipRRect(
-            //     borderRadius: const BorderRadius.only(
-            //       topLeft: Radius.circular(10),
-            //       topRight: Radius.circular(10),
-            //     ),
-            //     child: Image.network(
-            //       branch.imageName,
-            //       fit: BoxFit.cover,
-            //     ),
-            //   ),
-            // ),
-            // Expanded(
-            //   child: Container(
-            //     padding: const EdgeInsets.all(5),
-            //     decoration: const BoxDecoration(
-            //       borderRadius: BorderRadius.only(
-            //         topLeft: Radius.circular(10),
-            //         topRight: Radius.circular(10),
-            //       ),
-            //       color: Colors.greenAccent,
-            //     ),
-            //     child: Image.network(
-            //       // 'https://via.placeholder.com/600/92c952',
-            //       'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTH7vDN07mCqaSv-VvdFX3VYd2Ic9uFyha4kA&s',
-            //       fit: BoxFit.fill,
-            //     ),
-            //   ),
-            // ),
-            // Expanded(
-            //   child: Container(
-            //     padding: const EdgeInsets.all(10),
-            //     decoration: const BoxDecoration(
-            //       borderRadius: BorderRadius.only(
-            //         bottomLeft: Radius.circular(10),
-            //         bottomRight: Radius.circular(10),
-            //       ),
-            //       color: CommonStyles.branchBg,
-            //     ),
-            //     child: Column(
-            //       crossAxisAlignment: CrossAxisAlignment.stretch,
-            //       children: [
-            //         Text(
-            //           branch.name,
-            //           style: CommonStyles.txSty_16p_fb,
-            //         ),
-            //         Text(branch.address, style: CommonStyles.txSty_12b_f5),
-            //       ],
-            //     ),
-            //   ),
-            // ),
-            Container(
-              // height: MediaQuery.of(context).size.height,
-              padding: const EdgeInsets.all(10),
-              decoration: const BoxDecoration(
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(10),
-                  bottomRight: Radius.circular(10),
-                ),
-                color: CommonStyles.branchBg,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Text(
-                    branch.name,
-                    style: CommonStyles.txSty_16p_fb,
+            child:
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Align(
+                  alignment : Alignment.topLeft,
+                  // top: 0,
+                  //     right: 20,
+                  child: Container(
+                    margin: EdgeInsets.only(top: 20,left: 10),
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Colors.grey,
+                        width: 2.5,
+                      ),
+                      borderRadius: BorderRadius.circular(15.0),
+                    ),
+                    child:
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(13.0),
+                      child: Image.network(
+                        branch.imageName!,
+                        width: 65,
+                        height: 60,
+                         fit: BoxFit.fill,
+                        loadingBuilder: (context, child, loadingProgress) {
+                          if (loadingProgress == null) return child;
+
+                          return Center(child: CircularProgressIndicator.adaptive());
+                        },
+                      ),
+                    ),
+                    width: 65,
+                    height: 60,
                   ),
-                  Text(
-                    branch.address,
-                    maxLines: 3,
-                    overflow: TextOverflow.ellipsis,
-                    style: CommonStyles.txSty_12b_f5.copyWith(
-                        color: Colors.black, fontWeight: FontWeight.w600),
-                  )
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
+                ),
+                // SizedBox(height: 8.0),
+                Padding(padding: EdgeInsets.only(left: 10.0,right: 5.0,top: 5.0,bottom: 5.0),child: Text(
+                  branch.name,
+                  maxLines: 3,
+                  style:  GoogleFonts.outfit(fontWeight: FontWeight.w700,fontSize: 18,color: Color(0xFF11528f)),
+                ),  ),
+                // SizedBox(height: 8.0),
+                Padding(padding: EdgeInsets.only(left: 10.0,right: 5.0,bottom: 5.0),
+                    child:   SizedBox(
+                      height: 70.0,
+                      child:  Text(
+                        branch.address,
+                        maxLines: 4,
+                        style:  GoogleFonts.outfit(fontSize: 12,fontWeight: FontWeight.w500,wordSpacing: 1.2,color: Colors.black.withOpacity(0.8)),
+                      ), ) ),
+                //  SizedBox(height: 5.0),
+                // Display from date and to date multiple times
+                Expanded(child:
+                Align(
+                    alignment: Alignment.bottomLeft,
+                    child:
+                    Container(
+                      height: 30,
+                      margin: const EdgeInsets.only(bottom: 10.0, left: 10.0, top: 5.0),
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: Color(0xFF11528f),
+                        ),
+                        borderRadius: BorderRadius.circular(20.0),
+                      ),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => AddConsulationscreen(agentId:agentid, branchname: branch.name)));
+                        },
+                        style: ElevatedButton.styleFrom(
+                          padding:EdgeInsets.symmetric(horizontal: 10.0), // Adjust padding as needed, // Remove padding
+                          foregroundColor: Color(0xFF8d97e2),
+                          backgroundColor: Colors.transparent,
+                          elevation: 0,
+                          shadowColor: Colors.transparent,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20.0),
+                          ),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Add Consultation',
+                              style: GoogleFonts.outfit(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 14,
+                                color: Color(0xFF11528f),
+                              ),
+                            ),
+                            SizedBox(width: 5),
+                            SvgPicture.asset(
+                              'assets/squareupright.svg',
+                              width: 12.0,
+                              height: 12.0,
+                              color: Color(0xFF11528f),
+                            ),
+                          ],
+                        ),
+                      ),
+                    )
+
+                ))
+
+              ],
+            )
+        ));
+    //   Card(
+    //   elevation: 2,
+    //   shape: RoundedRectangleBorder(
+    //     borderRadius: BorderRadius.circular(10),
+    //   ),
+    //   child: Container(
+    //     height: MediaQuery.of(context).size.height,
+    //     // width: 170,
+    //     width: MediaQuery.of(context).size.width / 2.5,
+    //     decoration: BoxDecoration(
+    //       borderRadius: BorderRadius.circular(10),
+    //       // color: Colors.grey,
+    //       color: CommonStyles.branchBg,
+    //     ),
+    //     child: Column(
+    //       crossAxisAlignment: CrossAxisAlignment.stretch,
+    //       children: [
+    //         Container(
+    //           height: MediaQuery.of(context).size.height / 8.5,
+    //           decoration: BoxDecoration(
+    //             borderRadius: BorderRadius.circular(10),
+    //             color: Colors.grey,
+    //           ),
+    //           child: ClipRRect(
+    //             borderRadius: const BorderRadius.only(
+    //               topLeft: Radius.circular(10),
+    //               topRight: Radius.circular(10),
+    //             ),
+    //             child: Image.network(
+    //               branch.imageName!,
+    //               fit: BoxFit.cover,
+    //             ),
+    //           ),
+    //         ),
+    //         // Expanded(
+    //         //   child: ClipRRect(
+    //         //     borderRadius: const BorderRadius.only(
+    //         //       topLeft: Radius.circular(10),
+    //         //       topRight: Radius.circular(10),
+    //         //     ),
+    //         //     child: Image.network(
+    //         //       branch.imageName,
+    //         //       fit: BoxFit.cover,
+    //         //     ),
+    //         //   ),
+    //         // ),
+    //         // Expanded(
+    //         //   child: Container(
+    //         //     padding: const EdgeInsets.all(5),
+    //         //     decoration: const BoxDecoration(
+    //         //       borderRadius: BorderRadius.only(
+    //         //         topLeft: Radius.circular(10),
+    //         //         topRight: Radius.circular(10),
+    //         //       ),
+    //         //       color: Colors.greenAccent,
+    //         //     ),
+    //         //     child: Image.network(
+    //         //       // 'https://via.placeholder.com/600/92c952',
+    //         //       'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTH7vDN07mCqaSv-VvdFX3VYd2Ic9uFyha4kA&s',
+    //         //       fit: BoxFit.fill,
+    //         //     ),
+    //         //   ),
+    //         // ),
+    //         // Expanded(
+    //         //   child: Container(
+    //         //     padding: const EdgeInsets.all(10),
+    //         //     decoration: const BoxDecoration(
+    //         //       borderRadius: BorderRadius.only(
+    //         //         bottomLeft: Radius.circular(10),
+    //         //         bottomRight: Radius.circular(10),
+    //         //       ),
+    //         //       color: CommonStyles.branchBg,
+    //         //     ),
+    //         //     child: Column(
+    //         //       crossAxisAlignment: CrossAxisAlignment.stretch,
+    //         //       children: [
+    //         //         Text(
+    //         //           branch.name,
+    //         //           style: CommonStyles.txSty_16p_fb,
+    //         //         ),
+    //         //         Text(branch.address, style: CommonStyles.txSty_12b_f5),
+    //         //       ],
+    //         //     ),
+    //         //   ),
+    //         // ),
+    //         Container(
+    //           // height: MediaQuery.of(context).size.height,
+    //           padding: const EdgeInsets.all(10),
+    //           decoration: const BoxDecoration(
+    //             borderRadius: BorderRadius.only(
+    //               bottomLeft: Radius.circular(10),
+    //               bottomRight: Radius.circular(10),
+    //             ),
+    //             color: CommonStyles.branchBg,
+    //           ),
+    //           child: Column(
+    //             crossAxisAlignment: CrossAxisAlignment.stretch,
+    //             children: [
+    //               Text(
+    //                 branch.name,
+    //                 style: CommonStyles.txSty_16p_fb,
+    //               ),
+    //               Text(
+    //                 branch.address,
+    //                 maxLines: 3,
+    //                 overflow: TextOverflow.ellipsis,
+    //                 style: CommonStyles.txSty_12b_f5.copyWith(
+    //                     color: Colors.black, fontWeight: FontWeight.w600),
+    //               )
+    //             ],
+    //           ),
+    //         ),
+    //       ],
+    //     ),
+    //   ),
+    // );
   }
 }

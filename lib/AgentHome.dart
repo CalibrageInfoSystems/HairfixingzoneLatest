@@ -155,21 +155,21 @@ class _AgentHomeState extends State<AgentHome> {
               ),
               label: 'Home',
             ),
-            BottomNavigationBarItem(
-              icon: SvgPicture.asset(
-                'assets/invite-alt.svg',
-                width: 24,
-                height: 24,
-                color: Colors.black.withOpacity(0.6),
-              ),
-              activeIcon: SvgPicture.asset(
-                'assets/invite-alt.svg',
-                width: 24,
-                height: 24,
-                color: CommonUtils.primaryTextColor,
-              ),
-              label: 'Add Consultation',
-            ),
+            // BottomNavigationBarItem(
+            //   icon: SvgPicture.asset(
+            //     'assets/invite-alt.svg',
+            //     width: 24,
+            //     height: 24,
+            //     color: Colors.black.withOpacity(0.6),
+            //   ),
+            //   activeIcon: SvgPicture.asset(
+            //     'assets/invite-alt.svg',
+            //     width: 24,
+            //     height: 24,
+            //     color: CommonUtils.primaryTextColor,
+            //   ),
+            //   label: 'Add Consultation',
+            // ),
             BottomNavigationBarItem(
               icon: SvgPicture.asset(
                 'assets/apps.svg',
@@ -276,12 +276,12 @@ class _AgentHomeState extends State<AgentHome> {
           agentid: widget.userId,
         );
 
-      case 1:
-        return AddConsulationscreen(
-          agentId: widget.userId,
-        );
+      // case 1:
+      //   return AddConsulationscreen(
+      //     agentId: widget.userId,
+      //   );
 
-      case 2:
+      case 1:
         return ViewConsultation(
           agentId: widget.userId,
         );

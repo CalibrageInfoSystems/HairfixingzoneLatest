@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/widgets.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hairfixingzone/AgentDashBoard.dart';
 import 'package:hairfixingzone/AgentHome.dart';
 import 'package:hairfixingzone/services/notifi_service.dart';
@@ -20,7 +21,10 @@ import 'api_config.dart';
 
 class AddConsulationscreen extends StatefulWidget {
   final int agentId;
-  const AddConsulationscreen({super.key, required this.agentId});
+  final String branchname;
+//  final String cityname;
+
+  const AddConsulationscreen({super.key, required this.agentId,required this.branchname});
 
   @override
   AddConsulationscreen_screenState createState() =>
@@ -200,12 +204,21 @@ class AddConsulationscreen_screenState extends State<AddConsulationscreen> {
         },
         child: Scaffold(
             backgroundColor: CommonStyles.whiteColor,
+            appBar: AppBar(
+              backgroundColor:  Color(0xffffffff),
+              automaticallyImplyLeading: false,
+              title:Text(
+                'Add Consultation',
+                style:GoogleFonts.outfit(fontWeight: FontWeight.w700,fontSize: 20,color: Colors.black),
+
+              ),
+            ),
             body: SingleChildScrollView(
               child: Form(
                   key: _formKey,
                   child: Container(
                       padding: const EdgeInsets.symmetric(
-                          vertical: 20, horizontal: 15),
+                          vertical: 5, horizontal: 15),
                       child: Column(
                         children: [
                           const SizedBox(
