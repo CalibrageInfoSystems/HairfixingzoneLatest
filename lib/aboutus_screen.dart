@@ -15,7 +15,10 @@ class AboutUsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: _appBar(context),
-        body: SingleChildScrollView(
+        body: Container(
+          color: Colors.white,
+    child:
+    SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(10.0),
             child: Column(
@@ -52,7 +55,7 @@ class AboutUsScreen extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 16,
                           fontFamily: "Outfit",
-                          color: Color(0xFF662d91),
+                          color: Color(0xFF11528f),
                         )),
                     SizedBox(height: 5),
                   Padding(
@@ -105,7 +108,7 @@ class AboutUsScreen extends StatelessWidget {
               ],
             ),
           ),
-        ));
+        )));
   }
 
   void logOutDialog(BuildContext context) {
@@ -151,7 +154,7 @@ class AboutUsScreen extends StatelessWidget {
   AppBar _appBar(BuildContext context) {
     return AppBar(
         elevation: 0,
-        backgroundColor: const Color(0xFFf3e3ff),
+        backgroundColor: const Color(0xffe2f0fd),
         title: const Text(
           'About Us',
           style: TextStyle(color: Color(0xFF0f75bc), fontSize: 16.0,  fontFamily: "Outfit",),

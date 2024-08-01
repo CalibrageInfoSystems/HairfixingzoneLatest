@@ -10,6 +10,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'AgentBranchModel.dart';
+import 'BranchModel.dart';
 import 'Common/common_styles.dart';
 import 'Common/custom_button.dart';
 import 'Common/custome_form_field.dart';
@@ -21,14 +23,12 @@ import 'api_config.dart';
 
 class AddConsulationscreen extends StatefulWidget {
   final int agentId;
-  final String branchname;
-//  final String cityname;
+  final AgentBranchModel  branch;
 
-  const AddConsulationscreen({super.key, required this.agentId,required this.branchname});
+  const AddConsulationscreen({super.key, required this.agentId, required this.branch});
 
   @override
-  AddConsulationscreen_screenState createState() =>
-      AddConsulationscreen_screenState();
+  AddConsulationscreen_screenState createState() => AddConsulationscreen_screenState();
 }
 
 class AddConsulationscreen_screenState extends State<AddConsulationscreen> {
@@ -54,6 +54,8 @@ class AddConsulationscreen_screenState extends State<AddConsulationscreen> {
   TextEditingController dobController = TextEditingController();
   TextEditingController genderController = TextEditingController();
   TextEditingController mobileNumberController = TextEditingController();
+  TextEditingController cityController = TextEditingController();
+  TextEditingController branchController = TextEditingController();
 
   TextEditingController emailController = TextEditingController();
   TextEditingController remarksController = TextEditingController();
@@ -111,25 +113,26 @@ class AddConsulationscreen_screenState extends State<AddConsulationscreen> {
       DeviceOrientation.portraitUp,
     ]);
 
-    CommonUtils.checkInternetConnectivity().then((isConnected) async {
+    CommonUtils.checkInternetConnectivity().then((isConnected) {
       if (isConnected) {
         print('The Internet Is Connected');
-
-        setState(() async {
+        setState(() {
+          print('Branch Name: ${widget.branch.name}');
+          print('city Name: ${widget.branch.city}');
+          cityController.text = widget.branch.city;
+          branchController.text = widget.branch.name;
           _dateController.text = DateFormat('dd-MM-yyyy').format(DateTime.now());
           visiteddate = DateFormat('yyyy-MM-dd').format(DateTime.now());
-          fetchRadioButtonOptions();
-          getCities(widget.agentId);
-          // _getBranchData(widget.agentId, 0);
         });
-
-        // fetchMyAppointments(userId);
+        fetchRadioButtonOptions();
       } else {
         CommonUtils.showCustomToastMessageLong(
             'Please Check Your Internet Connection', context, 1, 4);
-        print('The Internet Is not  Connected');
+        print('The Internet Is not Connected');
       }
     });
+
+
   }
 
   Future<void> fetchRadioButtonOptions() async {
@@ -271,8 +274,7 @@ class AddConsulationscreen_screenState extends State<AddConsulationscreen> {
                             children: [
                               Text(
                                 'Gender ',
-                                style: TextStyle(
-                                    fontSize: 12, fontWeight: FontWeight.bold),
+                                style:CommonUtils.txSty_12b_fb,
                               ),
                               Text(
                                 '*',
@@ -304,9 +306,7 @@ class AddConsulationscreen_screenState extends State<AddConsulationscreen> {
                                       value: selectedTypeCdId,
                                       iconSize: 30,
                                       icon: null,
-                                      style: const TextStyle(
-                                        color: Colors.black,
-                                      ),
+                                     style:CommonUtils.txSty_12b_fb,
                                       onChanged: (value) {
                                         setState(() {
                                           selectedTypeCdId = value!;
@@ -335,9 +335,7 @@ class AddConsulationscreen_screenState extends State<AddConsulationscreen> {
                                           value: -1,
                                           child: Text(
                                             'Select Gender',
-                                            style: TextStyle(
-                                                color: Colors.grey,
-                                                fontWeight: FontWeight.w500),
+                                            style: CommonStyles.texthintstyle,
                                           ),
                                         ),
                                         ...dropdownItems
@@ -348,7 +346,7 @@ class AddConsulationscreen_screenState extends State<AddConsulationscreen> {
                                           final item = entry.value;
                                           return DropdownMenuItem<int>(
                                             value: index,
-                                            child: Text(item['desc']),
+                                            child: Text(item['desc'],  style:CommonUtils.txSty_12b_fb,),
                                           );
                                         }).toList(),
                                       ]),
@@ -366,10 +364,7 @@ class AddConsulationscreen_screenState extends State<AddConsulationscreen> {
                                       horizontal: 16, vertical: 5),
                                   child: Text(
                                     'Please Select Gender',
-                                    style: TextStyle(
-                                      color: Color.fromARGB(255, 175, 15, 4),
-                                      fontSize: 12,
-                                    ),
+                                    style: CommonStyles.texterrorstyle
                                   ),
                                 ),
                               ],
@@ -420,9 +415,7 @@ class AddConsulationscreen_screenState extends State<AddConsulationscreen> {
                             children: [
                               Text(
                                 'Email',
-                                style: TextStyle(
-                                    fontSize: 12, fontWeight: FontWeight.bold),
-                              ),
+                                style: CommonUtils.txSty_12b_fb)
                               // Text(
                               //   ' *',
                               //   style: TextStyle(color: Colors.red),
@@ -471,232 +464,47 @@ class AddConsulationscreen_screenState extends State<AddConsulationscreen> {
                                 _emailError = false;
                               });
                             },
+                            style: CommonStyles.txSty_14b_fb,
                           ),
                           const SizedBox(
                             height: 10,
                           ),
-                          const Row(
-                            children: [
-                              Text(
-                                'City ',
-                                style: TextStyle(
-                                    fontSize: 12, fontWeight: FontWeight.bold),
-                              ),
-                              Text(
-                                '*',
-                                style: TextStyle(color: Colors.red),
-                              ),
-                            ],
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(
-                                left: 0, top: 5.0, right: 0),
-                            child: Container(
-                              width: MediaQuery.of(context).size.width,
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                  color: isCitySelected
-                                      ? const Color.fromARGB(255, 175, 15, 4)
-                                      : CommonUtils.primaryTextColor,
-                                ),
-                                borderRadius: BorderRadius.circular(5.0),
-                              ),
-                              child: DropdownButtonHideUnderline(
-                                child: ButtonTheme(
-                                  alignedDropdown: true,
-                                  child: DropdownButton<int>(
-                                    value: citySelectedTypeCdId,
-                                    iconSize: 30,
-                                    icon: null,
-                                    style: const TextStyle(color: Colors.black),
-                                    onChanged: (value) async {
-                                      setState(() {
-                                        citySelectedTypeCdId = value!;
-                                        branchselectedTypeCdId =
-                                            -1; // Reset selected branch
-                                        branchValue = null;
-                                        branchName = null;
-                                        BranchesdropdownItems =
-                                            []; // Clear branches list
-                                      });
 
-                                      if (citySelectedTypeCdId != -1) {
-                                        cityValue = cityDropdownItems[
-                                            citySelectedTypeCdId]['typecdid'];
-                                        cityName = cityDropdownItems[
-                                            citySelectedTypeCdId]['desc'];
-                                        print("==========$cityValue$cityName");
-
-                                        await _getBranchData(
-                                            widget.agentId, cityValue!);
-                                        // The BranchesdropdownItems is updated within _getBranchData
-                                      } else {
-                                        print("==========");
-                                        print(cityValue);
-                                        print(cityName);
-                                      }
-                                      setState(() {
-                                        isCitySelected = false;
-                                      });
-                                    },
-                                    items: [
-                                      const DropdownMenuItem<int>(
-                                        value: -1,
-                                        child: Text(
-                                          'Select City',
-                                          style: TextStyle(
-                                              color: Colors.grey,
-                                              fontWeight: FontWeight.w500),
-                                        ),
-                                      ),
-                                      ...cityDropdownItems
-                                          .asMap()
-                                          .entries
-                                          .map((entry) {
-                                        final index = entry.key;
-                                        final item = entry.value;
-                                        return DropdownMenuItem<int>(
-                                          value: index,
-                                          child: Text(item['desc']),
-                                        );
-                                      }).toList(),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          if (isCitySelected)
-                            const Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 16, vertical: 5),
-                                  child: Text(
-                                    'Please Select City',
-                                    style: TextStyle(
-                                        color: Color.fromARGB(255, 175, 15, 4),
-                                        fontSize: 12),
-                                  ),
-                                ),
-                              ],
-                            ),
-
-                          const SizedBox(height: 10),
-
-                          const Row(
-                            children: [
-                              Text(
-                                'Branch ',
-                                style: TextStyle(
-                                    fontSize: 12, fontWeight: FontWeight.bold),
-                              ),
-                              Text(
-                                '*',
-                                style: TextStyle(color: Colors.red),
-                              ),
-                            ],
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              if (citySelectedTypeCdId == -1) {
-                                setState(() {
-                                  isCitySelected = true;
-                                });
+                          CustomeFormField(
+                            label: 'City',
+                            validator: (value) {
+                              // Custom validation logic
+                              if (value == null || value.isEmpty) {
+                                return 'City cannot be empty';
                               }
+                              return null;
                             },
-                            child: AbsorbPointer(
-                              absorbing: citySelectedTypeCdId == -1,
-                              child: Padding(
-                                padding: const EdgeInsets.only(
-                                    left: 0, top: 5.0, right: 0),
-                                child: Container(
-                                  width: MediaQuery.of(context).size.width,
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                      color: isBranchSelected
-                                          ? const Color.fromARGB(
-                                              255, 175, 15, 4)
-                                          : CommonUtils.primaryTextColor,
-                                    ),
-                                    borderRadius: BorderRadius.circular(5.0),
-                                  ),
-                                  child: DropdownButtonHideUnderline(
-                                    child: ButtonTheme(
-                                      alignedDropdown: true,
-                                      child: DropdownButton<int>(
-                                        value: branchselectedTypeCdId,
-                                        iconSize: 30,
-                                        icon: null,
-                                        style: const TextStyle(
-                                            color: Colors.black),
-                                        onChanged: (value) {
-                                          setState(() {
-                                            branchselectedTypeCdId = value!;
-                                            if (branchselectedTypeCdId != -1) {
-                                              branchValue =
-                                                  BranchesdropdownItems[
-                                                          branchselectedTypeCdId]
-                                                      ['id'];
-                                              branchName = BranchesdropdownItems[
-                                                      branchselectedTypeCdId]
-                                                  ['name'];
-
-                                              print("branchValue:$branchValue");
-                                              print("branchName:$branchName");
-                                            } else {
-                                              print("==========");
-                                              print(branchValue);
-                                              print(branchName);
-                                            }
-                                            isBranchSelected = false;
-                                          });
-                                        },
-                                        items: [
-                                          const DropdownMenuItem<int>(
-                                            value: -1,
-                                            child: Text(
-                                              'Select Branch',
-                                              style: TextStyle(
-                                                  color: Colors.grey,
-                                                  fontWeight: FontWeight.w500),
-                                            ),
-                                          ),
-                                          ...BranchesdropdownItems.asMap()
-                                              .entries
-                                              .map((entry) {
-                                            final index = entry.key;
-                                            final item = entry.value;
-                                            return DropdownMenuItem<int>(
-                                              value: index,
-                                              child: Text(item['name']),
-                                            );
-                                          }).toList(),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
+                            inputFormatters: [
+                              FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]')),
+                            ],
+                            controller: cityController,
+                            keyboardType: TextInputType.name,
+                            readOnly: true,
                           ),
-                          if (isBranchSelected)
-                            const Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 16, vertical: 5),
-                                  child: Text(
-                                    'Please Select Branch',
-                                    style: TextStyle(
-                                        color: Color.fromARGB(255, 175, 15, 4),
-                                        fontSize: 12),
-                                  ),
-                                ),
-                              ],
-                            ),
+                          const SizedBox(height: 10),
+                          CustomeFormField(
+                            label: 'Branch',
+                            validator: (value) {
+                              // Custom validation logic
+                              if (value == null || value.isEmpty) {
+                                return 'Branch cannot be empty';
+                              }
+                              return null;
+                            },
+                            inputFormatters: [
+                              FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]')),
+                            ],
+                            controller: branchController,
+                            keyboardType: TextInputType.name,
+                            readOnly: true,
+                          ),
+
+
                           const SizedBox(
                             height: 10,
                           ),
@@ -704,8 +512,7 @@ class AddConsulationscreen_screenState extends State<AddConsulationscreen> {
                             children: [
                               Text(
                                 'Visiting Date ',
-                                style: TextStyle(
-                                    fontSize: 12, fontWeight: FontWeight.bold),
+                                style:CommonUtils.txSty_12b_fb,
                               ),
                               Text(
                                 '*',
@@ -735,7 +542,7 @@ class AddConsulationscreen_screenState extends State<AddConsulationscreen> {
                                   top: 15, bottom: 10, left: 15, right: 15),
                               focusedBorder: OutlineInputBorder(
                                 borderSide: const BorderSide(
-                                  color: Color(0xFF662e91),
+                                  color: Color(0xFF11528f),
                                 ),
                                 borderRadius: BorderRadius.circular(6.0),
                               ),
@@ -752,14 +559,13 @@ class AddConsulationscreen_screenState extends State<AddConsulationscreen> {
                               ),
                               hintText: 'Date',
                               counterText: "",
-                              hintStyle: const TextStyle(
-                                  color: Colors.grey,
-                                  fontWeight: FontWeight.w400),
+                              hintStyle: CommonStyles.texthintstyle,
                               suffixIcon: const Icon(
                                 Icons.calendar_today,
-                                color: Color(0xFF662e91),
+                                color: Color(0xFF11528f),
                               ),
                             ),
+                            style: CommonStyles.txSty_14b_fb,
                             //          validator: validateDate,
                           ),
                           const SizedBox(
@@ -769,8 +575,7 @@ class AddConsulationscreen_screenState extends State<AddConsulationscreen> {
                             children: [
                               Text(
                                 'Visiting Time ',
-                                style: TextStyle(
-                                    fontSize: 12, fontWeight: FontWeight.bold),
+                                style:CommonUtils.txSty_12b_fb,
                               ),
                               Text(
                                 '*',
@@ -794,12 +599,13 @@ class AddConsulationscreen_screenState extends State<AddConsulationscreen> {
                               }
                               return null;
                             },
+
                             decoration: InputDecoration(
                               contentPadding: const EdgeInsets.only(
                                   top: 15, bottom: 10, left: 15, right: 15),
                               focusedBorder: OutlineInputBorder(
                                 borderSide: const BorderSide(
-                                  color: Color(0xFF662e91),
+                                  color: Color(0xFF11528f),
                                 ),
                                 borderRadius: BorderRadius.circular(6.0),
                               ),
@@ -816,14 +622,14 @@ class AddConsulationscreen_screenState extends State<AddConsulationscreen> {
                               ),
                               hintText: 'Time',
                               counterText: "",
-                              hintStyle: const TextStyle(
-                                  color: Colors.grey,
-                                  fontWeight: FontWeight.w400),
+                              hintStyle: CommonStyles.texthintstyle,
+                              errorStyle: CommonStyles.texterrorstyle,
                               suffixIcon: const Icon(
                                 Icons.access_time,
-                                color: Color(0xFF662e91),
+                                color: Color(0xFF11528f),
                               ),
                             ),
+                            style: CommonStyles.txSty_14b_fb,
                           ),
                           const SizedBox(
                             height: 10,
@@ -832,8 +638,7 @@ class AddConsulationscreen_screenState extends State<AddConsulationscreen> {
                             children: [
                               Text(
                                 'Remark ',
-                                style: TextStyle(
-                                    fontSize: 12, fontWeight: FontWeight.bold),
+                                style:CommonUtils.txSty_12b_fb,
                               ),
                               // Text(
                               //   '*',
@@ -891,9 +696,8 @@ class AddConsulationscreen_screenState extends State<AddConsulationscreen> {
                               hintText: 'Enter Remark ',
                               counterText: "",
                               // counterText: "",
-                              hintStyle: const TextStyle(
-                                  color: Colors.grey,
-                                  fontWeight: FontWeight.w400),
+                              hintStyle:CommonStyles.texthintstyle,
+                              errorStyle: CommonStyles.texterrorstyle,
                             ),
                             //  validator: validateremarks,
                             onChanged: (value) {
@@ -914,8 +718,11 @@ class AddConsulationscreen_screenState extends State<AddConsulationscreen> {
                                   );
                                 }
                                 _remarksError = false;
+
                               }); // Update the UI when text changes
                             },
+
+                            style: CommonStyles.txSty_14b_fb,
                           ),
 
                           const SizedBox(
@@ -939,8 +746,8 @@ class AddConsulationscreen_screenState extends State<AddConsulationscreen> {
 
   Future<void> validating() async {
     validateGender(selectedName);
-    validateCity(cityName);
-    validatebranch(branchName);
+    // validateCity(cityName);
+    // validatebranch(branchName);
 
     if (_formKey.currentState!.validate()) {
       _printVisitingDateTime();
@@ -953,8 +760,7 @@ class AddConsulationscreen_screenState extends State<AddConsulationscreen> {
 
       if (isFullNameValidate &&
           isGenderValidate &&
-          isMobileNumberValidate &&
-          isBranchValidate) {
+          isMobileNumberValidate ) {
         updateUser();
       }
     }
@@ -1040,26 +846,9 @@ class AddConsulationscreen_screenState extends State<AddConsulationscreen> {
     //   setState(() {});
   }
 
-  void validateCity(String? value) {
-    if (value == null || value.isEmpty) {
-      isCitySelected = true;
-      isCityValidate = false;
-    } else {
-      isCitySelected = false;
-      isCityValidate = true;
-    }
-  }
 
-  void validatebranch(String? value) {
-    if (value == null || value.isEmpty) {
-      isBranchSelected = true;
-      isBranchValidate = false;
-    } else {
-      isBranchSelected = false;
-      isBranchValidate = true;
-    }
-    //  setState(() {});
-  }
+
+
 
   String? validateEmail(String? value) {
     if (value!.isEmpty) {
@@ -1122,7 +911,7 @@ class AddConsulationscreen_screenState extends State<AddConsulationscreen> {
 
   Future<void> updateUser() async {
     validateGender(selectedName);
-    validatebranch(branchName);
+ //   validatebranch(branchName);
     if (_formKey.currentState!.validate()) {
       DateTime now = DateTime.now();
       String mobilenumber = mobileNumberController.text;
@@ -1139,10 +928,10 @@ class AddConsulationscreen_screenState extends State<AddConsulationscreen> {
         "genderTypeId": selectedValue,
         "phoneNumber": mobilenumber,
         "email": apiEmail,
-        "branchId": branchValue,
+        "branchId": widget.branch.id,
         "isActive": true,
         "remarks": apiRemarks,
-        "createdByUserId": 8,
+        "createdByUserId": widget.agentId,
         "createdDate": '$now',
         "updatedByUserId": null,
         "updatedDate": null,
@@ -1150,9 +939,8 @@ class AddConsulationscreen_screenState extends State<AddConsulationscreen> {
       };
       print('Object: ${json.encode(request)}');
       try {
-        // final String ee = baseUrl + addupdateconsulation;
-        const String ee =
-            'http://182.18.157.215/SaloonApp/API/api/Consultation/AddUpdateConsultation';
+      final String ee = baseUrl + addupdateconsulation;
+        //const String ee = 'http://182.18.157.215/SaloonApp/API/api/Consultation/AddUpdateConsultation';
         print(ee);
         final url1 = Uri.parse(ee);
 
@@ -1321,3 +1109,4 @@ class AddConsulationscreen_screenState extends State<AddConsulationscreen> {
     }
   }
 }
+

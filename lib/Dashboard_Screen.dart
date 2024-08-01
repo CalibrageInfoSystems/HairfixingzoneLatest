@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
 
+
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hairfixingzone/BranchesModel.dart';
@@ -437,7 +438,8 @@ class _CustomerDashBoardState extends State<CustomerDashBoard>  with SingleTicke
         child: isLoading
             ? Center(child: CircularProgressIndicator())
             : FlutterCarousel(
-          options: CarouselOptions(
+          options:
+          CarouselOptions(
             floatingIndicator: true,
             height: 200,
             viewportFraction: 1.0,
@@ -447,12 +449,13 @@ class _CustomerDashBoardState extends State<CustomerDashBoard>  with SingleTicke
             autoPlayCurve: Curves.fastOutSlowIn,
             enableInfiniteScroll: true,
             slideIndicator: CircularSlideIndicator(
-              itemSpacing: 10,
-              padding: const EdgeInsets.only(bottom: 10.0),
-              indicatorBorderColor: Color(0xFF11528f),
-              currentIndicatorColor: Color(0xFF11528f),
-              indicatorRadius: 4,
-            ),
+
+                slideIndicatorOptions: SlideIndicatorOptions(itemSpacing: 10,
+                  padding: const EdgeInsets.only(bottom: 10.0),
+                  indicatorBorderColor: Color(0xFF11528f),
+                  currentIndicatorColor: Color(0xFF11528f),
+                  indicatorRadius: 4,
+                ),),
             autoPlayAnimationDuration: const Duration(milliseconds: 800),
           ),
           items: _items.map((item) {
@@ -495,18 +498,19 @@ class _CustomerDashBoardState extends State<CustomerDashBoard>  with SingleTicke
                       color: Color(0xFF11528f).withOpacity(0.9), // Set the background color here
                       child: Stack(
                         children: [
-                          ListView.builder(
-                            controller: _scrollController,
-                            scrollDirection: Axis.horizontal,
-                            itemCount: 2, // Ensures the image can scroll infinitely
-                            itemBuilder: (context, index) {
-                              return Image.asset(
-                                'assets/bar_texture_rec.png',
-                                fit: BoxFit.cover,
-                                width: MediaQuery.of(context).size.width,
-                              );
-                            },
-                          ),
+                        ListView.builder(
+                        controller: _scrollController,
+                        scrollDirection: Axis.horizontal,
+                        itemCount: 2, // Ensures the image can scroll infinitely
+                        physics: const SlowScrollPhysics(), // Apply custom scroll physics here
+                        itemBuilder: (context, index) {
+                          return Image.asset(
+                            'assets/bar_texture_rec.png',
+                            fit: BoxFit.cover,
+                            width: MediaQuery.of(context).size.width,
+                          );
+                        },
+                      ),
                           Center(
                             child: Padding(
                               padding: EdgeInsets.only(left: 10.0, right: 20.0), // Add padding to icon
@@ -538,63 +542,8 @@ class _CustomerDashBoardState extends State<CustomerDashBoard>  with SingleTicke
                   ),
 
 
-                  // SizedBox(
-                  //     height: 50.0,
-                  //     child:Stack(
-                  //       children: [
-                  //         ListView.builder(
-                  //           controller: _scrollController,
-                  //           scrollDirection: Axis.horizontal,
-                  //           itemCount: 2, // Ensures the image can scroll infinitely
-                  //           itemBuilder: (context, index) {
-                  //             return Image.asset(
-                  //               'assets/flashbg.png',
-                  //               fit: BoxFit.cover,
-                  //               width: MediaQuery.of(context).size.width,
-                  //             );
-                  //           },
-                  //         ),
-                  //         Center(
-                  //           child: Text(
-                  //             marqueeText!,
-                  //             style:    GoogleFonts.outfit(fontWeight: FontWeight.w500,fontSize: 16,color: Colors.white),
-                  //           ),
-                  //         ),
-                  //       ],
-                  //     )),
 
                   SizedBox(height: 10),
-                  // FutureBuilder(
-                  //   future: getMarqueeText(),
-                  //   builder: (context, snapshot) {
-                  //     if (snapshot.connectionState == ConnectionState.waiting) {
-                  //       return const SizedBox();
-                  //     } else if (snapshot.hasError) {
-                  //       return const SizedBox();
-                  //     } else {
-                  //       if (marqueeText != null) {
-                  //         return Container(
-                  //           height: 40,
-                  //           decoration: const BoxDecoration(
-                  //             image: DecorationImage(
-                  //               fit: BoxFit.cover,
-                  //               image: AssetImage(
-                  //                 'assets/flashbg.png',
-                  //               ),
-                  //             ),
-                  //           ),
-                  //           child: Marquee(
-                  //             text: marqueeText!,
-                  //             style: CommonStyles.text16white,
-                  //             velocity: _shouldStartMarquee ? 30 : 0,
-                  //           ),
-                  //         );
-                  //       } else {
-                  //         return const SizedBox();
-                  //       }
-                  //     }
-                  //   },
-                  // ),
 
 
 
@@ -768,7 +717,22 @@ Align(
       borderRadius: BorderRadius.circular(20.0),
     ),
     child: ElevatedButton(
-      onPressed: () {},
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => Bookingscreen(
+              branchId: branch.id!,
+              branchname: branch.name!,
+              branchaddress: branch.address!,
+              phonenumber: branch.mobileNumber!,
+              branchImage: branch.imageName!,
+              latitude: branch.latitude,
+              longitude: branch.longitude,
+            ),
+          ),
+        );
+      },
       style: ElevatedButton.styleFrom(
         padding:EdgeInsets.symmetric(horizontal: 10.0), // Adjust padding as needed, // Remove padding
         foregroundColor: Color(0xFF8d97e2),
@@ -965,202 +929,30 @@ Align(
     );
   }
 }
-// child:     Align(
-//   alignment: Alignment.topRight,
-//   child: Padding(
-//     padding: const EdgeInsets.only(left: 15.0),
-//     child: Container(
-//       width: 110,
-//       height: 65,
-//       decoration: BoxDecoration(
-//         borderRadius: BorderRadius.circular(10.0),
-//       ),
-//       child: ClipRRect(
-//         borderRadius: BorderRadius.circular(7.0),
-//         child: Image.network(
-//           branch.imageName!,
-//           width: 110,
-//           height: 65,
-//           fit: BoxFit.fill,
-//           loadingBuilder: (context, child, loadingProgress) {
-//             if (loadingProgress == null) return child;
-//
-//             return const Center(child: CircularProgressIndicator.adaptive());
-//           },
-//         ),
-//       ),
-//     ),
-//   ),
-// ),
 
-// Card(
-//   shadowColor: Colors.transparent,
-//   surfaceTintColor: Colors.transparent,
-//   child: ClipRRect(
-//     // borderRadius: const BorderRadius.only(
-//     //   topRight: Radius.circular(29.0),
-//     //   bottomLeft: Radius.circular(29.0),
-//     // ),
-//     child:
-//     Container(
-//       decoration: BoxDecoration(
-//         gradient: const LinearGradient(
-//           colors: [
-//             Color(0xFFFFFFFF),
-//             Color(0xFFFFFFFF),
-//           ],
-//           begin: Alignment.centerLeft,
-//           end: Alignment.centerRight,
-//         ),
-//         border: Border.all(
-//           color: Colors.grey,
-//           //  color: const Color(0xFF8d97e2), // Add your desired border color here
-//           width: 1.0, // Set the border width
-//         ),
-//         borderRadius: BorderRadius.circular(10.0), // Optional: Add border radius if needed
-//       ),
-//       child:
-//
-//
-//
-//           // Column(
-//           //   crossAxisAlignment: CrossAxisAlignment.start,
-//           // //  mainAxisAlignment: MainAxisAlignment.start,
-//           //   children: [
-//           //
-//           //     Row(
-//           //       mainAxisAlignment: MainAxisAlignment.spaceAround,
-//           //       children: [
-//           //         Text(branch.name, style: CommonStyles.txSty_18b_fb),
-//           //         Align(
-//           //           alignment: Alignment.topRight,
-//           //           child:  Padding(
-//           //             padding: const EdgeInsets.only(left: 15.0),
-//           //             child: Container(
-//           //               width: 110,
-//           //               height: 65,
-//           //               decoration: BoxDecoration(
-//           //                 borderRadius: BorderRadius.circular(10.0),
-//           //               ),
-//           //               child: ClipRRect(
-//           //                 borderRadius: BorderRadius.circular(7.0),
-//           //                 child: Image.network(
-//           //                   branch.imageName!,
-//           //                   width: 110,
-//           //                   height: 65,
-//           //                   fit: BoxFit.fill,
-//           //                   loadingBuilder: (context, child, loadingProgress) {
-//           //                     if (loadingProgress == null) return child;
-//           //
-//           //                     return const Center(child: CircularProgressIndicator.adaptive());
-//           //                   },
-//           //                 ),
-//           //               ),
-//           //             ),
-//           //           ),
-//           //         ),
-//           //       ],
-//           //     ),
-//           //
-//           //     Expanded(
-//           //       child: Text(branch.address, style: CommonStyles.txSty_12b_fb),
-//           //     ),
-//           //   ],
-//           // ),
-//
-//           // Expanded(
-//           //   child: Padding(
-//           //     padding: const EdgeInsets.only(left: 15.0),
-//           //     child:
-//           //     Column(
-//           //       mainAxisAlignment: MainAxisAlignment.start,
-//           //       crossAxisAlignment: CrossAxisAlignment.start,
-//           //       children: [
-//           //         // Padding(
-//           //         //   padding: const EdgeInsets.only(top: 15.0),
-//           //         //   child: Text(branch.name, style: CommonStyles.txSty_18b_fb),
-//           //         // ),
-//           //         const SizedBox(height: 4.0),
-//           //         Expanded(
-//           //           child: Padding(
-//           //             padding: const EdgeInsets.only(right: 10.0),
-//           //             child: Column(
-//           //               crossAxisAlignment: CrossAxisAlignment.start,
-//           //               children: [
-//           //                 Row(
-//           //                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//           //                   children: [
-//           //                     //MARK: location_icon
-//           //                     // Image.asset(
-//           //                     //   'assets/location_icon.png',
-//           //                     //   width: 20,
-//           //                     //   height: 18,
-//           //                     // ),
-//           //                     // const SizedBox(
-//           //                     //     width:
-//           //                     //         4.0),
-//           //                     // Expanded(
-//           //                     //   child: Text(branch.address, style: CommonStyles.txSty_12b_fb),
-//           //                     // ),
-//           //                   ],
-//           //                 ),
-//           //                 const Spacer(flex: 3),
-//           //               ],
-//           //             ),
-//           //           ),
-//           //         ),
-//           //         // Align(
-//           //         //   alignment: Alignment.bottomRight,
-//           //         //   child: Container(
-//           //         //     height: 26,
-//           //         //     margin: const EdgeInsets.only(bottom: 10.0, right: 10.0),
-//           //         //     decoration: BoxDecoration(
-//           //         //       color: Colors.white,
-//           //         //       border: Border.all(
-//           //         //         color: const Color(0xFF8d97e2),
-//           //         //       ),
-//           //         //       borderRadius: BorderRadius.circular(10.0),
-//           //         //     ),
-//           //         //     child: ElevatedButton(
-//           //         //       onPressed: () {},
-//           //         //       style: ElevatedButton.styleFrom(
-//           //         //         foregroundColor: const Color(0xFF8d97e2),
-//           //         //         backgroundColor: Colors.transparent,
-//           //         //         elevation: 0,
-//           //         //         shadowColor: Colors.transparent,
-//           //         //         shape: RoundedRectangleBorder(
-//           //         //           borderRadius: BorderRadius.circular(10.0),
-//           //         //         ),
-//           //         //       ),
-//           //         //       child: Row(
-//           //         //         mainAxisSize: MainAxisSize.min,
-//           //         //         children: [
-//           //         //           SvgPicture.asset(
-//           //         //             'assets/datepicker_icon.svg',
-//           //         //             width: 15.0,
-//           //         //             height: 15.0,
-//           //         //           ),
-//           //         //           const SizedBox(width: 5),
-//           //         //           const Text(
-//           //         //             'Book Now',
-//           //         //             style: TextStyle(
-//           //         //               fontSize: 13,
-//           //         //               color: Color(0xFF8d97e2),
-//           //         //             ),
-//           //         //           ),
-//           //         //         ],
-//           //         //       ),
-//           //         //     ),
-//           //         //   ),
-//           //         // ),
-//           //       ],
-//           //     ),
-//           //   ),
-//           // ),
-//
-//     ),
-//   ),
-// ),
+class SlowScrollPhysics extends ScrollPhysics {
+  const SlowScrollPhysics({ScrollPhysics? parent}) : super(parent: parent);
+
+  @override
+  SlowScrollPhysics applyTo(ScrollPhysics? ancestor) {
+    return SlowScrollPhysics(parent: buildParent(ancestor));
+  }
+
+  @override
+  double get maxFlingVelocity => super.maxFlingVelocity * 0.2; // Decrease the fling velocity
+
+  @override
+  double get minFlingVelocity => super.minFlingVelocity * 0.2; // Decrease the minimum fling velocity
+
+  @override
+  Simulation? createBallisticSimulation(ScrollMetrics position, double velocity) {
+    if ((velocity.abs() >= minFlingVelocity)) {
+      return super.createBallisticSimulation(position, velocity * 0.2);
+    }
+    return super.createBallisticSimulation(position, velocity);
+  }
+}
+
 class BranchCard extends StatelessWidget {
   final Model_branch branch;
 

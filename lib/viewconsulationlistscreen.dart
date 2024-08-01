@@ -462,7 +462,7 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
   Padding consultationCard(BuildContext context, int index,
       GlobalKey<State<StatefulWidget>> mobilenumber) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 3),
       child: Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         elevation: 5,
@@ -472,18 +472,19 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
               decoration: BoxDecoration(
                 gradient: const LinearGradient(
                   colors: [
-                    Color(0xFFFFFFFF),
-                    Color(0xFFFFFFFF),
+                    Color(0xffe2f0fd),
+                 Color(0xffe2f0fd),
+
                   ],
                   begin: Alignment.centerLeft,
                   end: Alignment.centerRight,
                 ),
-                border: Border.all(
-                  color: Colors.grey,
-                  //  color: const Color(0xFF8d97e2), // Add your desired border color here
-                  width:
-                  1.0, // Set the border width
-                ),
+                // border: Border.all(
+                //   color: Colors.grey,
+                //   //  color: const Color(0xFF8d97e2), // Add your desired border color here
+                //   width:
+                //   1.0, // Set the border width
+                // ),
                 borderRadius: BorderRadius.circular(
                     10.0), // Optional: Add border radius if needed
               ),
@@ -503,7 +504,7 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
                     Text(
                       '$date',
                       style: const TextStyle(
-                        fontSize: 22,
+                        fontSize: 28,
                         fontFamily: "Outfit",
                         fontWeight: FontWeight.w700,
                         color: Color(0xFF0f75bc),
@@ -545,6 +546,9 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
                                 color: Colors.black,
                               ),
                             ),
+                            const SizedBox(
+                              height: 2.0,
+                            ),
                             Text(
                               consultationslist[index].consultationName,
                               style: const TextStyle(
@@ -553,6 +557,10 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
                                 fontWeight: FontWeight.w500,
                                 color: Colors.black,
                               ),
+                            ),
+                            const SizedBox(
+                              height:
+                              5.0,
                             ),
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -601,11 +609,11 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
                           ],
                         ),
                       ),
-                      const SizedBox(
-                        height: 5.0,
-                      ),
+                      // const SizedBox(
+                      //   height: 5.0,
+                      // ),
                       SizedBox(
-                        width: MediaQuery.of(context).size.width / 3.2,
+                        width: MediaQuery.of(context).size.width / 3,
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -635,9 +643,9 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
                       ),
                     ],
                   ),
-                  // SizedBox(
-                  //   height: 5.0,
-                  // ),
+                  SizedBox(
+                    height: 5.0,
+                  ),
                   // Text(
                   //   consultationslist[index].remarks,
                   //   style: const TextStyle(
@@ -684,7 +692,7 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
   AppBar _appBar(BuildContext context) {
     return AppBar(
         elevation: 0,
-        backgroundColor: const Color(0xffffffff),
+        backgroundColor: const Color(0xffe2f0fd),
         title: const Text(
           'View Consultation',
           style: TextStyle(color: Color(0xFF0f75bc), fontSize: 16.0, fontFamily: "Outfit",),
@@ -705,7 +713,7 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
         leading: IconButton(
           icon: const Icon(
             Icons.arrow_back_ios,
-            //  color: CommonUtils.primaryTextColor,
+             color: CommonUtils.primaryTextColor,
           ),
           onPressed: () {
             Navigator.of(context).pop();

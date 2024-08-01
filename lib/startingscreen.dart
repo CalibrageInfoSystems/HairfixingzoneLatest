@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:hairfixingzone/Common/common_styles.dart';
 
 import 'AgentLogin.dart';
 import 'CommonUtils.dart';
 import 'CustomerLoginScreen.dart';
 import 'CustomerRegisterScreen.dart';
-import 'agentloginscreen.dart';
+
 
 class startingscreen extends StatefulWidget {
   @override
@@ -37,6 +38,7 @@ class _startingscreenState extends State<startingscreen> {
           SystemNavigator.pop();
           return true;
         },
+
         child: Scaffold(
           backgroundColor: Color(0xFFefdbfe), // Background color
           body: Column(
@@ -104,7 +106,7 @@ class _startingscreenState extends State<startingscreen> {
                               },
                               child: Text(
                                 'Login',
-                                style: TextStyle(fontSize: 20), // Increased font size
+                                style: CommonStyles.txSty_20wh_fb, // Increased font size
                               ),
                               style: ButtonStyle(
                                 minimumSize: MaterialStateProperty.all(Size(150, 40)), // Set the minimum size for the button
@@ -115,13 +117,13 @@ class _startingscreenState extends State<startingscreen> {
                                 ),
                                 backgroundColor: MaterialStateProperty.resolveWith<Color>(
                                   (Set<MaterialState> states) {
-                                    return Color(0xFF662e91); // Use purple background color
+                                    return Color(0xFF11528f); // Use purple background color
                                   },
                                 ),
                                 shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                                   RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(25.0),
-                                    side: BorderSide(color: Color(0xFF662e91), width: 2.0),
+                                    side: BorderSide(color: Color(0xFF11528f), width: 2.0),
                                   ),
                                 ),
                               ),
@@ -137,7 +139,7 @@ class _startingscreenState extends State<startingscreen> {
                               },
                               child: Text(
                                 'Register',
-                                style: TextStyle(fontSize: 20), // Increased font size
+                                style: CommonStyles.txSty_20bl_fb, // Increased font size
                               ),
                               style: ButtonStyle(
                                 minimumSize: MaterialStateProperty.all(Size(150, 40)), // Set the minimum size for the button
@@ -154,7 +156,7 @@ class _startingscreenState extends State<startingscreen> {
                                 shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                                   RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(25.0),
-                                    side: BorderSide(color: Color(0xFF0f75bc), width: 2.0),
+                                    side: BorderSide(color: Color(0xFF11528f), width: 2.0),
                                   ),
                                 ),
                               ),

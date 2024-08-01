@@ -14,7 +14,7 @@ class contactus extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
           elevation: 0,
-          backgroundColor: const Color(0xFFf3e3ff),
+          backgroundColor: const Color(0xffe2f0fd),
           title: const Text(
             'Contact Us',
             style: TextStyle(
@@ -33,6 +33,7 @@ class contactus extends StatelessWidget {
             },
           )),
       body: Container(
+        color: Colors.white,
         child: Column(
           //  mainAxisAlignment: MainAxisAlignment.start,
           children: [

@@ -10,11 +10,11 @@ import '../NewScreen.dart';
 
 class CommonStyles {
   // colors
-  static const statusBlueBg = Color(0xFFd9edfd);
-  static const statusBlueText = Color(0xFF004998);
+  static const statusBlueBg = Color(0xffc3c8cc);
+  static const statusBlueText = Color(0xFF11528f);
   static const statusGreenBg = Color(0xFFe5ffeb);
   static const statusGreenText = Color(0xFF287d02);
-  static const statusYellowBg = Color(0xFFfcf2dd);
+  static const statusYellowBg = Color(0xfff8e7cb);
   static const statusYellowText = Color(0xFFd48202);
   static const statusRedBg = Color(0xFFffdedf);
   static const statusRedText = Color.fromARGB(255, 236, 62, 68);
@@ -23,10 +23,11 @@ class CommonStyles {
   static const blackColor = Colors.black;
   static const blackColorShade = Color(0xFF5f5f5f);
   static const primaryColor = Color(0xFFf7ebff);
-  static const primaryTextColor = Color(0xFF662e91);
+  static const primaryTextColor = Color(0xFF11528f);
   static const formFieldErrorBorderColor = Color(0xFFff0000);
   static const blueColor = Color(0xFF0f75bc);
   static const branchBg = Color(0xFFcfeaff);
+  static const primarylightColor = Color(0xffe2f0fd);
   static const greenColor = Colors.greenAccent;
   static const whiteColor = Colors.white;
   // styles
@@ -36,7 +37,30 @@ class CommonStyles {
     fontWeight: FontWeight.w500,
     color: blackColor,
   );
-
+  static const TextStyle texthintstyle = TextStyle(
+    fontSize: 14,
+    fontFamily: "Outfit",
+    fontWeight: FontWeight.w500,
+    color: Colors.grey,
+  );
+  static const TextStyle texterrorstyle = TextStyle(
+    fontSize: 14,
+    fontFamily: "Outfit",
+    fontWeight: FontWeight.w500,
+    color: Color.fromARGB(255, 175, 15, 4),
+  );
+  static const TextStyle txSty_20wh_fb = TextStyle(
+    fontSize: 20,
+    fontFamily: "Outfit",
+    fontWeight: FontWeight.w500,
+    color: whiteColor,
+  );
+  static const TextStyle txSty_20bl_fb = TextStyle(
+    fontSize: 20,
+    fontFamily: "Outfit",
+    fontWeight: FontWeight.w500,
+    color: primaryTextColor,
+  );
   static const TextStyle txSty_14b_f5 = TextStyle(
     fontSize: 14,
     fontFamily: "Outfit",
@@ -53,7 +77,7 @@ class CommonStyles {
     fontSize: 16,
     fontFamily: "Outfit",
     fontWeight: FontWeight.w600,
-    color: greenColor,
+    color: statusGreenText,
   );
   static const TextStyle txSty_14blu_f5 = TextStyle(
     fontSize: 14,
@@ -88,13 +112,25 @@ class CommonStyles {
   static const TextStyle txSty_18b_fb = TextStyle(
     fontSize: 18,
     color: Colors.black,
-    fontWeight: FontWeight.bold,
+    fontWeight: FontWeight.w600,
+    fontFamily: 'Outfit',
+  );
+  static const TextStyle txSty_16b6_fb = TextStyle(
+    fontSize: 16,
+    color: Colors.black,
+    fontWeight: FontWeight.w700,
     fontFamily: 'Outfit',
   );
   static const TextStyle txSty_16b_fb = TextStyle(
     fontSize: 16,
     color: Colors.black,
-    fontWeight: FontWeight.bold,
+    fontWeight: FontWeight.w500,
+    fontFamily: 'Outfit',
+  );
+  static const TextStyle txSty_14b_fb = TextStyle(
+    fontSize: 14,
+    color: Colors.black,
+    fontWeight: FontWeight.w500,
     fontFamily: 'Outfit',
   );
   static const TextStyle header_Styles = TextStyle(
@@ -124,7 +160,7 @@ class CommonStyles {
   static const TextStyle txSty_20p_fb = TextStyle(
     fontSize: 20,
     fontFamily: "Outfit",
-    fontWeight: FontWeight.bold,
+    fontWeight: FontWeight.w700,
     color: primaryTextColor,
     letterSpacing: 2,
   );
@@ -158,8 +194,8 @@ class CommonStyles {
   static const TextStyle txSty_20blu_fb = TextStyle(
     fontSize: 20,
     fontFamily: "Outfit",
-    fontWeight: FontWeight.bold,
-    color: blueColor,
+    fontWeight: FontWeight.w700,
+    color: primaryTextColor,
   );
   static const TextStyle txSty_20w_fb = TextStyle(
     fontSize: 20,
@@ -172,6 +208,7 @@ class CommonStyles {
     fontWeight: FontWeight.w600,
     color: CommonStyles.whiteColor,
   );
+
   static TextStyle dayTextStyle =
       const TextStyle(color: Colors.black, fontWeight: FontWeight.w700);
 

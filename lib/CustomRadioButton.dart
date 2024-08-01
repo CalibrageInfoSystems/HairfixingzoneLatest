@@ -24,7 +24,7 @@ class _CustomRadioButtonState extends State<CustomRadioButton> {
           shape: BoxShape.circle,
           border: Border.all(
             width: 2,
-            color: widget.selected ? Color(0xFF163CF1) : Colors.grey,
+            color: widget.selected ? Color(0xFF11528f) : Colors.grey,
           ),
         ),
         child: widget.selected

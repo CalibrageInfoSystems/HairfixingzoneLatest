@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hairfixingzone/EditProfile.dart';
 import 'package:hairfixingzone/Product_My.dart';
-import 'package:hairfixingzone/SelectCity_Branch.dart';
 import 'package:hairfixingzone/MyProductsProvider.dart';
 import 'package:hairfixingzone/Rescheduleslotscreen.dart';
 import 'package:hairfixingzone/aboutus_screen.dart';
@@ -164,7 +163,6 @@ class MyApp extends StatelessWidget {
           MyAppointment_Model? data = null;
           return data != null ? Rescheduleslotscreen(data: data) : Rescheduleslotscreen(data: data!);
         },
-        '/BookAppointment': (context) => SelectCity_Branch_screen(),
         '/Mybookings': (context) => GetAppointments(),
         '/Products': (context) => ProductsMy(),
         '/ProfileMy': (context) => ProfileMy()

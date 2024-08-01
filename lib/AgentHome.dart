@@ -2,6 +2,7 @@ import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:hairfixingzone/Branches_screen.dart';
 import 'package:hairfixingzone/Common/common_styles.dart';
 import 'package:hairfixingzone/CommonUtils.dart';
 import 'package:hairfixingzone/CustomerLoginScreen.dart';
@@ -143,47 +144,47 @@ class _AgentHomeState extends State<AgentHome> {
             BottomNavigationBarItem(
               icon: SvgPicture.asset(
                 'assets/home.svg',
-                width: 24,
-                height: 24,
+                width: 20,
+                height: 20,
                 color: Colors.black.withOpacity(0.6),
               ),
               activeIcon: SvgPicture.asset(
                 'assets/home.svg',
-                width: 24,
-                height: 24,
+                width: 20,
+                height: 20,
                 color: CommonUtils.primaryTextColor,
               ),
               label: 'Home',
             ),
-            // BottomNavigationBarItem(
-            //   icon: SvgPicture.asset(
-            //     'assets/invite-alt.svg',
-            //     width: 24,
-            //     height: 24,
-            //     color: Colors.black.withOpacity(0.6),
-            //   ),
-            //   activeIcon: SvgPicture.asset(
-            //     'assets/invite-alt.svg',
-            //     width: 24,
-            //     height: 24,
-            //     color: CommonUtils.primaryTextColor,
-            //   ),
-            //   label: 'Add Consultation',
-            // ),
             BottomNavigationBarItem(
               icon: SvgPicture.asset(
-                'assets/apps.svg',
-                width: 24,
-                height: 24,
+                'assets/calendarcheck.svg',
+                width: 20,
+                height: 20,
                 color: Colors.black.withOpacity(0.6),
               ),
               activeIcon: SvgPicture.asset(
-                'assets/apps.svg',
-                width: 24,
-                height: 24,
+                'assets/calendarcheck.svg',
+                width: 20,
+                height: 20,
                 color: CommonUtils.primaryTextColor,
               ),
-              label: 'View Consultation',
+              label: 'Appointments',
+            ),
+            BottomNavigationBarItem(
+              icon: SvgPicture.asset(
+                'assets/overview.svg',
+                width: 20,
+                height: 20,
+                color: Colors.black.withOpacity(0.6),
+              ),
+              activeIcon: SvgPicture.asset(
+                'assets/overview.svg',
+                width: 20,
+                height: 20,
+                color: CommonUtils.primaryTextColor,
+              ),
+              label: 'Consultations',
             ),
           ],
           selectedLabelStyle: CommonStyles.txSty_16b_fb,
@@ -192,79 +193,7 @@ class _AgentHomeState extends State<AgentHome> {
           //   color: Colors.grey, // Customize the color as needed
           // ),
         ),
-        /* 
-        bottomNavigationBar: BottomNavyBar(
-          selectedIndex: _currentIndex,
-          backgroundColor: const Color(0xFFf3e3ff),
-          showElevation: true,
-          itemCornerRadius: 24,
-          curve: Curves.easeIn,
-          onItemSelected: (index) => setState(() {
-            setState(() {
-              _currentIndex = index;
-            });
-          }),
-          items: <BottomNavyBarItem>[
-            BottomNavyBarItem(
-              icon: SvgPicture.asset(
-                'assets/objects-column.svg',
-                width: 24,
-                height: 24,
-                color: _currentIndex == 0
-                    ? CommonUtils.primaryTextColor
-                    : Colors.black,
-              ),
-              title: const Text(
-                'Home',
-              ),
-              activeColor: Colors.blue,
-              textAlign: TextAlign.center,
-            ),
-            BottomNavyBarItem(
-              icon: SvgPicture.asset(
-                'assets/calendar-day.svg',
-                width: 24,
-                height: 24,
-                color: _currentIndex == 1
-                    ? CommonUtils.primaryTextColor
-                    : Colors.black,
-              ),
-              title: const Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'Add',
-                  ),
-                  Text(
-                    'Consultation',
-                  ),
-                ],
-              ),
-              activeColor: Colors.blue,
-              textAlign: TextAlign.center,
-            ),
-            BottomNavyBarItem(
-              icon: SvgPicture.asset(
-                'assets/calendar-lines.svg',
-                width: 24,
-                height: 24,
-                color: _currentIndex == 2
-                    ? CommonUtils.primaryTextColor
-                    : Colors.black,
-              ),
-              title: const Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text('View'),
-                  Text('Consultation'),
-                ],
-              ),
-              activeColor: Colors.blue,
-              textAlign: TextAlign.center,
-            ),
-          ],
-        ),
-      */
+
       ),
     );
   }
@@ -276,12 +205,10 @@ class _AgentHomeState extends State<AgentHome> {
           agentid: widget.userId,
         );
 
-      // case 1:
-      //   return AddConsulationscreen(
-      //     agentId: widget.userId,
-      //   );
-
       case 1:
+        return Branches_screen(userId: widget.userId!);
+
+      case 2:
         return ViewConsultation(
           agentId: widget.userId,
         );
@@ -298,8 +225,8 @@ class _AgentHomeState extends State<AgentHome> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Logout'),
-          content: const Text('Are You Sure You Want to Logout?'),
+          title: const Text('Logout',style: CommonStyles.txSty_18b_fb,),
+          content: const Text('Are You Sure You Want to Logout?',style: CommonStyles.txSty_16b_fb),
           actions: [
             Container(
               child: ElevatedButton(
@@ -381,19 +308,6 @@ class _AgentHomeState extends State<AgentHome> {
     );
   }
 
-  String _getAppBarTitle(int index) {
-    switch (index) {
-      case 0:
-        return '';
-      case 1:
-        return 'Add Consultation';
-      case 2:
-        return 'View Consultation';
-
-      default:
-        return '';
-    }
-  }
 
   void checkLoginuserdata() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -409,9 +323,9 @@ class _AgentHomeState extends State<AgentHome> {
       case 0:
         return '';
       case 1:
-        return 'Add Consultation';
+        return 'Check Appointments';
       case 2:
-        return 'View Consultation';
+        return 'View Consultations';
       default:
         return 'default';
     }

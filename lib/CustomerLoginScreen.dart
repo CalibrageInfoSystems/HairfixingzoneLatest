@@ -97,11 +97,11 @@ class _LoginPageState extends State<CustomerLoginScreen> {
                   ),
                   const Text('Customer Login',
                       style: TextStyle(
-                        fontSize: 24,
+                        fontSize: 20,
                         fontFamily: "Outfit",
-                        fontWeight: FontWeight.w700,
+                        fontWeight: FontWeight.w600,
                         letterSpacing: 2,
-                        color: Color(0xFF662d91),
+                        color: Color(0xFF11528f),
                       )),
                   const SizedBox(
                     height: 20,
@@ -140,12 +140,10 @@ class _LoginPageState extends State<CustomerLoginScreen> {
                     children: [
                       Text(
                         'Email / User Name',
-                        style: TextStyle(
-                            fontSize: 12, fontWeight: FontWeight.bold),
-                      ),
+                        style:  CommonStyles.txSty_12b_f5,),
                       Text(
                         ' *',
-                        style: TextStyle(color: Colors.red),
+                        style:  CommonStyles.txSty_12b_f5,
                       ),
                     ],
                   ),
@@ -180,8 +178,7 @@ class _LoginPageState extends State<CustomerLoginScreen> {
                       ),
                       hintText: 'Enter Email / User Name',
                       counterText: "",
-                      hintStyle: const TextStyle(
-                          color: Colors.grey, fontWeight: FontWeight.w400),
+                      hintStyle:  CommonStyles.texthintstyle ,
                     ),
                     validator: validateEmail,
                   ),
@@ -197,13 +194,11 @@ class _LoginPageState extends State<CustomerLoginScreen> {
                     children: [
                       Text(
                         'Password',
-                        style: TextStyle(
-                            fontSize: 12, fontWeight: FontWeight.bold),
-                      ),
+                    style:  CommonStyles.txSty_12b_f5,),
                       Text(
                         ' *',
-                        style: TextStyle(color: Colors.red),
-                      ),
+                        style:  CommonStyles.txSty_12b_f5,),
+
                     ],
                   ),
                   const SizedBox(
@@ -253,8 +248,7 @@ class _LoginPageState extends State<CustomerLoginScreen> {
                           });
                         },
                       ),
-                      hintStyle: const TextStyle(
-                          color: Colors.grey, fontWeight: FontWeight.w400),
+                        hintStyle:  CommonStyles.texthintstyle ,
                     ),
                     validator: validatePassword,
                   ),
@@ -353,7 +347,7 @@ class _LoginPageState extends State<CustomerLoginScreen> {
                             style: TextStyle(
                               fontSize: 20,
                               fontFamily: "Outfit",
-                              fontWeight: FontWeight.w700,
+                              fontWeight: FontWeight.w500,
                               color: Color(0xFF0f75bc),
                             )),
                       )

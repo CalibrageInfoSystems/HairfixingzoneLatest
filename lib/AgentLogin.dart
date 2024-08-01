@@ -138,9 +138,9 @@ class _AgentLoginState extends State<AgentLogin> {
                             style: TextStyle(
                               fontSize: 24,
                               fontFamily: "Outfit",
-                              fontWeight: FontWeight.w700,
+                              fontWeight: FontWeight.w600,
                               letterSpacing: 2,
-                              color: Color(0xFF662d91),
+                              color: Color(0xFF11528f),
                             )),
                         const SizedBox(
                           height: 20,

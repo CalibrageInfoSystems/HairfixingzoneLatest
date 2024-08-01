@@ -114,80 +114,7 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
     return DateFormat('dd-MM-yyyy').format(date);
   }
 
-  // Future<void> _selectDate(BuildContext context) async {
-  //   final DateTime? pickedYear = await showDatePicker(
-  //     context: context,
-  //     initialDate: selectedDate,
-  //     firstDate: DateTime(DateTime.now().year - 100),
-  //     initialEntryMode: DatePickerEntryMode.calendarOnly,
-  //     lastDate: DateTime.now(),
-  //     initialDatePickerMode: DatePickerMode.year,
-  //   );
-  //   if (pickedYear != null && pickedYear != selectedDate) {
-  //     setState(() {
-  //       selectedDate = pickedYear;
-  //       dobController.text = DateFormat('dd-MM-yyyy').format(selectedDate);
-  //       _dobError = false;
-  //     });
-  //     // After year selection, open month selection dialog
-  //     await _selectDay(context);
-  //   }
-  // }
 
-  // Future<void> _selectMonth(BuildContext context) async {
-  //   final DateTime? pickedMonth = await showDatePicker(
-  //     context: context,
-  //     initialDate: selectedDate,
-  //     firstDate: DateTime(selectedDate.year),
-  //     initialEntryMode: DatePickerEntryMode.calendarOnly,
-  //     lastDate: DateTime(selectedDate.year + 1),
-  //     initialDatePickerMode: DatePickerMode.day, // Start with day mode to enable month view
-  //   );
-  //   if (pickedMonth != null && pickedMonth != selectedDate) {
-  //     setState(() {
-  //       selectedDate = pickedMonth;
-  //       dobController.text = DateFormat('dd-MM-yyyy').format(selectedDate);
-  //     });
-  //     // After month selection, open day selection dialog
-  //     await _selectDay(context);
-  //   }
-  // }
-
-  // Future<void> _selectDay(BuildContext context) async {
-  //   final DateTime? pickedDay = await showDatePicker(
-  //     context: context,
-  //     initialDate: selectedDate,
-  //     initialEntryMode: DatePickerEntryMode.calendarOnly,
-  //     firstDate: DateTime(selectedDate.year, selectedDate.month),
-  //     lastDate: DateTime(selectedDate.year, selectedDate.month + 1, 0),
-  //     initialDatePickerMode: DatePickerMode.day,
-  //   );
-  //   if (pickedDay != null && pickedDay != selectedDate) {
-  //     setState(() {
-  //       selectedDate = pickedDay;
-  //       dobController.text = DateFormat('dd-MM-yyyy').format(selectedDate);
-  //     });
-  //   }
-  // }
-  // Future<void> _selectDate(BuildContext context) async {
-  //   final DateTime? pickedYear = await showDatePicker(
-  //     context: context,
-  //     initialDate: selectedDate,
-  //     firstDate: DateTime(DateTime.now().year - 100),
-  //     initialEntryMode: DatePickerEntryMode.calendarOnly,
-  //     lastDate: DateTime.now(),
-  //     initialDatePickerMode: DatePickerMode.year,
-  //   );
-  //   if (pickedYear != null && pickedYear != selectedDate) {
-  //     setState(() {
-  //       selectedDate = pickedYear;
-  //       dobController.text = DateFormat('dd-MM-yyyy').format(selectedDate);
-  //       _dobError = false;
-  //     });
-  //     // After year selection, open month selection dialog
-  //     await _selectDay(context);
-  //   }
-  // }
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime currentDate = DateTime.now();
@@ -250,11 +177,11 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
                       style: TextStyle(
                         fontSize: 22,
                         fontFamily: "Outfit",
-                        fontWeight: FontWeight.w700,
-                        // letterSpacing: 0.8,
-                        color: Color(0xFF662d91),
-                      ),
-                    ),
+                        fontWeight: FontWeight.w600,
+                        letterSpacing: 2,
+                        color: Color(0xFF11528f),
+                      )),
+
                   ],
                 ),
               ),
@@ -330,9 +257,7 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
                                   children: [
                                     Text(
                                       'Date of Birth',
-                                      style: TextStyle(
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.bold),
+                                      style:CommonUtils.txSty_12b_fb,
                                     ),
                                     Text(
                                       ' *',
@@ -351,6 +276,7 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
                                   readOnly: true,
                                   decoration: InputDecoration(
                                     errorText: _dobError ? _dobErrorMsg : null,
+                                    errorStyle: CommonStyles.texterrorstyle,
                                     contentPadding: const EdgeInsets.only(
                                         top: 15,
                                         bottom: 10,
@@ -375,9 +301,7 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
                                     ),
                                     hintText: 'Date of Birth',
                                     counterText: "",
-                                    hintStyle: const TextStyle(
-                                        color: Colors.grey,
-                                        fontWeight: FontWeight.w400),
+                                    hintStyle: CommonStyles.texthintstyle,
                                     suffixIcon:
                                         const Icon(Icons.calendar_today),
                                   ),
@@ -387,6 +311,7 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
                                       _dobError = false;
                                     });
                                   },
+                                  style: CommonStyles.txSty_14b_fb,
                                 ),
 
                                 const SizedBox(
@@ -396,13 +321,10 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
                                   children: [
                                     Text(
                                       'Gender ',
-                                      style: TextStyle(
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.bold),
-                                    ),
+                                      style:CommonUtils.txSty_12b_fb,),
                                     Text(
                                       ' *',
-                                      style: TextStyle(color: Colors.red),
+                                      style: TextStyle(color: Color.fromARGB(255, 175, 15, 4)),
                                     ),
                                   ],
                                 ),
@@ -428,9 +350,7 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
                                             value: selectedTypeCdId,
                                             iconSize: 30,
                                             icon: null,
-                                            style: const TextStyle(
-                                              color: Colors.black,
-                                            ),
+                                          style:CommonUtils.txSty_12b_fb,
                                             onChanged: (value) {
                                               setState(() {
                                                 selectedTypeCdId = value!;
@@ -459,11 +379,7 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
                                                 value: -1,
                                                 child: Text(
                                                   'Select Gender',
-                                                  style: TextStyle(
-                                                      color: Colors.grey,
-                                                      fontWeight:
-                                                          FontWeight.w500),
-                                                ),
+                                                  style:CommonStyles.texthintstyle,)
                                               ),
                                               ...dropdownItems
                                                   .asMap()
@@ -491,11 +407,9 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
                                             horizontal: 16, vertical: 5),
                                         child: Text(
                                           'Please Select Gender',
-                                          style: TextStyle(
-                                            color:
-                                                Color.fromARGB(255, 175, 15, 4),
-                                            fontSize: 12,
-                                          ),
+
+                                          style:CommonStyles.texthintstyle,
+
                                         ),
                                       ),
                                     ],
@@ -551,10 +465,7 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
                                       children: [
                                         Text(
                                           'Alternate Mobile Number',
-                                          style: TextStyle(
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.bold),
-                                        ),
+                                          style:CommonUtils.txSty_12b_fb,)
                                         // Text(
                                         //   '',
                                         //   style: TextStyle(color: Colors.red),
@@ -620,9 +531,7 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
                                           ),
                                         ),
                                         hintText: 'Alternate Mobile Number',
-                                        hintStyle: const TextStyle(
-                                            color: Colors.grey,
-                                            fontWeight: FontWeight.w400),
+                                        hintStyle: CommonStyles.texthintstyle,
                                       ),
                                       maxLength: 10,
                                       inputFormatters: [
@@ -652,6 +561,7 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
                                           _altNumberError = false;
                                         });
                                       },
+                                      style: CommonStyles.txSty_14b_fb,
                                     ),
                                   ],
                                 ),
@@ -668,10 +578,8 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
                                       children: [
                                         Text(
                                           'Email',
-                                          style: TextStyle(
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.bold),
-                                        ),
+                                            style: CommonStyles.txSty_12b_fb,),
+
                                         Text(
                                           ' *',
                                           style: TextStyle(color: Colors.red),
@@ -709,6 +617,7 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
                                       decoration: InputDecoration(
                                         errorText:
                                             _emailError ? _emailErrorMsg : null,
+                                        errorStyle: CommonStyles.texterrorstyle,
                                         contentPadding: const EdgeInsets.only(
                                             top: 15,
                                             bottom: 10,
@@ -735,9 +644,7 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
                                         ),
                                         hintText: 'Email',
                                         counterText: "",
-                                        hintStyle: const TextStyle(
-                                            color: Colors.grey,
-                                            fontWeight: FontWeight.w400),
+                                        hintStyle:CommonStyles.texthintstyle,
                                       ),
                                       validator: validateEmail,
                                       onChanged: (value) {
@@ -745,6 +652,7 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
                                           _emailError = false;
                                         });
                                       },
+                                      style: CommonStyles.txSty_14b_fb,
                                     ),
                                   ],
                                 ),
@@ -761,9 +669,7 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
                                       children: [
                                         Text(
                                           'User Name',
-                                          style: TextStyle(
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.bold),
+                                           style: CommonStyles.txSty_12b_fb,
                                         ),
                                         Text(
                                           ' *',
@@ -830,12 +736,11 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
                                         ),
                                         hintText: 'User Name',
                                         counterText: "",
-                                        hintStyle: const TextStyle(
-                                            color: Colors.grey,
-                                            fontWeight: FontWeight.w400),
+                                        hintStyle: CommonStyles.texthintstyle,
                                         errorText: _userNameError
                                             ? _userNameErrorMsg
                                             : null,
+                                        errorStyle: CommonStyles.texterrorstyle,
                                       ),
                                       inputFormatters: [
                                         FilteringTextInputFormatter.allow(RegExp(
@@ -859,6 +764,7 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
                                         });
                                       },
                                       validator: validateUserName,
+                                      style: CommonStyles.txSty_14b_fb,
                                     ),
                                   ],
                                 ),
@@ -875,9 +781,7 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
                                       children: [
                                         Text(
                                           'Password',
-                                          style: TextStyle(
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.bold),
+                                            style: CommonStyles.txSty_12b_fb,
                                         ),
                                         Text(
                                           ' *',
@@ -923,6 +827,7 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
                                             errorText: _passwordError
                                                 ? _passwordErrorMsg
                                                 : null,
+                                            errorStyle: CommonStyles.texterrorstyle,
                                             suffixIcon: GestureDetector(
                                               onTap: () {
                                                 setState(() {
@@ -961,9 +866,7 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
                                             ),
                                             hintText: 'Password',
                                             counterText: "",
-                                            hintStyle: const TextStyle(
-                                                color: Colors.grey,
-                                                fontWeight: FontWeight.w400),
+                                            hintStyle: CommonStyles.texthintstyle,
                                           ),
                                           validator: validatePassword,
                                           inputFormatters: [
@@ -992,6 +895,7 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
                                               // }
                                             });
                                           },
+                                          style: CommonStyles.txSty_14b_fb,
                                         ),
                                         if (isPasswordValidate)
                                           Row(
@@ -1028,9 +932,7 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
                                       children: [
                                         Text(
                                           'Confirm Password ',
-                                          style: TextStyle(
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.bold),
+                                            style: CommonStyles.txSty_12b_fb,
                                         ),
                                         Text(
                                           ' *',
@@ -1072,6 +974,7 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
                                         errorText: _confirmPasswordError
                                             ? _confirmPasswordErrorMsg
                                             : null,
+                                        errorStyle: CommonStyles.texterrorstyle,
                                         suffixIcon: GestureDetector(
                                           onTap: () {
                                             setState(() {
@@ -1109,9 +1012,7 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
                                         ),
                                         hintText: 'Confirm Password',
                                         counterText: "",
-                                        hintStyle: const TextStyle(
-                                            color: Colors.grey,
-                                            fontWeight: FontWeight.w400),
+                                        hintStyle: CommonStyles.texthintstyle,
                                       ),
                                       validator: validateconfirmpassword,
                                       inputFormatters: [
@@ -1135,6 +1036,7 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
                                           _confirmPasswordError = false;
                                         });
                                       },
+                                      style: CommonStyles.txSty_14b_fb,
                                     ),
                                   ],
                                 ),

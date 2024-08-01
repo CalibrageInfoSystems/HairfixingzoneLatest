@@ -1,29 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:intl/intl.dart';
 import 'Appointment.dart';
 
 class AgentAppointmentsProvider extends ChangeNotifier {
   List<Appointment> proAppointments = [];
+
   int selectedCategoryIndex = 0;
   int? _selectedCategory;
-// varibles
   String displayDate = 'Select Dates';
   String? apiFromDate;
   String? apiToDate;
   int? apiBranchId;
   int? apiStatusTypeId;
   bool isFilterApplied = false;
-  List<Appointment> filteredAppointments = []; // Add this property
+  List<Appointment> filteredAppointments = [];
+
+  List<Appointment> get storeIntoProvider => proAppointments;
 
   // Method to update filtered data
   void updateFilteredData(List<Appointment> data) {
     filteredAppointments = data;
-    notifyListeners(); // Ensure listeners are notified when filtered data changes
+    notifyListeners();
   }
 
-  List<Appointment> get storeIntoProvider => proAppointments;
   set storeIntoProvider(List<Appointment> products) {
-    proAppointments = List<Appointment>.from(products);
+    proAppointments = products;
     notifyListeners();
   }
 
@@ -45,23 +47,13 @@ class AgentAppointmentsProvider extends ChangeNotifier {
   }
 
   String? get getApiFromDate => apiFromDate;
-  // set getApiFromDate(String? newCode) {
-  //   DateTime dateTime = DateTime.parse('2022-08-22');
-  //   DateFormat('yyyy-MM-dd').format(dateTime);
-  //   apiFromDate = newCode;
-  //   notifyListeners();
-  // }
   set getApiFromDate(String? newCode) {
     if (newCode != null) {
       try {
         DateFormat inputFormat = DateFormat('dd/MM/yyyy');
-
         DateTime dateTime = inputFormat.parse(newCode);
-
         DateFormat outputFormat = DateFormat('yyyy-MM-dd');
-
         String formattedDateStr = outputFormat.format(dateTime);
-
         apiFromDate = formattedDateStr;
       } catch (e) {
         print('Error parsing date: $e');
@@ -79,13 +71,9 @@ class AgentAppointmentsProvider extends ChangeNotifier {
     if (newCode != null) {
       try {
         DateFormat inputFormat = DateFormat('dd/MM/yyyy');
-
         DateTime dateTime = inputFormat.parse(newCode);
-
         DateFormat outputFormat = DateFormat('yyyy-MM-dd');
-
         String formattedDateStr = outputFormat.format(dateTime);
-
         apiToDate = formattedDateStr;
       } catch (e) {
         print('Error parsing date: $e');
@@ -120,11 +108,6 @@ class AgentAppointmentsProvider extends ChangeNotifier {
   List<Statusmodel> get storeIntobranchProvider => probranches;
   int? _selectedbranch;
 
-  // void filterProviderData(List<Appointment> items) {
-  //   proAppointments.clear();
-  //   proAppointments.addAll(items);
-  //   notifyListeners();
-  // }
   void clearFilter() {
     displayDate = 'Select Dates';
     selectedStatus = 0;
@@ -158,6 +141,13 @@ class AgentAppointmentsProvider extends ChangeNotifier {
     _selectedStatus = newCategory;
     notifyListeners();
   }
+
+  // Future<void> fetchAppointments() async {
+  //   // Fetch data from API
+  //   List<Appointment> fetchedAppointments = await apiData; // Replace with actual API call
+  //   proAppointments = fetchedAppointments;
+  //   notifyListeners();
+  // }
 }
 
 class Statusmodel {

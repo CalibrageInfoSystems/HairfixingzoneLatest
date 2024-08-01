@@ -27,7 +27,6 @@ import 'Dashboard_Screen.dart';
 import 'MyAppointments.dart';
 import 'MyProducts.dart';
 import 'Profile.dart';
-import 'agentloginscreen.dart';
 import 'api_config.dart';
 import 'CommonUtils.dart';
 
@@ -329,9 +328,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 const Text(
                   'Please Rate Your Recent Experience With Us',
                   style: TextStyle(
-                    fontSize: 24,
+                    fontSize: 20,
                     color: CommonUtils.primaryTextColor,
+                    fontWeight: FontWeight.w600,
                     fontFamily: 'Outfit',
+
                   ),
                 ),
                 const SizedBox(
@@ -345,6 +346,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       style: TextStyle(
                         fontSize: 16,
                         color: CommonUtils.primaryTextColor,
+                        fontWeight: FontWeight.w500,
                         fontFamily: 'Outfit',
                       ),
                     ),
@@ -380,6 +382,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       style: TextStyle(
                         fontSize: 16,
                         color: CommonUtils.primaryTextColor,
+                        fontWeight: FontWeight.w600,
                         fontFamily: 'Outfit',
                       ),
                     ),
@@ -465,7 +468,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           backgroundColor: Colors.white,
                           shape: const RoundedRectangleBorder(
                             borderRadius: BorderRadius.all(
-                              Radius.circular(10),
+                              Radius.circular(5),
                             ),
                           ),
                         ),
@@ -492,7 +495,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               // width: desiredWidth * 0.9,
                               height: 40.0,
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(15.0),
+                                borderRadius: BorderRadius.circular(5.0),
                                 color: CommonUtils.primaryTextColor,
                               ),
                               child: const Center(

@@ -41,6 +41,7 @@ class MyAppointments_screenState extends State<MyAppointments> {
   @override
   void initState() {
     super.initState();
+
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitDown,
       DeviceOrientation.portraitUp,
@@ -127,6 +128,14 @@ class MyAppointments_screenState extends State<MyAppointments> {
                                   children: [
                                     OpCard(
                                       data: data[index],
+                                      onRefresh: () {
+                                        // Implement the refresh logic here
+                                        setState(() {
+                                          // Refresh logic
+                                          refreshTheScreen();
+
+                                        });
+                                      },
                                     ),
                                     const SizedBox(
                                       height: 5,
@@ -165,6 +174,7 @@ class MyAppointments_screenState extends State<MyAppointments> {
   }
 
   void checkLoginuserdata() async {
+    myAppointmentsProvider!.clearFilter();
     SharedPreferences prefs = await SharedPreferences.getInstance();
     userId = prefs.getInt('userId');
     print('userId: : $userId');
@@ -269,6 +279,7 @@ class MyAppointments_screenState extends State<MyAppointments> {
                 decoration: InputDecoration(
                   contentPadding: const EdgeInsets.only(top: 5, left: 12),
                   hintText: 'Search Appointment',
+                  hintStyle:  CommonStyles.texthintstyle ,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
                     borderSide:
@@ -466,7 +477,7 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
     return Consumer<MyAppointmentsProvider>(
       builder: (context, provider, _) => SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(10),
+          padding: const EdgeInsets.all(15),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
@@ -518,71 +529,7 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                       height: 10,
                     ),
 
-                    // TextFormField(
-                    //   controller: _fromToDatesController,
-                    //   keyboardType: TextInputType.visiblePassword,
-                    //   onTap: () {
-                    //     showCustomDateRangePicker(
-                    //       context,
-                    //       dismissible: true,
-                    //       endDate: endDate,
-                    //       startDate: startDate,
-                    //       maximumDate: DateTime.now().add(const Duration(days: 50)),
-                    //       minimumDate: DateTime.now().subtract(const Duration(days: 50)),
-                    //       onApplyClick: (s, e) {
-                    //         setState(() {
-                    //           //MARK: Date
-                    //           endDate = e;
-                    //           startDate = s;
-                    //           provider.getDisplayDate =
-                    //               '${startDate != null ? DateFormat('dd/MM/yyyy').format(startDate!) : '-'}  -  ${endDate != null ? DateFormat('dd/MM/yyyy').format(endDate!) : '-'}';
-                    //           // provider.getDisplayDate =
-                    //           //     '${startDate != null ? DateFormat("dd, MMM").format(startDate!) : '-'} / ${endDate != null ? DateFormat("dd, MMM").format(endDate!) : '-'}';
-                    //           _fromToDatesController.text = provider.getDisplayDate;
-                    //           provider.getApiFromDate = DateFormat('yyyy-MM-dd').format(startDate!);
-                    //           provider.getApiToDate = DateFormat('yyyy-MM-dd').format(endDate!);
-                    //           print('Filter apiFromDate: $apiFromDate');
-                    //           print('Filter apiToDate: $apiToDate');
-                    //         });
-                    //       },
-                    //       onCancelClick: () {
-                    //         setState(() {
-                    //           endDate = null;
-                    //           startDate = null;
-                    //         });
-                    //       },
-                    //     );
-                    //   },
-                    //   focusNode: DateofBirthdFocus,
-                    //   readOnly: true,
-                    //   decoration: InputDecoration(
-                    //     contentPadding: const EdgeInsets.only(top: 15, bottom: 10, left: 15, right: 15),
-                    //     focusedBorder: OutlineInputBorder(
-                    //       borderSide: const BorderSide(
-                    //         color: Color(0xFF0f75bc),
-                    //       ),
-                    //       borderRadius: BorderRadius.circular(6.0),
-                    //     ),
-                    //     enabledBorder: OutlineInputBorder(
-                    //       borderSide: const BorderSide(
-                    //         color: CommonUtils.primaryTextColor,
-                    //       ),
-                    //       borderRadius: BorderRadius.circular(6.0),
-                    //     ),
-                    //     border: const OutlineInputBorder(
-                    //       borderRadius: BorderRadius.all(
-                    //         Radius.circular(10),
-                    //       ),
-                    //     ),
-                    //     hintText: 'Select Dates',
-                    //     counterText: "",
-                    //     hintStyle: const TextStyle(color: Colors.grey, fontWeight: FontWeight.w400),
-                    //     prefixIcon: const Icon(Icons.calendar_today),
-                    //   ),
-                    //   //  validator: validatePassword,
-                    // ),
 
-//MARK: Date Picker
                     TextFormField(
                       controller: _fromToDatesController,
                       keyboardType: TextInputType.visiblePassword,
@@ -646,8 +593,7 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                         ),
                         hintText: 'Select Dates',
                         counterText: "",
-                        hintStyle: const TextStyle(
-                            color: Colors.grey, fontWeight: FontWeight.w400),
+                        hintStyle:CommonStyles.texthintstyle ,
                         prefixIcon: const Icon(Icons.calendar_today),
                       ),
                       //  validator: validatePassword,
@@ -658,7 +604,7 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                     ),
                     //MARK: Filter Category
                     Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      padding: const EdgeInsets.symmetric(vertical: 8),
                       child: FutureBuilder(
                           future: apiData,
                           builder: (context, snapshot) {
@@ -674,7 +620,7 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                             } else {
                               List<BranchModel> data = snapshot.data!;
                               return SizedBox(
-                                height: 40,
+                                height: 38,
                                 child: ListView.builder(
                                   scrollDirection: Axis.horizontal,
                                   shrinkWrap: true,
@@ -741,7 +687,7 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                                               Container(
                                                 padding:
                                                     const EdgeInsets.symmetric(
-                                                        horizontal: 10.0),
+                                                        horizontal: 15.0),
                                                 child: Row(
                                                   children: [
                                                     Text(
@@ -776,7 +722,7 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                     ),
                     //MARK: Filter Status
                     Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      padding: const EdgeInsets.only(right: 10.0,left: 0.0),
                       child: FutureBuilder(
                           future: prostatus,
                           builder: (context, snapshot) {
@@ -798,7 +744,7 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                                   .toList();
 
                               return SizedBox(
-                                height: 40,
+                                height: 38,
                                 child: ListView.builder(
                                   scrollDirection: Axis.horizontal,
                                   shrinkWrap: true,
@@ -855,7 +801,7 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                                               Container(
                                                 padding:
                                                     const EdgeInsets.symmetric(
-                                                        horizontal: 10.0),
+                                                        horizontal: 15.0),
                                                 child: Row(
                                                   children: [
                                                     Text(
@@ -1097,8 +1043,9 @@ class UserFeedback {
 
 class OpCard extends StatefulWidget {
   final MyAppointment_Model data;
-
-  const OpCard({super.key, required this.data});
+  final VoidCallback? onRefresh;
+  const OpCard({super.key, required this.data,  this.onRefresh,
+  }) ;
 
   @override
   State<OpCard> createState() => _OpCardState();
@@ -1134,6 +1081,7 @@ class _OpCardState extends State<OpCard> {
 
   @override
   Widget build(BuildContext context) {
+    dateValues = parseDateString(widget.data.date);
     return IntrinsicHeight(
       child: SizedBox(
           width: MediaQuery.of(context).size.height,
@@ -1150,18 +1098,18 @@ class _OpCardState extends State<OpCard> {
               decoration: BoxDecoration(
                 gradient: const LinearGradient(
                   colors: [
-                    Color(0xFFFFFFFF),
-                    Color(0xFFFFFFFF),
+                    Color(0xffe2f0fd),
+                    Color(0xffe2f0fd),
                   ],
                   begin: Alignment.centerLeft,
                   end: Alignment.centerRight,
                 ),
-                border: Border.all(
-                  color: Colors.grey,
-                  //  color: const Color(0xFF8d97e2), // Add your desired border color here
-                  width:
-                  1.0, // Set the border width
-                ),
+                // border: Border.all(
+                //   color: Colors.grey,
+                //   //  color: const Color(0xFF8d97e2), // Add your desired border color here
+                //   width:
+                //   1.0, // Set the border width
+                // ),
                 borderRadius: BorderRadius.circular(
                     10.0), // Optional: Add border radius if needed
               ),
@@ -1195,7 +1143,7 @@ class _OpCardState extends State<OpCard> {
                         Text(
                           '${dateValues[0]}',
                           style: const TextStyle(
-                            fontSize: 22,
+                            fontSize: 28,
                             fontFamily: "Outfit",
                             // letterSpacing: 1.5,
                             fontWeight: FontWeight.w700,
@@ -1242,9 +1190,9 @@ class _OpCardState extends State<OpCard> {
                                         ),
                                       ),
                                       Text(widget.data.purposeOfVisit,
-                                          style: CommonStyles.txSty_16black_f5),
+                                          style: CommonStyles.txSty_14black_f5),
                                       Text(widget.data.branch,
-                                          style: CommonStyles.txSty_16black_f5),
+                                          style: CommonStyles.txSty_14black_f5),
                                       if (widget.data.technicianName != null)
                                         Row(
                                           children: [
@@ -2043,7 +1991,8 @@ class _OpCardState extends State<OpCard> {
           //  fetchMyAppointments(userId);
           CommonUtils.showCustomToastMessageLong(
               'Feedback Successfully Submitted', context, 0, 4);
-          // refreshTheScreen();
+          widget.onRefresh?.call();
+          Navigator.of(context).pop();
           // if (index >= 0.0 && index < userfeedbacklist.length) {
           //   // Ensure index is within the valid range
           //   userfeedbacklist.ratingstar = rating_star;
@@ -2059,7 +2008,7 @@ class _OpCardState extends State<OpCard> {
           // userfeedbacklist[index].ratingstar = rating_star;
           // userfeedbacklist[index].comments = _commentstexteditcontroller.text.toString();
 
-          Navigator.of(context).pop();
+
           // Navigator.of(context).push(
           //   MaterialPageRoute(
           //     builder: (context) => const MyAppointments(),
@@ -2360,12 +2309,13 @@ class _OpCardState extends State<OpCard> {
                 buttonText: 'Done',
                 color: CommonUtils.primaryTextColor,
                 onPressed: () {
+                  widget.onRefresh?.call();
                   Navigator.of(context).pop();
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => const MyAppointments(),
-                    ),
-                  );
+                  // Navigator.of(context).push(
+                  //   MaterialPageRoute(
+                  //     builder: (context) => const MyAppointments(),
+                  //   ),
+                  // );
                 },
               ),
             ],

@@ -107,25 +107,13 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
 
-    - assets/logo.png
     - assets/splash_background.png
-    - assets/background.png
-    - assets/agent_icon.png
     - assets/web_icon.png
-    - assets/location_icon.png
-    - assets/back_2.jpg
-    - assets/back_1.jpg
     - assets/schedule.png
     - assets/User_icon.svg
-    - assets/agent.svg
-    - assets/password.svg
+
     - assets/top_image.png
-    - assets/datepicker_icon.svg
-    - assets/phone_1.svg
-    - assets/Mail_icon.svg
-    - assets/icons/hair_fixing_2.png
-    - assets/CUSTOMER_ICON.png
-    - assets/AGENT.png
+
     - assets/gender.png
     - assets/user.svg
     - assets/skin-care.svg
@@ -139,7 +127,7 @@ flutter:
     - assets/hfz_logo.png
     - assets/password_success.png
     - assets/sign-out-alt.svg
-    - assets/bin-bottles.svg
+
     - assets/calendar-clock.svg
     - assets/filter.svg
     - assets/invite-alt.svg
@@ -152,14 +140,14 @@ flutter:
     - assets/my_profile_icon.svg
     - assets/my_bookings_icon.svg
     - assets/book_op_illusion.svg
-    - assets/noun-appointment-date-2417776.svg
+
     - assets/check.svg
     - assets/phone_call.svg
-    - assets/map_marker.svg
+
     - assets/id-card-clip-alt.svg
     - assets/venus-mars.svg
     - assets/calendar_icon.svg
-    - assets/mobile-notch.svg
+
     - assets/pen-circle.svg
     - assets/calendar-day.svg
     - assets/calendar-lines.svg
@@ -172,7 +160,7 @@ flutter:
     - assets/applogo.png
     - assets/feedbackbanner.svg
     - assets/about_us.jpg
-    - assets/bs_v1.svg
+
     - assets/bs_v2.svg
     - assets/bs_v3.svg
     - assets/facebook.svg
@@ -194,12 +182,18 @@ flutter:
     - assets/giftbox.svg
     - assets/change-password-icon.svg
     - assets/bs_v5.svg
-    - assets/flashbg.png
+
     - assets/squareupright.svg
     - assets/home_new.svg
     - assets/apps-add.svg
     - assets/flashbg4.png
     - assets/bar_texture_rec.png
+
+    - assets/booking.svg
+
+    - assets/markersvg.svg
+    - assets/calendarcheck.svg
+    - assets/calendarplus.svg
 
 
 

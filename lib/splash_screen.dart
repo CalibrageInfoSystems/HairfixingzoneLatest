@@ -6,61 +6,32 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'AgentHome.dart';
 import 'Branches_screen.dart';
 import 'HomeScreen.dart';
-import 'UserLoginScreen.dart';
-import 'UserSelectionScreen.dart';
+
 
 class SplashScreen extends StatefulWidget {
   @override
   _SplashScreenState createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderStateMixin {
-  late AnimationController _animationController;
-  late Animation<double> _animation;
-
+class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
+    super.initState();
     requestNotificationPermission();
 
-    super.initState();
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitDown,
       DeviceOrientation.portraitUp,
     ]);
 
-    _animationController = AnimationController(
-      vsync: this,
-      duration: Duration(seconds: 2),
-    );
-
-    _animation = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(
-        parent: _animationController,
-        curve: Curves.easeInOut,
-      ),
-    );
-
-    _animationController.addStatusListener((status) {
-      if (status == AnimationStatus.completed) {
-      navigateTouserselection();
-        checkLoginStatus();
-
-        //  navigateToHome();
-      }
+    // Navigate to the next screen after 2 seconds
+    Future.delayed(Duration(seconds: 1), () {
+      navigateToUserSelection();
+      checkLoginStatus();
     });
-
-    _animationController.forward();
-    // Call checkLoginStatus here
-
   }
 
-  @override
-  void dispose() {
-    _animationController.dispose();
-    super.dispose();
-  }
-
-  void navigateTouserselection() {
+  void navigateToUserSelection() {
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(builder: (context) => startingscreen()),
     );
@@ -77,25 +48,15 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
           ),
         ),
         child: Center(
-          child:
-          AnimatedBuilder(
-            animation: _animationController,
-            builder: (BuildContext context, Widget? child) {
-              return Transform.scale(
-                scale: _animation.value,
-                child: Image.asset(
-                  'assets/hairfixing_logo.png',
-                  width: 200,
-                  height: 200,
-                ),
-              );
-            },
+          child: Image.asset(
+            'assets/hairfixing_logo.png',
+            width: 200,
+            height: 200,
           ),
         ),
       ),
     );
   }
-
 
   Future<void> requestNotificationPermission() async {
     final prefs = await SharedPreferences.getInstance();
@@ -108,7 +69,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
         print('permissionisstored');
       }
     } else if (status.isDenied) {
-      navigateTouserselection();
+      navigateToUserSelection();
       // The user denied permission
       // You may want to inform the user about why you need this permission
     } else if (status.isPermanentlyDenied) {

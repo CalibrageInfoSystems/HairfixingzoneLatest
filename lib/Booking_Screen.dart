@@ -224,7 +224,7 @@ class _BookingScreenState extends State<Bookingscreen> {
 
   Future<Holiday> fetchHolidayListByBranchId() async {
     // final url = Uri.parse(
-    //     'http://182.18.157.215/SaloonApp/API/GetHolidayListByBranchId/$branchId');
+    //     'http://182.18.157.215/SaloonApp/API/api/HolidayList/GetHolidayListdetails');
     // final url = Uri.parse(baseUrl + GetHolidayListByBranchId);
     final url = Uri.parse(baseUrl + getholidayslist);
     try {
@@ -282,32 +282,6 @@ class _BookingScreenState extends State<Bookingscreen> {
     );
   }
 
-  void logOutDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Logout'),
-          content: const Text('Are you sure you want to Logout?'),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text('No'),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-                onConfirmLogout(context);
-              },
-              child: const Text('Yes'),
-            ),
-          ],
-        );
-      },
-    );
-  }
 
   Future<void> _openDatePicker(bool isTodayHoliday) async {
     setState(() {
@@ -565,7 +539,7 @@ class _BookingScreenState extends State<Bookingscreen> {
                               fontSize: 14,
                               fontFamily: "Outfit",
                               fontWeight: FontWeight.w500,
-                              color: Color(0xFF662e91),
+                              color: Color(0xFF11528f),
                             ),
                           ),
                           Text(
@@ -596,7 +570,7 @@ class _BookingScreenState extends State<Bookingscreen> {
                               top: 15, bottom: 10, left: 15, right: 15),
                           focusedBorder: OutlineInputBorder(
                             borderSide: const BorderSide(
-                              color: Color(0xFF662e91),
+                              color: Color(0xFF11528f),
                             ),
                             borderRadius: BorderRadius.circular(6.0),
                           ),
@@ -617,7 +591,7 @@ class _BookingScreenState extends State<Bookingscreen> {
                               color: Colors.grey, fontWeight: FontWeight.w400),
                           suffixIcon: const Icon(
                             Icons.calendar_today,
-                            color: Color(0xFF662e91),
+                            color: Color(0xFF11528f),
                           ),
                         ),
                         //          validator: validateDate,
@@ -822,7 +796,7 @@ class _BookingScreenState extends State<Bookingscreen> {
                               fontSize: 14,
                               fontFamily: "Outfit",
                               fontWeight: FontWeight.w500,
-                              color: Color(0xFF662e91),
+                              color: Color(0xFF11528f),
                             ),
                           ),
                           Text(
@@ -861,9 +835,8 @@ class _BookingScreenState extends State<Bookingscreen> {
                                   //   }
                                   // },
                                   icon: null,
-                                  style: const TextStyle(
-                                    color: Colors.black,
-                                  ),
+                                  style: CommonStyles
+                                  .txSty_14b_fb,
                                   // decoration: InputDecoration(
                                   //   contentPadding: EdgeInsets.zero,
                                   //   border: InputBorder.none, // Hide the underline here
@@ -947,7 +920,7 @@ class _BookingScreenState extends State<Bookingscreen> {
                               fontSize: 14,
                               fontFamily: "Outfit",
                               fontWeight: FontWeight.w500,
-                              color: Color(0xFF662e91),
+                              color: Color(0xFF11528f),
                             ),
                           ),
                         ],
@@ -1017,7 +990,8 @@ class _BookingScreenState extends State<Bookingscreen> {
                                       final item = entry.value;
                                       return DropdownMenuItem<int>(
                                         value: index,
-                                        child: Text(item['firstName']),
+                                        child: Text(item['firstName'],style: CommonStyles
+                                            .txSty_14b_fb,),
                                       );
                                     }).toList(),
                                   ]),

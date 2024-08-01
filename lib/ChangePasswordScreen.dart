@@ -45,7 +45,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: _appBar(context),
-      body: SingleChildScrollView(
+      body:  Container(
+    color: Colors.white,
+    child:SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(20),
           child: Container(
@@ -138,7 +140,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                           ),
                           hintText: 'Enter Current Password',
                           counterText: "",
-                          hintStyle: const TextStyle(color: Colors.grey, fontWeight: FontWeight.w400),
+                          hintStyle: CommonStyles.texthintstyle
                         ),
                         validator: validateCurrentPassword,
                         inputFormatters: [
@@ -216,7 +218,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                           ),
                           hintText: 'Enter New Password',
                           counterText: "",
-                          hintStyle: const TextStyle(color: Colors.grey, fontWeight: FontWeight.w400),
+                          hintStyle: CommonStyles.texthintstyle,
                         ),
                         validator: validateNewPassword,
                         inputFormatters: [
@@ -293,7 +295,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                           ),
                           hintText: 'Enter Confirm Password',
                           counterText: "",
-                          hintStyle: const TextStyle(color: Colors.grey, fontWeight: FontWeight.w400),
+                          hintStyle: CommonStyles.texthintstyle
                         ),
                         validator: validateConfirmNewPassword,
                         inputFormatters: [
@@ -340,7 +342,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
           ),
         ),
       ),
-    );
+    ));
   }
 
   Future<void> changePassword() async {
@@ -470,7 +472,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   AppBar _appBar(BuildContext context) {
     return AppBar(
         elevation: 0,
-        backgroundColor: const Color(0xFFf3e3ff),
+        backgroundColor: const Color(0xffe2f0fd),
         title: const Text(
           'Change Password',
           style: TextStyle(color: Color(0xFF0f75bc), fontSize: 16.0),
@@ -506,8 +508,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Logout'),
-          content: const Text('Are You Sure You Want to Logout?'),
+          title: const Text('Logout',style: CommonStyles.txSty_18b_fb,),
+          content: const Text('Are You Sure You Want to Logout?',style: CommonStyles.txSty_16b_fb),
           actions: [
             TextButton(
               onPressed: () {

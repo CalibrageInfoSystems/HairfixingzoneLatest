@@ -11,14 +11,13 @@ import 'package:hairfixingzone/BranchesModel.dart';
 import 'package:hairfixingzone/Common/common_styles.dart';
 import 'package:hairfixingzone/Consultation.dart';
 import 'package:hairfixingzone/Dashboard_Screen.dart';
-import 'package:hairfixingzone/View_Consultation_screen.dart';
-
 import 'package:marquee/marquee.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'AddConsulationscreen.dart';
-import 'Add_Consultation_Screen.dart';
+
+import 'AgentBranchModel.dart';
 import 'Branches_screen.dart';
 import 'api_config.dart';
 
@@ -35,7 +34,7 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
   late Timer _timer;
   String? marqueeText;
   final int _currentPage = 0;
-  late Future<List<BranchModel>> apiData;
+  late Future<List<AgentBranchModel >> apiData;
   String userFullName = '';
   String email = '';
   String phonenumber = '';
@@ -127,7 +126,8 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: CommonStyles.whiteColor,
-      body: Column(
+      body: SingleChildScrollView(child:Container(width: MediaQuery.of(context).size.width,
+      child:Column(
         children: [
           wishSection(context),
           //MARK: Carousel view
@@ -140,7 +140,7 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
           // const SizedBox(
           //   height: 15,
           // ),
-         // screens(),
+      //     screens(),
          //  const SizedBox(
          //    height: 0,
          //  ),
@@ -168,7 +168,7 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
          // newBranches()
         ],
       ),
-    );
+    )));
   }
 
   Padding wishSection(BuildContext context) {
@@ -231,7 +231,7 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
             child: Text(snapshot.error.toString()),
           );
         } else {
-          List<BranchModel>? data = snapshot.data!;
+          List<AgentBranchModel >? data = snapshot.data!;
           return SizedBox(
             width: MediaQuery.of(context).size.width,
             // height: MediaQuery.of(context).size.height / 3.5,
@@ -240,7 +240,7 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
               shrinkWrap: true,
               itemCount: data.length,
               itemBuilder: (context, index) {
-                BranchModel branch = data[index];
+                AgentBranchModel  branch = data[index];
                 return
                   IntrinsicHeight(
                   child: GestureDetector(
@@ -468,12 +468,12 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
           autoPlayCurve: Curves.fastOutSlowIn,
           enableInfiniteScroll: true,
           slideIndicator: CircularSlideIndicator(
-            itemSpacing: 10,
+            slideIndicatorOptions: SlideIndicatorOptions(itemSpacing: 10,
             padding: const EdgeInsets.only(bottom: 10.0),
             indicatorBorderColor: Color(0xFF11528f),
             currentIndicatorColor: Color(0xFF11528f),
             indicatorRadius: 4,
-          ),
+          ),),
           autoPlayAnimationDuration: const Duration(milliseconds: 800),
         ),
         items: _items.map((item) {
@@ -681,7 +681,7 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
               child: Text(snapshot.error.toString()),
             );
           } else {
-            List<BranchModel>? data = snapshot.data!;
+            List<AgentBranchModel >? data = snapshot.data!;
             return SizedBox(
             //  width: MediaQuery.of(context).size.width,
               // height: MediaQuery.of(context).size.height / 3.5,
@@ -732,7 +732,7 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
   //     rethrow;
   //   }
   // }
-  Future<List<BranchModel>> getBranches(int userId) async {
+  Future<List<AgentBranchModel >> getBranches(int userId) async {
     String apiUrl = '$baseUrl$GetBranchByUserId$userId/null';
 
     try {
@@ -742,8 +742,8 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
         final data = json.decode(response.body);
         List<dynamic>? listResult = data['listResult']; // Add a check for null
         if (listResult != null) {
-          List<BranchModel> result =
-              listResult.map((e) => BranchModel.fromJson(e)).toList();
+          List<AgentBranchModel > result =
+              listResult.map((e) => AgentBranchModel .fromJson(e)).toList();
           return result;
         } else {
           print('listResult is null');
@@ -854,582 +854,24 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
     );
   }
 
-/* 
-  Widget screens() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        GestureDetector(
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => Branches_screen(userId: AgentId!)),
-            );
-          },
-          child: Column(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(15),
-                width: MediaQuery.of(context).size.width / 7,
-                //   height: 60,
-                decoration: const BoxDecoration(
-                  color: Color(0xFFe656ae),
-                  // color: Color(0xFF295f5a),
-                  shape: BoxShape.circle,
-                ),
-                child: SvgPicture.asset(
-                  'assets/calendar-lines.svg',
-                  color: CommonStyles.whiteColor,
-                ),
-              ),
-              const SizedBox(height: 5),
-              const Text(
-                'Check',
-                style: CommonStyles.txSty_14p_f5,
-                textAlign: TextAlign.center,
-              ),
-              const Text(
-                'Appointments',
-                style: CommonStyles.txSty_14p_f5,
-              ),
-            ],
-          ),
-        ),
-        GestureDetector(
-          // onTap: () {
-          //   print('_______test_______');
-          //   Navigator.of(context, rootNavigator: true)
-          //       .pushNamed("/ViewConsultation");
-          // },
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => Add_Consulation_screen(
-                        agentId: AgentId!,
-                      )),
-            );
-            // Navigator.of(context, rootNavigator: true)
-            //     .pushNamed("/Products");
-          },
-          child: Column(
-            children: [
-              Container(
-                width: MediaQuery.of(context).size.width / 7,
-                padding: const EdgeInsets.all(15),
-                decoration: const BoxDecoration(
-                  color: Color(0xFFe44561),
-                  shape: BoxShape.circle,
-                ),
-                child: SvgPicture.asset(
-                  'assets/calendar-day.svg',
-                  color: CommonStyles.whiteColor,
-                ),
-              ),
-              const SizedBox(height: 5),
-              // const Text(
-              //   'Add Consultation',
-              //   style: CommonStyles.txSty_14p_f5,
-              // ),
-              const Text(
-                'Add',
-                style: CommonStyles.txSty_14p_f5,
-                textAlign: TextAlign.center,
-              ),
-              const Text(
-                'Consultation',
-                style: CommonStyles.txSty_14p_f5,
-              ),
-            ],
-          ),
-        ),
-        GestureDetector(
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => View_Consultation_screen(
-                        agentId: AgentId!,
-                      )),
-            );
-            // Navigator.of(context, rootNavigator: true)
-            //     .pushNamed("/Products");
-          },
-          child: Column(
-            children: [
-              Container(
-                width: MediaQuery.of(context).size.width / 7,
-                //height: 60,
-                padding: const EdgeInsets.all(15),
-                decoration: const BoxDecoration(
-                  color: Color(0xFF662d91),
-                  shape: BoxShape.circle,
-                ),
-                child: SvgPicture.asset(
-                  'assets/overview.svg',
-                  color: CommonStyles.whiteColor,
-                ),
-              ),
-              const SizedBox(height: 5),
-              // const Text(
-              //   'View Consultation',
-              //   style: CommonStyles.txSty_14p_f5,
-              // ),
-              const Text(
-                'View',
-                style: CommonStyles.txSty_14p_f5,
-                textAlign: TextAlign.center,
-              ),
-              const Text(
-                'Consultation',
-                style: CommonStyles.txSty_14p_f5,
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
- */
-  // Widget newBranches() {
-  //   return FutureBuilder(
-  //     future: apiData,
-  //     builder: (context, snapshot) {
-  //       if (snapshot.connectionState == ConnectionState.waiting) {
-  //         return const Center(child: CircularProgressIndicator.adaptive());
-  //       } else if (snapshot.hasError) {
-  //         return Center(
-  //           child: Text(snapshot.error.toString()),
-  //         );
-  //       } else {
-  //         List<BranchModel>? data = snapshot.data!;
-  //         return SizedBox(
-  //           width: MediaQuery.of(context).size.width,
-  //           // height: MediaQuery.of(context).size.height / 3.5,
-  //           child: ListView.builder(
-  //             scrollDirection: Axis.vertical,
-  //             shrinkWrap: true,
-  //             itemCount: data.length,
-  //             itemBuilder: (context, index) {
-  //               BranchModel branch = data[index];
-  //               return IntrinsicHeight(
-  //                 child: GestureDetector(
-  //                   onTap: () {},
-  //                   child: Card(
-  //                     shadowColor: Colors.transparent,
-  //                     surfaceTintColor: Colors.transparent,
-  //                     child: ClipRRect(
-  //                       // borderRadius: const BorderRadius.only(
-  //                       //   topRight: Radius.circular(29.0),
-  //                       //   bottomLeft: Radius.circular(29.0),
-  //                       // ),
-  //                       child: Container(
-  //                         padding: const EdgeInsets.all(20),
-  //                         decoration: BoxDecoration(
-  //                           gradient: const LinearGradient(
-  //                             colors: [
-  //                               Color(0xFFFFFFFF),
-  //                               Color(0xFFFFFFFF),
-  //                             ],
-  //                             begin: Alignment.centerLeft,
-  //                             end: Alignment.centerRight,
-  //                           ),
-  //                           border: Border.all(
-  //                             color: Colors.grey,
-  //                             //  color: const Color(0xFF8d97e2), // Add your desired border color here
-  //                             width: 1.0, // Set the border width
-  //                           ),
-  //                           borderRadius: BorderRadius.circular(
-  //                               10.0), // Optional: Add border radius if needed
-  //                         ),
-  //                         child: Row(
-  //                           crossAxisAlignment: CrossAxisAlignment.center,
-  //                           children: [
-  //                             Container(
-  //                               width: 110,
-  //                               height: 65,
-  //                               decoration: BoxDecoration(
-  //                                 borderRadius: BorderRadius.circular(10.0),
-  //                               ),
-  //                               child: ClipRRect(
-  //                                 borderRadius: BorderRadius.circular(7.0),
-  //                                 child: Image.network(
-  //                                   branch.imageName!,
-  //                                   width: 110,
-  //                                   height: 65,
-  //                                   fit: BoxFit.fill,
-  //                                   loadingBuilder:
-  //                                       (context, child, loadingProgress) {
-  //                                     if (loadingProgress == null) {
-  //                                       return child;
-  //                                     }
-  //
-  //                                     return const Center(
-  //                                         child: CircularProgressIndicator
-  //                                             .adaptive());
-  //                                   },
-  //                                 ),
-  //                               ),
-  //                             ),
-  //                             const SizedBox(width: 10.0),
-  //                             Expanded(
-  //                               child: Column(
-  //                                 mainAxisAlignment: MainAxisAlignment.start,
-  //                                 crossAxisAlignment: CrossAxisAlignment.start,
-  //                                 children: [
-  //                                   Text(branch.name,
-  //                                       style: CommonStyles.txSty_18b_fb),
-  //                                   const SizedBox(height: 4.0),
-  //                                   Expanded(
-  //                                     child: Padding(
-  //                                       padding:
-  //                                           const EdgeInsets.only(right: 10.0),
-  //                                       child: Column(
-  //                                         crossAxisAlignment:
-  //                                             CrossAxisAlignment.start,
-  //                                         children: [
-  //                                           Row(
-  //                                             mainAxisAlignment:
-  //                                                 MainAxisAlignment.spaceEvenly,
-  //                                             children: [
-  //                                               //MARK: location_icon
-  //                                               // Image.asset(
-  //                                               //   'assets/location_icon.png',
-  //                                               //   width: 20,
-  //                                               //   height: 18,
-  //                                               // ),
-  //                                               // const SizedBox(
-  //                                               //     width:
-  //                                               //         4.0),
-  //                                               Expanded(
-  //                                                 child: Text(branch.address,
-  //                                                     style: CommonStyles
-  //                                                         .txSty_12b_fb),
-  //                                               ),
-  //                                             ],
-  //                                           ),
-  //                                         ],
-  //                                       ),
-  //                                     ),
-  //                                   ),
-  //
-  //                                   /*
-  //                                   Align(
-  //                                     alignment: Alignment.bottomRight,
-  //                                     child: Container(
-  //                                       height: 26,
-  //                                       margin: const EdgeInsets.only(
-  //                                           bottom: 10.0, right: 10.0),
-  //                                       decoration: BoxDecoration(
-  //                                         color: Colors.white,
-  //                                         border: Border.all(
-  //                                           color:
-  //                                               const Color(0xFF8d97e2),
-  //                                         ),
-  //                                         borderRadius:
-  //                                             BorderRadius.circular(10.0),
-  //                                       ),
-  //                                       child: ElevatedButton(
-  //                                         onPressed: () {},
-  //                                         style: ElevatedButton.styleFrom(
-  //                                           foregroundColor:
-  //                                               const Color(0xFF8d97e2),
-  //                                           backgroundColor:
-  //                                               Colors.transparent,
-  //                                           elevation: 0,
-  //                                           shadowColor:
-  //                                               Colors.transparent,
-  //                                           shape: RoundedRectangleBorder(
-  //                                             borderRadius:
-  //                                                 BorderRadius.circular(
-  //                                                     10.0),
-  //                                           ),
-  //                                         ),
-  //                                         child: Row(
-  //                                           mainAxisSize:
-  //                                               MainAxisSize.min,
-  //                                           children: [
-  //                                             SvgPicture.asset(
-  //                                               'assets/datepicker_icon.svg',
-  //                                               width: 15.0,
-  //                                               height: 15.0,
-  //                                             ),
-  //                                             const SizedBox(width: 5),
-  //                                             const Text(
-  //                                               'Book Now',
-  //                                               style: TextStyle(
-  //                                                 fontSize: 13,
-  //                                                 color:
-  //                                                     Color(0xFF8d97e2),
-  //                                               ),
-  //                                             ),
-  //                                           ],
-  //                                         ),
-  //                                       ),
-  //                                     ),
-  //                                   ),
-  //                                */
-  //                                 ],
-  //                               ),
-  //                             ),
-  //                           ],
-  //                         ),
-  //                       ),
-  //                     ),
-  //                   ),
-  //                 ),
-  //               );
-  //             },
-  //           ),
-  //         );
-  //       }
-  //     },
-  //   );
-  //   /*
-  //      return Padding(
-  //                             padding: const EdgeInsets.symmetric(
-  //                                 horizontal: 0.0, vertical: 5.0),
-  //                             child: IntrinsicHeight(
-  //                               child: ClipRRect(
-  //                                 borderRadius: const BorderRadius.only(
-  //                                     // topRight: Radius.circular(42.5),
-  //                                     // bottomLeft: Radius.circular(42.5),
-  //                                     ),
-  //                                 child: GestureDetector(
-  //                                   onTap: () {    },
-  //                                   child: Card(
-  //                                     shadowColor: Colors.transparent,
-  //                                     surfaceTintColor: Colors.transparent,
-  //                                     child: ClipRRect(
-  //                                       // borderRadius: const BorderRadius.only(
-  //                                       //   topRight: Radius.circular(29.0),
-  //                                       //   bottomLeft: Radius.circular(29.0),
-  //                                       // ),
-  //                                       child: Container(
-  //                                         decoration: BoxDecoration(
-  //                                           gradient: const LinearGradient(
-  //                                             colors: [
-  //                                               Color(0xFFFFFFFF),
-  //                                               Color(0xFFFFFFFF),
-  //                                             ],
-  //                                             begin: Alignment.centerLeft,
-  //                                             end: Alignment.centerRight,
-  //                                           ),
-  //                                           border: Border.all(
-  //                                             color: Colors.grey,
-  //                                             //  color: const Color(0xFF8d97e2), // Add your desired border color here
-  //                                             width:
-  //                                                 1.0, // Set the border width
-  //                                           ),
-  //                                           borderRadius: BorderRadius.circular(
-  //                                               10.0), // Optional: Add border radius if needed
-  //                                         ),
-  //                                         child: Row(
-  //                                           crossAxisAlignment:
-  //                                               CrossAxisAlignment.center,
-  //                                           children: [
-  //                                             Padding(
-  //                                               padding: const EdgeInsets.only(
-  //                                                   left: 15.0),
-  //                                               child: Container(
-  //                                                 width: 110,
-  //                                                 height: 65,
-  //                                                 decoration: BoxDecoration(
-  //                                                   borderRadius:
-  //                                                       BorderRadius.circular(
-  //                                                           10.0),
-  //                                                 ),
-  //                                                 child: ClipRRect(
-  //                                                   borderRadius:
-  //                                                       BorderRadius.circular(
-  //                                                           7.0),
-  //                                                   child: Image.network(
-  //                                                     branch.imageName!,
-  //                                                     width: 110,
-  //                                                     height: 65,
-  //                                                     fit: BoxFit.fill,
-  //                                                     loadingBuilder: (context,
-  //                                                         child,
-  //                                                         loadingProgress) {
-  //                                                       if (loadingProgress ==
-  //                                                           null) return child;
-  //
-  //                                                       return const Center(
-  //                                                           child:
-  //                                                               CircularProgressIndicator
-  //                                                                   .adaptive());
-  //                                                     },
-  //                                                   ),
-  //                                                 ),
-  //                                               ),
-  //                                             ),
-  //                                             Expanded(
-  //                                               child: Padding(
-  //                                                 padding:
-  //                                                     const EdgeInsets.only(
-  //                                                         left: 15.0),
-  //                                                 child: Column(
-  //                                                   mainAxisAlignment:
-  //                                                       MainAxisAlignment.start,
-  //                                                   crossAxisAlignment:
-  //                                                       CrossAxisAlignment
-  //                                                           .start,
-  //                                                   children: [
-  //                                                     Padding(
-  //                                                       padding:
-  //                                                           const EdgeInsets
-  //                                                               .only(
-  //                                                               top: 15.0),
-  //                                                       child: Text(branch.name,
-  //                                                           style: CommonStyles
-  //                                                               .txSty_18b_fb),
-  //                                                     ),
-  //                                                     const SizedBox(
-  //                                                         height: 4.0),
-  //                                                     Expanded(
-  //                                                       child: Padding(
-  //                                                         padding:
-  //                                                             const EdgeInsets
-  //                                                                 .only(
-  //                                                                 right: 10.0),
-  //                                                         child: Column(
-  //                                                           crossAxisAlignment:
-  //                                                               CrossAxisAlignment
-  //                                                                   .start,
-  //                                                           children: [
-  //                                                             Row(
-  //                                                               mainAxisAlignment:
-  //                                                                   MainAxisAlignment
-  //                                                                       .spaceEvenly,
-  //                                                               children: [
-  //                                                                 //MARK: location_icon
-  //                                                                 // Image.asset(
-  //                                                                 //   'assets/location_icon.png',
-  //                                                                 //   width: 20,
-  //                                                                 //   height: 18,
-  //                                                                 // ),
-  //                                                                 // const SizedBox(
-  //                                                                 //     width:
-  //                                                                 //         4.0),
-  //                                                                 Expanded(
-  //                                                                   child: Text(
-  //                                                                       branch
-  //                                                                           .address,
-  //                                                                       style: CommonStyles
-  //                                                                           .txSty_12b_fb),
-  //                                                                 ),
-  //                                                               ],
-  //                                                             ),
-  //                                                             const Spacer(
-  //                                                                 flex: 3),
-  //                                                           ],
-  //                                                         ),
-  //                                                       ),
-  //                                                     ),
-  //                                                     Align(
-  //                                                       alignment: Alignment
-  //                                                           .bottomRight,
-  //                                                       child: Container(
-  //                                                         height: 26,
-  //                                                         margin:
-  //                                                             const EdgeInsets
-  //                                                                 .only(
-  //                                                                 bottom: 10.0,
-  //                                                                 right: 10.0),
-  //                                                         decoration:
-  //                                                             BoxDecoration(
-  //                                                           color: Colors.white,
-  //                                                           border: Border.all(
-  //                                                             color: const Color(
-  //                                                                 0xFF8d97e2),
-  //                                                           ),
-  //                                                           borderRadius:
-  //                                                               BorderRadius
-  //                                                                   .circular(
-  //                                                                       10.0),
-  //                                                         ),
-  //                                                         child: ElevatedButton(
-  //                                                           onPressed: () {},
-  //                                                           style:
-  //                                                               ElevatedButton
-  //                                                                   .styleFrom(
-  //                                                             foregroundColor:
-  //                                                                 const Color(
-  //                                                                     0xFF8d97e2),
-  //                                                             backgroundColor:
-  //                                                                 Colors
-  //                                                                     .transparent,
-  //                                                             elevation: 0,
-  //                                                             shadowColor: Colors
-  //                                                                 .transparent,
-  //                                                             shape:
-  //                                                                 RoundedRectangleBorder(
-  //                                                               borderRadius:
-  //                                                                   BorderRadius
-  //                                                                       .circular(
-  //                                                                           10.0),
-  //                                                             ),
-  //                                                           ),
-  //                                                           child: Row(
-  //                                                             mainAxisSize:
-  //                                                                 MainAxisSize
-  //                                                                     .min,
-  //                                                             children: [
-  //                                                               SvgPicture
-  //                                                                   .asset(
-  //                                                                 'assets/datepicker_icon.svg',
-  //                                                                 width: 15.0,
-  //                                                                 height: 15.0,
-  //                                                               ),
-  //                                                               const SizedBox(
-  //                                                                   width: 5),
-  //                                                               const Text(
-  //                                                                 'Book Now',
-  //                                                                 style:
-  //                                                                     TextStyle(
-  //                                                                   fontSize:
-  //                                                                       13,
-  //                                                                   color: Color(
-  //                                                                       0xFF8d97e2),
-  //                                                                 ),
-  //                                                               ),
-  //                                                             ],
-  //                                                           ),
-  //                                                         ),
-  //                                                       ),
-  //                                                     ),
-  //                                                   ],
-  //                                                 ),
-  //                                               ),
-  //                                             ),
-  //                                           ],
-  //                                         ),
-  //                                       ),
-  //                                     ),
-  //                                   ),
-  //                                 ),
-  //                               ),
-  //                             ),
-  //                           );
-  //    */
-  // }
+
 }
 
 class BranchCard extends StatelessWidget {
-  final BranchModel branch;
+  final AgentBranchModel  branch;
   final int agentid;
 
   const BranchCard({super.key, required this.branch,required this.agentid});
 
   @override
   Widget build(BuildContext context) {
-    return     GestureDetector(
+    return  GestureDetector(
         onTap: () {
           Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => AddConsulationscreen(agentId:agentid, branchname: branch.name,)));
+                  builder: (context) => AddConsulationscreen(agentId: agentid, branch: branch),
+              ));
 
           print('branchid${branch.id}');
 
@@ -1522,7 +964,7 @@ class BranchCard extends StatelessWidget {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => AddConsulationscreen(agentId:agentid, branchname: branch.name)));
+                                  builder: (context) => AddConsulationscreen(agentId: agentid, branch: branch),));
                         },
                         style: ElevatedButton.styleFrom(
                           padding:EdgeInsets.symmetric(horizontal: 10.0), // Adjust padding as needed, // Remove padding
@@ -1548,7 +990,7 @@ class BranchCard extends StatelessWidget {
                             ),
                             SizedBox(width: 5),
                             SvgPicture.asset(
-                              'assets/squareupright.svg',
+                              'assets/calendarplus.svg',
                               width: 12.0,
                               height: 12.0,
                               color: Color(0xFF11528f),
@@ -1563,121 +1005,6 @@ class BranchCard extends StatelessWidget {
               ],
             )
         ));
-    //   Card(
-    //   elevation: 2,
-    //   shape: RoundedRectangleBorder(
-    //     borderRadius: BorderRadius.circular(10),
-    //   ),
-    //   child: Container(
-    //     height: MediaQuery.of(context).size.height,
-    //     // width: 170,
-    //     width: MediaQuery.of(context).size.width / 2.5,
-    //     decoration: BoxDecoration(
-    //       borderRadius: BorderRadius.circular(10),
-    //       // color: Colors.grey,
-    //       color: CommonStyles.branchBg,
-    //     ),
-    //     child: Column(
-    //       crossAxisAlignment: CrossAxisAlignment.stretch,
-    //       children: [
-    //         Container(
-    //           height: MediaQuery.of(context).size.height / 8.5,
-    //           decoration: BoxDecoration(
-    //             borderRadius: BorderRadius.circular(10),
-    //             color: Colors.grey,
-    //           ),
-    //           child: ClipRRect(
-    //             borderRadius: const BorderRadius.only(
-    //               topLeft: Radius.circular(10),
-    //               topRight: Radius.circular(10),
-    //             ),
-    //             child: Image.network(
-    //               branch.imageName!,
-    //               fit: BoxFit.cover,
-    //             ),
-    //           ),
-    //         ),
-    //         // Expanded(
-    //         //   child: ClipRRect(
-    //         //     borderRadius: const BorderRadius.only(
-    //         //       topLeft: Radius.circular(10),
-    //         //       topRight: Radius.circular(10),
-    //         //     ),
-    //         //     child: Image.network(
-    //         //       branch.imageName,
-    //         //       fit: BoxFit.cover,
-    //         //     ),
-    //         //   ),
-    //         // ),
-    //         // Expanded(
-    //         //   child: Container(
-    //         //     padding: const EdgeInsets.all(5),
-    //         //     decoration: const BoxDecoration(
-    //         //       borderRadius: BorderRadius.only(
-    //         //         topLeft: Radius.circular(10),
-    //         //         topRight: Radius.circular(10),
-    //         //       ),
-    //         //       color: Colors.greenAccent,
-    //         //     ),
-    //         //     child: Image.network(
-    //         //       // 'https://via.placeholder.com/600/92c952',
-    //         //       'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTH7vDN07mCqaSv-VvdFX3VYd2Ic9uFyha4kA&s',
-    //         //       fit: BoxFit.fill,
-    //         //     ),
-    //         //   ),
-    //         // ),
-    //         // Expanded(
-    //         //   child: Container(
-    //         //     padding: const EdgeInsets.all(10),
-    //         //     decoration: const BoxDecoration(
-    //         //       borderRadius: BorderRadius.only(
-    //         //         bottomLeft: Radius.circular(10),
-    //         //         bottomRight: Radius.circular(10),
-    //         //       ),
-    //         //       color: CommonStyles.branchBg,
-    //         //     ),
-    //         //     child: Column(
-    //         //       crossAxisAlignment: CrossAxisAlignment.stretch,
-    //         //       children: [
-    //         //         Text(
-    //         //           branch.name,
-    //         //           style: CommonStyles.txSty_16p_fb,
-    //         //         ),
-    //         //         Text(branch.address, style: CommonStyles.txSty_12b_f5),
-    //         //       ],
-    //         //     ),
-    //         //   ),
-    //         // ),
-    //         Container(
-    //           // height: MediaQuery.of(context).size.height,
-    //           padding: const EdgeInsets.all(10),
-    //           decoration: const BoxDecoration(
-    //             borderRadius: BorderRadius.only(
-    //               bottomLeft: Radius.circular(10),
-    //               bottomRight: Radius.circular(10),
-    //             ),
-    //             color: CommonStyles.branchBg,
-    //           ),
-    //           child: Column(
-    //             crossAxisAlignment: CrossAxisAlignment.stretch,
-    //             children: [
-    //               Text(
-    //                 branch.name,
-    //                 style: CommonStyles.txSty_16p_fb,
-    //               ),
-    //               Text(
-    //                 branch.address,
-    //                 maxLines: 3,
-    //                 overflow: TextOverflow.ellipsis,
-    //                 style: CommonStyles.txSty_12b_f5.copyWith(
-    //                     color: Colors.black, fontWeight: FontWeight.w600),
-    //               )
-    //             ],
-    //           ),
-    //         ),
-    //       ],
-    //     ),
-    //   ),
-    // );
+
   }
 }

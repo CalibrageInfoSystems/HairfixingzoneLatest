@@ -86,39 +86,40 @@ class CommonUtils{
   static const blackColor = Colors.black;
   static const blackColorShade = Color(0xFF5f5f5f);
   static const primaryColor = Color(0xFFf7ebff);
-  static const primaryTextColor = Color(0xFF662e91);
+  static const primaryTextColor = Color(0xFF11528f);
   static const formFieldErrorBorderColor = Color(0xFFff0000);
   static const blueColor = Color(0xFF0f75bc);
+  static const primarylightColor = Color(0xffe2f0fd);
   static const TextStyle header_Styles = TextStyle(
-    fontSize: 24,
+    fontSize: 20,
     fontFamily: "Outfit",
-    fontWeight: FontWeight.w700,
-    color: Color(0xFF662d91),
+    fontWeight: FontWeight.w600,
+    color: Color(0xFF11528f),
   );
   static const TextStyle Sub_header_Styles = TextStyle(
-    fontSize: 24,
+    fontSize: 20,
     fontFamily: "Outfit",
     fontWeight: FontWeight.w500,
-    color: Color(0xFF5f5f5f)
+    color: blackColor
   );
   static const TextStyle Mediumtext_o_14 = TextStyle(
     fontSize: 20,
     fontFamily: "Outfit",
     fontWeight: FontWeight.w500,
-    color: Color(0xFF0f75bc),
+    color: Color(0xFF11528f),
   );
 
   static const TextStyle Mediumtext14 = TextStyle(
     fontSize: 14,
     fontFamily: "Outfit",
     fontWeight: FontWeight.w500,
-    color: Color(0xFF0f75bc),
+    color: Color(0xFF11528f),
   );
   static const TextStyle Mediumtext_14 = TextStyle(
     fontSize: 20,
     fontFamily: "Outfit",
     fontWeight: FontWeight.w500,
-    color: Color(0xFF5f5f5f),
+    color:Colors.black,
   );
   static  TextStyle Mediumtext16 = TextStyle(
     fontSize: 16,
@@ -135,13 +136,13 @@ class CommonUtils{
   static const txSty_12b_fb = TextStyle(
     fontSize: 12.0,
     color: blackColor,
-    fontWeight: FontWeight.bold,
+    fontWeight: FontWeight.w600,
     fontFamily: "Outfit",
   );
   static const txSty_12bs_fb = TextStyle(
     fontSize: 12.0,
     letterSpacing: 1,
-    fontWeight: FontWeight.bold,
+    fontWeight: FontWeight.w600,
     fontFamily: "Outfit",
   );
   static const txSty_12p_fb = TextStyle(
@@ -154,15 +155,15 @@ class CommonUtils{
   static const txSty_18b_fb = TextStyle(
     fontSize: 18,
     fontFamily: 'Outfit',
-    fontWeight: FontWeight.bold,
-    color: Color(0xFF662d91),
+    fontWeight: FontWeight.w600,
+    color: Color(0xFF11528f),
   );
   static const txSty_18p_f7 = TextStyle(
-    fontSize: 18,
+    fontSize: 16,
     fontFamily: 'Outfit',
-    fontWeight: FontWeight.w700,
+    fontWeight: FontWeight.w600,
     letterSpacing: 1,
-    color:Color(0xFF0f75bc),
+    color:Color(0xFF11528f),
   );
   static Future<bool> checkInternetConnectivity() async {
     var connectivityResult = await (Connectivity().checkConnectivity());

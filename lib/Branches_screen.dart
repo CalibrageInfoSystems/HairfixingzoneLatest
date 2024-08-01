@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
@@ -9,9 +10,7 @@ import 'Agentappointmentlist.dart';
 import 'BranchModel.dart';
 import 'Common/common_styles.dart';
 import 'CommonUtils.dart';
-import 'UserSelectionScreen.dart';
-import 'ViewConsultations.dart';
-import 'appointmentlist.dart';
+
 import 'api_config.dart';
 // import 'consultation_creation_screen.dart';
 // import 'consultation_creation_screen.dart';
@@ -75,23 +74,26 @@ class _BranchesscreenState extends State<Branches_screen> {
     final desiredWidth = screenWidth;
 
     return Scaffold(
-      appBar: AppBar(
-          elevation: 0,
-          backgroundColor: const Color(0xFFf3e3ff),
-          title: const Text(
-            'Select Branch',
-            style: TextStyle(color: Color(0xFF0f75bc), fontSize: 16.0, fontFamily: "Outfit", fontWeight: FontWeight.w600),
-          ),
-          leading: IconButton(
-            icon: const Icon(
-              Icons.arrow_back_ios,
-              color: CommonUtils.primaryTextColor,
-            ),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          )),
-      body: Column(
+      // appBar: AppBar(
+      //     elevation: 0,
+      //     backgroundColor: const Color(0xffe2f0fd),
+      //     title: const Text(
+      //       'Select Branch',
+      //       style: TextStyle(color: Color(0xFF11528f), fontSize: 16.0, fontFamily: "Outfit", fontWeight: FontWeight.w600),
+      //     ),
+      //     leading: IconButton(
+      //       icon: const Icon(
+      //         Icons.arrow_back_ios,
+      //         color: CommonUtils.primaryTextColor,
+      //       ),
+      //       onPressed: () {
+      //         Navigator.of(context).pop();
+      //       },
+      //     )),
+      body:
+      Container(
+        color: Colors.white,
+      child:Column(
         children: [
           const SizedBox(
             height: 10,
@@ -127,7 +129,7 @@ class _BranchesscreenState extends State<Branches_screen> {
               ),
         ],
       ),
-    );
+    ));
   }
 
   void _handleButtonPress() {
@@ -162,15 +164,15 @@ class _BranchesscreenState extends State<Branches_screen> {
   }
 
   Future<void> _getBranchData(int userId) async {
-    // setState(() {
-    //   _isLoading = true; // Set isLoading to true before making the API call
-    // });
+    setState(() {
+      _isLoading = true; // Set isLoading to true before making the API call
+    });
 
     String apiUrl = '$baseUrl$GetBranchByUserId$userId/null';
-    // const maxRetries = 1; // Set maximum number of retries
-    // int retries = 0;
+   const maxRetries = 1; // Set maximum number of retries
+ int retries = 0;
 
-    //while (retries < maxRetries) {
+  while (retries < maxRetries) {
     try {
       // Make the HTTP GET request with a timeout of 30 seconds
       final response = await http.get(Uri.parse(apiUrl));
@@ -204,50 +206,13 @@ class _BranchesscreenState extends State<Branches_screen> {
     } catch (error) {
       print('Error: $error');
     }
-
-    // retries++;
-    // await Future.delayed(Duration(seconds: 2 * retries)); // Exponential backoff
+  }
+    retries++;
+    await Future.delayed(Duration(seconds: 2 * retries)); // Exponential backoff
   }
 
-  void logOutDialog() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Logout'),
-          content: const Text('Are you sure you want to Logout?'),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text('No'),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-                onConfirmLogout();
-              },
-              child: const Text('Yes'),
-            ),
-          ],
-        );
-      },
-    );
-  }
 
-  Future<void> onConfirmLogout() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setBool('isLoggedIn', false);
-    prefs.remove('userId'); // Remove userId from SharedPreferences
-    prefs.remove('userRoleId'); // Remove roleId from SharedPreferences
-    CommonUtils.showCustomToastMessageLong("Logout Successful", context, 0, 3);
 
-    Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(builder: (context) => UserSelectionScreen()),
-      (route) => false,
-    );
-  }
 
 // Handle the case where all retries failed
 // print('All retries failed. Unable to fetch data from the API.');
@@ -265,6 +230,7 @@ class BranchTemplate extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       width: MediaQuery.of(context).size.width,
       child: GestureDetector(
@@ -290,38 +256,50 @@ class BranchTemplate extends StatelessWidget {
             //   borderRadius: BorderRadius.circular(10.0),
             // ),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: Color(0xFFdbeaff),
               borderRadius: BorderRadius.circular(10.0),
               // borderRadius: BorderRadius.circular(30), //border corner radius
-              boxShadow: [
-                BoxShadow(
-                  color: Color(0xFF960efd).withOpacity(0.2), //color of shadow
-                  spreadRadius: 2, //spread radius
-                  blurRadius: 4, // blur radius
-                  offset: Offset(0, 2), // changes position of shadow
-                ),
-              ],
+              // boxShadow: [
+              //   BoxShadow(
+              //     color: Color(0xFF11528f).withOpacity(0.2), //color of shadow
+              //     spreadRadius: 2, //spread radius
+              //     blurRadius: 4, // blur radius
+              //     offset: Offset(0, 2), // changes position of shadow
+              //   ),
+              // ],
             ),
             child: Row(
               children: [
-                Container(
-                  padding: EdgeInsets.all(10),
+            Container(
+            margin: EdgeInsets.only(top: 10.0,left: 10.0,right: 10.0,bottom: 10.0),
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: Colors.grey,
+                width: 2.5,
+              ),
+              borderRadius: BorderRadius.circular(15.0),
+            ),
+            child:
+            ClipRRect(
+              borderRadius: BorderRadius.circular(13.0),
+              child: Image.network(
+                imageUrl.isNotEmpty ? imageUrl : 'https://example.com/placeholder-image.jpg',
+                width: 65,
+                height: 60,
+                fit: BoxFit.fill,
+                loadingBuilder: (context, child, loadingProgress) {
+                  if (loadingProgress == null) return child;
+
+                  return Center(child: CircularProgressIndicator.adaptive());
+                },
+              ),
+            ),
+            width: 65,
+            height: 60,
+          ),
                   // width: MediaQuery.of(context).size.width / 4,
-                  child: Image.network(
-                    imageUrl.isNotEmpty ? imageUrl : 'https://example.com/placeholder-image.jpg',
-                    fit: BoxFit.cover,
-                    height: MediaQuery.of(context).size.height / 4 / 2,
-                    width: MediaQuery.of(context).size.width / 3.2,
-                    errorBuilder: (context, error, stackTrace) {
-                      return Image.asset(
-                        'assets/hairfixing_logo.png', // Path to your PNG placeholder image
-                        fit: BoxFit.cover,
-                        height: MediaQuery.of(context).size.height / 4 / 2,
-                        width: MediaQuery.of(context).size.width / 3.2,
-                      );
-                    },
-                  ),
-                ),
+
+
                 Container(
                   // height: MediaQuery.of(context).size.height / 4 / 2,
 
@@ -334,11 +312,7 @@ class BranchTemplate extends StatelessWidget {
                     children: [
                       Text(
                         '${branchnames.name}',
-                        style: TextStyle(
-                          color: Color(0xFF0f75bc),
-                          fontSize: 14.0,
-                          fontWeight: FontWeight.w600,
-                        ),
+                        style:  GoogleFonts.outfit(fontWeight: FontWeight.w700,fontSize: 18,color: Color(0xFF11528f)),
                       ),
                       SizedBox(
                         height: 5,

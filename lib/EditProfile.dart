@@ -100,65 +100,7 @@ class EditProfile_screenState extends State<EditProfile> {
     CommonUtils.checkInternetConnectivity().then((isConnected) async {
       if (isConnected) {
         fetchRadioButtonOptions();
-        /*  
-        setState(() async {
-          // Wait for SharedPreferences.getInstance() to complete
-          SharedPreferences prefs = await SharedPreferences.getInstance();
 
-          // Now you can retrieve values from SharedPreferences
-          Id = prefs.getInt('id');
-          userId = prefs.getInt('userId');
-          fullName = prefs.getString('userFullName');
-          dob = prefs.getString('dateofbirth') ?? '';
-          gender = prefs.getString('gender');
-          gendertypeid = prefs.getInt('genderId');
-          email = prefs.getString('email');
-          contactNumber = prefs.getString('contactNumber');
-          phoneNumber = prefs.getString('mobileNumber');
-          createdDate = prefs.getString('createddate');
-          username = prefs.getString('username');
-          roleId = prefs.getInt('userRoleId');
-          password = prefs.getString('password');
-
-          print('profile: $Id');
-          print('profile: $userId');
-          print('profile: $fullName');
-          print('profile: $dob');
-          print('profile: $gender');
-          print('profile: $gendertypeid');
-          print('profile: $email');
-          print('profile: $contactNumber');
-          print('profile: $phoneNumber');
-          print('profile: $createdDate');
-          print('profile: $username');
-          print('profile: $roleId');
-          print('profile: $password');
-
-          // Format date if dob is not empty
-          if (dob!.isNotEmpty) {
-            formattedDate =
-                DateFormat('yyyy-MM-dd').format(DateTime.parse(dob!));
-            dobDate = DateFormat('dd-MM-yyyy').format(DateTime.parse(dob!));
-          }
-          print('APIDate:117$dob==$dobDate  =$formattedDate');
-          // Set the state using retrieved values
-          setState(() {
-            fullNameController.text = "$fullName";
-            dobController.text = '$dobDate';
-            emailController.text = '$email';
-            mobileNumberController.text = '$contactNumber';
-            alernateMobileNumberController.text = '$phoneNumber';
-            selectedGender = gender!;
-            isGenderSelected = true;
-            isGenderValidate = false;
-          });
-
-          // Print for debugging
-          print('fullname$fullName');
-          print('usernameId:$Id');
-          print('gender:$gender');
-        });
- */
         // fetchMyAppointments(userId);
       } else {
         CommonUtils.showCustomToastMessageLong(
@@ -370,6 +312,7 @@ class EditProfile_screenState extends State<EditProfile> {
                       _fullNameError = false;
                     });
                   },
+
                 ),
                 const SizedBox(
                   height: 10,
@@ -386,9 +329,8 @@ class EditProfile_screenState extends State<EditProfile> {
                   children: [
                     Text(
                       'Date of Birth ',
-                      style:
-                          TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-                    ),
+                  style:CommonUtils.txSty_12b_fb,),
+
                     Text(
                       '*',
                       style: TextStyle(color: Colors.red),
@@ -429,11 +371,11 @@ class EditProfile_screenState extends State<EditProfile> {
                     ),
                     hintText: 'Enter Date of Birth',
                     counterText: "",
-                    hintStyle: const TextStyle(
-                        color: Colors.grey, fontWeight: FontWeight.w400),
+                    hintStyle: CommonStyles.texthintstyle,
                     suffixIcon: const Icon(Icons.calendar_today),
                   ),
                   validator: validateDOB,
+                  style: CommonStyles.txSty_14b_fb,
                   onChanged: (value) {
                     setState(() {
                       _dobError = false;
@@ -448,8 +390,7 @@ class EditProfile_screenState extends State<EditProfile> {
                   children: [
                     Text(
                       'Gender ',
-                      style:
-                          TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                        style: CommonStyles.txSty_12b_fb,
                     ),
                     Text(
                       '*',
@@ -477,9 +418,7 @@ class EditProfile_screenState extends State<EditProfile> {
                             value: selectedGender,
                             iconSize: 30,
                             icon: null,
-                            style: const TextStyle(
-                              color: Colors.black,
-                            ),
+                            style: CommonUtils.txSty_12b_fb,
                             onChanged: (value) {
                               setState(() {
                                 selectedGender = value!;
@@ -515,7 +454,7 @@ class EditProfile_screenState extends State<EditProfile> {
                               ...dropdownItems.map((item) {
                                 return DropdownMenuItem<String>(
                                   value: item['desc'],
-                                  child: Text(item['desc']),
+                                  child: Text(item['desc'],   style: CommonStyles.txSty_14b_fb,),
                                 );
                               }).toList(),
                             ]),
@@ -623,8 +562,7 @@ class EditProfile_screenState extends State<EditProfile> {
                   children: [
                     Text(
                       'Email ',
-                      style:
-                          TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                      style: CommonStyles.txSty_12b_fb,
                     ),
                     Text(
                       '*',
@@ -681,10 +619,10 @@ class EditProfile_screenState extends State<EditProfile> {
                     ),
                     hintText: 'Enter Email',
                     counterText: "",
-                    hintStyle: const TextStyle(
-                        color: Colors.grey, fontWeight: FontWeight.w400),
+                    hintStyle: CommonStyles.texthintstyle
                   ),
                   validator: validateEmail,
+                  style: CommonStyles.txSty_14b_fb,
                   onChanged: (value) {
                     setState(() {
                       _emailError = false;
@@ -740,8 +678,7 @@ class EditProfile_screenState extends State<EditProfile> {
                       children: [
                         Text(
                           'Alternate Mobile Number ',
-                          style: TextStyle(
-                              fontSize: 12, fontWeight: FontWeight.bold),
+                            style: CommonStyles.txSty_12b_fb,
                         ),
                       ],
                     ),
@@ -795,13 +732,14 @@ class EditProfile_screenState extends State<EditProfile> {
                           ),
                         ),
                         hintText: 'Enter Alternate Mobile Number',
-                        hintStyle: const TextStyle(
-                            color: Colors.grey, fontWeight: FontWeight.w400),
+                        hintStyle: CommonStyles.texthintstyle,
                       ),
                       maxLength: 10,
+
                       inputFormatters: [
                         FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
                       ],
+                      style: CommonStyles.txSty_14b_fb,
                       validator: validateAlterMobilenum,
                       onChanged: (value) {
                         setState(() {
@@ -1127,7 +1065,7 @@ class EditProfile_screenState extends State<EditProfile> {
             print('Request sent successfully');
             Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (context) =>  NewScreen(userName: loginUserFullName!),
+                builder: (context) =>   HomeScreen(),
               ),
             );
             // showCustomToastMessageLong('Slot booked successfully', context, 0, 2);

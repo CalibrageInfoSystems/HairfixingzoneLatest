@@ -41,9 +41,14 @@ class _NewScreenState extends State<NewScreen> {
   DateTime? createdDate;
   String? password = '';
   int Id = 0;
+  int? loginUserId;
+  String? loginUserFullName;
+  late Future<void> _fetchUserDataFuture;
   @override
   void initState() {
     super.initState();
+
+    print('username===47 ${widget.userName}');
     // getUserDataFromSharedPreferences();
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitDown,
@@ -57,6 +62,7 @@ class _NewScreenState extends State<NewScreen> {
         setState(() {
           Id = prefs.getInt('userId') ?? 0;
           fetchdetailsofcustomer(Id);
+         // _fetchUserDataFuture = fetchLoginUserData();
         });
 
         // fetchMyAppointments(userId);
@@ -67,6 +73,7 @@ class _NewScreenState extends State<NewScreen> {
   }
   @override
   Widget build(BuildContext context) {
+  //  _fetchUserDataFuture = fetchLoginUserData();
     return WillPopScope(
       onWillPop: () => onBackPressed(context),
       child: Scaffold(
@@ -153,8 +160,11 @@ class _NewScreenState extends State<NewScreen> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(widget.userName,
-                              style: CommonStyles.txSty_20black_fb),
+                          Text(
+                            loginUserFullName ?? '',
+                            style: CommonStyles.txSty_20black_fb,
+                          ),
+
                           const Text('Edit profile',
                               style: CommonStyles.txSty_16black_f5),
                         ],
@@ -255,7 +265,7 @@ class _NewScreenState extends State<NewScreen> {
                   'assets/about_us.svg',
                   width: 25,
                   height: 25,
-                  color: const Color(0xFF662e91), // Adjust color as needed
+                  color: const Color(0xFF11528f), // Adjust color as needed
                 ),
                 title: const Text('About Us',
                     style: CommonStyles.txSty_20black_fb),
@@ -275,7 +285,7 @@ class _NewScreenState extends State<NewScreen> {
                   'assets/apps.svg',
                   width: 25,
                   height: 25,
-                  color: const Color(0xFF662e91), // Adjust color as needed
+                  color: const Color(0xFF11528f), // Adjust color as needed
                 ),
                 title: const Text('Products',
                     style: CommonStyles.txSty_20black_fb),
@@ -283,7 +293,7 @@ class _NewScreenState extends State<NewScreen> {
                     color: Colors.grey, size: 16), // Add trailing icon here
                 onTap: () {
                   products(context);
-                  MyProducts();
+                 // MyProducts();
                 },
               ),
               const Padding(
@@ -296,7 +306,7 @@ class _NewScreenState extends State<NewScreen> {
                     'assets/fav_star.svg',
                     width: 25,
                     height: 25,
-                    color: const Color(0xFF662e91), // Adjust color as needed
+                    color: const Color(0xFF11528f), // Adjust color as needed
                   ),
                   title: const Text('Favourites',
                       style: CommonStyles.txSty_20black_fb),
@@ -315,7 +325,7 @@ class _NewScreenState extends State<NewScreen> {
                   'assets/headset.svg',
                   width: 25,
                   height: 25,
-                  color: const Color(0xFF662e91), // Adjust color as needed
+                  color: const Color(0xFF11528f), // Adjust color as needed
                 ),
                 title: const Text('Contact Us',
                     style: CommonStyles.txSty_20black_fb),
@@ -335,7 +345,7 @@ class _NewScreenState extends State<NewScreen> {
                   'assets/change-password-icon.svg',
                   width: 25,
                   height: 25,
-                  color: const Color(0xFF662e91), // Adjust color as needed
+                  color: const Color(0xFF11528f), // Adjust color as needed
                 ),
                 title:
                     const Text('Change Password', style: CommonStyles.txSty_20black_fb),
@@ -363,7 +373,7 @@ class _NewScreenState extends State<NewScreen> {
                   'assets/logout_new.svg',
                   width: 25,
                   height: 25,
-                  color: const Color(0xFF662e91), // Adjust color as needed
+                  color: const Color(0xFF11528f), // Adjust color as needed
                 ),
                 title:
                 const Text('Logout', style: CommonStyles.txSty_20black_fb),
@@ -377,7 +387,7 @@ class _NewScreenState extends State<NewScreen> {
                 padding: EdgeInsets.symmetric(horizontal: 16.0), // Adjust padding as needed
                 child: Divider(),
               ),
-              const SizedBox(height: 50),
+              const SizedBox(height: 30),
               referBox(),
             ],
           ),
@@ -393,7 +403,7 @@ class _NewScreenState extends State<NewScreen> {
       clipBehavior: Clip.antiAlias,
       alignment: Alignment.center,
       decoration: const BoxDecoration(
-        color: CommonStyles.primaryColor,
+        color: CommonStyles.primarylightColor,
         borderRadius: BorderRadius.all(
           Radius.circular(10),
         ),
@@ -455,8 +465,8 @@ class _NewScreenState extends State<NewScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Logout'),
-          content: const Text('Are You Sure You Want to Logout?'),
+          title: const Text('Logout',style: CommonStyles.txSty_18b_fb,),
+          content: const Text('Are You Sure You Want to Logout?',style: CommonStyles.txSty_16b_fb),
           actions: [
             Container(
               child: ElevatedButton(
@@ -595,6 +605,7 @@ class _NewScreenState extends State<NewScreen> {
         setState(() {
 ;
           password = customerData['password'] ?? '';
+         loginUserFullName = customerData['firstname'] ?? '';
 
 
           print('Role Name: $password');
@@ -621,4 +632,42 @@ class _NewScreenState extends State<NewScreen> {
       MaterialPageRoute(builder: (context) => const ProductsMy()),
     );
   }
+
+  Future<void> fetchLoginUserData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    loginUserId = prefs.getInt('userId') ?? 0;
+    //String apiUrl = 'http://182.18.157.215/SaloonApp/API/GetCustomerData?id=$id';
+    String apiUrl = '$baseUrl$getCustomerDatabyid$loginUserId';
+
+    try {
+      final response = await http.get(Uri.parse(apiUrl));
+      print('apiurl: $apiUrl');
+      print('response: ${response.body}');
+      if (response.statusCode == 200) {
+        // Parse the JSON response
+        Map<String, dynamic> jsonResponse = json.decode(response.body);
+
+        // Access the 'listResult' from the response
+        List<dynamic> listResult = jsonResponse['listResult'];
+
+        // Assuming there's only one item in the listResult
+        Map<String, dynamic> customerData = listResult[0];
+
+        loginUserFullName = customerData['firstname'] ?? '';
+
+        print('loginUserFullName: ${loginUserFullName}');
+        Future.value();
+
+        // Now you can access individual fields like 'firstname', 'lastname', etc.
+      } else {
+        print('Request failed with status: ${response.statusCode}');
+        throw Exception('Failed to load data');
+      }
+    } catch (e) {
+      // Handle exceptions
+      print('Exception occurred: $e');
+      rethrow;
+    }
+  }
+
 }

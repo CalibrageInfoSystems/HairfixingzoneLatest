@@ -48,7 +48,7 @@ class _SlotSuccessScreenState extends State<SlotSuccessScreen> with TickerProvid
     fontSize: 20,
     fontFamily: "Outfit",
     fontWeight: FontWeight.bold,
-    color: Color(0xFF662e91),
+    color: Color(0xFF11528f),
   );
 
   @override
@@ -75,7 +75,7 @@ class _SlotSuccessScreenState extends State<SlotSuccessScreen> with TickerProvid
     super.dispose();
   }
 
-  final primaryTextColor = const Color(0xFF662e91);
+  final primaryTextColor = const Color(0xFF11528f);
   final primaryGreen = const Color.fromARGB(255, 4, 138, 73);
 
   @override
@@ -88,10 +88,10 @@ class _SlotSuccessScreenState extends State<SlotSuccessScreen> with TickerProvid
           appBar: AppBar(
             elevation: 0,
             backgroundColor: const Color(0xffffffff),
-            title: const Text(
-              'Booked Successfully',
-              style: TextStyle(color: Color(0xFF0f75bc), fontSize: 16.0, fontWeight: FontWeight.w600),
-            ),
+            // title: const Text(
+            //   'Booked Successfully',
+            //   style: TextStyle(color: Color(0xFF0f75bc), fontSize: 16.0, fontWeight: FontWeight.w600,fontFamily: "Outfit"),
+            // ),
             centerTitle: true,
             automaticallyImplyLeading: false,
           ),
@@ -100,7 +100,7 @@ class _SlotSuccessScreenState extends State<SlotSuccessScreen> with TickerProvid
             padding: const EdgeInsets.all(20),
             child: Column(
               children: [
-                Expanded(
+                Container(
                   child: Column(
                     //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -115,41 +115,34 @@ class _SlotSuccessScreenState extends State<SlotSuccessScreen> with TickerProvid
                             alignment: Alignment.center,
                             children: [
                               Center(
-                                child: RotationTransition(
-                                  turns: Tween(begin: 0.0, end: 1.0).animate(_controller),
-                                  child: DottedBorder(
-                                    borderType: BorderType.Circle,
-                                    strokeWidth: 3,
-                                    dashPattern: const <double>[9, 5],
-                                    padding: const EdgeInsets.all(25),
-                                    color: primaryGreen,
-                                    child: Container(
-                                      width: 80,
-                                      height: 80,
-                                      decoration: const BoxDecoration(
-                                        shape: BoxShape.circle,
-                                      ),
-                                    ),
-                                  ),
+                                child:
+                                SvgPicture.asset(
+                                  'assets/booking.svg',
+                                  width: 100,
+                                  height: 100,
+
                                 ),
+
                               ),
-                              RotationTransition(
-                                turns: Tween(begin: 0.0, end: 1.0).animate(_controller2),
-                                child: SvgPicture.asset(
-                                  'assets/check.svg',
-                                  width: 60,
-                                  height: 60,
-                                  color: primaryGreen,
-                                ),
-                              )
+                              // RotationTransition(
+                              //   turns: Tween(begin: 0.0, end: 1.0).animate(_controller2),
+                              //   child: SvgPicture.asset(
+                              //     'assets/booking.svg,
+                              //     width: 60,
+                              //     height: 60,
+                              //     color: primaryGreen,
+                              //   ),
+                              // )
                             ],
                           ),
                         ],
                       ),
                       const SizedBox(
-                        height: 5,
+                        height: 30,
                       ),
                       const Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(
                             'Appointment',
@@ -219,11 +212,11 @@ class _SlotSuccessScreenState extends State<SlotSuccessScreen> with TickerProvid
                                         textAlign: TextAlign.center,
                                         text: TextSpan(
                                           text: widget.slotbranchname,
-                                          style: CommonStyles.txSty_20b_fb,
+                                          style: CommonStyles.txSty_20p_fb,
                                           children: <TextSpan>[
                                             TextSpan(
                                               text: ' Branch',
-                                              style: textStyle,
+                                              style: CommonStyles.txSty_20p_fb,
                                             ),
                                           ],
                                         ),
@@ -320,10 +313,11 @@ class _SlotSuccessScreenState extends State<SlotSuccessScreen> with TickerProvid
                                         child: Container(
                                           padding: const EdgeInsets.all(1),
                                         //  decoration: BoxDecoration(border: Border.all(color: CommonStyles.primaryTextColor), shape: BoxShape.circle),
-                                          child: Image.asset(
-                                            'assets/location_icon.png',
-                                            width: 20,
-                                            height: 20,
+                                          child: SvgPicture.asset(
+                                            'assets/markersvg.svg',
+                                            width: 25,
+                                            height: 25,
+                                          color: CommonStyles.statusBlueText,
                                           ),
                                         ),
                                       ),
@@ -341,7 +335,7 @@ class _SlotSuccessScreenState extends State<SlotSuccessScreen> with TickerProvid
                               Text(
                                 widget.slotbrnach_address,
                                 maxLines: 3,
-                                overflow: TextOverflow.ellipsis,
+                                style: CommonStyles.txSty_16b_fb,
                               ),
                             ],
                           ),
@@ -365,7 +359,7 @@ class _SlotSuccessScreenState extends State<SlotSuccessScreen> with TickerProvid
                                   borderRadius: BorderRadius.circular(5),
                                   border: Border.all(color: primaryTextColor),
                                 ),
-                                child: const Center(child: Text('Back to Home')),
+                                child: const Center(child: Text('Back to Home',   style: CommonStyles.txSty_16b_fb,)),
                               ),
                             ),
                           ),
@@ -388,7 +382,8 @@ class _SlotSuccessScreenState extends State<SlotSuccessScreen> with TickerProvid
                                 child: const Center(
                                   child: Text(
                                     'My Appointments',
-                                    style: TextStyle(color: Colors.white),
+                                    style: CommonStyles.text16white,
+
                                   ),
                                 ),
                               ),

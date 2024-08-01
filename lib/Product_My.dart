@@ -22,6 +22,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:shimmer/shimmer.dart';
+import 'Common/common_styles.dart';
 import 'Commonutils.dart';
 import 'CustomRadioButton.dart';
 import 'LatestAppointment.dart';
@@ -146,7 +147,7 @@ class MyProducts_screenState extends State<ProductsMy> {
         builder: (context, provider, _) => Scaffold(
           appBar: AppBar(
               elevation: 0,
-              backgroundColor: const Color(0xFFf3e3ff),
+              backgroundColor: const Color(0xffe2f0fd),
               title: const Text(
                 'My Products',
                 style: TextStyle(
@@ -164,7 +165,10 @@ class MyProducts_screenState extends State<ProductsMy> {
                   provider.clearFilter();
                 },
               )),
-          body: Padding(
+          body:Container(
+    color: Colors.white,
+    child:
+          Padding(
             padding: const EdgeInsets.all(5),
             child: Column(
               children: [
@@ -230,7 +234,7 @@ class MyProducts_screenState extends State<ProductsMy> {
           ),
         ),
       ),
-    );
+    ));
   }
 
   Future<List<ProductList>> fetchproducts(
@@ -313,7 +317,7 @@ class MyProducts_screenState extends State<ProductsMy> {
                   contentPadding: const EdgeInsets.all(10),
 
                   hintText: 'Search Products',
-                  // hintStyle: CommonStyles.txSty_14bs_fb,
+                   hintStyle:CommonStyles.texthintstyle ,
                   // suffixIcon: const Icon(Icons.search),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
@@ -543,8 +547,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                           return Row(
                             children: [
                               CustomRadioButton(
-                                selected:
-                                provider.selectedGender == option.typeCdId,
+                                selected: provider.selectedGender == option.typeCdId,
                                 onTap: () {
                                   setState(() {
                                     provider.getGender = option.typeCdId;
@@ -595,7 +598,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                             } else {
                               List<ProductCategory> data = snapshot.data!;
                               return SizedBox(
-                                height: 40,
+                                height: 38,
                                 child: ListView.builder(
                                   scrollDirection: Axis.horizontal,
                                   shrinkWrap: true,
@@ -649,7 +652,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                                               Container(
                                                 padding:
                                                 const EdgeInsets.symmetric(
-                                                    horizontal: 10.0),
+                                                    horizontal: 15.0),
                                                 child: Row(
                                                   children: [
                                                     Text(
@@ -705,7 +708,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                           backgroundColor: Colors.white,
                           shape: const RoundedRectangleBorder(
                             borderRadius: BorderRadius.all(
-                              Radius.circular(10),
+                              Radius.circular(5),
                             ),
                           ),
                         ),
@@ -735,7 +738,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                               // width: desiredWidth * 0.9,
                               height: 40.0,
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(15.0),
+                                borderRadius: BorderRadius.circular(5.0),
                                 color: CommonUtils.primaryTextColor,
                               ),
                               child: const Center(
@@ -815,25 +818,25 @@ class ProductCard extends StatelessWidget {
     return
       Card(
         elevation: 5,
-        shadowColor: CommonUtils.primaryColor, // Set the shadow color here
+     //   shadowColor: CommonUtils.primaryColor, // Set the shadow color here
         child: IntrinsicHeight(
           child: Container(
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(10.0),
-              boxShadow: [
-                BoxShadow(
-                  color: const Color(0xFF960efd).withOpacity(0.2), // Shadow color
-                  spreadRadius: 2, // Spread radius
-                  blurRadius: 4, // Blur radius
-                  offset: const Offset(0, 2), // Shadow position
-                ),
-              ],
+              // boxShadow: [
+              //   BoxShadow(
+              //     color: const Color(0xFF960efd).withOpacity(0.2), // Shadow color
+              //     spreadRadius: 2, // Spread radius
+              //     blurRadius: 4, // Blur radius
+              //     offset: const Offset(0, 2), // Shadow position
+              //   ),
+              // ],
             ),
             child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Stack(
                   children: [
@@ -842,7 +845,7 @@ class ProductCard extends StatelessWidget {
                       height: MediaQuery.of(context).size.height / 10,
                       padding: const EdgeInsets.all(10),
                       decoration: BoxDecoration(
-                        color: CommonUtils.primaryColor,
+                        color:  Color(0xffe2f0fd),
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: GestureDetector(
@@ -855,7 +858,7 @@ class ProductCard extends StatelessWidget {
                         top: -8,
                         left: -10,
                         child: SvgPicture.asset(
-                          'assets/bs_v5.svg',
+                          'assets/bs_v3.svg',
                           width: 80.0,
                           height: 35.0,
                         ),
@@ -874,17 +877,17 @@ class ProductCard extends StatelessWidget {
                         style: CommonUtils.txSty_18p_f7,
                       ),
                     ),
-                    const SizedBox(height: 8), // Add space here
+                    const SizedBox(height: 4), // Add space here
                     Text(
                       product.categoryName,
                       style: CommonUtils.txSty_12bs_fb,
                     ),
-                    const SizedBox(height: 8), // Add space here
+                    const SizedBox(height: 4), // Add space here
                     Text(
                       product.gender ?? ' ',
-                      style: CommonUtils.txSty_12bs_fb,
+                      style: CommonStyles.txSty_14b_fb,
                     ),
-                    const SizedBox(height: 8), // Add space here
+                    const SizedBox(height: 4), // Add space here
                     Text(
                       '₹ ${formatNumber(product.maxPrice)}',
                       style: const TextStyle(
@@ -892,7 +895,7 @@ class ProductCard extends StatelessWidget {
                         fontFamily: "Outfit",
                         fontWeight: FontWeight.w500,
                         letterSpacing: 1,
-                        color: Color(0xFF662d91),
+                        color:Colors.black,
                       ),
                     ),
                   ],
@@ -904,71 +907,6 @@ class ProductCard extends StatelessWidget {
       );
 
   }
-  //   return Card(
-  //     elevation: 5,
-  //     shadowColor: CommonUtils.primaryColor, // Set the shadow color here
-  //     child: Container(
-  //       padding: const EdgeInsets.all(10),
-  //       decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10)),
-  //       child: Row(
-  //         children: [
-  //           // product image
-  //           Container(
-  //             width: MediaQuery.of(context).size.width / 3,
-  //             height: 100,
-  //             padding: const EdgeInsets.all(10),
-  //             decoration: BoxDecoration(
-  //               color: CommonUtils.primaryColor,
-  //               borderRadius: BorderRadius.circular(10),
-  //             ),
-  //             child: Image.network(product.imageName),
-  //           ),
-  //           const SizedBox(
-  //             width: 10,
-  //           ),
-  //           Column(
-  //             crossAxisAlignment: CrossAxisAlignment.start,
-  //             mainAxisAlignment: MainAxisAlignment.end,
-  //             children: [
-  //               // Text(
-  //               //   "${product.name} (${product.code}) ",
-  //               //   style: CommonUtils.txSty_18p_f7,
-  //               // ),
-  //               Container(
-  //                 width: MediaQuery.of(context).size.width / 2,
-  //                 child: Text(
-  //                   "${product.name} (${product.code}) ",
-  //                   style: CommonUtils.txSty_18p_f7,
-  //                 ),
-  //               ),
-  //               const SizedBox(height: 8), // Add space here
-  //               Text(
-  //                 product.categoryName,
-  //                 style: CommonUtils.txSty_12bs_fb,
-  //               ),
-  //               const SizedBox(height: 8), // Add space here
-  //               Text(
-  //                 product.gender ?? ' ',
-  //                 style: CommonUtils.txSty_12bs_fb,
-  //               ),
-  //               const SizedBox(height: 8), // Add space here
-  //               Text(
-  //                 '₹ ${formatNumber(product.maxPrice)}',
-  //                 style: const TextStyle(
-  //                   fontSize: 18,
-  //                   fontFamily: "Outfit",
-  //                   fontWeight: FontWeight.w500,
-  //                   letterSpacing: 1,
-  //                   color: Color(0xFF662d91),
-  //                 ),
-  //               ),
-  //             ],
-  //           )
-  //         ],
-  //       ),
-  //     ),
-  //   );
-  // }
 
   String formatNumber(double number) {
     NumberFormat formatter = NumberFormat("#,##,##,##,##,##,##0.00", "en_US");

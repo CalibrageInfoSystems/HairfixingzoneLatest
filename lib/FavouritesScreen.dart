@@ -13,7 +13,7 @@ class FavouritesScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        backgroundColor: CommonStyles.whiteColor,
+        backgroundColor: Color(0xffe2f0fd),
         title: const Text(
           'Favourites',
           style: TextStyle(
@@ -32,10 +32,12 @@ class FavouritesScreen extends StatelessWidget {
           },
         ),
       ),
-      body: Center(
+      body: Container(
+    color: Colors.white,
+    child:Center(
         child: errorMessage(),
       ),
-    );
+      ));
   }
 
   Widget errorMessage() {
