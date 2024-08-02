@@ -477,6 +477,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
           'Change Password',
           style: TextStyle(color: Color(0xFF0f75bc), fontSize: 16.0),
         ),
+        titleSpacing:0.0,
         actions: [
           IconButton(
             icon: SvgPicture.asset(

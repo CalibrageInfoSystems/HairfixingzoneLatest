@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
@@ -271,6 +271,7 @@ class BranchTemplate extends StatelessWidget {
             child: Row(
               children: [
             Container(
+              width: MediaQuery.of(context).size.width / 6,
             margin: EdgeInsets.only(top: 10.0,left: 10.0,right: 10.0,bottom: 10.0),
             decoration: BoxDecoration(
               border: Border.all(
@@ -294,7 +295,7 @@ class BranchTemplate extends StatelessWidget {
                 },
               ),
             ),
-            width: 65,
+          //  width: 65,
             height: 60,
           ),
                   // width: MediaQuery.of(context).size.width / 4,
@@ -303,7 +304,7 @@ class BranchTemplate extends StatelessWidget {
                 Container(
                   // height: MediaQuery.of(context).size.height / 4 / 2,
 
-                  width: MediaQuery.of(context).size.width / 2.2,
+                width: MediaQuery.of(context).size.width / 1.5,
                   padding: EdgeInsets.only(top: 7),
                   // width: MediaQuery.of(context).size.width / 4,
                   child: Column(
@@ -312,7 +313,7 @@ class BranchTemplate extends StatelessWidget {
                     children: [
                       Text(
                         '${branchnames.name}',
-                        style:  GoogleFonts.outfit(fontWeight: FontWeight.w700,fontSize: 18,color: Color(0xFF11528f)),
+                        style: CommonUtils.txSty_18b_fb,
                       ),
                       SizedBox(
                         height: 5,

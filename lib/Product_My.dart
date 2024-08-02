@@ -155,6 +155,7 @@ class MyProducts_screenState extends State<ProductsMy> {
                     fontSize: 16.0,
                     fontWeight: FontWeight.w600),
               ),
+              titleSpacing:0.0,
               leading: IconButton(
                 icon: const Icon(
                   Icons.arrow_back_ios,

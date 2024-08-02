@@ -22,6 +22,7 @@ class FavouritesScreen extends StatelessWidget {
               fontFamily: "Outfit",
               fontWeight: FontWeight.w600),
         ),
+        titleSpacing:0.0,
         leading: IconButton(
           icon: const Icon(
             Icons.arrow_back_ios,

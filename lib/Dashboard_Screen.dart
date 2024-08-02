@@ -8,8 +8,7 @@ import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
 
 
 import 'package:flutter_svg/svg.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:hairfixingzone/BranchesModel.dart';
+
 import 'package:hairfixingzone/Common/common_styles.dart';
 import 'package:hairfixingzone/aboutus_screen.dart';
 import 'package:hairfixingzone/api_config.dart';
@@ -389,12 +388,13 @@ class _CustomerDashBoardState extends State<CustomerDashBoard>  with SingleTicke
                     children: [
                       Text(
                         'Hello ',
-                        //    style: CommonStyles.txSty_20b_fb.copyWith(fontSize: 22),
-                        style: GoogleFonts.outfit(fontWeight: FontWeight.w700,fontSize: 22,color: Colors.black),
+                        style: CommonStyles.txSty_20b_fb.copyWith(fontSize: 22),
+                        //style: GoogleFonts.outfit(fontWeight: FontWeight.w700,fontSize: 22,color: Colors.black),
                       ),
                       Text(
                         userFullName,
-                        style:GoogleFonts.outfit(fontWeight: FontWeight.w700,fontSize: 22,color: Color(0xFF11528f)),
+                        style: CommonStyles.txSty_20b_fb.copyWith(fontSize: 22,color: Color(0xFF11528f)),
+                      //  style:GoogleFonts.outfit(fontWeight: FontWeight.w700,fontSize: 22,color: Color(0xFF11528f)),
                       ),
                     ],
                   ),
@@ -406,11 +406,11 @@ class _CustomerDashBoardState extends State<CustomerDashBoard>  with SingleTicke
                       Text(
                         'Welcome to ',
                         //    style: CommonStyles.txSty_20b_fb.copyWith(fontSize: 22),
-                        style: GoogleFonts.outfit(fontWeight: FontWeight.w500,fontSize: 16,color: Colors.black),
+                        style: CommonStyles.txSty_16b_fb,
                       ),
                       Text(
                         'Hair Fixing Zone',
-                        style:GoogleFonts.outfit(fontWeight: FontWeight.w500,fontSize: 16,color: Color(0xFF11528f)),
+                        style: CommonStyles.txSty_16p_f5,
                       ),
                     ],
                   ),
@@ -491,7 +491,7 @@ class _CustomerDashBoardState extends State<CustomerDashBoard>  with SingleTicke
       ),
 
                   SizedBox(height: 10),
-
+if(marqueeTexts.isNotEmpty )
                   SizedBox(
                     height: 70.0,
                     child: Container(
@@ -516,12 +516,14 @@ class _CustomerDashBoardState extends State<CustomerDashBoard>  with SingleTicke
                               padding: EdgeInsets.only(left: 10.0, right: 20.0), // Add padding to icon
                               child: Text(
                                 marqueeTexts.isNotEmpty ? marqueeTexts[currentTextIndex] : '',
-                                style: GoogleFonts.outfit(
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 14,
-                                  color: Colors.white,
-                                  height: 1.5, // Adjust line spacing here
-                                ),
+                                style: CommonStyles.text14white.copyWith(  height: 1.5),
+                                // style:
+                                // GoogleFonts.outfit(
+                                //   fontWeight: FontWeight.w600,
+                                //   fontSize: 14,
+                                //   color: Colors.white,
+                                //   height: 1.5, // Adjust line spacing here
+                             //   ),
                               ),
                             ),
                           ),
@@ -554,7 +556,7 @@ class _CustomerDashBoardState extends State<CustomerDashBoard>  with SingleTicke
                       alignment: Alignment.topLeft,
                       child: Text(
                         "Our Branches",
-                        style:GoogleFonts.outfit(fontWeight: FontWeight.w700,fontSize: 20,color: Colors.black),
+                        style: CommonStyles.txSty_20b_fb,
 
                       ),
 
@@ -691,7 +693,8 @@ class _CustomerDashBoardState extends State<CustomerDashBoard>  with SingleTicke
                                           Padding(padding: EdgeInsets.only(left: 10.0,right: 5.0,top: 5.0,bottom: 5.0),child: Text(
                                             branch.name,
                                             maxLines: 3,
-                                            style:  GoogleFonts.outfit(fontWeight: FontWeight.w700,fontSize: 18,color: Color(0xFF11528f)),
+                                            style: CommonUtils.txSty_18b_fb,
+                                            // style:  GoogleFonts.outfit(fontWeight: FontWeight.w700,fontSize: 18,color: Color(0xFF11528f)),
                                           ),  ),
                                           // SizedBox(height: 8.0),
                                           Padding(padding: EdgeInsets.only(left: 10.0,right: 5.0,bottom: 5.0),
@@ -700,7 +703,7 @@ class _CustomerDashBoardState extends State<CustomerDashBoard>  with SingleTicke
                                               child:  Text(
                                             branch.address,
                                             maxLines: 4,
-                                            style:  GoogleFonts.outfit(fontSize: 12,fontWeight: FontWeight.w500,wordSpacing: 1.2,color: Colors.black.withOpacity(0.8)),
+                                                style: CommonStyles.txSty_12b_fb.copyWith(wordSpacing: 1.2,color: Colors.black.withOpacity(0.8)),
                                           ), ) ),
                                           //  SizedBox(height: 5.0),
                                           // Display from date and to date multiple times
@@ -749,11 +752,12 @@ Align(
         children: [
           Text(
             'Book Now',
-            style: GoogleFonts.outfit(
-              fontWeight: FontWeight.w500,
-              fontSize: 14,
-              color: Color(0xFF11528f),
-            ),
+            style: CommonStyles.txSty_14p_f5
+            // GoogleFonts.outfit(
+            //   fontWeight: FontWeight.w500,
+            //   fontSize: 14,
+            //   color: Color(0xFF11528f),
+            // ),
           ),
           SizedBox(width: 5),
           SvgPicture.asset(

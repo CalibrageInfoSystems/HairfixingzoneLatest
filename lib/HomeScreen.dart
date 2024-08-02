@@ -5,7 +5,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 import 'package:hairfixingzone/LatestAppointment.dart';
 import 'package:hairfixingzone/NewScreen.dart';
 import 'package:hairfixingzone/slotbookingscreen.dart';
@@ -230,7 +230,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   label: 'Menu',
                 ),
               ],
-              selectedLabelStyle: GoogleFonts.outfit(fontWeight: FontWeight.w500,fontSize: 16,color: Color(0xFF11528f)),
+              selectedLabelStyle: CommonStyles.txSty_16p_f5,
               // unselectedLabelStyle: TextStyle(
               //   fontSize: 14,
               //   color: Colors.grey, // Customize the color as needed
@@ -656,13 +656,13 @@ class _HomeScreenState extends State<HomeScreen> {
       case 1:
         return Text(
           'Appointments',
-          style: GoogleFonts.outfit(fontWeight: FontWeight.w500,fontSize: 22,color: Colors.black),
+          style:CommonStyles.txSty_22b_f5
         );
 
       case 2:
         return Text(
           'Profile',
-          style: GoogleFonts.outfit(fontWeight: FontWeight.w500,fontSize: 22,color: Colors.black),
+            style:CommonStyles.txSty_22b_f5
         );
 
 
@@ -670,7 +670,7 @@ class _HomeScreenState extends State<HomeScreen> {
       default:
         return Text(
           'default',
-          style: GoogleFonts.outfit(fontWeight: FontWeight.w500,fontSize: 22,color: Colors.black),
+            style:CommonStyles.txSty_22b_f5
         );
     }
   }

@@ -309,7 +309,7 @@ class MyAppointments_screenState extends State<MyAppointments> {
             width: 45,
             decoration: BoxDecoration(
               color: myAppointmentsProvider!.filterStatus
-                  ? const Color.fromARGB(255, 220, 186, 243)
+                  ? const Color(0xffe2f0fd)
                   : Colors.white,
               borderRadius: BorderRadius.circular(10),
               border: Border.all(

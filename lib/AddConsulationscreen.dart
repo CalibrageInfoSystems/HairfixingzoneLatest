@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/widgets.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:hairfixingzone/AgentDashBoard.dart';
+
 import 'package:hairfixingzone/AgentHome.dart';
 import 'package:hairfixingzone/services/notifi_service.dart';
 import 'package:http/http.dart' as http;
@@ -212,7 +211,7 @@ class AddConsulationscreen_screenState extends State<AddConsulationscreen> {
               automaticallyImplyLeading: false,
               title:Text(
                 'Add Consultation',
-                style:GoogleFonts.outfit(fontWeight: FontWeight.w700,fontSize: 20,color: Colors.black),
+                style: CommonStyles.txSty_20b_fb,
 
               ),
             ),

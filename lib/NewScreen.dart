@@ -173,88 +173,9 @@ class _NewScreenState extends State<NewScreen> {
                   ),
                 ),
               ),
-              /*    ListTile(
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          EditProfile(createdDate: '$createdDate'),
-                    ),
-                  );
-                },
-                leading: CircleAvatar(
-                  backgroundColor: CommonStyles.primaryTextColor,
-                  radius: 25,
-                  child: Text(
-                    widget.userName.isNotEmpty
-                        ? widget.userName[0].toUpperCase()
-                        : "H",
-                    style: const TextStyle(fontSize: 24, color: Colors.white),
-                  ),
-                ),
-                title:
-                    Text(widget.userName, style: CommonStyles.txSty_20black_fb),
-                subtitle: const Text('Edit profile',
-                    style: CommonStyles.txSty_16black_f5),
-              ), */
-              /*  const Divider(),
-              ListTile(
-                leading: SvgPicture.asset(
-                  'assets/Profile_new.svg',
-                  width: 25,
-                  height: 25,
-                  color: const Color(0xFF662e91), // Adjust color as needed
-                ),
-                title:
-                    const Text('Profile', style: CommonStyles.txSty_20black_fb),
-                trailing: const Icon(Icons.arrow_forward_ios,
-                    color: Colors.grey, size: 16), // Add trailing icon here
-                onTap: () {
-                  profile(context); // Execute your action here
-                },
-              ), */
+
               const SizedBox(height: 10,width: 10,),
-              // const Divider(),
-              // ListTile(
-              //   onTap: () {
-              //     Navigator.of(context).push(
-              //       MaterialPageRoute(
-              //         builder: (context) =>
-              //             EditProfile(createdDate: '$createdDate'),
-              //       ),
-              //     );
-              //   },
-              //   leading: CircleAvatar(
-              //     backgroundColor: CommonStyles.primaryTextColor,
-              //     radius: 25,
-              //     child: Text(
-              //       widget.userName.isNotEmpty
-              //           ? widget.userName[0].toUpperCase()
-              //           : "H",
-              //       style: const TextStyle(fontSize: 24, color: Colors.white),
-              //     ),
-              //   ),
-              //   title:
-              //       Text(widget.userName, style: CommonStyles.txSty_20black_fb),
-              //   subtitle: const Text('Edit profile',
-              //       style: CommonStyles.txSty_16black_f5),
-              // ),
-              // const Divider(),
-              // ListTile(
-              //   leading: SvgPicture.asset(
-              //     'assets/Profile_new.svg',
-              //     width: 25,
-              //     height: 25,
-              //     color: const Color(0xFF662e91), // Adjust color as needed
-              //   ),
-              //   title:
-              //       const Text('Profile', style: CommonStyles.txSty_20black_fb),
-              //   trailing: const Icon(Icons.arrow_forward_ios,
-              //       color: Colors.grey, size: 16), // Add trailing icon here
-              //   onTap: () {
-              //     profile(context); // Execute your action here
-              //   },
-              // ),
+
               const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 16.0), // Adjust padding as needed
                 child: Divider(),

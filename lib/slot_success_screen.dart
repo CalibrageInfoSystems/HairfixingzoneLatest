@@ -416,27 +416,19 @@ class _SlotSuccessScreenState extends State<SlotSuccessScreen> with TickerProvid
       print(e);
     }
   }
-
   Future<void> openMap() async {
-    // if (widget.latitude != null && widget.longitude != null) {
-    //   final String url = 'https://www.google.com/maps?q=${widget.latitude},${widget.longitude}';
-    //   print('getbrancheslist: $url');
-    //   try {
-    //     await launchUrl(Uri.parse(url));
-    //   } catch (e) {
-    //     print(e);
-    //   }
-    // } else {
-    //   CommonUtils.showCustomToastMessageLong('Location not found', context, 1, 3);
-    // }
-    // final String url =
-    //     'https://www.google.com/maps?q=$label@${widget.latitude},${widget.longitude}';
     if (widget.latitude != null && widget.longitude != null) {
       final String label = 'Hair Fixing Zone - ${widget.slotbranchname}';
-      final String url = 'geo:${widget.latitude},${widget.longitude}?q=${Uri.encodeComponent(label)}';
+      final String googleMapsUrl = 'geo:${widget.latitude},${widget.longitude}?q=${Uri.encodeComponent(label)}';
+      final String appleMapsUrl = 'https://maps.apple.com/?q=${Uri.encodeComponent(label)}&ll=${widget.latitude},${widget.longitude}';
 
-      // final String url =
-      //     'https://maps.app.goo.gl/wp5rYLH6Z7sxnFDB6';
+      String url;
+      if (Theme.of(context).platform == TargetPlatform.iOS) {
+        url = appleMapsUrl;
+      } else {
+        url = googleMapsUrl;
+      }
+
       print('getbrancheslist: $url');
       try {
         await launchUrl(Uri.parse(url));
@@ -448,6 +440,37 @@ class _SlotSuccessScreenState extends State<SlotSuccessScreen> with TickerProvid
           'Location not found', context, 1, 3);
     }
   }
+  // Future<void> openMap() async {
+  //   // if (widget.latitude != null && widget.longitude != null) {
+  //   //   final String url = 'https://www.google.com/maps?q=${widget.latitude},${widget.longitude}';
+  //   //   print('getbrancheslist: $url');
+  //   //   try {
+  //   //     await launchUrl(Uri.parse(url));
+  //   //   } catch (e) {
+  //   //     print(e);
+  //   //   }
+  //   // } else {
+  //   //   CommonUtils.showCustomToastMessageLong('Location not found', context, 1, 3);
+  //   // }
+  //   // final String url =
+  //   //     'https://www.google.com/maps?q=$label@${widget.latitude},${widget.longitude}';
+  //   if (widget.latitude != null && widget.longitude != null) {
+  //     final String label = 'Hair Fixing Zone - ${widget.slotbranchname}';
+  //     final String url = 'geo:${widget.latitude},${widget.longitude}?q=${Uri.encodeComponent(label)}';
+  //
+  //     // final String url =
+  //     //     'https://maps.app.goo.gl/wp5rYLH6Z7sxnFDB6';
+  //     print('getbrancheslist: $url');
+  //     try {
+  //       await launchUrl(Uri.parse(url));
+  //     } catch (e) {
+  //       print(e);
+  //     }
+  //   } else {
+  //     CommonUtils.showCustomToastMessageLong(
+  //         'Location not found', context, 1, 3);
+  //   }
+  // }
 
   Future<void> sharedprefsdelete() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();

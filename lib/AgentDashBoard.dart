@@ -5,9 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:hairfixingzone/BranchModel.dart';
-import 'package:hairfixingzone/BranchesModel.dart';
+
 import 'package:hairfixingzone/Common/common_styles.dart';
 import 'package:hairfixingzone/Consultation.dart';
 import 'package:hairfixingzone/Dashboard_Screen.dart';
@@ -159,7 +157,7 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
               alignment: Alignment.topLeft,
               child: Text(
                 "Branches",
-                style:GoogleFonts.outfit(fontWeight: FontWeight.w700,fontSize: 20,color: Colors.black),
+                style: CommonStyles.txSty_20b_fb,
 
               ),
             ),
@@ -181,11 +179,11 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
               Text(
                 'Hello, ',
                 // style: CommonStyles.txSty_20b_fb.copyWith(fontSize: 24),
-                style: GoogleFonts.outfit(fontWeight: FontWeight.w700,fontSize: 22,color: Colors.black),
+                style: CommonStyles.txSty_20b_fb,
               ),
               Text(
                 userFullName,
-                style:GoogleFonts.outfit(fontWeight: FontWeight.w700,fontSize: 22,color: Color(0xFF11528f)),
+                  style: CommonStyles.txSty_20b_fb.copyWith(color: Color(0xFF11528f)),
                 //  style: CommonStyles.txSty_20b_fb.copyWith(fontSize: 24),
               ),
             ],
@@ -207,11 +205,11 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
               Text(
                 'Welcome to ',
                 //    style: CommonStyles.txSty_20b_fb.copyWith(fontSize: 22),
-                style: GoogleFonts.outfit(fontWeight: FontWeight.w500,fontSize: 16,color: Colors.black),
+                style: CommonStyles.txSty_16b_fb,
               ),
               Text(
                 'Hair Fixing Zone',
-                style:GoogleFonts.outfit(fontWeight: FontWeight.w500,fontSize: 16,color: Color(0xFF11528f)),
+                style: CommonStyles.txSty_16p_fb,
               ),
             ],
           ),
@@ -933,7 +931,7 @@ class BranchCard extends StatelessWidget {
                 Padding(padding: EdgeInsets.only(left: 10.0,right: 5.0,top: 5.0,bottom: 5.0),child: Text(
                   branch.name,
                   maxLines: 3,
-                  style:  GoogleFonts.outfit(fontWeight: FontWeight.w700,fontSize: 18,color: Color(0xFF11528f)),
+                  style: CommonStyles.txSty_20b_fb,
                 ),  ),
                 // SizedBox(height: 8.0),
                 Padding(padding: EdgeInsets.only(left: 10.0,right: 5.0,bottom: 5.0),
@@ -942,7 +940,8 @@ class BranchCard extends StatelessWidget {
                       child:  Text(
                         branch.address,
                         maxLines: 4,
-                        style:  GoogleFonts.outfit(fontSize: 12,fontWeight: FontWeight.w500,wordSpacing: 1.2,color: Colors.black.withOpacity(0.8)),
+                        style: CommonStyles.txSty_12b_fb.copyWith(wordSpacing: 1.2,color: Colors.black.withOpacity(0.8)),
+                      //  style:  GoogleFonts.outfit(fontSize: 12,fontWeight: FontWeight.w500,wordSpacing: 1.2,color: Colors.black.withOpacity(0.8)),
                       ), ) ),
                 //  SizedBox(height: 5.0),
                 // Display from date and to date multiple times
@@ -982,11 +981,7 @@ class BranchCard extends StatelessWidget {
                           children: [
                             Text(
                               'Add Consultation',
-                              style: GoogleFonts.outfit(
-                                fontWeight: FontWeight.w500,
-                                fontSize: 14,
-                                color: Color(0xFF11528f),
-                              ),
+                             style: CommonStyles.txSty_14blu_f5
                             ),
                             SizedBox(width: 5),
                             SvgPicture.asset(

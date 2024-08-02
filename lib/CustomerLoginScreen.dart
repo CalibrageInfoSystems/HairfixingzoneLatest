@@ -181,6 +181,7 @@ class _LoginPageState extends State<CustomerLoginScreen> {
                       hintStyle:  CommonStyles.texthintstyle ,
                     ),
                     validator: validateEmail,
+                    style: CommonStyles.txSty_14b_fb,
                   ),
                   const SizedBox(
                     height: 10,
@@ -251,6 +252,7 @@ class _LoginPageState extends State<CustomerLoginScreen> {
                         hintStyle:  CommonStyles.texthintstyle ,
                     ),
                     validator: validatePassword,
+                    style: CommonStyles.txSty_14b_fb,
                   ),
                   const SizedBox(
                     height: 10,

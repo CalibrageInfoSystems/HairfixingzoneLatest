@@ -4,7 +4,7 @@ import 'package:custom_date_range_picker/custom_date_range_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 import 'package:hairfixingzone/BranchModel.dart';
 import 'package:hairfixingzone/Common/common_styles.dart';
 import 'package:hairfixingzone/CommonUtils.dart';
@@ -132,37 +132,7 @@ class _ViewConsultationState extends State<ViewConsultation> {
     );
   }
 
-  AppBar _appBar(BuildContext context) {
-    return AppBar(
-        elevation: 0,
-        backgroundColor: const Color(0xFFf3e3ff),
-        title: const Text(
-          'View Consultation',
-          style: TextStyle(color: Color(0xFF0f75bc), fontSize: 16.0),
-        ),
-        actions: [
-          IconButton(
-            icon: SvgPicture.asset(
-              'assets/sign-out-alt.svg', // Path to your SVG asset
-              color: const Color(0xFF662e91),
-              width: 24, // Adjust width as needed
-              height: 24, // Adjust height as needed
-            ),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-        ],
-        leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back_ios,
-            color: CommonUtils.primaryTextColor,
-          ),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        ));
-  }
+
 }
 
 class ViewConsulatationBranchTemplate extends StatelessWidget {
@@ -255,7 +225,7 @@ class ViewConsulatationBranchTemplate extends StatelessWidget {
                 Container(
                   // height: MediaQuery.of(context).size.height / 4 / 2,
 
-                  width: MediaQuery.of(context).size.width / 2.2,
+                  width: MediaQuery.of(context).size.width / 1.5,
                   padding: EdgeInsets.only(top: 7),
                   // width: MediaQuery.of(context).size.width / 4,
                   child: Column(
@@ -264,7 +234,8 @@ class ViewConsulatationBranchTemplate extends StatelessWidget {
                     children: [
                       Text(
                         '${agent.name}',
-                        style:  GoogleFonts.outfit(fontWeight: FontWeight.w700,fontSize: 18,color: Color(0xFF11528f)),
+                        style: CommonUtils.txSty_18b_fb,
+                      //  style:  GoogleFonts.outfit(fontWeight: FontWeight.w700,fontSize: 18,color: Color(0xFF11528f)),
                       ),
                       SizedBox(
                         height: 5,

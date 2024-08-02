@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 import 'package:loading_progress/loading_progress.dart';
 
 import '../NewScreen.dart';
@@ -63,6 +63,12 @@ class CommonStyles {
   );
   static const TextStyle txSty_14b_f5 = TextStyle(
     fontSize: 14,
+    fontFamily: "Outfit",
+    fontWeight: FontWeight.w500,
+    color: blackColor,
+  );
+  static const TextStyle txSty_22b_f5 = TextStyle(
+    fontSize: 22,
     fontFamily: "Outfit",
     fontWeight: FontWeight.w500,
     color: blackColor,
@@ -175,6 +181,7 @@ class CommonStyles {
     fontFamily: 'Outfit',
     fontSize: 12,
     color: Color(0xFF000000),
+    fontWeight: FontWeight.w500
   );
   static const TextStyle txSty_12bl_fb = TextStyle(
     fontFamily: 'Outfit',
@@ -208,7 +215,12 @@ class CommonStyles {
     fontWeight: FontWeight.w600,
     color: CommonStyles.whiteColor,
   );
-
+  static const TextStyle text14white = TextStyle(
+    fontSize: 14,
+    fontFamily: "Outfit",
+    fontWeight: FontWeight.w600,
+    color: CommonStyles.whiteColor,
+  );
   static TextStyle dayTextStyle =
       const TextStyle(color: Colors.black, fontWeight: FontWeight.w700);
 
@@ -458,7 +470,7 @@ class CommonStyles {
       automaticallyImplyLeading: false,
       title: Text(
         title,
-        style: CommonStyles.txSty_20b_fb.copyWith(fontSize: 20),
+        style: CommonStyles.txSty_20b_fb,
       ),
       actions: [
         IconButton(

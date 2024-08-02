@@ -231,6 +231,7 @@ class Profile_screenState extends State<ProfileMy> {
           //   ),
           // ],
           // centerTitle: true,
+          titleSpacing:0.0,
           leading: IconButton(
             icon: const Icon(
               Icons.arrow_back_ios,

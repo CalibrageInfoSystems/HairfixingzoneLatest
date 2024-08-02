@@ -155,7 +155,7 @@ class CommonUtils{
   static const txSty_18b_fb = TextStyle(
     fontSize: 18,
     fontFamily: 'Outfit',
-    fontWeight: FontWeight.w600,
+    fontWeight: FontWeight.w700,
     color: Color(0xFF11528f),
   );
   static const txSty_18p_f7 = TextStyle(

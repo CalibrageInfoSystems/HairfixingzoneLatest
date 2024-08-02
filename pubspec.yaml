@@ -66,14 +66,7 @@ dependencies:
   flutter_timezone: ^1.0.8
   calendar_date_picker2: ^1.0.0
   photo_view: ^0.14.0
-  google_fonts: ^4.0.4
-
-
-
-
-
-
-
+#  google_fonts: ^4.0.4
 
 
 dev_dependencies:
@@ -111,9 +104,7 @@ flutter:
     - assets/web_icon.png
     - assets/schedule.png
     - assets/User_icon.svg
-
     - assets/top_image.png
-
     - assets/gender.png
     - assets/user.svg
     - assets/skin-care.svg
@@ -127,7 +118,6 @@ flutter:
     - assets/hfz_logo.png
     - assets/password_success.png
     - assets/sign-out-alt.svg
-
     - assets/calendar-clock.svg
     - assets/filter.svg
     - assets/invite-alt.svg
@@ -140,14 +130,11 @@ flutter:
     - assets/my_profile_icon.svg
     - assets/my_bookings_icon.svg
     - assets/book_op_illusion.svg
-
     - assets/check.svg
     - assets/phone_call.svg
-
     - assets/id-card-clip-alt.svg
     - assets/venus-mars.svg
     - assets/calendar_icon.svg
-
     - assets/pen-circle.svg
     - assets/calendar-day.svg
     - assets/calendar-lines.svg
@@ -160,7 +147,6 @@ flutter:
     - assets/applogo.png
     - assets/feedbackbanner.svg
     - assets/about_us.jpg
-
     - assets/bs_v2.svg
     - assets/bs_v3.svg
     - assets/facebook.svg
@@ -182,21 +168,15 @@ flutter:
     - assets/giftbox.svg
     - assets/change-password-icon.svg
     - assets/bs_v5.svg
-
     - assets/squareupright.svg
     - assets/home_new.svg
     - assets/apps-add.svg
     - assets/flashbg4.png
     - assets/bar_texture_rec.png
-
     - assets/booking.svg
-
     - assets/markersvg.svg
     - assets/calendarcheck.svg
     - assets/calendarplus.svg
-
-
-
 
 
 
@@ -215,30 +195,7 @@ flutter:
   # example:
 
   fonts:
-    - family: Calibri
-      fonts:
-        - asset: fonts/Calibri.ttf
-    - family: Nunito
-      fonts:
-        - asset: fonts/NunitoBold.ttf
-        - asset: fonts/NunitoMedium.ttf
-        - asset: fonts/NunitoSemiBold.ttf
-    - family: LibreFranklin
-      fonts:
-        - asset: fonts/LibreFranklin-Medium.ttf
-    - family: OpenSans
-      fonts:
-        - asset: fonts/OpenSans-SemiBold.ttf
-    - family: Roboto
-      fonts:
-       - asset: fonts/Roboto-Bold.ttf
-         weight: 700
-       - asset: fonts/Roboto-Medium.ttf
-         weight: 600
-       - asset: fonts/Roboto-Regular.ttf
-         weight: 400
-       - asset: fonts/Roboto-Thin.ttf
-         weight: 100
+
     - family: Outfit
       fonts:
         - asset: fonts/Outfit-Medium.ttf     
