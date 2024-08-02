@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
-
+import 'package:flutter_infinite_marquee/flutter_infinite_marquee.dart';
 
 import 'package:flutter_svg/svg.dart';
 
@@ -51,13 +51,15 @@ class CustomerDashBoard extends StatefulWidget {
   final void Function()? bookNowButtonPressed;
   final Function(Branch data) toNavigate;
 
-  const CustomerDashBoard({super.key, this.bookNowButtonPressed, required this.toNavigate});
+  const CustomerDashBoard(
+      {super.key, this.bookNowButtonPressed, required this.toNavigate});
 
   @override
   State<CustomerDashBoard> createState() => _CustomerDashBoardState();
 }
 
-class _CustomerDashBoardState extends State<CustomerDashBoard>  with SingleTickerProviderStateMixin {
+class _CustomerDashBoardState extends State<CustomerDashBoard>
+    with SingleTickerProviderStateMixin {
   late final ScrollController _scrollController;
   late final AnimationController _animationController;
   String? marqueeText;
@@ -86,11 +88,11 @@ class _CustomerDashBoardState extends State<CustomerDashBoard>  with SingleTicke
       vsync: this,
       duration: const Duration(seconds: 10),
     )..addListener(() {
-      if (_scrollController.hasClients) {
-        _scrollController.jumpTo(_animationController.value *
-            _scrollController.position.maxScrollExtent);
-      }
-    });
+        if (_scrollController.hasClients) {
+          _scrollController.jumpTo(_animationController.value *
+              _scrollController.position.maxScrollExtent);
+        }
+      });
 
     _animationController.repeat();
     SystemChrome.setPreferredOrientations([
@@ -109,7 +111,8 @@ class _CustomerDashBoardState extends State<CustomerDashBoard>  with SingleTicke
         //fetchimagesslider();
         fetchImages();
       } else {
-        CommonUtils.showCustomToastMessageLong('No Internet Connection', context, 1, 4);
+        CommonUtils.showCustomToastMessageLong(
+            'No Internet Connection', context, 1, 4);
         print('Not connected to the internet');
       }
     });
@@ -122,6 +125,7 @@ class _CustomerDashBoardState extends State<CustomerDashBoard>  with SingleTicke
       userFullName = prefs.getString('userFullName') ?? '';
     });
   }
+
   Future<void> getMarqueeText() async {
     final apiUrl = Uri.parse(baseUrl + getcontent);
     print('apiUrl$apiUrl');
@@ -145,7 +149,8 @@ class _CustomerDashBoardState extends State<CustomerDashBoard>  with SingleTicke
           throw Exception('API failed');
         }
       } else {
-        throw Exception('Request failed with status: ${jsonResponse.statusCode}');
+        throw Exception(
+            'Request failed with status: ${jsonResponse.statusCode}');
       }
     } catch (error) {
       rethrow;
@@ -226,7 +231,9 @@ class _CustomerDashBoardState extends State<CustomerDashBoard>  with SingleTicke
     });
     if (response.statusCode == 200) {
       setState(() {
-        _items = (json.decode(response.body)['listResult'] as List).map((item) => Item.fromJson(item)).toList();
+        _items = (json.decode(response.body)['listResult'] as List)
+            .map((item) => Item.fromJson(item))
+            .toList();
         isDataBinding = false;
         isLoading = false;
       });
@@ -329,7 +336,8 @@ class _CustomerDashBoardState extends State<CustomerDashBoard>  with SingleTicke
 
         List<BannerImages> bannerImages = [];
         for (var item in jsonData['listResult']) {
-          bannerImages.add(BannerImages(imageName: item['imageName'] ?? '', id: item['id'] ?? 0));
+          bannerImages.add(BannerImages(
+              imageName: item['imageName'] ?? '', id: item['id'] ?? 0));
         }
 
         setState(() {
@@ -362,7 +370,8 @@ class _CustomerDashBoardState extends State<CustomerDashBoard>  with SingleTicke
         fetchData();
         fetchimagesslider();
       } else {
-        CommonUtils.showCustomToastMessageLong('No Internet Connection', context, 1, 4);
+        CommonUtils.showCustomToastMessageLong(
+            'No Internet Connection', context, 1, 4);
         print('Not connected to the internet');
       }
     });
@@ -372,241 +381,334 @@ class _CustomerDashBoardState extends State<CustomerDashBoard>  with SingleTicke
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: CommonStyles.whiteColor,
-      body: SingleChildScrollView(child:
-      Container(
-        width: MediaQuery.of(context).size.width,
-      //  height: MediaQuery.of(context).size.height,
-        child: Column(
-          //    crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12.0, ),
+      body: SingleChildScrollView(
+          child: SizedBox(
+              width: MediaQuery.of(context).size.width,
+              //  height: MediaQuery.of(context).size.height,
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                //    crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    children: [
-                      Text(
-                        'Hello ',
-                        style: CommonStyles.txSty_20b_fb.copyWith(fontSize: 22),
-                        //style: GoogleFonts.outfit(fontWeight: FontWeight.w700,fontSize: 22,color: Colors.black),
-                      ),
-                      Text(
-                        userFullName,
-                        style: CommonStyles.txSty_20b_fb.copyWith(fontSize: 22,color: Color(0xFF11528f)),
-                      //  style:GoogleFonts.outfit(fontWeight: FontWeight.w700,fontSize: 22,color: Color(0xFF11528f)),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 10.0,
-                  ),
-                  Row(
-                    children: [
-                      Text(
-                        'Welcome to ',
-                        //    style: CommonStyles.txSty_20b_fb.copyWith(fontSize: 22),
-                        style: CommonStyles.txSty_16b_fb,
-                      ),
-                      Text(
-                        'Hair Fixing Zone',
-                        style: CommonStyles.txSty_16p_f5,
-                      ),
-                    ],
-                  ),
-                  // Text(
-                  //   'Welcome to Hair Fixing Zone',
-                  //   style: TextStyle(
-                  //     //  fontSize: MediaQuery.of(context).size.width * 0.04,
-                  //     fontSize: 10,
-                  //     fontFamily: "Muli",
-                  //     fontWeight: FontWeight.bold,
-                  //     color: Colors.black,
-                  //   ),
-                  // ),
-                ],
-              ),
-            ),
-            // Expanded(
-            //   child:
-              Column(
-                children: [
-              Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
-        width: MediaQuery.of(context).size.width,
-        height: 200,
-        child: isLoading
-            ? Center(child: CircularProgressIndicator())
-            : FlutterCarousel(
-          options:
-          CarouselOptions(
-            floatingIndicator: true,
-            height: 200,
-            viewportFraction: 1.0,
-            enlargeCenterPage: true,
-            autoPlay: true,
-            aspectRatio: 16 / 9,
-            autoPlayCurve: Curves.fastOutSlowIn,
-            enableInfiniteScroll: true,
-            slideIndicator: CircularSlideIndicator(
-
-                slideIndicatorOptions: SlideIndicatorOptions(itemSpacing: 10,
-                  padding: const EdgeInsets.only(bottom: 10.0),
-                  indicatorBorderColor: Color(0xFF11528f),
-                  currentIndicatorColor: Color(0xFF11528f),
-                  indicatorRadius: 4,
-                ),),
-            autoPlayAnimationDuration: const Duration(milliseconds: 800),
-          ),
-          items: _items.map((item) {
-            return Builder(
-              builder: (BuildContext context) {
-                return SizedBox(
-                  width: MediaQuery.of(context).size.width,
-                  child: Card(
-                    shadowColor: Colors.transparent,
-                    surfaceTintColor: Colors.transparent,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12.0,
                     ),
-                    elevation: 4,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child: Image.network(
-                        item.imageName,
-                        height: 200,
-                        fit: BoxFit.fill,
-                        loadingBuilder: (context, child, loadingProgress) {
-                          if (loadingProgress == null) return child;
-                          return const Center(child: CircularProgressIndicator.adaptive());
-                        },
-                      ),
-                    ),
-                  ),
-                );
-              },
-            );
-          }).toList(),
-        ),
-      ),
-
-                  SizedBox(height: 10),
-if(marqueeTexts.isNotEmpty )
-                  SizedBox(
-                    height: 70.0,
-                    child: Container(
-                      color: Color(0xFF11528f).withOpacity(0.9), // Set the background color here
-                      child: Stack(
-                        children: [
-                        ListView.builder(
-                        controller: _scrollController,
-                        scrollDirection: Axis.horizontal,
-                        itemCount: 2, // Ensures the image can scroll infinitely
-                        physics: const SlowScrollPhysics(), // Apply custom scroll physics here
-                        itemBuilder: (context, index) {
-                          return Image.asset(
-                            'assets/bar_texture_rec.png',
-                            fit: BoxFit.cover,
-                            width: MediaQuery.of(context).size.width,
-                          );
-                        },
-                      ),
-                          Center(
-                            child: Padding(
-                              padding: EdgeInsets.only(left: 10.0, right: 20.0), // Add padding to icon
-                              child: Text(
-                                marqueeTexts.isNotEmpty ? marqueeTexts[currentTextIndex] : '',
-                                style: CommonStyles.text14white.copyWith(  height: 1.5),
-                                // style:
-                                // GoogleFonts.outfit(
-                                //   fontWeight: FontWeight.w600,
-                                //   fontSize: 14,
-                                //   color: Colors.white,
-                                //   height: 1.5, // Adjust line spacing here
-                             //   ),
-                              ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Text(
+                              'Hello ',
+                              style: CommonStyles.txSty_20b_fb
+                                  .copyWith(fontSize: 22),
+                              //style: GoogleFonts.outfit(fontWeight: FontWeight.w700,fontSize: 22,color: Colors.black),
                             ),
-                          ),
-                          if (marqueeTexts.length > 1)
-                            Align(
-                              alignment: Alignment.centerRight,
-                              child: Padding(
-                                padding: EdgeInsets.only(left: 0.0, right: 0.0), // Add padding to icon
-                                child: IconButton(
-                                  icon: Icon(Icons.arrow_forward_ios, color: Colors.white),
-                                  onPressed: nextText,
+                            Text(
+                              userFullName,
+                              style: CommonStyles.txSty_20b_fb.copyWith(
+                                  fontSize: 22, color: const Color(0xFF11528f)),
+                              //  style:GoogleFonts.outfit(fontWeight: FontWeight.w700,fontSize: 22,color: Color(0xFF11528f)),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 10.0,
+                        ),
+                        const Row(
+                          children: [
+                            Text(
+                              'Welcome to ',
+                              //    style: CommonStyles.txSty_20b_fb.copyWith(fontSize: 22),
+                              style: CommonStyles.txSty_16b_fb,
+                            ),
+                            Text(
+                              'Hair Fixing Zone',
+                              style: CommonStyles.txSty_16p_f5,
+                            ),
+                          ],
+                        ),
+                        // Text(
+                        //   'Welcome to Hair Fixing Zone',
+                        //   style: TextStyle(
+                        //     //  fontSize: MediaQuery.of(context).size.width * 0.04,
+                        //     fontSize: 10,
+                        //     fontFamily: "Muli",
+                        //     fontWeight: FontWeight.bold,
+                        //     color: Colors.black,
+                        //   ),
+                        // ),
+                      ],
+                    ),
+                  ),
+                  // Expanded(
+                  //   child:
+                  Column(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10.0, vertical: 10.0),
+                        width: MediaQuery.of(context).size.width,
+                        height: 200,
+                        child: isLoading
+                            ? const Center(child: CircularProgressIndicator())
+                            : FlutterCarousel(
+                                options: CarouselOptions(
+                                  floatingIndicator: true,
+                                  height: 200,
+                                  viewportFraction: 1.0,
+                                  enlargeCenterPage: true,
+                                  autoPlay: true,
+                                  aspectRatio: 16 / 9,
+                                  autoPlayCurve: Curves.fastOutSlowIn,
+                                  enableInfiniteScroll: true,
+                                  slideIndicator: const CircularSlideIndicator(
+                                    slideIndicatorOptions:
+                                        SlideIndicatorOptions(
+                                      itemSpacing: 10,
+                                      padding: EdgeInsets.only(bottom: 10.0),
+                                      indicatorBorderColor: Color(0xFF11528f),
+                                      currentIndicatorColor: Color(0xFF11528f),
+                                      indicatorRadius: 4,
+                                    ),
+                                  ),
+                                  autoPlayAnimationDuration:
+                                      const Duration(milliseconds: 800),
+                                ),
+                                items: _items.map((item) {
+                                  return Builder(
+                                    builder: (BuildContext context) {
+                                      return SizedBox(
+                                        width:
+                                            MediaQuery.of(context).size.width,
+                                        child: Card(
+                                          shadowColor: Colors.transparent,
+                                          surfaceTintColor: Colors.transparent,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                          ),
+                                          elevation: 4,
+                                          child: ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            child: Image.network(
+                                              item.imageName,
+                                              height: 200,
+                                              fit: BoxFit.fill,
+                                              loadingBuilder: (context, child,
+                                                  loadingProgress) {
+                                                if (loadingProgress == null) {
+                                                  return child;
+                                                }
+                                                return const Center(
+                                                    child:
+                                                        CircularProgressIndicator
+                                                            .adaptive());
+                                              },
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  );
+                                }).toList(),
+                              ),
+                      ),
+
+                      const SizedBox(height: 10),
+                      if (marqueeTexts.isNotEmpty)
+                        SizedBox(
+                          height: 70.0,
+                          child: Container(
+                            color: const Color(0xFF11528f).withOpacity(
+                                0.9), // Set the background color here
+                            child: Stack(children: [
+                              // Assets/images/stacked-steps-haikei.png
+
+                              Positioned.fill(
+                                child: InfiniteMarquee(
+                                  frequency: const Duration(milliseconds: 70),
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    return Image.asset(
+                                      'assets/bar_texture_rec.png',
+                                      fit: BoxFit.cover,
+                                      width: MediaQuery.of(context).size.width,
+                                    );
+                                  },
                                 ),
                               ),
-                            ),
-                        ],
-                      ),
-                    ),
-                  ),
-
-
-
-                  SizedBox(height: 10),
-
-
-
-                  //MARK: Branches
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 5.0),
-                    child: Align(
-                      alignment: Alignment.topLeft,
-                      child: Text(
-                        "Our Branches",
-                        style: CommonStyles.txSty_20b_fb,
-
-                      ),
-
-                      // Text(
-                      //   'Select a Branch',
-                      //   textAlign: TextAlign.left,
-                      //   //style: CommonStyles.txSty_20b_fb,
-                      //   style: TextStyle(
-                      //     fontSize: 14,
-                      //     fontFamily: "Muli",
-                      //     fontWeight: FontWeight.bold,
-                      //     color: Colors.black,
-                      //   ),
-                      // //  style:  GoogleFonts.outfit(fontWeight: FontWeight.w500,fontSize: 16,color: Color(0xFF11528f)),
-                      //
-                      // ),
-                    ),
-                  ),
-                  SizedBox(height: 10),
-                  if (isLoading)
-                    const Text('Please Wait Loading Slow Internet Connection !')
-                  else if (brancheslist.isEmpty && imageList.isEmpty)
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                      child: Container(
-                        padding: const EdgeInsets.all(15.0),
-                        child: Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Text('Failed to fetch data. Please check your internet connection.!'),
-                              const SizedBox(height: 20),
-                              ElevatedButton(
-                                onPressed: retryDataFetching,
-                                child: const Text('Retry'),
+                              /*   const Align(
+                                alignment: Alignment.center,
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      'This is sample text',
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 22,
+                                          fontWeight: FontWeight.w900),
+                                    ),
+                                  ],
+                                ),
+                              ), */
+                              Center(
+                                child: Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 10.0,
+                                      right: 20.0), // Add padding to icon
+                                  child: Text(
+                                    marqueeTexts.isNotEmpty
+                                        ? marqueeTexts[currentTextIndex]
+                                        : '',
+                                    style: CommonStyles.text14white
+                                        .copyWith(height: 1.5),
+                                  ),
+                                ),
                               ),
-                            ],
+                              if (marqueeTexts.length > 1)
+                                Align(
+                                  alignment: Alignment.centerRight,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 0.0,
+                                        right: 0.0), // Add padding to icon
+                                    child: IconButton(
+                                      icon: const Icon(Icons.arrow_forward_ios,
+                                          color: Colors.white),
+                                      onPressed: nextText,
+                                    ),
+                                  ),
+                                ),
+                            ]),
+
+                            /*   
+                            Stack(
+                              children: [
+                                ListView.builder(
+                                  controller: _scrollController,
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount:
+                                      2, // Ensures the image can scroll infinitely
+                                  physics:
+                                      const SlowScrollPhysics(), // Apply custom scroll physics here
+                                  itemBuilder: (context, index) {
+                                    return Image.asset(
+                                      'assets/bar_texture_rec.png',
+                                      fit: BoxFit.cover,
+                                      width: MediaQuery.of(context).size.width,
+                                    );
+                                  },
+                                ),
+                                Center(
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 10.0,
+                                        right: 20.0), // Add padding to icon
+                                    child: Text(
+                                      marqueeTexts.isNotEmpty
+                                          ? marqueeTexts[currentTextIndex]
+                                          : '',
+                                      style: CommonStyles.text14white
+                                          .copyWith(height: 1.5),
+                                      // style:
+                                      // GoogleFonts.outfit(
+                                      //   fontWeight: FontWeight.w600,
+                                      //   fontSize: 14,
+                                      //   color: Colors.white,
+                                      //   height: 1.5, // Adjust line spacing here
+                                      //   ),
+                                    ),
+                                  ),
+                                ),
+                                if (marqueeTexts.length > 1)
+                                  Align(
+                                    alignment: Alignment.centerRight,
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 0.0,
+                                          right: 0.0), // Add padding to icon
+                                      child: IconButton(
+                                        icon: const Icon(
+                                            Icons.arrow_forward_ios,
+                                            color: Colors.white),
+                                        onPressed: nextText,
+                                      ),
+                                    ),
+                                  ),
+                              ],
+                            ),
+                           */
                           ),
                         ),
+
+                      const SizedBox(height: 10),
+
+                      //MARK: Branches
+                      const Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 12.0, vertical: 5.0),
+                        child: Align(
+                          alignment: Alignment.topLeft,
+                          child: Text(
+                            "Our Branches",
+                            style: CommonStyles.txSty_20b_fb,
+                          ),
+
+                          // Text(
+                          //   'Select a Branch',
+                          //   textAlign: TextAlign.left,
+                          //   //style: CommonStyles.txSty_20b_fb,
+                          //   style: TextStyle(
+                          //     fontSize: 14,
+                          //     fontFamily: "Muli",
+                          //     fontWeight: FontWeight.bold,
+                          //     color: Colors.black,
+                          //   ),
+                          // //  style:  GoogleFonts.outfit(fontWeight: FontWeight.w500,fontSize: 16,color: Color(0xFF11528f)),
+                          //
+                          // ),
+                        ),
                       ),
-                    ),
-                  // Expanded(
-                  //     //flex: 3,
-                  //     child:
+                      const SizedBox(height: 10),
+                      if (isLoading)
+                        const Text(
+                            'Please Wait Loading Slow Internet Connection !')
+                      else if (brancheslist.isEmpty && imageList.isEmpty)
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                          child: Container(
+                            padding: const EdgeInsets.all(15.0),
+                            child: Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const Text(
+                                      'Failed to fetch data. Please check your internet connection.!'),
+                                  const SizedBox(height: 20),
+                                  ElevatedButton(
+                                    onPressed: retryDataFetching,
+                                    child: const Text('Retry'),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      // Expanded(
+                      //     //flex: 3,
+                      //     child:
                       Padding(
-                        padding:  EdgeInsets.symmetric(horizontal: 12.0),
+                        padding: const EdgeInsets.symmetric(horizontal: 12.0),
                         child: GridView.builder(
-                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2, crossAxisSpacing: 16.0, mainAxisSpacing: 16.0, mainAxisExtent: 250, childAspectRatio: 8 / 2),
-                          physics: NeverScrollableScrollPhysics(),
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2,
+                                  crossAxisSpacing: 16.0,
+                                  mainAxisSpacing: 16.0,
+                                  mainAxisExtent: 250,
+                                  childAspectRatio: 8 / 2),
+                          physics: const NeverScrollableScrollPhysics(),
                           shrinkWrap: true,
                           itemCount: isLoading ? 5 : brancheslist.length,
                           // ListView.builder(
@@ -615,7 +717,8 @@ if(marqueeTexts.isNotEmpty )
                           itemBuilder: (context, index) {
                             if (isLoading) {
                               return Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 5.0),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 0.0, vertical: 5.0),
                                 child: Shimmer.fromColors(
                                   baseColor: Colors.grey.shade300,
                                   highlightColor: Colors.grey.shade100,
@@ -630,19 +733,20 @@ if(marqueeTexts.isNotEmpty )
                               );
                             } else {
                               BranchModel branch = brancheslist[index];
-                              Color backgroundColor = index % 2 == 0 ? Color(0xFFdbeaff) : Color(0xFFcdeac3);
+                              Color backgroundColor = index % 2 == 0
+                                  ? const Color(0xFFdbeaff)
+                                  : const Color(0xFFcdeac3);
 
-                              return   GestureDetector(
-                                  onTap: () {
+                              return GestureDetector(
+                                  onTap: () {},
+                                  child: Container(
 
-                                  },
-                                  child:  Container(
-
-                                    //padding: EdgeInsets.only(top: 10),
+                                      //padding: EdgeInsets.only(top: 10),
                                       decoration: BoxDecoration(
-                                        color: Color(0xFFdbeaff),
-                                        borderRadius: BorderRadius.circular(15.0),
-                                        boxShadow: [
+                                        color: const Color(0xFFdbeaff),
+                                        borderRadius:
+                                            BorderRadius.circular(15.0),
+                                        boxShadow: const [
                                           // BoxShadow(
                                           //   color: Colors.grey.withOpacity(0.3),
                                           //   spreadRadius: 2,
@@ -652,146 +756,190 @@ if(marqueeTexts.isNotEmpty )
                                           // ),
                                         ],
                                       ),
-                                      child:
-                                      Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        mainAxisAlignment: MainAxisAlignment.start,
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
                                         children: [
                                           Align(
-                                            alignment : Alignment.topLeft,
+                                            alignment: Alignment.topLeft,
                                             // top: 0,
                                             //     right: 20,
                                             child: Container(
-                                              margin: EdgeInsets.only(top: 20,left: 10),
+                                              margin: const EdgeInsets.only(
+                                                  top: 20, left: 10),
                                               decoration: BoxDecoration(
                                                 border: Border.all(
                                                   color: Colors.grey,
                                                   width: 2.5,
                                                 ),
-                                                borderRadius: BorderRadius.circular(15.0),
+                                                borderRadius:
+                                                    BorderRadius.circular(15.0),
                                               ),
-                                              child:
-                                              ClipRRect(
-                                                borderRadius: BorderRadius.circular(13.0),
+                                              width: 65,
+                                              height: 60,
+                                              child: ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(13.0),
                                                 child: Image.network(
                                                   branch.imageName!,
                                                   width: 65,
                                                   height: 60,
                                                   fit: BoxFit.fill,
-                                                  loadingBuilder: (context, child, loadingProgress) {
-                                                    if (loadingProgress == null) return child;
+                                                  loadingBuilder: (context,
+                                                      child, loadingProgress) {
+                                                    if (loadingProgress ==
+                                                        null) {
+                                                      return child;
+                                                    }
 
-                                                    return Center(child: CircularProgressIndicator.adaptive());
+                                                    return const Center(
+                                                        child:
+                                                            CircularProgressIndicator
+                                                                .adaptive());
                                                   },
                                                 ),
                                               ),
-                                              width: 65,
-                                              height: 60,
                                             ),
                                           ),
                                           // SizedBox(height: 8.0),
-                                          Padding(padding: EdgeInsets.only(left: 10.0,right: 5.0,top: 5.0,bottom: 5.0),child: Text(
-                                            branch.name,
-                                            maxLines: 3,
-                                            style: CommonUtils.txSty_18b_fb,
-                                            // style:  GoogleFonts.outfit(fontWeight: FontWeight.w700,fontSize: 18,color: Color(0xFF11528f)),
-                                          ),  ),
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 10.0,
+                                                right: 5.0,
+                                                top: 5.0,
+                                                bottom: 5.0),
+                                            child: Text(
+                                              branch.name,
+                                              maxLines: 3,
+                                              style: CommonUtils.txSty_18b_fb,
+                                              // style:  GoogleFonts.outfit(fontWeight: FontWeight.w700,fontSize: 18,color: Color(0xFF11528f)),
+                                            ),
+                                          ),
                                           // SizedBox(height: 8.0),
-                                          Padding(padding: EdgeInsets.only(left: 10.0,right: 5.0,bottom: 5.0),
-                                            child:   SizedBox(
-                                              height: 70.0,
-                                              child:  Text(
-                                            branch.address,
-                                            maxLines: 4,
-                                                style: CommonStyles.txSty_12b_fb.copyWith(wordSpacing: 1.2,color: Colors.black.withOpacity(0.8)),
-                                          ), ) ),
+                                          Padding(
+                                              padding: const EdgeInsets.only(
+                                                  left: 10.0,
+                                                  right: 5.0,
+                                                  bottom: 5.0),
+                                              child: SizedBox(
+                                                height: 70.0,
+                                                child: Text(
+                                                  branch.address,
+                                                  maxLines: 4,
+                                                  style: CommonStyles
+                                                      .txSty_12b_fb
+                                                      .copyWith(
+                                                          wordSpacing: 1.2,
+                                                          color: Colors.black
+                                                              .withOpacity(
+                                                                  0.8)),
+                                                ),
+                                              )),
                                           //  SizedBox(height: 5.0),
                                           // Display from date and to date multiple times
-Align(
-  alignment: Alignment.bottomLeft,
-  child:
-  Container(
-    height: 30,
-    margin: const EdgeInsets.only(bottom: 2.0, left: 10.0, top: 5.0),
-    decoration: BoxDecoration(
-      border: Border.all(
-        color: Color(0xFF11528f),
-      ),
-      borderRadius: BorderRadius.circular(20.0),
-    ),
-    child: ElevatedButton(
-      onPressed: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => Bookingscreen(
-              branchId: branch.id!,
-              branchname: branch.name!,
-              branchaddress: branch.address!,
-              phonenumber: branch.mobileNumber!,
-              branchImage: branch.imageName!,
-              latitude: branch.latitude,
-              longitude: branch.longitude,
-            ),
-          ),
-        );
-      },
-      style: ElevatedButton.styleFrom(
-        padding:EdgeInsets.symmetric(horizontal: 10.0), // Adjust padding as needed, // Remove padding
-        foregroundColor: Color(0xFF8d97e2),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        shadowColor: Colors.transparent,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20.0),
-        ),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            'Book Now',
-            style: CommonStyles.txSty_14p_f5
-            // GoogleFonts.outfit(
-            //   fontWeight: FontWeight.w500,
-            //   fontSize: 14,
-            //   color: Color(0xFF11528f),
-            // ),
-          ),
-          SizedBox(width: 5),
-          SvgPicture.asset(
-            'assets/squareupright.svg',
-            width: 12.0,
-            height: 12.0,
-            color: Color(0xFF11528f),
-          ),
-        ],
-      ),
-    ),
-  )
-
-)
-
+                                          Align(
+                                              alignment: Alignment.bottomLeft,
+                                              child: Container(
+                                                height: 30,
+                                                margin: const EdgeInsets.only(
+                                                    bottom: 2.0,
+                                                    left: 10.0,
+                                                    top: 5.0),
+                                                decoration: BoxDecoration(
+                                                  border: Border.all(
+                                                    color:
+                                                        const Color(0xFF11528f),
+                                                  ),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          20.0),
+                                                ),
+                                                child: ElevatedButton(
+                                                  onPressed: () {
+                                                    Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            Bookingscreen(
+                                                          branchId: branch.id!,
+                                                          branchname:
+                                                              branch.name,
+                                                          branchaddress:
+                                                              branch.address,
+                                                          phonenumber: branch
+                                                              .mobileNumber,
+                                                          branchImage:
+                                                              branch.imageName!,
+                                                          latitude:
+                                                              branch.latitude,
+                                                          longitude:
+                                                              branch.longitude,
+                                                        ),
+                                                      ),
+                                                    );
+                                                  },
+                                                  style:
+                                                      ElevatedButton.styleFrom(
+                                                    padding: const EdgeInsets
+                                                        .symmetric(
+                                                        horizontal:
+                                                            10.0), // Adjust padding as needed, // Remove padding
+                                                    foregroundColor:
+                                                        const Color(0xFF8d97e2),
+                                                    backgroundColor:
+                                                        Colors.transparent,
+                                                    elevation: 0,
+                                                    shadowColor:
+                                                        Colors.transparent,
+                                                    shape:
+                                                        RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              20.0),
+                                                    ),
+                                                  ),
+                                                  child: Row(
+                                                    mainAxisSize:
+                                                        MainAxisSize.min,
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      const Text('Book Now',
+                                                          style: CommonStyles
+                                                              .txSty_14p_f5
+                                                          // GoogleFonts.outfit(
+                                                          //   fontWeight: FontWeight.w500,
+                                                          //   fontSize: 14,
+                                                          //   color: Color(0xFF11528f),
+                                                          // ),
+                                                          ),
+                                                      const SizedBox(width: 5),
+                                                      SvgPicture.asset(
+                                                        'assets/squareupright.svg',
+                                                        width: 12.0,
+                                                        height: 12.0,
+                                                        color: const Color(
+                                                            0xFF11528f),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ))
                                         ],
-                                      )
-                                  ));
-
-
-
-
+                                      )));
                             }
                           },
                         ),
                       )
-                  //),
+                      //),
+                    ],
+                  ),
+                  // ),
                 ],
-              ),
-           // ),
-          ],
-        )
-      )
-     ),
+              ))),
     );
   }
 
@@ -943,15 +1091,16 @@ class SlowScrollPhysics extends ScrollPhysics {
   }
 
   @override
-  double get maxFlingVelocity => super.maxFlingVelocity * 0.2; // Decrease the fling velocity
+  double get maxFlingVelocity => super.maxFlingVelocity * 0.2;
 
   @override
-  double get minFlingVelocity => super.minFlingVelocity * 0.2; // Decrease the minimum fling velocity
+  double get minFlingVelocity => super.minFlingVelocity * 0.2;
 
   @override
-  Simulation? createBallisticSimulation(ScrollMetrics position, double velocity) {
+  Simulation? createBallisticSimulation(
+      ScrollMetrics position, double velocity) {
     if ((velocity.abs() >= minFlingVelocity)) {
-      return super.createBallisticSimulation(position, velocity * 0.2);
+      return super.createBallisticSimulation(position, velocity * 0.1);
     }
     return super.createBallisticSimulation(position, velocity);
   }
@@ -965,7 +1114,7 @@ class BranchCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(left: 5.0),
+        padding: const EdgeInsets.only(left: 5.0),
         color: Colors.white,
         child: Card(
           elevation: 2,
@@ -1060,7 +1209,8 @@ class BranchCard extends StatelessWidget {
   }
 
   Future<void> openMap(Model_branch branchnames) async {
-    final url = 'https://www.google.com/maps/search/?api=1&query=${branchnames.latitude},${branchnames.longitude}';
+    final url =
+        'https://www.google.com/maps/search/?api=1&query=${branchnames.latitude},${branchnames.longitude}';
     if (await canLaunch(url)) {
       await launch(url);
     } else {
