@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:math';
 
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:custom_date_range_picker/custom_date_range_picker.dart';
@@ -133,7 +132,6 @@ class MyAppointments_screenState extends State<MyAppointments> {
                                         setState(() {
                                           // Refresh logic
                                           refreshTheScreen();
-
                                         });
                                       },
                                     ),
@@ -279,7 +277,7 @@ class MyAppointments_screenState extends State<MyAppointments> {
                 decoration: InputDecoration(
                   contentPadding: const EdgeInsets.only(top: 5, left: 12),
                   hintText: 'Search Appointment',
-                  hintStyle:  CommonStyles.texthintstyle ,
+                  hintStyle: CommonStyles.texthintstyle,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
                     borderSide:
@@ -408,7 +406,7 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
   Statusmodel? selectedstatus;
   String? apiFromDate;
   String? apiToDate;
-  List<String>? selectedDate;
+  DateTime? selectedDate;
 
   late MyAppointmentsProvider myAppointmentsProvider;
 
@@ -432,6 +430,7 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
 
     try {
       Map<String, dynamic> request = requestBody;
+      print('filterAppointments: $url');
       print('filterAppointments: ${json.encode(request)}');
 
       final jsonResponse = await http.post(
@@ -529,46 +528,24 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                       height: 10,
                     ),
 
-
                     TextFormField(
                       controller: _fromToDatesController,
                       keyboardType: TextInputType.visiblePassword,
                       onTap: () async {
-                        FocusScope.of(context).requestFocus(
-                            FocusNode()); // to prevent the keyboard from appearing
-                        final values = await showCustomCalendarDialog(
+                        FocusScope.of(context).requestFocus(FocusNode());
+                        /*   final values = await showCustomCalendarDialog(
                             context, CommonStyles.config);
                         if (values != null) {
                           setState(() {
-                            //           startDate = s;
-                            //           endDate = e;
-                            //           _fromToDatesController.text =
-                            //               '${startDate != null ? DateFormat("dd/MM/yyyy").format(startDate!) : '-'} / ${endDate != null ? DateFormat("dd/MM/yyyy").format(endDate!) : '-'}';
-                            //           ConsultationData =
-                            //               getviewconsulationlist(DateFormat('yyyy-MM-dd').format(startDate!), DateFormat('yyyy-MM-dd').format(endDate!));
-
-                            // selectedDate =
-                            //     _getValueText(config.calendarType, values);
-                            // _fromToDatesController.text =
-                            //     '${selectedDate![0]} To ${selectedDate![1]}';
-                            // String apiFromDate = formateDate(selectedDate![0]);
-                            // String apiToDate = formateDate(selectedDate![1]);
-                            // ConsultationData =
-                            //     getviewconsulationlist(apiFromDate, apiToDate);
-
                             selectedDate = _getValueText(
                                 CommonStyles.config.calendarType, values);
                             provider.getDisplayDate =
                                 '${selectedDate![0]}  -  ${selectedDate![1]}';
                             provider.getApiFromDate = selectedDate![0];
                             provider.getApiToDate = selectedDate![1];
-
-                            // provider.getDisplayDate =
-                            //     '${selectedDate![0]}  to  ${selectedDate![1]}';
-                            // provider.getApiFromDate = selectedDate![0];
-                            // provider.getApiToDate = selectedDate![1];
                           });
-                        }
+                        } */
+                        _selectDate(context, provider);
                       },
                       readOnly: true,
                       decoration: InputDecoration(
@@ -593,7 +570,7 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                         ),
                         hintText: 'Select Dates',
                         counterText: "",
-                        hintStyle:CommonStyles.texthintstyle ,
+                        hintStyle: CommonStyles.texthintstyle,
                         prefixIcon: const Icon(Icons.calendar_today),
                       ),
                       //  validator: validatePassword,
@@ -722,7 +699,7 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                     ),
                     //MARK: Filter Status
                     Padding(
-                      padding: const EdgeInsets.only(right: 10.0,left: 0.0),
+                      padding: const EdgeInsets.only(right: 10.0, left: 0.0),
                       child: FutureBuilder(
                           future: prostatus,
                           builder: (context, snapshot) {
@@ -1032,6 +1009,30 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
     String formattedDate = DateFormat('yyyy-MM-dd').format(dateTime);
     return formattedDate;
   }
+
+  Future<void> _selectDate(
+      BuildContext context, MyAppointmentsProvider provider) async {
+    final DateTime currentDate = DateTime.now();
+    final DateTime initialDate = selectedDate ?? currentDate;
+
+    final DateTime? pickedDay = await showDatePicker(
+      context: context,
+      initialDate: initialDate,
+      firstDate: DateTime.now(),
+      lastDate:
+          DateTime(currentDate.year + 1, currentDate.month, currentDate.day),
+      initialDatePickerMode: DatePickerMode.day,
+    );
+
+    if (pickedDay != null) {
+      setState(() {
+        selectedDate = pickedDay;
+        provider.getDisplayDate = pickedDay.toString();
+        provider.getApiFromDate = pickedDay.toString();
+        provider.getApiToDate = pickedDay.toString();
+      });
+    }
+  }
 }
 
 class UserFeedback {
@@ -1044,8 +1045,11 @@ class UserFeedback {
 class OpCard extends StatefulWidget {
   final MyAppointment_Model data;
   final VoidCallback? onRefresh;
-  const OpCard({super.key, required this.data,  this.onRefresh,
-  }) ;
+  const OpCard({
+    super.key,
+    required this.data,
+    this.onRefresh,
+  });
 
   @override
   State<OpCard> createState() => _OpCardState();
@@ -1730,9 +1734,9 @@ class _OpCardState extends State<OpCard> {
                           ),
                           Row(
                             children: [
-                              Text(
+                              const Text(
                                 'Quality',
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontSize: 16,
                                   color: CommonUtils.primaryTextColor,
                                   fontFamily: 'Outfit',
@@ -1742,25 +1746,26 @@ class _OpCardState extends State<OpCard> {
                               Container(
                                 child: SizedBox(
                                   width: MediaQuery.of(context).size.width *
-                                      0.5 , // Adjusted width
+                                      0.5, // Adjusted width
                                   child: Center(
                                     child: RatingBar.builder(
                                       initialRating: 0,
                                       minRating: 0,
                                       direction: Axis.horizontal,
                                       allowHalfRating: true,
-                                      itemCount: 5,itemSize: 30,
+                                      itemCount: 5,
+                                      itemSize: 30,
                                       itemPadding: const EdgeInsets.symmetric(
                                           horizontal: 0.5),
                                       itemBuilder: (context, _) => const Icon(
                                         Icons.star,
-
                                         color: CommonUtils.primaryTextColor,
                                       ),
                                       onRatingUpdate: (rating) {
                                         setState(() {
                                           Qul_rating_star = rating;
-                                          print('Qul_rating_star$Qul_rating_star');
+                                          print(
+                                              'Qul_rating_star$Qul_rating_star');
                                         });
                                       },
                                     ),
@@ -1769,14 +1774,14 @@ class _OpCardState extends State<OpCard> {
                               ),
                             ],
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 5.0,
                           ),
                           Row(
                             children: [
-                              Text(
+                              const Text(
                                 'Service',
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontSize: 16,
                                   color: CommonUtils.primaryTextColor,
                                   fontFamily: 'Outfit',
@@ -1785,7 +1790,8 @@ class _OpCardState extends State<OpCard> {
                               ),
                               Container(
                                 child: SizedBox(
-                                  width: MediaQuery.of(context).size.width * 0.5, // Adjusted width
+                                  width: MediaQuery.of(context).size.width *
+                                      0.5, // Adjusted width
                                   child: Center(
                                     child: RatingBar.builder(
                                       initialRating: 0,
@@ -1798,13 +1804,13 @@ class _OpCardState extends State<OpCard> {
                                           horizontal: 1.0),
                                       itemBuilder: (context, _) => const Icon(
                                         Icons.star,
-
                                         color: CommonUtils.primaryTextColor,
                                       ),
                                       onRatingUpdate: (rating) {
                                         setState(() {
                                           Serv_rating_star = rating;
-                                          print('Serv_rating_star$Serv_rating_star');
+                                          print(
+                                              'Serv_rating_star$Serv_rating_star');
                                         });
                                       },
                                     ),
@@ -1920,7 +1926,7 @@ class _OpCardState extends State<OpCard> {
     if (isValid && Qul_rating_star <= 0.0) {
       FocusScope.of(context).unfocus();
       CommonUtils.showCustomToastMessageLong(
-          'Please Rate Your Experience with Quality' , context, 1, 4);
+          'Please Rate Your Experience with Quality', context, 1, 4);
       isValid = false;
       hasValidationFailed = true;
     }
@@ -1972,7 +1978,7 @@ class _OpCardState extends State<OpCard> {
         "customerId": userId,
         "price": appointmens.price,
         "paymentTypeId": appointmens.paymentTypeId,
-        "qualityRating":Qul_rating_star,
+        "qualityRating": Qul_rating_star,
       };
       print('AddUpdatefeedback object: : ${json.encode(request)}');
 
@@ -2008,13 +2014,11 @@ class _OpCardState extends State<OpCard> {
           // userfeedbacklist[index].ratingstar = rating_star;
           // userfeedbacklist[index].comments = _commentstexteditcontroller.text.toString();
 
-
           // Navigator.of(context).push(
           //   MaterialPageRoute(
           //     builder: (context) => const MyAppointments(),
           //   ),
           // );
-
         } else {
           print(
               'Failed to send the request. Status code: ${response.statusCode}');
