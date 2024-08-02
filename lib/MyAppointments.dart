@@ -1720,7 +1720,7 @@ class _OpCardState extends State<OpCard> {
                           ),
                           Center(
                             child: Text(
-                              'Please Rate Your Experience for the ${appointments.slotDuration} Slot at the ${appointments.branch} Hair Fixing Zone.',
+                              'Please Rate us Your Experience for the ${appointments.slotDuration} Slot at the ${appointments.branch} Hair Fixing Zone.',
                               style: const TextStyle(
                                 fontSize: 16,
                                 color: CommonUtils.primaryTextColor,

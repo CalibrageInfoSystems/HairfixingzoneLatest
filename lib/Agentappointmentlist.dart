@@ -16,6 +16,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'package:url_launcher/url_launcher.dart';
 import 'AgentAppointmentsProvider.dart';
 import 'AgentHome.dart';
 import 'Appointment.dart';
@@ -1241,9 +1242,32 @@ class _OpCardState extends State<OpCard> {
                                   const SizedBox(height: 2.0),
 
                                   Row(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      Text(widget.data.phoneNumber ?? '',
-                                          style: CommonStyles.txSty_16b_fb),
+                                      GestureDetector(
+                                        onTap: () {
+                                          makePhoneCall(
+                                              'tel:+91${widget.data.phoneNumber }');
+                                        },
+                                        child: RichText(
+                                          text: TextSpan(
+                                            text:
+                                            widget.data.phoneNumber ,
+                                            style: const TextStyle(
+                                              fontSize: 14,
+                                              fontFamily: "Outfit",
+                                              fontWeight: FontWeight.w500,
+                                              color: Color(0xFF0f75bc),
+                                              decoration: TextDecoration.underline,
+                                              decorationColor: Color(
+                                                  0xFF0f75bc), // Change this to your desired underline color
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        width: 5.0,
+                                      ),
                                       GestureDetector(
                                         key: _toolTipKey,
                                         child: const Padding(
@@ -2687,6 +2711,14 @@ class _OpCardState extends State<OpCard> {
         isPaymentModeSelected = false;
         isPaymentValidate = true;
       });
+    }
+  }
+
+  Future<void> makePhoneCall(String phoneNumber) async {
+    if (await canLaunch(phoneNumber)) {
+      await launch(phoneNumber);
+    } else {
+      throw 'Could not launch $phoneNumber';
     }
   }
 }

@@ -113,8 +113,8 @@ class contactus extends StatelessWidget {
                         const SizedBox(width: 10),
                         SvgPicture.asset(
                           'assets/phone_call.svg',
-                          width: 25,
-                          height: 25,
+                          width: 20,
+                          height: 20,
                           color: Colors.white,
                         ),
                         const SizedBox(width: 10),
@@ -182,12 +182,12 @@ class SocialMediaButton extends StatelessWidget {
               children: [
                 SvgPicture.asset(
                   iconPath,
-                  width: 25,
-                  height: 25,
+                  width: 20,
+                  height: 20,
                   color: color, // Adjust color as needed
                 ),
                 const SizedBox(width: 15),
-                Text(username, style: CommonStyles.txSty_20black_fb),
+                Text(username, style: CommonStyles.txSty_18b_fb                ),
               ],
             ),
           ),

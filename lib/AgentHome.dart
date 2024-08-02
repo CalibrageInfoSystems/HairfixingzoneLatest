@@ -138,7 +138,7 @@ class _AgentHomeState extends State<AgentHome> {
           onTap: (index) => setState(() {
             _currentIndex = index;
           }),
-          selectedItemColor: Colors.black,
+          selectedItemColor:  CommonUtils.primaryTextColor,
 
           items: <BottomNavigationBarItem>[
             BottomNavigationBarItem(

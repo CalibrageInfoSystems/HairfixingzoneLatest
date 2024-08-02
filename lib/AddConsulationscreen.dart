@@ -206,15 +206,42 @@ class AddConsulationscreen_screenState extends State<AddConsulationscreen> {
         },
         child: Scaffold(
             backgroundColor: CommonStyles.whiteColor,
-            appBar: AppBar(
-              backgroundColor:  Color(0xffffffff),
-              automaticallyImplyLeading: false,
-              title:Text(
-                'Add Consultation',
-                style: CommonStyles.txSty_20b_fb,
+            appBar:AppBar(
+                elevation: 0,
+                backgroundColor: const Color(0xffe2f0fd),
+                title: const Text(
+                  'Add Consultation',
+                  style: TextStyle(
+                      color: Color(0xFF0f75bc),
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.w600),
+                ),
+                // actions: [
+                //   IconButton(
+                //     icon: SvgPicture.asset(
+                //       'assets/sign-out-alt.svg', // Path to your SVG asset
+                //       color: Color(0xFF662e91),
+                //       width: 24, // Adjust width as needed
+                //       height: 24, // Adjust height as needed
+                //     ),
+                //     onPressed: () {
+                //       logOutDialog(context);
+                //       // Add logout functionality here
+                //     },
+                //   ),
+                // ],
+                // centerTitle: true,
+                leading: IconButton(
+                  icon: const Icon(
+                    Icons.arrow_back_ios,
+                    color: CommonUtils.primaryTextColor,
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                )),
 
-              ),
-            ),
+
             body: SingleChildScrollView(
               child: Form(
                   key: _formKey,

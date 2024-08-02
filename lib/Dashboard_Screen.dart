@@ -943,10 +943,10 @@ class SlowScrollPhysics extends ScrollPhysics {
   }
 
   @override
-  double get maxFlingVelocity => super.maxFlingVelocity * 0.2; // Decrease the fling velocity
+  double get maxFlingVelocity => super.maxFlingVelocity * 0.9; // Decrease the fling velocity
 
   @override
-  double get minFlingVelocity => super.minFlingVelocity * 0.2; // Decrease the minimum fling velocity
+  double get minFlingVelocity => super.minFlingVelocity * 0.9; // Decrease the minimum fling velocity
 
   @override
   Simulation? createBallisticSimulation(ScrollMetrics position, double velocity) {

@@ -91,15 +91,31 @@ class MyApp extends StatelessWidget {
       print("onMessageOpenedApp: $messageBody");
       print("onMessageOpenedApp: $messagelog");
       LocalNotificationService.showNotificationOnForeground(context, message);
-      RegExp datePattern = RegExp(r'\b(\d{1,2} \w+ \d{4})\b');
-      Match? match = datePattern.firstMatch(messageBody!);
+      if (messageBody != null) {
+        RegExp datePattern = RegExp(r'\b(\d{1,2})(st|nd|rd|th)? (\w+)\b');
+        Match? match = datePattern.firstMatch(messageBody);
 
-      if (match != null) {
-        String dateString = match.group(1)!;
-        DateTime date = DateFormat("dd MMMM yyyy").parse(dateString);
-        formattedDate = DateFormat("yyyy-MM-dd").format(date);
-        print("Formatted Date: $formattedDate");
-      } else {
+        if (match != null) {
+          String day = match.group(1)!;
+          String month = match.group(3)!;
+
+          String dateString = "$day $month";
+
+          try {
+            DateTime date = DateFormat("d MMMM").parse(dateString);
+
+            // Adjust the year to the current year
+            date = DateTime(DateTime
+                .now()
+                .year, date.month, date.day);
+
+            formattedDate = DateFormat("yyyy-MM-dd").format(date);
+            print("Formatted Date: $formattedDate");
+          } catch (e) {
+            print("Error parsing date: $e");
+          }
+        }
+      }else {
         print("Date not found in the message.");
       }
 
@@ -119,16 +135,29 @@ class MyApp extends StatelessWidget {
       print("onMessageOpenedApp: $message");
 
       String? messageBody = message.notification!.body;
-      print("onMessageOpenedApp: $messageBody");
+      print("onMessageOpenedApp:122 $messageBody");
 
-      RegExp datePattern = RegExp(r'\b(\d{1,2} \w+ \d{4})\b');
-      Match? match = datePattern.firstMatch(messageBody!);
+      if (messageBody != null) {
+        RegExp datePattern = RegExp(r'\b(\d{1,2})(st|nd|rd|th)? (\w+)\b');
+        Match? match = datePattern.firstMatch(messageBody);
 
-      if (match != null) {
-        String dateString = match.group(1)!;
-        DateTime date = DateFormat("dd MMMM yyyy").parse(dateString);
-        formattedDate = DateFormat("yyyy-MM-dd").format(date);
-        print("Formatted Date: $formattedDate");
+        if (match != null) {
+          String day = match.group(1)!;
+          String month = match.group(3)!;
+
+          String dateString = "$day $month";
+          print("dateString133: $dateString");
+          try {
+            DateTime date = DateFormat("d MMMM").parse(dateString);
+
+            // Adjust the year to the current year
+            date = DateTime(DateTime.now().year, date.month, date.day);
+
+            formattedDate = DateFormat("yyyy-MM-dd").format(date);
+            print("Formatted Date: $formattedDate");
+          } catch (e) {
+            print("Error parsing date: $e");
+          }}
       } else {
         print("Date not found in the message.");
       }

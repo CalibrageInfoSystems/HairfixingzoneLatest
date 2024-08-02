@@ -417,29 +417,40 @@ class _SlotSuccessScreenState extends State<SlotSuccessScreen> with TickerProvid
     }
   }
   Future<void> openMap() async {
-    if (widget.latitude != null && widget.longitude != null) {
-      final String label = 'Hair Fixing Zone - ${widget.slotbranchname}';
-      final String googleMapsUrl = 'geo:${widget.latitude},${widget.longitude}?q=${Uri.encodeComponent(label)}';
-      final String appleMapsUrl = 'https://maps.apple.com/?q=${Uri.encodeComponent(label)}&ll=${widget.latitude},${widget.longitude}';
+    final String mapUrl = 'https://maps.app.goo.gl/MtXMAwJKREYvyCbk8';
 
-      String url;
-      if (Theme.of(context).platform == TargetPlatform.iOS) {
-        url = appleMapsUrl;
-      } else {
-        url = googleMapsUrl;
-      }
-
-      print('getbrancheslist: $url');
-      try {
-        await launchUrl(Uri.parse(url));
-      } catch (e) {
-        print(e);
-      }
-    } else {
+    try {
+      await launchUrl(Uri.parse(mapUrl));
+    } catch (e) {
+      print(e);
       CommonUtils.showCustomToastMessageLong(
-          'Location not found', context, 1, 3);
+          'Could not open the map', context, 1, 3);
     }
   }
+  // Future<void> openMap() async {
+  //   if (widget.latitude != null && widget.longitude != null) {
+  //     final String label = 'Hair Fixing Zone - ${widget.slotbranchname}';
+  //     final String googleMapsUrl = 'geo:${widget.latitude},${widget.longitude}?q=${Uri.encodeComponent(label)}';
+  //     final String appleMapsUrl = 'https://maps.apple.com/?q=${Uri.encodeComponent(label)}&ll=${widget.latitude},${widget.longitude}';
+  //
+  //     String url;
+  //     if (Theme.of(context).platform == TargetPlatform.iOS) {
+  //       url = appleMapsUrl;
+  //     } else {
+  //       url = googleMapsUrl;
+  //     }
+  //
+  //     print('getbrancheslist: $url');
+  //     try {
+  //       await launchUrl(Uri.parse(url));
+  //     } catch (e) {
+  //       print(e);
+  //     }
+  //   } else {
+  //     CommonUtils.showCustomToastMessageLong(
+  //         'Location not found', context, 1, 3);
+  //   }
+  // }
   // Future<void> openMap() async {
   //   // if (widget.latitude != null && widget.longitude != null) {
   //   //   final String url = 'https://www.google.com/maps?q=${widget.latitude},${widget.longitude}';
