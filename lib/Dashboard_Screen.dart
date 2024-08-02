@@ -527,7 +527,7 @@ class _CustomerDashBoardState extends State<CustomerDashBoard>
 
                               Positioned.fill(
                                 child: InfiniteMarquee(
-                                  frequency: const Duration(milliseconds: 70),
+                                  frequency: const Duration(milliseconds: 100),
                                   itemBuilder:
                                       (BuildContext context, int index) {
                                     return Image.asset(
