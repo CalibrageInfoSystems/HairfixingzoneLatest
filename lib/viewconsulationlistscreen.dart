@@ -47,7 +47,8 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
   final TextEditingController _fromToDatesController = TextEditingController();
   DateTime? startDate;
   DateTime? endDate;
-  List<String>? selectedDate;
+
+  DateTime? selectedDate;
   String? month;
   String? date;
   String? year;
@@ -59,13 +60,14 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
     startDate = DateTime.now().subtract(const Duration(days: 14));
     endDate = DateTime.now();
     _fromToDatesController.text =
-        '${startDate != null ? DateFormat("dd/MM/yyyy").format(startDate!) : '-'} - ${endDate != null ? DateFormat("dd/MM/yyyy").format(endDate!) : '-'}';
+        DateFormat('dd-MM-yyyy').format(DateTime.now());
 
     print(
         'branchid ${widget.branchid} fromdate${widget.fromdate} todate ${widget.todate}');
     ConsultationData = getviewconsulationlist(
-        DateFormat('yyyy-MM-dd').format(startDate!),
-        DateFormat('yyyy-MM-dd').format(endDate!));
+      DateFormat('yyyy-MM-dd').format(DateTime.now()),
+      DateFormat('yyyy-MM-dd').format(DateTime.now()),
+    );
   }
 
 // http://182.18.157.215/SaloonApp/API/api/Consultation/GetConsultationsByBranchId
@@ -82,7 +84,7 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
       "toDate": todate,
       "isActive": true, //widget.todate
     };
-
+    print('test rqbody: $requestObject');
     // {
     //   "branchId": widget.branchid,
     //   "fromDate": widget.fromdate,
@@ -251,8 +253,7 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
                           border: Border.all(
                             color: Colors.grey,
                             //  color: const Color(0xFF8d97e2), // Add your desired border color here
-                            width:
-                            1.0, // Set the border width
+                            width: 1.0, // Set the border width
                           ),
                           borderRadius: BorderRadius.circular(
                               10.0), // Optional: Add border radius if needed
@@ -263,23 +264,22 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
                               // padding: const EdgeInsets.all(10),
                               clipBehavior: Clip.antiAlias,
                               decoration: BoxDecoration(
-                              gradient: const LinearGradient(
-                                colors: [
-                                  Color(0xFFFFFFFF),
-                                  Color(0xFFFFFFFF),
-                                ],
-                                begin: Alignment.centerLeft,
-                                end: Alignment.centerRight,
+                                gradient: const LinearGradient(
+                                  colors: [
+                                    Color(0xFFFFFFFF),
+                                    Color(0xFFFFFFFF),
+                                  ],
+                                  begin: Alignment.centerLeft,
+                                  end: Alignment.centerRight,
+                                ),
+                                border: Border.all(
+                                  color: Colors.grey,
+                                  //  color: const Color(0xFF8d97e2), // Add your desired border color here
+                                  width: 1.0, // Set the border width
+                                ),
+                                borderRadius: BorderRadius.circular(
+                                    10.0), // Optional: Add border radius if needed
                               ),
-                              border: Border.all(
-                                color: Colors.grey,
-                                //  color: const Color(0xFF8d97e2), // Add your desired border color here
-                                width:
-                                1.0, // Set the border width
-                              ),
-                              borderRadius: BorderRadius.circular(
-                                  10.0), // Optional: Add border radius if needed
-                            ),
                               // width: MediaQuery.of(context).size.width / 4,
                               child: Image.network(
                                 widget.agent.imageName!.isNotEmpty
@@ -343,13 +343,14 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
                     const SizedBox(
                       height: 10,
                     ),
+                    //MARK: Date Picker
                     TextFormField(
                       controller: _fromToDatesController,
                       keyboardType: TextInputType.visiblePassword,
                       onTap: () async {
                         FocusScope.of(context).requestFocus(
                             FocusNode()); // to prevent the keyboard from appearing
-                        final values =
+                        /* final values =
                             await showCustomCalendarDialog(context, config);
                         if (values != null) {
                           setState(() {
@@ -373,7 +374,9 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
                             // provider.getApiFromDate = selectedDate![0];
                             // provider.getApiToDate = selectedDate![1];
                           });
-                        }
+                        } */
+
+                        _selectDate(context);
                       },
                       readOnly: true,
                       decoration: InputDecoration(
@@ -469,25 +472,24 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
         child: IntrinsicHeight(
             child: Container(
           padding: const EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [
-                    Color(0xffe2f0fd),
-                 Color(0xffe2f0fd),
-
-                  ],
-                  begin: Alignment.centerLeft,
-                  end: Alignment.centerRight,
-                ),
-                // border: Border.all(
-                //   color: Colors.grey,
-                //   //  color: const Color(0xFF8d97e2), // Add your desired border color here
-                //   width:
-                //   1.0, // Set the border width
-                // ),
-                borderRadius: BorderRadius.circular(
-                    10.0), // Optional: Add border radius if needed
-              ),
+          decoration: BoxDecoration(
+            gradient: const LinearGradient(
+              colors: [
+                Color(0xffe2f0fd),
+                Color(0xffe2f0fd),
+              ],
+              begin: Alignment.centerLeft,
+              end: Alignment.centerRight,
+            ),
+            // border: Border.all(
+            //   color: Colors.grey,
+            //   //  color: const Color(0xFF8d97e2), // Add your desired border color here
+            //   width:
+            //   1.0, // Set the border width
+            // ),
+            borderRadius: BorderRadius.circular(
+                10.0), // Optional: Add border radius if needed
+          ),
           child: Row(
             children: [
               Container(
@@ -559,8 +561,7 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
                               ),
                             ),
                             const SizedBox(
-                              height:
-                              5.0,
+                              height: 5.0,
                             ),
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -643,19 +644,9 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
                       ),
                     ],
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 5.0,
                   ),
-                  // Text(
-                  //   consultationslist[index].remarks,
-                  //   style: const TextStyle(
-                  //     fontSize: 14,
-                  //     fontFamily: "Outfit",
-                  //     fontWeight: FontWeight.w500,
-                  //     color: Color(0xFF5f5f5f),
-                  //   ),
-                  // ),
-
                   Flexible(
                     child: Visibility(
                       visible: consultationslist[index].remarks.isNotEmpty,
@@ -678,8 +669,6 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
                       ),
                     ),
                   ),
-
-                  // based on status hide this row
                 ],
               ),
             ],
@@ -695,7 +684,11 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
         backgroundColor: const Color(0xffe2f0fd),
         title: const Text(
           'View Consultation',
-          style: TextStyle(color: Color(0xFF0f75bc), fontSize: 16.0, fontFamily: "Outfit",),
+          style: TextStyle(
+            color: Color(0xFF0f75bc),
+            fontSize: 16.0,
+            fontFamily: "Outfit",
+          ),
         ),
         // actions: [
         //   IconButton(
@@ -713,7 +706,7 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
         leading: IconButton(
           icon: const Icon(
             Icons.arrow_back_ios,
-             color: CommonUtils.primaryTextColor,
+            color: CommonUtils.primaryTextColor,
           ),
           onPressed: () {
             Navigator.of(context).pop();
@@ -744,5 +737,34 @@ class _ViewConsultationState extends State<viewconsulationlistscreen> {
     String formattedTime = DateFormat.jm().format(parsedDate);
     print(formattedTime); // Output: 4:15 PM
     return formattedTime;
+  }
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime currentDate = DateTime.now();
+    final DateTime initialDate = selectedDate ?? currentDate;
+
+    final DateTime? pickedDay = await showDatePicker(
+      context: context,
+      initialDate: initialDate,
+      firstDate: DateTime.now(),
+      lastDate:
+          DateTime(currentDate.year + 1, currentDate.month, currentDate.day),
+      initialDatePickerMode: DatePickerMode.day,
+    );
+
+    if (pickedDay != null) {
+      print('pickedDay.toString(): ${pickedDay.toString()}');
+      setState(() {
+        selectedDate = pickedDay;
+        _fromToDatesController.text =
+            DateFormat('dd-MM-yyyy').format(pickedDay);
+        String apiFromDate = DateFormat('yyyy-MM-dd').format(pickedDay);
+        String apiToDate = DateFormat('yyyy-MM-dd').format(pickedDay);
+        ConsultationData = getviewconsulationlist(apiFromDate, apiToDate);
+        print('test: $selectedDate');
+        print('test apiFromDate: $apiFromDate');
+        print('test apiToDate: $apiToDate');
+      });
+    }
   }
 }

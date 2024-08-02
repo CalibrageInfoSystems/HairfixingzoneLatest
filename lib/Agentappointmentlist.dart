@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 import 'dart:math';
 
@@ -38,12 +37,12 @@ class Agentappointmentlist extends StatefulWidget {
   final String branchaddress;
   const Agentappointmentlist(
       {super.key,
-        required this.userId,
-        required this.branchid,
-        required this.branchname,
-        required this.filepath,
-        required this.phonenumber,
-        required this.branchaddress});
+      required this.userId,
+      required this.branchid,
+      required this.branchname,
+      required this.filepath,
+      required this.phonenumber,
+      required this.branchaddress});
   @override
   MyAppointments_screenState createState() => MyAppointments_screenState();
 }
@@ -87,12 +86,11 @@ class MyAppointments_screenState extends State<Agentappointmentlist> {
 
   void initializeData(int? userId) {
     setState(() {
-   //   apiData = fetchagentAppointments(userId, widget.branchid);
+      //   apiData = fetchagentAppointments(userId, widget.branchid);
       apiData = fetchagentAppointments(userId, widget.branchid);
       apiData!.then((value) {
         myAppointmentsProvider!.storeIntoProvider = value;
         temp.addAll(value);
-
       }).catchError((error) {
         print('catchError: Error occurred.');
       });
@@ -128,7 +126,7 @@ class MyAppointments_screenState extends State<Agentappointmentlist> {
         if (response['listResult'] != null) {
           List<dynamic> listResult = response['listResult'];
           List<Appointment> result =
-          listResult.map((item) => Appointment.fromJson(item)).toList();
+              listResult.map((item) => Appointment.fromJson(item)).toList();
           return result;
         } else {
           myAppointmentsProvider!.storeIntoProvider = [];
@@ -147,7 +145,7 @@ class MyAppointments_screenState extends State<Agentappointmentlist> {
 
   void refreshTheScreen() {
     CommonUtils.checkInternetConnectivity().then(
-          (isConnected) {
+      (isConnected) {
         if (isConnected) {
           print('The Internet Is Connected');
 
@@ -183,159 +181,151 @@ class MyAppointments_screenState extends State<Agentappointmentlist> {
 
   @override
   Widget build(BuildContext context) {
-
     return WillPopScope(
-
-      onWillPop: () async {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => AgentHome(
-              userId: widget.userId,
+        onWillPop: () async {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => AgentHome(
+                userId: widget.userId,
+              ),
             ),
-          ),
-        );
-        myAppointmentsProvider!.clearFilter();
-        return true;
-      },
-      child: RefreshIndicator(
-        onRefresh: () async {
-          refreshTheScreen();
+          );
+          myAppointmentsProvider!.clearFilter();
+          return true;
         },
-        child: Scaffold(
-          appBar: AppBar(
-            backgroundColor: const Color(0xffe2f0fd),
-            title: const Text(
-              'Appointments',
-              style: TextStyle(
-                color: Color(0xFF0f75bc),
-                fontSize: 16.0,
-                fontFamily: "Outfit",
-                fontWeight: FontWeight.w600,
-              ),
-              textAlign: TextAlign.start,
-            ),
-            leading: IconButton(
-              icon: const Icon(
-                Icons.arrow_back_ios,
-                color: CommonUtils.primaryTextColor,
-              ),
-              onPressed: () {
-                Navigator.of(context).pop();
-                myAppointmentsProvider!.clearFilter();
-              },
-            ),
-          ),
-          body: Container(
-    color: Colors.white,
-    child:
-          Consumer<AgentAppointmentsProvider>(
-            builder: (context, provider, _) => WillPopScope(
-              onWillPop: () async {
-                provider.clearFilter();
-                return true;
-              },
-              child: Column(
-                children: [
-                  // search and filter
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10)
-                        .copyWith(top: 10),
-                    child: _searchBarAndFilter(),
+        child: RefreshIndicator(
+            onRefresh: () async {
+              refreshTheScreen();
+            },
+            child: Scaffold(
+              appBar: AppBar(
+                backgroundColor: const Color(0xffe2f0fd),
+                title: const Text(
+                  'Appointments',
+                  style: TextStyle(
+                    color: Color(0xFF0f75bc),
+                    fontSize: 16.0,
+                    fontFamily: "Outfit",
+                    fontWeight: FontWeight.w600,
                   ),
+                  textAlign: TextAlign.start,
+                ),
+                leading: IconButton(
+                  icon: const Icon(
+                    Icons.arrow_back_ios,
+                    color: CommonUtils.primaryTextColor,
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    myAppointmentsProvider!.clearFilter();
+                  },
+                ),
+              ),
+              body: Container(
+                color: Colors.white,
+                child: Consumer<AgentAppointmentsProvider>(
+                  builder: (context, provider, _) => WillPopScope(
+                    onWillPop: () async {
+                      provider.clearFilter();
+                      return true;
+                    },
+                    child: Column(
+                      children: [
+                        // search and filter
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10)
+                              .copyWith(top: 10),
+                          child: _searchBarAndFilter(),
+                        ),
 
-                  //MARK: Appointment
-                  Expanded(
-                    child: FutureBuilder(
-                      future: apiData,
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return const Center(
-                            child: CircularProgressIndicator.adaptive(),
-                          );
-                        } else if (snapshot.hasError) {
-                          return const Center(
-                            child: Text(
-                              'No Appointments Available',
-                              style: TextStyle(
-                                fontSize: 12.0,
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: "Roboto",
-                              ),
-                            ),
-                          );
-                        } else {
-                          List<Appointment> data = provider.proAppointments;
-                          print('datasize ${data.length}');
+                        //MARK: Appointment
+                        Expanded(
+                          child: FutureBuilder(
+                            future: apiData,
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return const Center(
+                                  child: CircularProgressIndicator.adaptive(),
+                                );
+                              } else if (snapshot.hasError) {
+                                return const Center(
+                                  child: Text(
+                                    'No Appointments Available',
+                                    style: TextStyle(
+                                      fontSize: 12.0,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: "Roboto",
+                                    ),
+                                  ),
+                                );
+                              } else {
+                                List<Appointment> data =
+                                    provider.proAppointments;
+                                print('datasize ${data.length}');
 
-                          if (data.isNotEmpty) {
-                            return Padding(
-                              padding: const EdgeInsets.all(5.0),
-                              child: ListView.builder(
-                                itemCount: data.length,
-                                itemBuilder: (context, index) {
-                                  return Column(
-                                    children: [
+                                if (data.isNotEmpty) {
+                                  return Padding(
+                                    padding: const EdgeInsets.all(5.0),
+                                    child: ListView.builder(
+                                      itemCount: data.length,
+                                      itemBuilder: (context, index) {
+                                        return Column(
+                                          children: [
+                                            OpCard(
+                                              data: data[index],
+                                              userId: widget.userId,
+                                              branchid: widget.branchid,
+                                              branchaddress:
+                                                  widget.branchaddress,
+                                              onRefresh: () {
+                                                // Implement the refresh logic here
+                                                setState(() {
+                                                  // Refresh logic
+                                                  refreshTheScreen();
+                                                });
+                                              },
+                                            ),
 
-                                      OpCard(
-                                        data: data[index],
-                                        userId: widget.userId,
-                                        branchid: widget.branchid,
-                                        branchaddress: widget.branchaddress,
-                                        onRefresh: () {
-                                          // Implement the refresh logic here
-                                          setState(() {
-                                            // Refresh logic
-                                            refreshTheScreen();
-
-                                          });
-                                        },
-                                      ),
-
-                                      // OpCard(
-                                      //     data: data[index], userId: widget.userId, branchid: widget.branchid, branchaddress: widget.branchaddress),
-                                      const SizedBox(
-                                        height: 5,
-                                      ),
-                                    ],
+                                            // OpCard(
+                                            //     data: data[index], userId: widget.userId, branchid: widget.branchid, branchaddress: widget.branchaddress),
+                                            const SizedBox(
+                                              height: 5,
+                                            ),
+                                          ],
+                                        );
+                                        // return AppointmentCard(
+                                        //     data: data[index],
+                                        //     day: parseDayFromDate(data[index].date),);
+                                      },
+                                    ),
                                   );
-                                  // return AppointmentCard(
-                                  //     data: data[index],
-                                  //     day: parseDayFromDate(data[index].date),);
-                                },
-                              ),
-                            );
-                          } else {
-                            return const Center(
-                              child: Text(
-                                'No Appointments Available',
-                                style: TextStyle(
-                                  fontSize: 12.0,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: "Roboto",
-                                ),
-                              ),
-                            );
-                          }
-                        }
-                      },
+                                } else {
+                                  return const Center(
+                                    child: Text(
+                                      'No Appointments Available',
+                                      style: TextStyle(
+                                        fontSize: 12.0,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: "Roboto",
+                                      ),
+                                    ),
+                                  );
+                                }
+                              }
+                            },
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                ],
+                ),
               ),
-            ),
-          ),
-        ),
-      )));
-
-
+            )));
   }
-
-
-
 
   Widget _searchBarAndFilter() {
     return Row(
@@ -354,7 +344,7 @@ class MyAppointments_screenState extends State<Agentappointmentlist> {
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
                   borderSide:
-                  const BorderSide(color: CommonUtils.primaryTextColor),
+                      const BorderSide(color: CommonUtils.primaryTextColor),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderSide: const BorderSide(
@@ -380,7 +370,7 @@ class MyAppointments_screenState extends State<Agentappointmentlist> {
           width: 45,
           decoration: BoxDecoration(
             color: myAppointmentsProvider!.filterStatus
-                ? const  Color(0xffe2f0fd)
+                ? const Color(0xffe2f0fd)
                 : Colors.white,
             borderRadius: BorderRadius.circular(10),
             border: Border.all(
@@ -463,7 +453,10 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
   Statusmodel? selectedstatus;
   String? apiFromDate;
   String? apiToDate;
-  List<String>? selectedDate;
+  DateTime? selectedDate;
+  // List<String>? selectedDate;
+  //   DateTime? selectDateFromDatePicker;
+
   AgentAppointmentsProvider? myAppointmentsProvider;
 
   static TextStyle anniversaryTextStyle = TextStyle(
@@ -499,7 +492,7 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
   Future<void> filterAppointments(Map<String, dynamic> requestBody) async {
     // final url = Uri.parse('http://182.18.157.215/SaloonApp/API/api/Appointment/GetAppointment');
     final url = Uri.parse(baseUrl + GetAppointment);
-    print('request object $requestBody');
+    print('filterAppointments: $requestBody');
     try {
       Map<String, dynamic> request = requestBody;
 
@@ -510,7 +503,7 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
           'Content-Type': 'application/json',
         },
       );
-      print('request object490 ${ json.encode(request)}');
+      print('request object490 ${json.encode(request)}');
       if (jsonResponse.statusCode == 200) {
         final response = json.decode(jsonResponse.body);
 
@@ -596,18 +589,19 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                       onTap: () async {
                         FocusScope.of(context).requestFocus(
                             FocusNode()); // to prevent the keyboard from appearing
-                        final values = await showCustomCalendarDialog(
+                        /*  final values = await showCustomCalendarDialog(
                             context, CommonStyles.config);
                         if (values != null) {
                           setState(() {
                             selectedDate = _getValueText(
                                 CommonStyles.config.calendarType, values);
                             provider.getDisplayDate =
-                            '${selectedDate![0]}  -  ${selectedDate![1]}';
+                                '${selectedDate![0]}  -  ${selectedDate![1]}';
                             provider.getApiFromDate = selectedDate![0];
                             provider.getApiToDate = selectedDate![1];
                           });
-                        }
+                        } */
+                        _selectDate(context, provider);
                       },
                       focusNode: DateofBirthdFocus,
                       readOnly: true,
@@ -631,7 +625,7 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                             Radius.circular(10),
                           ),
                         ),
-                        hintText: 'Select Dates',
+                        hintText: 'xx',
                         counterText: "",
                         hintStyle: CommonStyles.texthintstyle,
                         prefixIcon: const Icon(Icons.calendar_today),
@@ -653,7 +647,7 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                               return CircularProgressIndicator.adaptive(
                                 backgroundColor: Colors.transparent,
                                 valueColor:
-                                AlwaysStoppedAnimation<Color>(orangeColor),
+                                    AlwaysStoppedAnimation<Color>(orangeColor),
                               );
                             } else if (snapshot.hasError) {
                               return Text('Error: ${snapshot.error}');
@@ -707,17 +701,17 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                                             width: 1.0,
                                           ),
                                           borderRadius:
-                                          BorderRadius.circular(8.0),
+                                              BorderRadius.circular(8.0),
                                         ),
                                         child: IntrinsicWidth(
                                           child: Column(
                                             mainAxisAlignment:
-                                            MainAxisAlignment.center,
+                                                MainAxisAlignment.center,
                                             children: [
                                               Container(
                                                 padding:
-                                                const EdgeInsets.symmetric(
-                                                    horizontal: 15.0),
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 15.0),
                                                 child: Row(
                                                   children: [
                                                     Text(
@@ -725,7 +719,7 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                                                       style: TextStyle(
                                                         fontSize: 12.0,
                                                         fontWeight:
-                                                        FontWeight.bold,
+                                                            FontWeight.bold,
                                                         fontFamily: "Outfit",
                                                         color: isSelected
                                                             ? Colors.white
@@ -796,11 +790,14 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                                     "branchId": widget.branchid,
                                     // "branchId":
                                     //     myAppointmentsProvider?.getApiBranchId,
-                                    "fromdate":myAppointmentsProvider?.getApiFromDate,
-                                    "toDate": myAppointmentsProvider?.getApiToDate,
-                                    "statustypeId": myAppointmentsProvider?.getApiStatusTypeId,
+                                    "fromdate":
+                                        myAppointmentsProvider?.getApiFromDate,
+                                    "toDate":
+                                        myAppointmentsProvider?.getApiToDate,
+                                    "statustypeId": myAppointmentsProvider
+                                        ?.getApiStatusTypeId,
                                   }).whenComplete(
-                                          () => provider.filterStatus = true);
+                                      () => provider.filterStatus = true);
                                 },
                                 child: Container(
                                   // width: desiredWidth * 0.9,
@@ -841,9 +838,9 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
     final response = await http.get(Uri.parse(baseUrl + getstatus));
     if (response.statusCode == 200) {
       final List<dynamic> responseData =
-      json.decode(response.body)['listResult'];
+          json.decode(response.body)['listResult'];
       List<Statusmodel> result =
-      responseData.map((json) => Statusmodel.fromJson(json)).toList();
+          responseData.map((json) => Statusmodel.fromJson(json)).toList();
       print('fetch branchname: ${result[0].desc}');
       return result;
     } else {
@@ -853,12 +850,12 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
 
   Future<List<BranchModel>> fetchbranches(userId) async {
     final response =
-    await http.get(Uri.parse('$baseUrl$GetBranchByUserId$userId/null'));
+        await http.get(Uri.parse('$baseUrl$GetBranchByUserId$userId/null'));
     if (response.statusCode == 200) {
       final List<dynamic> responseData =
-      json.decode(response.body)['listResult'];
+          json.decode(response.body)['listResult'];
       List<BranchModel> result =
-      responseData.map((json) => BranchModel.fromJson(json)).toList();
+          responseData.map((json) => BranchModel.fromJson(json)).toList();
       print('fetch branchname: ${result[0].name}');
       return result;
     } else {
@@ -916,9 +913,34 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
     endDate = values.length > 1 ? values[1] : null;
     String? formattedStartDate = DateFormat('dd/MM/yyyy').format(startDate!);
     String? formattedEndDate =
-    endDate != null ? DateFormat('dd/MM/yyyy').format(endDate) : 'null';
+        endDate != null ? DateFormat('dd/MM/yyyy').format(endDate) : 'null';
 
     return [formattedStartDate, formattedEndDate];
+  }
+
+  Future<void> _selectDate(
+      BuildContext context, AgentAppointmentsProvider provider) async {
+    final DateTime currentDate = DateTime.now();
+    final DateTime initialDate = selectedDate ?? currentDate;
+
+    final DateTime? pickedDay = await showDatePicker(
+      context: context,
+      initialDate: initialDate,
+      firstDate: DateTime.now(),
+      lastDate:
+          DateTime(currentDate.year + 1, currentDate.month, currentDate.day),
+      initialDatePickerMode: DatePickerMode.day,
+    );
+
+    if (pickedDay != null) {
+      print('pickedDay.toString(): ${pickedDay.toString()}');
+      setState(() {
+        selectedDate = pickedDay;
+        provider.getDisplayDate = pickedDay.toString();
+        provider.getApiFromDate = pickedDay.toString();
+        provider.getApiToDate = pickedDay.toString();
+      });
+    }
   }
 }
 
@@ -952,7 +974,7 @@ class OpCard extends StatefulWidget {
 class _OpCardState extends State<OpCard> {
   late List<dynamic> dateValues;
   final TextEditingController _commentstexteditcontroller =
-  TextEditingController();
+      TextEditingController();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _priceController = TextEditingController();
@@ -1000,8 +1022,7 @@ class _OpCardState extends State<OpCard> {
   @override
   Widget build(BuildContext context) {
     dateValues = parseDateString(widget.data.date);
-    return
-      Card(
+    return Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         elevation: 5,
         child: IntrinsicHeight(
@@ -1015,14 +1036,13 @@ class _OpCardState extends State<OpCard> {
             //   borderRadius: BorderRadius.circular(10.0),
             // ),
             decoration: BoxDecoration(
-              color: Color(0xffe2f0fd),
+              color: const Color(0xffe2f0fd),
               borderRadius: BorderRadius.circular(5.0),
               // border: Border.all(
               //   color: Colors.grey,
               //   //  color: const Color(0xFF8d97e2), // Add your desired border color here
               //   width: 1.0, // Set the border width
               // ),
-
             ),
             child: Row(
               children: [
@@ -1107,7 +1127,7 @@ class _OpCardState extends State<OpCard> {
                               child: Container(
                                 child: Column(
                                   mainAxisAlignment:
-                                  MainAxisAlignment.spaceAround,
+                                      MainAxisAlignment.spaceAround,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
@@ -1119,7 +1139,9 @@ class _OpCardState extends State<OpCard> {
                                         color: Color(0xFF0f75bc),
                                       ),
                                     ),
-                                    SizedBox(height: 2.0,),
+                                    const SizedBox(
+                                      height: 2.0,
+                                    ),
                                     Row(children: [
                                       Text(widget.data.customerName,
                                           style: CommonStyles.txSty_16b6_fb),
@@ -1127,7 +1149,7 @@ class _OpCardState extends State<OpCard> {
                                         key: _fullnameTipKey,
                                         child: const Padding(
                                           padding:
-                                          EdgeInsets.fromLTRB(5, 0, 5, 0),
+                                              EdgeInsets.fromLTRB(5, 0, 5, 0),
                                           child: Icon(
                                             Icons.copy,
                                             size: 16,
@@ -1141,17 +1163,17 @@ class _OpCardState extends State<OpCard> {
                                         },
                                       ),
                                     ]),
-SizedBox(height: 2.0,),
+                                    const SizedBox(
+                                      height: 2.0,
+                                    ),
                                     Container(
                                       // width: MediaQuery.of(context).size.width / 3.5,
                                       child: Row(children: [
-
                                         Flexible(
                                           child: RichText(
                                             text: TextSpan(
                                               text: widget.data.email ?? '',
-                                              style:
-                                              CommonStyles.txSty_14b_fb,
+                                              style: CommonStyles.txSty_14b_fb,
                                               children: const <TextSpan>[],
                                             ),
                                           ),
@@ -1160,7 +1182,7 @@ SizedBox(height: 2.0,),
                                           key: _emailtoolTipKey,
                                           child: const Padding(
                                             padding:
-                                            EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                                EdgeInsets.fromLTRB(0, 0, 0, 0),
                                             child: Icon(
                                               Icons.copy,
                                               size: 16,
@@ -1175,13 +1197,19 @@ SizedBox(height: 2.0,),
                                         ),
                                       ]),
                                     ),
-                                    SizedBox(height: 2.0,),
+                                    const SizedBox(
+                                      height: 2.0,
+                                    ),
                                     Text(widget.data.purposeOfVisit,
                                         style: CommonStyles.txSty_14blu_f5),
-                                    SizedBox(height: 2.0,),
+                                    const SizedBox(
+                                      height: 2.0,
+                                    ),
                                     Text(widget.data.name,
                                         style: CommonStyles.txSty_16b_fb),
-                                    SizedBox(height: 2.0,),
+                                    const SizedBox(
+                                      height: 2.0,
+                                    ),
                                     //MARK: technician
                                     if (widget.data.technicianName != null)
                                       Row(
@@ -1191,15 +1219,15 @@ SizedBox(height: 2.0,),
                                             style: CommonStyles.txSty_16blu_f5,
                                           ),
                                           Text(widget.data.technicianName!,
-                                              style: CommonStyles
-                                                  .txSty_16b_fb),
+                                              style: CommonStyles.txSty_16b_fb),
                                         ],
                                       ),
-                                    SizedBox(height: 2.0,),
+                                    const SizedBox(
+                                      height: 2.0,
+                                    ),
                                     if (widget.data.paymentType != null)
                                       Text(widget.data.paymentType ?? ' ',
                                           style: CommonStyles.txSty_16b_fb),
-
                                   ],
                                 ),
                               ),
@@ -1212,7 +1240,6 @@ SizedBox(height: 2.0,),
                                       widget.data.status),
                                   const SizedBox(height: 2.0),
 
-
                                   Row(
                                     children: [
                                       Text(widget.data.phoneNumber ?? '',
@@ -1221,7 +1248,7 @@ SizedBox(height: 2.0,),
                                         key: _toolTipKey,
                                         child: const Padding(
                                           padding:
-                                          EdgeInsets.fromLTRB(5, 0, 0, 0),
+                                              EdgeInsets.fromLTRB(5, 0, 0, 0),
                                           child: Icon(
                                             Icons.copy,
                                             size: 16,
@@ -1267,16 +1294,17 @@ SizedBox(height: 2.0,),
                                             const Icon(
                                               Icons.star_border_outlined,
                                               size: 13,
-                                              color: CommonStyles.statusGreenText,
+                                              color:
+                                                  CommonStyles.statusGreenText,
                                             ),
                                             Padding(
                                               padding: const EdgeInsets.only(
                                                   right:
-                                                  8.0), // Adjust the value as needed
+                                                      8.0), // Adjust the value as needed
                                               child: Text(
                                                 '${widget.data.rating ?? ''}',
                                                 style:
-                                                CommonStyles.txSty_14g_f5,
+                                                    CommonStyles.txSty_14g_f5,
                                               ),
                                             ),
                                           ],
@@ -1310,12 +1338,12 @@ SizedBox(height: 2.0,),
 
   void showTooltip(BuildContext context, String message, GlobalKey toolTipKey) {
     final renderBox =
-    toolTipKey.currentContext!.findRenderObject() as RenderBox;
+        toolTipKey.currentContext!.findRenderObject() as RenderBox;
     final overlay = Overlay.of(context).context.findRenderObject() as RenderBox;
 
     final target = renderBox.localToGlobal(
-        renderBox.size.bottomLeft(Offset.zero),
-        ancestor: overlay) +
+            renderBox.size.bottomLeft(Offset.zero),
+            ancestor: overlay) +
         const Offset(-10, 0);
 
     final entry = OverlayEntry(
@@ -1397,7 +1425,7 @@ SizedBox(height: 2.0,),
   Widget verifyStatus(Appointment data, int? userId) {
     switch (data.statusTypeId) {
       case 4: // Submited
-      //   return const SizedBox();
+        //   return const SizedBox();
         return Row(
           children: [
             GestureDetector(
@@ -1421,7 +1449,7 @@ SizedBox(height: 2.0,),
                             : CommonStyles.primaryTextColor),
                   ),
                   padding:
-                  const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
+                      const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
                   child: Row(
                     children: [
                       SvgPicture.asset(
@@ -1467,7 +1495,7 @@ SizedBox(height: 2.0,),
                     ),
                   ),
                   padding:
-                  const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
+                      const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
                   child: Row(
                     children: [
                       SvgPicture.asset(
@@ -1497,7 +1525,7 @@ SizedBox(height: 2.0,),
         );
       case 5: // Accepted
 
-      // if (isSlotTimeReached(data.date, data.slotDuration)) {
+        // if (isSlotTimeReached(data.date, data.slotDuration)) {
         return Row(
           children: [
             GestureDetector(
@@ -1534,19 +1562,19 @@ SizedBox(height: 2.0,),
             ),
           ],
         );
-    // } else {
-    //   return const SizedBox();
-    // }
+      // } else {
+      //   return const SizedBox();
+      // }
 
       case 6: // Declined
         return const SizedBox();
-    // case 11: // FeedBack
-    //   return Flexible(
-    //     child: Text('" ${data.review} "' ?? '',
-    //         overflow: TextOverflow.ellipsis,
-    //         maxLines: 2,
-    //         style: CommonStyles.txSty_16blu_f5),
-    //   );
+      // case 11: // FeedBack
+      //   return Flexible(
+      //     child: Text('" ${data.review} "' ?? '',
+      //         overflow: TextOverflow.ellipsis,
+      //         maxLines: 2,
+      //         style: CommonStyles.txSty_16blu_f5),
+      //   );
 
       case 17: // Closed
 
@@ -1558,7 +1586,7 @@ SizedBox(height: 2.0,),
           return Flexible(
             child: RichText(
               text: TextSpan(
-                text: 'Review :',
+                text: 'Review ',
                 style: CommonStyles.txSty_16blu_f5,
                 children: <TextSpan>[
                   TextSpan(
@@ -1644,7 +1672,7 @@ SizedBox(height: 2.0,),
                   'Are You Sure You Want to Cancel the Appointment at ${appointments.name} Branch for ${appointments.purposeOfVisit}?',
                   style: CommonUtils.txSty_18b_fb,
                   textAlign:
-                  TextAlign.center, // Optionally, align the text center
+                      TextAlign.center, // Optionally, align the text center
                 ),
               ),
               const SizedBox(
@@ -1737,7 +1765,7 @@ SizedBox(height: 2.0,),
       "SlotTime": appointmens.slotTime,
       "CustomerName": appointmens.customerName,
       "PhoneNumber":
-      appointmens.phoneNumber, // Changed from appointments.phoneNumber
+          appointmens.phoneNumber, // Changed from appointments.phoneNumber
       "Email": appointmens.email,
       "GenderTypeId": appointmens.genderTypeId,
       "StatusTypeId": 6,
@@ -1916,16 +1944,16 @@ SizedBox(height: 2.0,),
                         children: [
                           const Expanded(
                               child: Center(
-                                child: Text(
-                                  'Billing Details',
-                                  style: TextStyle(
-                                    color: CommonStyles.primaryTextColor,
-                                    fontSize: 14,
-                                    fontFamily: "Outfit",
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                              )),
+                            child: Text(
+                              'Billing Details',
+                              style: TextStyle(
+                                color: CommonStyles.primaryTextColor,
+                                fontSize: 14,
+                                fontFamily: "Outfit",
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          )),
                           GestureDetector(
                             onTap: () {
                               selectedPaymentOption = -1;
@@ -1956,7 +1984,7 @@ SizedBox(height: 2.0,),
                             key: _formKey,
                             child: Container(
                               padding:
-                              const EdgeInsets.symmetric(horizontal: 5),
+                                  const EdgeInsets.symmetric(horizontal: 5),
                               child: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -1980,7 +2008,7 @@ SizedBox(height: 2.0,),
                                         flex: 6,
                                         child: Row(
                                           mainAxisAlignment:
-                                          MainAxisAlignment.start,
+                                              MainAxisAlignment.start,
                                           children: [
                                             Text(
                                               ': ${data.customerName}',
@@ -2016,7 +2044,7 @@ SizedBox(height: 2.0,),
                                         flex: 6,
                                         child: Row(
                                           mainAxisAlignment:
-                                          MainAxisAlignment.start,
+                                              MainAxisAlignment.start,
                                           children: [
                                             Text(
                                               ': ${DateFormat('dd-MM-yyyy').format(DateTime.parse(data.date))}, ${data.slotDuration}',
@@ -2052,7 +2080,7 @@ SizedBox(height: 2.0,),
                                         flex: 6,
                                         child: Row(
                                           mainAxisAlignment:
-                                          MainAxisAlignment.start,
+                                              MainAxisAlignment.start,
                                           children: [
                                             Text(
                                               ': ${data.purposeOfVisit}',
@@ -2093,11 +2121,11 @@ SizedBox(height: 2.0,),
                                         border: Border.all(
                                           color: isPaymentModeSelected
                                               ? const Color.fromARGB(
-                                              255, 175, 15, 4)
+                                                  255, 175, 15, 4)
                                               : CommonUtils.primaryTextColor,
                                         ),
                                         borderRadius:
-                                        BorderRadius.circular(5.0),
+                                            BorderRadius.circular(5.0),
                                         color: Colors.white,
                                       ),
                                       child: DropdownButtonHideUnderline(
@@ -2115,23 +2143,23 @@ SizedBox(height: 2.0,),
                                                 if (value != null) {
                                                   selectedPaymentOption = value;
                                                   if (paymentOptions[value]
-                                                  ['typeCdId'] ==
+                                                          ['typeCdId'] ==
                                                       23) {
                                                     isFreeService = false;
                                                     _priceController.text =
-                                                    '0.0';
+                                                        '0.0';
                                                   } else {
                                                     _priceController.clear();
                                                     isFreeService = true;
                                                   }
 
                                                   apiPaymentMode = paymentOptions[
-                                                  selectedPaymentOption]
-                                                  ['typeCdId'];
+                                                          selectedPaymentOption]
+                                                      ['typeCdId'];
                                                   selectedPaymentMode =
-                                                  paymentOptions[
-                                                  selectedPaymentOption]
-                                                  ['desc'];
+                                                      paymentOptions[
+                                                              selectedPaymentOption]
+                                                          ['desc'];
                                                 }
                                                 isPaymentModeSelected = false;
                                               });
@@ -2144,7 +2172,7 @@ SizedBox(height: 2.0,),
                                                   style: TextStyle(
                                                       color: Colors.grey,
                                                       fontWeight:
-                                                      FontWeight.w500),
+                                                          FontWeight.w500),
                                                 ),
                                               ),
                                               ...paymentOptions
@@ -2167,7 +2195,7 @@ SizedBox(height: 2.0,),
                                   if (isPaymentModeSelected)
                                     const Row(
                                       mainAxisAlignment:
-                                      MainAxisAlignment.start,
+                                          MainAxisAlignment.start,
                                       children: [
                                         Padding(
                                           padding: EdgeInsets.symmetric(
@@ -2205,8 +2233,8 @@ SizedBox(height: 2.0,),
                                     // readOnly: isFreeService,
                                     enabled: isFreeService,
                                     keyboardType:
-                                    const TextInputType.numberWithOptions(
-                                        decimal: true),
+                                        const TextInputType.numberWithOptions(
+                                            decimal: true),
                                     inputFormatters: [
                                       FilteringTextInputFormatter.allow(
                                           RegExp(r'^\d*\.?\d*')),
@@ -2216,11 +2244,11 @@ SizedBox(height: 2.0,),
                                         if (value.startsWith(' ')) {
                                           _priceController.value =
                                               TextEditingValue(
-                                                text: value.trimLeft(),
-                                                selection: TextSelection.collapsed(
-                                                    offset:
+                                            text: value.trimLeft(),
+                                            selection: TextSelection.collapsed(
+                                                offset:
                                                     value.trimLeft().length),
-                                              );
+                                          );
                                         }
                                       });
                                     },
@@ -2236,22 +2264,22 @@ SizedBox(height: 2.0,),
                                           color: CommonUtils.primaryTextColor,
                                         ),
                                         borderRadius:
-                                        BorderRadius.circular(6.0),
+                                            BorderRadius.circular(6.0),
                                       ),
                                       enabledBorder: OutlineInputBorder(
                                         borderSide: const BorderSide(
                                           color: CommonUtils.primaryTextColor,
                                         ),
                                         borderRadius:
-                                        BorderRadius.circular(6.0),
+                                            BorderRadius.circular(6.0),
                                       ),
                                       errorBorder: OutlineInputBorder(
                                         borderSide: const BorderSide(
                                           color:
-                                          Color.fromARGB(255, 175, 15, 4),
+                                              Color.fromARGB(255, 175, 15, 4),
                                         ),
                                         borderRadius:
-                                        BorderRadius.circular(6.0),
+                                            BorderRadius.circular(6.0),
                                       ),
                                       border: const OutlineInputBorder(
                                         borderRadius: BorderRadius.all(
@@ -2378,7 +2406,7 @@ SizedBox(height: 2.0,),
                   'Your Appointment Has Been Cancelled Successfully ',
                   style: CommonUtils.txSty_18b_fb,
                   textAlign:
-                  TextAlign.center, // Optionally, align the text center
+                      TextAlign.center, // Optionally, align the text center
                 ),
               ),
               const SizedBox(
@@ -2438,7 +2466,7 @@ SizedBox(height: 2.0,),
                   'Your Appointment Has Been Accepted Successfully. ',
                   style: CommonUtils.txSty_18b_fb,
                   textAlign:
-                  TextAlign.center, // Optionally, align the text center
+                      TextAlign.center, // Optionally, align the text center
                 ),
               ),
               const SizedBox(
@@ -2489,7 +2517,7 @@ SizedBox(height: 2.0,),
                   'Your Appointment Has Been Closed Successfully ',
                   style: CommonUtils.txSty_18b_fb,
                   textAlign:
-                  TextAlign.center, // Optionally, align the text center
+                      TextAlign.center, // Optionally, align the text center
                 ),
               ),
               const SizedBox(

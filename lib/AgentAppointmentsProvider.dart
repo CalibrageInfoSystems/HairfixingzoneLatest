@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:intl/intl.dart';
 import 'Appointment.dart';
 
@@ -42,23 +41,22 @@ class AgentAppointmentsProvider extends ChangeNotifier {
 
   String get getDisplayDate => displayDate;
   set getDisplayDate(String newCode) {
-    displayDate = newCode;
+    DateTime dateTime = DateTime.parse(newCode);
+    displayDate = DateFormat('dd-MM-yyyy').format(dateTime);
+
     notifyListeners();
   }
 
   String? get getApiFromDate => apiFromDate;
   set getApiFromDate(String? newCode) {
+    print('test: $newCode');
     if (newCode != null) {
-      try {
-        DateFormat inputFormat = DateFormat('dd/MM/yyyy');
-        DateTime dateTime = inputFormat.parse(newCode);
-        DateFormat outputFormat = DateFormat('yyyy-MM-dd');
-        String formattedDateStr = outputFormat.format(dateTime);
-        apiFromDate = formattedDateStr;
-      } catch (e) {
-        print('Error parsing date: $e');
-        apiFromDate = null;
-      }
+      DateTime dateTime = DateTime.parse(newCode);
+      DateFormat outputFormat = DateFormat('yyyy-MM-dd');
+      String formattedDateStr = outputFormat.format(dateTime);
+      apiFromDate = formattedDateStr;
+      apiFromDate = formattedDateStr;
+      print('test apiFromDate: $apiFromDate');
     } else {
       apiFromDate = null;
     }
@@ -69,20 +67,14 @@ class AgentAppointmentsProvider extends ChangeNotifier {
   String? get getApiToDate => apiToDate;
   set getApiToDate(String? newCode) {
     if (newCode != null) {
-      try {
-        DateFormat inputFormat = DateFormat('dd/MM/yyyy');
-        DateTime dateTime = inputFormat.parse(newCode);
-        DateFormat outputFormat = DateFormat('yyyy-MM-dd');
-        String formattedDateStr = outputFormat.format(dateTime);
-        apiToDate = formattedDateStr;
-      } catch (e) {
-        print('Error parsing date: $e');
-        apiToDate = null;
-      }
+      DateTime dateTime = DateTime.parse(newCode);
+      DateFormat outputFormat = DateFormat('yyyy-MM-dd');
+      String formattedDateStr = outputFormat.format(dateTime);
+      apiToDate = formattedDateStr;
+      print('test apiToDate: $apiToDate');
     } else {
-      apiToDate = null;
+      apiFromDate = null;
     }
-
     notifyListeners();
   }
 
