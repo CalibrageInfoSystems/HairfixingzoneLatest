@@ -221,25 +221,25 @@ class _NewScreenState extends State<NewScreen> {
                 padding: EdgeInsets.symmetric(horizontal: 16.0), // Adjust padding as needed
                 child: Divider(),
               ),
-              ListTile(
-                  minTileHeight: 40.0,
-                  leading: SvgPicture.asset(
-                    'assets/fav_star.svg',
-                    width: 25,
-                    height: 25,
-                    color: const Color(0xFF11528f), // Adjust color as needed
-                  ),
-                  title: const Text('Favourites',
-                      style: CommonStyles.txSty_20black_fb),
-                  trailing: const Icon(Icons.arrow_forward_ios,
-                      color: Colors.grey, size: 16), // Add trailing icon here
-                  onTap: () {
-                    Favourite(context);
-                  }),
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16.0), // Adjust padding as needed
-                child: Divider(),
-              ),
+              // ListTile(
+              //     minTileHeight: 40.0,
+              //     leading: SvgPicture.asset(
+              //       'assets/fav_star.svg',
+              //       width: 25,
+              //       height: 25,
+              //       color: const Color(0xFF11528f), // Adjust color as needed
+              //     ),
+              //     title: const Text('Favourites',
+              //         style: CommonStyles.txSty_20black_fb),
+              //     trailing: const Icon(Icons.arrow_forward_ios,
+              //         color: Colors.grey, size: 16), // Add trailing icon here
+              //     onTap: () {
+              //       Favourite(context);
+              //     }),
+              // const Padding(
+              //   padding: EdgeInsets.symmetric(horizontal: 16.0), // Adjust padding as needed
+              //   child: Divider(),
+              // ),
               ListTile(
                 minTileHeight: 40.0,
                 leading: SvgPicture.asset(

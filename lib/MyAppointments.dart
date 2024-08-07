@@ -192,6 +192,11 @@ class MyAppointments_screenState extends State<MyAppointments> {
 
   Future<List<MyAppointment_Model>> fetchMyAppointments(int? userId) async {
     final url = Uri.parse(baseUrl + GetAppointmentByUserid);
+    final DateTime currentDate = DateTime.now();
+    final DateTime threeMonthsAgo = DateTime(currentDate.year, currentDate.month - 3, currentDate.day);
+
+    final String formattedFromDate = DateFormat('yyyy-MM-dd').format(threeMonthsAgo);
+    final String formattedToDate = DateFormat('yyyy-MM-dd').format(currentDate);
 
     try {
       final request = {
@@ -493,6 +498,11 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                   ),
                   GestureDetector(
                     onTap: () {
+                      final DateTime currentDate = DateTime.now();
+                      final DateTime threeMonthsAgo = DateTime(currentDate.year, currentDate.month - 3, currentDate.day);
+
+                      final String formattedFromDate = DateFormat('yyyy-MM-dd').format(threeMonthsAgo);
+                      final String formattedToDate = DateFormat('yyyy-MM-dd').format(currentDate);
                       clearFilterAppointments({
                         "userid": widget.userId,
                         "branchId": null,
@@ -568,7 +578,7 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                             Radius.circular(10),
                           ),
                         ),
-                        hintText: 'Select Dates',
+                        hintText: 'Select Date',
                         counterText: "",
                         hintStyle: CommonStyles.texthintstyle,
                         prefixIcon: const Icon(Icons.calendar_today),
@@ -618,7 +628,7 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                                         closeTime: 0,
                                         room: 0,
                                         mobileNumber: "",
-                                        isActive: true,
+                                        isActive: true, locationUrl: '',
                                       );
                                     } else {
                                       branchmodel = data[index - 1];
@@ -1010,17 +1020,18 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
     return formattedDate;
   }
 
-  Future<void> _selectDate(
-      BuildContext context, MyAppointmentsProvider provider) async {
+  Future<void> _selectDate(BuildContext context, MyAppointmentsProvider provider) async {
     final DateTime currentDate = DateTime.now();
     final DateTime initialDate = selectedDate ?? currentDate;
+    // final DateTime threeMonthsAgo = DateTime(currentDate.year, currentDate.month - 3, currentDate.day);
+    // final DateTime initialDate = selectedDate ?? threeMonthsAgo;
 
     final DateTime? pickedDay = await showDatePicker(
       context: context,
+      initialEntryMode: DatePickerEntryMode.calendarOnly,
       initialDate: initialDate,
-      firstDate: DateTime.now(),
-      lastDate:
-          DateTime(currentDate.year + 1, currentDate.month, currentDate.day),
+      firstDate: DateTime(currentDate.year , currentDate.month -3, currentDate.day),
+      lastDate: DateTime(currentDate.year + 1, currentDate.month, currentDate.day),
       initialDatePickerMode: DatePickerMode.day,
     );
 

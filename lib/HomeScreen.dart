@@ -31,15 +31,31 @@ import 'api_config.dart';
 import 'CommonUtils.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  final int initialIndex;
+
+  const HomeScreen({super.key, this.initialIndex = 0});
 
   @override
-  _HomeScreenState createState() => _HomeScreenState();
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
-  int _currentIndex = 0;
+// class _HomeScreenState extends State<HomeScreen> {
+//   late int _currentIndex;
+//
+//   @override
+//   void initState() {
+//     super.initState();
+//     _currentIndex = widget.initialIndex;
+//   }
+//
+//   void _onItemTapped(int index) {
+//     setState(() {
+//       _currentIndex = index;
+//     });
+//   }
 
+class _HomeScreenState extends State<HomeScreen> {
+  late int _currentIndex;
   String userFullName = '';
   String email = '';
   String phonenumber = '';
@@ -71,8 +87,13 @@ class _HomeScreenState extends State<HomeScreen> {
       }
     });
     super.initState();
+    _currentIndex = widget.initialIndex;
   }
-
+  void _onItemTapped(int index) {
+    setState(() {
+      _currentIndex = index;
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -252,370 +273,14 @@ class _HomeScreenState extends State<HomeScreen> {
       Gender = prefs.getString('gender') ?? '';
       userId = prefs.getInt('userId');
       print('userId:$userId');
-      getLatestAppointmentByUserId(userId);
+     // getLatestAppointmentByUserId(userId);
       print('userFullName: $userFullName');
       print('gender:$Gender');
 
     });
   }
 
-  Future<void> getLatestAppointmentByUserId(int? userId) async {
-    //  final response = await http.get('http://182.18.157.215/SaloonApp/API/api/Role/GetLatestAppointmentByUserId/1');
-    final Uri url = Uri.parse(
-        'http://182.18.157.215/SaloonApp/API/api/Role/GetLatestAppointmentByUserId/$userId');
-    print('url==>1086: $url');
-    final response = await http.get(url);
 
-    if (response.statusCode == 200) {
-      final List<dynamic> jsonData = jsonDecode(response.body);
-      List<LastAppointment> loadedAppointments = [];
-
-      for (var item in jsonData) {
-        loadedAppointments.add(LastAppointment.fromJson(item));
-      }
-
-      setState(() {
-        appointments = loadedAppointments;
-        print('Appointment ID: ${appointments.length}');
-      });
-
-      // Print each appointment in the logs
-      for (var appointment in appointments) {
-        print('Appointment ID: ${appointment.id}');
-        print('Branch: ${appointment.branch}');
-        print('Date: ${appointment.date}');
-        print('Customer Name: ${appointment.customerName}');
-        print('Slot Time: ${appointment.slotTime}');
-        print('Contact Number: ${appointment.contactNumber}');
-        print('Email: ${appointment.email}');
-        print('Gender: ${appointment.gender}');
-        print('Status: ${appointment.status}');
-        print('Purpose of Visit: ${appointment.purposeOfVisit}');
-        print('Slot Duration: ${appointment.slotDuration}');
-        print('Appointment Time: ${appointment.appointmentTime}');
-        print('xxx: here');
-        SchedulerBinding.instance.addPostFrameCallback((_) {
-          _showBottomSheet(context, appointments);
-        });
-        // WidgetsBinding.instance.addPostFrameCallback((_) {
-        //   _showBottomSheet(context, appointments);
-        // });
-      }
-    } else {
-      throw Exception('Failed to load appointments');
-    }
-  }
-
-  void _showBottomSheet(
-      BuildContext context, List<LastAppointment> appointments) {
-    showModalBottomSheet(
-      isScrollControlled: true,
-      context: context,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      builder: (BuildContext context) {
-        return Padding(
-          padding: EdgeInsets.only(
-            bottom: MediaQuery.of(context).viewInsets.bottom,
-          ),
-          child: Container(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  'Please Rate Your Recent Experience With Us',
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: CommonUtils.primaryTextColor,
-                    fontWeight: FontWeight.w600,
-                    fontFamily: 'Outfit',
-
-                  ),
-                ),
-                const SizedBox(
-                  height: 15.0,
-                ),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    const Text(
-                      'Service Rating',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: CommonUtils.primaryTextColor,
-                        fontWeight: FontWeight.w500,
-                        fontFamily: 'Outfit',
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    RatingBar.builder(
-                      initialRating: 0,
-                      minRating: 0,
-                      direction: Axis.horizontal,
-                      allowHalfRating: true,
-                      itemCount: 5,
-                      itemPadding: const EdgeInsets.symmetric(horizontal: 1.0),
-                      itemBuilder: (context, _) => const Icon(
-                        Icons.star,
-                        color: CommonUtils.primaryTextColor,
-                      ),
-                      onRatingUpdate: (rating) {
-                        setState(() {
-                          ratingStar = rating;
-                          print('ratingStar $ratingStar');
-                        });
-                      },
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    const Text(
-                      'Quality Rating',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: CommonUtils.primaryTextColor,
-                        fontWeight: FontWeight.w600,
-                        fontFamily: 'Outfit',
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    RatingBar.builder(
-                      initialRating: 0,
-                      minRating: 0,
-                      direction: Axis.horizontal,
-                      allowHalfRating: true,
-                      itemCount: 5,
-                      itemPadding: const EdgeInsets.symmetric(horizontal: 1.0),
-                      itemBuilder: (context, _) => const Icon(
-                        Icons.star,
-                        color: CommonUtils.primaryTextColor,
-                      ),
-                      onRatingUpdate: (rating) {
-                        setState(() {
-                          qualityRating = rating;
-                          print('Qul_rating_star $qualityRating');
-                        });
-                      },
-                    ),
-                  ],
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 0, top: 10.0, right: 0),
-                  child: GestureDetector(
-                    onTap: () async {},
-                    child: Container(
-                      height: 80,
-                      width: MediaQuery.of(context).size.width,
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                            color: CommonUtils.primaryTextColor, width: 1.5),
-                        borderRadius: BorderRadius.circular(5.0),
-                        color: Colors.white,
-                      ),
-                      child: TextFormField(
-                        controller: _commentstexteditcontroller,
-                        style: const TextStyle(
-                          fontFamily: 'Outfit',
-                          fontSize: 14,
-                          fontWeight: FontWeight.w300,
-                        ),
-                        maxLines: null,
-                        maxLength: 250,
-                        // Set maxLines to null for multiline input
-                        decoration: const InputDecoration(
-                          hintText: 'Comment',
-                          hintStyle: TextStyle(
-                            color: Colors.black54,
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: 'Outfit',
-                          ),
-                          contentPadding: EdgeInsets.symmetric(
-                            horizontal: 16.0,
-                            vertical: 12.0,
-                          ),
-                          border: InputBorder.none,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        style: ElevatedButton.styleFrom(
-                          textStyle: const TextStyle(
-                            color: CommonUtils.primaryTextColor,
-                          ),
-                          side: const BorderSide(
-                            color: CommonUtils.primaryTextColor,
-                          ),
-                          backgroundColor: Colors.white,
-                          shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(5),
-                            ),
-                          ),
-                        ),
-                        child: const Text(
-                          'Close',
-                          style: TextStyle(
-                            fontFamily: 'Outfit',
-                            fontSize: 14,
-                            color: CommonUtils.primaryTextColor,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 20),
-                    Expanded(
-                      child: SizedBox(
-                        child: Center(
-                          child: GestureDetector(
-                            onTap: () {
-                              validaterating(appointments);
-                            },
-                            child: Container(
-                              // width: desiredWidth * 0.9,
-                              height: 40.0,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(5.0),
-                                color: CommonUtils.primaryTextColor,
-                              ),
-                              child: const Center(
-                                child: Text(
-                                  'Submit',
-                                  style: TextStyle(
-                                    fontFamily: 'Outfit',
-                                    fontSize: 14,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  Future<void> validaterating(List<LastAppointment> appointments) async {
-    bool isValid = true;
-    bool hasValidationFailed = false;
-    if (isValid && ratingStar <= 0.0) {
-      CommonUtils.showCustomToastMessageLong(
-          'Please Rate Your Experience', context, 1, 4);
-      isValid = false;
-      hasValidationFailed = true;
-      FocusScope.of(context).unfocus();
-    }
-
-    if (isValid && qualityRating <= 0.0) {
-      FocusScope.of(context).unfocus();
-      CommonUtils.showCustomToastMessageLong(
-          'Please Rate Your Experience with Quality', context, 1, 4);
-      isValid = false;
-      hasValidationFailed = true;
-    }
-
-
-    if (isValid) {
-      SharedPreferences sharedPreferences =
-          await SharedPreferences.getInstance();
-      String? storedEmployeeId = sharedPreferences.getString("employeeId");
-      print('employidinfeedback$storedEmployeeId');
-      String comments = _commentstexteditcontroller.text.toString();
-      int myInt = ratingStar.toInt();
-      print('changedintoint$myInt');
-      addUpdatefeedback(appointments);
-    }
-  }
-
-  Future<void> addUpdatefeedback(List<LastAppointment> appointments) async {
-    final url = Uri.parse(baseUrl + postApiAppointment);
-    print('url==>890: $url');
-    DateTime now = DateTime.now();
-    String dateTimeString = now.toString();
-    print('DateTime as String: $dateTimeString');
-
-    for (LastAppointment appointment in appointments) {
-      // Create the request object for each appointment
-      final request = {
-        "Id": appointment.id,
-        "BranchId": appointment.branchId,
-        "Date": appointment.date,
-        "SlotTime": appointment.slotTime,
-        "CustomerName": appointment.customerName,
-        "PhoneNumber":
-            appointment.contactNumber, // Changed from appointments.phoneNumber
-        "Email": appointment.email,
-        "GenderTypeId": appointment.genderTypeId,
-        "StatusTypeId": 17,
-        "PurposeOfVisitId": appointment.purposeOfVisitId,
-        "PurposeOfVisit": appointment.purposeOfVisit,
-        "IsActive": true,
-        "CreatedDate": dateTimeString,
-        "UpdatedDate": dateTimeString,
-        "UpdatedByUserId": null,
-        "rating": ratingStar,
-        "review": _commentstexteditcontroller.text.toString(),
-        "reviewSubmittedDate": dateTimeString,
-        "timeofslot": null,
-        "customerId": userId,
-        "paymentTypeId": null,
-        "qualityRating": qualityRating,
-      };
-      print('AddUpdatefeedback object: : ${json.encode(request)}');
-
-      try {
-        // Send the POST request for each appointment
-        final response = await http.post(
-          url,
-          body: json.encode(request),
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        );
-
-        if (response.statusCode == 200) {
-          CommonUtils.showCustomToastMessageLong(
-              'Feedback Successfully Submitted', context, 0, 4);
-          print('Request sent successfully');
-          Navigator.pop(context);
-        } else {
-          print(
-              'Failed to send the request. Status code: ${response.statusCode}');
-        }
-      } catch (e) {
-        print('Error: $e');
-      }
-    }
-  }
 
 
   void checkLoginStatus() async {
@@ -691,7 +356,7 @@ Widget _buildScreens(int index, BuildContext context, String userFullName) {
               phonenumber: value.phonenumber,
               branchImage: value.branchImage,
               latitude: value.latitude,
-              longitude: value.longitude,
+              longitude: value.longitude, LocationUrl: value.LocationUrl,
             ),
           ),
         );

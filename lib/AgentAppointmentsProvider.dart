@@ -7,7 +7,7 @@ class AgentAppointmentsProvider extends ChangeNotifier {
 
   int selectedCategoryIndex = 0;
   int? _selectedCategory;
-  String displayDate = 'Select Dates';
+  String displayDate = 'Select Date';
   String? apiFromDate;
   String? apiToDate;
   int? apiBranchId;
@@ -101,12 +101,13 @@ class AgentAppointmentsProvider extends ChangeNotifier {
   int? _selectedbranch;
 
   void clearFilter() {
-    displayDate = 'Select Dates';
+    displayDate = 'Select Date';
     selectedStatus = 0;
     selectedBranch = 0;
     apiFromDate = null;
     apiToDate = null;
     filterStatus = false;
+    apiStatusTypeId = null;
     notifyListeners();
   }
 

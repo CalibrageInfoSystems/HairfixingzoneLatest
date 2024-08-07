@@ -35,7 +35,7 @@ class Branch {
   final String branchImage;
   final double? latitude;
   final double? longitude;
-
+  final String? LocationUrl;
   Branch({
     required this.branchId,
     required this.branchname,
@@ -44,6 +44,7 @@ class Branch {
     required this.branchImage,
     required this.latitude,
     required this.longitude,
+    required this.LocationUrl
   });
 }
 
@@ -290,6 +291,7 @@ class _CustomerDashBoardState extends State<CustomerDashBoard>
               updatedBy: item['updatedBy'],
               latitude: item['latitude'],
               longitude: item['longitude'],
+              locationUrl: item['locationUrl'],
             ));
           }
 
@@ -461,7 +463,7 @@ class _CustomerDashBoardState extends State<CustomerDashBoard>
                                   aspectRatio: 16 / 9,
                                   autoPlayCurve: Curves.fastOutSlowIn,
                                   enableInfiniteScroll: true,
-                                  slideIndicator: const CircularSlideIndicator(
+                                  slideIndicator: const CircularSlideIndicator(      
                                     slideIndicatorOptions:
                                         SlideIndicatorOptions(
                                       itemSpacing: 10,
@@ -876,6 +878,7 @@ class _CustomerDashBoardState extends State<CustomerDashBoard>
                                                               branch.latitude,
                                                           longitude:
                                                               branch.longitude,
+                                                                LocationUrl : branch.locationUrl
                                                         ),
                                                       ),
                                                     );

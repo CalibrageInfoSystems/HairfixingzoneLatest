@@ -192,6 +192,7 @@ class _BranchesscreenState extends State<Branches_screen> {
             room: item['room'],
             mobileNumber: item['mobileNumber'],
             isActive: item['isActive'],
+              locationUrl : item['LocationUrl']
           ));
         }
 

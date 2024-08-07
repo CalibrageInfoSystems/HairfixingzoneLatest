@@ -9,7 +9,7 @@ class MyAppointmentsProvider extends ChangeNotifier {
   List<MyAppointment_Model> get storeIntoProvider => proAppointments;
 
 // variables
-  String displayDate = 'Select Dates';
+  String displayDate = 'Select Date';
   String? apiFromDate;
   String? apiToDate;
   int? apiBranchId;
@@ -95,7 +95,12 @@ class MyAppointmentsProvider extends ChangeNotifier {
   }
 
   void clearFilter() {
-    displayDate = 'Select Dates';
+    // final DateTime currentDate = DateTime.now();
+    // final DateTime threeMonthsAgo = DateTime(currentDate.year, currentDate.month - 3, currentDate.day);
+    //
+    // final String formattedFromDate = DateFormat('yyyy-MM-dd').format(threeMonthsAgo);
+    // final String formattedToDate = DateFormat('yyyy-MM-dd').format(currentDate);
+    displayDate = 'Select Date';
     selectedStatus = 0;
     selectedBranch = 0;
     getApiFromDate = null;

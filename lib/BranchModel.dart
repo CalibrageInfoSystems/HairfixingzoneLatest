@@ -13,6 +13,7 @@ class BranchModel {
   final dynamic updatedBy; // Assuming updatedBy can be of any type
   final double? latitude;
   final double? longitude;
+  final String? locationUrl;
   BranchModel({
     required this.id,
     required this.name,
@@ -28,6 +29,7 @@ class BranchModel {
     this.updatedBy,
     this.latitude,
     this.longitude,
+    required this.locationUrl,
   });
 
   factory BranchModel.fromJson(Map<String, dynamic> json) {
@@ -46,6 +48,7 @@ class BranchModel {
       updatedBy: json['updatedBy'],
       latitude: json['latitude'],
       longitude: json['longitude'],
+      locationUrl: json['LocationUrl'],
     );
   }
 }

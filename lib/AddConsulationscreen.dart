@@ -49,6 +49,7 @@ class AddConsulationscreen_screenState extends State<AddConsulationscreen> {
   bool isCityValidate = false;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _formKey2 = GlobalKey<FormState>();
   TextEditingController fullNameController = TextEditingController();
   TextEditingController dobController = TextEditingController();
   TextEditingController genderController = TextEditingController();
@@ -207,13 +208,23 @@ class AddConsulationscreen_screenState extends State<AddConsulationscreen> {
         child: Scaffold(
             backgroundColor: CommonStyles.whiteColor,
             appBar: AppBar(
-              backgroundColor:  Color(0xffffffff),
+              backgroundColor:  Color(0xffe2f0fd),
               automaticallyImplyLeading: false,
               title:Text(
                 'Add Consultation',
                 style: CommonStyles.txSty_20b_fb,
 
               ),
+                titleSpacing:0.0,
+                leading: IconButton(
+                  icon: const Icon(
+                    Icons.arrow_back_ios,
+                    color: CommonUtils.primaryTextColor,
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                )
             ),
             body: SingleChildScrollView(
               child: Form(
@@ -585,51 +596,54 @@ class AddConsulationscreen_screenState extends State<AddConsulationscreen> {
                           const SizedBox(
                             height: 5.0,
                           ),
-                          TextFormField(
-                            controller: _timeController,
-                            keyboardType: TextInputType.visiblePassword,
-                            onTap: () {
-                              _openTimePicker();
-                            },
-                            readOnly: true,
-                            validator: (value) {
-                              if (value!.isEmpty || value.isEmpty) {
-                                return 'Choose Time ';
-                              }
-                              return null;
-                            },
-
-                            decoration: InputDecoration(
-                              contentPadding: const EdgeInsets.only(
-                                  top: 15, bottom: 10, left: 15, right: 15),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: const BorderSide(
-                                  color: Color(0xFF11528f),
-                                ),
-                                borderRadius: BorderRadius.circular(6.0),
-                              ),
-                              enabledBorder: OutlineInputBorder(
-                                borderSide: const BorderSide(
-                                  color: CommonUtils.primaryTextColor,
-                                ),
-                                borderRadius: BorderRadius.circular(6.0),
-                              ),
-                              border: const OutlineInputBorder(
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(10),
-                                ),
-                              ),
-                              hintText: 'Time',
-                              counterText: "",
-                              hintStyle: CommonStyles.texthintstyle,
-                              errorStyle: CommonStyles.texterrorstyle,
-                              suffixIcon: const Icon(
-                                Icons.access_time,
+                Form(
+                    key: _formKey2,
+                    child: Column(
+                      children: [
+                        TextFormField(
+                          controller: _timeController,
+                          keyboardType: TextInputType.visiblePassword,
+                          onTap: () {
+                            _openTimePicker();
+                          },
+                          readOnly: true,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'Choose Time';
+                            }
+                            return null;
+                          },
+                          decoration: InputDecoration(
+                            contentPadding: const EdgeInsets.only(
+                                top: 15, bottom: 10, left: 15, right: 15),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(
                                 color: Color(0xFF11528f),
                               ),
+                              borderRadius: BorderRadius.circular(6.0),
                             ),
-                            style: CommonStyles.txSty_14b_fb,
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                color: CommonUtils.primaryTextColor,
+                              ),
+                              borderRadius: BorderRadius.circular(6.0),
+                            ),
+                            border: const OutlineInputBorder(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(10),
+                              ),
+                            ),
+                            hintText: 'Time',
+                            counterText: "",
+                            hintStyle: CommonStyles.texthintstyle,
+                            errorStyle: CommonStyles.texterrorstyle,
+                            suffixIcon: const Icon(
+                              Icons.access_time,
+                              color: Color(0xFF11528f),
+                            ),
                           ),
+                          style: CommonStyles.txSty_14b_fb,
+                        ),
                           const SizedBox(
                             height: 10,
                           ),
@@ -739,8 +753,8 @@ class AddConsulationscreen_screenState extends State<AddConsulationscreen> {
                             ],
                           ),
                         ],
-                      ))),
-            )));
+                      ))]),
+            )))));
   }
 
   Future<void> validating() async {
@@ -748,7 +762,7 @@ class AddConsulationscreen_screenState extends State<AddConsulationscreen> {
     // validateCity(cityName);
     // validatebranch(branchName);
 
-    if (_formKey.currentState!.validate()) {
+    if (_formKey.currentState!.validate()  && _formKey2.currentState!.validate()) {
       _printVisitingDateTime();
       print(isFullNameValidate);
       print(isGenderValidate);
@@ -844,10 +858,6 @@ class AddConsulationscreen_screenState extends State<AddConsulationscreen> {
     }
     //   setState(() {});
   }
-
-
-
-
 
   String? validateEmail(String? value) {
     if (value!.isEmpty) {
@@ -972,7 +982,7 @@ class AddConsulationscreen_screenState extends State<AddConsulationscreen> {
               title: 'Reminder Notification',
               //An Consulatation has been booked by Manohar at 17th july 10.30 AM Marathahalli Branch. Please check with him once -- Consultation Reminder Notification
               body:
-                  'An Consulatation has been booked by $apiUsrname at $formattedDateapi $slot_time $branchName Branch. Please check with him once ',
+                  'An Consulatation has been booked by $apiUsrname at $formattedDateapi $slot_time ${widget.branch.name} Branch. Please check with him once ',
               //  body: 'Hey $userFullName, Today Your Appointment is Scheduled for  $_selectedTimeSlot at the ${widget.branchname} Branch, Located at ${widget.branchaddress}.',
               //  scheduledNotificationDateTime: testdate!,
               scheduledNotificationDateTime: VisitslotDateTime!,
@@ -999,26 +1009,6 @@ class AddConsulationscreen_screenState extends State<AddConsulationscreen> {
     }
   }
 
-  Future<void> getCities(int userId) async {
-    // String apiUrl = '$baseUrl$GetBranchByUserId$userId';
-    String apiUrl = 'http://182.18.157.215/SaloonApp/API/GetCityById/4';
-
-    try {
-      final response = await http.get(Uri.parse(apiUrl));
-      print('apiUrl: $apiUrl');
-      if (response.statusCode == 200) {
-        final data = json.decode(response.body);
-        setState(() {
-          cityDropdownItems = data['listResult'];
-        });
-        return;
-      } else {
-        print('Request failed with status: ${response.statusCode}');
-      }
-    } catch (error) {
-      print('Error: $error');
-    }
-  }
 
   Future<void> _openDatePicker() async {
     selectedDate = await showDatePicker(
@@ -1049,6 +1039,7 @@ class AddConsulationscreen_screenState extends State<AddConsulationscreen> {
         slot_time = pickedTime.format(context);
         print('selected Time $slot_time');
         _timeController.text = pickedTime.format(context);
+        _formKey2.currentState!.validate();
       });
     }
   }

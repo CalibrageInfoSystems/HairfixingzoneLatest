@@ -31,6 +31,7 @@ class Bookingscreen extends StatefulWidget {
   final String branchImage;
   final double? latitude;
   final double? longitude;
+  final String? LocationUrl;
 
   const Bookingscreen(
       {super.key,
@@ -40,7 +41,7 @@ class Bookingscreen extends StatefulWidget {
       required this.phonenumber,
       required this.branchImage,
       required this.latitude,
-      required this.longitude});
+      required this.longitude, required this.LocationUrl, });
 
   @override
   State<Bookingscreen> createState() => _BookingScreenState();
@@ -1283,6 +1284,7 @@ class _BookingScreenState extends State<Bookingscreen> {
                   branchImage: widget.branchImage,
                   latitude: widget.latitude,
                   longitude: widget.longitude,
+                    locationUrl : widget.LocationUrl!
                 ),
               ),
             );

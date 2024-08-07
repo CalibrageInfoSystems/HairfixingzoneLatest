@@ -1227,6 +1227,8 @@ class _BookingScreenState extends State<Rescheduleslotscreen> {
                         branchImage: widget.data.imageName,
                         latitude: widget.data.latitude!,
                         longitude: widget.data.longitude!,
+                 //   locationUrl: widget.data.l,
+                    locationUrl:widget.data.locationUrl!,
                       )),
             );
             // showCustomToastMessageLong('Slot booked successfully', context, 0, 2);

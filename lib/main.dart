@@ -3,23 +3,22 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hairfixingzone/EditProfile.dart';
+import 'package:hairfixingzone/MyAppointments.dart';
 import 'package:hairfixingzone/Product_My.dart';
 import 'package:hairfixingzone/MyProductsProvider.dart';
 import 'package:hairfixingzone/Rescheduleslotscreen.dart';
 import 'package:hairfixingzone/aboutus_screen.dart';
 import 'package:hairfixingzone/services/local_notifications.dart';
 import 'package:hairfixingzone/services/notifi_service.dart';
-// import 'package:hairfixingzone/services/notification_service.dart';
+
 import 'package:hairfixingzone/splash_screen.dart';
 import 'package:provider/provider.dart';
-// import 'package:hairfixingservice/services/local_notifications.dart';
-// import 'package:hairfixingservice/splash_screen.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'AgentAppointmentsProvider.dart';
-import 'GetAppointments.dart';
-import 'HomeScreen.dart';
+
 import 'MyAppointment_Model.dart';
 import 'MyAppointmentsProvider.dart';
 import 'ProfileMy.dart';
@@ -91,15 +90,36 @@ class MyApp extends StatelessWidget {
       print("onMessageOpenedApp: $messageBody");
       print("onMessageOpenedApp: $messagelog");
       LocalNotificationService.showNotificationOnForeground(context, message);
-      RegExp datePattern = RegExp(r'\b(\d{1,2} \w+ \d{4})\b');
-      Match? match = datePattern.firstMatch(messageBody!);
+      if (messageBody != null) {
+        if (messageBody.contains("Your Appointment has been Approved Which was Booked on")) {
+          print("Appointment already approved. Just opening the app.");
+          // No further action needed, just return.
+          return;
+        }
+        RegExp datePattern = RegExp(r'\b(\d{1,2})(st|nd|rd|th)? (\w+)\b');
+        Match? match = datePattern.firstMatch(messageBody);
 
-      if (match != null) {
-        String dateString = match.group(1)!;
-        DateTime date = DateFormat("dd MMMM yyyy").parse(dateString);
-        formattedDate = DateFormat("yyyy-MM-dd").format(date);
-        print("Formatted Date: $formattedDate");
-      } else {
+        if (match != null) {
+          String day = match.group(1)!;
+          String month = match.group(3)!;
+
+          String dateString = "$day $month";
+
+          try {
+            DateTime date = DateFormat("d MMMM").parse(dateString);
+
+            // Adjust the year to the current year
+            date = DateTime(DateTime
+                .now()
+                .year, date.month, date.day);
+
+            formattedDate = DateFormat("yyyy-MM-dd").format(date);
+            print("Formatted Date: $formattedDate");
+          } catch (e) {
+            print("Error parsing date: $e");
+          }
+        }
+      }else {
         print("Date not found in the message.");
       }
 
@@ -119,16 +139,34 @@ class MyApp extends StatelessWidget {
       print("onMessageOpenedApp: $message");
 
       String? messageBody = message.notification!.body;
-      print("onMessageOpenedApp: $messageBody");
+      print("onMessageOpenedApp:122 $messageBody");
 
-      RegExp datePattern = RegExp(r'\b(\d{1,2} \w+ \d{4})\b');
-      Match? match = datePattern.firstMatch(messageBody!);
+      if (messageBody != null) {
+        if (messageBody.contains("Your Appointment has been Approved Which was Booked on")) {
+          print("Appointment already approved. Just opening the app.");
+          // No further action needed, just return.
+          return;
+        }
+        RegExp datePattern = RegExp(r'\b(\d{1,2})(st|nd|rd|th)? (\w+)\b');
+        Match? match = datePattern.firstMatch(messageBody);
 
-      if (match != null) {
-        String dateString = match.group(1)!;
-        DateTime date = DateFormat("dd MMMM yyyy").parse(dateString);
-        formattedDate = DateFormat("yyyy-MM-dd").format(date);
-        print("Formatted Date: $formattedDate");
+        if (match != null) {
+          String day = match.group(1)!;
+          String month = match.group(3)!;
+
+          String dateString = "$day $month";
+          print("dateString133: $dateString");
+          try {
+            DateTime date = DateFormat("d MMMM").parse(dateString);
+
+            // Adjust the year to the current year
+            date = DateTime(DateTime.now().year, date.month, date.day);
+
+            formattedDate = DateFormat("yyyy-MM-dd").format(date);
+            print("Formatted Date: $formattedDate");
+          } catch (e) {
+            print("Error parsing date: $e");
+          }}
       } else {
         print("Date not found in the message.");
       }
@@ -163,7 +201,7 @@ class MyApp extends StatelessWidget {
           MyAppointment_Model? data = null;
           return data != null ? Rescheduleslotscreen(data: data) : Rescheduleslotscreen(data: data!);
         },
-        '/Mybookings': (context) => GetAppointments(),
+      '/Mybookings': (context) => MyAppointments(),
         '/Products': (context) => ProductsMy(),
         '/ProfileMy': (context) => ProfileMy()
 

@@ -19,6 +19,7 @@ class MyAppointment_Model {
   final String? address;
   final double? latitude;
   final double? longitude;
+  final String? locationUrl;
   final String date;
   final int slotTime;
   final String customerName;
@@ -55,6 +56,7 @@ class MyAppointment_Model {
     required this.address,
     required this.latitude,
     required this.longitude,
+    required this.locationUrl,
     required this.date,
     required this.slotTime,
     required this.customerName,
@@ -93,6 +95,7 @@ class MyAppointment_Model {
         address: json["address"],
         latitude: json["latitude"]?.toDouble(),
         longitude: json["longitude"]?.toDouble(),
+        locationUrl :json["locationUrl"],
         date: json["date"],
         slotTime: json["slotTime"],
         customerName: json["customerName"],

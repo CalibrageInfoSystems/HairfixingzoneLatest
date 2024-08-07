@@ -19,6 +19,7 @@ class SlotSuccessScreen extends StatefulWidget {
   final String branchImage;
   final double? latitude;
   final double? longitude;
+  final String locationUrl;
 
   const SlotSuccessScreen(
       {super.key,
@@ -30,7 +31,7 @@ class SlotSuccessScreen extends StatefulWidget {
       required this.phonenumber,
       required this.branchImage,
       required this.latitude,
-      required this.longitude});
+      required this.longitude,   required this.locationUrl});
   @override
   State<SlotSuccessScreen> createState() => _SlotSuccessScreenState();
 }
@@ -369,8 +370,19 @@ class _SlotSuccessScreenState extends State<SlotSuccessScreen> with TickerProvid
                           Expanded(
                             child: InkWell(
                               onTap: () {
-                                print('My Appointments btn clicked');
-                                Navigator.of(context, rootNavigator: true).pushNamed("/Mybookings");
+                                // print('My Appointments btn clicked');
+                                // Navigator.of(context, rootNavigator: true).pushNamed("/Mybookings");
+                                // {
+                                  print('My Appointments btn clicked');
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => HomeScreen(
+                                        initialIndex: 1, // Set initial index to 1
+                                      ),
+                                    ),
+                                  );
+
                               },
                               child: Container(
                                 padding: const EdgeInsets.all(5),
@@ -400,13 +412,7 @@ class _SlotSuccessScreenState extends State<SlotSuccessScreen> with TickerProvid
         ));
   }
 
-  // Future<void> _makePhoneCall(String phoneNumber) async {
-  //   if (await canLaunch(phoneNumber)) {
-  //     await launch(phoneNumber);
-  //   } else {
-  //     throw 'Could not launch $phoneNumber';
-  //   }
-  // }
+
 
   Future<void> openPhone() async {
     final url = 'tel:${widget.phonenumber}';
@@ -419,11 +425,15 @@ class _SlotSuccessScreenState extends State<SlotSuccessScreen> with TickerProvid
   Future<void> openMap() async {
     if (widget.latitude != null && widget.longitude != null) {
       final String label = 'Hair Fixing Zone - ${widget.slotbranchname}';
+      //   final String googleMapsUrl = 'geo:${widget.latitude},${widget.longitude}?q=${Uri.encodeComponent(label)}';
       final String googleMapsUrl = 'geo:${widget.latitude},${widget.longitude}?q=${Uri.encodeComponent(label)}';
-      final String appleMapsUrl = 'https://maps.apple.com/?q=${Uri.encodeComponent(label)}&ll=${widget.latitude},${widget.longitude}';
+      //  final String googleMapsUrl = 'https://maps.app.goo.gl/mLAmxhUXATDtMcdS8';
+      String appleMapsUrl = widget.locationUrl;
 
       String url;
-      if (Theme.of(context).platform == TargetPlatform.iOS) {
+      if (Theme
+          .of(context)
+          .platform == TargetPlatform.iOS) {
         url = appleMapsUrl;
       } else {
         url = googleMapsUrl;
@@ -431,7 +441,7 @@ class _SlotSuccessScreenState extends State<SlotSuccessScreen> with TickerProvid
 
       print('getbrancheslist: $url');
       try {
-        await launchUrl(Uri.parse(url));
+        await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
       } catch (e) {
         print(e);
       }
@@ -440,37 +450,7 @@ class _SlotSuccessScreenState extends State<SlotSuccessScreen> with TickerProvid
           'Location not found', context, 1, 3);
     }
   }
-  // Future<void> openMap() async {
-  //   // if (widget.latitude != null && widget.longitude != null) {
-  //   //   final String url = 'https://www.google.com/maps?q=${widget.latitude},${widget.longitude}';
-  //   //   print('getbrancheslist: $url');
-  //   //   try {
-  //   //     await launchUrl(Uri.parse(url));
-  //   //   } catch (e) {
-  //   //     print(e);
-  //   //   }
-  //   // } else {
-  //   //   CommonUtils.showCustomToastMessageLong('Location not found', context, 1, 3);
-  //   // }
-  //   // final String url =
-  //   //     'https://www.google.com/maps?q=$label@${widget.latitude},${widget.longitude}';
-  //   if (widget.latitude != null && widget.longitude != null) {
-  //     final String label = 'Hair Fixing Zone - ${widget.slotbranchname}';
-  //     final String url = 'geo:${widget.latitude},${widget.longitude}?q=${Uri.encodeComponent(label)}';
-  //
-  //     // final String url =
-  //     //     'https://maps.app.goo.gl/wp5rYLH6Z7sxnFDB6';
-  //     print('getbrancheslist: $url');
-  //     try {
-  //       await launchUrl(Uri.parse(url));
-  //     } catch (e) {
-  //       print(e);
-  //     }
-  //   } else {
-  //     CommonUtils.showCustomToastMessageLong(
-  //         'Location not found', context, 1, 3);
-  //   }
-  // }
+
 
   Future<void> sharedprefsdelete() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
