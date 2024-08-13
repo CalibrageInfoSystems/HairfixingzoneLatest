@@ -16,6 +16,7 @@ import 'package:hairfixingzone/Appointment.dart';
 import 'package:hairfixingzone/Common/common_styles.dart';
 import 'package:hairfixingzone/Common/custom_button.dart';
 
+import 'AgentHome.dart';
 import 'CommonUtils.dart';
 import 'Notifications.dart';
 import 'api_config.dart';
@@ -83,7 +84,19 @@ class _notifications_screenState extends State<notifications_screen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return WillPopScope(
+        onWillPop: () async {
+          // Replace the current screen with AgentHome when the back button is pressed
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => AgentHome(userId: widget.userId),
+            ),
+          );
+          // Returning false means we don't want the system to perform the default back navigation
+          return false;
+        },
+    child:Scaffold(
       appBar: AppBar(
           backgroundColor: const Color(0xFFf3e3ff),
           title: const Text(
@@ -102,10 +115,16 @@ class _notifications_screenState extends State<notifications_screen> {
               color: CommonUtils.primaryTextColor,
             ),
             onPressed: () {
-              Navigator.of(context).pop();
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => AgentHome(userId: widget.userId)),
+              );
+          //    Navigator.of(context).pop();
             },
           )),
-      body: Consumer<MyProductProvider>(
+      body:
+      Consumer<MyProductProvider>(
         builder: (context, provider, _) => Column(
           children: [
             Expanded(
@@ -154,9 +173,10 @@ class _notifications_screenState extends State<notifications_screen> {
                           },
                         ),
                       );
-                    } else {
+                    }
+                    else {
                       return const Center(
-                        child: Text('No Appointments Found'),
+                        child: CircularProgressIndicator.adaptive(),
                       );
                     }
                   }
@@ -166,7 +186,7 @@ class _notifications_screenState extends State<notifications_screen> {
           ],
         ),
       ),
-    );
+    ));
   }
 
   Future<List<Notifications>> fetchAppointments(

@@ -54,23 +54,67 @@ void main() async {
     print("Body: ${notification.body}");
     // print("Scheduled Time: ${notification.scheduledDate}");
   }
+// Check if the app was opened from a notification
+  RemoteMessage? initialMessage = await FirebaseMessaging.instance.getInitialMessage();
 
+  Widget homeWidget = SplashScreen(); // Default to Splash Screen
+// Default to Splash Screen
+
+  if (initialMessage != null) {
+    // Handle the notification data and set the initial route
+    String? messageBody = initialMessage.notification?.body;
+    String formattedDate = '';
+
+    if (messageBody != null) {
+      RegExp datePattern = RegExp(r'\b(\d{1,2})(st|nd|rd|th)? (\w+)\b');
+      Match? match = datePattern.firstMatch(messageBody);
+
+      if (match != null) {
+        String day = match.group(1)!;
+        String month = match.group(3)!;
+
+        String dateString = "$day $month";
+
+        try {
+          DateTime date = DateFormat("d MMMM").parse(dateString);
+          date = DateTime(DateTime.now().year, date.month, date.day);
+          formattedDate = DateFormat("yyyy-MM-dd").format(date);
+        } catch (e) {
+          print("Error parsing date: $e");
+        }
+      }
+
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      bool isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
+
+      if (isLoggedIn) {
+        int? userId = prefs.getInt('userId');
+        if (userId != null) {
+          homeWidget = notifications_screen(userId: userId, formattedDate: formattedDate); // Your notification screen widget
+        }
+      }
+    }
+  }
+
+//  runApp(MyApp(initialRoute: initialRoute));
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (context) => MyProductProvider()),
     ChangeNotifierProvider(create: (context) => MyAppointmentsProvider()),
     ChangeNotifierProvider(create: (context) => AgentAppointmentsProvider()),
-  ], child: MyApp()));
+  ], child: MyApp(homeWidget: homeWidget)));
 }
 
-final GlobalKey<NavigatorState> navigatorKey = new GlobalKey<NavigatorState>();
 
 class MyApp extends StatelessWidget {
-  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+  final Widget homeWidget;
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+
   late String formattedDate;
   int? userId;
 
-  MyApp({super.key});
+  MyApp({required this.homeWidget, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -194,23 +238,22 @@ class MyApp extends StatelessWidget {
       navigatorKey: navigatorKey,
       debugShowCheckedModeBanner: false,
       title: 'My App',
+      home: homeWidget, // Set home property dynamically
       routes: {
-        // Home screen route
-        '/about': (context) => AboutUsScreen(), // About Us screen route
+        '/about': (context) => AboutUsScreen(),
         '/ReSchedulescreen': (context) {
           MyAppointment_Model? data = null;
           return data != null ? Rescheduleslotscreen(data: data) : Rescheduleslotscreen(data: data!);
         },
-      '/Mybookings': (context) => MyAppointments(),
+        '/Mybookings': (context) => MyAppointments(),
         '/Products': (context) => ProductsMy(),
-        '/ProfileMy': (context) => ProfileMy()
-
-        // Add routes for other screens here
+        '/ProfileMy': (context) => ProfileMy(),
       },
-      home: SplashScreen(),
     );
   }
 }
+
+
 
 
 

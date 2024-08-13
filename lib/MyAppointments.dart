@@ -1731,7 +1731,7 @@ class _OpCardState extends State<OpCard> {
                           ),
                           Center(
                             child: Text(
-                              'Please Rate Your Experience for the ${appointments.slotDuration} Slot at the ${appointments.branch} Hair Fixing Zone.',
+                              'Please Rate us Your Experience for the ${appointments.slotDuration} Slot at the ${appointments.branch} Hair Fixing Zone.',
                               style: const TextStyle(
                                 fontSize: 16,
                                 color: CommonUtils.primaryTextColor,
@@ -1945,7 +1945,7 @@ class _OpCardState extends State<OpCard> {
     if (isValid && Serv_rating_star <= 0.0) {
       FocusScope.of(context).unfocus();
       CommonUtils.showCustomToastMessageLong(
-          'Please Rate Your Experience with Service', context, 1, 4);
+          'Please Rate  Your Experience with Service', context, 1, 4);
       isValid = false;
       hasValidationFailed = true;
     }

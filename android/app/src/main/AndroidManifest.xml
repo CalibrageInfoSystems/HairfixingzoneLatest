@@ -28,6 +28,7 @@
             android:allowBackup="false"
             android:fullBackupOnly="false"
             android:name="${applicationName}"
+            android:enableOnBackInvokedCallback="true"
             android:icon="@drawable/applogo">
             <activity
                 android:name=".MainActivity"

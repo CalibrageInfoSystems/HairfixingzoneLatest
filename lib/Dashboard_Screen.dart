@@ -463,7 +463,7 @@ class _CustomerDashBoardState extends State<CustomerDashBoard>
                                   aspectRatio: 16 / 9,
                                   autoPlayCurve: Curves.fastOutSlowIn,
                                   enableInfiniteScroll: true,
-                                  slideIndicator: const CircularSlideIndicator(      
+                                  slideIndicator: const CircularSlideIndicator(
                                     slideIndicatorOptions:
                                         SlideIndicatorOptions(
                                       itemSpacing: 10,

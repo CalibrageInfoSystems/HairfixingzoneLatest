@@ -189,7 +189,7 @@ class _NewScreenState extends State<NewScreen> {
                   color: const Color(0xFF11528f), // Adjust color as needed
                 ),
                 title: const Text('About Us',
-                    style: CommonStyles.txSty_20black_fb),
+                    style: CommonStyles.txSty_18b_fb),
                 trailing: const Icon(Icons.arrow_forward_ios,
                     color: Colors.grey, size: 16), // Add trailing icon here
                 onTap: () {
@@ -209,7 +209,7 @@ class _NewScreenState extends State<NewScreen> {
                   color: const Color(0xFF11528f), // Adjust color as needed
                 ),
                 title: const Text('Products',
-                    style: CommonStyles.txSty_20black_fb),
+                    style: CommonStyles.txSty_18b_fb),
                 trailing: const Icon(Icons.arrow_forward_ios,
                     color: Colors.grey, size: 16), // Add trailing icon here
                 onTap: () {
@@ -249,7 +249,7 @@ class _NewScreenState extends State<NewScreen> {
                   color: const Color(0xFF11528f), // Adjust color as needed
                 ),
                 title: const Text('Contact Us',
-                    style: CommonStyles.txSty_20black_fb),
+                    style: CommonStyles.txSty_18b_fb),
                 trailing: const Icon(Icons.arrow_forward_ios,
                     color: Colors.grey, size: 16), // Add trailing icon here
                 onTap: () {
@@ -269,7 +269,7 @@ class _NewScreenState extends State<NewScreen> {
                   color: const Color(0xFF11528f), // Adjust color as needed
                 ),
                 title:
-                    const Text('Change Password', style: CommonStyles.txSty_20black_fb),
+                    const Text('Change Password', style: CommonStyles.txSty_18b_fb),
                 trailing: const Icon(Icons.arrow_forward_ios,
                     color: Colors.grey, size: 16), // Add trailing icon here
                 onTap: () {
@@ -297,7 +297,7 @@ class _NewScreenState extends State<NewScreen> {
                   color: const Color(0xFF11528f), // Adjust color as needed
                 ),
                 title:
-                const Text('Logout', style: CommonStyles.txSty_20black_fb),
+                const Text('Logout', style: CommonStyles.txSty_18b_fb),
                 trailing: const Icon(Icons.arrow_forward_ios,
                     color: Colors.grey, size: 16), // Add trailing icon here
                 onTap: () {

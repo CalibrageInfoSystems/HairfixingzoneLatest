@@ -1,3 +1,4 @@
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -826,67 +827,104 @@ class _BookingScreenState extends State<Bookingscreen> {
                           child: DropdownButtonHideUnderline(
                             child: ButtonTheme(
                               alignedDropdown: true,
-                              child: DropdownButton<int>(
-                                  value: selectedTypeCdId,
-                                  iconSize: 30,
-                                  //  validator: (value) => value == null ? "Select a country" : null,
-                                  // validator: (value) {
-                                  //   if (value == -1) {
-                                  //     return 'Choose Date to Check Slots';
-                                  //   }
-                                  // },
-                                  icon: null,
-                                  style: CommonStyles
-                                  .txSty_14b_fb,
-                                  // decoration: InputDecoration(
-                                  //   contentPadding: EdgeInsets.zero,
-                                  //   border: InputBorder.none, // Hide the underline here
-                                  // ),
-                                  onChanged: (value) {
-                                    setState(() {
-                                      selectedTypeCdId = value!;
-                                      if (selectedTypeCdId != -1) {
-                                        selectedValue =
-                                            dropdownItems[selectedTypeCdId]
-                                                ['typeCdId'];
-                                        selectedName =
-                                            dropdownItems[selectedTypeCdId]
-                                                ['desc'];
+                              child:
+                              DropdownButton2<int>(
+                                isExpanded: true,
 
-                                        print("selectedValue:$selectedValue");
-                                        print("selectedName:$selectedName");
-                                      } else {
-                                        print("==========");
-                                        print(selectedValue);
-                                        print(selectedName);
-                                      }
-                                      ispurposeselected = false;
-                                      // isDropdownValid = selectedTypeCdId != -1;
-                                    });
-                                  },
-                                  items: [
-                                    const DropdownMenuItem<int>(
-                                      value: -1,
-                                      child: Text(
-                                        ' Select Purpose',
-                                        style: TextStyle(
-                                            color: Colors.grey,
-                                            fontWeight: FontWeight.w500),
+                                items:[
+                                  DropdownMenuItem<int>(
+                                    value: -1,
+                                    child: Text(
+                                      ' Select Purpose of Visit',
+                                      style: TextStyle(
+                                          color: Colors.grey,fontSize: 14, fontFamily: 'Outfit',
+                                        //  fontWeight: FontWeight.w500
                                       ),
-                                      // Static text
                                     ),
-                                    ...dropdownItems
-                                        .asMap()
-                                        .entries
-                                        .map((entry) {
-                                      final index = entry.key;
-                                      final item = entry.value;
-                                      return DropdownMenuItem<int>(
-                                        value: index,
-                                        child: Text(item['desc']),
-                                      );
-                                    }).toList(),
-                                  ]),
+                                    // Static text
+                                  ),
+                                  ...dropdownItems
+                                      .asMap()
+                                      .entries
+                                      .map((entry) {
+                                    final index = entry.key;
+                                    final item = entry.value;
+                                    return DropdownMenuItem<int>(
+                                      value: index,
+                                      child: Text(item['desc'],style: TextStyle(
+                                          fontSize: 14,fontWeight: FontWeight.w400,
+                                          color: Colors.black,
+                                        fontFamily: 'Outfit',
+                                      ),),
+                                    );
+                                  }).toList(),
+                                ]
+                                    .toList(),
+                                value: selectedTypeCdId,
+                                onChanged: (value) {
+                                  setState(() {
+                                    selectedTypeCdId = value!;
+                                    if (selectedTypeCdId != -1) {
+                                      selectedValue =
+                                      dropdownItems[selectedTypeCdId]
+                                      ['typeCdId'];
+                                      selectedName =
+                                      dropdownItems[selectedTypeCdId]
+                                      ['desc'];
+
+                                      print("selectedValue:$selectedValue");
+                                      print("selectedName:$selectedName");
+                                    } else {
+                                      print("==========");
+                                      print(selectedValue);
+                                      print(selectedName);
+                                    }
+                                    ispurposeselected = false;
+                                    // isDropdownValid = selectedTypeCdId != -1;
+                                  });
+                                },
+                                buttonStyleData: ButtonStyleData(
+                                  height: 45,
+                                  width: double.infinity,
+                                  padding:  EdgeInsets.only(left: 14, right: 14),
+                                  //decoration: BoxDecoration(
+                                  //  borderRadius: BorderRadius.circular(14),
+                                  //   border: Border.all(
+                                  //     color: Colors.black26,
+                                  //   ),
+                                  //   color: Colors.redAccent,
+                                  //    ),
+                                  // elevation: 2,
+                                ),
+                                iconStyleData: const IconStyleData(
+                                  icon: Icon(
+                                    Icons.arrow_drop_down_sharp,
+
+                                  ),
+                                  iconSize: 24,
+                                  iconEnabledColor:  Color(0xFF11528f),
+                                  iconDisabledColor: Color(0xFF11528f),
+                                ),
+                                dropdownStyleData: DropdownStyleData(
+                                  maxHeight: MediaQuery.of(context).size.height/4,
+                                  width: MediaQuery.of(context).size.width/1.1,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(12),
+                                    color: Colors.grey.shade50,
+                                  ),
+                                  //  offset: const Offset(-20, 0),
+                                  scrollbarTheme: ScrollbarThemeData(
+                                    radius:  Radius.circular(40),
+                                    thickness: MaterialStateProperty.all<double>(6),
+                                    thumbVisibility: MaterialStateProperty.all<bool>(true),
+                                  ),
+                                ),
+                                menuItemStyleData: const MenuItemStyleData(
+                                  height: 40,
+                                  padding: EdgeInsets.only(left: 14, right: 14),
+                                ),
+                              ),
+
                             ),
                           ),
                         ),
@@ -941,61 +979,103 @@ class _BookingScreenState extends State<Bookingscreen> {
                           child: DropdownButtonHideUnderline(
                             child: ButtonTheme(
                               alignedDropdown: true,
-                              child: DropdownButton<int>(
-                                  value: selectedTechnician,
-                                  iconSize: 30,
-                                  icon: null,
-                                  style: const TextStyle(
-                                    color: Colors.black,
-                                  ),
-                                  onChanged: (value) {
-                                    setState(() {
-                                      selectedTechnician = value!;
-                                      if (selectedTechnician != -1) {
-                                        selectedTechnicianValue =
-                                            dropdownForTechnicians[
-                                                selectedTechnician]['id'];
-                                        selectedTechnicianName =
-                                            dropdownForTechnicians[
-                                                    selectedTechnician]
-                                                ['firstName'];
+                              child:
+                              DropdownButton2<int>(
+                                isExpanded: true,
 
-                                        print(
-                                            "selectedTechnicianValue: $selectedTechnicianValue");
-                                        print(
-                                            "selectedTechnicianName:$selectedTechnicianName");
-                                      } else {
-                                        print("==========");
-                                        print(selectedTechnicianValue);
-                                        print(selectedTechnicianName);
-                                      }
-                                      // isDropdownValid = selectedTypeCdId != -1;
-                                    });
-                                  },
-                                  items: [
-                                    const DropdownMenuItem<int>(
-                                      value: -1,
-                                      child: Text(
-                                        'Select Technician',
-                                        style: TextStyle(
-                                            color: Colors.grey,
-                                            fontWeight: FontWeight.w500),
-                                      ),
-                                      // Static text
+                                items: [
+                                  const DropdownMenuItem<int>(
+                                    value: -1,
+                                    child: Text(
+                                      'Select Technician',
+                                      style: TextStyle(
+                                          color: Colors.grey,
+                                          fontWeight: FontWeight.w500, fontFamily: 'Outfit',),
                                     ),
-                                    ...dropdownForTechnicians
-                                        .asMap()
-                                        .entries
-                                        .map((entry) {
-                                      final index = entry.key;
-                                      final item = entry.value;
-                                      return DropdownMenuItem<int>(
-                                        value: index,
-                                        child: Text(item['firstName'],style: CommonStyles
-                                            .txSty_14b_fb,),
-                                      );
-                                    }).toList(),
-                                  ]),
+                                    // Static text
+                                  ),
+                                  ...dropdownForTechnicians
+                                      .asMap()
+                                      .entries
+                                      .map((entry) {
+                                    final index = entry.key;
+                                    final item = entry.value;
+                                    return DropdownMenuItem<int>(
+                                      value: index,
+                                      child: Text(item['firstName'],style: TextStyle(
+                                          fontSize: 14,fontWeight: FontWeight.w400,
+                                          color: Colors.black, fontFamily: 'Outfit',
+                                      ),),
+                                    );
+                                  }).toList(),
+                                ].toList(),
+
+                                value: selectedTechnician,
+                                onChanged: (value) {
+                                  setState(() {
+                                    selectedTechnician = value!;
+                                    if (selectedTechnician != -1) {
+                                      selectedTechnicianValue =
+                                      dropdownForTechnicians[
+                                      selectedTechnician]['id'];
+                                      selectedTechnicianName =
+                                      dropdownForTechnicians[
+                                      selectedTechnician]
+                                      ['firstName'];
+
+                                      print(
+                                          "selectedTechnicianValue: $selectedTechnicianValue");
+                                      print(
+                                          "selectedTechnicianName:$selectedTechnicianName");
+                                    } else {
+                                      print("==========");
+                                      print(selectedTechnicianValue);
+                                      print(selectedTechnicianName);
+                                    }
+                                    // isDropdownValid = selectedTypeCdId != -1;
+                                  });
+                                },
+                                buttonStyleData: ButtonStyleData(
+                                  height: 45,
+                                  width: double.infinity,
+                                  padding:  EdgeInsets.only(left: 14, right: 14),
+                                  //decoration: BoxDecoration(
+                                  //  borderRadius: BorderRadius.circular(14),
+                                  //   border: Border.all(
+                                  //     color: Colors.black26,
+                                  //   ),
+                                  //   color: Colors.redAccent,
+                                  //    ),
+                                  // elevation: 2,
+                                ),
+                                iconStyleData: const IconStyleData(
+                                  icon: Icon(
+                                    Icons.arrow_drop_down_sharp,
+
+                                  ),
+                                  iconSize: 24,
+                                  iconEnabledColor:  Color(0xFF11528f),
+                                  iconDisabledColor: Color(0xFF11528f),
+                                ),
+                                dropdownStyleData: DropdownStyleData(
+                                  maxHeight: MediaQuery.of(context).size.height/4,
+                                  width: MediaQuery.of(context).size.width/1.1,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(12),
+                                    color: Colors.grey.shade50,
+                                  ),
+                                  //  offset: const Offset(-20, 0),
+                                  scrollbarTheme: ScrollbarThemeData(
+                                    radius:  Radius.circular(40),
+                                    thickness: MaterialStateProperty.all<double>(6),
+                                    thumbVisibility: MaterialStateProperty.all<bool>(true),
+                                  ),
+                                ),
+                                menuItemStyleData: const MenuItemStyleData(
+                                  height: 40,
+                                  padding: EdgeInsets.only(left: 14, right: 14),
+                                ),
+                              ),
                             ),
                           ),
                         ),
