@@ -215,7 +215,7 @@ class MyProducts_screenState extends State<ProductsMy> {
                           } else {
                             return const Center(
                               child: Text(
-                                'No Products Found',
+                                'No Products Available',
                                 style: TextStyle(
                                   fontSize: 12.0,
                                   color: Colors.black,
@@ -237,11 +237,10 @@ class MyProducts_screenState extends State<ProductsMy> {
       ),
     ));
   }
-
   Future<List<ProductList>> fetchproducts(
       {int? id, int? categoryTypeId, int? genderTypeId}) async {
     final apiurl = baseUrl + getproductsbyid;
-    print('apiurl=======: ${apiurl}');
+    print('API URL: $apiurl');
     try {
       final request = {
         "id": id,
@@ -256,10 +255,12 @@ class MyProducts_screenState extends State<ProductsMy> {
           'Content-Type': 'application/json',
         },
       );
-      print('api: ${json.encode(request)}');
+      print('API Request: ${json.encode(request)}');
 
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
+        print('API Response: $data'); // Log the entire response
+
         if (data['listResult'] != null) {
           List<dynamic> list = data['listResult'];
           List<ProductList> result =
@@ -267,18 +268,59 @@ class MyProducts_screenState extends State<ProductsMy> {
           return result;
         } else {
           print('listResult is null');
-          throw Exception('else: listResult is null');
+          return []; // Return an empty list instead of throwing an exception
         }
-        // myProductProvider.proProducts = productlist;
       } else {
-        print('api failed');
-        throw Exception('else: api failed');
+        print('API failed with status code: ${response.statusCode}');
+        throw Exception('API failed with status code: ${response.statusCode}');
       }
     } catch (error) {
-      print('Error data is not getting from the api: $error');
-      throw Exception('catch: $error');
+      print('Error occurred while fetching products: $error');
+      throw Exception('Failed to fetch products: $error');
     }
   }
+
+  // Future<List<ProductList>> fetchproducts(
+  //     {int? id, int? categoryTypeId, int? genderTypeId}) async {
+  //   final apiurl = baseUrl + getproductsbyid;
+  //   print('apiurl=======: ${apiurl}');
+  //   try {
+  //     final request = {
+  //       "id": id,
+  //       "categoryTypeId": categoryTypeId,
+  //       "genderTypeId": genderTypeId,
+  //       "isActive": true
+  //     };
+  //     final response = await http.post(
+  //       Uri.parse(apiurl),
+  //       body: json.encode(request),
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //     );
+  //     print('api: ${json.encode(request)}');
+  //
+  //     if (response.statusCode == 200) {
+  //       final data = json.decode(response.body);
+  //       if (data['listResult'] != null) {
+  //         List<dynamic> list = data['listResult'];
+  //         List<ProductList> result =
+  //         list.map((item) => ProductList.fromJson(item)).toList();
+  //         return result;
+  //       } else {
+  //         print('listResult is null');
+  //         throw Exception('else: listResult is null');
+  //       }
+  //       // myProductProvider.proProducts = productlist;
+  //     } else {
+  //       print('api failed');
+  //       throw Exception('else: api failed');
+  //     }
+  //   } catch (error) {
+  //     print('Error data is not getting from the api: $error');
+  //     throw Exception('catch: $error');
+  //   }
+  // }
 
   AppBar _appBar() {
     return AppBar(

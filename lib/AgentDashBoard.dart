@@ -77,20 +77,42 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
       // }
     });
   }
-
   void _fetchItems() async {
     final response = await http.get(Uri.parse(baseUrl + getbanner));
 
     if (response.statusCode == 200) {
+      final data = json.decode(response.body);
       setState(() {
-        _items = (json.decode(response.body)['listResult'] as List)
-            .map((item) => Item.fromJson(item))
-            .toList();
+        if (data['listResult'] != null && (data['listResult'] as List).isNotEmpty) {
+          _items = (data['listResult'] as List)
+              .map((item) => Item.fromJson(item))
+              .toList();
+        } else {
+          _items = [];  // Set to an empty list if listResult is null or empty
+        }
       });
     } else {
-      throw Exception('Failed to load items');
+      setState(() {
+        _items = [];  // Set to an empty list in case of a failed request
+      });
     }
   }
+
+  //
+  // void _fetchItems() async {
+  //   final response = await http.get(Uri.parse(baseUrl + getbanner));
+  //
+  //   if (response.statusCode == 200) {
+  //     setState(() {
+  //       _items = (json.decode(response.body)['listResult'] as List)
+  //           .map((item) => Item.fromJson(item))
+  //           .toList();
+  //     });
+  //   } else {
+  //     _items =[];
+  //    // throw Exception('Failed to load items');
+  //   }
+  // }
 
   Future<List<Consultation>?> getAgentBranches(int agentId) async {
     final apiUrl = Uri.parse(
@@ -449,13 +471,16 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
       },
     );
   }
+  Widget carousel(BuildContext context) {
+    if (_items.isEmpty) {
+      return SizedBox.shrink(); // This hides the carousel by returning an empty widget
+    }
 
-  Container carousel(BuildContext context) {
-    return    Container(
+    return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
       width: MediaQuery.of(context).size.width,
       height: 180,
-      child:  FlutterCarousel(
+      child: FlutterCarousel(
         options: CarouselOptions(
           floatingIndicator: true,
           height: 180,
@@ -466,12 +491,14 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
           autoPlayCurve: Curves.fastOutSlowIn,
           enableInfiniteScroll: true,
           slideIndicator: CircularSlideIndicator(
-            slideIndicatorOptions: SlideIndicatorOptions(itemSpacing: 10,
-            padding: const EdgeInsets.only(bottom: 10.0),
-            indicatorBorderColor: Color(0xFF11528f),
-            currentIndicatorColor: Color(0xFF11528f),
-            indicatorRadius: 4,
-          ),),
+            slideIndicatorOptions: SlideIndicatorOptions(
+              itemSpacing: 10,
+              padding: const EdgeInsets.only(bottom: 10.0),
+              indicatorBorderColor: const Color(0xFF11528f),
+              currentIndicatorColor: const Color(0xFF11528f),
+              indicatorRadius: 4,
+            ),
+          ),
           autoPlayAnimationDuration: const Duration(milliseconds: 800),
         ),
         items: _items.map((item) {
@@ -494,7 +521,9 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
                       fit: BoxFit.fill,
                       loadingBuilder: (context, child, loadingProgress) {
                         if (loadingProgress == null) return child;
-                        return const Center(child: CircularProgressIndicator.adaptive());
+                        return const Center(
+                          child: CircularProgressIndicator.adaptive(),
+                        );
                       },
                     ),
                   ),
@@ -505,58 +534,187 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
         }).toList(),
       ),
     );
-    //   Container(
-    //   padding: const EdgeInsets.symmetric(horizontal: 10.0),
-    //   width: MediaQuery.of(context).size.width,
-    //   height: 180,
-    //   child: FlutterCarousel(
-    //     options: CarouselOptions(
-    //       floatingIndicator: false,
-    //       height: 180,
-    //       viewportFraction: 1.0,
-    //       enlargeCenterPage: true,
-    //       autoPlay: true,
-    //       aspectRatio: 16 / 9,
-    //       autoPlayCurve: Curves.fastOutSlowIn,
-    //       enableInfiniteScroll: true,
-    //       slideIndicator: const CircularSlideIndicator(
-    //         indicatorBorderColor: CommonStyles.blackColor,
-    //         currentIndicatorColor: CommonStyles.primaryTextColor,
-    //         indicatorRadius: 2, // Decrease the size of the indicator
-    //       ),
-    //       autoPlayAnimationDuration: const Duration(milliseconds: 800),
-    //     ),
-    //     items: _items.map((item) {
-    //       return Builder(
-    //         builder: (BuildContext context) {
-    //           return SizedBox(
-    //             width: MediaQuery.of(context).size.width,
-    //             child: Card(
-    //               shape: RoundedRectangleBorder(
-    //                 borderRadius: BorderRadius.circular(10),
-    //               ),
-    //               elevation: 4,
-    //               child: ClipRRect(
-    //                 borderRadius: BorderRadius.circular(10),
-    //                 child: Image.network(
-    //                   item.imageName,
-    //                   height: 100,
-    //                   fit: BoxFit.cover,
-    //                   loadingBuilder: (context, child, loadingProgress) {
-    //                     if (loadingProgress == null) return child;
-    //                     return const Center(
-    //                         child: CircularProgressIndicator.adaptive());
-    //                   },
-    //                 ),
-    //               ),
-    //             ),
-    //           );
-    //         },
-    //       );
-    //     }).toList(),
-    //   ),
-    // );
   }
+
+  // Container carousel(BuildContext context) {
+  //   return Container(
+  //     padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
+  //     width: MediaQuery.of(context).size.width,
+  //     height: 180,
+  //     child: _items.isNotEmpty
+  //         ? FlutterCarousel(
+  //       options: CarouselOptions(
+  //         floatingIndicator: true,
+  //         height: 180,
+  //         viewportFraction: 1.0,
+  //         enlargeCenterPage: true,
+  //         autoPlay: true,
+  //         aspectRatio: 16 / 9,
+  //         autoPlayCurve: Curves.fastOutSlowIn,
+  //         enableInfiniteScroll: true,
+  //         slideIndicator: CircularSlideIndicator(
+  //           slideIndicatorOptions: SlideIndicatorOptions(
+  //             itemSpacing: 10,
+  //             padding: const EdgeInsets.only(bottom: 10.0),
+  //             indicatorBorderColor: const Color(0xFF11528f),
+  //             currentIndicatorColor: const Color(0xFF11528f),
+  //             indicatorRadius: 4,
+  //           ),
+  //         ),
+  //         autoPlayAnimationDuration: const Duration(milliseconds: 800),
+  //       ),
+  //       items: _items.map((item) {
+  //         return Builder(
+  //           builder: (BuildContext context) {
+  //             return SizedBox(
+  //               width: MediaQuery.of(context).size.width,
+  //               child: Card(
+  //                 shadowColor: Colors.transparent,
+  //                 surfaceTintColor: Colors.transparent,
+  //                 shape: RoundedRectangleBorder(
+  //                   borderRadius: BorderRadius.circular(10),
+  //                 ),
+  //                 elevation: 4,
+  //                 child: ClipRRect(
+  //                   borderRadius: BorderRadius.circular(10),
+  //                   child: Image.network(
+  //                     item.imageName,
+  //                     height: 200,
+  //                     fit: BoxFit.fill,
+  //                     loadingBuilder: (context, child, loadingProgress) {
+  //                       if (loadingProgress == null) return child;
+  //                       return const Center(
+  //                         child: CircularProgressIndicator.adaptive(),
+  //                       );
+  //                     },
+  //                   ),
+  //                 ),
+  //               ),
+  //             );
+  //           },
+  //         );
+  //       }).toList(),
+  //     )
+  //         : const Center(
+  //       child: Text(
+  //         'No Banners Available',
+  //         style: TextStyle(
+  //           fontSize: 16.0,
+  //           color: Colors.black,
+  //           fontWeight: FontWeight.bold,
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
+
+  // Container carousel(BuildContext context) {
+  //   return    Container(
+  //     padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
+  //     width: MediaQuery.of(context).size.width,
+  //     height: 180,
+  //     child:  FlutterCarousel(
+  //       options: CarouselOptions(
+  //         floatingIndicator: true,
+  //         height: 180,
+  //         viewportFraction: 1.0,
+  //         enlargeCenterPage: true,
+  //         autoPlay: true,
+  //         aspectRatio: 16 / 9,
+  //         autoPlayCurve: Curves.fastOutSlowIn,
+  //         enableInfiniteScroll: true,
+  //         slideIndicator: CircularSlideIndicator(
+  //           slideIndicatorOptions: SlideIndicatorOptions(itemSpacing: 10,
+  //           padding: const EdgeInsets.only(bottom: 10.0),
+  //           indicatorBorderColor: Color(0xFF11528f),
+  //           currentIndicatorColor: Color(0xFF11528f),
+  //           indicatorRadius: 4,
+  //         ),),
+  //         autoPlayAnimationDuration: const Duration(milliseconds: 800),
+  //       ),
+  //       items: _items.map((item) {
+  //         return Builder(
+  //           builder: (BuildContext context) {
+  //             return SizedBox(
+  //               width: MediaQuery.of(context).size.width,
+  //               child: Card(
+  //                 shadowColor: Colors.transparent,
+  //                 surfaceTintColor: Colors.transparent,
+  //                 shape: RoundedRectangleBorder(
+  //                   borderRadius: BorderRadius.circular(10),
+  //                 ),
+  //                 elevation: 4,
+  //                 child: ClipRRect(
+  //                   borderRadius: BorderRadius.circular(10),
+  //                   child: Image.network(
+  //                     item.imageName,
+  //                     height: 200,
+  //                     fit: BoxFit.fill,
+  //                     loadingBuilder: (context, child, loadingProgress) {
+  //                       if (loadingProgress == null) return child;
+  //                       return const Center(child: CircularProgressIndicator.adaptive());
+  //                     },
+  //                   ),
+  //                 ),
+  //               ),
+  //             );
+  //           },
+  //         );
+  //       }).toList(),
+  //     ),
+  //   );
+  //   //   Container(
+  //   //   padding: const EdgeInsets.symmetric(horizontal: 10.0),
+  //   //   width: MediaQuery.of(context).size.width,
+  //   //   height: 180,
+  //   //   child: FlutterCarousel(
+  //   //     options: CarouselOptions(
+  //   //       floatingIndicator: false,
+  //   //       height: 180,
+  //   //       viewportFraction: 1.0,
+  //   //       enlargeCenterPage: true,
+  //   //       autoPlay: true,
+  //   //       aspectRatio: 16 / 9,
+  //   //       autoPlayCurve: Curves.fastOutSlowIn,
+  //   //       enableInfiniteScroll: true,
+  //   //       slideIndicator: const CircularSlideIndicator(
+  //   //         indicatorBorderColor: CommonStyles.blackColor,
+  //   //         currentIndicatorColor: CommonStyles.primaryTextColor,
+  //   //         indicatorRadius: 2, // Decrease the size of the indicator
+  //   //       ),
+  //   //       autoPlayAnimationDuration: const Duration(milliseconds: 800),
+  //   //     ),
+  //   //     items: _items.map((item) {
+  //   //       return Builder(
+  //   //         builder: (BuildContext context) {
+  //   //           return SizedBox(
+  //   //             width: MediaQuery.of(context).size.width,
+  //   //             child: Card(
+  //   //               shape: RoundedRectangleBorder(
+  //   //                 borderRadius: BorderRadius.circular(10),
+  //   //               ),
+  //   //               elevation: 4,
+  //   //               child: ClipRRect(
+  //   //                 borderRadius: BorderRadius.circular(10),
+  //   //                 child: Image.network(
+  //   //                   item.imageName,
+  //   //                   height: 100,
+  //   //                   fit: BoxFit.cover,
+  //   //                   loadingBuilder: (context, child, loadingProgress) {
+  //   //                     if (loadingProgress == null) return child;
+  //   //                     return const Center(
+  //   //                         child: CircularProgressIndicator.adaptive());
+  //   //                   },
+  //   //                 ),
+  //   //               ),
+  //   //             ),
+  //   //           );
+  //   //         },
+  //   //       );
+  //   //     }).toList(),
+  //   //   ),
+  //   // );
+  // }
 
   getMarqueeText() async {
     final apiUrl = Uri.parse(baseUrl + getcontent);

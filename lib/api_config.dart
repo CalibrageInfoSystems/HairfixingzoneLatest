@@ -3,6 +3,7 @@ library APIConstants;
 const String SUCCESS_MESSAGE = " You will be contacted by us very soon.";
 
 var baseUrl = "http://182.18.157.215/SaloonApp/API/"; // Test
+//var baseUrl = "http://182.18.157.215/Saloon_UAT/API/"; //UAT
 //var baseUrl ="http://182.18.157.215/SaloonApp_Live/API/";//live
 
 var getBanners = "GetBanner?Id=null";
@@ -27,6 +28,7 @@ var GetHolidayListByBranchId = "api/Appointment/GetHolidayListByBranchId/";
 var SendFirebaseNotifications = "SendFirebaseNotifications";
 
 var imagesflierepo = 'http://182.18.157.215/SaloonApp/Saloon_Repo/'; //test
+//var imagesflierepo = 'http://182.18.157.215/Saloon_UAT/Saloon_Repo/'; //test
 //var imagesflierepo= 'http://182.18.157.215/SaloonApp_Live/Saloon_Repo/';
 
 var AddAgentSlotInformation = "AddAgentSlotInformation";

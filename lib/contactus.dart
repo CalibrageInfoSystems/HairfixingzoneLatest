@@ -110,7 +110,7 @@ class contactus extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const SizedBox(width: 10),
+                      //  const SizedBox(width: 5),
                         SvgPicture.asset(
                           'assets/phone_call.svg',
                           width: 25,
@@ -120,7 +120,7 @@ class contactus extends StatelessWidget {
                         const SizedBox(width: 10),
                         const Text(
                           'Call Us: +(91) 9916160222',
-                          style: CommonStyles.txSty_20w_fb,
+                          style: CommonStyles.txSty_18_fb,
                         ),
                       ],
                     ),

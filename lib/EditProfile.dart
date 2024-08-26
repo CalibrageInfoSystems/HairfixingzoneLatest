@@ -1065,7 +1065,7 @@ class EditProfile_screenState extends State<EditProfile> {
             print('Request sent successfully');
             Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (context) =>   HomeScreen(),
+                builder: (context) => HomeScreen(),
               ),
             );
             // showCustomToastMessageLong('Slot booked successfully', context, 0, 2);

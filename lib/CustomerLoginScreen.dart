@@ -14,6 +14,7 @@ import 'CustomerRegisterScreen.dart';
 import 'ForgotChangePassword.dart';
 import 'ForgotPasswordscreen.dart';
 import 'HomeScreen.dart';
+import 'OtpVerificationScreen.dart';
 import 'api_config.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -79,288 +80,288 @@ class _LoginPageState extends State<CustomerLoginScreen> {
       appBar: _appBar(),
       body: SingleChildScrollView(
           child: Column(
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          Container(
-            height: MediaQuery.of(context).size.height / 3,
-            decoration: const BoxDecoration(),
-            child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    width: MediaQuery.of(context).size.height / 5,
-                    child: Image.asset('assets/hfz_logo.png'),
-                  ),
-                  const SizedBox(
-                    height: 5.0,
-                  ),
-                  const Text('Customer Login',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontFamily: "Outfit",
-                        fontWeight: FontWeight.w600,
-                        letterSpacing: 2,
-                        color: Color(0xFF11528f),
-                      )),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  const Text('Login Your Account',
-                      style: CommonUtils.Sub_header_Styles),
-                  const Text('to Access All the Services',
-                      style: CommonUtils.Sub_header_Styles),
-                ],
-              ),
-            ),
-          ),
-          SingleChildScrollView(
-              // physics: const AlwaysScrollableScrollPhysics(),
-              child: Form(
-            key: _formKey,
-            child: Container(
-              // height: MediaQuery.of(context).size.height,
-              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 40),
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(30.0),
-                  topRight: Radius.circular(30.0),
-                ),
-              ),
-              height: MediaQuery.of(context).size.height / 1.7,
-              width: MediaQuery.of(context).size.width,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  const Row(
-                    children: [
-                      Text(
-                        'Email / User Name',
-                        style:  CommonStyles.txSty_12b_f5,),
-                      Text(
-                        ' *',
-                        style:  CommonStyles.txSty_12b_f5,
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 5.0,
-                  ),
-                  TextFormField(
-                    controller: _emailController, // Assigning the controller
-                    keyboardType: TextInputType.visiblePassword,
-                    // obscureText: true,
-
-                    maxLength: 60,
-                    decoration: InputDecoration(
-                      contentPadding: const EdgeInsets.only(
-                          top: 15, bottom: 10, left: 15, right: 15),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                          color: CommonUtils.primaryTextColor,
-                        ),
-                        borderRadius: BorderRadius.circular(6.0),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                          color: CommonUtils.primaryTextColor,
-                        ),
-                        borderRadius: BorderRadius.circular(6.0),
-                      ),
-                      border: const OutlineInputBorder(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(10),
-                        ),
-                      ),
-                      hintText: 'Enter Email / User Name',
-                      counterText: "",
-                      hintStyle:  CommonStyles.texthintstyle ,
-                    ),
-                    validator: validateEmail,
-                    style: CommonStyles.txSty_14b_fb,
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  // CustomeFormField(
-                  //   label: 'Password',
-                  //   validator: validatePassword,
-                  //   controller: _passwordController, // Pass the password controller
-                  // ),
-                  const Row(
-                    children: [
-                      Text(
-                        'Password',
-                    style:  CommonStyles.txSty_12b_f5,),
-                      Text(
-                        ' *',
-                        style:  CommonStyles.txSty_12b_f5,),
-
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 5.0,
-                  ),
-                  TextFormField(
-                    obscureText: _obscureText,
-
-                    controller: _passwordController, // Assigning the controller
-                    keyboardType: TextInputType.visiblePassword,
-                    // obscureText: true,
-                    onTap: () {},
-                    maxLength: 25,
-                    decoration: InputDecoration(
-                      contentPadding: const EdgeInsets.only(
-                          top: 15, bottom: 10, left: 15, right: 15),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                          color: CommonUtils.primaryTextColor,
-                        ),
-                        borderRadius: BorderRadius.circular(6.0),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                          color: CommonUtils.primaryTextColor,
-                        ),
-                        borderRadius: BorderRadius.circular(6.0),
-                      ),
-                      border: const OutlineInputBorder(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(10),
-                        ),
-                      ),
-                      hintText: 'Enter Password',
-                      counterText: "",
-                      suffixIcon: IconButton(
-                        icon: Icon(
-                          _obscureText
-                              ? Icons.visibility_off
-                              : Icons.visibility,
-                          color: Colors.black,
-                        ),
-                        onPressed: () {
-                          // Toggle the password visibility
-                          setState(() {
-                            _obscureText = !_obscureText;
-                          });
-                        },
-                      ),
-                        hintStyle:  CommonStyles.texthintstyle ,
-                    ),
-                    validator: validatePassword,
-                    style: CommonStyles.txSty_14b_fb,
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    const ForgotPasswordscreen()),
-                          );
-                          // Navigator.push(
-                          //   context,
-                          //   MaterialPageRoute(builder: (context) => AddConsulationscreen()),
-                          // );
-                          // Navigator.push(
-                          //   context,
-                          //   MaterialPageRoute(
-                          //       builder: (context) => ForgotChangePassword(
-                          //             id: 1,
-                          //           )),
-                          // );
-                        },
-                        child: const Text(
-                          'Forgot Password?',
-                          style: CommonUtils.Mediumtext_o_14,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: GestureDetector(
-                            onTap: () {
-                              // Navigator.push(
-                              //   context,
-                              //   MaterialPageRoute(
-                              //       builder: (context) => const HomeScreen()),
-                              // );
-                            },
-                            child: CustomButton(
-                              buttonText: 'Login',
-                              color: CommonUtils.primaryTextColor,
-                              onPressed: () {
-                                FocusManager.instance.primaryFocus?.unfocus();
-                                CommonUtils.checkInternetConnectivity()
-                                    .then((isConnected) {
-                                  if (isConnected) {
-                                    loginUser();
-                                    print('The Internet Is Connected');
-                                  } else {
-                                    CommonUtils.showCustomToastMessageLong(
-                                        'Please Check Your Internet Connection',
-                                        context,
-                                        1,
-                                        4);
-                                    print('The Internet Is not Connected');
-                                  }
-                                });
-                              },
-                            )),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  Row(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Container(
+                height: MediaQuery.of(context).size.height / 3,
+                decoration: const BoxDecoration(),
+                child: Center(
+                  child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Text('New User?', style: CommonUtils.Mediumtext_14),
-                      const SizedBox(width: 8.0),
-                      GestureDetector(
-                        onTap: () {
-                          // Handle the click event for the "Click here!" text
-                          print('Click here! clicked');
-                          // Add your custom logic or navigation code here
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  const CustomerRegisterScreen(),
-                            ),
-                          );
-                        },
-                        child: const Text('Register Here!',
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontFamily: "Outfit",
-                              fontWeight: FontWeight.w500,
-                              color: Color(0xFF0f75bc),
-                            )),
-                      )
+                      SizedBox(
+                        width: MediaQuery.of(context).size.height / 5,
+                        child: Image.asset('assets/hfz_logo.png'),
+                      ),
+                      const SizedBox(
+                        height: 5.0,
+                      ),
+                      const Text('Customer Login',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontFamily: "Outfit",
+                            fontWeight: FontWeight.w600,
+                            letterSpacing: 2,
+                            color: Color(0xFF11528f),
+                          )),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      const Text('Login Your Account',
+                          style: CommonUtils.Sub_header_Styles),
+                      const Text('to Access All the Services',
+                          style: CommonUtils.Sub_header_Styles),
                     ],
                   ),
-                ],
+                ),
               ),
-            ),
-          ))
-        ],
-      )),
+              SingleChildScrollView(
+                // physics: const AlwaysScrollableScrollPhysics(),
+                  child: Form(
+                    key: _formKey,
+                    child: Container(
+                      // height: MediaQuery.of(context).size.height,
+                      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 40),
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(30.0),
+                          topRight: Radius.circular(30.0),
+                        ),
+                      ),
+                      height: MediaQuery.of(context).size.height / 1.7,
+                      width: MediaQuery.of(context).size.width,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          const Row(
+                            children: [
+                              Text(
+                                'Email / User Name',
+                                style:  CommonStyles.txSty_12b_f5,),
+                              Text(
+                                ' *',
+                                style:  CommonStyles.txSty_12b_f5,
+                              ),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 5.0,
+                          ),
+                          TextFormField(
+                            controller: _emailController, // Assigning the controller
+                            keyboardType: TextInputType.visiblePassword,
+                            // obscureText: true,
+
+                            maxLength: 60,
+                            decoration: InputDecoration(
+                              contentPadding: const EdgeInsets.only(
+                                  top: 15, bottom: 10, left: 15, right: 15),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                  color: CommonUtils.primaryTextColor,
+                                ),
+                                borderRadius: BorderRadius.circular(6.0),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                  color: CommonUtils.primaryTextColor,
+                                ),
+                                borderRadius: BorderRadius.circular(6.0),
+                              ),
+                              border: const OutlineInputBorder(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(10),
+                                ),
+                              ),
+                              hintText: 'Enter Email / User Name',
+                              counterText: "",
+                              hintStyle:  CommonStyles.texthintstyle ,
+                            ),
+                            validator: validateEmail,
+                            style: CommonStyles.txSty_14b_fb,
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          // CustomeFormField(
+                          //   label: 'Password',
+                          //   validator: validatePassword,
+                          //   controller: _passwordController, // Pass the password controller
+                          // ),
+                          const Row(
+                            children: [
+                              Text(
+                                'Password',
+                                style:  CommonStyles.txSty_12b_f5,),
+                              Text(
+                                ' *',
+                                style:  CommonStyles.txSty_12b_f5,),
+
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 5.0,
+                          ),
+                          TextFormField(
+                            obscureText: _obscureText,
+
+                            controller: _passwordController, // Assigning the controller
+                            keyboardType: TextInputType.visiblePassword,
+                            // obscureText: true,
+                            onTap: () {},
+                            maxLength: 25,
+                            decoration: InputDecoration(
+                              contentPadding: const EdgeInsets.only(
+                                  top: 15, bottom: 10, left: 15, right: 15),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                  color: CommonUtils.primaryTextColor,
+                                ),
+                                borderRadius: BorderRadius.circular(6.0),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                  color: CommonUtils.primaryTextColor,
+                                ),
+                                borderRadius: BorderRadius.circular(6.0),
+                              ),
+                              border: const OutlineInputBorder(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(10),
+                                ),
+                              ),
+                              hintText: 'Enter Password',
+                              counterText: "",
+                              suffixIcon: IconButton(
+                                icon: Icon(
+                                  _obscureText
+                                      ? Icons.visibility_off
+                                      : Icons.visibility,
+                                  color: Colors.black,
+                                ),
+                                onPressed: () {
+                                  // Toggle the password visibility
+                                  setState(() {
+                                    _obscureText = !_obscureText;
+                                  });
+                                },
+                              ),
+                              hintStyle:  CommonStyles.texthintstyle ,
+                            ),
+                            validator: validatePassword,
+                            style: CommonStyles.txSty_14b_fb,
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                        const ForgotPasswordscreen()),
+                                  );
+                                  // Navigator.push(
+                                  //   context,
+                                  //   MaterialPageRoute(builder: (context) => AddConsulationscreen()),
+                                  // );
+                                  // Navigator.push(
+                                  //   context,
+                                  //   MaterialPageRoute(
+                                  //       builder: (context) => ForgotChangePassword(
+                                  //             id: 1,
+                                  //           )),
+                                  // );
+                                },
+                                child: const Text(
+                                  'Forgot Password?',
+                                  style: CommonUtils.Mediumtext_o_14,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: GestureDetector(
+                                    onTap: () {
+                                      // Navigator.push(
+                                      //   context,
+                                      //   MaterialPageRoute(
+                                      //       builder: (context) => const HomeScreen()),
+                                      // );
+                                    },
+                                    child: CustomButton(
+                                      buttonText: 'Login',
+                                      color: CommonUtils.primaryTextColor,
+                                      onPressed: () {
+                                        FocusManager.instance.primaryFocus?.unfocus();
+                                        CommonUtils.checkInternetConnectivity()
+                                            .then((isConnected) {
+                                          if (isConnected) {
+                                            loginUser();
+                                            print('The Internet Is Connected');
+                                          } else {
+                                            CommonUtils.showCustomToastMessageLong(
+                                                'Please Check Your Internet Connection',
+                                                context,
+                                                1,
+                                                4);
+                                            print('The Internet Is not Connected');
+                                          }
+                                        });
+                                      },
+                                    )),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Text('New User?', style: CommonUtils.Mediumtext_14),
+                              const SizedBox(width: 8.0),
+                              GestureDetector(
+                                onTap: () {
+                                  // Handle the click event for the "Click here!" text
+                                  print('Click here! clicked');
+                                  // Add your custom logic or navigation code here
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                      const CustomerRegisterScreen(),
+                                    ),
+                                  );
+                                },
+                                child: const Text('Register Here!',
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      fontFamily: "Outfit",
+                                      fontWeight: FontWeight.w500,
+                                      color: Color(0xFF0f75bc),
+                                    )),
+                              )
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ))
+            ],
+          )),
     );
   }
 
@@ -453,8 +454,12 @@ class _LoginPageState extends State<CustomerLoginScreen> {
               AddCustomer_Notification(user['id'],user['roleID']);
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) =>  HomeScreen()),
+                MaterialPageRoute(builder: (context) =>  OtpVerificationScreen(id: user['id'],email: user['email'],password :user['password'], )),
               );
+              // Navigator.push(
+              //   context,
+              //   MaterialPageRoute(builder: (context) =>  HomeScreen()),
+              // );
 
             } else {
               // Show toast for invalid user
@@ -499,8 +504,8 @@ class _LoginPageState extends State<CustomerLoginScreen> {
   Future<void> saveUserDataToSharedPreferences(
       Map<String, dynamic> userData) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    prefs.setBool('isLoggedIn', true);
+    //
+    // prefs.setBool('isLoggedIn', true);
     // Save user data using unique keys
     await prefs.setInt('userId', userData['id']);
     await prefs.setString('userFullName', userData['firstName']);
@@ -574,7 +579,7 @@ class _LoginPageState extends State<CustomerLoginScreen> {
           'Content-Type': 'application/json',
         },
       );
-          if (response.statusCode == 200) {
+      if (response.statusCode == 200) {
         Map<String, dynamic> data = json.decode(response.body);
         // LoadingProgress.stop(context);
         // Extract the necessary information
@@ -587,15 +592,15 @@ class _LoginPageState extends State<CustomerLoginScreen> {
         // }
 
 
-        } else {
+      } else {
 
-        }
+      }
 
 
     } catch (e) {
 
-    // ProgressManager.stopProgress();
-    print('Error slot: $e');
+      // ProgressManager.stopProgress();
+      print('Error slot: $e');
     }
 
 

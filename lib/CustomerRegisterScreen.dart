@@ -1095,8 +1095,11 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
       ),
     );
   }
-
   Future<void> fetchRadioButtonOptions() async {
+    // Debugging: Print baseUrl and getgender to check their values.
+    print('baseUrl: $baseUrl');
+    print('getgender: $getgender');
+
     final url = Uri.parse(baseUrl + getgender);
     print('url==>946: $url');
 
@@ -1112,9 +1115,30 @@ class _LoginPageState extends State<CustomerRegisterScreen> {
         throw Exception('Failed to fetch radio button options');
       }
     } catch (e) {
+      print('Error Radio: $e');
       throw Exception('Error Radio: $e');
     }
   }
+
+  // Future<void> fetchRadioButtonOptions() async {
+  //   final url = Uri.parse(baseUrl + getgender);
+  //   print('url==>946: $url');
+  //
+  //   try {
+  //     final response = await http.get(url);
+  //     if (response.statusCode == 200) {
+  //       final dynamic responseData = jsonDecode(response.body);
+  //       final data = json.decode(response.body);
+  //       setState(() {
+  //         dropdownItems = data['listResult'];
+  //       });
+  //     } else {
+  //       throw Exception('Failed to fetch radio button options');
+  //     }
+  //   } catch (e) {
+  //     throw Exception('Error Radio: $e');
+  //   }
+  // }
 
 //MARK: Validations
   String? validatefullname(String? value) {

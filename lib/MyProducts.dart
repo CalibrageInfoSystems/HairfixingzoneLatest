@@ -181,17 +181,16 @@ class MyProducts_screenState extends State<MyProducts> {
                 Expanded(
                   child: Consumer<MyProductProvider>(
                     builder: (context, provider, _) => FutureBuilder(
-                      future: apiData,
+                      future: apiData,  // Ensure this future is initialized properly
                       builder: (context, snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
+                        if (snapshot.connectionState == ConnectionState.waiting) {
                           return const Center(
                             child: CircularProgressIndicator.adaptive(),
                           );
                         } else if (snapshot.hasError) {
                           return Center(
                             child: Text(
-                              'Error: ${snapshot.error.toString()}',
+                              'No Products',
                               style: const TextStyle(
                                 fontSize: 12.0,
                                 color: Colors.black,
@@ -202,7 +201,7 @@ class MyProducts_screenState extends State<MyProducts> {
                           );
                         } else {
                           List<ProductList>? data = provider.getProProducts;
-                          if (provider.getProProducts.isNotEmpty) {
+                          if (data != null && data.isNotEmpty) {
                             return ListView.builder(
                               itemCount: data.length,
                               itemBuilder: (context, index) {
@@ -227,6 +226,56 @@ class MyProducts_screenState extends State<MyProducts> {
                     ),
                   ),
                 )
+
+                // Expanded(
+                //   child: Consumer<MyProductProvider>(
+                //     builder: (context, provider, _) => FutureBuilder(
+                //       future: apiData,
+                //       builder: (context, snapshot) {
+                //         if (snapshot.connectionState ==
+                //             ConnectionState.waiting) {
+                //           return const Center(
+                //             child: CircularProgressIndicator.adaptive(),
+                //           );
+                //         } else if (snapshot.hasError) {
+                //           return Center(
+                //             child: Text(
+                //               'No Products',
+                //               style: const TextStyle(
+                //                 fontSize: 12.0,
+                //                 color: Colors.black,
+                //                 fontWeight: FontWeight.bold,
+                //                 fontFamily: "Outfit",
+                //               ),
+                //             ),
+                //           );
+                //         } else {
+                //           List<ProductList>? data = provider.getProProducts;
+                //           if (provider.getProProducts.isNotEmpty) {
+                //             return ListView.builder(
+                //               itemCount: data.length,
+                //               itemBuilder: (context, index) {
+                //                 return ProductCard(product: data[index]);
+                //               },
+                //             );
+                //           } else {
+                //             return const Center(
+                //               child: Text(
+                //                 'No Products Found',
+                //                 style: TextStyle(
+                //                   fontSize: 12.0,
+                //                   color: Colors.black,
+                //                   fontWeight: FontWeight.bold,
+                //                   fontFamily: "Outfit",
+                //                 ),
+                //               ),
+                //             );
+                //           }
+                //         }
+                //       },
+                //     ),
+                //   ),
+                // )
               ],
             ),
           ),
@@ -266,6 +315,7 @@ class MyProducts_screenState extends State<MyProducts> {
         } else {
           print('listResult is null');
           throw Exception('else: listResult is null');
+          return [];
         }
         // myProductProvider.proProducts = productlist;
       } else {
@@ -407,7 +457,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
       myProductProvider.getProProducts = data;
       // Navigator.of(context).pop();
     }).catchError((error) {
-      print('catchError: Error occurred.');
+      print('catchError:$error');
     });
   }
 
@@ -572,7 +622,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                                     AlwaysStoppedAnimation<Color>(orangeColor),
                               );
                             } else if (snapshot.hasError) {
-                              return Text('Error: ${snapshot.error}');
+                              return Text('No Products');
                             } else {
                               List<ProductCategory> data = snapshot.data!;
                               return SizedBox(

@@ -223,6 +223,36 @@ class _CustomerDashBoardState extends State<CustomerDashBoard>
 
     await fetchImages();
   }
+  // void fetchCarouselData() async {
+  //   final response = await http.get(Uri.parse(baseUrl + getbanner));
+  //   setState(() {
+  //     isDataBinding = true;
+  //     isLoading = true;
+  //   });
+  //   if (response.statusCode == 200) {
+  //     final decodedResponse = json.decode(response.body);
+  //     final listResult = decodedResponse['listResult'];
+  //
+  //     setState(() {
+  //       if (listResult != null && listResult.isNotEmpty) {
+  //         _items = (listResult as List)
+  //             .map((item) => Item.fromJson(item))
+  //             .toList();
+  //       } else {
+  //         _items = []; // or null depending on how you handle it in the UI
+  //         noBannerFound = true; // Add this flag to show "No banner found"
+  //       }
+  //       isDataBinding = false;
+  //       isLoading = false;
+  //     });
+  //   } else {
+  //     setState(() {
+  //       isDataBinding = false;
+  //       isLoading = false;
+  //     });
+  //     throw Exception('Failed to load items');
+  //   }
+  // }
 
   void fetchCarouselData() async {
     final response = await http.get(Uri.parse(baseUrl + getbanner));
@@ -446,6 +476,30 @@ class _CustomerDashBoardState extends State<CustomerDashBoard>
                   //   child:
                   Column(
                     children: [
+                   // if ( imageList.isEmpty)
+                   //   Padding(
+                   //     padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                   //     child: Container(
+                   //       width: MediaQuery.of(context).size.width,
+                   //       height: 200,
+                   //       padding: const EdgeInsets.all(15.0),
+                   //       child: Center(
+                   //         child: Column(
+                   //           mainAxisAlignment: MainAxisAlignment.center,
+                   //           children: [
+                   //             Text(
+                   //               'No Banners Found',style:CommonStyles.txSty_14b_fb,),
+                   //            // const SizedBox(height: 20),
+                   //             // ElevatedButton(
+                   //             //   onPressed: retryDataFetching,
+                   //             //   child: const Text('Retry'),
+                   //             // ),
+                   //           ],
+                   //         ),
+                   //       ),
+                   //     ),
+                   //   ),
+                      if ( !imageList.isEmpty)
                       Container(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 10.0, vertical: 10.0),
@@ -685,8 +739,8 @@ class _CustomerDashBoardState extends State<CustomerDashBoard>
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  const Text(
-                                      'Failed to fetch data. Please check your internet connection.!'),
+                                   Text(
+                                      'No Branches Found',style:CommonStyles.txSty_14b_fb,),
                                   const SizedBox(height: 20),
                                   ElevatedButton(
                                     onPressed: retryDataFetching,
@@ -738,201 +792,361 @@ class _CustomerDashBoardState extends State<CustomerDashBoard>
                               Color backgroundColor = index % 2 == 0
                                   ? const Color(0xFFdbeaff)
                                   : const Color(0xFFcdeac3);
+    return GestureDetector(
+    onTap: () {},
+    child: Container(
+    decoration: BoxDecoration(
+    color: const Color(0xFFdbeaff),
+    borderRadius: BorderRadius.circular(15.0),
+    boxShadow: const [
+    // You can uncomment the shadow if needed
+    // BoxShadow(
+    //   color: Colors.grey.withOpacity(0.3),
+    //   spreadRadius: 2,
+    //   blurRadius: 5,
+    //   offset: Offset(1, 3),
+    // ),
+    ],
+    ),
+    child: Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    mainAxisAlignment: MainAxisAlignment.start,
+    children: [
+    Align(
+    alignment: Alignment.topLeft,
+    child: Container(
+    margin: const EdgeInsets.only(top: 20, left: 10),
+    decoration: BoxDecoration(
+    border: Border.all(
+    color: Colors.grey,
+    width: 2.5,
+    ),
+    borderRadius: BorderRadius.circular(15.0),
+    ),
+    width: 65,
+    height: 60,
+    child: ClipRRect(
+    borderRadius: BorderRadius.circular(13.0),
+    child: Image.network(
+    branch.imageName!,
+    width: 65,
+    height: 60,
+    fit: BoxFit.fill,
+    loadingBuilder: (context, child, loadingProgress) {
+    if (loadingProgress == null) {
+    return child;
+    }
+    return const Center(
+    child: CircularProgressIndicator.adaptive(),
+    );
+    },
+    ),
+    ),
+    ),
+    ),
+    Padding(
+    padding: const EdgeInsets.only(
+    left: 10.0,
+    right: 5.0,
+    top: 5.0,
+    bottom: 5.0,
+    ),
+    child: Text(
+    branch.name,
+    maxLines: 3,
+    style: CommonUtils.txSty_18b_fb.copyWith(
+    fontSize: 18 * MediaQuery.of(context).textScaleFactor,
+    ),
+    ),
+    ),
+    Padding(
+    padding: const EdgeInsets.only(
+    left: 10.0,
+    right: 5.0,
+    bottom: 5.0,
+    ),
+    child: SizedBox(
+    height: 70.0,
+    child: Text(
+    branch.address,
+    maxLines: 4,
+    style: CommonStyles.txSty_12b_fb.copyWith(
+    fontSize: 12 * MediaQuery.of(context).textScaleFactor,
+    wordSpacing: 1.2,
+    color: Colors.black.withOpacity(0.8),
+    ),
+    ),
+    ),
+    ),
+    Align(
+    alignment: Alignment.bottomLeft,
+    child: Container(
+    height: 30,
+    margin: const EdgeInsets.only(
+    bottom: 2.0,
+    left: 10.0,
+    top: 5.0,
+    ),
+    decoration: BoxDecoration(
+    border: Border.all(
+    color: const Color(0xFF11528f),
+    ),
+    borderRadius: BorderRadius.circular(20.0),
+    ),
+    child: ElevatedButton(
+    onPressed: () {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) =>
+              Bookingscreen(
+                  branchId: branch.id!,
+                  branchname:
+                  branch.name,
+                  branchaddress:
+                  branch.address,
+                  phonenumber: branch
+                      .mobileNumber,
+                  branchImage:
+                  branch.imageName!,
+                  latitude:
+                  branch.latitude,
+                  longitude:
+                  branch.longitude,
+                  LocationUrl : branch.locationUrl
+              ),
+        ),
+      );
+    },
+    style: ElevatedButton.styleFrom(
+    padding: const EdgeInsets.symmetric(horizontal: 10.0),
+    foregroundColor: const Color(0xFF8d97e2),
+    backgroundColor: Colors.transparent,
+    elevation: 0,
+    shadowColor: Colors.transparent,
+    shape: RoundedRectangleBorder(
+    borderRadius: BorderRadius.circular(20.0),
+    ),
+    ),
+    child: Row(
+    mainAxisSize: MainAxisSize.min,
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: [
+    const Text(
+    'Book Now',
+    style: CommonStyles.txSty_14p_f5,
+    ),
+    const SizedBox(width: 5),
+    SvgPicture.asset(
+    'assets/squareupright.svg',
+    width: 12.0,
+    height: 12.0,
+    color: const Color(0xFF11528f),
+    ),
+    ],
+    ),
+    ),
+    ),
+    ),
+    ],
+    ),
+    ),
+    );
 
-                              return GestureDetector(
-                                  onTap: () {},
-                                  child: Container(
-
-                                      //padding: EdgeInsets.only(top: 10),
-                                      decoration: BoxDecoration(
-                                        color: const Color(0xFFdbeaff),
-                                        borderRadius:
-                                            BorderRadius.circular(15.0),
-                                        boxShadow: const [
-                                          // BoxShadow(
-                                          //   color: Colors.grey.withOpacity(0.3),
-                                          //   spreadRadius: 2,
-                                          //   blurRadius: 5,
-                                          //   offset: Offset(1, 3),
-                                          //   blurStyle: BlurStyle.solid
-                                          // ),
-                                        ],
-                                      ),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: [
-                                          Align(
-                                            alignment: Alignment.topLeft,
-                                            // top: 0,
-                                            //     right: 20,
-                                            child: Container(
-                                              margin: const EdgeInsets.only(
-                                                  top: 20, left: 10),
-                                              decoration: BoxDecoration(
-                                                border: Border.all(
-                                                  color: Colors.grey,
-                                                  width: 2.5,
-                                                ),
-                                                borderRadius:
-                                                    BorderRadius.circular(15.0),
-                                              ),
-                                              width: 65,
-                                              height: 60,
-                                              child: ClipRRect(
-                                                borderRadius:
-                                                    BorderRadius.circular(13.0),
-                                                child: Image.network(
-                                                  branch.imageName!,
-                                                  width: 65,
-                                                  height: 60,
-                                                  fit: BoxFit.fill,
-                                                  loadingBuilder: (context,
-                                                      child, loadingProgress) {
-                                                    if (loadingProgress ==
-                                                        null) {
-                                                      return child;
-                                                    }
-
-                                                    return const Center(
-                                                        child:
-                                                            CircularProgressIndicator
-                                                                .adaptive());
-                                                  },
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          // SizedBox(height: 8.0),
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                                left: 10.0,
-                                                right: 5.0,
-                                                top: 5.0,
-                                                bottom: 5.0),
-                                            child: Text(
-                                              branch.name,
-                                              maxLines: 3,
-                                              style: CommonUtils.txSty_18b_fb,
-                                              // style:  GoogleFonts.outfit(fontWeight: FontWeight.w700,fontSize: 18,color: Color(0xFF11528f)),
-                                            ),
-                                          ),
-                                          // SizedBox(height: 8.0),
-                                          Padding(
-                                              padding: const EdgeInsets.only(
-                                                  left: 10.0,
-                                                  right: 5.0,
-                                                  bottom: 5.0),
-                                              child: SizedBox(
-                                                height: 70.0,
-                                                child: Text(
-                                                  branch.address,
-                                                  maxLines: 4,
-                                                  style: CommonStyles
-                                                      .txSty_12b_fb
-                                                      .copyWith(
-                                                          wordSpacing: 1.2,
-                                                          color: Colors.black
-                                                              .withOpacity(
-                                                                  0.8)),
-                                                ),
-                                              )),
-                                          //  SizedBox(height: 5.0),
-                                          // Display from date and to date multiple times
-                                          Align(
-                                              alignment: Alignment.bottomLeft,
-                                              child: Container(
-                                                height: 30,
-                                                margin: const EdgeInsets.only(
-                                                    bottom: 2.0,
-                                                    left: 10.0,
-                                                    top: 5.0),
-                                                decoration: BoxDecoration(
-                                                  border: Border.all(
-                                                    color:
-                                                        const Color(0xFF11528f),
-                                                  ),
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          20.0),
-                                                ),
-                                                child: ElevatedButton(
-                                                  onPressed: () {
-                                                    Navigator.push(
-                                                      context,
-                                                      MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            Bookingscreen(
-                                                          branchId: branch.id!,
-                                                          branchname:
-                                                              branch.name,
-                                                          branchaddress:
-                                                              branch.address,
-                                                          phonenumber: branch
-                                                              .mobileNumber,
-                                                          branchImage:
-                                                              branch.imageName!,
-                                                          latitude:
-                                                              branch.latitude,
-                                                          longitude:
-                                                              branch.longitude,
-                                                                LocationUrl : branch.locationUrl
-                                                        ),
-                                                      ),
-                                                    );
-                                                  },
-                                                  style:
-                                                      ElevatedButton.styleFrom(
-                                                    padding: const EdgeInsets
-                                                        .symmetric(
-                                                        horizontal:
-                                                            10.0), // Adjust padding as needed, // Remove padding
-                                                    foregroundColor:
-                                                        const Color(0xFF8d97e2),
-                                                    backgroundColor:
-                                                        Colors.transparent,
-                                                    elevation: 0,
-                                                    shadowColor:
-                                                        Colors.transparent,
-                                                    shape:
-                                                        RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              20.0),
-                                                    ),
-                                                  ),
-                                                  child: Row(
-                                                    mainAxisSize:
-                                                        MainAxisSize.min,
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    children: [
-                                                      const Text('Book Now',
-                                                          style: CommonStyles
-                                                              .txSty_14p_f5
-                                                          // GoogleFonts.outfit(
-                                                          //   fontWeight: FontWeight.w500,
-                                                          //   fontSize: 14,
-                                                          //   color: Color(0xFF11528f),
-                                                          // ),
-                                                          ),
-                                                      const SizedBox(width: 5),
-                                                      SvgPicture.asset(
-                                                        'assets/squareupright.svg',
-                                                        width: 12.0,
-                                                        height: 12.0,
-                                                        color: const Color(
-                                                            0xFF11528f),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ))
-                                        ],
-                                      )));
+                              // return GestureDetector(
+                              //     onTap: () {},
+                              //     child: Container(
+                              //
+                              //         //padding: EdgeInsets.only(top: 10),
+                              //         decoration: BoxDecoration(
+                              //           color: const Color(0xFFdbeaff),
+                              //           borderRadius:
+                              //               BorderRadius.circular(15.0),
+                              //           boxShadow: const [
+                              //             // BoxShadow(
+                              //             //   color: Colors.grey.withOpacity(0.3),
+                              //             //   spreadRadius: 2,
+                              //             //   blurRadius: 5,
+                              //             //   offset: Offset(1, 3),
+                              //             //   blurStyle: BlurStyle.solid
+                              //             // ),
+                              //           ],
+                              //         ),
+                              //         child: Column(
+                              //           crossAxisAlignment:
+                              //               CrossAxisAlignment.start,
+                              //           mainAxisAlignment:
+                              //               MainAxisAlignment.start,
+                              //           children: [
+                              //             Align(
+                              //               alignment: Alignment.topLeft,
+                              //               // top: 0,
+                              //               //     right: 20,
+                              //               child: Container(
+                              //                 margin: const EdgeInsets.only(
+                              //                     top: 20, left: 10),
+                              //                 decoration: BoxDecoration(
+                              //                   border: Border.all(
+                              //                     color: Colors.grey,
+                              //                     width: 2.5,
+                              //                   ),
+                              //                   borderRadius:
+                              //                       BorderRadius.circular(15.0),
+                              //                 ),
+                              //                 width: 65,
+                              //                 height: 60,
+                              //                 child: ClipRRect(
+                              //                   borderRadius:
+                              //                       BorderRadius.circular(13.0),
+                              //                   child: Image.network(
+                              //                     branch.imageName!,
+                              //                     width: 65,
+                              //                     height: 60,
+                              //                     fit: BoxFit.fill,
+                              //                     loadingBuilder: (context,
+                              //                         child, loadingProgress) {
+                              //                       if (loadingProgress ==
+                              //                           null) {
+                              //                         return child;
+                              //                       }
+                              //
+                              //                       return const Center(
+                              //                           child:
+                              //                               CircularProgressIndicator
+                              //                                   .adaptive());
+                              //                     },
+                              //                   ),
+                              //                 ),
+                              //               ),
+                              //             ),
+                              //             // SizedBox(height: 8.0),
+                              //             Padding(
+                              //               padding: const EdgeInsets.only(
+                              //                   left: 10.0,
+                              //                   right: 5.0,
+                              //                   top: 5.0,
+                              //                   bottom: 5.0),
+                              //               child: Text(
+                              //                 branch.name,
+                              //                 maxLines: 3,
+                              //                 style: CommonUtils.txSty_18b_fb,
+                              //                 // style:  GoogleFonts.outfit(fontWeight: FontWeight.w700,fontSize: 18,color: Color(0xFF11528f)),
+                              //               ),
+                              //             ),
+                              //             // SizedBox(height: 8.0),
+                              //             Padding(
+                              //                 padding: const EdgeInsets.only(
+                              //                     left: 10.0,
+                              //                     right: 5.0,
+                              //                     bottom: 5.0),
+                              //                 child: SizedBox(
+                              //                   height: 70.0,
+                              //                   child: Text(
+                              //                     branch.address,
+                              //                     maxLines: 4,
+                              //                     style: CommonStyles
+                              //                         .txSty_12b_fb
+                              //                         .copyWith(
+                              //                             wordSpacing: 1.2,
+                              //                             color: Colors.black
+                              //                                 .withOpacity(
+                              //                                     0.8)),
+                              //                   ),
+                              //                 )),
+                              //             //  SizedBox(height: 5.0),
+                              //             // Display from date and to date multiple times
+                              //             Align(
+                              //                 alignment: Alignment.bottomLeft,
+                              //                 child: Container(
+                              //                   height: 30,
+                              //                   margin: const EdgeInsets.only(
+                              //                       bottom: 2.0,
+                              //                       left: 10.0,
+                              //                       top: 5.0),
+                              //                   decoration: BoxDecoration(
+                              //                     border: Border.all(
+                              //                       color:
+                              //                           const Color(0xFF11528f),
+                              //                     ),
+                              //                     borderRadius:
+                              //                         BorderRadius.circular(
+                              //                             20.0),
+                              //                   ),
+                              //                   child: ElevatedButton(
+                              //                     onPressed: () {
+                              //                       Navigator.push(
+                              //                         context,
+                              //                         MaterialPageRoute(
+                              //                           builder: (context) =>
+                              //                               Bookingscreen(
+                              //                             branchId: branch.id!,
+                              //                             branchname:
+                              //                                 branch.name,
+                              //                             branchaddress:
+                              //                                 branch.address,
+                              //                             phonenumber: branch
+                              //                                 .mobileNumber,
+                              //                             branchImage:
+                              //                                 branch.imageName!,
+                              //                             latitude:
+                              //                                 branch.latitude,
+                              //                             longitude:
+                              //                                 branch.longitude,
+                              //                                   LocationUrl : branch.locationUrl
+                              //                           ),
+                              //                         ),
+                              //                       );
+                              //                     },
+                              //                     style:
+                              //                         ElevatedButton.styleFrom(
+                              //                       padding: const EdgeInsets
+                              //                           .symmetric(
+                              //                           horizontal:
+                              //                               10.0), // Adjust padding as needed, // Remove padding
+                              //                       foregroundColor:
+                              //                           const Color(0xFF8d97e2),
+                              //                       backgroundColor:
+                              //                           Colors.transparent,
+                              //                       elevation: 0,
+                              //                       shadowColor:
+                              //                           Colors.transparent,
+                              //                       shape:
+                              //                           RoundedRectangleBorder(
+                              //                         borderRadius:
+                              //                             BorderRadius.circular(
+                              //                                 20.0),
+                              //                       ),
+                              //                     ),
+                              //                     child: Row(
+                              //                       mainAxisSize:
+                              //                           MainAxisSize.min,
+                              //                       mainAxisAlignment:
+                              //                           MainAxisAlignment
+                              //                               .center,
+                              //                       children: [
+                              //                         const Text('Book Now',
+                              //                             style: CommonStyles
+                              //                                 .txSty_14p_f5
+                              //                             // GoogleFonts.outfit(
+                              //                             //   fontWeight: FontWeight.w500,
+                              //                             //   fontSize: 14,
+                              //                             //   color: Color(0xFF11528f),
+                              //                             // ),
+                              //                             ),
+                              //                         const SizedBox(width: 5),
+                              //                         SvgPicture.asset(
+                              //                           'assets/squareupright.svg',
+                              //                           width: 12.0,
+                              //                           height: 12.0,
+                              //                           color: const Color(
+                              //                               0xFF11528f),
+                              //                         ),
+                              //                       ],
+                              //                     ),
+                              //                   ),
+                              //                 ))
+                              //           ],
+                              //         )));
                             }
                           },
                         ),
@@ -1194,7 +1408,7 @@ class BranchCard extends StatelessWidget {
                         Expanded(
                           child: Text(
                             branch.address,
-                            maxLines: 3,
+                           // maxLines: 3,
                             overflow: TextOverflow.ellipsis,
                             style: CommonStyles.txSty_12b_f5.copyWith(
                               fontSize: 16,

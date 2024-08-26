@@ -192,7 +192,8 @@ class _notifications_screenState extends State<notifications_screen> {
   Future<List<Notifications>> fetchAppointments(
       int userId, String? formattedDate) async {
     print('Agent userId173: $userId');
-    final url = Uri.parse('$baseUrl$Getnotificatons$userId/null/$formattedDate');
+    final url = Uri.parse('$baseUrl$Getnotificatons$userId/null/null');
+  //  final url = Uri.parse('$baseUrl$Getnotificatons$userId/null/$formattedDate');
     // Uri.parse(
     //     'http://182.18.157.215/SaloonApp/API/api/Appointment/GetNotificationsByUserId/8/null/2024-05-13');
     // Uri.parse('$baseUrl$Getnotificatons$userId/null/$formattedDate');

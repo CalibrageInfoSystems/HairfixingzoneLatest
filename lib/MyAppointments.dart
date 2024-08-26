@@ -105,7 +105,7 @@ class MyAppointments_screenState extends State<MyAppointments> {
                       } else if (snapshot.hasError) {
                         return const Center(
                           child: Text(
-                            'No Appointments Found!',
+                            'No Appointments Available',
                             style: TextStyle(
                               fontSize: 12.0,
                               color: Colors.black,

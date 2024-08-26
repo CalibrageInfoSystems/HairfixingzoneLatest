@@ -209,6 +209,11 @@ class CommonStyles {
     fontFamily: "Outfit",
     color: whiteColor,
   );
+  static const TextStyle txSty_18_fb = TextStyle(
+    fontSize: 18,
+    fontFamily: "Outfit",
+    color: whiteColor,
+  );
   static const TextStyle text16white = TextStyle(
     fontSize: 16,
     fontFamily: "Outfit",

@@ -27,6 +27,7 @@ import 'notifications_screen.dart';
 Future<void> backgroundHandler(RemoteMessage message) async {
   print("This is a message from the background");
   print(message.notification!.title);
+  String ? messagetitle = message.notification!.title;
   print(message.notification!.body);
 }
 
@@ -63,9 +64,11 @@ void main() async {
   if (initialMessage != null) {
     // Handle the notification data and set the initial route
     String? messageBody = initialMessage.notification?.body;
+    String? messagetitle = initialMessage.notification?.title;
     String formattedDate = '';
-
-    if (messageBody != null) {
+    print("web notification1== $messagetitle");
+    if (messageBody != null && !messagetitle!.contains("Hair Fixing") && !messageBody.contains("Your Appointment has been Approved Which was Booked on")) {
+      print("web notification2== $messagetitle");
       RegExp datePattern = RegExp(r'\b(\d{1,2})(st|nd|rd|th)? (\w+)\b');
       Match? match = datePattern.firstMatch(messageBody);
 
@@ -130,8 +133,10 @@ class MyApp extends StatelessWidget {
       // Handle the notification when the app is in the foreground
       print("onMessage: $message");
       String? messageBody = message.notification!.body;
+      String ? messagetitle = message.notification!.title;
       String? messagelog = message.data["message"];
       print("onMessageOpenedApp: $messageBody");
+      print("onMessageOmessagetitle: $messagetitle");
       print("onMessageOpenedApp: $messagelog");
       LocalNotificationService.showNotificationOnForeground(context, message);
       if (messageBody != null) {
@@ -140,33 +145,40 @@ class MyApp extends StatelessWidget {
           // No further action needed, just return.
           return;
         }
-        RegExp datePattern = RegExp(r'\b(\d{1,2})(st|nd|rd|th)? (\w+)\b');
-        Match? match = datePattern.firstMatch(messageBody);
+        else if (messagetitle!.contains("Hair Fixing")) {
+          print("web notification");
+          // No further action needed, just return.
+          return;
+        }
+        else {
+          RegExp datePattern = RegExp(r'\b(\d{1,2})(st|nd|rd|th)? (\w+)\b');
+          Match? match = datePattern.firstMatch(messageBody);
 
-        if (match != null) {
-          String day = match.group(1)!;
-          String month = match.group(3)!;
+          if (match != null) {
+            String day = match.group(1)!;
+            String month = match.group(3)!;
 
-          String dateString = "$day $month";
+            String dateString = "$day $month";
 
-          try {
-            DateTime date = DateFormat("d MMMM").parse(dateString);
+            try {
+              DateTime date = DateFormat("d MMMM").parse(dateString);
 
-            // Adjust the year to the current year
-            date = DateTime(DateTime
-                .now()
-                .year, date.month, date.day);
+              // Adjust the year to the current year
+              date = DateTime(DateTime
+                  .now()
+                  .year, date.month, date.day);
 
-            formattedDate = DateFormat("yyyy-MM-dd").format(date);
-            print("Formatted Date: $formattedDate");
-          } catch (e) {
-            print("Error parsing date: $e");
+              formattedDate = DateFormat("yyyy-MM-dd").format(date);
+              print("Formatted Date: $formattedDate");
+            } catch (e) {
+              print("Error parsing date: $e");
+            }
+          }
+          else {
+            print("Date not found in the message.");
           }
         }
-      }else {
-        print("Date not found in the message.");
-      }
-
+    }
       SharedPreferences prefs = await SharedPreferences.getInstance();
       bool isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
 
@@ -183,7 +195,9 @@ class MyApp extends StatelessWidget {
       print("onMessageOpenedApp: $message");
 
       String? messageBody = message.notification!.body;
+      String ? messagetitle = message.notification!.title;
       print("onMessageOpenedApp:122 $messageBody");
+      print("messagetitle:122 $messagetitle");
 
       if (messageBody != null) {
         if (messageBody.contains("Your Appointment has been Approved Which was Booked on")) {
@@ -191,6 +205,12 @@ class MyApp extends StatelessWidget {
           // No further action needed, just return.
           return;
         }
+       else if (messagetitle!.contains("Hair Fixing")) {
+          print("web notification");
+          // No further action needed, just return.
+          return;
+        }
+       else{
         RegExp datePattern = RegExp(r'\b(\d{1,2})(st|nd|rd|th)? (\w+)\b');
         Match? match = datePattern.firstMatch(messageBody);
 
@@ -211,9 +231,9 @@ class MyApp extends StatelessWidget {
           } catch (e) {
             print("Error parsing date: $e");
           }}
-      } else {
+       else {
         print("Date not found in the message.");
-      }
+      }}}
 
       SharedPreferences prefs = await SharedPreferences.getInstance();
       bool isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
