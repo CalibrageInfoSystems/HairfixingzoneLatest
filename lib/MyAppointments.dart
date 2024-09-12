@@ -624,8 +624,8 @@ class _FilterBottomSheetState extends State<FilterAppointmentBottomSheet> {
                                         name: "All",
                                         imageName: null,
                                         address: " ",
-                                        startTime: 0,
-                                        closeTime: 0,
+                                        startTime: "0.0",
+                                        closeTime: '',
                                         room: 0,
                                         mobileNumber: "",
                                         isActive: true, locationUrl: '',
@@ -1190,10 +1190,8 @@ class _OpCardState extends State<OpCard> {
                               Expanded(
                                 child: Container(
                                   child: Column(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         widget.data.slotDuration,
@@ -1229,7 +1227,7 @@ class _OpCardState extends State<OpCard> {
                                   ),
                                 ),
                               ),
-                              Container(
+                              Container (
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [

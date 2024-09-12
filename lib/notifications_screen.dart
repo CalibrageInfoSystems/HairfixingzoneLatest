@@ -176,7 +176,15 @@ class _notifications_screenState extends State<notifications_screen> {
                     }
                     else {
                       return const Center(
-                        child: CircularProgressIndicator.adaptive(),
+                        child:Text(
+                          'No Appointments Available',
+                          style: TextStyle(
+                            fontSize: 12.0,
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: "Outfit",
+                          ),
+                        ),
                       );
                     }
                   }

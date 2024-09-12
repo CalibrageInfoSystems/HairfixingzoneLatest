@@ -931,16 +931,26 @@ class ProductCard extends StatelessWidget {
                       style: CommonStyles.txSty_14b_fb,
                     ),
                     const SizedBox(height: 4), // Add space here
-                    Text(
-                      '₹ ${formatNumber(product.maxPrice)}',
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontFamily: "Outfit",
-                        fontWeight: FontWeight.w500,
-                        letterSpacing: 1,
-                        color:Colors.black,
-                      ),
-                    ),
+                    if(product.minPrice != null)
+                    Row(
+                      children: [
+                        Text(
+                          '₹ ${formatNumber(product.minPrice!)} ',
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontFamily: "Outfit",
+                            fontWeight: FontWeight.w500,
+                            letterSpacing: 1,
+                            color: Colors.black,
+                          ),
+                        ),
+                        Text(
+                          ' On wards',
+                          style: CommonStyles.texthintstyle,
+                        ),
+                      ],
+                    )
+
                   ],
                 ),
               ],

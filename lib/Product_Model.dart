@@ -52,10 +52,10 @@ class ProductList {
   final String name;
   final int categoryTypeId;
   final dynamic genderTypeId;
-  final double minPrice;
-  final double maxPrice;
-  final double minDiscountPrice;
-  final double maxDiscountPrice;
+  final double? minPrice;
+  final double? maxPrice;
+  final double? minDiscountPrice;
+  final double? maxDiscountPrice;
   final String imageName;
   final String fileLocation;
   final String fileName;

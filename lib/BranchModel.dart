@@ -3,8 +3,8 @@ class BranchModel {
   final String name;
   final String? imageName;
   final String address;
-  final int startTime;
-  final int closeTime;
+  final String startTime;
+  final String closeTime;
   final int room;
   final String mobileNumber;
   final bool isActive;

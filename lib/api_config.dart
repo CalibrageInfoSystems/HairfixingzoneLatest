@@ -28,7 +28,7 @@ var GetHolidayListByBranchId = "api/Appointment/GetHolidayListByBranchId/";
 var SendFirebaseNotifications = "SendFirebaseNotifications";
 
 var imagesflierepo = 'http://182.18.157.215/SaloonApp/Saloon_Repo/'; //test
-//var imagesflierepo = 'http://182.18.157.215/Saloon_UAT/Saloon_Repo/'; //test
+//var imagesflierepo = 'http://182.18.157.215/Saloon_UAT/Saloon_Repo/'; //UAT
 //var imagesflierepo= 'http://182.18.157.215/SaloonApp_Live/Saloon_Repo/';
 
 var AddAgentSlotInformation = "AddAgentSlotInformation";

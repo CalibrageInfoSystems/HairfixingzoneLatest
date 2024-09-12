@@ -932,8 +932,10 @@ class ProductCard extends StatelessWidget {
                   style: CommonUtils.txSty_12bs_fb,
                 ),
                 const SizedBox(height: 8), // Add space here
+
+                if(product.maxPrice != null)
                 Text(
-                  '₹ ${formatNumber(product.maxPrice)}',
+                  '₹ ${formatNumber(product.maxPrice! )}',
                   style: const TextStyle(
                     fontSize: 18,
                     fontFamily: "Outfit",

@@ -89,11 +89,11 @@ class _CustomerDashBoardState extends State<CustomerDashBoard>
       vsync: this,
       duration: const Duration(seconds: 10),
     )..addListener(() {
-        if (_scrollController.hasClients) {
-          _scrollController.jumpTo(_animationController.value *
-              _scrollController.position.maxScrollExtent);
-        }
-      });
+      if (_scrollController.hasClients) {
+        _scrollController.jumpTo(_animationController.value *
+            _scrollController.position.maxScrollExtent);
+      }
+    });
 
     _animationController.repeat();
     SystemChrome.setPreferredOrientations([
@@ -476,100 +476,99 @@ class _CustomerDashBoardState extends State<CustomerDashBoard>
                   //   child:
                   Column(
                     children: [
-                   // if ( imageList.isEmpty)
-                   //   Padding(
-                   //     padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                   //     child: Container(
-                   //       width: MediaQuery.of(context).size.width,
-                   //       height: 200,
-                   //       padding: const EdgeInsets.all(15.0),
-                   //       child: Center(
-                   //         child: Column(
-                   //           mainAxisAlignment: MainAxisAlignment.center,
-                   //           children: [
-                   //             Text(
-                   //               'No Banners Found',style:CommonStyles.txSty_14b_fb,),
-                   //            // const SizedBox(height: 20),
-                   //             // ElevatedButton(
-                   //             //   onPressed: retryDataFetching,
-                   //             //   child: const Text('Retry'),
-                   //             // ),
-                   //           ],
-                   //         ),
-                   //       ),
-                   //     ),
-                   //   ),
+                      // if ( imageList.isEmpty)
+                      //   Padding(
+                      //     padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                      //     child: Container(
+                      //       width: MediaQuery.of(context).size.width,
+                      //       height: 200,
+                      //       padding: const EdgeInsets.all(15.0),
+                      //       child: Center(
+                      //         child: Column(
+                      //           mainAxisAlignment: MainAxisAlignment.center,
+                      //           children: [
+                      //             Text(
+                      //               'No Banners Found',style:CommonStyles.txSty_14b_fb,),
+                      //            // const SizedBox(height: 20),
+                      //             // ElevatedButton(
+                      //             //   onPressed: retryDataFetching,
+                      //             //   child: const Text('Retry'),
+                      //             // ),
+                      //           ],
+                      //         ),
+                      //       ),
+                      //     ),
+                      //   ),
                       if ( !imageList.isEmpty)
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 10.0, vertical: 10.0),
-                        width: MediaQuery.of(context).size.width,
-                        height: 200,
-                        child: isLoading
-                            ? const Center(child: CircularProgressIndicator())
-                            : FlutterCarousel(
-                                options: CarouselOptions(
-                                  floatingIndicator: true,
-                                  height: 200,
-                                  viewportFraction: 1.0,
-                                  enlargeCenterPage: true,
-                                  autoPlay: true,
-                                  aspectRatio: 16 / 9,
-                                  autoPlayCurve: Curves.fastOutSlowIn,
-                                  enableInfiniteScroll: true,
-                                  slideIndicator: const CircularSlideIndicator(
-                                    slideIndicatorOptions:
-                                        SlideIndicatorOptions(
-                                      itemSpacing: 10,
-                                      padding: EdgeInsets.only(bottom: 10.0),
-                                      indicatorBorderColor: Color(0xFF11528f),
-                                      currentIndicatorColor: Color(0xFF11528f),
-                                      indicatorRadius: 4,
-                                    ),
-                                  ),
-                                  autoPlayAnimationDuration:
-                                      const Duration(milliseconds: 800),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10.0, vertical: 10.0),
+                          width: MediaQuery.of(context).size.width,
+                          height: 200,
+                          child: isLoading
+                              ? const Center(child: CircularProgressIndicator())
+                              : FlutterCarousel(
+                            options: CarouselOptions(
+                              floatingIndicator: true,
+                              height: 200,
+                              viewportFraction: 1.0,
+                              enlargeCenterPage: true,
+                              autoPlay: imageList.length>1,
+                              aspectRatio: 16 / 9,
+                              autoPlayCurve: Curves.fastOutSlowIn,
+                              enableInfiniteScroll: imageList.length>1,
+                              slideIndicator: const CircularSlideIndicator(
+                                slideIndicatorOptions:
+                                SlideIndicatorOptions(
+                                  itemSpacing: 10,
+                                  padding: EdgeInsets.only(bottom: 10.0),
+                                  indicatorBorderColor: Color(0xFF11528f),
+                                  currentIndicatorColor: Color(0xFF11528f),
+                                  indicatorRadius: 4,
                                 ),
-                                items: _items.map((item) {
-                                  return Builder(
-                                    builder: (BuildContext context) {
-                                      return SizedBox(
-                                        width:
-                                            MediaQuery.of(context).size.width,
-                                        child: Card(
-                                          shadowColor: Colors.transparent,
-                                          surfaceTintColor: Colors.transparent,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                          ),
-                                          elevation: 4,
-                                          child: ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                            child: Image.network(
-                                              item.imageName,
-                                              height: 200,
-                                              fit: BoxFit.fill,
-                                              loadingBuilder: (context, child,
-                                                  loadingProgress) {
-                                                if (loadingProgress == null) {
-                                                  return child;
-                                                }
-                                                return const Center(
-                                                    child:
-                                                        CircularProgressIndicator
-                                                            .adaptive());
-                                              },
-                                            ),
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                  );
-                                }).toList(),
                               ),
-                      ),
+                             //autoPlayAnimationDuration: const Duration(milliseconds: 800),
+                            ),
+                            items: _items.map((item) {
+                              return Builder(
+                                builder: (BuildContext context) {
+                                  return SizedBox(
+                                    width:
+                                    MediaQuery.of(context).size.width,
+                                    child: Card(
+                                      shadowColor: Colors.transparent,
+                                      surfaceTintColor: Colors.transparent,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                        BorderRadius.circular(10),
+                                      ),
+                                      elevation: 4,
+                                      child: ClipRRect(
+                                        borderRadius:
+                                        BorderRadius.circular(10),
+                                        child: Image.network(
+                                          item.imageName,
+                                          height: 200,
+                                          fit: BoxFit.fill,
+                                          loadingBuilder: (context, child,
+                                              loadingProgress) {
+                                            if (loadingProgress == null) {
+                                              return child;
+                                            }
+                                            return const Center(
+                                                child:
+                                                CircularProgressIndicator
+                                                    .adaptive());
+                                          },
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                },
+                              );
+                            }).toList(),
+                          ),
+                        ),
 
                       const SizedBox(height: 10),
                       if (marqueeTexts.isNotEmpty)
@@ -638,7 +637,7 @@ class _CustomerDashBoardState extends State<CustomerDashBoard>
                                 ),
                             ]),
 
-                            /*   
+                            /*
                             Stack(
                               children: [
                                 ListView.builder(
@@ -739,8 +738,8 @@ class _CustomerDashBoardState extends State<CustomerDashBoard>
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                   Text(
-                                      'No Branches Found',style:CommonStyles.txSty_14b_fb,),
+                                  Text(
+                                    'No Branches Found',style:CommonStyles.txSty_14b_fb,),
                                   const SizedBox(height: 20),
                                   ElevatedButton(
                                     onPressed: retryDataFetching,
@@ -751,408 +750,637 @@ class _CustomerDashBoardState extends State<CustomerDashBoard>
                             ),
                           ),
                         ),
+                      // Padding(
+                      //   padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                      //   child: LayoutBuilder(
+                      //     builder: (context, constraints) {
+                      //       // Get the text scale factor based on device font size settings
+                      //       double textScaleFactor = MediaQuery.of(context).textScaleFactor;
+                      //
+                      //       // Clamp the textScaleFactor to be between 0.9 and 2.0
+                      //       double adjustedTextScaleFactor = textScaleFactor.clamp(0.9, 2.0);
+                      //
+                      //       // Get the base text style's font size
+                      //       double baseFontSize = Theme.of(context).textTheme.bodyLarge?.fontSize ?? 16.0;
+                      //
+                      //       // Calculate the effective font size based on the adjusted text scale factor
+                      //       double textSize = baseFontSize * adjustedTextScaleFactor;
+                      //       print('textSize====$textSize');
+                      //
+                      //       // Determine the aspect ratio based on the text size
+                      //       double childAspectRatio = textSize > 16.0 ? 0.65 : 0.65;
+                      //       print('childAspectRatio====$childAspectRatio');
+                      //       return GridView.builder(
+                      //         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      //           crossAxisCount: 2,
+                      //           crossAxisSpacing: 16.0,
+                      //           mainAxisSpacing: 16.0,
+                      //           childAspectRatio: childAspectRatio,
+                      //         ),
+                      //         physics: const NeverScrollableScrollPhysics(),
+                      //         shrinkWrap: true,
+                      //         itemCount: isLoading ? 5 : brancheslist.length,
+                      //         itemBuilder: (context, index) {
+                      //           if (isLoading) {
+                      //             return Padding(
+                      //               padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 5.0),
+                      //               child: Shimmer.fromColors(
+                      //                 baseColor: Colors.grey.shade300,
+                      //                 highlightColor: Colors.grey.shade100,
+                      //                 child: Container(
+                      //                   height: 150,
+                      //                   decoration: BoxDecoration(
+                      //                     color: Colors.white,
+                      //                     borderRadius: BorderRadius.circular(15.0),
+                      //                   ),
+                      //                 ),
+                      //               ),
+                      //             );
+                      //           } else {
+                      //             BranchModel branch = brancheslist[index];
+                      //             // Color backgroundColor = index % 2 == 0
+                      //             //     ? const Color(0xFFdbeaff)
+                      //             //     : const Color(0xFFcdeac3);
+                      //             Color backgroundColor = const Color(0xFFdbeaff);
+                      //
+                      //             return GestureDetector(
+                      //               onTap: () {},
+                      //               child: Container(
+                      //                 decoration: BoxDecoration(
+                      //                   color: backgroundColor,
+                      //                   borderRadius: BorderRadius.circular(15.0),
+                      //                 ),
+                      //                 child: Column(
+                      //                   crossAxisAlignment: CrossAxisAlignment.start,
+                      //                   children: [
+                      //                     Align(
+                      //                       alignment: Alignment.topLeft,
+                      //                       child: Container(
+                      //                         margin: const EdgeInsets.only(top: 20, left: 10),
+                      //                         decoration: BoxDecoration(
+                      //                           border: Border.all(
+                      //                             color: Colors.grey,
+                      //                             width: 2.5,
+                      //                           ),
+                      //                           borderRadius: BorderRadius.circular(15.0),
+                      //                         ),
+                      //                         width: 65,
+                      //                         height: 60,
+                      //                         child: ClipRRect(
+                      //                           borderRadius: BorderRadius.circular(13.0),
+                      //                           child: Image.network(
+                      //                             branch.imageName!,
+                      //                             width: 65,
+                      //                             height: 60,
+                      //                             fit: BoxFit.fill,
+                      //                             loadingBuilder: (context, child, loadingProgress) {
+                      //                               if (loadingProgress == null) {
+                      //                                 return child;
+                      //                               }
+                      //                               return const Center(
+                      //                                   child: CircularProgressIndicator.adaptive());
+                      //                             },
+                      //                           ),
+                      //                         ),
+                      //                       ),
+                      //                     ),
+                      //                     Padding(
+                      //                       padding: const EdgeInsets.only(
+                      //                           left: 10.0, right: 5.0, top: 5.0, bottom: 5.0),
+                      //                       child: Text(
+                      //                         branch.name,
+                      //                         overflow: TextOverflow.ellipsis,
+                      //                         maxLines: 1,
+                      //                         style: CommonUtils.txSty_18b_fb,
+                      //                       ),
+                      //                     ),
+                      //                     Padding(
+                      //                       padding: const EdgeInsets.only(
+                      //                           left: 10.0, right: 5.0, bottom: 5.0),
+                      //                       child: Text(
+                      //                         branch.address,
+                      //                         maxLines: 4,
+                      //                         overflow: TextOverflow.ellipsis,
+                      //                         style: CommonStyles.txSty_12b_fb
+                      //                       ),
+                      //                     ),
+                      //                     const Spacer(),
+                      //                     Align(
+                      //                       alignment: Alignment.bottomLeft,
+                      //                       child: Container(
+                      //                         height: 30,
+                      //                         margin: const EdgeInsets.only(
+                      //                             bottom: 5.0, left: 10.0, top: 5.0),
+                      //                         decoration: BoxDecoration(
+                      //                           border: Border.all(
+                      //                             color: const Color(0xFF11528f),
+                      //                           ),
+                      //                           borderRadius: BorderRadius.circular(20.0),
+                      //                         ),
+                      //                         child: ElevatedButton(
+                      //                           onPressed: () {
+                      //                             Navigator.push(
+                      //                               context,
+                      //                               MaterialPageRoute(
+                      //                                 builder: (context) => Bookingscreen(
+                      //                                   branchId: branch.id!,
+                      //                                   branchname: branch.name,
+                      //                                   branchaddress: branch.address,
+                      //                                   phonenumber: branch.mobileNumber,
+                      //                                   branchImage: branch.imageName!,
+                      //                                   latitude: branch.latitude,
+                      //                                   longitude: branch.longitude,
+                      //                                   LocationUrl: branch.locationUrl,
+                      //                                 ),
+                      //                               ),
+                      //                             );
+                      //                           },
+                      //                           style: ElevatedButton.styleFrom(
+                      //                             padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                      //                             foregroundColor: const Color(0xFF8d97e2),
+                      //                             backgroundColor: Colors.transparent,
+                      //                             elevation: 0,
+                      //                             shadowColor: Colors.transparent,
+                      //                             shape: RoundedRectangleBorder(
+                      //                               borderRadius: BorderRadius.circular(20.0),
+                      //                             ),
+                      //                           ),
+                      //                           child: Row(
+                      //                             mainAxisSize: MainAxisSize.min,
+                      //                             mainAxisAlignment: MainAxisAlignment.center,
+                      //                             children: [
+                      //                               const Text('Book Now',
+                      //                                   style: CommonStyles.txSty_14p_f5),
+                      //                               const SizedBox(width: 5),
+                      //                               SvgPicture.asset(
+                      //                                 'assets/squareupright.svg',
+                      //                                 width: 12.0,
+                      //                                 height: 12.0,
+                      //                                 color: const Color(0xFF11528f),
+                      //                               ),
+                      //                             ],
+                      //                           ),
+                      //                         ),
+                      //                       ),
+                      //                     ),
+                      //                   ],
+                      //                 ),
+                      //               ),
+                      //             );
+                      //           }
+                      //         },
+                      //       );
+                      //     },
+                      //   ),
+                      // )
+                            Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                            child: GridView.builder(
+                            gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 16.0,
+                            mainAxisSpacing: 16.0,
+                            mainAxisExtent: 250,
+                            childAspectRatio: 8 / 2),
+                            physics: const NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            itemCount: isLoading ? 5 : brancheslist.length,
+                            // ListView.builder(
+                            //   shrinkWrap: true,
+                            //   itemCount: isLoading ? 5 : brancheslist.length,
+                            itemBuilder: (context, index) {
+                            if (isLoading) {
+                            return Padding(
+                            padding: const EdgeInsets.symmetric(
+                            horizontal: 0.0, vertical: 5.0),
+                            child: Shimmer.fromColors(
+                            baseColor: Colors.grey.shade300,
+                            highlightColor: Colors.grey.shade100,
+                            child: Container(
+                            height: 150,
+                            decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(15.0),
+                            ),
+                            ),
+                            ),
+                            );
+                            } else {
+                            BranchModel branch = brancheslist[index];
+                            Color backgroundColor = index % 2 == 0
+                            ? const Color(0xFFdbeaff)
+                                : const Color(0xFFcdeac3);
+                            return GestureDetector(
+                            onTap: () {},
+                            child: Container(
+                            decoration: BoxDecoration(
+                            color: const Color(0xFFdbeaff),
+                            borderRadius: BorderRadius.circular(15.0),
+                            boxShadow: const [
+                            // You can uncomment the shadow if needed
+                            // BoxShadow(
+                            //   color: Colors.grey.withOpacity(0.3),
+                            //   spreadRadius: 2,
+                            //   blurRadius: 5,
+                            //   offset: Offset(1, 3),
+                            // ),
+                            ],
+                            ),
+                            child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                            Align(
+                            alignment: Alignment.topLeft,
+                            child: Container(
+                            margin: const EdgeInsets.only(top: 20, left: 10),
+                            decoration: BoxDecoration(
+                            border: Border.all(
+                            color: Colors.grey,
+                            width: 2.5,
+                            ),
+                            borderRadius: BorderRadius.circular(15.0),
+                            ),
+                            width: 65,
+                            height: 60,
+                            child: ClipRRect(
+                            borderRadius: BorderRadius.circular(13.0),
+                            child: Image.network(
+                            branch.imageName!,
+                            width: 65,
+                            height: 60,
+                            fit: BoxFit.fill,
+                            loadingBuilder: (context, child, loadingProgress) {
+                            if (loadingProgress == null) {
+                            return child;
+                            }
+                            return const Center(
+                            child: CircularProgressIndicator.adaptive(),
+                            );
+                            },
+                            ),
+                            ),
+                            ),
+                            ),
+                            Padding(
+                            padding: const EdgeInsets.only(
+                            left: 10.0,
+                            right: 5.0,
+                            top: 5.0,
+                            bottom: 5.0,
+                            ),
+                            child: Text(
+                            branch.name,
+                            maxLines: 3,
+                            style: CommonUtils.txSty_18b_fb.copyWith(
+                            fontSize: 18 * MediaQuery.of(context).textScaleFactor,
+                            ),
+                            ),
+                            ),
+                            Padding(
+                            padding: const EdgeInsets.only(
+                            left: 10.0,
+                            right: 5.0,
+                            bottom: 5.0,
+                            ),
+                            child: SizedBox(
+                            height: 70.0,
+                            child: Text(
+                            branch.address,
+                            maxLines: 4,
+                            style: CommonStyles.txSty_12b_fb.copyWith(
+                            fontSize: 12 * MediaQuery.of(context).textScaleFactor,
+                            wordSpacing: 1.2,
+                            color: Colors.black.withOpacity(0.8),
+                            ),
+                            ),
+                            ),
+                            ),
+                            Align(
+                            alignment: Alignment.bottomLeft,
+                            child: Container(
+                            height: 30,
+                            margin: const EdgeInsets.only(
+                            bottom: 2.0,
+                            left: 10.0,
+                            top: 5.0,
+                            ),
+                            decoration: BoxDecoration(
+                            border: Border.all(
+                            color: const Color(0xFF11528f),
+                            ),
+                            borderRadius: BorderRadius.circular(20.0),
+                            ),
+                            child: ElevatedButton(
+                            onPressed: () {
+                            Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                            builder: (context) =>
+                            Bookingscreen(
+                            branchId: branch.id!,
+                            branchname:
+                            branch.name,
+                            branchaddress:
+                            branch.address,
+                            phonenumber: branch
+                                .mobileNumber,
+                            branchImage:
+                            branch.imageName!,
+                            latitude:
+                            branch.latitude,
+                            longitude:
+                            branch.longitude,
+                            LocationUrl : branch.locationUrl
+                            ),
+                            ),
+                            );
+                            },
+                            style: ElevatedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                            foregroundColor: const Color(0xFF8d97e2),
+                            backgroundColor: Colors.transparent,
+                            elevation: 0,
+                            shadowColor: Colors.transparent,
+                            shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20.0),
+                            ),
+                            ),
+                            child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                            const Text(
+                            'Book Now',
+                            style: CommonStyles.txSty_14p_f5,
+                            ),
+                            const SizedBox(width: 5),
+                            SvgPicture.asset(
+                            'assets/squareupright.svg',
+                            width: 12.0,
+                            height: 12.0,
+                            color: const Color(0xFF11528f),
+    ),
+    ],
+    ),
+    ),
+    ),
+    ),
+    ],
+    ),
+    ),
+    );
+    }
+    },
+
+
+
                       // Expanded(
                       //     //flex: 3,
                       //     child:
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                        child: GridView.builder(
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 2,
-                                  crossAxisSpacing: 16.0,
-                                  mainAxisSpacing: 16.0,
-                                  mainAxisExtent: 250,
-                                  childAspectRatio: 8 / 2),
-                          physics: const NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: isLoading ? 5 : brancheslist.length,
-                          // ListView.builder(
-                          //   shrinkWrap: true,
-                          //   itemCount: isLoading ? 5 : brancheslist.length,
-                          itemBuilder: (context, index) {
-                            if (isLoading) {
-                              return Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 0.0, vertical: 5.0),
-                                child: Shimmer.fromColors(
-                                  baseColor: Colors.grey.shade300,
-                                  highlightColor: Colors.grey.shade100,
-                                  child: Container(
-                                    height: 150,
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(15.0),
-                                    ),
-                                  ),
-                                ),
-                              );
-                            } else {
-                              BranchModel branch = brancheslist[index];
-                              Color backgroundColor = index % 2 == 0
-                                  ? const Color(0xFFdbeaff)
-                                  : const Color(0xFFcdeac3);
-    return GestureDetector(
-    onTap: () {},
-    child: Container(
-    decoration: BoxDecoration(
-    color: const Color(0xFFdbeaff),
-    borderRadius: BorderRadius.circular(15.0),
-    boxShadow: const [
-    // You can uncomment the shadow if needed
-    // BoxShadow(
-    //   color: Colors.grey.withOpacity(0.3),
-    //   spreadRadius: 2,
-    //   blurRadius: 5,
-    //   offset: Offset(1, 3),
-    // ),
-    ],
-    ),
-    child: Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    mainAxisAlignment: MainAxisAlignment.start,
-    children: [
-    Align(
-    alignment: Alignment.topLeft,
-    child: Container(
-    margin: const EdgeInsets.only(top: 20, left: 10),
-    decoration: BoxDecoration(
-    border: Border.all(
-    color: Colors.grey,
-    width: 2.5,
-    ),
-    borderRadius: BorderRadius.circular(15.0),
-    ),
-    width: 65,
-    height: 60,
-    child: ClipRRect(
-    borderRadius: BorderRadius.circular(13.0),
-    child: Image.network(
-    branch.imageName!,
-    width: 65,
-    height: 60,
-    fit: BoxFit.fill,
-    loadingBuilder: (context, child, loadingProgress) {
-    if (loadingProgress == null) {
-    return child;
-    }
-    return const Center(
-    child: CircularProgressIndicator.adaptive(),
-    );
-    },
-    ),
-    ),
-    ),
-    ),
-    Padding(
-    padding: const EdgeInsets.only(
-    left: 10.0,
-    right: 5.0,
-    top: 5.0,
-    bottom: 5.0,
-    ),
-    child: Text(
-    branch.name,
-    maxLines: 3,
-    style: CommonUtils.txSty_18b_fb.copyWith(
-    fontSize: 18 * MediaQuery.of(context).textScaleFactor,
-    ),
-    ),
-    ),
-    Padding(
-    padding: const EdgeInsets.only(
-    left: 10.0,
-    right: 5.0,
-    bottom: 5.0,
-    ),
-    child: SizedBox(
-    height: 70.0,
-    child: Text(
-    branch.address,
-    maxLines: 4,
-    style: CommonStyles.txSty_12b_fb.copyWith(
-    fontSize: 12 * MediaQuery.of(context).textScaleFactor,
-    wordSpacing: 1.2,
-    color: Colors.black.withOpacity(0.8),
-    ),
-    ),
-    ),
-    ),
-    Align(
-    alignment: Alignment.bottomLeft,
-    child: Container(
-    height: 30,
-    margin: const EdgeInsets.only(
-    bottom: 2.0,
-    left: 10.0,
-    top: 5.0,
-    ),
-    decoration: BoxDecoration(
-    border: Border.all(
-    color: const Color(0xFF11528f),
-    ),
-    borderRadius: BorderRadius.circular(20.0),
-    ),
-    child: ElevatedButton(
-    onPressed: () {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) =>
-              Bookingscreen(
-                  branchId: branch.id!,
-                  branchname:
-                  branch.name,
-                  branchaddress:
-                  branch.address,
-                  phonenumber: branch
-                      .mobileNumber,
-                  branchImage:
-                  branch.imageName!,
-                  latitude:
-                  branch.latitude,
-                  longitude:
-                  branch.longitude,
-                  LocationUrl : branch.locationUrl
-              ),
-        ),
-      );
-    },
-    style: ElevatedButton.styleFrom(
-    padding: const EdgeInsets.symmetric(horizontal: 10.0),
-    foregroundColor: const Color(0xFF8d97e2),
-    backgroundColor: Colors.transparent,
-    elevation: 0,
-    shadowColor: Colors.transparent,
-    shape: RoundedRectangleBorder(
-    borderRadius: BorderRadius.circular(20.0),
-    ),
-    ),
-    child: Row(
-    mainAxisSize: MainAxisSize.min,
-    mainAxisAlignment: MainAxisAlignment.center,
-    children: [
-    const Text(
-    'Book Now',
-    style: CommonStyles.txSty_14p_f5,
-    ),
-    const SizedBox(width: 5),
-    SvgPicture.asset(
-    'assets/squareupright.svg',
-    width: 12.0,
-    height: 12.0,
-    color: const Color(0xFF11528f),
-    ),
-    ],
-    ),
-    ),
-    ),
-    ),
-    ],
-    ),
-    ),
-    );
-
-                              // return GestureDetector(
-                              //     onTap: () {},
-                              //     child: Container(
-                              //
-                              //         //padding: EdgeInsets.only(top: 10),
-                              //         decoration: BoxDecoration(
-                              //           color: const Color(0xFFdbeaff),
-                              //           borderRadius:
-                              //               BorderRadius.circular(15.0),
-                              //           boxShadow: const [
-                              //             // BoxShadow(
-                              //             //   color: Colors.grey.withOpacity(0.3),
-                              //             //   spreadRadius: 2,
-                              //             //   blurRadius: 5,
-                              //             //   offset: Offset(1, 3),
-                              //             //   blurStyle: BlurStyle.solid
-                              //             // ),
-                              //           ],
-                              //         ),
-                              //         child: Column(
-                              //           crossAxisAlignment:
-                              //               CrossAxisAlignment.start,
-                              //           mainAxisAlignment:
-                              //               MainAxisAlignment.start,
-                              //           children: [
-                              //             Align(
-                              //               alignment: Alignment.topLeft,
-                              //               // top: 0,
-                              //               //     right: 20,
-                              //               child: Container(
-                              //                 margin: const EdgeInsets.only(
-                              //                     top: 20, left: 10),
-                              //                 decoration: BoxDecoration(
-                              //                   border: Border.all(
-                              //                     color: Colors.grey,
-                              //                     width: 2.5,
-                              //                   ),
-                              //                   borderRadius:
-                              //                       BorderRadius.circular(15.0),
-                              //                 ),
-                              //                 width: 65,
-                              //                 height: 60,
-                              //                 child: ClipRRect(
-                              //                   borderRadius:
-                              //                       BorderRadius.circular(13.0),
-                              //                   child: Image.network(
-                              //                     branch.imageName!,
-                              //                     width: 65,
-                              //                     height: 60,
-                              //                     fit: BoxFit.fill,
-                              //                     loadingBuilder: (context,
-                              //                         child, loadingProgress) {
-                              //                       if (loadingProgress ==
-                              //                           null) {
-                              //                         return child;
-                              //                       }
-                              //
-                              //                       return const Center(
-                              //                           child:
-                              //                               CircularProgressIndicator
-                              //                                   .adaptive());
-                              //                     },
-                              //                   ),
-                              //                 ),
-                              //               ),
-                              //             ),
-                              //             // SizedBox(height: 8.0),
-                              //             Padding(
-                              //               padding: const EdgeInsets.only(
-                              //                   left: 10.0,
-                              //                   right: 5.0,
-                              //                   top: 5.0,
-                              //                   bottom: 5.0),
-                              //               child: Text(
-                              //                 branch.name,
-                              //                 maxLines: 3,
-                              //                 style: CommonUtils.txSty_18b_fb,
-                              //                 // style:  GoogleFonts.outfit(fontWeight: FontWeight.w700,fontSize: 18,color: Color(0xFF11528f)),
-                              //               ),
-                              //             ),
-                              //             // SizedBox(height: 8.0),
-                              //             Padding(
-                              //                 padding: const EdgeInsets.only(
-                              //                     left: 10.0,
-                              //                     right: 5.0,
-                              //                     bottom: 5.0),
-                              //                 child: SizedBox(
-                              //                   height: 70.0,
-                              //                   child: Text(
-                              //                     branch.address,
-                              //                     maxLines: 4,
-                              //                     style: CommonStyles
-                              //                         .txSty_12b_fb
-                              //                         .copyWith(
-                              //                             wordSpacing: 1.2,
-                              //                             color: Colors.black
-                              //                                 .withOpacity(
-                              //                                     0.8)),
-                              //                   ),
-                              //                 )),
-                              //             //  SizedBox(height: 5.0),
-                              //             // Display from date and to date multiple times
-                              //             Align(
-                              //                 alignment: Alignment.bottomLeft,
-                              //                 child: Container(
-                              //                   height: 30,
-                              //                   margin: const EdgeInsets.only(
-                              //                       bottom: 2.0,
-                              //                       left: 10.0,
-                              //                       top: 5.0),
-                              //                   decoration: BoxDecoration(
-                              //                     border: Border.all(
-                              //                       color:
-                              //                           const Color(0xFF11528f),
-                              //                     ),
-                              //                     borderRadius:
-                              //                         BorderRadius.circular(
-                              //                             20.0),
-                              //                   ),
-                              //                   child: ElevatedButton(
-                              //                     onPressed: () {
-                              //                       Navigator.push(
-                              //                         context,
-                              //                         MaterialPageRoute(
-                              //                           builder: (context) =>
-                              //                               Bookingscreen(
-                              //                             branchId: branch.id!,
-                              //                             branchname:
-                              //                                 branch.name,
-                              //                             branchaddress:
-                              //                                 branch.address,
-                              //                             phonenumber: branch
-                              //                                 .mobileNumber,
-                              //                             branchImage:
-                              //                                 branch.imageName!,
-                              //                             latitude:
-                              //                                 branch.latitude,
-                              //                             longitude:
-                              //                                 branch.longitude,
-                              //                                   LocationUrl : branch.locationUrl
-                              //                           ),
-                              //                         ),
-                              //                       );
-                              //                     },
-                              //                     style:
-                              //                         ElevatedButton.styleFrom(
-                              //                       padding: const EdgeInsets
-                              //                           .symmetric(
-                              //                           horizontal:
-                              //                               10.0), // Adjust padding as needed, // Remove padding
-                              //                       foregroundColor:
-                              //                           const Color(0xFF8d97e2),
-                              //                       backgroundColor:
-                              //                           Colors.transparent,
-                              //                       elevation: 0,
-                              //                       shadowColor:
-                              //                           Colors.transparent,
-                              //                       shape:
-                              //                           RoundedRectangleBorder(
-                              //                         borderRadius:
-                              //                             BorderRadius.circular(
-                              //                                 20.0),
-                              //                       ),
-                              //                     ),
-                              //                     child: Row(
-                              //                       mainAxisSize:
-                              //                           MainAxisSize.min,
-                              //                       mainAxisAlignment:
-                              //                           MainAxisAlignment
-                              //                               .center,
-                              //                       children: [
-                              //                         const Text('Book Now',
-                              //                             style: CommonStyles
-                              //                                 .txSty_14p_f5
-                              //                             // GoogleFonts.outfit(
-                              //                             //   fontWeight: FontWeight.w500,
-                              //                             //   fontSize: 14,
-                              //                             //   color: Color(0xFF11528f),
-                              //                             // ),
-                              //                             ),
-                              //                         const SizedBox(width: 5),
-                              //                         SvgPicture.asset(
-                              //                           'assets/squareupright.svg',
-                              //                           width: 12.0,
-                              //                           height: 12.0,
-                              //                           color: const Color(
-                              //                               0xFF11528f),
-                              //                         ),
-                              //                       ],
-                              //                     ),
-                              //                   ),
-                              //                 ))
-                              //           ],
-                              //         )));
-                            }
-                          },
-                        ),
-                      )
-                      //),
-                    ],
+                      // Padding(
+                      //   padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                      //   child: GridView.builder(
+                      //     gridDelegate:
+                      //     const SliverGridDelegateWithFixedCrossAxisCount(
+                      //         crossAxisCount: 2,
+                      //         crossAxisSpacing: 16.0,
+                      //         mainAxisSpacing: 16.0,
+                      //       //  mainAxisExtent: 250,
+                      //
+                      //         childAspectRatio:0.5),
+                      //     physics: const NeverScrollableScrollPhysics(),
+                      //     shrinkWrap: true,
+                      //     itemCount: isLoading ? 5 : brancheslist.length,
+                      //     // ListView.builder(
+                      //     //   shrinkWrap: true,
+                      //     //   itemCount: isLoading ? 5 : brancheslist.length,
+                      //     itemBuilder: (context, index) {
+                      //       if (isLoading) {
+                      //         return Padding(
+                      //           padding: const EdgeInsets.symmetric(
+                      //               horizontal: 0.0, vertical: 5.0),
+                      //           child: Shimmer.fromColors(
+                      //             baseColor: Colors.grey.shade300,
+                      //             highlightColor: Colors.grey.shade100,
+                      //             child: Container(
+                      //               height: 150,
+                      //               decoration: BoxDecoration(
+                      //                 color: Colors.white,
+                      //                 borderRadius: BorderRadius.circular(15.0),
+                      //               ),
+                      //             ),
+                      //           ),
+                      //         );
+                      //       } else {
+                      //         BranchModel branch = brancheslist[index];
+                      //         Color backgroundColor = index % 2 == 0
+                      //             ? const Color(0xFFdbeaff)
+                      //             : const Color(0xFFcdeac3);
+                      //
+                      //         return GestureDetector(
+                      //             onTap: () {},
+                      //             child: Container(
+                      //
+                      //               //padding: EdgeInsets.only(top: 10),
+                      //                 decoration: BoxDecoration(
+                      //                   color: const Color(0xFFdbeaff),
+                      //                   borderRadius:
+                      //                   BorderRadius.circular(15.0),
+                      //                   boxShadow: const [
+                      //                     // BoxShadow(
+                      //                     //   color: Colors.grey.withOpacity(0.3),
+                      //                     //   spreadRadius: 2,
+                      //                     //   blurRadius: 5,
+                      //                     //   offset: Offset(1, 3),
+                      //                     //   blurStyle: BlurStyle.solid
+                      //                     // ),
+                      //                   ],
+                      //                 ),
+                      //                 child: Column(
+                      //                   crossAxisAlignment:
+                      //                   CrossAxisAlignment.start,
+                      //                   mainAxisAlignment:
+                      //                   MainAxisAlignment.start,
+                      //                   children: [
+                      //                     Align(
+                      //                       alignment: Alignment.topLeft,
+                      //                       // top: 0,
+                      //                       //     right: 20,
+                      //                       child: Container(
+                      //                         margin: const EdgeInsets.only(
+                      //                             top: 20, left: 10),
+                      //                         decoration: BoxDecoration(
+                      //                           border: Border.all(
+                      //                             color: Colors.grey,
+                      //                             width: 2.5,
+                      //                           ),
+                      //                           borderRadius:
+                      //                           BorderRadius.circular(15.0),
+                      //                         ),
+                      //                         width: 65,
+                      //                         height: 60,
+                      //                         child: ClipRRect(
+                      //                           borderRadius:
+                      //                           BorderRadius.circular(13.0),
+                      //                           child: Image.network(
+                      //                             branch.imageName!,
+                      //                             width: 65,
+                      //                             height: 60,
+                      //                             fit: BoxFit.fill,
+                      //                             loadingBuilder: (context,
+                      //                                 child, loadingProgress) {
+                      //                               if (loadingProgress ==
+                      //                                   null) {
+                      //                                 return child;
+                      //                               }
+                      //
+                      //                               return const Center(
+                      //                                   child:
+                      //                                   CircularProgressIndicator
+                      //                                       .adaptive());
+                      //                             },
+                      //                           ),
+                      //                         ),
+                      //                       ),
+                      //                     ),
+                      //                     // SizedBox(height: 8.0),
+                      //                     Padding(
+                      //                       padding: const EdgeInsets.only(
+                      //                           left: 10.0,
+                      //                           right: 5.0,
+                      //                           top: 5.0,
+                      //                           bottom: 5.0),
+                      //                       child: Text(
+                      //                         branch.name,
+                      //                         overflow: TextOverflow.ellipsis,
+                      //                         maxLines: 1,
+                      //                         style: CommonUtils.txSty_18b_fb,
+                      //                         // style:  GoogleFonts.outfit(fontWeight: FontWeight.w700,fontSize: 18,color: Color(0xFF11528f)),
+                      //                       ),
+                      //                     ),
+                      //                     // SizedBox(height: 8.0),
+                      //                     Padding(
+                      //                         padding: const EdgeInsets.only(
+                      //                             left: 10.0,
+                      //                             right: 5.0,
+                      //                             bottom: 5.0),
+                      //
+                      //                           child: Text(
+                      //                             branch.address,
+                      //                             maxLines: 4,
+                      //                             overflow: TextOverflow.ellipsis,
+                      //                             style: CommonStyles
+                      //                                 .txSty_12b_fb
+                      //                                 .copyWith(
+                      //                                 wordSpacing: 1.2,
+                      //                                 color: Colors.black
+                      //                                     .withOpacity(
+                      //                                     0.8)),
+                      //
+                      //                         )),
+                      //                     //  SizedBox(height: 5.0),
+                      //                     // Display from date and to date multiple times
+                      //                     Spacer(),
+                      //                     Align(
+                      //                         alignment: Alignment.bottomLeft,
+                      //                         child: Container(
+                      //                           height: 30,
+                      //                           margin: const EdgeInsets.only(
+                      //                               bottom: 5.0,
+                      //                               left: 10.0,
+                      //                               top: 5.0),
+                      //                           decoration: BoxDecoration(
+                      //                             border: Border.all(
+                      //                               color:
+                      //                               const Color(0xFF11528f),
+                      //                             ),
+                      //                             borderRadius:
+                      //                             BorderRadius.circular(
+                      //                                 20.0),
+                      //                           ),
+                      //                           child: ElevatedButton(
+                      //                             onPressed: () {
+                      //                               Navigator.push(
+                      //                                 context,
+                      //                                 MaterialPageRoute(
+                      //                                   builder: (context) =>
+                      //                                       Bookingscreen(
+                      //                                           branchId: branch.id!,
+                      //                                           branchname:
+                      //                                           branch.name,
+                      //                                           branchaddress:
+                      //                                           branch.address,
+                      //                                           phonenumber: branch
+                      //                                               .mobileNumber,
+                      //                                           branchImage:
+                      //                                           branch.imageName!,
+                      //                                           latitude:
+                      //                                           branch.latitude,
+                      //                                           longitude:
+                      //                                           branch.longitude,
+                      //                                           LocationUrl : branch.locationUrl
+                      //                                       ),
+                      //                                 ),
+                      //                               );
+                      //                             },
+                      //                             style:
+                      //                             ElevatedButton.styleFrom(
+                      //                               padding: const EdgeInsets
+                      //                                   .symmetric(
+                      //                                   horizontal:
+                      //                                   10.0), // Adjust padding as needed, // Remove padding
+                      //                               foregroundColor:
+                      //                               const Color(0xFF8d97e2),
+                      //                               backgroundColor:
+                      //                               Colors.transparent,
+                      //                               elevation: 0,
+                      //                               shadowColor:
+                      //                               Colors.transparent,
+                      //                               shape:
+                      //                               RoundedRectangleBorder(
+                      //                                 borderRadius:
+                      //                                 BorderRadius.circular(
+                      //                                     20.0),
+                      //                               ),
+                      //                             ),
+                      //                             child: Row(
+                      //                               mainAxisSize:
+                      //                               MainAxisSize.min,
+                      //                               mainAxisAlignment:
+                      //                               MainAxisAlignment
+                      //                                   .center,
+                      //                               children: [
+                      //                                 const Text('Book Now',
+                      //                                     style: CommonStyles
+                      //                                         .txSty_14p_f5
+                      //                                   // GoogleFonts.outfit(
+                      //                                   //   fontWeight: FontWeight.w500,
+                      //                                   //   fontSize: 14,
+                      //                                   //   color: Color(0xFF11528f),
+                      //                                   // ),
+                      //                                 ),
+                      //                                 const SizedBox(width: 5),
+                      //                                 SvgPicture.asset(
+                      //                                   'assets/squareupright.svg',
+                      //                                   width: 12.0,
+                      //                                   height: 12.0,
+                      //                                   color: const Color(
+                      //                                       0xFF11528f),
+                      //                                 ),
+                      //                               ],
+                      //                             ),
+                      //                           ),
+                      //                         ))
+                      //                   ],
+                      //                 )));
+                      //       }
+                      //     },
+                      //   ),
+                      // )
+                      // //),
+                            ))],
                   ),
                   // ),
                 ],
@@ -1408,7 +1636,7 @@ class BranchCard extends StatelessWidget {
                         Expanded(
                           child: Text(
                             branch.address,
-                           // maxLines: 3,
+                            maxLines: 3,
                             overflow: TextOverflow.ellipsis,
                             style: CommonStyles.txSty_12b_f5.copyWith(
                               fontSize: 16,

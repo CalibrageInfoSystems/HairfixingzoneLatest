@@ -486,10 +486,11 @@ class _AgentDashBoardState extends State<AgentDashBoard> {
           height: 180,
           viewportFraction: 1.0,
           enlargeCenterPage: true,
-          autoPlay: true,
+          autoPlay: _items.length>1,
+          enableInfiniteScroll: _items.length>1,
           aspectRatio: 16 / 9,
           autoPlayCurve: Curves.fastOutSlowIn,
-          enableInfiniteScroll: true,
+        //  enableInfiniteScroll: true,
           slideIndicator: CircularSlideIndicator(
             slideIndicatorOptions: SlideIndicatorOptions(
               itemSpacing: 10,

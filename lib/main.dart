@@ -67,7 +67,7 @@ void main() async {
     String? messagetitle = initialMessage.notification?.title;
     String formattedDate = '';
     print("web notification1== $messagetitle");
-    if (messageBody != null && !messagetitle!.contains("Hair Fixing") && !messageBody.contains("Your Appointment has been Approved Which was Booked on")) {
+    if (messageBody != null && !messagetitle!.contains("HairFixingZone") && !messageBody.contains("Your Appointment has been Approved Which was Booked on")) {
       print("web notification2== $messagetitle");
       RegExp datePattern = RegExp(r'\b(\d{1,2})(st|nd|rd|th)? (\w+)\b');
       Match? match = datePattern.firstMatch(messageBody);
@@ -140,12 +140,12 @@ class MyApp extends StatelessWidget {
       print("onMessageOpenedApp: $messagelog");
       LocalNotificationService.showNotificationOnForeground(context, message);
       if (messageBody != null) {
-        if (messageBody.contains("Your Appointment has been Approved Which was Booked on")) {
+        if (messageBody.contains("Your Appointment has been Approved Which was Booked on") ) {
           print("Appointment already approved. Just opening the app.");
           // No further action needed, just return.
           return;
         }
-        else if (messagetitle!.contains("Hair Fixing")) {
+        else if (messagetitle!.contains("HairFixingZone")) {
           print("web notification");
           // No further action needed, just return.
           return;
@@ -205,7 +205,7 @@ class MyApp extends StatelessWidget {
           // No further action needed, just return.
           return;
         }
-       else if (messagetitle!.contains("Hair Fixing")) {
+       else if (messagetitle!.contains("HairFixingZone")) {
           print("web notification");
           // No further action needed, just return.
           return;
@@ -252,9 +252,37 @@ class MyApp extends StatelessWidget {
       }
     });
 
-
+    // MaterialApp(
+    //   builder: (context, child) {
+    //     final originalTextScaleFactor = MediaQuery.of(context).textScaleFactor;
+    //     final boldText = MediaQuery.boldTextOverride(context);
+    //
+    //     final newMediaQueryData = MediaQuery.of(context).copyWith(
+    //       textScaleFactor: originalTextScaleFactor.clamp(0.8, 1.0),
+    //       boldText: boldText,
+    //     );
+    //
+    //     return MediaQuery(
+    //       data: newMediaQueryData,
+    //       child: child!,
+    //     );
+    //   },
 
     return MaterialApp(
+        builder: (context, child) {
+      final originalTextScaleFactor = MediaQuery.of(context).textScaleFactor;
+      final boldText = MediaQuery.boldTextOf(context);
+
+      final newMediaQueryData = MediaQuery.of(context).copyWith(
+        textScaleFactor: originalTextScaleFactor.clamp(0.8, 1.0),
+        boldText: boldText,
+      );
+
+      return MediaQuery(
+        data: newMediaQueryData,
+        child: child!,
+      );
+    },
       navigatorKey: navigatorKey,
       debugShowCheckedModeBanner: false,
       title: 'My App',
